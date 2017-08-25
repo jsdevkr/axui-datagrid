@@ -5,14 +5,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: {index:'./src/index.js'},
+  entry: {index:'./dev/index.js'},
   output: {
-    path: path.resolve(__dirname, 'docs'),
+    path: path.resolve(__dirname, 'dev/dist'),
     filename: '[name].js',
     sourceMapFilename: '[name].js.map'
   },
   devServer: {
-    contentBase: path.join(__dirname, "docs"),
+    contentBase: path.join(__dirname, "dev/dist"),
     compress: true,
     port: 4000
   },
@@ -50,7 +50,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, './src/layout/default.html')
+      template: path.join(__dirname, './dev/layout/default.html')
     })
-  ]
+  ],
+  resolve: {
+    alias: {
+      'src': path.join(__dirname, './src')
+    }
+  }
 };

@@ -1,0 +1,834 @@
+@mixin placeholder($color: $input-color-placeholder) {
+  // Firefox
+  &::-moz-placeholder {
+    color: $color;
+    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+  // Internet Explorer 10+
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+  // Safari and Chrome
+}
+
+@mixin prefixer($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == webkit {
+      @if $prefix-for-webkit {
+        -webkit-#{$property}: $value;
+      }
+    } @else if $prefix == moz {
+      @if $prefix-for-mozilla {
+        -moz-#{$property}: $value;
+      }
+    } @else if $prefix == ms {
+      @if $prefix-for-microsoft {
+        -ms-#{$property}: $value;
+      }
+    } @else if $prefix == o {
+      @if $prefix-for-opera {
+        -o-#{$property}: $value;
+      }
+    } @else if $prefix == spec {
+      @if $prefix-for-spec {
+        #{$property}: $value;
+      }
+    } @else {
+      @warn "Unrecognized prefix: #{$prefix}";
+    }
+  }
+}
+
+@mixin box-shadow($shadows...) {
+  @include prefixer(box-shadow, $shadows, spec);
+}
+
+@mixin background-size($lengths...) {
+  @include prefixer(background-size, $lengths, spec);
+}
+
+@mixin ax-border-radius($border-radius, $direction:"", $adjust:0) {
+  @if (type_of($border-radius) == "list") {
+    @if ($direction == "") {
+      border-top-left-radius: nth($border-radius, 1)+$adjust;
+      border-top-right-radius: nth($border-radius, 2)+$adjust;
+      border-bottom-right-radius: nth($border-radius, 3)+$adjust;
+      border-bottom-left-radius: nth($border-radius, 4)+$adjust;
+    } @else if ($direction == "top") {
+      border-top-left-radius: nth($border-radius, 1)+$adjust;
+      border-top-right-radius: nth($border-radius, 2)+$adjust;
+    } @else if ($direction == "bottom") {
+      border-bottom-right-radius: nth($border-radius, 3)+$adjust;
+      border-bottom-left-radius: nth($border-radius, 4)+$adjust;
+    } @else if ($direction == "left") {
+      border-top-left-radius: nth($border-radius, 1)+$adjust;
+      border-bottom-left-radius: nth($border-radius, 4)+$adjust;
+    } @else if ($direction == "right") {
+      border-top-right-radius: nth($border-radius, 2)+$adjust;
+      border-bottom-right-radius: nth($border-radius, 3)+$adjust;
+    }
+  } @else {
+    @if ($direction == "") {
+      border-radius: $border-radius+$adjust;
+    } @else if ($direction == "top") {
+      border-top-left-radius: $border-radius+$adjust;
+      border-top-right-radius: $border-radius+$adjust;
+    } @else if ($direction == "bottom") {
+      border-bottom-left-radius: $border-radius+$adjust;
+      border-bottom-right-radius: $border-radius+$adjust;
+    } @else if ($direction == "left") {
+      border-top-left-radius: $border-radius+$adjust;
+      border-bottom-left-radius: $border-radius+$adjust;
+    } @else if ($direction == "right") {
+      border-top-right-radius: $border-radius+$adjust;
+      border-bottom-right-radius: $border-radius+$adjust;
+    }
+  }
+}
+
+@mixin ax-background($pos, $g1: null, $g2: null) {
+
+  $pos-type: type-of(nth($pos, 1));
+
+  // If $pos is missing from mixin, reassign vars and add default position
+  @if ($pos-type == color) or (nth($pos, 1) == "transparent") {
+    $g2: $g1;
+    $g1: $pos;
+    $pos: to top;
+  } @else if ($g1 == null) {
+    $g1: $pos;
+    $pos: to top;
+  }
+
+  // @debug($g1);
+  @if (length($g1) == 2) {
+    $g2: nth($g1, 2);
+    $g1: nth($g1, 1);
+    @include linear-gradient($pos, $g1, $g2);
+  } @else if (length($g1) == 3) {
+    @include linear-gradient(nth($g1, 1), nth($g1, 2), nth($g1, 3));
+  } @else {
+    @if (type_of(nth($g2, 1)) == color) {
+      $g2: nth($g2, 1);
+    }
+    @include linear-gradient($pos, $g1, $g2);
+  }
+}
+
+// Contextual backgrounds
+
+// [converter] $parent hack
+@mixin bg-variant($parent, $color) {
+  #{$parent} {
+    background-color: $color;
+  }
+  a#{$parent}:hover,
+  a#{$parent}:focus {
+    background-color: darken($color, 10%);
+  }
+}
+
+// Single side border-radius
+
+@mixin border-top-radius($radius) {
+  border-top-right-radius: $radius;
+  border-top-left-radius: $radius;
+}
+
+@mixin border-right-radius($radius) {
+  border-bottom-right-radius: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin border-bottom-radius($radius) {
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin border-left-radius($radius) {
+  border-bottom-left-radius: $radius;
+  border-top-left-radius: $radius;
+}
+
+// Gradients
+
+// Horizontal gradient, from left to right
+//
+// Creates two color stops, start and end, by specifying a color and position for each color stop.
+// Color stops are not available in IE9 and below.
+@mixin gradient-horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+  background-image: -webkit-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
+  background-image: -o-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // Opera 12
+  background-image: linear-gradient(to right, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down
+}
+
+// Vertical gradient, from top to bottom
+//
+// Creates two color stops, start and end, by specifying a color and position for each color stop.
+// Color stops are not available in IE9 and below.
+@mixin gradient-vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+  background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
+  background-image: -o-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // Opera 12
+  background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
+}
+
+@mixin gradient-directional($start-color: #555, $end-color: #333, $deg: 45deg) {
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient($deg, $start-color, $end-color); // Safari 5.1-6, Chrome 10+
+  background-image: -o-linear-gradient($deg, $start-color, $end-color); // Opera 12
+  background-image: linear-gradient($deg, $start-color, $end-color); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+}
+
+@mixin gradient-horizontal-three-colors($start-color: #00b3ee, $mid-color: #7a43b6, $color-stop: 50%, $end-color: #c3325f) {
+  background-image: -webkit-linear-gradient(left, $start-color, $mid-color $color-stop, $end-color);
+  background-image: -o-linear-gradient(left, $start-color, $mid-color $color-stop, $end-color);
+  background-image: linear-gradient(to right, $start-color, $mid-color $color-stop, $end-color);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down, gets no color-stop at all for proper fallback
+}
+
+@mixin gradient-vertical-three-colors($start-color: #00b3ee, $mid-color: #7a43b6, $color-stop: 50%, $end-color: #c3325f) {
+  background-image: -webkit-linear-gradient($start-color, $mid-color $color-stop, $end-color);
+  background-image: -o-linear-gradient($start-color, $mid-color $color-stop, $end-color);
+  background-image: linear-gradient($start-color, $mid-color $color-stop, $end-color);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down, gets no color-stop at all for proper fallback
+}
+
+@mixin gradient-radial($inner-color: #555, $outer-color: #333) {
+  background-image: -webkit-radial-gradient(circle, $inner-color, $outer-color);
+  background-image: radial-gradient(circle, $inner-color, $outer-color);
+  background-repeat: no-repeat;
+}
+
+@mixin gradient-striped($color: rgba(255,255,255,.15), $angle: 45deg) {
+  background-image: -webkit-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+  background-image: linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+}
+
+@mixin tab-focus() {
+  // WebKit-specific. Other browsers will keep their default outline style.
+  // (Initially tried to also force default via `outline: initial`,
+  // but that seems to erroneously remove the outline in Firefox altogether.)
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+// Form validation states
+//
+// Used in forms.less to generate the form validation CSS for warnings, errors,
+// and successes.
+
+@mixin form-control-validation($text-color: #555, $border-color: #ccc, $background-color: #f5f5f5) {
+  // Color the label and help text
+  .help-block,
+  .control-label,
+  .radio,
+  .checkbox,
+  .radio-inline,
+  .checkbox-inline,
+  &.radio label,
+  &.checkbox label,
+  &.radio-inline label,
+  &.checkbox-inline label {
+    color: $text-color;
+  }
+  // Set the border and box shadow on specific inputs to match
+  .form-control {
+    border-color: $border-color;
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075)); // Redeclare so transitions work
+    &:focus {
+      border-color: darken($border-color, 10%);
+      $shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px lighten($border-color, 20%);
+      @include box-shadow($shadow);
+    }
+  }
+  // Set validation states also for addons
+  .input-group-addon {
+    color: $text-color;
+    border-color: $border-color;
+    background-color: $background-color;
+  }
+  // Optional feedback icon
+  .form-control-feedback {
+    color: $text-color;
+  }
+}
+
+// Form control focus state
+//
+// Generate a customized focus state and for any input with the specified color,
+// which defaults to the `$input-border-focus` variable.
+//
+// We highly encourage you to not customize the default value, but instead use
+// this to tweak colors on an as-needed basis. This aesthetic change is based on
+// WebKit's default styles, but applicable to a wider range of browsers. Its
+// usability and accessibility should be taken into account with any change.
+//
+// Example usage: change the default blue border and shadow to white for better
+// contrast against a dark gray background.
+@mixin form-control-focus($color: $input-border-focus) {
+  $color-rgba: rgba(red($color), green($color), blue($color), .6);
+  &:focus {
+    border-color: $color;
+    outline: 0;
+    @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
+  }
+}
+
+// Form control sizing
+//
+// Relative text size, padding, and border-radii changes for form controls. For
+// horizontal sizing, wrap controls in the predefined grid classes. `<select>`
+// element gets special love because it's special, and that's a fact!
+// [converter] $parent hack
+@mixin input-size($parent, $input-height, $padding-vertical, $padding-horizontal, $font-size, $line-height, $border-radius) {
+  #{$parent} {
+    height: $input-height;
+    padding: $padding-vertical $padding-horizontal;
+    font-size: $font-size;
+    line-height: $line-height;
+    border-radius: $border-radius;
+  }
+
+  select#{$parent} {
+    height: $input-height;
+    line-height: $input-height;
+  }
+
+  textarea#{$parent},
+  select[multiple]#{$parent} {
+    height: auto;
+  }
+}
+
+// Clearfix
+//
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    contenteditable attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that are clearfixed.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+//
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin disable-prefix-for-all() {
+  $prefix-for-webkit: false !global;
+  $prefix-for-mozilla: false !global;
+  $prefix-for-microsoft: false !global;
+  $prefix-for-opera: false !global;
+  $prefix-for-spec: false !global;
+}
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  // IE8 filter
+  $opacity-ie: ($opacity * 100);
+  filter: alpha(opacity=$opacity-ie);
+}
+
+@mixin keyframes($name) {
+  $original-prefix-for-webkit: $prefix-for-webkit;
+  $original-prefix-for-mozilla: $prefix-for-mozilla;
+  $original-prefix-for-microsoft: $prefix-for-microsoft;
+  $original-prefix-for-opera: $prefix-for-opera;
+  $original-prefix-for-spec: $prefix-for-spec;
+
+  @if $original-prefix-for-webkit {
+    @include disable-prefix-for-all();
+    $prefix-for-webkit: true !global;
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @if $original-prefix-for-mozilla {
+    @include disable-prefix-for-all();
+    $prefix-for-mozilla: true !global;
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  $prefix-for-webkit: $original-prefix-for-webkit !global;
+  $prefix-for-mozilla: $original-prefix-for-mozilla !global;
+  $prefix-for-microsoft: $original-prefix-for-microsoft !global;
+  $prefix-for-opera: $original-prefix-for-opera !global;
+  $prefix-for-spec: $original-prefix-for-spec !global;
+
+  @if $original-prefix-for-spec {
+    @keyframes #{$name} {
+      @content;
+    }
+  }
+}
+
+///// bourbon support
+
+// Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
+@mixin keyframes($name) {
+  $original-prefix-for-webkit: $prefix-for-webkit;
+  $original-prefix-for-mozilla: $prefix-for-mozilla;
+  $original-prefix-for-microsoft: $prefix-for-microsoft;
+  $original-prefix-for-opera: $prefix-for-opera;
+  $original-prefix-for-spec: $prefix-for-spec;
+
+  @if $original-prefix-for-webkit {
+    @include disable-prefix-for-all();
+    $prefix-for-webkit: true !global;
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  @if $original-prefix-for-mozilla {
+    @include disable-prefix-for-all();
+    $prefix-for-mozilla: true !global;
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+  }
+
+  $prefix-for-webkit: $original-prefix-for-webkit !global;
+  $prefix-for-mozilla: $original-prefix-for-mozilla !global;
+  $prefix-for-microsoft: $original-prefix-for-microsoft !global;
+  $prefix-for-opera: $original-prefix-for-opera !global;
+  $prefix-for-spec: $original-prefix-for-spec !global;
+
+  @if $original-prefix-for-spec {
+    @keyframes #{$name} {
+      @content;
+    }
+  }
+}
+
+@mixin transform($property: none) {
+  // none | <transform-function>
+  @include prefixer(transform, $property, webkit moz ms o spec);
+}
+
+@mixin transform-origin($axes: 50%) {
+  // x-axis - left | center | right  | length | %
+  // y-axis - top  | center | bottom | length | %
+  // z-axis -                          length
+  @include prefixer(transform-origin, $axes, webkit moz ms o spec);
+}
+
+@mixin transform-style($style: flat) {
+  @include prefixer(transform-style, $style, webkit moz ms o spec);
+}
+
+@mixin display($value) {
+  // flex | inline-flex
+  @if $value == "flex" {
+    // 2009
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+
+    // 2012
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox; // 2011 (IE 10)
+    display: flex;
+  } @else if $value == "inline-flex" {
+    display: -webkit-inline-box;
+    display: -moz-inline-box;
+    display: inline-box;
+
+    display: -webkit-inline-flex;
+    display: -moz-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  } @else {
+    display: $value;
+  }
+}
+
+// 2009 - box-flex (integer)
+// 2011 - flex (decimal | width decimal)
+// 2012 - flex (integer integer width)
+@mixin flex($value) {
+  // Grab flex-grow for older browsers.
+  $flex-grow: nth($value, 1);
+
+  // 2009
+  @include prefixer(box-flex, $flex-grow, webkit moz spec);
+
+  // 2011 (IE 10), 2012
+  @include prefixer(flex, $value, webkit moz ms spec);
+}
+
+// 2009 - box-orient ( horizontal | vertical | inline-axis | block-axis)
+//      - box-direction (normal | reverse)
+// 2011 - flex-direction (row | row-reverse | column | column-reverse)
+// 2012 - flex-direction (row | row-reverse | column | column-reverse)
+@mixin flex-direction($value: row) {
+  // Alt values.
+  $value-2009: $value;
+  $value-2011: $value;
+  $direction: normal;
+
+  @if $value == row {
+    $value-2009: horizontal;
+  } @else if $value == "row-reverse" {
+    $value-2009: horizontal;
+    $direction: reverse;
+  } @else if $value == column {
+    $value-2009: vertical;
+  } @else if $value == "column-reverse" {
+    $value-2009: vertical;
+    $direction: reverse;
+  }
+
+  // 2009
+  @include prefixer(box-orient, $value-2009, webkit moz spec);
+  @include prefixer(box-direction, $direction, webkit moz spec);
+
+  // 2012
+  @include prefixer(flex-direction, $value, webkit moz spec);
+
+  // 2011 (IE 10)
+  -ms-flex-direction: $value;
+}
+
+// 2009 - box-lines (single | multiple)
+// 2011 - flex-wrap (nowrap | wrap | wrap-reverse)
+// 2012 - flex-wrap (nowrap | wrap | wrap-reverse)
+@mixin flex-wrap($value: nowrap) {
+  // Alt values
+  $alt-value: $value;
+  @if $value == nowrap {
+    $alt-value: single;
+  } @else if $value == wrap {
+    $alt-value: multiple;
+  } @else if $value == "wrap-reverse" {
+    $alt-value: multiple;
+  }
+
+  @include prefixer(box-lines, $alt-value, webkit moz spec);
+  @include prefixer(flex-wrap, $value, webkit moz ms spec);
+}
+
+// 2009 - TODO: parse values into flex-direction/flex-wrap
+// 2011 - TODO: parse values into flex-direction/flex-wrap
+// 2012 - flex-flow (flex-direction || flex-wrap)
+@mixin flex-flow($value) {
+  @include prefixer(flex-flow, $value, webkit moz spec);
+}
+
+// 2009 - box-ordinal-group (integer)
+// 2011 - flex-order (integer)
+// 2012 - order (integer)
+@mixin order($int: 0) {
+  // 2009
+  @include prefixer(box-ordinal-group, $int, webkit moz spec);
+
+  // 2012
+  @include prefixer(order, $int, webkit moz spec);
+
+  // 2011 (IE 10)
+  -ms-flex-order: $int;
+}
+
+// 2012 - flex-grow (number)
+@mixin flex-grow($number: 0) {
+  @include prefixer(flex-grow, $number, webkit moz spec);
+  -ms-flex-positive: $number;
+}
+
+// 2012 - flex-shrink (number)
+@mixin flex-shrink($number: 1) {
+  @include prefixer(flex-shrink, $number, webkit moz spec);
+  -ms-flex-negative: $number;
+}
+
+// 2012 - flex-basis (number)
+@mixin flex-basis($width: auto) {
+  @include prefixer(flex-basis, $width, webkit moz spec);
+  -ms-flex-preferred-size: $width;
+}
+
+// Shorthand mixin. Supports multiple parentheses-deliminated values for each variable.
+// Example: @include transition (all 2s ease-in-out);
+//          @include transition (opacity 1s ease-in 2s, width 2s ease-out);
+//          @include transition-property (transform, opacity);
+
+@mixin transition($properties...) {
+  // Fix for vendor-prefix transform property
+  $needs-prefixes: false;
+  $webkit: ();
+  $moz: ();
+  $spec: ();
+
+  // Create lists for vendor-prefixed transform
+  @each $list in $properties {
+    @if nth($list, 1) == "transform" {
+      $needs-prefixes: true;
+      $list1: -webkit-transform;
+      $list2: -moz-transform;
+      $list3: ();
+
+      @each $var in $list {
+        $list3: join($list3, $var);
+
+        @if $var != "transform" {
+          $list1: join($list1, $var);
+          $list2: join($list2, $var);
+        }
+      }
+
+      $webkit: append($webkit, $list1);
+      $moz: append($moz, $list2);
+      $spec: append($spec, $list3);
+    } @else {
+      $webkit: append($webkit, $list, comma);
+      $moz: append($moz, $list, comma);
+      $spec: append($spec, $list, comma);
+    }
+  }
+
+  @if $needs-prefixes {
+    -webkit-transition: $webkit;
+    -moz-transition: $moz;
+    transition: $spec;
+  } @else {
+    @if length($properties) >= 1 {
+      @include prefixer(transition, $properties, webkit moz spec);
+    } @else {
+      $properties: all 0.15s ease-out 0s;
+      @include prefixer(transition, $properties, webkit moz spec);
+    }
+  }
+}
+
+@mixin transition-property($properties...) {
+  -webkit-transition-property: transition-property-names($properties, "webkit");
+  -moz-transition-property: transition-property-names($properties, "moz");
+  transition-property: transition-property-names($properties, false);
+}
+
+@mixin transition-duration($times...) {
+  @include prefixer(transition-duration, $times, webkit moz spec);
+}
+
+@mixin transition-timing-function($motions...) {
+  // ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier()
+  @include prefixer(transition-timing-function, $motions, webkit moz spec);
+}
+
+@mixin transition-delay($times...) {
+  @include prefixer(transition-delay, $times, webkit moz spec);
+}
+
+// http://www.w3.org/TR/css3-animations/#the-animation-name-property-
+// Each of these mixins support comma separated lists of values, which allows different transitions for individual properties to be described in a single style rule. Each value in the list corresponds to the value at that same position in the other properties.
+
+@mixin animation($animations...) {
+  @include prefixer(animation, $animations, webkit moz spec);
+}
+
+@mixin animation-name($names...) {
+  @include prefixer(animation-name, $names, webkit moz spec);
+}
+
+@mixin animation-duration($times...) {
+  @include prefixer(animation-duration, $times, webkit moz spec);
+}
+
+@mixin animation-timing-function($motions...) {
+  // ease | linear | ease-in | ease-out | ease-in-out
+  @include prefixer(animation-timing-function, $motions, webkit moz spec);
+}
+
+@mixin animation-iteration-count($values...) {
+  // infinite | <number>
+  @include prefixer(animation-iteration-count, $values, webkit moz spec);
+}
+
+@mixin animation-direction($directions...) {
+  // normal | alternate
+  @include prefixer(animation-direction, $directions, webkit moz spec);
+}
+
+@mixin animation-play-state($states...) {
+  // running | paused
+  @include prefixer(animation-play-state, $states, webkit moz spec);
+}
+
+@mixin animation-delay($times...) {
+  @include prefixer(animation-delay, $times, webkit moz spec);
+}
+
+@mixin animation-fill-mode($modes...) {
+  // none | forwards | backwards | both
+  @include prefixer(animation-fill-mode, $modes, webkit moz spec);
+}
+
+@mixin linear-gradient($pos, $g1, $g2: null,
+                       $g3: null, $g4: null,
+                       $g5: null, $g6: null,
+                       $g7: null, $g8: null,
+                       $g9: null, $g10: null,
+                       $fallback: null) {
+
+  // Detect what type of value exists in $pos
+  $pos-type: type-of(nth($pos, 1));
+  $pos-spec: null;
+  $pos-degree: null;
+
+  // If $pos is missing from mixin, reassign vars and add default position
+  @if ($pos-type == color) or (nth($pos, 1) == "transparent") {
+    $g10: $g9;
+    $g9: $g8;
+    $g8: $g7;
+    $g7: $g6;
+    $g6: $g5;
+    $g5: $g4;
+    $g4: $g3;
+    $g3: $g2;
+    $g2: $g1;
+    $g1: $pos;
+    $pos: null;
+  }
+
+  @if $pos {
+    $positions: _linear-positions-parser($pos);
+    $pos-degree: nth($positions, 1);
+    $pos-spec: nth($positions, 2);
+  }
+
+  $full: $g1, $g2, $g3, $g4, $g5, $g6, $g7, $g8, $g9, $g10;
+
+  // Set $g1 as the default fallback color
+  $fallback-color: nth($g1, 1);
+
+  // If $fallback is a color use that color as the fallback color
+  @if (type-of($fallback) == color) or ($fallback == "transparent") {
+    $fallback-color: $fallback;
+  }
+
+  background-color: $fallback-color;
+  background-image: -webkit-linear-gradient($pos-degree $full); // Safari 5.1+, Chrome
+  background-image: unquote("linear-gradient(#{$pos-spec}#{$full})");
+}
+
+@function _linear-positions-parser($pos) {
+  $user-deprecation-warnings-setting: $output-bourbon-deprecation-warnings;
+  $output-bourbon-deprecation-warnings: false !global;
+
+  $type: type-of(nth($pos, 1));
+  $spec: null;
+  $degree: null;
+  $side: null;
+  $corner: null;
+  $length: length($pos);
+  // Parse Side and corner positions
+  @if ($length > 1) {
+    @if nth($pos, 1) == "to" { // Newer syntax
+      $side: nth($pos, 2);
+
+      @if $length == 2 { // eg. to top
+        // Swap for backwards compatibility
+        $degree: _position-flipper(nth($pos, 2));
+      } @else if $length == 3 { // eg. to top left
+        $corner: nth($pos, 3);
+      }
+    } @else if $length == 2 { // Older syntax ("top left")
+      $side: _position-flipper(nth($pos, 1));
+      $corner: _position-flipper(nth($pos, 2));
+    }
+
+    @if ("#{$side} #{$corner}" == "left top") or ("#{$side} #{$corner}" == "top left") {
+      $degree: _position-flipper(#{$side}) _position-flipper(#{$corner});
+    } @else if ("#{$side} #{$corner}" == "right top") or ("#{$side} #{$corner}" == "top right") {
+      $degree: _position-flipper(#{$side}) _position-flipper(#{$corner});
+    } @else if ("#{$side} #{$corner}" == "right bottom") or ("#{$side} #{$corner}" == "bottom right") {
+      $degree: _position-flipper(#{$side}) _position-flipper(#{$corner});
+    } @else if ("#{$side} #{$corner}" == "left bottom") or ("#{$side} #{$corner}" == "bottom left") {
+      $degree: _position-flipper(#{$side}) _position-flipper(#{$corner});
+    }
+    $spec: to $side $corner;
+  } @else if $length == 1 {
+    // Swap for backwards compatibility
+    @if $type == string {
+      $degree: $pos;
+      $spec: to _position-flipper($pos);
+    } @else {
+      $degree: -270 - $pos; //rotate the gradient opposite from spec
+      $spec: $pos;
+    }
+  }
+  $degree: unquote($degree + ",");
+  $spec: unquote($spec + ",");
+
+  $output-bourbon-deprecation-warnings: $user-deprecation-warnings-setting !global;
+
+  @return $degree $spec;
+}
+
+@function _position-flipper($pos) {
+  @return if($pos == left, right, null) if($pos == right, left, null) if($pos == top, bottom, null) if($pos == bottom, top, null);
+}
+
+/// border-radius
+@mixin border-top-radius($radii) {
+  border-top-left-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+@mixin border-right-radius($radii) {
+  border-bottom-right-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+@mixin border-bottom-radius($radii) {
+  border-bottom-left-radius: $radii;
+  border-bottom-right-radius: $radii;
+}
+
+@mixin border-left-radius($radii) {
+  border-bottom-left-radius: $radii;
+  border-top-left-radius: $radii;
+}
+
+/// perspective
+@mixin perspective($depth: none) {
+  @include prefixer(perspective, $depth, webkit moz spec);
+}
+
+@mixin perspective-origin($value: 50% 50%) {
+  @include prefixer(perspective-origin, $value, webkit moz spec);
+}
+
+//// ellipsis
+@mixin ellipsis($width: 100%) {
+  display: inline-block;
+  max-width: $width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
