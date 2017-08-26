@@ -1,4 +1,6 @@
 import merge from 'lodash/merge';
+import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
 
 const supportTouch = (window) ? (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) : false;
 
@@ -451,6 +453,27 @@ const getRealPathForDataItem = function (_dataPath) {
   return path.join("");
 };
 
+
+// for state ~~~~~~~~~~
+const getStateForData = function (data) {
+  // 그리드 데이터 준비 : dataOfList, dataOfPage를 미리 준비
+  let stateForData = {
+    dataOfList: [],
+    proxyList: [],
+    dataOfPage: false
+  };
+
+  if (isArray(data)) {
+    stateForData.dataOfList = data;
+  }
+  else if (isPlainObject(data) && 'list' in data) {
+    stateForData.dataOfList = data.list;
+    stateForData.dataOfPage = data.page || {};
+  }
+
+  return stateForData;
+};
+
 export default {
   divideTableByFrozenColumnIndex: divideTableByFrozenColumnIndex,
   getTableByStartEndColumnIndex: getTableByStartEndColumnIndex,
@@ -462,5 +485,6 @@ export default {
   makeFootSumTable: makeFootSumTable,
   makeBodyGroupingTable: makeBodyGroupingTable,
   findPanelByColumnIndex: findPanelByColumnIndex,
-  getRealPathForDataItem: getRealPathForDataItem
+  getRealPathForDataItem: getRealPathForDataItem,
+  getStateForData: getStateForData
 };

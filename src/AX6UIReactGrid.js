@@ -1,14 +1,157 @@
 import React from 'react';
-
-import merge from 'lodash/merge';
-import isArray from 'lodash/isArray';
-import isPlainObject from 'lodash/isPlainObject';
-
-import DATA from './AX6UIReactGrid-data';
 import UTIL from './AX6UIReactGrid-util';
 
 //~~~~~
-let defaultConfig = {
+
+
+//~~~~~
+class AX6UIReactGrid extends React.Component {
+  constructor(props) {
+    super(props);
+
+
+    let stateForData = UTIL.getStateForData(this.props.data);
+    // todo getStateForData 에서 컨버팅 할 데이터들 다시 확인
+
+    // state init
+    this.state = {
+      dataOfList: stateForData.dataOfList,
+      dataOfPage: stateForData.dataOfPage,
+      proxyList: stateForData.proxyList,
+      deletedList: [],
+
+      bodyTrHeight: 0, // 한줄의 높이
+      scrollContentWidth: 0, // 스크롤 될 내용물의 너비 (스크롤 될 내용물 : panel['body-scroll'] 안에 컬럼이 있는)
+      scrollContentHeight: 0, // 스크롤 된 내용물의 높이
+      scrollTimer: null,
+      columns: [],
+      colGroup: [],
+      footSumColumns: [],
+      bodyGrouping: [],
+      sortInfo: {},
+      focused: false,
+      focusedColumn: {}, // 그리드 바디의 포커스된 셀 정보
+      selectedColumn: {}, // 그리드 바디의 선택된 셀 정보
+      isInlineEditing: false,
+      inlineEditing: {},
+      listIndexMap: {}, // tree데이터 사용시 데이터 인덱싱 맵
+      headerTable: {},
+      leftHeaderData: {},
+      headerData: {},
+      rightHeaderData: {},
+      bodyRowTable: {},
+      leftBodyRowData: {},
+      bodyRowData: {},
+      rightBodyRowData: {},
+      bodyRowMap: {},
+      bodyGroupingTable: {},
+      leftBodyGroupingData: {},
+      bodyGroupingData: {},
+      rightBodyGroupingData: {},
+      bodyGroupingMap: {},
+      footSumTable: {}, // footSum의 출력레이아웃
+      leftFootSumData: {}, // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
+      footSumData: {}, // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+      needToPaintSum: true, // 데이터 셋이 변경되어 summary 변경 필요여부
+    };
+  }
+
+  componentDidMount() {
+    // setData.call(this);
+
+  }
+
+  componentWillUnmount() {
+
+  }
+
+  componentWillReceiveProps(newProps) {
+
+    // 새로운 array가 속성값으로 왔을경우
+    // console.log("this.props.data === newProps.data", this.props.data === newProps.data);
+    if (this.props.data !== newProps.data) {
+      // 데이터가 변경된 경우
+      let stateForData = UTIL.getStateForData(newProps.data);
+      this.setState({
+        dataOfList: stateForData.dataOfList,
+        dataOfPage: stateForData.dataOfPage,
+        proxyList: stateForData.proxyList,
+        deletedList: []
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div data-ax6ui-grid>
+        <div data-ax6grid-container="root" style={{height: this.props.height}}>
+          <div data-ax6grid-container="hidden">
+            <textarea data-ax6grid-form="clipboard"></textarea>
+          </div>
+          <div data-ax6grid-container="header">
+            <div data-ax6grid-panel="aside-header"></div>
+            <div data-ax6grid-panel="left-header"></div>
+            <div data-ax6grid-panel="header">
+              <div data-ax6grid-panel-scroll="header"></div>
+            </div>
+            <div data-ax6grid-panel="right-header"></div>
+          </div>
+          <div data-ax6grid-container="body">
+            <div data-ax6grid-panel="top-aside-body"></div>
+            <div data-ax6grid-panel="top-left-body"></div>
+            <div data-ax6grid-panel="top-body">
+              <div data-ax6grid-panel-scroll="top-body"></div>
+            </div>
+            <div data-ax6grid-panel="top-right-body"></div>
+            <div data-ax6grid-panel="aside-body">
+              <div data-ax6grid-panel-scroll="aside-body"></div>
+            </div>
+            <div data-ax6grid-panel="left-body">
+              <div data-ax6grid-panel-scroll="left-body"></div>
+            </div>
+            <div data-ax6grid-panel="body">
+              <div data-ax6grid-panel-scroll="body">
+
+                {this.state.dataOfList.length}
+
+              </div>
+            </div>
+            <div data-ax6grid-panel="right-body">
+              <div data-ax6grid-panel-scroll="right-body"></div>
+            </div>
+            <div data-ax6grid-panel="bottom-aside-body"></div>
+            <div data-ax6grid-panel="bottom-left-body"></div>
+            <div data-ax6grid-panel="bottom-body">
+              <div data-ax6grid-panel-scroll="bottom-body"></div>
+            </div>
+            <div data-ax6grid-panel="bottom-right-body"></div>
+          </div>
+          <div data-ax6grid-container="page">
+            <div data-ax6grid-page="holder">
+              <div data-ax6grid-page="navigation"></div>
+              <div data-ax6grid-page="status"></div>
+            </div>
+          </div>
+          <div data-ax6grid-container="scroller">
+            <div data-ax6grid-scroller="vertical">
+              <div data-ax6grid-scroller="vertical-bar"></div>
+            </div>
+            <div data-ax6grid-scroller="horizontal">
+              <div data-ax6grid-scroller="horizontal-bar"></div>
+            </div>
+            <div data-ax6grid-scroller="corner"></div>
+          </div>
+          <div data-ax6grid-resizer="vertical"></div>
+          <div data-ax6grid-resizer="horizontal"></div>
+        </div>
+      </div>
+    );
+  }
+}
+
+AX6UIReactGrid.defaultProps = {
+  data: [],
+  height: "300px",
   theme: 'default',
   animateTime: 250,
   debounceTime: 250,
@@ -98,112 +241,4 @@ let defaultConfig = {
   }
 };
 
-const setData = function () {
-  // 그리드 데이터 준비 : dataOfList, dataOfPage를 미리 준비
-  if (isArray(this.state.data)) {
-    this.state["dataOfList"] = this.state.data;
-    this.state["dataOfPage"] = {};
-  }
-  else if (isPlainObject(this.state.data) && 'list' in this.state.data) {
-    this.state["dataOfList"] = this.state.data.list;
-    this.state["dataOfPage"] = this.state.data.page || {};
-  }
-  else {
-    this.state["dataOfList"] = [];
-    this.state["dataOfPage"] = {};
-  }
-};
-
-//~~~~~
-export default class AX6UIReactGrid extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // 그리드 설정값 준비
-    this.state = merge({config: defaultConfig}, props);
-  }
-
-  componentDidMount() {
-    setData.call(this); //
-
-    console.log(this.state);
-  }
-
-  componentWillUnmount() {
-
-  }
-
-  componentWillUpdate() {
-    // 업데이트 전
-    setData.call(this);
-  }
-
-  componentDidUpdate() {
-    // 업데이트 후
-    console.log("componentDidUpdate");
-    // console.log(this.state);
-  }
-
-  render() {
-    return (
-      <div data-ax6ui-grid>
-        <div data-ax6grid-container="root" style={{height: this.state.height}}>
-          <div data-ax6grid-container="hidden">
-            <textarea data-ax6grid-form="clipboard"></textarea>
-          </div>
-          <div data-ax6grid-container="header">
-            <div data-ax6grid-panel="aside-header"></div>
-            <div data-ax6grid-panel="left-header"></div>
-            <div data-ax6grid-panel="header">
-              <div data-ax6grid-panel-scroll="header"></div>
-            </div>
-            <div data-ax6grid-panel="right-header"></div>
-          </div>
-          <div data-ax6grid-container="body">
-            <div data-ax6grid-panel="top-aside-body"></div>
-            <div data-ax6grid-panel="top-left-body"></div>
-            <div data-ax6grid-panel="top-body">
-              <div data-ax6grid-panel-scroll="top-body"></div>
-            </div>
-            <div data-ax6grid-panel="top-right-body"></div>
-            <div data-ax6grid-panel="aside-body">
-              <div data-ax6grid-panel-scroll="aside-body"></div>
-            </div>
-            <div data-ax6grid-panel="left-body">
-              <div data-ax6grid-panel-scroll="left-body"></div>
-            </div>
-            <div data-ax6grid-panel="body">
-              <div data-ax6grid-panel-scroll="body"></div>
-            </div>
-            <div data-ax6grid-panel="right-body">
-              <div data-ax6grid-panel-scroll="right-body"></div>
-            </div>
-            <div data-ax6grid-panel="bottom-aside-body"></div>
-            <div data-ax6grid-panel="bottom-left-body"></div>
-            <div data-ax6grid-panel="bottom-body">
-              <div data-ax6grid-panel-scroll="bottom-body"></div>
-            </div>
-            <div data-ax6grid-panel="bottom-right-body"></div>
-          </div>
-          <div data-ax6grid-container="page">
-            <div data-ax6grid-page="holder">
-              <div data-ax6grid-page="navigation"></div>
-              <div data-ax6grid-page="status"></div>
-            </div>
-          </div>
-          <div data-ax6grid-container="scroller">
-            <div data-ax6grid-scroller="vertical">
-              <div data-ax6grid-scroller="vertical-bar"></div>
-            </div>
-            <div data-ax6grid-scroller="horizontal">
-              <div data-ax6grid-scroller="horizontal-bar"></div>
-            </div>
-            <div data-ax6grid-scroller="corner"></div>
-          </div>
-          <div data-ax6grid-resizer="vertical"></div>
-          <div data-ax6grid-resizer="horizontal"></div>
-        </div>
-      </div>
-    );
-  }
-}
+export default AX6UIReactGrid
