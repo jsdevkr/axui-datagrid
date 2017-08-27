@@ -54,11 +54,19 @@ class AX6UIReactGrid extends React.Component {
       footSumData: {}, // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
       needToPaintSum: true, // 데이터 셋이 변경되어 summary 변경 필요여부
     };
+    this.dom = {
+      container_hidden: null,
+      container_header: null,
+      container_body: null,
+      container_page: null
+    };
+
   }
 
   componentDidMount() {
     // setData.call(this);
 
+    // this.dom.container_hidden.style.display = "block";
   }
 
   componentWillUnmount() {
@@ -85,10 +93,10 @@ class AX6UIReactGrid extends React.Component {
     return (
       <div data-ax6ui-grid>
         <div data-ax6grid-container="root" style={{height: this.props.height}}>
-          <div data-ax6grid-container="hidden">
-            <textarea data-ax6grid-form="clipboard"></textarea>
+          <div data-ax6grid-container="hidden" ref={ref => this.dom.container_hidden = ref}>
+            <textarea data-ax6grid-form="clipboard" ref={ref => this.dom.clipboard = ref} />
           </div>
-          <div data-ax6grid-container="header">
+          <div data-ax6grid-container="header" ref={ref => this.dom.container_header = ref}>
             <div data-ax6grid-panel="aside-header"></div>
             <div data-ax6grid-panel="left-header"></div>
             <div data-ax6grid-panel="header">
@@ -96,7 +104,7 @@ class AX6UIReactGrid extends React.Component {
             </div>
             <div data-ax6grid-panel="right-header"></div>
           </div>
-          <div data-ax6grid-container="body">
+          <div data-ax6grid-container="body" ref={ref => this.dom.container_body = ref}>
             <div data-ax6grid-panel="top-aside-body"></div>
             <div data-ax6grid-panel="top-left-body"></div>
             <div data-ax6grid-panel="top-body">
@@ -126,7 +134,7 @@ class AX6UIReactGrid extends React.Component {
             </div>
             <div data-ax6grid-panel="bottom-right-body"></div>
           </div>
-          <div data-ax6grid-container="page">
+          <div data-ax6grid-container="page" ref={ref => this.dom.container_page = ref}>
             <div data-ax6grid-page="holder">
               <div data-ax6grid-page="navigation"></div>
               <div data-ax6grid-page="status"></div>
