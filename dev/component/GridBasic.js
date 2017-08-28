@@ -1,7 +1,6 @@
 import React from 'react';
-import AX6UIGrid from 'src/AX6UIReactGrid';
 import 'src/scss/style.scss';
-
+import AX6UIGrid from 'src/AX6UIReactGrid';
 
 export default class App extends React.Component {
   constructor(props) {

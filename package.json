@@ -7,8 +7,7 @@
   "dependencies": {
     "react": "^15.6.1",
     "react-addons-update": "^15.6.0",
-    "react-dom": "^15.6.1",
-    "react-router": "^4.1.2"
+    "react-dom": "^15.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -41,6 +40,8 @@
     "jsx-loader": "^0.13.2",
     "lodash": "^4.17.4",
     "node-sass": "^4.5.3",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "webpack": "^3.5.5",
