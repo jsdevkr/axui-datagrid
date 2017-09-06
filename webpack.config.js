@@ -14,7 +14,12 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, "dev/dist"),
     compress: true,
-    port: 4000
+    port: 4000,
+    historyApiFallback: {
+      rewrites: [
+        { from: /./, to: '/' }
+      ]
+    }
   },
   module: {
     rules: [
