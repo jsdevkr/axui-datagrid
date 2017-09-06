@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-// import * as actions from '../modules';
+import * as actions from '../modules';
 
 const Main = ({onCreate, onRemove, name}) => {
   return (
@@ -34,4 +34,11 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, null)(Main);
+// 액션함수 준비
+const mapToDispatch = (dispatch) => ({
+  onCreate: () => dispatch(actions.create()),
+  onRemove: () => dispatch(actions.remove())
+});
+
+
+export default connect(mapStateToProps, mapToDispatch)(Main);

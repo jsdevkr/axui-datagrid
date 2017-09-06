@@ -5,22 +5,16 @@ import GridBasic from '../Routes/GridBasic';
 import NotFound from '../Routes/NotFound';
 import Nav from '../component/Nav';
 
-import { connect } from 'react-redux';
-import * as actions from '../modules';
-
-
-class App extends React.Component{
-  render(){
-    const { onCreate, onRemove } = this.props;
-
+class App extends React.Component {
+  render() {
     return (
       <BrowserRouter>
         <div>
           <Nav />
           <Switch>
-            <Route exact path="/" render={(props) => (<Main onCreate={onCreate} onRemove={onRemove} {...props} />)} />
+            <Route exact path="/" component={Main} />
             <Route path="/grid" component={GridBasic} />
-            <Route component={NotFound}/>
+            <Route component={NotFound} />
           </Switch>
         </div>
       </BrowserRouter>
@@ -28,12 +22,6 @@ class App extends React.Component{
   }
 }
 
-
-// 액션함수 준비
-const mapToDispatch = (dispatch) => ({
-  onCreate: () => dispatch(actions.create()),
-  onRemove: () => dispatch(actions.remove())
-});
-
+// <Route exact path="/" render={(props) => (<Main onCreate={onCreate} onRemove={onRemove} {...props} />)} />
 // 리덕스에 연결을 시키고 내보낸다
-export default connect(null, mapToDispatch)(App);
+export default App;

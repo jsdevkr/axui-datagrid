@@ -18,7 +18,7 @@ export default handleActions({
   [CREATE]: (state, action) => {
     console.log("ACTION CREATE");
     const name = state.get('name');
-    return state.set('name', "SET");
+    return state.set('name', "이름생김");
   },
   [REMOVE]: (state, action) => {
     console.log("ACTION REMOVE");
