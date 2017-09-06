@@ -50,7 +50,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, './dev/layout/default.html')
+      template: path.join(__dirname, './dev/tmpl/default.html')
     })
   ],
   resolve: {

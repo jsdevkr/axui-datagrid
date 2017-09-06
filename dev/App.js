@@ -3,7 +3,6 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Main from './Routes/Main';
 import GridBasic from './Routes/GridBasic';
 import NotFound from './Routes/NotFound';
-
 import Nav from './component/Nav';
 
 
