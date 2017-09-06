@@ -1,11 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+// import * as actions from '../modules';
 
-export default ({history}) => {
+const Main = ({onCreate, onRemove, name}) => {
   return (
-    <div>
-      메인페이지 입니다
+    <div className="Buttons">
 
-
+      {name} /
+      <button className="btn add" onClick={onCreate}>
+        생성
+      </button>
+      <button className="btn remove" onClick={onRemove}>
+        제거
+      </button>
     </div>
   )
-}
+};
+
+Main.propTypes = {
+  onCreate: PropTypes.func,
+  onRemove: PropTypes.func
+};
+
+Main.defaultProps = {
+  onCreate: () => console.warn('onCreate not defined'),
+  onRemove: () => console.warn('onRemove not defined')
+};
+
+const mapStateToProps = (state) => {
+  return {
+    name: state.get('name')
+  }
+};
+
+export default connect(mapStateToProps, null)(Main);
