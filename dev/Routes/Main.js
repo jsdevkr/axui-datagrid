@@ -40,5 +40,4 @@ const mapToDispatch = (dispatch) => ({
   onRemove: () => dispatch(actions.remove())
 });
 
-
 export default connect(mapStateToProps, mapToDispatch)(Main);
