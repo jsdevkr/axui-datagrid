@@ -2,8 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../modules';
 
-import 'src/scss/style.scss';
-import AX6UIGrid from 'src/AX6UIReactGrid';
+import AX6UIGrid from 'ax6ui-react-grid/AX6UIReactGrid';
 
 class GridBasic extends React.Component {
   constructor(props) {

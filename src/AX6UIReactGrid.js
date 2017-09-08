@@ -1,8 +1,11 @@
 import React from 'react';
-import UTIL from './AX6UIReactGrid-util';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import UTIL from './modules/util';
+import reducers from './modules/reducer';
 
 //~~~~~
-
+const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 //~~~~~
 class AX6UIReactGrid extends React.Component {
@@ -91,68 +94,70 @@ class AX6UIReactGrid extends React.Component {
 
   render() {
     return (
-      <div data-ax6ui-grid>
-        <div data-ax6grid-container="root" style={{height: this.props.height}}>
-          <div data-ax6grid-container="hidden" ref={ref => this.dom.container_hidden = ref}>
-            <textarea data-ax6grid-form="clipboard" ref={ref => this.dom.clipboard = ref} />
-          </div>
-          <div data-ax6grid-container="header" ref={ref => this.dom.container_header = ref}>
-            <div data-ax6grid-panel="aside-header"></div>
-            <div data-ax6grid-panel="left-header"></div>
-            <div data-ax6grid-panel="header">
-              <div data-ax6grid-panel-scroll="header"></div>
+      <Provider store={store}>
+        <div data-ax6ui-grid>
+          <div data-ax6grid-container="root" style={{height: this.props.height}}>
+            <div data-ax6grid-container="hidden" ref={ref => this.dom.container_hidden = ref}>
+              <textarea data-ax6grid-form="clipboard" ref={ref => this.dom.clipboard = ref} />
             </div>
-            <div data-ax6grid-panel="right-header"></div>
-          </div>
-          <div data-ax6grid-container="body" ref={ref => this.dom.container_body = ref}>
-            <div data-ax6grid-panel="top-aside-body"></div>
-            <div data-ax6grid-panel="top-left-body"></div>
-            <div data-ax6grid-panel="top-body">
-              <div data-ax6grid-panel-scroll="top-body"></div>
+            <div data-ax6grid-container="header" ref={ref => this.dom.container_header = ref}>
+              <div data-ax6grid-panel="aside-header"></div>
+              <div data-ax6grid-panel="left-header"></div>
+              <div data-ax6grid-panel="header">
+                <div data-ax6grid-panel-scroll="header"></div>
+              </div>
+              <div data-ax6grid-panel="right-header"></div>
             </div>
-            <div data-ax6grid-panel="top-right-body"></div>
-            <div data-ax6grid-panel="aside-body">
-              <div data-ax6grid-panel-scroll="aside-body"></div>
-            </div>
-            <div data-ax6grid-panel="left-body">
-              <div data-ax6grid-panel-scroll="left-body"></div>
-            </div>
-            <div data-ax6grid-panel="body">
-              <div data-ax6grid-panel-scroll="body">
+            <div data-ax6grid-container="body" ref={ref => this.dom.container_body = ref}>
+              <div data-ax6grid-panel="top-aside-body"></div>
+              <div data-ax6grid-panel="top-left-body"></div>
+              <div data-ax6grid-panel="top-body">
+                <div data-ax6grid-panel-scroll="top-body"></div>
+              </div>
+              <div data-ax6grid-panel="top-right-body"></div>
+              <div data-ax6grid-panel="aside-body">
+                <div data-ax6grid-panel-scroll="aside-body"></div>
+              </div>
+              <div data-ax6grid-panel="left-body">
+                <div data-ax6grid-panel-scroll="left-body"></div>
+              </div>
+              <div data-ax6grid-panel="body">
+                <div data-ax6grid-panel-scroll="body">
 
-                {this.state.dataOfList.length}
+                  {this.state.dataOfList.length}
 
+                </div>
+              </div>
+              <div data-ax6grid-panel="right-body">
+                <div data-ax6grid-panel-scroll="right-body"></div>
+              </div>
+              <div data-ax6grid-panel="bottom-aside-body"></div>
+              <div data-ax6grid-panel="bottom-left-body"></div>
+              <div data-ax6grid-panel="bottom-body">
+                <div data-ax6grid-panel-scroll="bottom-body"></div>
+              </div>
+              <div data-ax6grid-panel="bottom-right-body"></div>
+            </div>
+            <div data-ax6grid-container="page" ref={ref => this.dom.container_page = ref}>
+              <div data-ax6grid-page="holder">
+                <div data-ax6grid-page="navigation"></div>
+                <div data-ax6grid-page="status"></div>
               </div>
             </div>
-            <div data-ax6grid-panel="right-body">
-              <div data-ax6grid-panel-scroll="right-body"></div>
+            <div data-ax6grid-container="scroller">
+              <div data-ax6grid-scroller="vertical">
+                <div data-ax6grid-scroller="vertical-bar"></div>
+              </div>
+              <div data-ax6grid-scroller="horizontal">
+                <div data-ax6grid-scroller="horizontal-bar"></div>
+              </div>
+              <div data-ax6grid-scroller="corner"></div>
             </div>
-            <div data-ax6grid-panel="bottom-aside-body"></div>
-            <div data-ax6grid-panel="bottom-left-body"></div>
-            <div data-ax6grid-panel="bottom-body">
-              <div data-ax6grid-panel-scroll="bottom-body"></div>
-            </div>
-            <div data-ax6grid-panel="bottom-right-body"></div>
+            <div data-ax6grid-resizer="vertical"></div>
+            <div data-ax6grid-resizer="horizontal"></div>
           </div>
-          <div data-ax6grid-container="page" ref={ref => this.dom.container_page = ref}>
-            <div data-ax6grid-page="holder">
-              <div data-ax6grid-page="navigation"></div>
-              <div data-ax6grid-page="status"></div>
-            </div>
-          </div>
-          <div data-ax6grid-container="scroller">
-            <div data-ax6grid-scroller="vertical">
-              <div data-ax6grid-scroller="vertical-bar"></div>
-            </div>
-            <div data-ax6grid-scroller="horizontal">
-              <div data-ax6grid-scroller="horizontal-bar"></div>
-            </div>
-            <div data-ax6grid-scroller="corner"></div>
-          </div>
-          <div data-ax6grid-resizer="vertical"></div>
-          <div data-ax6grid-resizer="horizontal"></div>
         </div>
-      </div>
+      </Provider>
     );
   }
 }

@@ -1,11 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export default () => {
 
-  const style = {
-
-  }
+  const style = {}
 
   return (
     <nav>

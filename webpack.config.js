@@ -60,7 +60,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      'src': path.join(__dirname, './src')
+      'ax6ui-react-grid': path.join(__dirname, './src')
     }
   }
 };
