@@ -1,11 +1,10 @@
 import React from 'react';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import UTIL from './modules/util';
-import reducers from './modules/reducer';
+import gridApp from './reducers';
 
 //~~~~~
-const store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(gridApp, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 //~~~~~
 class AX6UIReactGrid extends React.Component {
