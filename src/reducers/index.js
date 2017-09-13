@@ -1,4 +1,4 @@
-import * as types from '../actions/ActionType';
+import * as act from '../actions';
 import {List, Map} from 'immutable';
 import { combineReducers } from 'redux';
 
@@ -11,12 +11,14 @@ const initialState = Map({
 
 
 // 리듀서 함수 정의
-function data(state = initialState, action) {
+const data = (state = initialState, action) => {
   // 레퍼런스 생성
-  const counters = state.get('counters');
+  const receivedList = state.get('receivedList');
   const processor = {
-    [types.INIT_DATA]: () => {
+    [act.INIT_DATA]: () => {
 
+      console.log("call init", receivedList);
+      return state;
     }
   };
 
@@ -25,8 +27,13 @@ function data(state = initialState, action) {
   }else{
     return state
   }
-}
+};
+
+const extra = (state = initialState, action) => {
+  return state;
+};
 
 export default combineReducers({
-  data
+  data,
+  extra
 });
