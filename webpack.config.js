@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: {index:'./dev/index.js'},
+  entry: {index: './dev/index.js'},
   output: {
     path: path.resolve(__dirname, 'dev/dist'),
     filename: '[name].js',
@@ -17,16 +17,36 @@ module.exports = {
     port: 4000,
     historyApiFallback: {
       rewrites: [
-        { from: /./, to: '/' }
+        {from: /./, to: '/'}
       ]
     }
   },
   module: {
     rules: [
-      {test: /\.css$/, use: 'css-loader'},
+      {
+        test: /\.css$/, use: [
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            localIdentName: '[path][name]__[local]--[hash:base64:5]'
+          }
+        }
+      ]
+      },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: [
+          {loader: 'style-loader'},
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[path][name]__[local]--[hash:base64:5]'
+            }
+          },
+          {loader: 'sass-loader'}
+        ]
       },
       {
         test: /\.(png|svg|jpg|gif|ico)$/,
@@ -40,7 +60,7 @@ module.exports = {
           'file-loader'
         ]
       },
-      { test: /\.html/, loader: "handlebars-loader" },
+      {test: /\.html/, loader: "handlebars-loader"},
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
