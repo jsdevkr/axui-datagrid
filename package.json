@@ -5,12 +5,13 @@
   "main": "AX6UIReactGrid.js",
   "repository": "https://github.com/ax6ui/ax6ui-react-grid",
   "dependencies": {
+    "classnames": "^2.2.5",
     "immutable": "^3.8.1",
     "react": "^15.6.1",
     "react-addons-update": "^15.6.0",
     "react-dom": "^15.6.1",
-    "redux": "^3.7.2",
     "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
     "redux-actions": "^2.2.1"
   },
   "devDependencies": {

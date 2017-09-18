@@ -7,21 +7,28 @@ const initialState = Map({
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
-  page: Map({})
+  page: Map({}),
+  scrollLeft: 0,
+  scrollTop: 0
 });
 
 
 // 리듀서 함수 정의
 const data = (state = initialState, action) => {
-  // 레퍼런스 생성
-  // const receivedList = state.get('receivedList');
-  const processor = {
-    [act.INIT_DATA]: () => {
-      // console.log("call init", receivedList, action);
 
-      state.set('receivedList', List(action.list));
-      state.set('page', Map(action.page));
+  const processor = {
+    [act.INIT_DATA]: () => { // 그리드 데이터 초기화
+
+      state = state
+        .set('receivedList', List(action.receivedList))
+        .set('page', Map(action.page));
+
+      console.log(state.toJS());
+
       return state;
+    },
+    [act.UPDATE_SCROLL]: () => {
+
     }
   };
 
