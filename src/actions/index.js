@@ -4,16 +4,16 @@ export function initData(receivedList = [], page = {}) {
   return {
     type: INIT_DATA,
     receivedList,
-    page
+    page,
   }
 }
 
 /* 그리드 스크롤 업데이트 */
 export const UPDATE_SCROLL = 'UPDATE_SCROLL';
-export function updateScroll(scrollTop = 0, scrollLeft = 0) {
+export function updateScroll(scrollLeft = 0, scrollTop = 0) {
   return {
     type: UPDATE_SCROLL,
+    scrollLeft,
     scrollTop,
-    scrollLeft
   }
 }
