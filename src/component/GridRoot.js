@@ -1,21 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
-import {connect} from 'react-redux';
-import * as act from '../actions';
 import sass from '../scss/index.scss';
 
 //~~~~~
-class AX6UIReactGrid extends React.Component {
+
+class GridRoot extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      scrollTop: 0,
-      scrollLeft: 0
-    };
-
     // props에 추가된 액션만 호출 가능
-    props.initData(props.data, {pageNo:9});
+    props.init(props);
   }
 
   render() {
@@ -25,13 +18,13 @@ class AX6UIReactGrid extends React.Component {
 
     return (
       <div data-ax6ui-grid-root className={classNames(sass.gridRoot)} style={style}>
-        
+
       </div>
     );
   }
 }
 
-AX6UIReactGrid.defaultProps = {
+GridRoot.defaultProps = {
   height: "300px",
   theme: 'default',
   animateTime: 250,
@@ -123,14 +116,4 @@ AX6UIReactGrid.defaultProps = {
   }
 };
 
-const mapStateToProps = (state) => {
-  return {}
-};
-
-// 액션함수 준비
-const mapToDispatch = (dispatch) => ({
-  initData: (data, page) => dispatch(act.initData(data, page)),
-  updateScroll: (top, left) => dispatch(act.updateScroll(top, left))
-});
-
-export default connect(mapStateToProps, mapToDispatch)(AX6UIReactGrid);
+export default GridRoot;

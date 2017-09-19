@@ -1,6 +1,6 @@
 import * as act from '../actions';
 import {List, Map} from 'immutable';
-import {combineReducers} from 'redux';
+import {isNumber, isString, extendOwn} from "underscore";
 
 // 초기 상태
 const initialState = Map({
@@ -37,6 +37,12 @@ const initialState = Map({
   footSumTable: Map({}), // footSum의 출력레이아웃
   leftFootSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
   footSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+  columnKeys: Map({
+    selected: '__selected__',
+    modified: '__modified__',
+    deleted: '__deleted__',
+    disableSelection: '__disable_selection__'
+  })
 });
 
 /*
@@ -49,28 +55,52 @@ this.xvar = {
 */
 
 // 리듀서 함수 정의
-const data = (state = initialState, action) => {
-
+const grid = (state = initialState, action) => {
   const processor = {
-    [act.INIT_DATA]: () => { // 그리드 데이터 초기화
+    [act.INIT]: () => { // 그리드 데이터 초기화
+      let columnKeys = extendOwn(state.get('columnKeys').toJS(), action.columnKeys)
+      if (action.columnKeys) {
+        state = state.set('columnKeys', Map(columnKeys));
+      }
+
+      let list = action.receivedList.filter(function (item) {
+        if(item) {
+          if (item[columnKeys.deleted]) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      return state
+        .set('receivedList', List(action.receivedList))
+        .set('list', List(list))
+        .set('page', Map(action.page));
+    },
+    [act.SET_DATA]: () => {
       return state
         .set('receivedList', List(action.receivedList))
         .set('page', Map(action.page));
     },
-    [act.UPDATE_SCROLL]: (state = initialState, action) => {
-      return state
-        .set('scrollLeft', action.scrollLeft)
-        .set('scrollTop', action.scrollTop);
+    [act.UPDATE_SCROLL]: () => {
+      if (isNumber(action.scrollLeft) || isString(action.scrollLeft)) {
+        state = state.set('scrollLeft', action.scrollLeft);
+      }
+      if (isNumber(action.scrollTop) || isString(action.scrollTop)) {
+        state = state.set('scrollTop', action.scrollTop);
+      }
+
+      return state;
     }
   };
 
   if (action.type in processor) {
     return processor[action.type]();
   } else {
-    return state
+    return state;
   }
 };
 
-export default combineReducers({
-  data
-});
+export default grid;

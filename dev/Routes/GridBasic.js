@@ -13,7 +13,7 @@ class GridBasic extends React.Component {
       showLineNumber: true,
       showRowSelector: false,
       columnKeys: {
-        deleted: "__ABC__"
+        modified: "__ABC__"
       }
     };
 
