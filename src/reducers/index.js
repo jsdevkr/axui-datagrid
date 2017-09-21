@@ -1,6 +1,7 @@
 import * as act from '../actions';
 import {List, Map} from 'immutable';
-import {isNumber, isString, extendOwn} from "underscore";
+import {extendOwn, isNumber, isString} from "underscore";
+// import {mouseEventNames} from '../_inc/preference';
 
 // 초기 상태
 const initialState = Map({
@@ -37,12 +38,76 @@ const initialState = Map({
   footSumTable: Map({}), // footSum의 출력레이아웃
   leftFootSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
   footSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-  columnKeys: Map({
-    selected: '__selected__',
-    modified: '__modified__',
-    deleted: '__deleted__',
-    disableSelection: '__disable_selection__'
+  options: Map({
+    frozenColumnIndex: 0,
+    frozenRowIndex: 0,
+    showLineNumber: false,
+    showRowSelector: false,
+    multipleSelect: true,
+    columnMinWidth: 100,
+    lineNumberColumnWidth: 30,
+    rowSelectorColumnWidth: 26,
+    sortable: undefined,
+    remoteSort: false,
+    header: Map({
+      display: true,
+      align: false,
+      columnHeight: 26,
+      columnPadding: 3,
+      columnBorderWidth: 1,
+      selector: true
+    }),
+    body: Map({
+      align: false,
+      columnHeight: 26,
+      columnPadding: 3,
+      columnBorderWidth: 1,
+      grouping: false,
+      mergeCells: false
+    }),
+    page: Map({
+      height: 25,
+      display: true,
+      statusDisplay: true,
+      navigationItemCount: 5
+    }),
+    scroller: Map({
+      size: 15,
+      barMinSize: 15,
+      trackPadding: 4
+    }),
+    columnKeys: Map({
+      selected: '__selected__',
+      modified: '__modified__',
+      deleted: '__deleted__',
+      disableSelection: '__disable_selection__'
+    }),
+    tree: Map({
+      use: false,
+      hashDigit: 8,
+      indentWidth: 10,
+      arrowWidth: 15,
+      iconWidth: 18,
+      icons: Map({
+        openedArrow: '▾',
+        collapsedArrow: '▸',
+        groupIcon: '⊚',
+        collapsedGroupIcon: '⊚',
+        itemIcon: '⊙'
+      }),
+      columnKeys: Map({
+        parentKey: "pid",
+        selfKey: "id",
+        collapse: "collapse",
+        hidden: "hidden",
+        parentHash: "__hp__",
+        selfHash: "__hs__",
+        children: "__children__",
+        depth: "__depth__",
+      })
+    })
   })
+
 });
 
 /*
@@ -58,13 +123,12 @@ this.xvar = {
 const grid = (state = initialState, action) => {
   const processor = {
     [act.INIT]: () => { // 그리드 데이터 초기화
-      let columnKeys = extendOwn(state.get('columnKeys').toJS(), action.columnKeys)
+      let columnKeys = extendOwn(state.getIn(['options', 'columnKeys']).toJS(), action.columnKeys);
       if (action.columnKeys) {
-        state = state.set('columnKeys', Map(columnKeys));
+        state = state.setIn(['options', 'columnKeys'], Map(columnKeys));
       }
-
       let list = action.receivedList.filter(function (item) {
-        if(item) {
+        if (item) {
           if (item[columnKeys.deleted]) {
             return false;
           } else {
@@ -74,11 +138,30 @@ const grid = (state = initialState, action) => {
         return false;
       });
 
+      // 정리할 state
+      // headerTable
+      // options.frozenColumnIndex
+      // bodyRowTable
+      // bodyRowMap
+      // options.bodyTrHeight
+      // colGroup
+      // footSumColumns
+      // footSumTable
+      // bodyGrouping
+      // bodyGroupingTable
+
+
       return state
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
         .set('page', Map(action.page));
+
     },
+    // 필요 액션들
+    // resetColGroupWidths
+    // resizeGrid
+
+
     [act.SET_DATA]: () => {
       return state
         .set('receivedList', List(action.receivedList))

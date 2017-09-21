@@ -8,8 +8,7 @@ class GridBasic extends React.Component {
   constructor(props) {
     super(props);
 
-    const gridConfig = {
-      animateTime: 300,
+    const gridOptions = {
       showLineNumber: true,
       showRowSelector: false,
       columnKeys: {
@@ -19,14 +18,17 @@ class GridBasic extends React.Component {
 
     let gridData = [
       {id: 1, title: "테스트"},
-      {id: 2, title: "테스트"},
+      {id: 2, title: "테스트", __deleted__: true},
       {id: 3, title: "테스트"}
     ];
 
     this.state = {
-      config: gridConfig,
       height: "300px",
-      data: gridData
+      columns: [
+        {key:"no", label:"번호"}
+      ],
+      data: gridData,
+      options: gridOptions
     }
   }
 
@@ -51,9 +53,11 @@ class GridBasic extends React.Component {
     return (
       <div>
         <AX6UIGrid
-          {...this.state.config}
           height={this.state.height}
-          data={this.state.data}></AX6UIGrid>
+          columns={this.state.columns}
+          data={this.state.data}
+          options={this.state.options}
+        ></AX6UIGrid>
 
         {this.props.name} /
         {this.state.height}
