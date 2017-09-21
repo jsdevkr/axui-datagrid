@@ -1,34 +1,30 @@
 import {isArray, isObject} from "underscore";
+import { propsConverterForData } from "../_inc/utils";
 
 /* 그리드 초기화 :  */
 export const INIT = 'INIT';
 
 export function init(props) {
+  let Obj_data = propsConverterForData(props.data);
   return {
     type: INIT,
-    receivedList: props.data || [],
-    page: props.page || {},
-    scroller: props.scroller,
-    columnKeys: props.columnKeys
+    height: props.height,
+    columns: props.columns,
+    receivedList: Obj_data.receivedList,
+    page: Obj_data.page,
+    options: props.options
   }
 }
 
 /* 그리드 데이터 변경 */
 export const SET_DATA= 'SET_DATA';
 export function setData(data) {
-  let receivedList = [], page = {};
-  if (isArray(data)) {
-    receivedList = data;
-  }
-  else if (isObject(data)) {
-    receivedList = data.list || [];
-    page = data.page || {};
-  }
+  let Obj_data = propsConverterForData(data);
 
   return {
     type: SET_DATA,
-    receivedList: receivedList,
-    page: page
+    receivedList: Obj_data.receivedList,
+    page: Obj_data.page,
   }
 }
 

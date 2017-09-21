@@ -1,7 +1,8 @@
 import * as act from '../actions';
 import {List, Map} from 'immutable';
-import {extendOwn, isNumber, isString} from "underscore";
+import {extend, extendOwn, isNumber, isString, isObject, each} from "underscore";
 // import {mouseEventNames} from '../_inc/preference';
+import * as UTIL from '../_inc/utils';
 
 // 초기 상태
 const initialState = Map({
@@ -49,53 +50,53 @@ const initialState = Map({
     rowSelectorColumnWidth: 26,
     sortable: undefined,
     remoteSort: false,
-    header: Map({
+    header: {
       display: true,
       align: false,
       columnHeight: 26,
       columnPadding: 3,
       columnBorderWidth: 1,
       selector: true
-    }),
-    body: Map({
+    },
+    body: {
       align: false,
       columnHeight: 26,
       columnPadding: 3,
       columnBorderWidth: 1,
       grouping: false,
       mergeCells: false
-    }),
-    page: Map({
+    },
+    page: {
       height: 25,
       display: true,
       statusDisplay: true,
       navigationItemCount: 5
-    }),
-    scroller: Map({
+    },
+    scroller: {
       size: 15,
       barMinSize: 15,
       trackPadding: 4
-    }),
-    columnKeys: Map({
+    },
+    columnKeys: {
       selected: '__selected__',
       modified: '__modified__',
       deleted: '__deleted__',
       disableSelection: '__disable_selection__'
-    }),
-    tree: Map({
+    },
+    tree: {
       use: false,
       hashDigit: 8,
       indentWidth: 10,
       arrowWidth: 15,
       iconWidth: 18,
-      icons: Map({
+      icons: {
         openedArrow: '▾',
         collapsedArrow: '▸',
         groupIcon: '⊚',
         collapsedGroupIcon: '⊚',
         itemIcon: '⊙'
-      }),
-      columnKeys: Map({
+      },
+      columnKeys: {
         parentKey: "pid",
         selfKey: "id",
         collapse: "collapse",
@@ -104,10 +105,9 @@ const initialState = Map({
         selfHash: "__hs__",
         children: "__children__",
         depth: "__depth__",
-      })
-    })
+      }
+    }
   })
-
 });
 
 /*
@@ -123,20 +123,40 @@ this.xvar = {
 const grid = (state = initialState, action) => {
   const processor = {
     [act.INIT]: () => { // 그리드 데이터 초기화
-      let columnKeys = extendOwn(state.getIn(['options', 'columnKeys']).toJS(), action.columnKeys);
-      if (action.columnKeys) {
-        state = state.setIn(['options', 'columnKeys'], Map(columnKeys));
-      }
-      let list = action.receivedList.filter(function (item) {
-        if (item) {
-          if (item[columnKeys.deleted]) {
-            return false;
-          } else {
-            return true;
+      let headerTable, bodyRowTable, bodyRowMap, colGroup, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable;
+      let bodyTrHeight;
+      let list; // 그리드에 표현할 목록
+      let options = state.get('options').toJS();
+        each(action.options, function (v, k) {
+          options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
+        });
+      
+      headerTable = UTIL.makeHeaderTable(action.columns, options);
+      
+      console.log(headerTable);
+      
+      bodyRowTable = UTIL.makeBodyRowTable(action.columns, options);
+      bodyRowMap = UTIL.makeBodyRowMap(bodyRowTable, options);
+
+      options.frozenColumnIndex = options.frozenColumnIndex || 0;
+      options.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
+
+      // colGroupMap
+      {
+        colGroupMap = {};
+        for (let r = 0, rl = headerTable.rows.length; r < rl; r++) {
+          let row = headerTable.rows[r];
+          for (let c = 0, cl = row.cols.length; c < cl; c++) {
+            colGroupMap[row.cols[c].colIndex] = extend({}, row.cols[c]);
           }
         }
-        return false;
-      });
+
+        colGroup = [];
+        each(colGroupMap, function (v, k) {
+          colGroup.push(v);
+        });
+      }
+
 
       // 정리할 state
       // headerTable
@@ -150,16 +170,36 @@ const grid = (state = initialState, action) => {
       // bodyGrouping
       // bodyGroupingTable
 
+      {
+        list = action.receivedList.filter(function (item) {
+          if (item) {
+            if (item[options.columnKeys.deleted]) {
+              return false;
+            } else {
+              return true;
+            }
+          }
+          return false;
+        });
+      }
+
 
       return state
+        .set('columns', List(action.columns))
+        .set('headerTable', Map(headerTable))
+        .set('bodyRowTable', Map(bodyRowTable))
+        .set('bodyRowMap', Map(bodyRowMap))
+        .set('colGroup', Map(colGroup))
+        .set('colGroupMap', Map(colGroupMap))
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
-        .set('page', Map(action.page));
+        .set('page', isObject(action.page) ? Map(action.page) : false)
+        .set('options', Map(options));
 
     },
     // 필요 액션들
     // resetColGroupWidths
-    // resizeGrid
+    // alignGrid
 
 
     [act.SET_DATA]: () => {

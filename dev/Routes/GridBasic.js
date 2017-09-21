@@ -25,7 +25,8 @@ class GridBasic extends React.Component {
     this.state = {
       height: "300px",
       columns: [
-        {key:"no", label:"번호"}
+        {key:"no", label:"번호"},
+        {key:"title", label:"제목"}
       ],
       data: gridData,
       options: gridOptions

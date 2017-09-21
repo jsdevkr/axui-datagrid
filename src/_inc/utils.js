@@ -1,3 +1,6 @@
+import {List} from 'immutable';
+import {extend, isArray, isObject} from "underscore";
+
 export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
 
   let tempTable_l = {rows: []},
@@ -10,16 +13,16 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
     tempTable_r.rows[r] = {cols: []};
 
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col = jQuery.extend({}, row.cols[c]),
+      let col           = jQuery.extend({}, row.cols[c]),
           colStartIndex = col.colIndex,
-          colEndIndex = col.colIndex + col.colspan;
+          colEndIndex   = col.colIndex + col.colspan;
 
       if (colStartIndex < _frozenColumnIndex) {
         if (colEndIndex <= _frozenColumnIndex) {
           // 좌측편에 변형없이 추가
           tempTable_l.rows[r].cols.push(col);
         } else {
-          let leftCol = jQuery.extend({}, col),
+          let leftCol  = jQuery.extend({}, col),
               rightCol = jQuery.extend({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
@@ -49,7 +52,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
     leftData: tempTable_l,
     rightData: tempTable_r
   }
-};
+}
 
 export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnIndex) {
 
@@ -59,7 +62,7 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
 
     tempTable.rows[r] = {cols: []};
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col = jQuery.extend({}, row.cols[c]),
+      let col                                       = jQuery.extend({}, row.cols[c]),
           colStartIndex = col.colIndex, colEndIndex = col.colIndex + col.colspan;
 
       if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
@@ -80,7 +83,7 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
   }
 
   return tempTable;
-};
+}
 
 export function getMousePosition(e) {
   let mouseObj,
@@ -92,63 +95,70 @@ export function getMousePosition(e) {
     clientX: mouseObj.pageX,
     clientY: mouseObj.pageY
   }
-};
+}
 
-export function makeHeaderTable(_columns) {
-  let columns = _columns,
-      cfg = this.config,
-      table = {
+/**
+ * @method
+ * @param _columns
+ * @param _options
+ * @return {{rows: Array}}
+ */
+export function makeHeaderTable(_columns, _options) {
+  let columns  = List(_columns),
+      table    = {
         rows: []
       },
-      colIndex = 0,
-      maekRows = function (_columns, depth, parentField) {
-        let row = {cols: []};
-        let i = 0, l = _columns.length;
-        let colspan = 1;
+      colIndex = 0;
 
-        for (; i < l; i++) {
-          let field = jQuery.extend({}, _columns[i]);
-          colspan = 1;
+  // todo immutable array
+  const maekRows = function (_columns, depth, parentField) {
+    let row = {cols: []};
+    let i = 0, l = _columns.length;
+    let colspan = 1;
 
-          if (!field.hidden) {
-            field.colspan = 1;
-            field.rowspan = 1;
+    for (; i < l; i++) {
+      let field = _columns.get(i);
+      colspan = 1;
 
-            field.rowIndex = depth;
-            field.colIndex = (function () {
-              if (!parentField) {
-                return colIndex++;
-              } else {
-                colIndex = parentField.colIndex + i + 1;
-                return parentField.colIndex + i;
-              }
-            })();
+      if (!field.hidden) {
+        field.colspan = 1;
+        field.rowspan = 1;
 
-            row.cols.push(field); // 복제된 필드 삽입
-
-            if ('columns' in field) {
-              colspan = maekRows(field.columns, depth + 1, field);
-            } else {
-              field.width = ('width' in field) ? field.width : cfg.columnMinWidth;
-            }
-            field.colspan = colspan;
+        field.rowIndex = depth;
+        field.colIndex = (function () {
+          if (!parentField) {
+            return colIndex++;
           } else {
-
-
+            colIndex = parentField.colIndex + i + 1;
+            return parentField.colIndex + i;
           }
-        }
+        })();
 
-        if (row.cols.length > 0) {
-          if (!table.rows[depth]) {
-            table.rows[depth] = {cols: []};
-          }
-          table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-          return (row.cols.length - 1) + colspan;
+        row.cols.push(field); // 복제된 필드 삽입
+
+        if ('columns' in field) {
+          colspan = maekRows(field.columns, depth + 1, field);
         } else {
-          return colspan;
+          field.width = ('width' in field) ? field.width : _options.columnMinWidth;
         }
+        field.colspan = colspan;
+      } else {
 
-      };
+
+      }
+    }
+
+    if (row.cols.length > 0) {
+      if (!table.rows[depth]) {
+        table.rows[depth] = {cols: []};
+      }
+      table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
+      return (row.cols.length - 1) + colspan;
+    } else {
+      return colspan;
+    }
+
+  };
 
   maekRows(columns, 0);
 
@@ -162,114 +172,121 @@ export function makeHeaderTable(_columns) {
   }
 
   return table;
-};
+}
 
-export function makeBodyRowTable(_columns) {
-  let columns = _columns,
-      table = {
+/**
+ * @method
+ * @param _columns
+ * @param _options
+ * @return {{rows: Array}}
+ */
+export function makeBodyRowTable(_columns, _options) {
+  let columns  = List(_columns),
+      table    = {
         rows: []
       },
-      colIndex = 0,
-      maekRows = function (_columns, depth, parentField) {
-        let row = {cols: []},
-            i = 0,
-            l = _columns.length,
+      colIndex = 0;
+
+  const maekRows = function (_columns, depth, parentField) {
+    let row     = {cols: []},
+        i       = 0,
+        l       = _columns.length,
+        colspan = 1;
+
+    let selfMakeRow = function (__columns) {
+      let i = 0, l = __columns.length;
+      for (; i < l; i++) {
+        let field   = __columns.get(i),
             colspan = 1;
 
-        let selfMakeRow = function (__columns) {
-          let i = 0, l = __columns.length;
-          for (; i < l; i++) {
-            let field = jQuery.extend({}, __columns[i]),
-                colspan = 1;
+        if (!field.hidden) {
 
-            if (!field.hidden) {
+          if ('key' in field) {
+            field.colspan = 1;
+            field.rowspan = 1;
 
-              if ('key' in field) {
-                field.colspan = 1;
-                field.rowspan = 1;
-
-                field.rowIndex = depth;
-                field.colIndex = (function () {
-                  if (!parentField) {
-                    return colIndex++;
-                  } else {
-                    colIndex = parentField.colIndex + i + 1;
-                    return parentField.colIndex + i;
-                  }
-                })();
-
-                row.cols.push(field);
-                if ('columns' in field) {
-                  colspan = maekRows(field.columns, depth + 1, field);
-                }
-                field.colspan = colspan;
+            field.rowIndex = depth;
+            field.colIndex = (function () {
+              if (!parentField) {
+                return colIndex++;
+              } else {
+                colIndex = parentField.colIndex + i + 1;
+                return parentField.colIndex + i;
               }
-              else {
-                if ('columns' in field) {
-                  selfMakeRow(field.columns, depth);
-                }
-              }
+            })();
+
+            row.cols.push(field);
+            if ('columns' in field) {
+              colspan = maekRows(field.columns, depth + 1, field);
             }
-            else {
-
-            }
-          }
-        };
-
-        for (; i < l; i++) {
-          let field = jQuery.extend({}, _columns[i]);
-          colspan = 1;
-
-          if (!field.hidden) {
-
-            if ('key' in field) {
-              field.colspan = 1;
-              field.rowspan = 1;
-
-              field.rowIndex = depth;
-              field.colIndex = (function () {
-                if (!parentField) {
-                  return colIndex++;
-                } else {
-                  colIndex = parentField.colIndex + i + 1;
-                  return parentField.colIndex + i;
-                }
-              })();
-
-              row.cols.push(field);
-              if ('columns' in field) {
-                colspan = maekRows(field.columns, depth + 1, field);
-              }
-              field.colspan = colspan;
-            }
-            else {
-              if ('columns' in field) {
-                selfMakeRow(field.columns, depth);
-              }
-            }
+            field.colspan = colspan;
           }
           else {
-
+            if ('columns' in field) {
+              selfMakeRow(field.columns, depth);
+            }
           }
-
-          field = null;
-        }
-
-        if (row.cols.length > 0) {
-          if (!table.rows[depth]) {
-            table.rows[depth] = {cols: []};
-          }
-          table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-          return (row.cols.length - 1) + colspan;
         }
         else {
-          return colspan;
+
         }
-      };
+      }
+    };
+
+    for (; i < l; i++) {
+      let field = _columns.get(i);
+      colspan = 1;
+
+      if (!field.hidden) {
+
+        if ('key' in field) {
+          field.colspan = 1;
+          field.rowspan = 1;
+
+          field.rowIndex = depth;
+          field.colIndex = (function () {
+            if (!parentField) {
+              return colIndex++;
+            } else {
+              colIndex = parentField.colIndex + i + 1;
+              return parentField.colIndex + i;
+            }
+          })();
+
+          row.cols.push(field);
+          if ('columns' in field) {
+            colspan = maekRows(field.columns, depth + 1, field);
+          }
+          field.colspan = colspan;
+        }
+        else {
+          if ('columns' in field) {
+            selfMakeRow(field.columns, depth);
+          }
+        }
+      }
+      else {
+
+      }
+
+      field = null;
+    }
+
+    if (row.cols.length > 0) {
+      if (!table.rows[depth]) {
+        table.rows[depth] = {cols: []};
+      }
+      table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
+      return (row.cols.length - 1) + colspan;
+    }
+    else {
+      return colspan;
+    }
+  };
 
   maekRows(columns, 0);
 
-  (function (table) {
+  {
     // set rowspan
     for (let r = 0, rl = table.rows.length; r < rl; r++) {
       let row = table.rows[r];
@@ -282,20 +299,27 @@ export function makeBodyRowTable(_columns) {
       }
       row = null;
     }
-  })(table);
+  }
+  ;
 
   return table;
-};
+}
 
-export function makeBodyRowMap(_table) {
+/**
+ * @method
+ * @param _table
+ * @param _options
+ * @return {{}}
+ */
+export function makeBodyRowMap(_table, _options) {
   let map = {};
   _table.rows.forEach(function (row) {
     row.cols.forEach(function (col) {
-      map[col.rowIndex + "_" + col.colIndex] = jQuery.extend({}, col);
+      map[col.rowIndex + "_" + col.colIndex] = extend({}, col);
     });
   });
   return map;
-};
+}
 
 export function makeFootSumTable(_footSumColumns) {
   let table = {
@@ -304,7 +328,7 @@ export function makeFootSumTable(_footSumColumns) {
 
   for (let r = 0, rl = _footSumColumns.length; r < rl; r++) {
     let footSumRow = _footSumColumns[r],
-        addC = 0;
+        addC       = 0;
 
     table.rows[r] = {cols: []};
 
@@ -350,14 +374,14 @@ export function makeFootSumTable(_footSumColumns) {
   }
 
   return table;
-};
+}
 
 export function makeBodyGroupingTable(_bodyGroupingColumns) {
   let table = {
         rows: []
       },
-      r = 0,
-      addC = 0;
+      r     = 0,
+      addC  = 0;
 
   table.rows[r] = {cols: []};
   for (let c = 0, cl = _bodyGroupingColumns.length; c < cl; c++) {
@@ -401,12 +425,12 @@ export function makeBodyGroupingTable(_bodyGroupingColumns) {
   }
 
   return table;
-};
+}
 
 export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
   let _containerPanelName,
       _isScrollPanel = false,
-      _panels = [];
+      _panels        = [];
 
   if (this.xvar.frozenRowIndex > _dindex) _panels.push("top");
   if (this.xvar.frozenColumnIndex > _colIndex) _panels.push("left");
@@ -423,10 +447,10 @@ export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
     containerPanelName: _containerPanelName,
     isScrollPanel: _isScrollPanel
   }
-};
+}
 
 export function getRealPathForDataItem(_dataPath) {
-  let path = [],
+  let path  = [],
       _path = [].concat(_dataPath.split(/[\.\[\]]/g));
 
   _path.forEach(function (n) {
@@ -434,4 +458,26 @@ export function getRealPathForDataItem(_dataPath) {
   });
   _path = null;
   return path.join("");
-};
+}
+
+/**
+ * @method
+ * @param data
+ * @return {{receivedList: Array, page: {}}}
+ */
+export function propsConverterForData(data) {
+  let Obj_return = {
+    receivedList: [],
+    page: false
+  };
+
+  if (isArray(data)) {
+    Obj_return.receivedList = data;
+  }
+  else if (isObject(data)) {
+    Obj_return.receivedList = data.list || [];
+    Obj_return.page = data.page || {};
+  }
+
+  return Obj_return;
+}
