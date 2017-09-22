@@ -132,9 +132,6 @@ const grid = (state = initialState, action) => {
         });
       
       headerTable = UTIL.makeHeaderTable(action.columns, options);
-      
-      console.log(headerTable);
-      
       bodyRowTable = UTIL.makeBodyRowTable(action.columns, options);
       bodyRowMap = UTIL.makeBodyRowMap(bodyRowTable, options);
 
@@ -159,12 +156,6 @@ const grid = (state = initialState, action) => {
 
 
       // 정리할 state
-      // headerTable
-      // options.frozenColumnIndex
-      // bodyRowTable
-      // bodyRowMap
-      // options.bodyTrHeight
-      // colGroup
       // footSumColumns
       // footSumTable
       // bodyGrouping

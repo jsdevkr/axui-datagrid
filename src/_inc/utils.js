@@ -113,7 +113,7 @@ export function makeHeaderTable(_columns, _options) {
   // todo immutable array
   const maekRows = function (_columns, depth, parentField) {
     let row = {cols: []};
-    let i = 0, l = _columns.length;
+    let i = 0, l = _columns.size;
     let colspan = 1;
 
     for (; i < l; i++) {
@@ -181,22 +181,24 @@ export function makeHeaderTable(_columns, _options) {
  * @return {{rows: Array}}
  */
 export function makeBodyRowTable(_columns, _options) {
-  let columns  = List(_columns),
-      table    = {
-        rows: []
-      },
-      colIndex = 0;
+  let columns = List(_columns);
+  let table = {
+    rows: []
+  };
+  let colIndex = 0;
 
   const maekRows = function (_columns, depth, parentField) {
-    let row     = {cols: []},
-        i       = 0,
-        l       = _columns.length,
-        colspan = 1;
+    let row = {cols: []};
+    let i = 0;
+    let l = _columns.size;
+    let colspan = 1;
 
-    let selfMakeRow = function (__columns) {
-      let i = 0, l = __columns.length;
+    const selfMakeRow = function (__columns) {
+      let i = 0;
+      let l = __columns.length;
+      
       for (; i < l; i++) {
-        let field   = __columns.get(i),
+        let field   = __columns,
             colspan = 1;
 
         if (!field.hidden) {
@@ -300,7 +302,6 @@ export function makeBodyRowTable(_columns, _options) {
       row = null;
     }
   }
-  ;
 
   return table;
 }
@@ -448,6 +449,7 @@ export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
     isScrollPanel: _isScrollPanel
   }
 }
+
 
 export function getRealPathForDataItem(_dataPath) {
   let path  = [],
