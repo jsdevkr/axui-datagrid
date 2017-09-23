@@ -16,6 +16,14 @@ export function init(props) {
   }
 }
 
+export const DID_MOUNT = 'DID_MOUNT';
+export function didMount(props, refs) {
+  return {
+    type: DID_MOUNT,
+    refs: refs
+  }
+}
+
 /* 그리드 데이터 변경 */
 export const SET_DATA= 'SET_DATA';
 export function setData(data) {
@@ -30,7 +38,6 @@ export function setData(data) {
 
 /* 그리드 스크롤 업데이트 */
 export const UPDATE_SCROLL = 'UPDATE_SCROLL';
-
 export function updateScroll(scrollLeft, scrollTop) {
   return {
     type: UPDATE_SCROLL,

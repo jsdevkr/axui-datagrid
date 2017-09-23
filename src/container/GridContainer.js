@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
 // 액션함수 준비
 const mapToDispatch = (dispatch) => ({
   init: (props) => dispatch(act.init(props)),
+  didMount: (props, refs) => dispatch(act.didMount(props, refs)),
   setData: (data) => dispatch(act.setData(data)),
   updateScroll: (left, top) => dispatch(act.updateScroll(left, top))
 });

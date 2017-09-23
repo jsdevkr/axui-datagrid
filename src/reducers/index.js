@@ -1,6 +1,7 @@
+import ReactDOM from 'react-dom';
 import * as act from '../actions';
 import {List, Map} from 'immutable';
-import {extend, extendOwn, isNumber, isString, isObject, each} from "underscore";
+import {each, extend, extendOwn, isArray, isNumber, isObject, isString} from "underscore";
 // import {mouseEventNames} from '../_inc/preference';
 import * as UTIL from '../_inc/utils';
 
@@ -106,7 +107,8 @@ const initialState = Map({
         children: "__children__",
         depth: "__depth__",
       }
-    }
+    },
+    footSum: false
   })
 });
 
@@ -123,14 +125,14 @@ this.xvar = {
 const grid = (state = initialState, action) => {
   const processor = {
     [act.INIT]: () => { // 그리드 데이터 초기화
-      let headerTable, bodyRowTable, bodyRowMap, colGroup, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable;
+      let headerTable, bodyRowTable, bodyRowMap, colGroup, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
       let bodyTrHeight;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
-        each(action.options, function (v, k) {
-          options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
-        });
-      
+      each(action.options, function (v, k) {
+        options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
+      });
+
       headerTable = UTIL.makeHeaderTable(action.columns, options);
       bodyRowTable = UTIL.makeBodyRowTable(action.columns, options);
       bodyRowMap = UTIL.makeBodyRowMap(bodyRowTable, options);
@@ -161,6 +163,52 @@ const grid = (state = initialState, action) => {
       // bodyGrouping
       // bodyGroupingTable
 
+      // colGroupWidths -- render 후 처리
+      {
+        // colGroup = UTIL.resetColGroupWidth(colGroup, options);
+      }
+
+      // footSum
+      {
+        footSumColumns = [];
+        footSumTable = {};
+
+        if (isArray(options.footSum)) {
+          footSumColumns = options.footSum;
+          footSumTable = UTIL.makeFootSumTable(footSumColumns, colGroup, options);
+        }
+      }
+
+      // grouping info
+      if (options.body.grouping) {
+        if ("by" in options.body.grouping && "columns" in options.body.grouping) {
+          bodyGrouping = {
+            by: options.body.grouping.by,
+            columns: options.body.grouping.columns
+          };
+          bodyGroupingTable = UTIL.makeBodyGroupingTable(bodyGrouping.columns, colGroup, options);
+          sortInfo = (() => {
+            let sortInfo = {};
+            for (let k = 0, kl = bodyGrouping.by.length; k < kl; k++) {
+              sortInfo[bodyGrouping.by[k]] = {
+                orderBy: "asc",
+                seq: k,
+                fixed: true
+              };
+              for (let c = 0, cl = colGroup.length; c < cl; c++) {
+                if (colGroup[c].key === bodyGrouping.by[k]) {
+                  colGroup[c].sort = "asc";
+                  colGroup[c].sortFixed = true;
+                }
+              }
+            }
+            return sortInfo;
+          })();
+        } else {
+          options.body.grouping = false;
+        }
+      }
+
       {
         list = action.receivedList.filter(function (item) {
           if (item) {
@@ -174,7 +222,6 @@ const grid = (state = initialState, action) => {
         });
       }
 
-
       return state
         .set('columns', List(action.columns))
         .set('headerTable', Map(headerTable))
@@ -182,6 +229,11 @@ const grid = (state = initialState, action) => {
         .set('bodyRowMap', Map(bodyRowMap))
         .set('colGroup', Map(colGroup))
         .set('colGroupMap', Map(colGroupMap))
+        .set('footSumColumns', Map(footSumColumns))
+        .set('footSumTable', Map(footSumTable))
+        .set('bodyGrouping', Map(bodyGrouping))
+        .set('bodyGroupingTable', Map(bodyGroupingTable))
+        .set('sortInfo', Map(sortInfo))
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
         .set('page', isObject(action.page) ? Map(action.page) : false)
@@ -191,8 +243,11 @@ const grid = (state = initialState, action) => {
     // 필요 액션들
     // resetColGroupWidths
     // alignGrid
-
-
+    [act.DID_MOUNT]: () => {
+      let elWidth = ReactDOM.findDOMNode(action.refs.gridRoot).getBoundingClientRect().width;
+      console.log(elWidth);
+      
+    },
     [act.SET_DATA]: () => {
       return state
         .set('receivedList', List(action.receivedList))

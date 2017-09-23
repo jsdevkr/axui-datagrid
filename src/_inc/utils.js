@@ -322,7 +322,14 @@ export function makeBodyRowMap(_table, _options) {
   return map;
 }
 
-export function makeFootSumTable(_footSumColumns) {
+/**
+ * @method
+ * @param _footSumColumns
+ * @param colGroup
+ * @param options
+ * @return {{rows: Array}}
+ */
+export function makeFootSumTable(_footSumColumns, colGroup, options) {
   let table = {
     rows: []
   };
@@ -334,7 +341,7 @@ export function makeFootSumTable(_footSumColumns) {
     table.rows[r] = {cols: []};
 
     for (let c = 0, cl = footSumRow.length; c < cl; c++) {
-      if (addC > this.colGroup.length) break;
+      if (addC > colGroup.length) break;
       let colspan = footSumRow[c].colspan || 1;
       if (footSumRow[c].label || footSumRow[c].key) {
         table.rows[r].cols.push({
@@ -360,8 +367,8 @@ export function makeFootSumTable(_footSumColumns) {
       colspan = null;
     }
 
-    if (addC < this.colGroup.length) {
-      for (let c = addC; c < this.colGroup.length; c++) {
+    if (addC < colGroup.length) {
+      for (let c = addC; c < colGroup.length; c++) {
         table.rows[r].cols.push({
           colIndex: (c),
           colspan: 1,
@@ -377,7 +384,8 @@ export function makeFootSumTable(_footSumColumns) {
   return table;
 }
 
-export function makeBodyGroupingTable(_bodyGroupingColumns) {
+
+export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
   let table = {
         rows: []
       },
@@ -385,8 +393,9 @@ export function makeBodyGroupingTable(_bodyGroupingColumns) {
       addC  = 0;
 
   table.rows[r] = {cols: []};
+
   for (let c = 0, cl = _bodyGroupingColumns.length; c < cl; c++) {
-    if (addC > this.columns.length) break;
+    if (addC > options.columns.length) break;
     let colspan = _bodyGroupingColumns[c].colspan || 1;
     if (_bodyGroupingColumns[c].label || _bodyGroupingColumns[c].key) {
       table.rows[r].cols.push({
@@ -413,8 +422,8 @@ export function makeBodyGroupingTable(_bodyGroupingColumns) {
     addC += colspan;
   }
 
-  if (addC < this.colGroup.length) {
-    for (var c = addC; c < this.colGroup.length; c++) {
+  if (addC < colGroup.length) {
+    for (var c = addC; c < colGroup.length; c++) {
       table.rows[r].cols.push({
         rowIndex: 0,
         colIndex: (c),
@@ -482,4 +491,43 @@ export function propsConverterForData(data) {
   }
 
   return Obj_return;
+}
+
+/**
+ * @method
+ * @param {Array} _colGroup
+ * @return {*|Immutable.List<any>}
+ */
+export function resetColGroupWidth(_colGroup, options, ) {
+  //let colGroup = List(_colGroup);
+
+  /// !! 그리드 target의 크기가 변경되면 이 함수를 호출하려 this.colGroup의 _width 값을 재 계산 하여야 함. [tom]
+  let CT_WIDTH = this.$["container"]["root"].width() - (function () {
+        let width = 0;
+        if (cfg.showLineNumber) width += cfg.lineNumberColumnWidth;
+        if (cfg.showRowSelector) width += cfg.rowSelectorColumnWidth;
+        width += cfg.scroller.size;
+        return width;
+      })(),
+      totalWidth = 0, computedWidth, autoWidthColgroupIndexs = [],
+      colGroup = this.colGroup,
+      i, l;
+
+  for (i = 0, l = colGroup.length; i < l; i++) {
+    if (U.isNumber(colGroup[i].width)) {
+      totalWidth += colGroup[i]._width = colGroup[i].width;
+    } else if (colGroup[i].width === "*") {
+      autoWidthColgroupIndexs.push(i);
+    } else if (U.right(colGroup[i].width, 1) === "%") {
+      totalWidth += colGroup[i]._width = CT_WIDTH * U.left(colGroup[i].width, "%") / 100;
+    }
+  }
+  if (autoWidthColgroupIndexs.length > 0) {
+    computedWidth = (CT_WIDTH - totalWidth) / autoWidthColgroupIndexs.length;
+    for (i = 0, l = autoWidthColgroupIndexs.length; i < l; i++) {
+      colGroup[autoWidthColgroupIndexs[i]]._width = computedWidth;
+    }
+  }
+
+  return colGroup;
 }

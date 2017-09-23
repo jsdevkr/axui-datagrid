@@ -11,13 +11,20 @@ class GridRoot extends React.Component {
     props.init(props);
   }
 
+  componentDidMount(){
+
+    // ReactDOM.findDOMNode(action.refs.gridRoot)
+
+    this.props.didMount(this.props, this.refs);
+  }
+
   render() {
     let style = {
       height: this.props.height
     };
 
     return (
-      <div data-ax6ui-grid-root className={classNames(sass.gridRoot)} style={style}>
+      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={style}>
 
       </div>
     );
