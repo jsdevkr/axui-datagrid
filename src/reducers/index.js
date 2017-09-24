@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import * as act from '../actions';
 import {List, Map} from 'immutable';
 import {each, extend, extendOwn, isArray, isNumber, isObject, isString} from "underscore";
@@ -129,6 +128,7 @@ const grid = (state = initialState, action) => {
       let bodyTrHeight;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
+
       each(action.options, function (v, k) {
         options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
       });
@@ -154,18 +154,6 @@ const grid = (state = initialState, action) => {
         each(colGroupMap, function (v, k) {
           colGroup.push(v);
         });
-      }
-
-
-      // 정리할 state
-      // footSumColumns
-      // footSumTable
-      // bodyGrouping
-      // bodyGroupingTable
-
-      // colGroupWidths -- render 후 처리
-      {
-        // colGroup = UTIL.resetColGroupWidth(colGroup, options);
       }
 
       // footSum
@@ -209,25 +197,24 @@ const grid = (state = initialState, action) => {
         }
       }
 
-      {
-        list = action.receivedList.filter(function (item) {
-          if (item) {
-            if (item[options.columnKeys.deleted]) {
-              return false;
-            } else {
-              return true;
-            }
+      // 전달받은 리스트 중에 출력할 리스트를 필터링
+      list = action.receivedList.filter(function (item) {
+        if (item) {
+          if (item[options.columnKeys.deleted]) {
+            return false;
+          } else {
+            return true;
           }
-          return false;
-        });
-      }
+        }
+        return false;
+      });
 
       return state
         .set('columns', List(action.columns))
         .set('headerTable', Map(headerTable))
         .set('bodyRowTable', Map(bodyRowTable))
         .set('bodyRowMap', Map(bodyRowMap))
-        .set('colGroup', Map(colGroup))
+        .set('colGroup', List(colGroup))
         .set('colGroupMap', Map(colGroupMap))
         .set('footSumColumns', Map(footSumColumns))
         .set('footSumTable', Map(footSumTable))
@@ -240,19 +227,50 @@ const grid = (state = initialState, action) => {
         .set('options', Map(options));
 
     },
+
     // 필요 액션들
     // resetColGroupWidths
     // alignGrid
+
     [act.DID_MOUNT]: () => {
-      let elWidth = ReactDOM.findDOMNode(action.refs.gridRoot).getBoundingClientRect().width;
-      console.log(elWidth);
-      
+      const elWidth = action.containerDOM.getBoundingClientRect().width;
+      let options = state.get('options').toJS();
+      let contWidth = elWidth - (() => {
+        let width = 0;
+        if (options.showLineNumber) width += options.lineNumberColumnWidth;
+        if (options.showRowSelector) width += options.rowSelectorColumnWidth;
+        width += options.scroller.size;
+        return width;
+      })();
+      let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
+      let colGroup = state.get("colGroup").toJS();
+
+      for (i = 0, l = colGroup.length; i < l; i++) {
+        if (isNumber(colGroup[i].width)) {
+          totalWidth += colGroup[i]._width = colGroup[i].width;
+        } else if (colGroup[i].width === "*") {
+          autoWidthColGroupIndexs.push(i);
+        } else if (colGroup[i].width.substring(colGroup[i].width.length - 1) === "%") {
+          totalWidth += colGroup[i]._width = contWidth * colGroup[i].width.substring(0, colGroup[i].width.length - 1) / 100;
+        }
+      }
+      if (autoWidthColGroupIndexs.length > 0) {
+        computedWidth = (contWidth - totalWidth) / autoWidthColGroupIndexs.length;
+        for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
+          colGroup[autoWidthColGroupIndexs[i]]._width = computedWidth;
+        }
+      }
+
+      console.log(colGroup);
+
     },
+
     [act.SET_DATA]: () => {
       return state
         .set('receivedList', List(action.receivedList))
         .set('page', Map(action.page));
     },
+
     [act.UPDATE_SCROLL]: () => {
       if (isNumber(action.scrollLeft) || isString(action.scrollLeft)) {
         state = state.set('scrollLeft', action.scrollLeft);

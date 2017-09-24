@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
@@ -12,10 +13,8 @@ class GridRoot extends React.Component {
   }
 
   componentDidMount(){
-
-    // ReactDOM.findDOMNode(action.refs.gridRoot)
-
-    this.props.didMount(this.props, this.refs);
+    // ReactDOM.findDOMNode(action.refs.gridRoot);
+    this.props.didMount(this.props, ReactDOM.findDOMNode(this.refs.gridRoot));
   }
 
   render() {

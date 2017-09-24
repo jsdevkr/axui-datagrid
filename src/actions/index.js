@@ -17,10 +17,10 @@ export function init(props) {
 }
 
 export const DID_MOUNT = 'DID_MOUNT';
-export function didMount(props, refs) {
+export function didMount(props, containerDOM) {
   return {
     type: DID_MOUNT,
-    refs: refs
+    containerDOM: containerDOM
   }
 }
 
