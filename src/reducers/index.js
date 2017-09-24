@@ -125,7 +125,6 @@ const grid = (state = initialState, action) => {
   const processor = {
     [act.INIT]: () => { // 그리드 데이터 초기화
       let headerTable, bodyRowTable, bodyRowMap, colGroup, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
-      let bodyTrHeight;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
 
@@ -138,6 +137,7 @@ const grid = (state = initialState, action) => {
       bodyRowMap = UTIL.makeBodyRowMap(bodyRowTable, options);
 
       options.frozenColumnIndex = options.frozenColumnIndex || 0;
+      // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
       options.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
 
       // colGroupMap
@@ -225,13 +225,10 @@ const grid = (state = initialState, action) => {
         .set('list', List(list))
         .set('page', isObject(action.page) ? Map(action.page) : false)
         .set('options', Map(options));
-
     },
 
     // 필요 액션들
-    // resetColGroupWidths
     // alignGrid
-
     [act.DID_MOUNT]: () => {
       const elWidth = action.containerDOM.getBoundingClientRect().width;
       let options = state.get('options').toJS();
@@ -242,27 +239,12 @@ const grid = (state = initialState, action) => {
         width += options.scroller.size;
         return width;
       })();
-      let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
+
       let colGroup = state.get("colGroup").toJS();
+      colGroup = UTIL.setColGroupWidth(colGroup, {width: contWidth}, options);
 
-      for (i = 0, l = colGroup.length; i < l; i++) {
-        if (isNumber(colGroup[i].width)) {
-          totalWidth += colGroup[i]._width = colGroup[i].width;
-        } else if (colGroup[i].width === "*") {
-          autoWidthColGroupIndexs.push(i);
-        } else if (colGroup[i].width.substring(colGroup[i].width.length - 1) === "%") {
-          totalWidth += colGroup[i]._width = contWidth * colGroup[i].width.substring(0, colGroup[i].width.length - 1) / 100;
-        }
-      }
-      if (autoWidthColGroupIndexs.length > 0) {
-        computedWidth = (contWidth - totalWidth) / autoWidthColGroupIndexs.length;
-        for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
-          colGroup[autoWidthColGroupIndexs[i]]._width = computedWidth;
-        }
-      }
-
-      console.log(colGroup);
-
+      return state
+        .set('colGroup', colGroup);
     },
 
     [act.SET_DATA]: () => {
@@ -278,6 +260,10 @@ const grid = (state = initialState, action) => {
       if (isNumber(action.scrollTop) || isString(action.scrollTop)) {
         state = state.set('scrollTop', action.scrollTop);
       }
+
+      return state;
+    },
+    [act.ALIGN]: () => {
 
       return state;
     }

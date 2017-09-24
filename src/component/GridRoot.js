@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
+import Header from './GridHeader';
+
 //~~~~~
 
 class GridRoot extends React.Component {
@@ -24,7 +26,7 @@ class GridRoot extends React.Component {
 
     return (
       <div ref="gridRoot" className={classNames(sass.gridRoot)} style={style}>
-
+        <Header />
       </div>
     );
   }

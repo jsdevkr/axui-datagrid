@@ -1,5 +1,5 @@
 import {List} from 'immutable';
-import {extend, isArray, isObject} from "underscore";
+import {extend, isArray, isObject, isNumber} from "underscore";
 
 export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
 
@@ -494,38 +494,30 @@ export function propsConverterForData(data) {
 }
 
 /**
+ * 그리드 colGroup의 width 값을 처리 하는 함수. 왜? '*', '%'로 된 값은 상대적인 값이기 때문에. 컨테이너의 너비에 따라 재계산이 필요합니다.
  * @method
- * @param {Array} _colGroup
- * @return {*|Immutable.List<any>}
+ * @param _colGroup
+ * @param options
+ * @param container
+ * @return {any}
  */
-export function resetColGroupWidth(_colGroup, options, ) {
-  //let colGroup = List(_colGroup);
-
-  /// !! 그리드 target의 크기가 변경되면 이 함수를 호출하려 this.colGroup의 _width 값을 재 계산 하여야 함. [tom]
-  let CT_WIDTH = this.$["container"]["root"].width() - (function () {
-        let width = 0;
-        if (cfg.showLineNumber) width += cfg.lineNumberColumnWidth;
-        if (cfg.showRowSelector) width += cfg.rowSelectorColumnWidth;
-        width += cfg.scroller.size;
-        return width;
-      })(),
-      totalWidth = 0, computedWidth, autoWidthColgroupIndexs = [],
-      colGroup = this.colGroup,
-      i, l;
+export function setColGroupWidth(_colGroup, container, options) {
+  let colGroup = List(_colGroup).toJS();
+  let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
 
   for (i = 0, l = colGroup.length; i < l; i++) {
-    if (U.isNumber(colGroup[i].width)) {
+    if (isNumber(colGroup[i].width)) {
       totalWidth += colGroup[i]._width = colGroup[i].width;
     } else if (colGroup[i].width === "*") {
-      autoWidthColgroupIndexs.push(i);
-    } else if (U.right(colGroup[i].width, 1) === "%") {
-      totalWidth += colGroup[i]._width = CT_WIDTH * U.left(colGroup[i].width, "%") / 100;
+      autoWidthColGroupIndexs.push(i);
+    } else if (colGroup[i].width.substring(colGroup[i].width.length - 1) === "%") {
+      totalWidth += colGroup[i]._width = container.width * colGroup[i].width.substring(0, colGroup[i].width.length - 1) / 100;
     }
   }
-  if (autoWidthColgroupIndexs.length > 0) {
-    computedWidth = (CT_WIDTH - totalWidth) / autoWidthColgroupIndexs.length;
-    for (i = 0, l = autoWidthColgroupIndexs.length; i < l; i++) {
-      colGroup[autoWidthColgroupIndexs[i]]._width = computedWidth;
+  if (autoWidthColGroupIndexs.length > 0) {
+    computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
+    for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
+      colGroup[autoWidthColGroupIndexs[i]]._width = computedWidth;
     }
   }
 
