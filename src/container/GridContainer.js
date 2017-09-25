@@ -4,10 +4,12 @@ import GridRoot from '../component/GridRoot';
 
 const mapStateToProps = (state) => {
   return {
-    list: state.get("list"),
-    page: state.get("page"),
-    scrollLeft: state.get("scrollLeft"),
-    scrollTop: state.get("scrollTop")
+    mounted: state.get('mounted'),
+    list: state.get('list'),
+    page: state.get('page'),
+    scrollLeft: state.get('scrollLeft'),
+    scrollTop: state.get('scrollTop'),
+    headerTable: state.get('headerTable')
   }
 };
 

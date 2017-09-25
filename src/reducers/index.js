@@ -6,6 +6,7 @@ import * as UTIL from '../_inc/utils';
 
 // 초기 상태
 const initialState = Map({
+  mounted: false,
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
@@ -244,6 +245,7 @@ const grid = (state = initialState, action) => {
       colGroup = UTIL.setColGroupWidth(colGroup, {width: contWidth}, options);
 
       return state
+        .set('mounted', true)
         .set('colGroup', colGroup);
     },
 

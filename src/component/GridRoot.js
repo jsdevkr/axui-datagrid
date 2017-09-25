@@ -14,8 +14,7 @@ class GridRoot extends React.Component {
     props.init(props);
   }
 
-  componentDidMount(){
-    // ReactDOM.findDOMNode(action.refs.gridRoot);
+  componentDidMount() {
     this.props.didMount(this.props, ReactDOM.findDOMNode(this.refs.gridRoot));
   }
 
@@ -24,11 +23,27 @@ class GridRoot extends React.Component {
       height: this.props.height
     };
 
+    let header = null;
+    if (this.props.mounted) {
+      header = <Header headerTable={this.props.headerTable} />;
+    }
+
     return (
       <div ref="gridRoot" className={classNames(sass.gridRoot)} style={style}>
-        <Header />
+        <div>
+          <textarea ref="gridClipboard"></textarea>
+        </div>
+        <div ref="gridHeder">
+          {header}
+        </div>
+        <div ref="gridBody"></div>
+        <div ref="gridPage"></div>
+        <div ref="gridScroller"></div>
+        <div ref="gridVerticalResizer"></div>
+        <div ref="gridHorizontalResizer"></div>
       </div>
     );
+
   }
 }
 
