@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
     page: state.get('page'),
     scrollLeft: state.get('scrollLeft'),
     scrollTop: state.get('scrollTop'),
+    colGroup: state.get('colGroup'),
     headerTable: state.get('headerTable')
   }
 };

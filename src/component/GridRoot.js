@@ -30,7 +30,7 @@ class GridRoot extends React.Component {
 
     return (
       <div ref="gridRoot" className={classNames(sass.gridRoot)} style={style}>
-        <div>
+        <div className={classNames(sass.gridClipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
         <div ref="gridHeder">
