@@ -16,6 +16,9 @@ const initialState = Map({
   scrollTop: 0,
   columns: List([]),
   colGroup: List([]),
+  asideColGroup: List([]),
+  leftHeaderColGroup: List([]),
+  headerColGroup: List([]),
   footSumColumns: List([]),
   bodyGrouping: List([]),
   focusedColumn: Map({}), // 그리드 바디의 포커스된 셀 정보
@@ -54,6 +57,7 @@ const initialState = Map({
     rowSelectorColumnWidth: 26,
     sortable: undefined,
     remoteSort: false,
+    asidePanelWidth: 0,
     header: {
       display: true,
       align: false,
@@ -128,7 +132,9 @@ this.xvar = {
 const grid = (state = initialState, action) => {
   const processor = {
     [act.INIT]: () => { // 그리드 데이터 초기화
-      let headerTable, bodyRowTable, bodyRowMap, colGroup, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
+      let headerTable, bodyRowTable, bodyRowMap, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
+      let colGroup, asideColGroup, leftHeaderColGroup, headerColGroup;
+      let dividedHeaderObj, asideHeaderData, leftHeaderData, headerData;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
 
@@ -141,6 +147,14 @@ const grid = (state = initialState, action) => {
       bodyRowMap = UTIL.makeBodyRowMap(bodyRowTable, options);
 
       options.frozenColumnIndex = options.frozenColumnIndex || 0;
+
+      dividedHeaderObj = UTIL.divideTableByFrozenColumnIndex(headerTable, options.frozenColumnIndex, options);
+      asideHeaderData = dividedHeaderObj.asideHeaderData;
+      asideColGroup = dividedHeaderObj.asideColGroup;
+      leftHeaderData = dividedHeaderObj.leftData;
+      headerData = dividedHeaderObj.rightData;
+      options.asidePanelWidth = dividedHeaderObj.asidePanelWidth;
+
       // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
       options.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
 
@@ -159,6 +173,9 @@ const grid = (state = initialState, action) => {
           colGroup.push(v);
         });
       }
+
+      leftHeaderColGroup = colGroup.slice(0, options.frozenColumnIndex);
+      headerColGroup = colGroup.slice(options.frozenColumnIndex);
 
       // footSum
       {
@@ -216,10 +233,16 @@ const grid = (state = initialState, action) => {
       return state
         .set('columns', List(action.columns))
         .set('headerTable', Map(headerTable))
+        .set('asideHeaderData', Map(asideHeaderData))
+        .set('leftHeaderData', Map(leftHeaderData))
+        .set('headerData', Map(headerData))
         .set('bodyRowTable', Map(bodyRowTable))
         .set('bodyRowMap', Map(bodyRowMap))
         .set('colGroup', List(colGroup))
         .set('colGroupMap', Map(colGroupMap))
+        .set('asideColGroup', List(asideColGroup))
+        .set('leftHeaderColGroup', List(leftHeaderColGroup))
+        .set('headerColGroup', List(headerColGroup))
         .set('footSumColumns', Map(footSumColumns))
         .set('footSumTable', Map(footSumTable))
         .set('bodyGrouping', Map(bodyGrouping))
@@ -229,12 +252,14 @@ const grid = (state = initialState, action) => {
         .set('list', List(list))
         .set('page', isObject(action.page) ? Map(action.page) : false)
         .set('options', Map(options));
+
     },
 
     // 필요 액션들
     // alignGrid
     [act.DID_MOUNT]: () => {
       const elWidth = action.containerDOM.getBoundingClientRect().width;
+      let colGroup;
       let options = state.get('options').toJS();
       let contWidth = elWidth - (() => {
         let width = 0;
@@ -244,11 +269,21 @@ const grid = (state = initialState, action) => {
         return width;
       })();
 
-      let colGroup = state.get("colGroup").toJS();
+      colGroup = state.get("colGroup").toJS();
       colGroup = UTIL.setColGroupWidth(colGroup, {width: contWidth}, options);
+
+      options.frozenPanelWidth = ((colGroup, endIndex) => {
+        let width = 0;
+        for (let i = 0, l = endIndex; i < l; i++) {
+          width += colGroup[i]._width;
+        }
+        return width;
+      })(colGroup, options.frozenColumnIndex);
+
 
       return state
         .set('mounted', true)
+        .set('options', Map(options))
         .set('colGroup', colGroup);
     },
 
@@ -268,6 +303,7 @@ const grid = (state = initialState, action) => {
 
       return state;
     },
+
     [act.ALIGN]: () => {
 
       return state;

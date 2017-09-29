@@ -1,10 +1,58 @@
 import {List} from 'immutable';
-import {extend, isArray, isObject, isNumber} from "underscore";
+import {extend, isArray, isNumber, isObject} from "underscore";
 
-export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
+/**
+ * @method
+ * @param _table
+ * @param _frozenColumnIndex
+ * @return {{leftData: {rows: Array}, rightData: {rows: Array}}}
+ */
+export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
 
-  let tempTable_l = {rows: []},
+  let asideTable  = {rows: []},
+      asideColGroup = [],
+      asidePanelWidth = 0,
+      frozenPanelWidth = 0,
+      tempTable_l = {rows: []},
       tempTable_r = {rows: []};
+
+  for (let i = 0, l = _table.rows.length; i < l; i++) {
+    asideTable.rows[i] = {cols: []};
+    if (i === 0) {
+      let col = {
+        label: "",
+        colspan: 1,
+        rowspan: _table.rows.length,
+        colIndex: null
+      }, _col = {};
+
+      if (options.showLineNumber) {
+        _col = extend({}, col, {
+          width: options.lineNumberColumnWidth,
+          _width: options.lineNumberColumnWidth,
+          columnAttr: "lineNumber",
+          key: "__index_header__", label: "&nbsp;"
+        });
+        asideColGroup.push(_col);
+        asideTable.rows[i].cols.push(_col);
+
+        asidePanelWidth += options.lineNumberColumnWidth;
+      }
+      if (options.showRowSelector) {
+        _col = extend({}, col, {
+          width: options.rowSelectorColumnWidth,
+          _width: options.rowSelectorColumnWidth,
+          columnAttr: "rowSelector",
+          key: "__checkbox_header__", label: ""
+        });
+        asideColGroup.push(_col);
+        asideTable.rows[i].cols.push(_col);
+
+        asidePanelWidth += options.rowSelectorColumnWidth;
+      }
+    }
+  }
+
 
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
     let row = _table.rows[r];
@@ -13,7 +61,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
     tempTable_r.rows[r] = {cols: []};
 
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col           = jQuery.extend({}, row.cols[c]),
+      let col           = row.cols[c],
           colStartIndex = col.colIndex,
           colEndIndex   = col.colIndex + col.colspan;
 
@@ -22,8 +70,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
           // 좌측편에 변형없이 추가
           tempTable_l.rows[r].cols.push(col);
         } else {
-          let leftCol  = jQuery.extend({}, col),
-              rightCol = jQuery.extend({}, leftCol);
+          let leftCol  = extend({}, col),
+              rightCol = extend({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
           rightCol.colIndex = _frozenColumnIndex;
@@ -49,21 +97,30 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex) {
   }
 
   return {
+    asideTable: asideTable,
+    asideColGroup: asideColGroup,
+    asidePanelWidth: asidePanelWidth,
     leftData: tempTable_l,
     rightData: tempTable_r
   }
 }
 
+/**
+ * @method
+ * @param _table
+ * @param _startColumnIndex
+ * @param _endColumnIndex
+ * @return {{rows: Array}}
+ */
 export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnIndex) {
-
   let tempTable = {rows: []};
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
     let row = _table.rows[r];
-
     tempTable.rows[r] = {cols: []};
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col                                       = jQuery.extend({}, row.cols[c]),
-          colStartIndex = col.colIndex, colEndIndex = col.colIndex + col.colspan;
+      let col = extend({}, row.cols[c]);
+      let colStartIndex = col.colIndex;
+      let colEndIndex = col.colIndex + col.colspan;
 
       if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
         if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
@@ -196,7 +253,7 @@ export function makeBodyRowTable(_columns, _options) {
     const selfMakeRow = function (__columns) {
       let i = 0;
       let l = __columns.length;
-      
+
       for (; i < l; i++) {
         let field   = __columns,
             colspan = 1;
@@ -458,7 +515,6 @@ export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
     isScrollPanel: _isScrollPanel
   }
 }
-
 
 export function getRealPathForDataItem(_dataPath) {
   let path  = [],

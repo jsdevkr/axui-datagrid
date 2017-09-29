@@ -25,7 +25,18 @@ class GridRoot extends React.Component {
 
     let header = null;
     if (this.props.mounted) {
-      header = <Header headerTable={this.props.headerTable} />;
+      header = <Header
+        colGroup={this.props.colGroup}
+        headerTable={this.props.headerTable}
+
+        asideColGroup={this.props.asideColGroup}
+        leftHeaderColGroup={this.props.leftHeaderColGroup}
+        headerColGroup={this.props.headerColGroup}
+
+        asideHeaderData={this.props.asideHeaderData}
+        leftHeaderData={this.props.leftHeaderData}
+        headerData={this.props.headerData}
+      />;
     }
 
     return (
