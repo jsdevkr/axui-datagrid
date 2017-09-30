@@ -51,13 +51,13 @@ const initialState = Map({
   options: Map({
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
-    showLineNumber: false,
+    showLineNumber: true,
     showRowSelector: false,
     multipleSelect: true,
     columnMinWidth: 100,
     lineNumberColumnWidth: 30,
     rowSelectorColumnWidth: 26,
-    sortable: undefined,
+    sortable: true,
     remoteSort: false,
     asidePanelWidth: 0,
     header: {
@@ -151,6 +151,7 @@ const grid = (state = initialState, action) => {
       options.frozenColumnIndex = options.frozenColumnIndex || 0;
 
       dividedHeaderObj = UTIL.divideTableByFrozenColumnIndex(headerTable, options.frozenColumnIndex, options);
+
       asideHeaderData = dividedHeaderObj.asideHeaderData;
       asideColGroup = dividedHeaderObj.asideColGroup;
       leftHeaderData = dividedHeaderObj.leftData;

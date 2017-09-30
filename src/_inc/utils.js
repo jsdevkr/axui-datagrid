@@ -31,7 +31,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           width: options.lineNumberColumnWidth,
           _width: options.lineNumberColumnWidth,
           columnAttr: "lineNumber",
-          key: "__index_header__", label: "&nbsp;"
+          key: "__index_header__", label: ""
         });
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);
@@ -97,7 +97,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
   }
 
   return {
-    asideTable: asideTable,
+    asideHeaderData: asideTable,
     asideColGroup: asideColGroup,
     asidePanelWidth: asidePanelWidth,
     leftData: tempTable_l,

@@ -19,16 +19,20 @@ class GridRoot extends React.Component {
   }
 
   render() {
+    const options = this.props.options.toJS();
+    options.header.sortable = options.sortable;
+    options.header.enableFilter = options.enableFilter;
+
     let style = {
       height: this.props.height
     };
-
+    
     let header = null;
     if (this.props.mounted) {
       header = <Header
-        optionsHeader={this.props.options.header}
-        asidePanelWidth={this.props.options.asidePanelWidth}
-        frozenColumnIndex={this.props.options.frozenColumnIndex}
+        optionsHeader={options.header}
+        asidePanelWidth={options.asidePanelWidth}
+        frozenColumnIndex={options.frozenColumnIndex}
 
         colGroup={this.props.colGroup}
         headerTable={this.props.headerTable}
