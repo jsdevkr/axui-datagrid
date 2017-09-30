@@ -14,6 +14,8 @@ const initialState = Map({
   sortInfo: Map({}),
   scrollLeft: 0,
   scrollTop: 0,
+  scrollContentWidth: 0,
+  scrollContentHeight: 0,
   columns: List([]),
   colGroup: List([]),
   asideColGroup: List([]),

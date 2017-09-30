@@ -26,6 +26,10 @@ class GridRoot extends React.Component {
     let header = null;
     if (this.props.mounted) {
       header = <Header
+        optionsHeader={this.props.options.header}
+        asidePanelWidth={this.props.options.asidePanelWidth}
+        frozenColumnIndex={this.props.options.frozenColumnIndex}
+
         colGroup={this.props.colGroup}
         headerTable={this.props.headerTable}
 
