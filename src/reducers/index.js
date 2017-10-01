@@ -180,6 +180,7 @@ const grid = (state = initialState, action) => {
       leftHeaderColGroup = colGroup.slice(0, options.frozenColumnIndex);
       headerColGroup = colGroup.slice(options.frozenColumnIndex);
 
+
       // footSum
       {
         footSumColumns = [];
@@ -263,7 +264,9 @@ const grid = (state = initialState, action) => {
     [act.DID_MOUNT]: () => {
       const elWidth = action.containerDOM.getBoundingClientRect().width;
       let colGroup;
+      let scrollContentWidth;
       let options = state.get('options').toJS();
+      let headerColGroup = state.get('headerColGroup');
       let contWidth = elWidth - (() => {
         let width = 0;
         if (options.showLineNumber) width += options.lineNumberColumnWidth;
@@ -283,11 +286,16 @@ const grid = (state = initialState, action) => {
         return width;
       })(colGroup, options.frozenColumnIndex);
 
+      // get scrollContentWidth
+      scrollContentWidth = headerColGroup.reduce((prev, curr) => {
+        return (prev._width || prev) + curr._width
+      });
 
       return state
         .set('mounted', true)
         .set('options', Map(options))
-        .set('colGroup', colGroup);
+        .set('colGroup', colGroup)
+        .set('scrollContentWidth', scrollContentWidth);
     },
 
     [act.SET_DATA]: () => {

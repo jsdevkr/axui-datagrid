@@ -111,9 +111,6 @@ const GridHeader = ({
     );
   };
 
-  // todo : get scrollContentWidth
-  // this.xvar.scrollContentWidth = repaintHeader.call(this, this.$.panel["header-scroll"], this.headerColGroup, headerData);
-
   return (
     <div className={classNames(sass.gridHeader)}>
       {(asidePanelWidth > 0) ? getHeader("aside-header", asideColGroup, asideHeaderData) : <div data-panel="aside-header" />}
