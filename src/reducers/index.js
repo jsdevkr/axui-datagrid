@@ -118,6 +118,14 @@ const initialState = Map({
       }
     },
     footSum: false
+  }),
+  styles: Map({
+    asidePanelWidth: null,
+    frozenPanelWidth: null,
+    bodyTrHeight: null,
+    elWidth: null, elHeight: null, CTInnerWidth: null, CTInnerHeight: null,
+    rightPanelWidth: null, headerHeight: null, frozenRowHeight: null, footSumHeight: null, pageHeight: null,
+    scrollContentWidth: null, verticalScrollerWidth: null, horizontalScrollerHeight: null, bodyHeight: null
   })
 });
 
@@ -139,6 +147,7 @@ const grid = (state = initialState, action) => {
       let dividedHeaderObj, asideHeaderData, leftHeaderData, headerData;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
+      let styles = state.get('styles').toJS();
 
       each(action.options, function (v, k) {
         options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
@@ -156,10 +165,11 @@ const grid = (state = initialState, action) => {
       asideColGroup = dividedHeaderObj.asideColGroup;
       leftHeaderData = dividedHeaderObj.leftData;
       headerData = dividedHeaderObj.rightData;
-      options.asidePanelWidth = dividedHeaderObj.asidePanelWidth;
+
+      styles.asidePanelWidth = dividedHeaderObj.asidePanelWidth;
 
       // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
-      options.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
+      styles.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
 
       // colGroupMap
       {
@@ -247,7 +257,7 @@ const grid = (state = initialState, action) => {
         .set('asideColGroup', List(asideColGroup))
         .set('leftHeaderColGroup', List(leftHeaderColGroup))
         .set('headerColGroup', List(headerColGroup))
-        .set('footSumColumns', Map(footSumColumns))
+        .set('footSumColumns', List(footSumColumns))
         .set('footSumTable', Map(footSumTable))
         .set('bodyGrouping', Map(bodyGrouping))
         .set('bodyGroupingTable', Map(bodyGroupingTable))
@@ -255,53 +265,88 @@ const grid = (state = initialState, action) => {
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
         .set('page', isObject(action.page) ? Map(action.page) : false)
-        .set('options', Map(options));
-
+        .set('options', Map(options))
+        .set('styles', Map(styles));
     },
 
     // 필요 액션들
     // alignGrid
     [act.DID_MOUNT]: () => {
-      const elWidth = action.containerDOM.getBoundingClientRect().width;
-      let colGroup;
-      let scrollContentWidth;
+      let footSumColumns = state.get('footSumColumns');
+      let headerTable = state.get('headerTable');
       let options = state.get('options').toJS();
-      let headerColGroup = state.get('headerColGroup');
-      let contWidth = elWidth - (() => {
-        let width = 0;
-        if (options.showLineNumber) width += options.lineNumberColumnWidth;
-        if (options.showRowSelector) width += options.rowSelectorColumnWidth;
-        width += options.scroller.size;
-        return width;
-      })();
+      let styles = state.get('styles').toJS();
+      styles.elWidth = action.containerDOM.getBoundingClientRect().width;
+      styles.elHeight = action.containerDOM.getBoundingClientRect().height;
+      styles.CTInnerWidth = styles.elWidth;
+      styles.CTInnerHeight = styles.elHeight;
+      styles.rightPanelWidth = 0;
+      styles.headerHeight = 0;
+      styles.frozenRowHeight = 0;
+      styles.headerHeight = 0;
+      styles.footSumHeight = 0;
+      styles.pageHeight = 0;
+      styles.scrollContentWidth = 0;
+      styles.verticalScrollerWidth = 0;
+      styles.horizontalScrollerHeight = 0;
+      styles.bodyHeight = 0;
 
-      colGroup = state.get("colGroup").toJS();
-      colGroup = UTIL.setColGroupWidth(colGroup, {width: contWidth}, options);
+      let list = state.get('list');
+      let colGroup = UTIL.setColGroupWidth(state.get("colGroup").toJS(), {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
 
-      options.frozenPanelWidth = ((colGroup, endIndex) => {
+      styles.frozenPanelWidth = ((colGroup, endIndex) => {
         let width = 0;
         for (let i = 0, l = endIndex; i < l; i++) {
           width += colGroup[i]._width;
         }
         return width;
       })(colGroup, options.frozenColumnIndex);
-
-      // get scrollContentWidth
-      scrollContentWidth = headerColGroup.reduce((prev, curr) => {
+      styles.headerHeight = (options.header.display) ? headerTable.get('rows').size * options.header.columnHeight : 0;
+      styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
+      styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
+      styles.pageHeight = (options.page.display) ? options.page.height : 0;
+      styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
         return (prev._width || prev) + curr._width
       });
+      styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+      styles.horizontalScrollerHeight = (() => {
+        let totalColGroupWidth = colGroup.reduce((prev, curr) => {
+          return (prev._width || prev) + curr._width
+        });
+        // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
+        let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
+
+        return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
+      })();
+      if (styles.horizontalScrollerHeight > 0) {
+        styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+      }
+
+      // 수평 너비 결정
+      styles.CTInnerWidth = styles.elWidth - styles.verticalScrollerWidth;
+      // 수직 스크롤러의 높이 결정.
+      styles.CTInnerHeight = styles.elHeight - styles.pageHeight - styles.horizontalScrollerHeight;
+      // get bodyHeight
+      styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
+
 
       return state
         .set('mounted', true)
         .set('options', Map(options))
-        .set('colGroup', colGroup)
-        .set('scrollContentWidth', scrollContentWidth);
+        .set('styles', Map(styles))
+        .set('colGroup', colGroup);
     },
 
     [act.SET_DATA]: () => {
       return state
         .set('receivedList', List(action.receivedList))
         .set('page', Map(action.page));
+    },
+
+    [act.SET_COLUMNS]: () => {
+      // todo : SET_COLUMNS 마저 정리하기
+      return state
+        .set('columns', List(action.columns));
     },
 
     [act.UPDATE_SCROLL]: () => {

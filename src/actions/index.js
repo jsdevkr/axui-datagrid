@@ -24,6 +24,14 @@ export function didMount(props, containerDOM) {
   }
 }
 
+export const SET_COLUMNS = 'SET_COLUMNS';
+export function setColumns(columns) {
+  return {
+    type: SET_COLUMNS,
+    columns: columns
+  }
+}
+
 /* 그리드 데이터 변경 */
 export const SET_DATA= 'SET_DATA';
 export function setData(data) {

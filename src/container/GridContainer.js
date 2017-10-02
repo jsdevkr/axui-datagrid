@@ -20,7 +20,8 @@ const mapStateToProps = (state) => {
     asideHeaderData: state.get('asideHeaderData'),
     leftHeaderData: state.get('leftHeaderData'),
     headerData: state.get('headerData'),
-    options: state.get('options')
+    options: state.get('options'),
+    styles: state.get('styles')
   }
 };
 

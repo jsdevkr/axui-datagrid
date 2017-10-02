@@ -4,7 +4,7 @@ import sass from '../scss/index.scss';
 
 const GridHeader = ({
                       optionsHeader,
-                      asidePanelWidth,
+                      styles,
                       frozenColumnIndex,
                       colGroup,
                       headerTable,
@@ -113,7 +113,7 @@ const GridHeader = ({
 
   return (
     <div className={classNames(sass.gridHeader)}>
-      {(asidePanelWidth > 0) ? getHeader("aside-header", asideColGroup, asideHeaderData) : <div data-panel="aside-header" />}
+      {(styles.asidePanelWidth > 0) ? getHeader("aside-header", asideColGroup, asideHeaderData) : <div data-panel="aside-header" />}
       {(frozenColumnIndex > 0) ? getHeader("left-header", leftHeaderColGroup, leftHeaderData) : <div data-panel="left-header" />}
       <div data-panel="header-scroll-container">
         {getHeader("header-scroll", headerColGroup, headerData)}

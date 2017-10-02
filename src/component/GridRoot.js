@@ -19,11 +19,13 @@ class GridRoot extends React.Component {
   }
 
   render() {
+    const styles = this.props.styles.toJS();
     const options = this.props.options.toJS();
     options.header.sortable = options.sortable;
     options.header.enableFilter = options.enableFilter;
 
-    let style = {
+
+    let css = {
       height: this.props.height
     };
     
@@ -31,7 +33,7 @@ class GridRoot extends React.Component {
     if (this.props.mounted) {
       header = <Header
         optionsHeader={options.header}
-        asidePanelWidth={options.asidePanelWidth}
+        styles={styles}
         frozenColumnIndex={options.frozenColumnIndex}
 
         colGroup={this.props.colGroup}
@@ -48,7 +50,7 @@ class GridRoot extends React.Component {
     }
 
     return (
-      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={style}>
+      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={css}>
         <div className={classNames(sass.gridClipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
