@@ -16,8 +16,7 @@ const GridHeader = ({
                       headerData
                     }) => {
 
-
-  const getHeader = function (_panelName, _colGroup, _bodyRow) {
+  const printHeader = function (_panelName, _colGroup, _bodyRow, _style) {
 
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
@@ -53,8 +52,8 @@ const GridHeader = ({
     };
 
     return (
-      <div data-panel={_panelName}>
-        <table>
+      <div data-panel={_panelName} style={_style}>
+        <table style={{height: "100%"}}>
           <colgroup>
             {_colGroup.map(
               (col, ci) => (
@@ -111,12 +110,28 @@ const GridHeader = ({
     );
   };
 
+  let asideHeaderPanelStyle = {
+    left: 0,
+    width: styles.asidePanelWidth,
+    height: styles.headerHeight
+  };
+  let leftHeaderPanelStyle = {
+    left: styles.asidePanelWidth,
+    width: styles.frozenPanelWidth,
+    height: styles.headerHeight
+  };
+  let headerPanelStyle = {
+    left: styles.frozenPanelWidth + styles.asidePanelWidth,
+    width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
+    height: styles.headerHeight
+  };
+
   return (
     <div className={classNames(sass.gridHeader)}>
-      {(styles.asidePanelWidth > 0) ? getHeader("aside-header", asideColGroup, asideHeaderData) : <div data-panel="aside-header" />}
-      {(frozenColumnIndex > 0) ? getHeader("left-header", leftHeaderColGroup, leftHeaderData) : <div data-panel="left-header" />}
-      <div data-panel="header-scroll-container">
-        {getHeader("header-scroll", headerColGroup, headerData)}
+      {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : <div data-panel="aside-header" style={{display: "none"}} />}
+      {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : <div data-panel="left-header" style={{display: "none"}} />}
+      <div data-panel="header-scroll-container" style={headerPanelStyle}>
+        {printHeader("header-scroll", headerColGroup, headerData, {height: styles.headerHeight})}
       </div>
     </div>
   )

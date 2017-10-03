@@ -1,5 +1,136 @@
+//== body.row
+$ax5grid-row-bg-0: #f3f3f3 !default;
+$ax5grid-row-bg-1: #fff !default;
+$ax5grid-row-bg-2: #f3f3f3 !default;
+$ax5grid-row-bg-3: #fff !default;
+$ax5grid-row-hover-bg: lighten(#cce2f3, 5%) !default;
+$ax5grid-row-grouping-bg: #ffffe7 !default;
+$ax5grid-row-selected: lighten(#b1d7fe, 10%) !default;
+
+//== body.cell
+$ax5grid-cell-padding-row-selector: 5px !default;
+$ax5grid-cell-padding: 3px 5px !default;
+
+$ax5grid-cell-checkbox-border: 1px solid #ccc !default;
+$ax5grid-cell-checkbox-border-radius: 3px !default;
+$ax5grid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax5grid-cell-disable-checkbox-bg-colors: (darken(nth($ax5grid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax5grid-cell-checkbox-bg-colors, 1), 10%)) !default;
+$ax5grid-cell-checkbox-arrow-color: #3372ff !default;
+
+$ax5grid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
+$ax5grid-cell-focused-bg: lighten(#b1d7fe, 10%) !default;
+$ax5grid-cell-focused-color: #000 !default;
+
+$ax5grid-cell-selected-border-color: #ccc !default;
+$ax5grid-cell-selected-bg: #b1d7fe !default;
+$ax5grid-cell-selected-color: #000 !default;
+
+//== resizer
+$ax5grid-resizer-color: #ff3300 !default;
+$ax5grid-resizer-size: 2px !default;
+
+//~~~~~~~
+
+
+@mixin gridRowBackground() {
+  &.tr-0 {
+    background: $ax5grid-row-bg-0;
+  }
+  &.tr-1 {
+    background: $ax5grid-row-bg-1;
+  }
+  &.tr-2 {
+    background: $ax5grid-row-bg-2;
+  }
+  &.tr-3 {
+    background: $ax5grid-row-bg-3;
+  }
+  &.hover {
+    background: $ax5grid-row-hover-bg;
+  }
+  &[data-ax5grid-grouping-tr="true"] {
+    background: $ax5grid-row-grouping-bg;
+  }
+  &[data-ax5grid-selected="true"] {
+    background: $ax5grid-row-selected;
+    td {
+      //color: #fff;
+      //box-shadow: inset 1px 1px 0px 0px #fff;
+      &[data-ax5grid-column-attr="rowSelector"],
+      &[data-ax5grid-column-attr="lineNumber"] {
+        box-shadow: none;
+      }
+      &[data-ax5grid-column-attr="rowSelector"] {
+        .checkBox {
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+  &[data-ax5grid-disable-selection="true"] {
+    // background: $ax5grid-row-selected;
+    td {
+      &[data-ax5grid-column-attr="rowSelector"] {
+        .checkBox {
+          cursor: not-allowed;
+          //@include ax-background(top, $ax5grid-cell-disable-checkbox-bg-colors);
+          &:after {
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+
+  // mergeCells 대상 컬럼 배경생 통일.
+  td.merged {
+    // background: $ax5grid-row-bg-1;
+  }
+}
+@mixin gridCell(){
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+  border: 0 none;
+
+  &.hasBorder {
+    //border-right: $ax5grid-column-border;
+    //border-bottom: $ax5grid-column-border;
+  }
+  &.isLastColumn {
+
+  }
+  &.lineNumberColumn {
+
+  }
+  &.focused {
+    box-shadow: $ax5grid-cell-focused-box-shadow;
+  }
+
+}
+
+
 .gridRoot {
   background: #eee;
+
+  table{
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0 none;
+    width: 100%;
+    tr{
+      border-bottom: 0 none;
+      @include gridRowBackground();
+    }
+    td, th{
+      @include gridCell();
+    }
+  }
+
   .gridClipBoard{
     position: absolute;
     left: -100%;
@@ -8,7 +139,11 @@
     width: 0;
   }
   .gridHeader{
-
+    position: relative;
+    box-sizing: border-box;
+    [data-panel]{
+      position: absolute;
+    }
   }
 }
 

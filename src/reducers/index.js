@@ -7,15 +7,13 @@ import * as UTIL from '../_inc/utils';
 // 초기 상태
 const initialState = Map({
   mounted: false,
+  scrollLeft: 0,
+  scrollTop: 0,
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
   page: Map({}),
   sortInfo: Map({}),
-  scrollLeft: 0,
-  scrollTop: 0,
-  scrollContentWidth: 0,
-  scrollContentHeight: 0,
   columns: List([]),
   colGroup: List([]),
   asideColGroup: List([]),
@@ -120,12 +118,32 @@ const initialState = Map({
     footSum: false
   }),
   styles: Map({
+    // 줄번호 + 줄셀렉터의 너비
     asidePanelWidth: null,
+    // 틀고정된 컬럼들의 너비
     frozenPanelWidth: null,
+    // 한줄의 높이
     bodyTrHeight: null,
-    elWidth: null, elHeight: null, CTInnerWidth: null, CTInnerHeight: null,
-    rightPanelWidth: null, headerHeight: null, frozenRowHeight: null, footSumHeight: null, pageHeight: null,
-    scrollContentWidth: null, verticalScrollerWidth: null, horizontalScrollerHeight: null, bodyHeight: null
+    // 컨테이너의 크기
+    elWidth: null,
+    elHeight: null, 
+    CTInnerWidth: null, 
+    CTInnerHeight: null,
+    rightPanelWidth: null,
+    // 헤더의 높이
+    headerHeight: null,
+    // 틀고정된 로우들의 높이
+    frozenRowHeight: null,
+    // 풋섬의 높이
+    footSumHeight: null,
+    // 페이징 영역의 높이
+    pageHeight: null,
+    scrollContentWidth: null,
+    // scrollTack 의 크기 (너비, 높이)
+    verticalScrollerWidth: null, 
+    horizontalScrollerHeight: null,
+
+    bodyHeight: null
   })
 });
 
@@ -301,13 +319,15 @@ const grid = (state = initialState, action) => {
         }
         return width;
       })(colGroup, options.frozenColumnIndex);
-      styles.headerHeight = (options.header.display) ? headerTable.get('rows').size * options.header.columnHeight : 0;
+      styles.headerHeight = (options.header.display) ? headerTable.get('rows').length * options.header.columnHeight : 0;
+
       styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
       styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
       styles.pageHeight = (options.page.display) ? options.page.height : 0;
       styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
         return (prev._width || prev) + curr._width
       });
+
       styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
       styles.horizontalScrollerHeight = (() => {
         let totalColGroupWidth = colGroup.reduce((prev, curr) => {
