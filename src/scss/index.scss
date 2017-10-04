@@ -1,58 +1,115 @@
+//==
+$ax6grid-border: 1px solid #ccc !default;
+$ax6grid-bg: #fff !default;
+$ax6grid-font-size: 12px !default;
+$ax6grid-column-border: 1px solid #ccc !default;
+
+//== header
+$ax6grid-header-column-color: #222 !default;
+$ax6grid-header-column-border: 1px solid #ccc !default;
+$ax6grid-header-column-box-shadow: inset 1px 1px 0px 0px #fff !default;
+$ax6grid-header-column-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax6grid-header-column-hover-bg-colors: (#eee, #eee) !default;
+$ax6grid-header-column-resizer-color: #ff3300 !default;
+$ax6grid-header-column-resizer-size: 4px !default;
+$ax6grid-header-sorter-size: 9px !default;
+$ax6grid-header-sorter-color: #000 !default;
+
+//== aside
+$ax6grid-aside-border: 1px solid darken(#ccc, 0%) !default;
+$ax6grid-aside-bg: #f2f2f2 !default;
+$ax6grid-aside-column-shadow: inset 1px 1px 0px 0px #fff !default;
+
+$ax6grid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
+
+//== footsum
+$ax6grid-footsum-bg: #ffe7e2 !default;
+$ax6grid-footsum-line-border: 1px solid darken(#ccc, 10%) !default;
+
+//== page
+$ax6grid-page-border: 1px solid #ccc !default;
+$ax6grid-page-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax6grid-page-navigation-padding: 5px !default;
+$ax6grid-page-navigation-font-size: 12px !default;
+$ax6grid-page-navigation-btn-min-width: 20px !default;
+$ax6grid-page-navigation-btn-border: 0px none !default;
+$ax6grid-page-navigation-btn-border-radius: 5px !default;
+$ax6grid-page-navigation-btn-bg: transparent !default;
+$ax6grid-page-navigation-btn-font-size: 11px !default;
+$ax6grid-page-navigation-btn-color: #222 !default;
+$ax6grid-page-navigation-btn-hover-bg: #888 !default;
+$ax6grid-page-navigation-btn-hover-color: #fff !default;
+
+$ax6grid-page-status-font-size: 12px !default;
+$ax6grid-page-status-padding: 10px !default;
+$ax6grid-page-status-color: #222 !default;
+
+//== scroll
+$ax6grid-scroll-track-border: 1px solid #ccc !default;
+$ax6grid-scroll-track-bg: #f3f3f3 !default;
+$ax6grid-scroll-corner-bg: #EAEDEF !default;
+
+$ax6grid-scroll-bar-border-radius: 10px !default;
+$ax6grid-scroll-bar-border: 0px solid #fff !default;
+$ax6grid-scroll-bar-bg: #ccc !default;
+$ax6grid-scroll-bar-hover-border: 0px solid #ccc !default;
+$ax6grid-scroll-bar-hover-bg: #bababa !default;
+
 //== body.row
-$ax5grid-row-bg-0: #f3f3f3 !default;
-$ax5grid-row-bg-1: #fff !default;
-$ax5grid-row-bg-2: #f3f3f3 !default;
-$ax5grid-row-bg-3: #fff !default;
-$ax5grid-row-hover-bg: lighten(#cce2f3, 5%) !default;
-$ax5grid-row-grouping-bg: #ffffe7 !default;
-$ax5grid-row-selected: lighten(#b1d7fe, 10%) !default;
+$ax6grid-row-bg-0: #f3f3f3 !default;
+$ax6grid-row-bg-1: #fff !default;
+$ax6grid-row-bg-2: #f3f3f3 !default;
+$ax6grid-row-bg-3: #fff !default;
+$ax6grid-row-hover-bg: lighten(#cce2f3, 5%) !default;
+$ax6grid-row-grouping-bg: #ffffe7 !default;
+$ax6grid-row-selected: lighten(#b1d7fe, 10%) !default;
 
 //== body.cell
-$ax5grid-cell-padding-row-selector: 5px !default;
-$ax5grid-cell-padding: 3px 5px !default;
+$ax6grid-cell-padding-row-selector: 5px !default;
+$ax6grid-cell-padding: 3px 5px !default;
 
-$ax5grid-cell-checkbox-border: 1px solid #ccc !default;
-$ax5grid-cell-checkbox-border-radius: 3px !default;
-$ax5grid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
-$ax5grid-cell-disable-checkbox-bg-colors: (darken(nth($ax5grid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax5grid-cell-checkbox-bg-colors, 1), 10%)) !default;
-$ax5grid-cell-checkbox-arrow-color: #3372ff !default;
+$ax6grid-cell-checkbox-border: 1px solid #ccc !default;
+$ax6grid-cell-checkbox-border-radius: 3px !default;
+$ax6grid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax6grid-cell-disable-checkbox-bg-colors: (darken(nth($ax6grid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax6grid-cell-checkbox-bg-colors, 1), 10%)) !default;
+$ax6grid-cell-checkbox-arrow-color: #3372ff !default;
 
-$ax5grid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
-$ax5grid-cell-focused-bg: lighten(#b1d7fe, 10%) !default;
-$ax5grid-cell-focused-color: #000 !default;
+$ax6grid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
+$ax6grid-cell-focused-bg: lighten(#b1d7fe, 10%) !default;
+$ax6grid-cell-focused-color: #000 !default;
 
-$ax5grid-cell-selected-border-color: #ccc !default;
-$ax5grid-cell-selected-bg: #b1d7fe !default;
-$ax5grid-cell-selected-color: #000 !default;
+$ax6grid-cell-selected-border-color: #ccc !default;
+$ax6grid-cell-selected-bg: #b1d7fe !default;
+$ax6grid-cell-selected-color: #000 !default;
 
 //== resizer
-$ax5grid-resizer-color: #ff3300 !default;
-$ax5grid-resizer-size: 2px !default;
+$ax6grid-resizer-color: #ff3300 !default;
+$ax6grid-resizer-size: 2px !default;
+
 
 //~~~~~~~
 
-
 @mixin gridRowBackground() {
   &.tr-0 {
-    background: $ax5grid-row-bg-0;
+    background: $ax6grid-row-bg-0;
   }
   &.tr-1 {
-    background: $ax5grid-row-bg-1;
+    background: $ax6grid-row-bg-1;
   }
   &.tr-2 {
-    background: $ax5grid-row-bg-2;
+    background: $ax6grid-row-bg-2;
   }
   &.tr-3 {
-    background: $ax5grid-row-bg-3;
+    background: $ax6grid-row-bg-3;
   }
   &.hover {
-    background: $ax5grid-row-hover-bg;
+    background: $ax6grid-row-hover-bg;
   }
   &[data-ax5grid-grouping-tr="true"] {
-    background: $ax5grid-row-grouping-bg;
+    background: $ax6grid-row-grouping-bg;
   }
   &[data-ax5grid-selected="true"] {
-    background: $ax5grid-row-selected;
+    background: $ax6grid-row-selected;
     td {
       //color: #fff;
       //box-shadow: inset 1px 1px 0px 0px #fff;
@@ -70,12 +127,12 @@ $ax5grid-resizer-size: 2px !default;
     }
   }
   &[data-ax5grid-disable-selection="true"] {
-    // background: $ax5grid-row-selected;
+    // background: $ax6grid-row-selected;
     td {
       &[data-ax5grid-column-attr="rowSelector"] {
         .checkBox {
           cursor: not-allowed;
-          //@include ax-background(top, $ax5grid-cell-disable-checkbox-bg-colors);
+          //@include ax-background(top, $ax6grid-cell-disable-checkbox-bg-colors);
           &:after {
             opacity: 0;
           }
@@ -86,10 +143,11 @@ $ax5grid-resizer-size: 2px !default;
 
   // mergeCells 대상 컬럼 배경생 통일.
   td.merged {
-    // background: $ax5grid-row-bg-1;
+    // background: $ax6grid-row-bg-1;
   }
 }
-@mixin gridCell(){
+
+@mixin gridCell() {
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
@@ -97,8 +155,8 @@ $ax5grid-resizer-size: 2px !default;
   border: 0 none;
 
   &.hasBorder {
-    //border-right: $ax5grid-column-border;
-    //border-bottom: $ax5grid-column-border;
+    border-right: $ax6grid-column-border;
+    border-bottom: $ax6grid-column-border;
   }
   &.isLastColumn {
 
@@ -107,42 +165,56 @@ $ax5grid-resizer-size: 2px !default;
 
   }
   &.focused {
-    box-shadow: $ax5grid-cell-focused-box-shadow;
+    box-shadow: $ax6grid-cell-focused-box-shadow;
   }
 
 }
 
-
 .gridRoot {
   background: #eee;
 
-  table{
+  table {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     border: 0 none;
     width: 100%;
-    tr{
+    tr {
       border-bottom: 0 none;
       @include gridRowBackground();
+      td {
+        @include gridCell();
+      }
     }
-    td, th{
-      @include gridCell();
-    }
+
   }
 
-  .gridClipBoard{
+  .gridClipBoard {
     position: absolute;
     left: -100%;
     top: -100%;
     height: 0;
     width: 0;
   }
-  .gridHeader{
+  .gridHeader {
     position: relative;
     box-sizing: border-box;
-    [data-panel]{
+    [data-panel] {
       position: absolute;
+      &[data-panel="aside-header"] {
+        border-right: $ax6grid-aside-border;
+        td {
+          text-align: center;
+        }
+      }
+      &[data-panel="left-header"] {
+        border-right: $ax6grid-frozen-line-border; /// frozen Line color
+      }
+      &[data-panel="header-scroll"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
     }
   }
 }

@@ -79,6 +79,7 @@ const GridHeader = ({
                         key={ci}
                         colSpan={col.colspan}
                         rowSpan={col.rowspan}
+                        className={classNames(sass.hasBorder)}
                         style={{height: cellHeight, minHeight: "1px"}}>
                         {getFieldSpan(_colGroup, col)}
                       </td>
