@@ -310,12 +310,12 @@ const grid = (state = initialState, action) => {
       styles.bodyHeight = 0;
 
       let list = state.get('list');
-      let colGroup = UTIL.setColGroupWidth(state.get("colGroup").toJS(), {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
+      let colGroup = UTIL.setColGroupWidth(state.get("colGroup"), {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
 
       styles.frozenPanelWidth = ((colGroup, endIndex) => {
         let width = 0;
         for (let i = 0, l = endIndex; i < l; i++) {
-          width += colGroup[i]._width;
+          width += colGroup.get(i)._width;
         }
         return width;
       })(colGroup, options.frozenColumnIndex);
@@ -333,6 +333,7 @@ const grid = (state = initialState, action) => {
         let totalColGroupWidth = colGroup.reduce((prev, curr) => {
           return (prev._width || prev) + curr._width
         });
+        
         // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
         let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
 
@@ -349,12 +350,10 @@ const grid = (state = initialState, action) => {
       // get bodyHeight
       styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
 
-
       return state
         .set('mounted', true)
         .set('options', Map(options))
-        .set('styles', Map(styles))
-        .set('colGroup', colGroup);
+        .set('styles', Map(styles));
     },
 
     [act.SET_DATA]: () => {

@@ -25,7 +25,7 @@ const GridHeader = ({
 
       if (_col.key === "__checkbox_header__") {
         if (optionsHeader.selector) {
-          label = <div className="checkBox" style={{"max-height": (_col.width - 10) + "px", "min-height": (_col.width - 10) + "px"}}></div>;
+          label = <div className="checkBox" style={{maxHeight: (_col.width - 10) + "px", minHeight: (_col.width - 10) + "px"}}></div>;
         }
       } else {
         label = _col.label;
@@ -73,13 +73,18 @@ const GridHeader = ({
                   className="">
                   {row.cols.map((col, ci) => {
                     let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
+                    let classNameItmes = {};
+                    classNameItmes[sass.hasBorder] = true;
+                    if (row.cols.length == ci + 1) {
+                      classNameItmes[sass.isLastColumn] = true;
+                    }
 
                     return (
                       <td
                         key={ci}
                         colSpan={col.colspan}
                         rowSpan={col.rowspan}
-                        className={classNames(sass.hasBorder)}
+                        className={classNames(classNameItmes)}
                         style={{height: cellHeight, minHeight: "1px"}}>
                         {getFieldSpan(_colGroup, col)}
                       </td>
@@ -128,7 +133,7 @@ const GridHeader = ({
   };
 
   return (
-    <div className={classNames(sass.gridHeader)}>
+    <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
       {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : <div data-panel="aside-header" style={{display: "none"}} />}
       {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : <div data-panel="left-header" style={{display: "none"}} />}
       <div data-panel="header-scroll-container" style={headerPanelStyle}>

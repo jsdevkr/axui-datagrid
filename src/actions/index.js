@@ -6,13 +6,15 @@ export const INIT = 'INIT';
 
 export function init(props) {
   let Obj_data = propsConverterForData(props.data);
+
   return {
     type: INIT,
     height: props.height,
     columns: props.columns,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
-    options: props.options
+    options: props.options,
+    _options: props._options,
   }
 }
 

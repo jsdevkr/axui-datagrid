@@ -19,33 +19,33 @@ class GridRoot extends React.Component {
   }
 
   render() {
-    const styles = this.props.styles.toJS();
-    const options = this.props.options.toJS();
+    const gridState = this.props.gridState;
+    const styles = gridState.get('styles').toJS();
+    const options = gridState.get('options').toJS();
     options.header.sortable = options.sortable;
     options.header.enableFilter = options.enableFilter;
-
-
+    
     let css = {
       height: this.props.height
     };
     
     let header = null;
-    if (this.props.mounted) {
+    if (gridState.get('mounted')) {
       header = <Header
         optionsHeader={options.header}
         styles={styles}
         frozenColumnIndex={options.frozenColumnIndex}
 
-        colGroup={this.props.colGroup}
-        headerTable={this.props.headerTable}
+        colGroup={gridState.get('colGroup')}
+        headerTable={gridState.get('headerTable')}
 
-        asideColGroup={this.props.asideColGroup}
-        leftHeaderColGroup={this.props.leftHeaderColGroup}
-        headerColGroup={this.props.headerColGroup}
+        asideColGroup={gridState.get('asideColGroup')}
+        leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
+        headerColGroup={gridState.get('headerColGroup')}
 
-        asideHeaderData={this.props.asideHeaderData}
-        leftHeaderData={this.props.leftHeaderData}
-        headerData={this.props.headerData}
+        asideHeaderData={gridState.get('asideHeaderData')}
+        leftHeaderData={gridState.get('leftHeaderData')}
+        headerData={gridState.get('headerData')}
       />;
     }
 

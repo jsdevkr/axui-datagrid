@@ -10,7 +10,7 @@ class GridBasic extends React.Component {
 
     const gridOptions = {
       showLineNumber: true,
-      showRowSelector: false,
+      showRowSelector: true,
       columnKeys: {
         modified: "__ABC__"
       }

@@ -558,24 +558,27 @@ export function propsConverterForData(data) {
  * @return {any}
  */
 export function setColGroupWidth(_colGroup, container, options) {
-  let colGroup = List(_colGroup).toJS();
   let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
 
-  for (i = 0, l = colGroup.length; i < l; i++) {
-    if (isNumber(colGroup[i].width)) {
-      totalWidth += colGroup[i]._width = colGroup[i].width;
-    } else if (colGroup[i].width === "*") {
+  _colGroup.forEach((col, ci) => {
+    if (isNumber(col.width)) {
+      totalWidth += col._width = col.width;
+    } else if (col.width === "*") {
       autoWidthColGroupIndexs.push(i);
-    } else if (colGroup[i].width.substring(colGroup[i].width.length - 1) === "%") {
-      totalWidth += colGroup[i]._width = container.width * colGroup[i].width.substring(0, colGroup[i].width.length - 1) / 100;
+    } else if (col.width.substring(col.width.length - 1) === "%") {
+      totalWidth += col._width = container.width * col.width.substring(0, col.width.length - 1) / 100;
     }
-  }
+  });
+
   if (autoWidthColGroupIndexs.length > 0) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
-      colGroup[autoWidthColGroupIndexs[i]]._width = computedWidth;
+      colGroup.update(autoWidthColGroupIndexs[i], O => {
+        O._width = computedWidth;
+        return O;
+      });
     }
   }
 
-  return colGroup;
+  return _colGroup;
 }
