@@ -9,6 +9,9 @@ class GridBasic extends React.Component {
     super(props);
 
     const gridOptions = {
+      header: {
+        align: "center"
+      },
       showLineNumber: true,
       showRowSelector: true,
       columnKeys: {
@@ -25,10 +28,10 @@ class GridBasic extends React.Component {
     this.state = {
       height: "300px",
       columns: [
-        {key:"no", width: 60, label:"번호"},
-        {key:"title", label:"제목"},
-        {key:"writer", label:"작성자"},
-        {key:"date", label:"작성일", align:"center"}
+        {key: "no", width: 60, label: "번호"},
+        {key: "title", label: "제목"},
+        {key: "writer", label: "작성자"},
+        {key: "date", label: "작성일"}
       ],
       data: gridData,
       options: gridOptions
@@ -39,7 +42,7 @@ class GridBasic extends React.Component {
 
     const processor = {
       "newData": function () {
-        this.setState({data:[]});
+        this.setState({data: []});
       }
     };
 
@@ -57,7 +60,7 @@ class GridBasic extends React.Component {
       <div>
         <AX6UIGrid
           height={this.state.height}
-          style={{fontSize:"12px"}}
+          style={{fontSize: "12px"}}
           columns={this.state.columns}
           data={this.state.data}
           options={this.state.options}

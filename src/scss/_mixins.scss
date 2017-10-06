@@ -29,3 +29,20 @@
   background-color: $g1;
   background-image: linear-gradient($pos, $g1, $g2);
 }
+
+@mixin sort-arrow($arrow-size, $ratio-0, $ratio-1, $arrow-color, $opacity, $direction) {
+  position: absolute;
+  content: ' ';
+  width: 0;
+  height: 0;
+  display: inline-block;
+  border-left: $arrow-size/$ratio-0 solid transparent;
+  border-right: $arrow-size/$ratio-0 solid transparent;
+  @if ($direction == "up") {
+    border-bottom: ($arrow-size)/$ratio-1 solid $arrow-color;
+  } @else {
+    border-top: ($arrow-size)/$ratio-1 solid $arrow-color;
+  }
+  background: transparent;
+  opacity: $opacity;
+}

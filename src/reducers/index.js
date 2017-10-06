@@ -126,8 +126,8 @@ const initialState = Map({
     bodyTrHeight: null,
     // 컨테이너의 크기
     elWidth: null,
-    elHeight: null, 
-    CTInnerWidth: null, 
+    elHeight: null,
+    CTInnerWidth: null,
     CTInnerHeight: null,
     rightPanelWidth: null,
     // 헤더의 높이
@@ -140,7 +140,7 @@ const initialState = Map({
     pageHeight: null,
     scrollContentWidth: null,
     // scrollTack 의 크기 (너비, 높이)
-    verticalScrollerWidth: null, 
+    verticalScrollerWidth: null,
     horizontalScrollerHeight: null,
 
     bodyHeight: null
@@ -163,6 +163,9 @@ const grid = (state = initialState, action) => {
       let headerTable, bodyRowTable, bodyRowMap, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
       let colGroup, asideColGroup, leftHeaderColGroup, headerColGroup;
       let dividedHeaderObj, asideHeaderData, leftHeaderData, headerData;
+      let dividedBodyObj, asideBodyRowData, leftBodyRowData, bodyRowData;
+      let leftFootSumData, footSumData;
+      let asideBodyGroupingData, leftBodyGroupingData, bodyGroupingData, bodyGroupingMap;
       let list; // 그리드에 표현할 목록
       let options = state.get('options').toJS();
       let styles = state.get('styles').toJS();
@@ -177,12 +180,18 @@ const grid = (state = initialState, action) => {
 
       options.frozenColumnIndex = options.frozenColumnIndex || 0;
 
+      // header 데이터 수집
       dividedHeaderObj = UTIL.divideTableByFrozenColumnIndex(headerTable, options.frozenColumnIndex, options);
-
       asideHeaderData = dividedHeaderObj.asideHeaderData;
       asideColGroup = dividedHeaderObj.asideColGroup;
       leftHeaderData = dividedHeaderObj.leftData;
       headerData = dividedHeaderObj.rightData;
+
+      // body 데이터 수집
+      dividedBodyObj = UTIL.divideTableByFrozenColumnIndex(bodyRowTable, options.frozenColumnIndex, options);
+      asideBodyRowData = dividedHeaderObj.asideHeaderData;
+      leftBodyRowData = dividedHeaderObj.leftData;
+      bodyRowData = dividedHeaderObj.rightData;
 
       styles.asidePanelWidth = dividedHeaderObj.asidePanelWidth;
 
@@ -215,6 +224,7 @@ const grid = (state = initialState, action) => {
         footSumTable = {};
 
         if (isArray(options.footSum)) {
+          // todo : leftFootSumData, footSumData
           footSumColumns = options.footSum;
           footSumTable = UTIL.makeFootSumTable(footSumColumns, colGroup, options);
         }
@@ -245,10 +255,14 @@ const grid = (state = initialState, action) => {
             }
             return sortInfo;
           })();
+
+          // todo : asideBodyGroupingData, leftBodyGroupingData, bodyGroupingData, bodyGroupingMap
+
         } else {
           options.body.grouping = false;
         }
       }
+
 
       // 전달받은 리스트 중에 출력할 리스트를 필터링
       list = action.receivedList.filter(function (item) {
@@ -270,6 +284,9 @@ const grid = (state = initialState, action) => {
         .set('headerData', Map(headerData))
         .set('bodyRowTable', Map(bodyRowTable))
         .set('bodyRowMap', Map(bodyRowMap))
+        .set('asideBodyRowData', Map(asideBodyRowData))
+        .set('leftBodyRowData', Map(leftBodyRowData))
+        .set('bodyRowData', Map(bodyRowData))
         .set('colGroup', List(colGroup))
         .set('colGroupMap', Map(colGroupMap))
         .set('asideColGroup', List(asideColGroup))
@@ -333,7 +350,7 @@ const grid = (state = initialState, action) => {
         let totalColGroupWidth = colGroup.reduce((prev, curr) => {
           return (prev._width || prev) + curr._width
         });
-        
+
         // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
         let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
 

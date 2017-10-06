@@ -25,7 +25,10 @@ const GridHeader = ({
 
       if (_col.key === "__checkbox_header__") {
         if (optionsHeader.selector) {
-          label = <div data-checkbox style={{maxHeight: (_col.width - 10) + "px", minHeight: (_col.width - 10) + "px"}}></div>;
+          label = <div data-checkbox style={{
+            maxHeight: (_col.width - 10) + "px",
+            minHeight: (_col.width - 10) + "px"
+          }}/>;
         }
       } else {
         label = _col.label;
@@ -39,8 +42,6 @@ const GridHeader = ({
         filter = <span data-filter={_col.colIndex} data-filter-value="" />;
       }
 
-      console.log(colAlign);
-      
       return (
         <span
           data-span
@@ -49,8 +50,8 @@ const GridHeader = ({
             height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + "px",
             lineHeight: lineHeight + "px"
           }}>
-          {label || ' '}
           {sorter}
+          {label || ' '}
           {filter}
         </span>
       );

@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
-import Header from './GridHeader';
+import GridHeader from './GridHeader';
+import GridBody from './GridBody';
+import GridPage from './GridPage';
 
 //~~~~~
 
@@ -25,37 +27,44 @@ class GridRoot extends React.Component {
     options.header.sortable = options.sortable;
     options.header.enableFilter = options.enableFilter;
 
-    let css = Object.assign({height: this.props.height}, this.props.style);
-    let header = null;
-    if (gridState.get('mounted')) {
-      header = <Header
-        optionsHeader={options.header}
-        styles={styles}
-        frozenColumnIndex={options.frozenColumnIndex}
-
-        colGroup={gridState.get('colGroup')}
-        headerTable={gridState.get('headerTable')}
-
-        asideColGroup={gridState.get('asideColGroup')}
-        leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-        headerColGroup={gridState.get('headerColGroup')}
-
-        asideHeaderData={gridState.get('asideHeaderData')}
-        leftHeaderData={gridState.get('leftHeaderData')}
-        headerData={gridState.get('headerData')}
-      />;
-    }
+    let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
+    let mounted = gridState.get("mounted");
 
     return (
-      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={css}>
+      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={gridRootStyle}>
         <div className={classNames(sass.gridClipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
-        <div ref="gridHeder">
-          {header}
+        <div ref="gridHeader">
+          {mounted ? <GridHeader
+            optionsHeader={options.header}
+            styles={styles}
+            frozenColumnIndex={options.frozenColumnIndex}
+
+            colGroup={gridState.get('colGroup')}
+            headerTable={gridState.get('headerTable')}
+
+            asideColGroup={gridState.get('asideColGroup')}
+            leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
+            headerColGroup={gridState.get('headerColGroup')}
+
+            asideHeaderData={gridState.get('asideHeaderData')}
+            leftHeaderData={gridState.get('leftHeaderData')}
+            headerData={gridState.get('headerData')}
+          /> : null}
         </div>
-        <div ref="gridBody"></div>
-        <div ref="gridPage"></div>
+        <div ref="gridBody">
+          {mounted ? <GridBody
+            styles={styles}
+            frozenColumnIndex={options.frozenColumnIndex}
+
+            colGroup={gridState.get('colGroup')}
+            bodyTable={gridState.get('bodyTable')}
+          /> : null}
+        </div>
+        <div ref="gridPage">
+          {mounted ? <GridPage/> : null}
+        </div>
         <div ref="gridScroller"></div>
         <div ref="gridVerticalResizer"></div>
         <div ref="gridHorizontalResizer"></div>
