@@ -12,7 +12,6 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
   let asideTable  = {rows: []},
       asideColGroup = [],
       asidePanelWidth = 0,
-      frozenPanelWidth = 0,
       tempTable_l = {rows: []},
       tempTable_r = {rows: []};
 
@@ -96,6 +95,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
     row = null;
   }
 
+  // frozenPanelWidth는 컬럼의 너비 _width가 결정된 후에 구해야 함으로 여기서 처리 하지 않는다
+  // _width는 컬럼의 너비가 "*" 또는 "%"일 때에 컨테이너의 너비에 따라 상대적으로 결정된다.
   return {
     asideHeaderData: asideTable,
     asideColGroup: asideColGroup,

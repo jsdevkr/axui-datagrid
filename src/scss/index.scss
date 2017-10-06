@@ -81,6 +81,105 @@
     box-shadow: $ax6grid-cell-focused-box-shadow;
   }
 
+  [data-span] {
+    box-sizing: border-box;
+    display: block;
+    padding: $ax6grid-cell-padding;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &[data-align='left'] {
+      text-align: left;
+    }
+    &[data-align='center'] {
+      text-align: center;
+    }
+    &[data-align='right'] {
+      text-align: right;
+    }
+
+    &[data-ax5grid-cellHolder="multiLine"] {
+      white-space: normal;
+    }
+
+    [data-ax5grid-editor] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border: 0 none;
+      background: $ax6grid-bg;
+      &::-ms-clear {
+        display: none;
+      }
+    }
+
+    [data-ax5select] {
+      position: absolute;
+      display: block;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border: 0px none;
+      background: $ax6grid-bg;
+      .ax5select-display {
+        height: 100%;
+        border-radius: 0;
+      }
+    }
+
+    [data-ax5grid-editor="checkbox"] {
+      display: inline-block;
+      position: relative;
+      border: $ax6grid-cell-checkbox-border;
+      border-radius: $ax6grid-cell-checkbox-border-radius;
+      @include ax-background(top, $ax6grid-cell-checkbox-bg-colors);
+      height: 100%;
+      &:after {
+        content: '';
+        width: 60%;
+        height: 40%;
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0.0;
+        // @include transform(rotate(-50deg));
+      }
+      &[data-ax5grid-checked="true"] {
+        &:after {
+          opacity: 1.0;
+        }
+      }
+    }
+
+    [data-ax5grid-tnode-arrow] {
+      display: inline-block;
+      box-sizing: content-box;
+      text-align: right;
+      text-shadow: 0 -1px #fff;
+      padding: 0 5px 0 0;
+    }
+    a[data-ax5grid-tnode-arrow] {
+      cursor: pointer;
+      text-decoration: none;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    [data-ax5grid-tnode-item="group"] {
+      display: inline-block;
+    }
+    [data-ax5grid-tnode-item="item"] {
+      display: inline-block;
+    }
+  }
 }
 
 .gridRoot {

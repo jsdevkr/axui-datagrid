@@ -28,7 +28,7 @@ class GridBasic extends React.Component {
         {key:"no", width: 60, label:"번호"},
         {key:"title", label:"제목"},
         {key:"writer", label:"작성자"},
-        {key:"date", label:"작성일"}
+        {key:"date", label:"작성일", align:"center"}
       ],
       data: gridData,
       options: gridOptions
@@ -57,6 +57,7 @@ class GridBasic extends React.Component {
       <div>
         <AX6UIGrid
           height={this.state.height}
+          style={{fontSize:"12px"}}
           columns={this.state.columns}
           data={this.state.data}
           options={this.state.options}

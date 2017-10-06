@@ -24,11 +24,8 @@ class GridRoot extends React.Component {
     const options = gridState.get('options').toJS();
     options.header.sortable = options.sortable;
     options.header.enableFilter = options.enableFilter;
-    
-    let css = {
-      height: this.props.height
-    };
-    
+
+    let css = Object.assign({height: this.props.height}, this.props.style);
     let header = null;
     if (gridState.get('mounted')) {
       header = <Header

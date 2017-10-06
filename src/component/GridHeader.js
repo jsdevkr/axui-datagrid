@@ -25,25 +25,30 @@ const GridHeader = ({
 
       if (_col.key === "__checkbox_header__") {
         if (optionsHeader.selector) {
-          label = <div className="checkBox" style={{maxHeight: (_col.width - 10) + "px", minHeight: (_col.width - 10) + "px"}}></div>;
+          label = <div data-checkbox style={{maxHeight: (_col.width - 10) + "px", minHeight: (_col.width - 10) + "px"}}></div>;
         }
       } else {
         label = _col.label;
       }
 
       if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-        sorter = <span data-column-sort={_col.colIndex} data-column-sort-order={_colGroup.get(_col.colIndex).sort} />;
+        sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
       }
 
       if (_col.colIndex !== null && typeof _col.colIndex !== "undefined" && optionsHeader.enableFilter) {
-        filter = <span data-column-filter={_col.colIndex} data-ax5grid-column-filter-value="" />;
+        filter = <span data-filter={_col.colIndex} data-filter-value="" />;
       }
 
+      console.log(colAlign);
+      
       return (
         <span
-          data-cell-holder
-          data-text-align={colAlign}
-          style={{height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + "px", lineHeight: lineHeight + "px"}}>
+          data-span
+          data-align={colAlign}
+          style={{
+            height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + "px",
+            lineHeight: lineHeight + "px"
+          }}>
           {label || ' '}
           {sorter}
           {filter}
