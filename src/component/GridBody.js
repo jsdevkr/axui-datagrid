@@ -41,39 +41,41 @@ const GridBody = ({
 
   return (
     <div className={classNames(sass.gridBody)} style={{}}>
-      <div data-panel="top-aside-body">
+      <div data-panel="top-aside-body" style={topAsideBodyPanelStyle}>
 
       </div>
-      <div data-panel="top-left-body">
+      <div data-panel="top-left-body" style={topLeftBodyPanelStyle}>
 
       </div>
-      <div data-panel="top-body-scroll-container">
+      <div data-panel="top-body-scroll-container" style={topBodyPanelStyle}>
+        <div data-panel="top-body-scroll">
 
+        </div>
       </div>
 
-      <div data-panel="aside-body-scroll-container">
+      <div data-panel="aside-body-scroll-container" style={asideBodyPanelStyle}>
         <div data-panel="aside-body-scroll">
 
         </div>
       </div>
-      <div data-panel="left-body-scroll-container">
+      <div data-panel="left-body-scroll-container" style={leftBodyPanelStyle}>
         <div data-panel="left-body-scroll">
 
         </div>
       </div>
-      <div data-panel="body-scroll-container">
+      <div data-panel="body-scroll-container" style={bodyPanelStyle}>
         <div data-panel="body-scroll">
 
         </div>
       </div>
 
-      <div data-panel="bottom-aside-body">
+      <div data-panel="bottom-aside-body" style={bottomAsideBodyPanelStyle}>
 
       </div>
-      <div data-panel="bottom-left-body">
+      <div data-panel="bottom-left-body" style={bottomLeftBodyPanelStyle}>
 
       </div>
-      <div data-panel="bottom-body-scroll-container">
+      <div data-panel="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
         <div data-panel="bottom-body-scroll">
 
         </div>
