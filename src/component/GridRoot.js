@@ -55,11 +55,19 @@ class GridRoot extends React.Component {
         </div>
         <div ref="gridBody">
           {mounted ? <GridBody
+            optionsBody={options.body}
             styles={styles}
             frozenColumnIndex={options.frozenColumnIndex}
 
             colGroup={gridState.get('colGroup')}
-            bodyTable={gridState.get('bodyTable')}
+            asideColGroup={gridState.get('asideColGroup')}
+            leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
+            headerColGroup={gridState.get('headerColGroup')}
+
+            bodyTable={gridState.get('bodyRowTable')}
+            asideBodyRowData={gridState.get('asideBodyRowData')}
+            leftBodyRowData={gridState.get('leftBodyRowData')}
+            bodyRowData={gridState.get('bodyRowData')}
           /> : null}
         </div>
         <div ref="gridPage">

@@ -89,7 +89,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-
     &[data-multiLine] {
       white-space: normal;
     }
@@ -180,7 +179,7 @@
       }
 
     }
-    
+
     [data-editor] {
       position: absolute;
       left: 0;
@@ -282,6 +281,11 @@
 
   }
 
+  [data-panel] {
+    position: absolute;
+    box-sizing: border-box;
+  }
+
   .gridClipBoard {
     position: absolute;
     left: -100%;
@@ -298,11 +302,7 @@
     border: 0 none;
     border-bottom: $ax6grid-header-column-border;
 
-
-
     [data-panel] {
-      position: absolute;
-      box-sizing: border-box;
       &[data-panel="aside-header"] {
         overflow: hidden;
         border-right: $ax6grid-aside-border;
@@ -318,6 +318,15 @@
         left: 0;
         top: 0;
       }
+    }
+  }
+  .gridBody {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+
+    [data-panel] {
+
     }
   }
 }
