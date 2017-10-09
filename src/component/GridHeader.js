@@ -140,8 +140,8 @@ const GridHeader = ({
 
   return (
     <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
-      {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : <div data-panel="aside-header" style={{display: "none"}} />}
-      {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : <div data-panel="left-header" style={{display: "none"}} />}
+      {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
+      {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
       <div data-panel="header-scroll-container" style={headerPanelStyle}>
         {printHeader("header-scroll", headerColGroup, headerData, {height: styles.headerHeight})}
       </div>

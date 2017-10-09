@@ -12,16 +12,30 @@ const GridBody = ({
                     headerColGroup,
                     bodyTable,
                     asideBodyRowData,
+                    asideBodyGroupingData,
                     leftBodyRowData,
-                    bodyRowData
+                    bodyRowData,
+                    list
                   }) => {
 
-  const printBody = function (_panelName, _style) {
+  const _paintBody = function () {
     return (
       <div data-panel={_panelName} style={_style}>
         <table></table>
       </div>
     )
+  };
+
+  const paintBody = function (_panelName, _list, _scrollConfig, _style) {
+    return (
+      <div data-panel={_panelName} style={_style}>
+        <table></table>
+      </div>
+    )
+  };
+
+  let scrollConfig = {
+
   };
 
   let topAsideBodyPanelStyle = {
@@ -83,37 +97,37 @@ const GridBody = ({
 
   return (
     <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
-      {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? printBody("top-aside-body", topAsideBodyPanelStyle) : <div data-panel="top-aside-body" style={{display: "none"}} />}
-      {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? printBody("top-left-body", topLeftBodyPanelStyle) : <div data-panel="top-left-body" style={{display: "none"}} />}
+      {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
+      {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
       {(styles.frozenRowHeight > 0) ? (
         <div data-panel="top-body-scroll-container" style={topBodyPanelStyle}>
-          {printBody("top-body-scroll", {height: topBodyPanelStyle.height})}
+          {_paintBody("top-body-scroll", {})}
         </div>
-      ) : <div data-panel="top-body-scroll-container" style={{display:"none"}} />}
+      ) : null}
 
       {(styles.asidePanelWidth > 0) ? (
         <div data-panel="aside-body-scroll-container" style={asideBodyPanelStyle}>
-          {printBody("aside-body-scroll", {height: asideBodyPanelStyle.height})}
+          {paintBody("aside-body-scroll", list, scrollConfig, {})}
         </div>
-      ) : <div data-panel="aside-body-scroll-container" style={{display:"none"}} />}
+      ) : null}
 
       {(styles.frozenPanelWidth > 0) ? (
         <div data-panel="left-body-scroll-container" style={leftBodyPanelStyle}>
-          {printBody("left-body-scroll", {height: leftBodyPanelStyle.height})}
+          {_paintBody("left-body-scroll", {})}
         </div>
-      ) : <div data-panel="left-body-scroll-container" style={{display:"none"}} />}
+      ) : null}
 
       <div data-panel="body-scroll-container" style={bodyPanelStyle}>
-        {printBody("body-scroll", {height: bodyPanelStyle.height})}
+        {_paintBody("body-scroll", list, scrollConfig, {})}
       </div>
 
-      {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? printBody("bottom-aside-body", bottomAsideBodyPanelStyle)  : <div data-panel="bottom-aside-body" style={{display:"none"}} />}
-      {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? printBody("bottom-left-body", bottomLeftBodyPanelStyle)  : <div data-panel="bottom-left-body" style={{display:"none"}} />}
+      {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle)  : null}
+      {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle)  : null}
       {(styles.footSumHeight > 0) ? (
         <div data-panel="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
-          {printBody("bottom-body-scroll", {height: bottomBodyPanelStyle.height})}
+          {_paintBody("bottom-body-scroll", {})}
         </div>
-      ) : <div data-panel="bottom-body-scroll-container" style={{display:"none"}} />}
+      ) : null}
     </div>
   );
 };

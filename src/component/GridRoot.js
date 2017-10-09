@@ -66,8 +66,11 @@ class GridRoot extends React.Component {
 
             bodyTable={gridState.get('bodyRowTable')}
             asideBodyRowData={gridState.get('asideBodyRowData')}
+            asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
             leftBodyRowData={gridState.get('leftBodyRowData')}
             bodyRowData={gridState.get('bodyRowData')}
+
+            list={gridState.get('list')}
           /> : null}
         </div>
         <div ref="gridPage">
