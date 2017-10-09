@@ -14,11 +14,13 @@ const GridBody = ({
                     asideBodyRowData,
                     asideBodyGroupingData,
                     leftBodyRowData,
+                    leftBodyGroupingData,
                     bodyRowData,
+                    bodyGroupingData,
                     list
                   }) => {
 
-  const _paintBody = function () {
+  const _paintBody = function (_panelName, _style) {
     return (
       <div data-panel={_panelName} style={_style}>
         <table></table>
@@ -26,10 +28,83 @@ const GridBody = ({
     )
   };
 
-  const paintBody = function (_panelName, _list, _scrollConfig, _style) {
+  const paintBody = function (_panelName, _colGroup, _bodyRow, _grouping, _list, _scrollConfig, _style) {
+
+    const getFieldSpan = function (_colGroup, _col) {
+      let lineHeight = (optionsBody.columnHeight - optionsBody.columnPadding * 2 - optionsBody.columnBorderWidth);
+      let colAlign = optionsBody.align || _col.align;
+      let label, sorter, filter;
+
+      if (_col.key === "__checkbox_header__") {
+        if (optionsBody.selector) {
+          label = <div data-checkbox style={{
+            maxHeight: (_col.width - 10) + "px",
+            minHeight: (_col.width - 10) + "px"
+          }}/>;
+        }
+      } else {
+        label = _col.label;
+      }
+
+      return (
+        <span
+          data-span
+          data-align={colAlign}
+          style={{
+            height: (optionsBody.columnHeight - optionsBody.columnBorderWidth) + "px",
+            lineHeight: lineHeight + "px"
+          }}>
+          {label || ' '}
+        </span>
+      );
+    };
+
     return (
       <div data-panel={_panelName} style={_style}>
-        <table></table>
+        <table style={{height: "100%"}}>
+          <colgroup>
+            {_colGroup.map(
+              (col, ci) => (
+                <col
+                  key={ci}
+                  style={{width: col._width + "px"}} />
+              )
+            )}
+            <col />
+          </colgroup>
+          <tbody>
+          {_bodyRow.get('rows').map(
+            (row, ri) => {
+              return (
+                <tr
+                  key={ri}
+                  className="">
+                  {row.cols.map((col, ci) => {
+                    let cellHeight = optionsBody.columnHeight * col.rowspan - optionsBody.columnBorderWidth;
+                    let classNameItmes = {};
+                    classNameItmes[sass.hasBorder] = true;
+                    if (row.cols.length == ci + 1) {
+                      classNameItmes[sass.isLastColumn] = true;
+                    }
+
+                    return (
+                      <td
+                        key={ci}
+                        colSpan={col.colspan}
+                        rowSpan={col.rowspan}
+                        className={classNames(classNameItmes)}
+                        style={{height: cellHeight, minHeight: "1px"}}>
+                        {getFieldSpan(_colGroup, col)}
+                      </td>
+                    );
+                  })}
+                  <td>&nbsp;</td>
+                </tr>
+              );
+            }
+          )}
+          </tbody>
+        </table>
       </div>
     )
   };
@@ -107,18 +182,18 @@ const GridBody = ({
 
       {(styles.asidePanelWidth > 0) ? (
         <div data-panel="aside-body-scroll-container" style={asideBodyPanelStyle}>
-          {paintBody("aside-body-scroll", list, scrollConfig, {})}
+          {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
       {(styles.frozenPanelWidth > 0) ? (
         <div data-panel="left-body-scroll-container" style={leftBodyPanelStyle}>
-          {_paintBody("left-body-scroll", {})}
+          {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
       <div data-panel="body-scroll-container" style={bodyPanelStyle}>
-        {_paintBody("body-scroll", list, scrollConfig, {})}
+        {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, {})}
       </div>
 
       {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle)  : null}

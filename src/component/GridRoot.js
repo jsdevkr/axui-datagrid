@@ -68,7 +68,9 @@ class GridRoot extends React.Component {
             asideBodyRowData={gridState.get('asideBodyRowData')}
             asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
             leftBodyRowData={gridState.get('leftBodyRowData')}
+            leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
             bodyRowData={gridState.get('bodyRowData')}
+            bodyGroupingData={gridState.get('bodyGroupingData')}
 
             list={gridState.get('list')}
           /> : null}
