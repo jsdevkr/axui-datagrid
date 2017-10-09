@@ -298,7 +298,7 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    @include ax-background(to top, $ax6grid-header-column-bg-colors);
+    @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
     border: 0 none;
     border-bottom: $ax6grid-header-column-border;
 
