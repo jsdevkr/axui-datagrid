@@ -88,7 +88,7 @@ const GridBody = ({
                               rowSpan={col.rowspan}
                               className={classNames(classNameItmes)}
                               style={{height: cellHeight, minHeight: "1px"}}>
-                              {getFieldSpan(_colGroup, col, item, li)}
+                              {getFieldSpan(colGroup, col, item, li)}
                             </td>
                           );
                         })}

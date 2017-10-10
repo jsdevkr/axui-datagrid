@@ -28,14 +28,20 @@ const GridHeader = ({
           label = <div data-checkbox style={{
             maxHeight: (_col.width - 10) + "px",
             minHeight: (_col.width - 10) + "px"
-          }}/>;
+          }} />;
         }
       } else {
         label = _col.label;
       }
 
+      
+
       if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-        sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
+        try {
+          sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
+        }catch(e){
+          console.log(_panelName, _colGroup, _col);
+        }
       }
 
       if (_col.colIndex !== null && typeof _col.colIndex !== "undefined" && optionsHeader.enableFilter) {
@@ -92,7 +98,7 @@ const GridHeader = ({
                         rowSpan={col.rowspan}
                         className={classNames(classNameItmes)}
                         style={{height: cellHeight, minHeight: "1px"}}>
-                        {getFieldSpan(_colGroup, col)}
+                        {getFieldSpan(colGroup, col)}
                       </td>
                     );
                   })}
