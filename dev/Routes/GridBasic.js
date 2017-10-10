@@ -20,16 +20,20 @@ class GridBasic extends React.Component {
     };
 
     let gridData = [
-      {id: 1, title: "테스트"},
-      {id: 2, title: "테스트", __deleted__: true},
-      {id: 3, title: "테스트"}
+      {id: 1, title: "제목입니다.", writer: "장기영", date: "2017-10-10"},
+      {id: 2, title: "제목 ONE 입니다.", writer: "장서우", date: "2017-10-10"},
+      {id: 3, title: "제목 TWO 입니다.", writer: "이영희", date: "2017-10-10"},
+      {id: 3, title: "제목 THREE 입니다.", writer: "황인서", date: "2017-10-10"},
+      {id: 3, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+      {id: 3, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+      {id: 3, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"}
     ];
 
     this.state = {
       height: "300px",
       columns: [
-        {key: "no", width: 60, label: "번호"},
-        {key: "title", label: "제목"},
+        {key: "id", width: 60, label: "번호"},
+        {key: "title", width: "*", label: "제목"},
         {key: "writer", label: "작성자"},
         {key: "date", label: "작성일"}
       ],

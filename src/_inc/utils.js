@@ -565,7 +565,7 @@ export function setColGroupWidth(_colGroup, container, options) {
     if (isNumber(col.width)) {
       totalWidth += col._width = col.width;
     } else if (col.width === "*") {
-      autoWidthColGroupIndexs.push(i);
+      autoWidthColGroupIndexs.push(ci);
     } else if (col.width.substring(col.width.length - 1) === "%") {
       totalWidth += col._width = container.width * col.width.substring(0, col.width.length - 1) / 100;
     }
@@ -574,7 +574,7 @@ export function setColGroupWidth(_colGroup, container, options) {
   if (autoWidthColGroupIndexs.length > 0) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
-      colGroup.update(autoWidthColGroupIndexs[i], O => {
+      _colGroup.update(autoWidthColGroupIndexs[i], O => {
         O._width = computedWidth;
         return O;
       });
