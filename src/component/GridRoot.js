@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {throttle} from 'underscore';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
@@ -16,8 +17,24 @@ class GridRoot extends React.Component {
     props.init(props);
   }
 
+  updateDimensions() {
+    console.log(this.gridRootNode.getBoundingClientRect().width);
+
+  }
+
   componentDidMount() {
-    this.props.didMount(this.props, ReactDOM.findDOMNode(this.refs.gridRoot));
+    this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
+    this.props.didMount(this.props, this.gridRootNode);
+
+    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
+    window.addEventListener("resize", this.throttled_updateDimensions);
+  }
+
+  /**
+   * Remove event listener
+   */
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.throttled_updateDimensions);
   }
 
   render() {

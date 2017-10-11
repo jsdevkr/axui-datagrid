@@ -37,11 +37,7 @@ const GridHeader = ({
       
 
       if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-        try {
           sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
-        }catch(e){
-          console.log(_panelName, _colGroup, _col);
-        }
       }
 
       if (_col.colIndex !== null && typeof _col.colIndex !== "undefined" && optionsHeader.enableFilter) {
