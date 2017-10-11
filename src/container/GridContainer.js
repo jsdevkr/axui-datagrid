@@ -12,6 +12,7 @@ const mapStateToProps = (state) => {
 const mapToDispatch = (dispatch) => ({
   init: (props) => dispatch(act.init(props)),
   didMount: (props, containerDOM) => dispatch(act.didMount(props, containerDOM)),
+  align: (props, containerDOM) => dispatch(act.align(props, containerDOM)),
   setData: (data) => dispatch(act.setData(data)),
   updateScroll: (left, top) => dispatch(act.updateScroll(left, top))
 });

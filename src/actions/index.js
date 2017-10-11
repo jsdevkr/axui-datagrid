@@ -58,8 +58,9 @@ export function updateScroll(scrollLeft, scrollTop) {
 
 /* 컨테이너의 크기가 변경되어 엘리먼트의 크기를 조정해야 할 때 */
 export const ALIGN = 'ALIGN';
-export function align() {
+export function align(props, containerDOM) {
   return {
-    type: ALIGN
+    type: ALIGN,
+    containerDOM: containerDOM
   }
 }

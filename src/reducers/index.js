@@ -315,66 +315,7 @@ const grid = (state = initialState, action) => {
     // 필요 액션들
     // alignGrid
     [act.DID_MOUNT]: () => {
-      let footSumColumns = state.get('footSumColumns');
-      let headerTable = state.get('headerTable');
-      let options = state.get('options').toJS();
-      let styles = state.get('styles').toJS();
-      styles.elWidth = action.containerDOM.getBoundingClientRect().width;
-      styles.elHeight = action.containerDOM.getBoundingClientRect().height;
-      styles.CTInnerWidth = styles.elWidth;
-      styles.CTInnerHeight = styles.elHeight;
-      styles.rightPanelWidth = 0;
-      styles.headerHeight = 0;
-      styles.frozenRowHeight = 0;
-      styles.headerHeight = 0;
-      styles.footSumHeight = 0;
-      styles.pageHeight = 0;
-      styles.scrollContentWidth = 0;
-      styles.verticalScrollerWidth = 0;
-      styles.horizontalScrollerHeight = 0;
-      styles.bodyHeight = 0;
-
-      let list = state.get('list');
-      let colGroup = UTIL.setColGroupWidth(state.get("colGroup"), {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
-
-      styles.frozenPanelWidth = ((colGroup, endIndex) => {
-        let width = 0;
-        for (let i = 0, l = endIndex; i < l; i++) {
-          width += colGroup.get(i)._width;
-        }
-        return width;
-      })(colGroup, options.frozenColumnIndex);
-      styles.headerHeight = (options.header.display) ? headerTable.get('rows').length * options.header.columnHeight : 0;
-
-      styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
-      styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
-      styles.pageHeight = (options.page.display) ? options.page.height : 0;
-      styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
-        return (prev._width || prev) + curr._width
-      });
-
-      styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
-      styles.horizontalScrollerHeight = (() => {
-        let totalColGroupWidth = colGroup.reduce((prev, curr) => {
-          return (prev._width || prev) + curr._width
-        });
-
-        // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
-        let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
-
-        return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
-      })();
-      if (styles.horizontalScrollerHeight > 0) {
-        styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
-      }
-
-      // 수평 너비 결정
-      styles.CTInnerWidth = styles.elWidth - styles.verticalScrollerWidth;
-      // 수직 스크롤러의 높이 결정.
-      styles.CTInnerHeight = styles.elHeight - styles.pageHeight - styles.horizontalScrollerHeight;
-      // get bodyHeight
-      styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
-
+      const {options, styles} = UTIL.calculateDimensions(state, action);
       return state
         .set('mounted', true)
         .set('options', Map(options))
@@ -405,8 +346,10 @@ const grid = (state = initialState, action) => {
     },
 
     [act.ALIGN]: () => {
-
-      return state;
+      const {options, styles} = UTIL.calculateDimensions(state, action);
+      return state
+        .set('options', Map(options))
+        .set('styles', Map(styles));
     }
   };
 

@@ -18,15 +18,15 @@ class GridRoot extends React.Component {
   }
 
   updateDimensions() {
-    console.log(this.gridRootNode.getBoundingClientRect().width);
-
+    // console.log(this.gridRootNode.getBoundingClientRect().width);
+    this.props.align(this.props, this.gridRootNode);
   }
 
   componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
     this.props.didMount(this.props, this.gridRootNode);
 
-    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
+    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 500);
     window.addEventListener("resize", this.throttled_updateDimensions);
   }
 
