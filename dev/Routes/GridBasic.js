@@ -15,7 +15,20 @@ class GridBasic extends React.Component {
       {id: 4, title: "제목 THREE 입니다.", writer: "황인서", date: "2017-10-10"},
       {id: 5, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
       {id: 6, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
-      {id: 7, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"}
+      {id: 7, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
+      {id: 8, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+      {id: 9, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+      {id: 10, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
+      {id: 11, title: "제목입니다.", writer: "장기영", date: "2017-10-10"},
+      {id: 12, title: "제목 ONE 입니다.", writer: "장서우", date: "2017-10-10"},
+      {id: 13, title: "제목 TWO 입니다.", writer: "이영희", date: "2017-10-10"},
+      {id: 14, title: "제목 THREE 입니다.", writer: "황인서", date: "2017-10-10"},
+      {id: 15, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+      {id: 16, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+      {id: 17, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
+      {id: 18, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+      {id: 19, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+      {id: 20, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"}
     ];
     const gridOptions = {
       header: {

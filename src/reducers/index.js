@@ -191,37 +191,34 @@ const grid = (state = initialState, action) => {
       styles.bodyTrHeight = bodyRowTable.rows.length * options.body.columnHeight;
 
       // colGroupMap
-      {
-        colGroupMap = {};
-        for (let r = 0, rl = headerTable.rows.length; r < rl; r++) {
-          let row = headerTable.rows[r];
-          for (let c = 0, cl = row.cols.length; c < cl; c++) {
-            colGroupMap[row.cols[c].colIndex] = extend({}, row.cols[c]);
-          }
+      colGroupMap = {};
+      for (let r = 0, rl = headerTable.rows.length; r < rl; r++) {
+        let row = headerTable.rows[r];
+        for (let c = 0, cl = row.cols.length; c < cl; c++) {
+          colGroupMap[row.cols[c].colIndex] = extend({}, row.cols[c]);
         }
-
-        colGroup = [];
-        each(colGroupMap, function (v, k) {
-          colGroup.push(v);
-        });
       }
+
+      colGroup = [];
+      each(colGroupMap, function (v, k) {
+        colGroup.push(v);
+      });
 
       leftHeaderColGroup = colGroup.slice(0, options.frozenColumnIndex);
       headerColGroup = colGroup.slice(options.frozenColumnIndex);
 
       // footSum
-      {
-        footSumColumns = [];
-        footSumTable = {};
+      footSumColumns = [];
+      footSumTable = {};
 
-        if (isArray(options.footSum)) {
-          footSumColumns = options.footSum;
-          footSumTable = UTIL.makeFootSumTable(footSumColumns, colGroup, options);
-          dividedObj = UTIL.divideTableByFrozenColumnIndex(footSumTable, options.frozenColumnIndex, options);
-          leftFootSumData = dividedObj.leftData;
-          footSumData = dividedObj.rightData;
-        }
+      if (isArray(options.footSum)) {
+        footSumColumns = options.footSum;
+        footSumTable = UTIL.makeFootSumTable(footSumColumns, colGroup, options);
+        dividedObj = UTIL.divideTableByFrozenColumnIndex(footSumTable, options.frozenColumnIndex, options);
+        leftFootSumData = dividedObj.leftData;
+        footSumData = dividedObj.rightData;
       }
+
 
       // grouping info
       if (options.body.grouping) {
@@ -323,9 +320,24 @@ const grid = (state = initialState, action) => {
     },
 
     [act.SET_DATA]: () => {
+      let options = state.get('options').toJS();
+
+      // 전달받은 리스트 중에 출력할 리스트를 필터링
+      let list = action.receivedList.filter(function (item) {
+        if (item) {
+          if (item[options.columnKeys.deleted]) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+        return false;
+      });
+
       return state
         .set('receivedList', List(action.receivedList))
-        .set('page', Map(action.page));
+        .set('list', List(list))
+        .set('page', isObject(action.page) ? Map(action.page) : false)
     },
 
     [act.SET_COLUMNS]: () => {

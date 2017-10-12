@@ -18,7 +18,6 @@ class GridRoot extends React.Component {
   }
 
   updateDimensions() {
-    // console.log(this.gridRootNode.getBoundingClientRect().width);
     this.props.align(this.props, this.gridRootNode);
   }
 
@@ -35,6 +34,12 @@ class GridRoot extends React.Component {
    */
   componentWillUnmount() {
     window.removeEventListener("resize", this.throttled_updateDimensions);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data != nextProps.data) {
+      this.props.setData(nextProps.data);
+    }
   }
 
   render() {
@@ -93,7 +98,7 @@ class GridRoot extends React.Component {
           /> : null}
         </div>
         <div ref="gridPage">
-          {mounted ? <GridPage/> : null}
+          {mounted ? <GridPage /> : null}
         </div>
         <div ref="gridScroller"></div>
         <div ref="gridVerticalResizer"></div>
