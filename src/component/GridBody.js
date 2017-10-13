@@ -176,18 +176,18 @@ const GridBody = ({
       ) : null}
 
       {(styles.asidePanelWidth > 0) ? (
-        <div data-panel="aside-body-scroll-container" style={asideBodyPanelStyle}>
+        <div data-panel="aside-body-scroll-container" data-scroll-container="" style={asideBodyPanelStyle}>
           {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
       {(styles.frozenPanelWidth > 0) ? (
-        <div data-panel="left-body-scroll-container" style={leftBodyPanelStyle}>
+        <div data-panel="left-body-scroll-container" data-scroll-container="" style={leftBodyPanelStyle}>
           {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
-      <div data-panel="body-scroll-container" style={bodyPanelStyle}>
+      <div data-panel="body-scroll-container" data-scroll-container="" style={bodyPanelStyle}>
         {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, {})}
       </div>
 

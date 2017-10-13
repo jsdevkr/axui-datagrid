@@ -17,10 +17,6 @@ class GridRoot extends React.Component {
     props.init(props);
   }
 
-  updateDimensions() {
-    this.props.align(this.props, this.gridRootNode);
-  }
-
   componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
     this.props.didMount(this.props, this.gridRootNode);
@@ -29,9 +25,6 @@ class GridRoot extends React.Component {
     window.addEventListener("resize", this.throttled_updateDimensions);
   }
 
-  /**
-   * Remove event listener
-   */
   componentWillUnmount() {
     window.removeEventListener("resize", this.throttled_updateDimensions);
   }
@@ -40,6 +33,19 @@ class GridRoot extends React.Component {
     if (this.props.data != nextProps.data) {
       this.props.setData(nextProps.data);
     }
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevProps.height != this.props.height){
+      this.props.align(this.props, this.gridRootNode);
+    }
+  }
+
+  /**
+   * 사용자 함수
+   */
+  updateDimensions() {
+    this.props.align(this.props, this.gridRootNode);
   }
 
   render() {
@@ -98,7 +104,9 @@ class GridRoot extends React.Component {
           /> : null}
         </div>
         <div ref="gridPage">
-          {mounted ? <GridPage /> : null}
+          {mounted ? <GridPage
+            styles={styles}
+          /> : null}
         </div>
         <div ref="gridScroller"></div>
         <div ref="gridVerticalResizer"></div>

@@ -3,21 +3,11 @@ import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
 const GridPage = ({
-                    optionsHeader,
-                    styles,
-                    frozenColumnIndex,
-                    colGroup,
-                    headerTable,
-                    asideColGroup,
-                    leftHeaderColGroup,
-                    headerColGroup,
-                    asideHeaderData,
-                    leftHeaderData,
-                    headerData
+                    styles
                   }) => {
 
   return (
-    <div className={classNames(sass.gridPage)} style={{}}>
+    <div className={classNames(sass.gridPage)} style={{height: styles.pageHeight}}>
 
     </div>
   )

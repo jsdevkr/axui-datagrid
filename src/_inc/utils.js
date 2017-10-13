@@ -636,6 +636,7 @@ export function calculateDimensions(state, action) {
 
     return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
   })();
+
   if (styles.horizontalScrollerHeight > 0) {
     styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   }

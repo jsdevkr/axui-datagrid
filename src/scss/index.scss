@@ -285,6 +285,12 @@
     position: absolute;
     box-sizing: border-box;
   }
+  [data-scroll-container] {
+    overflow: hidden;
+    [data-panel]{
+
+    }
+  }
 
   .gridClipBoard {
     position: absolute;
@@ -328,6 +334,19 @@
     [data-panel] {
 
     }
+  }
+  .gridPage{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    user-select: none;
+    box-sizing: border-box;
+    overflow: hidden;
+    @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
+    border: 0 none;
+    border-top: $ax6grid-header-column-border;
   }
 }
 

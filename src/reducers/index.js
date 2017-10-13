@@ -7,8 +7,6 @@ import * as UTIL from '../_inc/utils';
 // 초기 상태
 const initialState = Map({
   mounted: false,
-  scrollLeft: 0,
-  scrollTop: 0,
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
