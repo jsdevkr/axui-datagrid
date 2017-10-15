@@ -34,8 +34,6 @@ const GridHeader = ({
         label = _col.label;
       }
 
-      
-
       if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
           sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
       }

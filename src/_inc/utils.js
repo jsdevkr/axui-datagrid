@@ -649,6 +649,6 @@ export function calculateDimensions(state, action) {
   styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
 
   return {
-    styles, options
+    styles
   }
 }

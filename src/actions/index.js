@@ -4,7 +4,7 @@ import { propsConverterForData } from "../_inc/utils";
 /* 그리드 초기화 :  */
 export const INIT = 'INIT';
 
-export function init(props) {
+export function init(props, options) {
   let Obj_data = propsConverterForData(props.data);
 
   return {
@@ -13,8 +13,7 @@ export function init(props) {
     columns: props.columns,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
-    options: props.options,
-    _options: props._options,
+    options: options
   }
 }
 
@@ -62,5 +61,13 @@ export function align(props, containerDOM) {
   return {
     type: ALIGN,
     containerDOM: containerDOM
+  }
+}
+
+export const CHANGE_OPTIONS = 'CHANGE_OPTIONS';
+export function changeOptions(options) {
+  return {
+    type: CHANGE_OPTIONS,
+    options: options
   }
 }

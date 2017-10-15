@@ -10,11 +10,12 @@ const mapStateToProps = (state) => {
 
 // 액션함수 준비
 const mapToDispatch = (dispatch) => ({
-  init: (props) => dispatch(act.init(props)),
+  init: (props, options) => dispatch(act.init(props, options)),
   didMount: (props, containerDOM) => dispatch(act.didMount(props, containerDOM)),
   align: (props, containerDOM) => dispatch(act.align(props, containerDOM)),
   setData: (data) => dispatch(act.setData(data)),
-  updateScroll: (left, top) => dispatch(act.updateScroll(left, top))
+  updateScroll: (left, top) => dispatch(act.updateScroll(left, top)),
+  changeOptions: (options) => dispatch(act.changeOptions(options))
 });
 
 export default connect(mapStateToProps, mapToDispatch)(GridRoot);

@@ -1,5 +1,5 @@
 import * as act from '../actions';
-import {List, Map} from 'immutable';
+import {List, Map, fromJS} from 'immutable';
 import {each, extend, extendOwn, isArray, isNumber, isObject, isString} from "underscore";
 // import {mouseEventNames} from '../_inc/preference';
 import * as UTIL from '../_inc/utils';
@@ -45,75 +45,12 @@ const initialState = Map({
   leftFootSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
   footSumData: Map({}), // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
   options: Map({
-    frozenColumnIndex: 0,
-    frozenRowIndex: 0,
-    showLineNumber: true,
-    showRowSelector: false,
-    multipleSelect: true,
-    columnMinWidth: 100,
-    lineNumberColumnWidth: 30,
-    rowSelectorColumnWidth: 26,
-    sortable: true,
-    remoteSort: false,
-    asidePanelWidth: 0,
-    header: {
-      display: true,
-      align: false,
-      columnHeight: 26,
-      columnPadding: 3,
-      columnBorderWidth: 1,
-      selector: true
-    },
-    body: {
-      align: false,
-      columnHeight: 26,
-      columnPadding: 3,
-      columnBorderWidth: 1,
-      grouping: false,
-      mergeCells: false
-    },
-    page: {
-      height: 25,
-      display: true,
-      statusDisplay: true,
-      navigationItemCount: 5
-    },
-    scroller: {
-      size: 15,
-      barMinSize: 15,
-      trackPadding: 4
-    },
-    columnKeys: {
-      selected: '__selected__',
-      modified: '__modified__',
-      deleted: '__deleted__',
-      disableSelection: '__disable_selection__'
-    },
-    tree: {
-      use: false,
-      hashDigit: 8,
-      indentWidth: 10,
-      arrowWidth: 15,
-      iconWidth: 18,
-      icons: {
-        openedArrow: '▾',
-        collapsedArrow: '▸',
-        groupIcon: '⊚',
-        collapsedGroupIcon: '⊚',
-        itemIcon: '⊙'
-      },
-      columnKeys: {
-        parentKey: "pid",
-        selfKey: "id",
-        collapse: "collapse",
-        hidden: "hidden",
-        parentHash: "__hp__",
-        selfHash: "__hs__",
-        children: "__children__",
-        depth: "__depth__",
-      }
-    },
-    footSum: false
+    header: {},
+    body: {},
+    page: {},
+    scroller: {},
+    columnKeys: {},
+    tree: {}
   }),
   styles: Map({
     // 줄번호 + 줄셀렉터의 너비
@@ -159,12 +96,8 @@ const grid = (state = initialState, action) => {
       let leftFootSumData, footSumData;
       let asideBodyGroupingData, leftBodyGroupingData, bodyGroupingData, bodyGroupingMap;
       let list; // 그리드에 표현할 목록
-      let options = state.get('options').toJS();
+      let options = action.options;
       let styles = state.get('styles').toJS();
-
-      each(action.options, function (v, k) {
-        options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
-      });
 
       headerTable = UTIL.makeHeaderTable(action.columns, options);
       bodyRowTable = UTIL.makeBodyRowTable(action.columns, options);
@@ -304,17 +237,16 @@ const grid = (state = initialState, action) => {
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
         .set('page', isObject(action.page) ? Map(action.page) : false)
-        .set('options', Map(options))
+        .set('options', fromJS(options))
         .set('styles', Map(styles));
     },
 
     // 필요 액션들
     // alignGrid
     [act.DID_MOUNT]: () => {
-      const {options, styles} = UTIL.calculateDimensions(state, action);
+      const {styles} = UTIL.calculateDimensions(state, action);
       return state
         .set('mounted', true)
-        .set('options', Map(options))
         .set('styles', Map(styles));
     },
 
@@ -357,10 +289,17 @@ const grid = (state = initialState, action) => {
     },
 
     [act.ALIGN]: () => {
-      const {options, styles} = UTIL.calculateDimensions(state, action);
+      const {styles} = UTIL.calculateDimensions(state, action);
       return state
-        .set('options', Map(options))
         .set('styles', Map(styles));
+    },
+
+    [act.CHANGE_OPTIONS]: () => {
+
+
+
+      return state
+        .set('options', fromJS(action.options))
     }
   };
 
