@@ -35,8 +35,8 @@ class GridRoot extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if(prevProps.height != this.props.height){
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.height != this.props.height) {
       this.props.align(this.props, this.gridRootNode);
     }
   }
@@ -59,56 +59,62 @@ class GridRoot extends React.Component {
     let mounted = gridState.get("mounted");
 
     return (
-      <div ref="gridRoot" className={classNames(sass.gridRoot)} style={gridRootStyle}>
+      <div ref="gridRoot"
+           onWheel={handleWheel}
+           className={classNames(sass.gridRoot)}
+           style={gridRootStyle}>
         <div className={classNames(sass.gridClipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
-        <div ref="gridHeader">
-          {mounted ? <GridHeader
-            optionsHeader={options.header}
-            styles={styles}
-            frozenColumnIndex={options.frozenColumnIndex}
+        {mounted ? <GridHeader
+          optionsHeader={options.header}
+          styles={styles}
+          frozenColumnIndex={options.frozenColumnIndex}
 
-            colGroup={gridState.get('colGroup')}
-            headerTable={gridState.get('headerTable')}
+          colGroup={gridState.get('colGroup')}
+          headerTable={gridState.get('headerTable')}
 
-            asideColGroup={gridState.get('asideColGroup')}
-            leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-            headerColGroup={gridState.get('headerColGroup')}
+          asideColGroup={gridState.get('asideColGroup')}
+          leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
+          headerColGroup={gridState.get('headerColGroup')}
 
-            asideHeaderData={gridState.get('asideHeaderData')}
-            leftHeaderData={gridState.get('leftHeaderData')}
-            headerData={gridState.get('headerData')}
-          /> : null}
+          asideHeaderData={gridState.get('asideHeaderData')}
+          leftHeaderData={gridState.get('leftHeaderData')}
+          headerData={gridState.get('headerData')}
+        /> : null}
+        {mounted ? <GridBody
+          optionsBody={options.body}
+          styles={styles}
+          frozenColumnIndex={options.frozenColumnIndex}
+
+          colGroup={gridState.get('colGroup')}
+          asideColGroup={gridState.get('asideColGroup')}
+          leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
+          headerColGroup={gridState.get('headerColGroup')}
+
+          bodyTable={gridState.get('bodyRowTable')}
+          asideBodyRowData={gridState.get('asideBodyRowData')}
+          asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
+          leftBodyRowData={gridState.get('leftBodyRowData')}
+          leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
+          bodyRowData={gridState.get('bodyRowData')}
+          bodyGroupingData={gridState.get('bodyGroupingData')}
+
+          list={gridState.get('list')}
+        /> : null}
+        {mounted ? <GridPage
+          styles={styles}
+        /> : null}
+
+        <div className={classNames(sass.gridScroller)}>
+          <div data-scroll="vertical">
+            <div data-scroll="vertical-bar"></div>
+          </div>
+          <div data-scroll="horizontal">
+            <div data-scroll="horizontal-bar"></div>
+          </div>
+          <div data-scroll="corner"></div>
         </div>
-        <div ref="gridBody">
-          {mounted ? <GridBody
-            optionsBody={options.body}
-            styles={styles}
-            frozenColumnIndex={options.frozenColumnIndex}
-
-            colGroup={gridState.get('colGroup')}
-            asideColGroup={gridState.get('asideColGroup')}
-            leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-            headerColGroup={gridState.get('headerColGroup')}
-
-            bodyTable={gridState.get('bodyRowTable')}
-            asideBodyRowData={gridState.get('asideBodyRowData')}
-            asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
-            leftBodyRowData={gridState.get('leftBodyRowData')}
-            leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
-            bodyRowData={gridState.get('bodyRowData')}
-            bodyGroupingData={gridState.get('bodyGroupingData')}
-
-            list={gridState.get('list')}
-          /> : null}
-        </div>
-        <div ref="gridPage">
-          {mounted ? <GridPage
-            styles={styles}
-          /> : null}
-        </div>
-        <div ref="gridScroller"></div>
         <div ref="gridVerticalResizer"></div>
         <div ref="gridHorizontalResizer"></div>
       </div>

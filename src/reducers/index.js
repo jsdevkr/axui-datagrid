@@ -136,12 +136,13 @@ const initialState = Map({
     footSumHeight: null,
     // 페이징 영역의 높이
     pageHeight: null,
-    scrollContentWidth: null,
     // scrollTack 의 크기 (너비, 높이)
     verticalScrollerWidth: null,
     horizontalScrollerHeight: null,
 
-    bodyHeight: null
+    bodyHeight: null,
+    scrollContentHeight: null,
+    scrollContentWidth: null
   })
 });
 

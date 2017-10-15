@@ -286,6 +286,8 @@
     box-sizing: border-box;
   }
   [data-scroll-container] {
+    position: absolute;
+    box-sizing: border-box;
     overflow: hidden;
     [data-panel]{
 
@@ -347,6 +349,11 @@
     @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
     border: 0 none;
     border-top: $ax6grid-header-column-border;
+  }
+  .gridScroller{
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 }
 

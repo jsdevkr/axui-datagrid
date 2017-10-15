@@ -170,31 +170,31 @@ const GridBody = ({
       {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
       {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
       {(styles.frozenRowHeight > 0) ? (
-        <div data-panel="top-body-scroll-container" style={topBodyPanelStyle}>
+        <div data-scroll-container="top-body-scroll-container" style={topBodyPanelStyle}>
           {_paintBody("top-body-scroll", {})}
         </div>
       ) : null}
 
       {(styles.asidePanelWidth > 0) ? (
-        <div data-panel="aside-body-scroll-container" data-scroll-container="" style={asideBodyPanelStyle}>
+        <div data-scroll-container="aside-body-scroll-container" style={asideBodyPanelStyle}>
           {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
       {(styles.frozenPanelWidth > 0) ? (
-        <div data-panel="left-body-scroll-container" data-scroll-container="" style={leftBodyPanelStyle}>
+        <div data-scroll-container="left-body-scroll-container" style={leftBodyPanelStyle}>
           {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, {})}
         </div>
       ) : null}
 
-      <div data-panel="body-scroll-container" data-scroll-container="" style={bodyPanelStyle}>
+      <div data-scroll-container="body-scroll-container" style={bodyPanelStyle}>
         {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, {})}
       </div>
 
       {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
       {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle) : null}
       {(styles.footSumHeight > 0) ? (
-        <div data-panel="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
+        <div data-scroll-container="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
           {_paintBody("bottom-body-scroll", {})}
         </div>
       ) : null}

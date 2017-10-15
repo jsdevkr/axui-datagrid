@@ -144,7 +144,7 @@ const GridHeader = ({
     <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
       {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
       {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
-      <div data-panel="header-scroll-container" style={headerPanelStyle}>
+      <div data-scroll-container="header-scroll-container" style={headerPanelStyle}>
         {printHeader("header-scroll", headerColGroup, headerData, {height: styles.headerHeight})}
       </div>
     </div>
