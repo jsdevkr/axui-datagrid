@@ -65,9 +65,10 @@ export function align(props, containerDOM) {
 }
 
 export const CHANGE_OPTIONS = 'CHANGE_OPTIONS';
-export function changeOptions(options) {
+export function changeOptions(containerDOM, options) {
   return {
     type: CHANGE_OPTIONS,
+    containerDOM: containerDOM,
     options: options
   }
 }

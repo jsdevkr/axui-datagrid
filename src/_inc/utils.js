@@ -584,16 +584,22 @@ export function setColGroupWidth(_colGroup, container, options) {
   return _colGroup;
 }
 
-export function calculateDimensions(state, action) {
+/**
+ *
+ * @param state
+ * @param action
+ * @param [options=state.get('options').toJS()]
+ * @param [styles=state.get('styles').toJS()]
+ * @return {{styles: (any | *)}}
+ */
+export function calculateDimensions(state, action, colGroup = state.get("colGroup"), options = state.get('options').toJS(), styles = state.get('styles').toJS()) {
   let list = state.get('list');
   let footSumColumns = state.get('footSumColumns');
   let headerTable = state.get('headerTable');
-  let options = state.get('options').toJS();
-  let styles = state.get('styles').toJS();
-  let colGroup;
 
   styles.elWidth = action.containerDOM.getBoundingClientRect().width;
   styles.elHeight = action.containerDOM.getBoundingClientRect().height;
+
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
   styles.rightPanelWidth = 0;
@@ -607,7 +613,7 @@ export function calculateDimensions(state, action) {
   styles.horizontalScrollerHeight = 0;
   styles.bodyHeight = 0;
 
-  colGroup = setColGroupWidth(state.get("colGroup"), {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
+  colGroup = setColGroupWidth(colGroup, {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
 
   styles.frozenPanelWidth = ((colGroup, endIndex) => {
     let width = 0;

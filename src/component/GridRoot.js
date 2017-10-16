@@ -103,7 +103,7 @@ class GridRoot extends React.Component {
     this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
     this.props.didMount(this.props, this.gridRootNode);
 
-    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 500);
+    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
     window.addEventListener("resize", this.throttled_updateDimensions);
   }
 
@@ -126,7 +126,8 @@ class GridRoot extends React.Component {
         options: this.state.options
       });
 
-      this.props.changeOptions(this.state.options);
+      this.props.changeOptions(this.gridRootNode, this.state.options);
+      //this.props.align(this.props, this.gridRootNode);
     }
   }
 

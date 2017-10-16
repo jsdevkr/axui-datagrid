@@ -15,7 +15,7 @@ const mapToDispatch = (dispatch) => ({
   align: (props, containerDOM) => dispatch(act.align(props, containerDOM)),
   setData: (data) => dispatch(act.setData(data)),
   updateScroll: (left, top) => dispatch(act.updateScroll(left, top)),
-  changeOptions: (options) => dispatch(act.changeOptions(options))
+  changeOptions: (containerDOM, options) => dispatch(act.changeOptions(containerDOM, options))
 });
 
 export default connect(mapStateToProps, mapToDispatch)(GridRoot);

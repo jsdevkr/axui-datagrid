@@ -52,8 +52,6 @@ class GridBasic extends React.Component {
   constructor(props) {
     super(props);
 
-
-
     this.state = {
       columns: [
         {key: "id", width: 60, label: "번호", align:"center"},

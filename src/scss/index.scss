@@ -336,6 +336,9 @@
     [data-panel] {
 
     }
+    [data-panel="aside-body-scroll"]{
+      background: $ax6grid-aside-bg;
+    }
   }
   .gridPage{
     position: absolute;

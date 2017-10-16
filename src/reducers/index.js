@@ -305,6 +305,8 @@ const grid = (state = initialState, action) => {
       let list; // 그리드에 표현할 목록
       let options = action.options;
       let styles = state.get('styles').toJS();
+
+
       let columns = state.get('columns').toJS();
       let receivedList = state.get('receivedList').toJS();
 
@@ -408,6 +410,7 @@ const grid = (state = initialState, action) => {
         }
         return false;
       });
+      styles = UTIL.calculateDimensions(state, action, List(colGroup), options, styles).styles;
 
       return state
         .set('colGroup', List(colGroup))
