@@ -78,11 +78,14 @@ const initialState = Map({
     horizontalScrollerHeight: null,
 
     bodyHeight: null,
-    scrollContentHeight: null,
-    scrollContentWidth: null
-  })
-});
 
+    scrollContentContainerHeight: null,
+    scrollContentHeight: null,
+    scrollContentContainerWidth: null,
+    scrollContentWidth: null
+  }),
+  scroll: {}
+});
 
 // 리듀서 함수 정의
 const grid = (state = initialState, action) => {
@@ -150,7 +153,6 @@ const grid = (state = initialState, action) => {
         leftFootSumData = dividedObj.leftData;
         footSumData = dividedObj.rightData;
       }
-
 
       // grouping info
       if (options.body.grouping) {
@@ -271,12 +273,6 @@ const grid = (state = initialState, action) => {
         .set('page', isObject(action.page) ? Map(action.page) : false)
     },
 
-    [act.SET_COLUMNS]: () => {
-      // todo : SET_COLUMNS 마저 정리하기
-      return state
-        .set('columns', List(action.columns));
-    },
-
     [act.UPDATE_SCROLL]: () => {
       if (isNumber(action.scrollLeft) || isString(action.scrollLeft)) {
         state = state.set('scrollLeft', action.scrollLeft);
@@ -294,7 +290,7 @@ const grid = (state = initialState, action) => {
         .set('styles', Map(styles));
     },
 
-    [act.CHANGE_OPTIONS]: () => {
+    [act.UPDATE_PROPS]: () => {
       let headerTable, bodyRowTable, bodyRowMap, colGroupMap, footSumColumns, footSumTable, bodyGrouping, bodyGroupingTable, sortInfo;
       let colGroup, asideColGroup, leftHeaderColGroup, headerColGroup;
       let dividedObj;
@@ -303,11 +299,9 @@ const grid = (state = initialState, action) => {
       let leftFootSumData, footSumData;
       let asideBodyGroupingData, leftBodyGroupingData, bodyGroupingData, bodyGroupingMap;
       let list; // 그리드에 표현할 목록
+      let columns = action.columns;
       let options = action.options;
       let styles = state.get('styles').toJS();
-
-
-      let columns = state.get('columns').toJS();
       let receivedList = state.get('receivedList').toJS();
 
       headerTable = UTIL.makeHeaderTable(columns, options);

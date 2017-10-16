@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
 const GridBody = ({
+                    mounted,
                     optionsBody,
                     styles,
                     frozenColumnIndex,
@@ -19,6 +20,8 @@ const GridBody = ({
                     bodyGroupingData,
                     list
                   }) => {
+
+  if(!mounted) return null;
 
   const _paintBody = function (_panelName, _style) {
     return (

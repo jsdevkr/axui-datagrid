@@ -575,13 +575,23 @@ export function setColGroupWidth(_colGroup, container, options) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
       _colGroup.update(autoWidthColGroupIndexs[i], O => {
-        O._width = computedWidth;
+        O._width = (computedWidth < options.columnMinWidth) ? options.columnMinWidth : computedWidth;
         return O;
       });
     }
   }
 
   return _colGroup;
+}
+
+
+function getInnerWidth(element) {
+  const cs = window.getComputedStyle(element);
+  return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
+}
+function getInnerHeight(element) {
+  const cs = window.getComputedStyle(element);
+  return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
 }
 
 /**
@@ -597,8 +607,8 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   let footSumColumns = state.get('footSumColumns');
   let headerTable = state.get('headerTable');
 
-  styles.elWidth = action.containerDOM.getBoundingClientRect().width;
-  styles.elHeight = action.containerDOM.getBoundingClientRect().height;
+  styles.elWidth = getInnerWidth(action.containerDOM);
+  styles.elHeight = getInnerHeight(action.containerDOM);
 
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
@@ -608,7 +618,12 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.headerHeight = 0;
   styles.footSumHeight = 0;
   styles.pageHeight = 0;
+
+  styles.scrollContentContainerHeight = 0;
+  styles.scrollContentHeight = 0;
+  styles.scrollContentContainerWidth = 0;
   styles.scrollContentWidth = 0;
+
   styles.verticalScrollerWidth = 0;
   styles.horizontalScrollerHeight = 0;
   styles.bodyHeight = 0;
@@ -630,6 +645,7 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
     return (prev._width || prev) + curr._width
   });
+  styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
@@ -653,6 +669,10 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.CTInnerHeight = styles.elHeight - styles.pageHeight - styles.horizontalScrollerHeight;
   // get bodyHeight
   styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
+
+  //
+  styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
+  styles.scrollContentHeight = styles.bodyTrHeight * list.size;
 
   return {
     styles

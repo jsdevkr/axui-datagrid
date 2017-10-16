@@ -9,7 +9,6 @@ export function init(props, options) {
 
   return {
     type: INIT,
-    height: props.height,
     columns: props.columns,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
@@ -22,14 +21,6 @@ export function didMount(props, containerDOM) {
   return {
     type: DID_MOUNT,
     containerDOM: containerDOM
-  }
-}
-
-export const SET_COLUMNS = 'SET_COLUMNS';
-export function setColumns(columns) {
-  return {
-    type: SET_COLUMNS,
-    columns: columns
   }
 }
 
@@ -64,11 +55,14 @@ export function align(props, containerDOM) {
   }
 }
 
-export const CHANGE_OPTIONS = 'CHANGE_OPTIONS';
-export function changeOptions(containerDOM, options) {
+
+export const UPDATE_PROPS = 'UPDATE_PROPS';
+export function updateProps(props, containerDOM, options) {
   return {
-    type: CHANGE_OPTIONS,
+    type: UPDATE_PROPS,
     containerDOM: containerDOM,
+    height: props.height,
+    columns: props.columns,
     options: options
   }
 }

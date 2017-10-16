@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import GridHeader from './GridHeader';
 import GridBody from './GridBody';
 import GridPage from './GridPage';
+import GridScroll from './GridScroll';
 
 //~~~~~
 const defaultOptions = {
@@ -112,22 +113,22 @@ class GridRoot extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // 데이터 체인지
     if (this.props.data != nextProps.data) {
       this.props.setData(nextProps.data);
     }
+    if (this.props.options != nextProps.options || this.props.columns != nextProps.columns) {
+      if (this.props.options != nextProps.options) {
+        each(nextProps.options, (v, k) => {
+          this.state.options[k] = (isObject(v)) ? extendOwn(this.state.options[k], v) : v;
+        });
+        this.setState({
+          options: this.state.options
+        });
+      }
 
-    if (this.props.options != nextProps.options) {
-
-      each(nextProps.options, (v, k) => {
-        this.state.options[k] = (isObject(v)) ? extendOwn(this.state.options[k], v) : v;
-      });
-
-      this.setState({
-        options: this.state.options
-      });
-
-      this.props.changeOptions(this.gridRootNode, this.state.options);
-      //this.props.align(this.props, this.gridRootNode);
+      //this.props.changeOptions(nextProps, this.gridRootNode, this.state.options);
+      this.props.updateProps(nextProps, this.gridRootNode, this.state.options);
     }
   }
 
@@ -159,7 +160,8 @@ class GridRoot extends React.Component {
         <div className={classNames(sass.gridClipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
-        {mounted ? <GridHeader
+        <GridHeader
+          mounted={mounted}
           optionsHeader={options.header}
           styles={styles}
           frozenColumnIndex={options.frozenColumnIndex}
@@ -174,8 +176,9 @@ class GridRoot extends React.Component {
           asideHeaderData={gridState.get('asideHeaderData')}
           leftHeaderData={gridState.get('leftHeaderData')}
           headerData={gridState.get('headerData')}
-        /> : null}
-        {mounted ? <GridBody
+        />
+        <GridBody
+          mounted={mounted}
           optionsBody={options.body}
           styles={styles}
           frozenColumnIndex={options.frozenColumnIndex}
@@ -194,20 +197,26 @@ class GridRoot extends React.Component {
           bodyGroupingData={gridState.get('bodyGroupingData')}
 
           list={gridState.get('list')}
-        /> : null}
-        {mounted ? <GridPage
+        />
+        <GridPage
+          mounted={mounted}
           styles={styles}
-        /> : null}
+        />
+        <GridScroll
+          mounted={mounted}
+          CTInnerWidth={styles.CTInnerWidth}
+          CTInnerHeight={styles.CTInnerHeight}
 
-        <div className={classNames(sass.gridScroller)}>
-          <div data-scroll="vertical">
-            <div data-scroll="vertical-bar"></div>
-          </div>
-          <div data-scroll="horizontal">
-            <div data-scroll="horizontal-bar"></div>
-          </div>
-          <div data-scroll="corner"></div>
-        </div>
+          pageHeight={styles.pageHeight}
+          verticalScrollerWidth={styles.verticalScrollerWidth}
+          horizontalScrollerHeight={styles.horizontalScrollerHeight}
+          scrollContentContainerHeight={styles.scrollContentContainerHeight}
+          scrollContentHeight={styles.scrollContentHeight}
+          scrollContentContainerWidth={styles.scrollContentContainerWidth}
+          scrollContentWidth={styles.scrollContentWidth}
+          trackPadding={options.scroller.trackPadding}
+        />
+
         <div ref="gridVerticalResizer"></div>
         <div ref="gridHorizontalResizer"></div>
       </div>

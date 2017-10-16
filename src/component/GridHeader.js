@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
 const GridHeader = ({
+                      mounted,
                       optionsHeader,
                       styles,
                       frozenColumnIndex,
@@ -15,6 +16,8 @@ const GridHeader = ({
                       leftHeaderData,
                       headerData
                     }) => {
+
+  if (!mounted) return null;
 
   const printHeader = function (_panelName, _colGroup, _bodyRow, _style) {
 

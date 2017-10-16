@@ -74,10 +74,25 @@ class GridBasic extends React.Component {
         this.setState({data: gridData_new});
       },
       "restoreOptions": function () {
-        this.setState({options: gridOptions});
+        this.setState({
+          columns: [
+            {key: "id", width: 60, label: "번호", align:"center"},
+            {key: "title", width: "*", label: "제목"},
+            {key: "writer", label: "작성자", align:"center"},
+            {key: "date", label: "작성일", align:"center"}
+          ],
+          options: gridOptions
+        });
       },
       "newOptions": function () {
-        this.setState({options: gridOptions_new});
+        this.setState({
+          columns: [
+            {key: "id", width: 60, label: "번호", align:"center"},
+            {key: "writer", label: "작성자", align:"center"},
+            {key: "date", label: "작성일", align:"center"}
+          ],
+          options: gridOptions_new
+        });
       }
     };
 
