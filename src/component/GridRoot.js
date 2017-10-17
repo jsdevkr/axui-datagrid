@@ -145,6 +145,25 @@ class GridRoot extends React.Component {
     this.props.align(this.props, this.gridRootNode);
   }
 
+  handleWheel(e) {
+    let delta = {x: 0, y: 0};
+    if (e.detail) {
+      delta.y = e.detail * 10;
+    } else {
+      if (typeof e.deltaY === "undefined") {
+        delta.y = -e.wheelDelta;
+        delta.x = 0;
+      } else {
+        delta.y = e.deltaY;
+        delta.x = e.deltaX;
+      }
+    }
+
+    if (!this.props.scrollBy(delta.x, delta.y).result) {
+      e.preventDefault();
+    }
+  }
+
   render() {
     const gridState = this.props.gridState;
     const styles = gridState.get('styles').toJS();
@@ -154,7 +173,9 @@ class GridRoot extends React.Component {
 
     return (
       <div ref="gridRoot"
-        //onWheel={handleWheel}
+           onWheel={e => {
+             this.handleWheel(e);
+           }}
            className={classNames(sass.gridRoot)}
            style={gridRootStyle}>
         <div className={classNames(sass.gridClipBoard)}>
@@ -176,6 +197,8 @@ class GridRoot extends React.Component {
           asideHeaderData={gridState.get('asideHeaderData')}
           leftHeaderData={gridState.get('leftHeaderData')}
           headerData={gridState.get('headerData')}
+
+          scrollLeft={gridState.get('scrollLeft')}
         />
         <GridBody
           mounted={mounted}
@@ -197,6 +220,9 @@ class GridRoot extends React.Component {
           bodyGroupingData={gridState.get('bodyGroupingData')}
 
           list={gridState.get('list')}
+
+          scrollLeft={gridState.get('scrollLeft')}
+          scrollTop={gridState.get('scrollTop')}
         />
         <GridPage
           mounted={mounted}
@@ -215,6 +241,9 @@ class GridRoot extends React.Component {
           scrollContentContainerWidth={styles.scrollContentContainerWidth}
           scrollContentWidth={styles.scrollContentWidth}
           trackPadding={options.scroller.trackPadding}
+
+          scrollLeft={gridState.get('scrollLeft')}
+          scrollTop={gridState.get('scrollTop')}
         />
 
         <div ref="gridVerticalResizer"></div>

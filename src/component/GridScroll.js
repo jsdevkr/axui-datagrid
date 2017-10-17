@@ -13,7 +13,9 @@ const GridScroll = ({
                       scrollContentHeight,
                       scrollContentContainerWidth,
                       scrollContentWidth,
-                      trackPadding
+                      trackPadding,
+                      scrollLeft,
+                      scrollTop
                     }) => {
 
   if (!mounted) return null;

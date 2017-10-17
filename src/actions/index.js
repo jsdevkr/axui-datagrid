@@ -37,14 +37,26 @@ export function setData(data) {
 }
 
 /* 그리드 스크롤 업데이트 */
-export const UPDATE_SCROLL = 'UPDATE_SCROLL';
-export function updateScroll(scrollLeft, scrollTop) {
+export const SCROLL_TO = 'SCROLL_TO';
+export function scrollTo(scrollLeft, scrollTop) {
   return {
-    type: UPDATE_SCROLL,
+    type: SCROLL_TO,
     scrollLeft,
     scrollTop,
+    result: false
   }
 }
+
+export const SCROLL_BY = 'SCROLL_BY';
+export function scrollBy(scrollLeft, scrollTop) {
+  return {
+    type: SCROLL_BY,
+    scrollLeft,
+    scrollTop,
+    result: false
+  }
+}
+
 
 /* 컨테이너의 크기가 변경되어 엘리먼트의 크기를 조정해야 할 때 */
 export const ALIGN = 'ALIGN';

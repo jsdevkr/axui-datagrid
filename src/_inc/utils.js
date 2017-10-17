@@ -678,3 +678,33 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
     styles
   }
 }
+
+
+/**
+ * list가 변경되면 list의 길이에 따라 변해야 하는 요소의 사이즈 재 계산.
+ * @param state
+ * @param list
+ * @param colGroup
+ * @param options
+ * @param styles
+ * @return {any | *}
+ */
+export function calculateDimensionsByList(state, list, colGroup = state.get("colGroup"), options = state.get('options').toJS(), styles = state.get('styles').toJS()) {
+  styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+  styles.horizontalScrollerHeight = (() => {
+    let totalColGroupWidth = colGroup.reduce((prev, curr) => {
+      return (prev._width || prev) + curr._width
+    });
+
+    // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
+    let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
+    return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
+  })();
+
+  if (styles.horizontalScrollerHeight > 0) {
+    styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+  }
+
+  styles.scrollContentHeight = styles.bodyTrHeight * list.size;
+  return styles;
+}

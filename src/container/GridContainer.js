@@ -14,7 +14,8 @@ const mapToDispatch = (dispatch) => ({
   didMount: (props, containerDOM) => dispatch(act.didMount(props, containerDOM)),
   align: (props, containerDOM) => dispatch(act.align(props, containerDOM)),
   setData: (data) => dispatch(act.setData(data)),
-  updateScroll: (left, top) => dispatch(act.updateScroll(left, top)),
+  scrollTo: (left, top) => dispatch(act.scrollTo(left, top)),
+  scrollBy: (left, top) => dispatch(act.scrollBy(left, top)),
   updateProps: (props, containerDOM, options) => dispatch(act.updateProps(props, containerDOM, options))
 });
 

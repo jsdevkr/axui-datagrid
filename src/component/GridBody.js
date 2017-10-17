@@ -18,7 +18,9 @@ const GridBody = ({
                     leftBodyGroupingData,
                     bodyRowData,
                     bodyGroupingData,
-                    list
+                    list,
+                    scrollLeft,
+                    scrollTop
                   }) => {
 
   if(!mounted) return null;
@@ -168,37 +170,55 @@ const GridBody = ({
     height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
   };
 
+
+  let topBodyScrollStyle = {
+    left: scrollLeft
+  };
+  let asideBodyScrollStyle = {
+    top: scrollTop
+  };
+  let leftBodyScrollStyle = {
+    top: scrollTop
+  };
+  let bodyScrollStyle = {
+    left: scrollLeft,
+    top: scrollTop
+  };
+  let bottomBodyScrollStyle = {
+    left: scrollLeft
+  };
+
   return (
     <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
       {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
       {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
       {(styles.frozenRowHeight > 0) ? (
         <div data-scroll-container="top-body-scroll-container" style={topBodyPanelStyle}>
-          {_paintBody("top-body-scroll", {})}
+          {_paintBody("top-body-scroll", topBodyScrollStyle)}
         </div>
       ) : null}
 
       {(styles.asidePanelWidth > 0) ? (
         <div data-scroll-container="aside-body-scroll-container" style={asideBodyPanelStyle}>
-          {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, {})}
+          {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, asideBodyScrollStyle)}
         </div>
       ) : null}
 
       {(styles.frozenPanelWidth > 0) ? (
         <div data-scroll-container="left-body-scroll-container" style={leftBodyPanelStyle}>
-          {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, {})}
+          {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, leftBodyScrollStyle)}
         </div>
       ) : null}
 
       <div data-scroll-container="body-scroll-container" style={bodyPanelStyle}>
-        {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, {})}
+        {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, bodyScrollStyle)}
       </div>
 
       {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
       {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle) : null}
       {(styles.footSumHeight > 0) ? (
         <div data-scroll-container="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
-          {_paintBody("bottom-body-scroll", {})}
+          {_paintBody("bottom-body-scroll", bottomBodyScrollStyle)}
         </div>
       ) : null}
     </div>

@@ -7,6 +7,8 @@ import * as UTIL from '../_inc/utils';
 // 초기 상태
 const initialState = Map({
   mounted: false,
+  scrollLeft: 0,
+  scrollTop: 0,
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
@@ -83,8 +85,7 @@ const initialState = Map({
     scrollContentHeight: null,
     scrollContentContainerWidth: null,
     scrollContentWidth: null
-  }),
-  scroll: {}
+  })
 });
 
 // 리듀서 함수 정의
@@ -243,8 +244,6 @@ const grid = (state = initialState, action) => {
         .set('styles', Map(styles));
     },
 
-    // 필요 액션들
-    // alignGrid
     [act.DID_MOUNT]: () => {
       const {styles} = UTIL.calculateDimensions(state, action);
       return state
@@ -254,6 +253,7 @@ const grid = (state = initialState, action) => {
 
     [act.SET_DATA]: () => {
       let options = state.get('options').toJS();
+      let styles = state.get('styles').toJS();
 
       // 전달받은 리스트 중에 출력할 리스트를 필터링
       let list = action.receivedList.filter(function (item) {
@@ -267,13 +267,17 @@ const grid = (state = initialState, action) => {
         return false;
       });
 
+      list = List(list);
+      styles = UTIL.calculateDimensionsByList(state, list);
+
       return state
+        .set('styles', Map(styles))
         .set('receivedList', List(action.receivedList))
-        .set('list', List(list))
+        .set('list', list)
         .set('page', isObject(action.page) ? Map(action.page) : false)
     },
 
-    [act.UPDATE_SCROLL]: () => {
+    [act.SCROLL_TO]: () => {
       if (isNumber(action.scrollLeft) || isString(action.scrollLeft)) {
         state = state.set('scrollLeft', action.scrollLeft);
       }
@@ -282,6 +286,21 @@ const grid = (state = initialState, action) => {
       }
 
       return state;
+    },
+
+    [act.SCROLL_BY]: () => {
+      let scrollLeft = state.get('scrollLeft'), scrollTop = state.get('scrollTop');
+
+      if (isNumber(action.scrollLeft)) {
+        scrollLeft += action.scrollLeft;
+      }
+      if (isNumber(action.scrollTop)) {
+        scrollTop += action.scrollTop;
+      }
+
+      return state
+        .set('scrollLeft', scrollLeft)
+        .set('scrollTop', scrollTop);
     },
 
     [act.ALIGN]: () => {

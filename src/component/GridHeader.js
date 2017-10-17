@@ -14,7 +14,8 @@ const GridHeader = ({
                       headerColGroup,
                       asideHeaderData,
                       leftHeaderData,
-                      headerData
+                      headerData,
+                      scrollLeft
                     }) => {
 
   if (!mounted) return null;
@@ -141,12 +142,17 @@ const GridHeader = ({
     height: styles.headerHeight
   };
 
+  let headerScrollStyle = {
+    height: styles.headerHeight,
+    left: scrollLeft
+  };
+
   return (
     <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
       {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
       {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
       <div data-scroll-container="header-scroll-container" style={headerPanelStyle}>
-        {printHeader("header-scroll", headerColGroup, headerData, {height: styles.headerHeight})}
+        {printHeader("header-scroll", headerColGroup, headerData, headerScrollStyle)}
       </div>
     </div>
   )
