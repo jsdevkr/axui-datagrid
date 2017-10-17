@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
 const GridHeader = ({
+                      refCallback,
                       mounted,
                       optionsHeader,
                       styles,
@@ -62,7 +63,7 @@ const GridHeader = ({
     };
 
     return (
-      <div data-panel={_panelName} style={_style}>
+      <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
         <table style={{height: "100%"}}>
           <colgroup>
             {_colGroup.map(

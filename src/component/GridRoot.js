@@ -88,6 +88,8 @@ class GridRoot extends React.Component {
     super(props);
     // props에 추가된 액션만 호출 가능
     this.state = {
+      scrollLeft: 0,
+      scrollTop: 0,
       options: (() => {
         let options = extend({}, defaultOptions);
         each(props.options, function (v, k) {
@@ -146,6 +148,7 @@ class GridRoot extends React.Component {
   }
 
   handleWheel(e) {
+    let scrollLeft = this.state.scrollLeft, scrollTop = this.state.scrollTop;
     let delta = {x: 0, y: 0};
     if (e.detail) {
       delta.y = e.detail * 10;
@@ -159,9 +162,23 @@ class GridRoot extends React.Component {
       }
     }
 
+    scrollLeft -= delta.x;
+    scrollTop -= delta.y;
+
+    this.setState({
+      scrollLeft: scrollLeft,
+      scrollTop: scrollTop
+    });
+
+    /*
     if (!this.props.scrollBy(delta.x, delta.y).result) {
       e.preventDefault();
     }
+    */
+  }
+
+  refCallback(_key, el) {
+    // console.log(_key);
   }
 
   render() {
@@ -182,6 +199,7 @@ class GridRoot extends React.Component {
           <textarea ref="gridClipboard"></textarea>
         </div>
         <GridHeader
+          refCallback={this.refCallback}
           mounted={mounted}
           optionsHeader={options.header}
           styles={styles}
@@ -198,9 +216,10 @@ class GridRoot extends React.Component {
           leftHeaderData={gridState.get('leftHeaderData')}
           headerData={gridState.get('headerData')}
 
-          scrollLeft={gridState.get('scrollLeft')}
+          scrollLeft={this.state.scrollLeft}
         />
         <GridBody
+          refCallback={this.refCallback}
           mounted={mounted}
           optionsBody={options.body}
           styles={styles}
@@ -221,14 +240,16 @@ class GridRoot extends React.Component {
 
           list={gridState.get('list')}
 
-          scrollLeft={gridState.get('scrollLeft')}
-          scrollTop={gridState.get('scrollTop')}
+          scrollLeft={this.state.scrollLeft}
+          scrollTop={this.state.scrollTop}
         />
         <GridPage
+          refCallback={this.refCallback}
           mounted={mounted}
           styles={styles}
         />
         <GridScroll
+          refCallback={this.refCallback}
           mounted={mounted}
           CTInnerWidth={styles.CTInnerWidth}
           CTInnerHeight={styles.CTInnerHeight}
@@ -242,8 +263,8 @@ class GridRoot extends React.Component {
           scrollContentWidth={styles.scrollContentWidth}
           trackPadding={options.scroller.trackPadding}
 
-          scrollLeft={gridState.get('scrollLeft')}
-          scrollTop={gridState.get('scrollTop')}
+          scrollLeft={this.state.scrollLeft}
+          scrollTop={this.state.scrollTop}
         />
 
         <div ref="gridVerticalResizer"></div>

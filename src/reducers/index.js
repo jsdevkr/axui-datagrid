@@ -277,32 +277,6 @@ const grid = (state = initialState, action) => {
         .set('page', isObject(action.page) ? Map(action.page) : false)
     },
 
-    [act.SCROLL_TO]: () => {
-      if (isNumber(action.scrollLeft) || isString(action.scrollLeft)) {
-        state = state.set('scrollLeft', action.scrollLeft);
-      }
-      if (isNumber(action.scrollTop) || isString(action.scrollTop)) {
-        state = state.set('scrollTop', action.scrollTop);
-      }
-
-      return state;
-    },
-
-    [act.SCROLL_BY]: () => {
-      let scrollLeft = state.get('scrollLeft'), scrollTop = state.get('scrollTop');
-
-      if (isNumber(action.scrollLeft)) {
-        scrollLeft += action.scrollLeft;
-      }
-      if (isNumber(action.scrollTop)) {
-        scrollTop += action.scrollTop;
-      }
-
-      return state
-        .set('scrollLeft', scrollLeft)
-        .set('scrollTop', scrollTop);
-    },
-
     [act.ALIGN]: () => {
       const {styles} = UTIL.calculateDimensions(state, action);
       return state
