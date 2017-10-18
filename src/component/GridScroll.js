@@ -13,7 +13,6 @@ const GridScroll = ({
                       scrollContentHeight,
                       scrollContentContainerWidth,
                       scrollContentWidth,
-                      trackPadding,
                       scrollLeft,
                       scrollTop
                     }) => {
@@ -30,7 +29,8 @@ const GridScroll = ({
     bottom: pageHeight + ((horizontalScrollerHeight) ? horizontalScrollerHeight : 0)
   };
   let verticalBarStyles = {
-    height: verticalScrollBarHeight
+    height: verticalScrollBarHeight,
+    top: - scrollTop * (CTInnerHeight - verticalScrollBarHeight) / (scrollContentHeight - scrollContentContainerHeight)
   };
   let horizontalStyles = {
     width: CTInnerWidth,
@@ -39,7 +39,8 @@ const GridScroll = ({
     right: (verticalScrollerWidth) ? verticalScrollerWidth : 0
   };
   let horizontalBarStyles = {
-    width: horizontalScrollBarWidth
+    width: horizontalScrollBarWidth,
+    left: - scrollLeft * (CTInnerWidth - horizontalScrollBarWidth) / (scrollContentWidth - scrollContentContainerWidth)
   };
   let cornerStyle = {
     width: verticalScrollerWidth,

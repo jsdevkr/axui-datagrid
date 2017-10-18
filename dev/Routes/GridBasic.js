@@ -24,7 +24,17 @@ const gridData = [
   {id: 17, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
   {id: 18, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
   {id: 19, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
-  {id: 20, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"}
+  {id: 20, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
+  {id: 21, title: "제목입니다.", writer: "장기영", date: "2017-10-10"},
+  {id: 22, title: "제목 ONE 입니다.", writer: "장서우", date: "2017-10-10"},
+  {id: 23, title: "제목 TWO 입니다.", writer: "이영희", date: "2017-10-10"},
+  {id: 24, title: "제목 THREE 입니다.", writer: "황인서", date: "2017-10-10"},
+  {id: 25, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+  {id: 26, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+  {id: 27, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"},
+  {id: 28, title: "제목 FOUR 입니다.", writer: "황세진", date: "2017-10-10"},
+  {id: 29, title: "제목 FIVE 입니다.", writer: "황현진", date: "2017-10-10"},
+  {id: 30, title: "제목 SIX 입니다.", writer: "이서연", date: "2017-10-10"}
 ];
 const gridData_new = [];
 

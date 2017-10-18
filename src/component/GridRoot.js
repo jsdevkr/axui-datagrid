@@ -4,7 +4,6 @@ import {each, extend, extendOwn, isObject, throttle} from 'underscore';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
-
 import GridHeader from './GridHeader';
 import GridBody from './GridBody';
 import GridPage from './GridPage';
@@ -47,8 +46,7 @@ const defaultOptions = {
   },
   scroller: {
     size: 15,
-    barMinSize: 15,
-    trackPadding: 4
+    barMinSize: 15
   },
   columnKeys: {
     selected: '__selected__',
@@ -87,6 +85,8 @@ class GridRoot extends React.Component {
   constructor(props) {
     super(props);
     // props에 추가된 액션만 호출 가능
+    this.gridStyles = {};
+    this.componentRefs = {};
     this.state = {
       scrollLeft: 0,
       scrollTop: 0,
@@ -114,6 +114,7 @@ class GridRoot extends React.Component {
     window.removeEventListener("resize", this.throttled_updateDimensions);
   }
 
+  // 변경된 props를 받게 되면
   componentWillReceiveProps(nextProps) {
     // 데이터 체인지
     if (this.props.data != nextProps.data) {
@@ -134,6 +135,7 @@ class GridRoot extends React.Component {
     }
   }
 
+  // change props and render
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.height != this.props.height) {
       this.props.align(this.props, this.gridRootNode);
@@ -145,14 +147,27 @@ class GridRoot extends React.Component {
    */
   updateDimensions() {
     this.props.align(this.props, this.gridRootNode);
+
+    // scrollLeft, scrollTop 검사
+    this.setState({
+      scrollLeft: (this.state.scrollLeft > 0) ? 0 : (this.gridStyles.scrollContentContainerWidth > this.gridStyles.scrollContentWidth + this.state.scrollLeft) ? this.gridStyles.scrollContentContainerWidth - this.gridStyles.scrollContentWidth : this.state.scrollLeft,
+      scrollTop: (this.state.scrollTop > 0) ? 0 : (this.gridStyles.scrollContentContainerHeight > this.gridStyles.scrollContentHeight + this.state.scrollTop) ? this.gridStyles.scrollContentContainerHeight - this.gridStyles.scrollContentHeight : this.state.scrollTop
+    });
   }
 
   handleWheel(e) {
     let scrollLeft = this.state.scrollLeft, scrollTop = this.state.scrollTop;
+    let scrollWidth  = this.gridStyles.scrollContentWidth,
+        scrollHeight = this.gridStyles.scrollContentHeight,
+        clientWidth  = this.gridStyles.scrollContentContainerWidth,
+        clientHeight = this.gridStyles.scrollContentContainerHeight;
+
     let delta = {x: 0, y: 0};
+    let eventBreak = false;
     if (e.detail) {
       delta.y = e.detail * 10;
-    } else {
+    }
+    else {
       if (typeof e.deltaY === "undefined") {
         delta.y = -e.wheelDelta;
         delta.x = 0;
@@ -165,27 +180,48 @@ class GridRoot extends React.Component {
     scrollLeft -= delta.x;
     scrollTop -= delta.y;
 
+    //console.log(clientHeight, scrollHeight + scrollTop);
+
+    if (scrollTop > 0) {
+      scrollTop = 0;
+      eventBreak = true;
+    } else if (clientHeight > scrollHeight + scrollTop) {
+      // scrollHeight
+      scrollTop = clientHeight - scrollHeight;
+      eventBreak = true;
+    }
+
+    if (scrollLeft > 0) {
+      scrollLeft = 0;
+      eventBreak = true;
+    } else if (clientWidth > scrollWidth + scrollLeft) {
+      // scrollHeight
+      scrollLeft = clientWidth - scrollWidth;
+      eventBreak = true;
+    }
+
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
     });
 
-    /*
-    if (!this.props.scrollBy(delta.x, delta.y).result) {
+
+    if (eventBreak) {
       e.preventDefault();
     }
-    */
   }
 
   refCallback(_key, el) {
     // console.log(_key);
+    this.componentRefs[_key] = el;
   }
 
   render() {
     const gridState = this.props.gridState;
-    const styles = gridState.get('styles').toJS();
+    const styles = this.gridStyles = gridState.get('styles').toJS();
     const options = gridState.get('options').toJS();
     const mounted = gridState.get("mounted");
+    const refCallback = this.refCallback.bind(this);
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
 
     return (
@@ -199,7 +235,7 @@ class GridRoot extends React.Component {
           <textarea ref="gridClipboard"></textarea>
         </div>
         <GridHeader
-          refCallback={this.refCallback}
+          refCallback={refCallback}
           mounted={mounted}
           optionsHeader={options.header}
           styles={styles}
@@ -219,7 +255,7 @@ class GridRoot extends React.Component {
           scrollLeft={this.state.scrollLeft}
         />
         <GridBody
-          refCallback={this.refCallback}
+          refCallback={refCallback}
           mounted={mounted}
           optionsBody={options.body}
           styles={styles}
@@ -244,16 +280,17 @@ class GridRoot extends React.Component {
           scrollTop={this.state.scrollTop}
         />
         <GridPage
-          refCallback={this.refCallback}
+          refCallback={refCallback}
           mounted={mounted}
           styles={styles}
         />
         <GridScroll
-          refCallback={this.refCallback}
+          refCallback={refCallback}
           mounted={mounted}
+          optionsScroller={options.scroller}
+
           CTInnerWidth={styles.CTInnerWidth}
           CTInnerHeight={styles.CTInnerHeight}
-
           pageHeight={styles.pageHeight}
           verticalScrollerWidth={styles.verticalScrollerWidth}
           horizontalScrollerHeight={styles.horizontalScrollerHeight}
@@ -261,7 +298,6 @@ class GridRoot extends React.Component {
           scrollContentHeight={styles.scrollContentHeight}
           scrollContentContainerWidth={styles.scrollContentContainerWidth}
           scrollContentWidth={styles.scrollContentWidth}
-          trackPadding={options.scroller.trackPadding}
 
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}

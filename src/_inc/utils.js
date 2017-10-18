@@ -585,13 +585,19 @@ export function setColGroupWidth(_colGroup, container, options) {
 }
 
 
-function getInnerWidth(element) {
+export function getInnerWidth(element) {
   const cs = window.getComputedStyle(element);
   return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
 }
-function getInnerHeight(element) {
+export function getInnerHeight(element) {
   const cs = window.getComputedStyle(element);
   return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
+}
+export function getOuterWidth(element) {
+  return element.offsetWidth;
+}
+export function getOuterHeight(element) {
+  return element.offsetHeight;
 }
 
 /**
@@ -642,10 +648,6 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
   styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
   styles.pageHeight = (options.page.display) ? options.page.height : 0;
-  styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
-    return (prev._width || prev) + curr._width
-  });
-  styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
@@ -658,6 +660,11 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
 
     return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
   })();
+
+  styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
+    return (prev._width || prev) + curr._width
+  });
+  styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
 
   if (styles.horizontalScrollerHeight > 0) {
     styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
