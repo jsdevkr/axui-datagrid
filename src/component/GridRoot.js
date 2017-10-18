@@ -4,6 +4,8 @@ import {each, extend, extendOwn, isObject, throttle} from 'underscore';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
+
+import * as UTIL from '../_inc/utils';
 import GridHeader from './GridHeader';
 import GridBody from './GridBody';
 import GridPage from './GridPage';
@@ -45,8 +47,8 @@ const defaultOptions = {
     navigationItemCount: 5
   },
   scroller: {
-    size: 15,
-    barMinSize: 15
+    size: 12,
+    barMinSize: 12
   },
   columnKeys: {
     selected: '__selected__',
@@ -139,6 +141,21 @@ class GridRoot extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.height != this.props.height) {
       this.props.align(this.props, this.gridRootNode);
+
+      setTimeout(() => {
+        let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
+          scrollWidth: this.gridStyles.scrollContentWidth,
+          scrollHeight: this.gridStyles.scrollContentHeight,
+          clientWidth: this.gridStyles.scrollContentContainerWidth,
+          clientHeight: this.gridStyles.scrollContentContainerHeight
+        });
+
+        this.setState({
+          scrollLeft: scrollLeft,
+          scrollTop: scrollTop
+        });
+      });
+
     }
   }
 
@@ -148,22 +165,25 @@ class GridRoot extends React.Component {
   updateDimensions() {
     this.props.align(this.props, this.gridRootNode);
 
-    // scrollLeft, scrollTop 검사
+    let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
+      scrollWidth: this.gridStyles.scrollContentWidth,
+      scrollHeight: this.gridStyles.scrollContentHeight,
+      clientWidth: this.gridStyles.scrollContentContainerWidth,
+      clientHeight: this.gridStyles.scrollContentContainerHeight
+    });
+
     this.setState({
-      scrollLeft: (this.state.scrollLeft > 0) ? 0 : (this.gridStyles.scrollContentContainerWidth > this.gridStyles.scrollContentWidth + this.state.scrollLeft) ? this.gridStyles.scrollContentContainerWidth - this.gridStyles.scrollContentWidth : this.state.scrollLeft,
-      scrollTop: (this.state.scrollTop > 0) ? 0 : (this.gridStyles.scrollContentContainerHeight > this.gridStyles.scrollContentHeight + this.state.scrollTop) ? this.gridStyles.scrollContentContainerHeight - this.gridStyles.scrollContentHeight : this.state.scrollTop
+      scrollLeft: scrollLeft,
+      scrollTop: scrollTop
     });
   }
 
   handleWheel(e) {
-    let scrollLeft = this.state.scrollLeft, scrollTop = this.state.scrollTop;
-    let scrollWidth  = this.gridStyles.scrollContentWidth,
-        scrollHeight = this.gridStyles.scrollContentHeight,
-        clientWidth  = this.gridStyles.scrollContentContainerWidth,
-        clientHeight = this.gridStyles.scrollContentContainerHeight;
+    let scrollLeft = this.state.scrollLeft,
+        scrollTop  = this.state.scrollTop;
 
     let delta = {x: 0, y: 0};
-    let eventBreak = false;
+
     if (e.detail) {
       delta.y = e.detail * 10;
     }
@@ -180,34 +200,21 @@ class GridRoot extends React.Component {
     scrollLeft -= delta.x;
     scrollTop -= delta.y;
 
-    //console.log(clientHeight, scrollHeight + scrollTop);
-
-    if (scrollTop > 0) {
-      scrollTop = 0;
-      eventBreak = true;
-    } else if (clientHeight > scrollHeight + scrollTop) {
-      // scrollHeight
-      scrollTop = clientHeight - scrollHeight;
-      eventBreak = true;
-    }
-
-    if (scrollLeft > 0) {
-      scrollLeft = 0;
-      eventBreak = true;
-    } else if (clientWidth > scrollWidth + scrollLeft) {
-      // scrollHeight
-      scrollLeft = clientWidth - scrollWidth;
-      eventBreak = true;
-    }
-
-    this.setState({
-      scrollLeft: scrollLeft,
-      scrollTop: scrollTop
+    let {scrollLeft: _scrollLeft, scrollTop: _scrollTop, eventBreak} = UTIL.getScrollPosition(scrollLeft, scrollTop, {
+      scrollWidth: this.gridStyles.scrollContentWidth,
+      scrollHeight: this.gridStyles.scrollContentHeight,
+      clientWidth: this.gridStyles.scrollContentContainerWidth,
+      clientHeight: this.gridStyles.scrollContentContainerHeight
     });
 
+    this.setState({
+      scrollLeft: _scrollLeft,
+      scrollTop: _scrollTop
+    });
 
     if (eventBreak) {
       e.preventDefault();
+      e.stopPropagation();
     }
   }
 

@@ -715,3 +715,42 @@ export function calculateDimensionsByList(state, list, colGroup = state.get("col
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
   return styles;
 }
+
+/**
+ *
+ * @param scrollLeft
+ * @param scrollTop
+ * @param scrollWidth
+ * @param scrollHeight
+ * @param clientWidth
+ * @param clientHeight
+ * @return {{scrollLeft: *, scrollTop: *, eventBreak: boolean}}
+ */
+export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHeight, clientWidth, clientHeight}) {
+  let eventBreak = false;
+
+  if (scrollTop > 0) {
+    scrollTop = 0;
+    eventBreak = true;
+  } else if (clientHeight < scrollHeight && clientHeight > scrollHeight + scrollTop) {
+    // scrollHeight
+    scrollTop = clientHeight - scrollHeight;
+    eventBreak = true;
+  }
+
+  if (clientWidth > scrollWidth) {
+    scrollLeft = 0;
+  }
+  else if (scrollLeft > 0) {
+    scrollLeft = 0;
+    eventBreak = true;
+  } else if (clientWidth > scrollWidth + scrollLeft) {
+    // scrollHeight
+    scrollLeft = clientWidth - scrollWidth;
+    eventBreak = true;
+  }
+
+  return {
+    scrollLeft, scrollTop, eventBreak
+  }
+}

@@ -375,29 +375,26 @@
       }
     }
 
-    [data-scroll="vertical"]{
+    [data-scroll="vertical"], [data-scroll="horizontal"]{
       box-sizing: border-box;
       position: absolute;
       right: 0;
       bottom: 0;
-      height: 100%;
       background: $ax6grid-scroll-track-bg;
-      border-left: $ax6grid-scroll-track-border;
+      box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
+    }
+    [data-scroll="vertical"]{
+      height: 100%;
       padding: 0 2px;
+      border-left: $ax6grid-scroll-track-border;
       .scrollBar{
         cursor: ns-resize;
       }
     }
-
     [data-scroll="horizontal"]{
-      box-sizing: border-box;
-      position: absolute;
-      right: 0;
-      bottom: 0;
       width: 100%;
-      background: $ax6grid-scroll-track-bg;
-      border-top: $ax6grid-scroll-track-border;
       padding: 2px 0;
+      border-top: $ax6grid-scroll-track-border;
       .scrollBar{
         cursor: ew-resize;
       }
