@@ -727,15 +727,18 @@ export function calculateDimensionsByList(state, list, colGroup = state.get("col
  * @return {{scrollLeft: *, scrollTop: *, eventBreak: boolean}}
  */
 export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHeight, clientWidth, clientHeight}) {
-  let eventBreak = false;
+  let endScroll = false;
 
-  if (scrollTop > 0) {
+  if (clientHeight > scrollHeight) {
     scrollTop = 0;
-    eventBreak = true;
-  } else if (clientHeight < scrollHeight && clientHeight > scrollHeight + scrollTop) {
+  }
+  else if (scrollTop > 0) {
+    scrollTop = 0;
+    endScroll = true;
+  } else if (clientHeight > scrollHeight + scrollTop) {
     // scrollHeight
     scrollTop = clientHeight - scrollHeight;
-    eventBreak = true;
+    endScroll = true;
   }
 
   if (clientWidth > scrollWidth) {
@@ -743,14 +746,14 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
   }
   else if (scrollLeft > 0) {
     scrollLeft = 0;
-    eventBreak = true;
+    endScroll = true;
   } else if (clientWidth > scrollWidth + scrollLeft) {
     // scrollHeight
     scrollLeft = clientWidth - scrollWidth;
-    eventBreak = true;
+    endScroll = true;
   }
 
   return {
-    scrollLeft, scrollTop, eventBreak
+    scrollLeft, scrollTop, endScroll
   }
 }

@@ -100,6 +100,8 @@ class GridRoot extends React.Component {
         return options;
       })()
     };
+    this.refCallback = this.refCallback.bind(this);
+    this.onMoveScrollBar = this.onMoveScrollBar.bind(this);
 
     props.init(props, this.state.options);
   }
@@ -179,9 +181,6 @@ class GridRoot extends React.Component {
   }
 
   handleWheel(e) {
-    let scrollLeft = this.state.scrollLeft,
-        scrollTop  = this.state.scrollTop;
-
     let delta = {x: 0, y: 0};
 
     if (e.detail) {
@@ -197,10 +196,7 @@ class GridRoot extends React.Component {
       }
     }
 
-    scrollLeft -= delta.x;
-    scrollTop -= delta.y;
-
-    let {scrollLeft: _scrollLeft, scrollTop: _scrollTop, eventBreak} = UTIL.getScrollPosition(scrollLeft, scrollTop, {
+    let {scrollLeft: _scrollLeft, scrollTop: _scrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
       scrollWidth: this.gridStyles.scrollContentWidth,
       scrollHeight: this.gridStyles.scrollContentHeight,
       clientWidth: this.gridStyles.scrollContentContainerWidth,
@@ -212,10 +208,14 @@ class GridRoot extends React.Component {
       scrollTop: _scrollTop
     });
 
-    if (eventBreak) {
+    if (!endScroll) {
       e.preventDefault();
       e.stopPropagation();
     }
+  }
+
+  onMoveScrollBar() {
+
   }
 
   refCallback(_key, el) {
@@ -228,7 +228,7 @@ class GridRoot extends React.Component {
     const styles = this.gridStyles = gridState.get('styles').toJS();
     const options = gridState.get('options').toJS();
     const mounted = gridState.get("mounted");
-    const refCallback = this.refCallback.bind(this);
+
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
 
     return (
@@ -242,7 +242,7 @@ class GridRoot extends React.Component {
           <textarea ref="gridClipboard"></textarea>
         </div>
         <GridHeader
-          refCallback={refCallback}
+          refCallback={this.refCallback}
           mounted={mounted}
           optionsHeader={options.header}
           styles={styles}
@@ -262,7 +262,7 @@ class GridRoot extends React.Component {
           scrollLeft={this.state.scrollLeft}
         />
         <GridBody
-          refCallback={refCallback}
+          refCallback={this.refCallback}
           mounted={mounted}
           optionsBody={options.body}
           styles={styles}
@@ -287,12 +287,13 @@ class GridRoot extends React.Component {
           scrollTop={this.state.scrollTop}
         />
         <GridPage
-          refCallback={refCallback}
+          refCallback={this.refCallback}
           mounted={mounted}
           styles={styles}
         />
         <GridScroll
-          refCallback={refCallback}
+          refCallback={this.refCallback}
+          onMoveScrollBar={this.onMoveScrollBar}
           mounted={mounted}
           optionsScroller={options.scroller}
 
