@@ -212,7 +212,7 @@ class GridRoot extends React.Component {
   }
 
   refCallback(_key, el) {
-    // console.log(_key);
+    // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
     this.componentRefs[_key] = el;
   }
 
