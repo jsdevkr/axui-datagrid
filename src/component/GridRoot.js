@@ -294,8 +294,6 @@ class GridRoot extends React.Component {
           frozenColumnIndex={options.frozenColumnIndex}
 
           colGroup={gridState.get('colGroup')}
-          headerTable={gridState.get('headerTable')}
-
           asideColGroup={gridState.get('asideColGroup')}
           leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
           headerColGroup={gridState.get('headerColGroup')}

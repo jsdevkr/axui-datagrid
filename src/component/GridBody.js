@@ -2,228 +2,255 @@ import React from 'react';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 
-const GridBody = ({
-                    refCallback,
-                    mounted,
-                    optionsBody,
-                    styles,
-                    frozenColumnIndex,
-                    colGroup,
-                    asideColGroup,
-                    leftHeaderColGroup,
-                    headerColGroup,
-                    bodyTable,
-                    asideBodyRowData,
-                    asideBodyGroupingData,
-                    leftBodyRowData,
-                    leftBodyGroupingData,
-                    bodyRowData,
-                    bodyGroupingData,
-                    list,
-                    scrollLeft,
-                    scrollTop
-                  }) => {
 
-  if(!mounted) return null;
+class GridBody extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const _paintBody = function (_panelName, _style) {
-    return (
-      <div data-panel={_panelName} style={_style}>
-        <table></table>
-      </div>
-    )
-  };
+  }
 
-  const paintBody = function (_panelName, _colGroup, _bodyRow, _groupRow, _list, _scrollConfig, _style) {
+  shouldComponentUpdate(nextProps, nextState) {
+    let sameProps = false;
 
-    const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
-      let lineHeight = (optionsBody.columnHeight - optionsBody.columnPadding * 2 - optionsBody.columnBorderWidth);
-      let colAlign = optionsBody.align || _col.align;
-      let label;
+    if (
+      this.props.mounted !== nextProps.mounted ||
+      JSON.stringify(this.props.optionsBody) !== JSON.stringify(nextProps.optionsBody) ||
+      JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
+      JSON.stringify(this.props.colGroup) !== JSON.stringify(nextProps.colGroup) ||
+      this.props.list !== nextProps.list ||
+      this.props.scrollLeft !== nextProps.scrollLeft ||
+      this.props.scrollTop !== nextProps.scrollTop
+    ) {
+      sameProps = true;
+    }
 
-      label = _item[_col.key];
+    return sameProps;
+  }
+
+  render() {
+
+    const refCallback           = this.props.refCallback,
+          mounted               = this.props.mounted,
+          optionsBody           = this.props.optionsBody,
+          styles                = this.props.styles,
+          frozenColumnIndex     = this.props.frozenColumnIndex,
+          colGroup              = this.props.colGroup,
+          asideColGroup         = this.props.asideColGroup,
+          leftHeaderColGroup    = this.props.leftHeaderColGroup,
+          headerColGroup        = this.props.headerColGroup,
+          bodyTable             = this.props.bodyTable,
+          asideBodyRowData      = this.props.asideBodyRowData,
+          asideBodyGroupingData = this.props.asideBodyGroupingData,
+          leftBodyRowData       = this.props.leftBodyRowData,
+          leftBodyGroupingData  = this.props.leftBodyGroupingData,
+          bodyRowData           = this.props.bodyRowData,
+          bodyGroupingData      = this.props.bodyGroupingData,
+          list                  = this.props.list,
+          scrollLeft            = this.props.scrollLeft,
+          scrollTop             = this.props.scrollTop;
+
+
+    if (!mounted) return null;
+
+    const _paintBody = function (_panelName, _style) {
+      return (
+        <div data-panel={_panelName} style={_style}>
+          <table></table>
+        </div>
+      )
+    };
+
+    const paintBody = function (_panelName, _colGroup, _bodyRow, _groupRow, _list, _scrollConfig, _style) {
+
+      const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
+        let lineHeight = (optionsBody.columnHeight - optionsBody.columnPadding * 2 - optionsBody.columnBorderWidth);
+        let colAlign = optionsBody.align || _col.align;
+        let label;
+
+        label = _item[_col.key];
+
+        return (
+          <span
+            data-span
+            data-align={colAlign}
+            style={{
+              height: (optionsBody.columnHeight - optionsBody.columnBorderWidth) + "px",
+              lineHeight: lineHeight + "px"
+            }}>
+            {label || ' '}
+          </span>
+        );
+      };
 
       return (
-        <span
-          data-span
-          data-align={colAlign}
-          style={{
-            height: (optionsBody.columnHeight - optionsBody.columnBorderWidth) + "px",
-            lineHeight: lineHeight + "px"
-          }}>
-          {label || ' '}
-        </span>
-      );
+        <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
+          <table style={{height: "100%"}}>
+            <colgroup>
+              {_colGroup.map(
+                (col, ci) => (
+                  <col
+                    key={ci}
+                    style={{width: col._width + "px"}} />
+                )
+              )}
+              <col />
+            </colgroup>
+            <tbody>
+            {_list.map(
+              (item, li) => {
+                return (
+                  _bodyRow.get('rows').map(
+                    (row, ri) => {
+                      return (
+                        <tr
+                          key={ri}
+                          className="">
+                          {row.cols.map((col, ci) => {
+                            let cellHeight = optionsBody.columnHeight * col.rowspan - optionsBody.columnBorderWidth;
+                            let classNameItmes = {};
+                            classNameItmes[sass.hasBorder] = true;
+                            if (row.cols.length == ci + 1) {
+                              classNameItmes[sass.isLastColumn] = true;
+                            }
+
+                            return (
+                              <td
+                                key={ci}
+                                colSpan={col.colspan}
+                                rowSpan={col.rowspan}
+                                className={classNames(classNameItmes)}
+                                style={{height: cellHeight, minHeight: "1px"}}>
+                                {getFieldSpan(colGroup, col, item, li)}
+                              </td>
+                            );
+                          })}
+                          <td>&nbsp;</td>
+                        </tr>
+                      )
+                    }
+                  )
+                )
+              }
+            )}
+            </tbody>
+          </table>
+        </div>
+      )
+    };
+
+    let scrollConfig = {};
+
+    let topAsideBodyPanelStyle = {
+      left: 0,
+      width: styles.asidePanelWidth,
+      top: 0,
+      height: styles.frozenRowHeight
+    };
+    let bottomAsideBodyPanelStyle = {
+      left: 0,
+      width: styles.asidePanelWidth,
+      top: styles.bodyHeight - styles.footSumHeight,
+      height: styles.footSumHeight
+    };
+    let asideBodyPanelStyle = {
+      left: 0,
+      width: styles.asidePanelWidth,
+      top: styles.frozenRowHeight,
+      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+    };
+
+    let topLeftBodyPanelStyle = {
+      left: styles.asidePanelWidth,
+      width: styles.frozenPanelWidth,
+      top: 0,
+      height: styles.frozenRowHeight
+    };
+    let bottomLeftBodyPanelStyle = {
+      left: styles.asidePanelWidth,
+      width: styles.frozenPanelWidth,
+      top: styles.bodyHeight - styles.footSumHeight,
+      height: styles.footSumHeight
+    };
+    let leftBodyPanelStyle = {
+      left: styles.asidePanelWidth,
+      width: styles.frozenPanelWidth,
+      top: styles.frozenRowHeight,
+      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+    };
+
+    let topBodyPanelStyle = {
+      left: styles.frozenPanelWidth + styles.asidePanelWidth,
+      width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
+      top: 0,
+      height: styles.frozenRowHeight
+    };
+    let bottomBodyPanelStyle = {
+      left: styles.frozenPanelWidth + styles.asidePanelWidth,
+      width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
+      top: styles.bodyHeight - styles.footSumHeight,
+      height: styles.footSumHeight
+    };
+    let bodyPanelStyle = {
+      left: styles.frozenPanelWidth + styles.asidePanelWidth,
+      width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
+      top: styles.frozenRowHeight,
+      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+    };
+
+    let topBodyScrollStyle = {
+      left: scrollLeft
+    };
+    let asideBodyScrollStyle = {
+      top: scrollTop
+    };
+    let leftBodyScrollStyle = {
+      top: scrollTop
+    };
+    let bodyScrollStyle = {
+      left: scrollLeft,
+      top: scrollTop
+    };
+    let bottomBodyScrollStyle = {
+      left: scrollLeft
     };
 
     return (
-      <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
-        <table style={{height: "100%"}}>
-          <colgroup>
-            {_colGroup.map(
-              (col, ci) => (
-                <col
-                  key={ci}
-                  style={{width: col._width + "px"}} />
-              )
-            )}
-            <col />
-          </colgroup>
-          <tbody>
-          {_list.map(
-            (item, li) => {
-              return (
-                _bodyRow.get('rows').map(
-                  (row, ri) => {
-                    return (
-                      <tr
-                        key={ri}
-                        className="">
-                        {row.cols.map((col, ci) => {
-                          let cellHeight = optionsBody.columnHeight * col.rowspan - optionsBody.columnBorderWidth;
-                          let classNameItmes = {};
-                          classNameItmes[sass.hasBorder] = true;
-                          if (row.cols.length == ci + 1) {
-                            classNameItmes[sass.isLastColumn] = true;
-                          }
+      <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
+        {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
+        {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
+        {(styles.frozenRowHeight > 0) ? (
+          <div data-scroll-container="top-body-scroll-container" style={topBodyPanelStyle}>
+            {_paintBody("top-body-scroll", topBodyScrollStyle)}
+          </div>
+        ) : null}
 
-                          return (
-                            <td
-                              key={ci}
-                              colSpan={col.colspan}
-                              rowSpan={col.rowspan}
-                              className={classNames(classNameItmes)}
-                              style={{height: cellHeight, minHeight: "1px"}}>
-                              {getFieldSpan(colGroup, col, item, li)}
-                            </td>
-                          );
-                        })}
-                        <td>&nbsp;</td>
-                      </tr>
-                    )
-                  }
-                )
-              )
-            }
-          )}
-          </tbody>
-        </table>
+        {(styles.asidePanelWidth > 0) ? (
+          <div data-scroll-container="aside-body-scroll-container" style={asideBodyPanelStyle}>
+            {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, asideBodyScrollStyle)}
+          </div>
+        ) : null}
+
+        {(styles.frozenPanelWidth > 0) ? (
+          <div data-scroll-container="left-body-scroll-container" style={leftBodyPanelStyle}>
+            {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, leftBodyScrollStyle)}
+          </div>
+        ) : null}
+
+        <div data-scroll-container="body-scroll-container" style={bodyPanelStyle} ref={ref => refCallback("body-scroll-container", ref)}>
+          {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, bodyScrollStyle)}
+        </div>
+
+        {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
+        {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle) : null}
+        {(styles.footSumHeight > 0) ? (
+          <div data-scroll-container="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
+            {_paintBody("bottom-body-scroll", bottomBodyScrollStyle)}
+          </div>
+        ) : null}
       </div>
-    )
-  };
+    );
 
-  let scrollConfig = {};
-
-  let topAsideBodyPanelStyle = {
-    left: 0,
-    width: styles.asidePanelWidth,
-    top: 0,
-    height: styles.frozenRowHeight
-  };
-  let bottomAsideBodyPanelStyle = {
-    left: 0,
-    width: styles.asidePanelWidth,
-    top: styles.bodyHeight - styles.footSumHeight,
-    height: styles.footSumHeight
-  };
-  let asideBodyPanelStyle = {
-    left: 0,
-    width: styles.asidePanelWidth,
-    top: styles.frozenRowHeight,
-    height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
-  };
-
-  let topLeftBodyPanelStyle = {
-    left: styles.asidePanelWidth,
-    width: styles.frozenPanelWidth,
-    top: 0,
-    height: styles.frozenRowHeight
-  };
-  let bottomLeftBodyPanelStyle = {
-    left: styles.asidePanelWidth,
-    width: styles.frozenPanelWidth,
-    top: styles.bodyHeight - styles.footSumHeight,
-    height: styles.footSumHeight
-  };
-  let leftBodyPanelStyle = {
-    left: styles.asidePanelWidth,
-    width: styles.frozenPanelWidth,
-    top: styles.frozenRowHeight,
-    height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
-  };
-
-  let topBodyPanelStyle = {
-    left: styles.frozenPanelWidth + styles.asidePanelWidth,
-    width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-    top: 0,
-    height: styles.frozenRowHeight
-  };
-  let bottomBodyPanelStyle = {
-    left: styles.frozenPanelWidth + styles.asidePanelWidth,
-    width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-    top: styles.bodyHeight - styles.footSumHeight,
-    height: styles.footSumHeight
-  };
-  let bodyPanelStyle = {
-    left: styles.frozenPanelWidth + styles.asidePanelWidth,
-    width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-    top: styles.frozenRowHeight,
-    height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
-  };
-
-
-  let topBodyScrollStyle = {
-    left: scrollLeft
-  };
-  let asideBodyScrollStyle = {
-    top: scrollTop
-  };
-  let leftBodyScrollStyle = {
-    top: scrollTop
-  };
-  let bodyScrollStyle = {
-    left: scrollLeft,
-    top: scrollTop
-  };
-  let bottomBodyScrollStyle = {
-    left: scrollLeft
-  };
-
-  return (
-    <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
-      {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
-      {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
-      {(styles.frozenRowHeight > 0) ? (
-        <div data-scroll-container="top-body-scroll-container" style={topBodyPanelStyle}>
-          {_paintBody("top-body-scroll", topBodyScrollStyle)}
-        </div>
-      ) : null}
-
-      {(styles.asidePanelWidth > 0) ? (
-        <div data-scroll-container="aside-body-scroll-container" style={asideBodyPanelStyle}>
-          {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, scrollConfig, asideBodyScrollStyle)}
-        </div>
-      ) : null}
-
-      {(styles.frozenPanelWidth > 0) ? (
-        <div data-scroll-container="left-body-scroll-container" style={leftBodyPanelStyle}>
-          {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, scrollConfig, leftBodyScrollStyle)}
-        </div>
-      ) : null}
-
-      <div data-scroll-container="body-scroll-container" style={bodyPanelStyle} ref={ref => refCallback("body-scroll-container", ref)}>
-        {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, scrollConfig, bodyScrollStyle)}
-      </div>
-
-      {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
-      {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle) : null}
-      {(styles.footSumHeight > 0) ? (
-        <div data-scroll-container="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
-          {_paintBody("bottom-body-scroll", bottomBodyScrollStyle)}
-        </div>
-      ) : null}
-    </div>
-  );
-};
+  }
+}
 
 export default GridBody;

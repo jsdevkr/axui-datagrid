@@ -33,7 +33,6 @@ class GridHeader extends React.Component {
           styles             = this.props.styles,
           frozenColumnIndex  = this.props.frozenColumnIndex,
           colGroup           = this.props.colGroup,
-          headerTable        = this.props.headerTable,
           asideColGroup      = this.props.asideColGroup,
           leftHeaderColGroup = this.props.leftHeaderColGroup,
           headerColGroup     = this.props.headerColGroup,
