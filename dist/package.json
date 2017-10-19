@@ -1,8 +1,8 @@
 {
-  "name": "ax6ui-react-grid",
-  "version": "0.0.1",
+  "name": "ax-datagrid",
+  "version": "0.0.2",
   "description": "React DataGrid - UI components that display data in table format (for React)",
-  "main": "AX6UIReactGrid.js",
+  "main": "AXDataGrid.js",
   "directories": {
     "test": "test"
   },
@@ -11,18 +11,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ax6ui/ax6ui-react-grid"
+    "url": "git+https://github.com/ax6ui/ax-datagrid"
   },
   "keywords": [
-    "ax6ui"
+    "react",
+    "datagrid",
+    "sheets",
+    "table"
   ],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ax6ui/ax6ui-react-grid/issues"
+    "url": "https://github.com/ax6ui/ax-datagrid/issues"
   },
   "homepage": "ax6ui.com",
   "dependencies": {
-    "react": ""
+    "classnames": "^2.2.5",
+    "immutable": "^3.8.2",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-addons-update": "^15.6.2",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "underscore": "^1.8.3"
   }
 }

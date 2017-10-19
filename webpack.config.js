@@ -80,7 +80,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      'ax6ui-react-grid': path.join(__dirname, './src')
+      'ax-datagrid': path.join(__dirname, './src')
     }
   }
 };

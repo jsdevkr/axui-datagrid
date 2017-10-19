@@ -10,12 +10,12 @@ const store = createStore(gridReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && w
 //~~~~~
 class AXDataGrid extends React.Component {
   render() {
-    return (
-      <Provider store={store}>
-        <GridContainer {...this.props}/>
-      </Provider>
+    return React.createElement(
+      Provider,
+      { store: store },
+      React.createElement(GridContainer, this.props)
     );
   }
 }
 
-export default AXDataGrid
+export default AXDataGrid;

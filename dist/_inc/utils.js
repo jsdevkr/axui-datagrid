@@ -1,5 +1,5 @@
-import {List} from 'immutable';
-import {extend, isArray, isNumber, isObject} from "underscore";
+import { List } from 'immutable';
+import { extend, isArray, isNumber, isObject } from "underscore";
 
 /**
  * @method
@@ -9,21 +9,22 @@ import {extend, isArray, isNumber, isObject} from "underscore";
  */
 export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
 
-  let asideTable  = {rows: []},
+  let asideTable = { rows: [] },
       asideColGroup = [],
       asidePanelWidth = 0,
-      tempTable_l = {rows: []},
-      tempTable_r = {rows: []};
+      tempTable_l = { rows: [] },
+      tempTable_r = { rows: [] };
 
   for (let i = 0, l = _table.rows.length; i < l; i++) {
-    asideTable.rows[i] = {cols: []};
+    asideTable.rows[i] = { cols: [] };
     if (i === 0) {
       let col = {
         label: "",
         colspan: 1,
         rowspan: _table.rows.length,
         colIndex: null
-      }, _col = {};
+      },
+          _col = {};
 
       if (options.showLineNumber) {
         _col = extend({}, col, {
@@ -52,24 +53,23 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
     }
   }
 
-
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
     let row = _table.rows[r];
 
-    tempTable_l.rows[r] = {cols: []};
-    tempTable_r.rows[r] = {cols: []};
+    tempTable_l.rows[r] = { cols: [] };
+    tempTable_r.rows[r] = { cols: [] };
 
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col           = row.cols[c],
+      let col = row.cols[c],
           colStartIndex = col.colIndex,
-          colEndIndex   = col.colIndex + col.colspan;
+          colEndIndex = col.colIndex + col.colspan;
 
       if (colStartIndex < _frozenColumnIndex) {
         if (colEndIndex <= _frozenColumnIndex) {
           // 좌측편에 변형없이 추가
           tempTable_l.rows[r].cols.push(col);
         } else {
-          let leftCol  = extend({}, col),
+          let leftCol = extend({}, col),
               rightCol = extend({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
@@ -81,8 +81,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
             tempTable_r.rows[r].cols.push(rightCol);
           }
         }
-      }
-      else {
+      } else {
         // 오른편
         tempTable_r.rows[r].cols.push(col);
       }
@@ -103,7 +102,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
     asidePanelWidth: asidePanelWidth,
     leftData: tempTable_l,
     rightData: tempTable_r
-  }
+  };
 }
 
 /**
@@ -114,10 +113,10 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
  * @return {{rows: Array}}
  */
 export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnIndex) {
-  let tempTable = {rows: []};
+  let tempTable = { rows: [] };
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
     let row = _table.rows[r];
-    tempTable.rows[r] = {cols: []};
+    tempTable.rows[r] = { cols: [] };
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
       let col = extend({}, row.cols[c]);
       let colStartIndex = col.colIndex;
@@ -127,13 +126,11 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
         if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
           // 변형없이 추가
           tempTable.rows[r].cols.push(col);
-        }
-        else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
+        } else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
           // 앞에서 걸친경우
           col.colspan = colEndIndex - _startColumnIndex;
           tempTable.rows[r].cols.push(col);
-        }
-        else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
+        } else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
           tempTable.rows[r].cols.push(col);
         }
       }
@@ -143,18 +140,16 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
   return tempTable;
 }
 
-/**
- *
- * @param e
- * @return {{clientX, clientY}}
- */
 export function getMousePosition(e) {
-  let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[0] : e;
+  let mouseObj,
+      originalEvent = e.originalEvent ? e.originalEvent : e;
+
+  mouseObj = 'changedTouches' in originalEvent && originalEvent.changedTouches ? originalEvent.changedTouches[0] : originalEvent;
   // clientX, Y 쓰면 스크롤에서 문제 발생
   return {
-    x: mouseObj.pageX,
-    y: mouseObj.pageY
-  }
+    clientX: mouseObj.pageX,
+    clientY: mouseObj.pageY
+  };
 }
 
 /**
@@ -164,16 +159,17 @@ export function getMousePosition(e) {
  * @return {{rows: Array}}
  */
 export function makeHeaderTable(_columns, _options) {
-  let columns  = List(_columns),
-      table    = {
-        rows: []
-      },
+  let columns = List(_columns),
+      table = {
+    rows: []
+  },
       colIndex = 0;
 
   // todo immutable array
   const maekRows = function (_columns, depth, parentField) {
-    let row = {cols: []};
-    let i = 0, l = _columns.size;
+    let row = { cols: [] };
+    let i = 0,
+        l = _columns.size;
     let colspan = 1;
 
     for (; i < l; i++) {
@@ -185,39 +181,35 @@ export function makeHeaderTable(_columns, _options) {
         field.rowspan = 1;
 
         field.rowIndex = depth;
-        field.colIndex = (function () {
+        field.colIndex = function () {
           if (!parentField) {
             return colIndex++;
           } else {
             colIndex = parentField.colIndex + i + 1;
             return parentField.colIndex + i;
           }
-        })();
+        }();
 
         row.cols.push(field); // 복제된 필드 삽입
 
         if ('columns' in field) {
           colspan = maekRows(field.columns, depth + 1, field);
         } else {
-          field.width = ('width' in field) ? field.width : _options.columnMinWidth;
+          field.width = 'width' in field ? field.width : _options.columnMinWidth;
         }
         field.colspan = colspan;
-      } else {
-
-
-      }
+      } else {}
     }
 
     if (row.cols.length > 0) {
       if (!table.rows[depth]) {
-        table.rows[depth] = {cols: []};
+        table.rows[depth] = { cols: [] };
       }
       table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-      return (row.cols.length - 1) + colspan;
+      return row.cols.length - 1 + colspan;
     } else {
       return colspan;
     }
-
   };
 
   maekRows(columns, 0);
@@ -248,7 +240,7 @@ export function makeBodyRowTable(_columns, _options) {
   let colIndex = 0;
 
   const maekRows = function (_columns, depth, parentField) {
-    let row = {cols: []};
+    let row = { cols: [] };
     let i = 0;
     let l = _columns.size;
     let colspan = 1;
@@ -258,7 +250,7 @@ export function makeBodyRowTable(_columns, _options) {
       let l = __columns.length;
 
       for (; i < l; i++) {
-        let field   = __columns,
+        let field = __columns,
             colspan = 1;
 
         if (!field.hidden) {
@@ -268,30 +260,26 @@ export function makeBodyRowTable(_columns, _options) {
             field.rowspan = 1;
 
             field.rowIndex = depth;
-            field.colIndex = (function () {
+            field.colIndex = function () {
               if (!parentField) {
                 return colIndex++;
               } else {
                 colIndex = parentField.colIndex + i + 1;
                 return parentField.colIndex + i;
               }
-            })();
+            }();
 
             row.cols.push(field);
             if ('columns' in field) {
               colspan = maekRows(field.columns, depth + 1, field);
             }
             field.colspan = colspan;
-          }
-          else {
+          } else {
             if ('columns' in field) {
               selfMakeRow(field.columns, depth);
             }
           }
-        }
-        else {
-
-        }
+        } else {}
       }
     };
 
@@ -306,42 +294,37 @@ export function makeBodyRowTable(_columns, _options) {
           field.rowspan = 1;
 
           field.rowIndex = depth;
-          field.colIndex = (function () {
+          field.colIndex = function () {
             if (!parentField) {
               return colIndex++;
             } else {
               colIndex = parentField.colIndex + i + 1;
               return parentField.colIndex + i;
             }
-          })();
+          }();
 
           row.cols.push(field);
           if ('columns' in field) {
             colspan = maekRows(field.columns, depth + 1, field);
           }
           field.colspan = colspan;
-        }
-        else {
+        } else {
           if ('columns' in field) {
             selfMakeRow(field.columns, depth);
           }
         }
-      }
-      else {
-
-      }
+      } else {}
 
       field = null;
     }
 
     if (row.cols.length > 0) {
       if (!table.rows[depth]) {
-        table.rows[depth] = {cols: []};
+        table.rows[depth] = { cols: [] };
       }
       table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-      return (row.cols.length - 1) + colspan;
-    }
-    else {
+      return row.cols.length - 1 + colspan;
+    } else {
       return colspan;
     }
   };
@@ -396,9 +379,9 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
 
   for (let r = 0, rl = _footSumColumns.length; r < rl; r++) {
     let footSumRow = _footSumColumns[r],
-        addC       = 0;
+        addC = 0;
 
-    table.rows[r] = {cols: []};
+    table.rows[r] = { cols: [] };
 
     for (let c = 0, cl = footSumRow.length; c < cl; c++) {
       if (addC > colGroup.length) break;
@@ -420,7 +403,7 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
           colIndex: addC,
           colspan: colspan,
           rowspan: 1,
-          label: "&nbsp;",
+          label: "&nbsp;"
         });
       }
       addC += colspan;
@@ -430,10 +413,10 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
     if (addC < colGroup.length) {
       for (let c = addC; c < colGroup.length; c++) {
         table.rows[r].cols.push({
-          colIndex: (c),
+          colIndex: c,
           colspan: 1,
           rowspan: 1,
-          label: "&nbsp;",
+          label: "&nbsp;"
         });
       }
     }
@@ -444,15 +427,14 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
   return table;
 }
 
-
 export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
   let table = {
-        rows: []
-      },
-      r     = 0,
-      addC  = 0;
+    rows: []
+  },
+      r = 0,
+      addC = 0;
 
-  table.rows[r] = {cols: []};
+  table.rows[r] = { cols: [] };
 
   for (let c = 0, cl = _bodyGroupingColumns.length; c < cl; c++) {
     if (addC > options.columns.length) break;
@@ -486,10 +468,10 @@ export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
     for (var c = addC; c < colGroup.length; c++) {
       table.rows[r].cols.push({
         rowIndex: 0,
-        colIndex: (c),
+        colIndex: c,
         colspan: 1,
         rowspan: 1,
-        label: "&nbsp;",
+        label: "&nbsp;"
       });
     }
   }
@@ -500,7 +482,7 @@ export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
 export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
   let _containerPanelName,
       _isScrollPanel = false,
-      _panels        = [];
+      _panels = [];
 
   if (this.xvar.frozenRowIndex > _dindex) _panels.push("top");
   if (this.xvar.frozenColumnIndex > _colIndex) _panels.push("left");
@@ -516,11 +498,11 @@ export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
     panelName: _panels.join("-"),
     containerPanelName: _containerPanelName,
     isScrollPanel: _isScrollPanel
-  }
+  };
 }
 
 export function getRealPathForDataItem(_dataPath) {
-  let path  = [],
+  let path = [],
       _path = [].concat(_dataPath.split(/[\.\[\]]/g));
 
   _path.forEach(function (n) {
@@ -543,8 +525,7 @@ export function propsConverterForData(data) {
 
   if (isArray(data)) {
     Obj_return.receivedList = data;
-  }
-  else if (isObject(data)) {
+  } else if (isObject(data)) {
     Obj_return.receivedList = data.list || [];
     Obj_return.page = data.page || {};
   }
@@ -561,7 +542,11 @@ export function propsConverterForData(data) {
  * @return {any}
  */
 export function setColGroupWidth(_colGroup, container, options) {
-  let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
+  let totalWidth = 0,
+      computedWidth,
+      autoWidthColGroupIndexs = [],
+      i,
+      l;
 
   _colGroup.forEach((col, ci) => {
     if (isNumber(col.width)) {
@@ -577,7 +562,7 @@ export function setColGroupWidth(_colGroup, container, options) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
       _colGroup.update(autoWidthColGroupIndexs[i], O => {
-        O._width = (computedWidth < options.columnMinWidth) ? options.columnMinWidth : computedWidth;
+        O._width = computedWidth < options.columnMinWidth ? options.columnMinWidth : computedWidth;
         return O;
       });
     }
@@ -585,7 +570,6 @@ export function setColGroupWidth(_colGroup, container, options) {
 
   return _colGroup;
 }
-
 
 export function getInnerWidth(element) {
   const cs = window.getComputedStyle(element);
@@ -636,7 +620,7 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.horizontalScrollerHeight = 0;
   styles.bodyHeight = 0;
 
-  colGroup = setColGroupWidth(colGroup, {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
+  colGroup = setColGroupWidth(colGroup, { width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size) }, options);
 
   styles.frozenPanelWidth = ((colGroup, endIndex) => {
     let width = 0;
@@ -645,31 +629,31 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
     }
     return width;
   })(colGroup, options.frozenColumnIndex);
-  styles.headerHeight = (options.header.display) ? headerTable.get('rows').length * options.header.columnHeight : 0;
+  styles.headerHeight = options.header.display ? headerTable.get('rows').length * options.header.columnHeight : 0;
 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
   styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
-  styles.pageHeight = (options.page.display) ? options.page.height : 0;
+  styles.pageHeight = options.page.display ? options.page.height : 0;
 
-  styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+  styles.verticalScrollerWidth = styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight < list.size * styles.bodyTrHeight ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
     let totalColGroupWidth = colGroup.reduce((prev, curr) => {
-      return (prev._width || prev) + curr._width
+      return (prev._width || prev) + curr._width;
     });
 
     // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
     let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
 
-    return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
+    return totalColGroupWidth > bodyWidth ? options.scroller.size : 0;
   })();
 
   styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
-    return (prev._width || prev) + curr._width
+    return (prev._width || prev) + curr._width;
   });
   styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
 
   if (styles.horizontalScrollerHeight > 0) {
-    styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+    styles.verticalScrollerWidth = styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight < list.size * styles.bodyTrHeight ? options.scroller.size : 0;
   }
 
   // 수평 너비 결정
@@ -685,9 +669,8 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
 
   return {
     styles
-  }
+  };
 }
-
 
 /**
  * list가 변경되면 list의 길이에 따라 변해야 하는 요소의 사이즈 재 계산.
@@ -699,19 +682,19 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
  * @return {any | *}
  */
 export function calculateDimensionsByList(state, list, colGroup = state.get("colGroup"), options = state.get('options').toJS(), styles = state.get('styles').toJS()) {
-  styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+  styles.verticalScrollerWidth = styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight < list.size * styles.bodyTrHeight ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
     let totalColGroupWidth = colGroup.reduce((prev, curr) => {
-      return (prev._width || prev) + curr._width
+      return (prev._width || prev) + curr._width;
     });
 
     // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
     let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
-    return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
+    return totalColGroupWidth > bodyWidth ? options.scroller.size : 0;
   })();
 
   if (styles.horizontalScrollerHeight > 0) {
-    styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+    styles.verticalScrollerWidth = styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight < list.size * styles.bodyTrHeight ? options.scroller.size : 0;
   }
 
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
@@ -728,13 +711,12 @@ export function calculateDimensionsByList(state, list, colGroup = state.get("col
  * @param clientHeight
  * @return {{scrollLeft: *, scrollTop: *, eventBreak: boolean}}
  */
-export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHeight, clientWidth, clientHeight}) {
+export function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHeight, clientWidth, clientHeight }) {
   let endScroll = false;
 
   if (clientHeight > scrollHeight) {
     scrollTop = 0;
-  }
-  else if (scrollTop > 0) {
+  } else if (scrollTop > 0) {
     scrollTop = 0;
     endScroll = true;
   } else if (clientHeight > scrollHeight + scrollTop) {
@@ -745,8 +727,7 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
 
   if (clientWidth > scrollWidth) {
     scrollLeft = 0;
-  }
-  else if (scrollLeft > 0) {
+  } else if (scrollLeft > 0) {
     scrollLeft = 0;
     endScroll = true;
   } else if (clientWidth > scrollWidth + scrollLeft) {
@@ -757,11 +738,5 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
 
   return {
     scrollLeft, scrollTop, endScroll
-  }
-}
-
-export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {}) {
-  return {
-
-  }
+  };
 }

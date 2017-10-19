@@ -1,9 +1,9 @@
 {
-  "name": "ax6ui-react-grid",
+  "name": "ax-datagrid",
   "version": "0.0.1",
   "description": "React DataGrid - UI components that display data in table format (for React)",
-  "main": "AX6UIReactGrid.js",
-  "repository": "https://github.com/ax6ui/ax6ui-react-grid",
+  "main": "",
+  "repository": "https://github.com/ax6ui/ax-datagrid",
   "dependencies": {
     "classnames": "^2.2.5",
     "immutable": "^3.8.2",

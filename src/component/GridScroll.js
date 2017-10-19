@@ -1,103 +1,68 @@
 import React from 'react';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
-import PropTypes from 'prop-types';
 
-class GridScroll extends React.Component {
-  constructor(props){
-    super(props);
+export default ({
+                  onMouseDownScrollBar,
+                  mounted,
+                  CTInnerWidth,
+                  CTInnerHeight,
+                  pageHeight,
+                  verticalScrollerWidth,
+                  horizontalScrollerHeight,
+                  scrollContentContainerHeight,
+                  scrollContentHeight,
+                  scrollContentContainerWidth,
+                  scrollContentWidth,
+                  scrollLeft,
+                  scrollTop
+                }) => {
 
-    this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
-    this.onMouseMoveScrollBar = this.onMouseMoveScrollBar.bind(this);
-    this.onMouseUpScrollBar = this.onMouseUpScrollBar.bind(this);
-    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
-  }
+  if (!mounted) return null;
+  if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
 
-  onMouseDownScrollBar(){
+  let verticalScrollBarHeight  = scrollContentContainerHeight * CTInnerHeight / scrollContentHeight,
+      horizontalScrollBarWidth = scrollContentContainerWidth * CTInnerWidth / scrollContentWidth;
 
-  }
-  onMouseMoveScrollBar(){
+  let verticalStyles = {
+    width: verticalScrollerWidth,
+    height: CTInnerHeight,
+    bottom: pageHeight + ((horizontalScrollerHeight) ? horizontalScrollerHeight : 0)
+  };
+  let verticalBarStyles = {
+    height: verticalScrollBarHeight,
+    top: -scrollTop * (CTInnerHeight - verticalScrollBarHeight) / (scrollContentHeight - scrollContentContainerHeight)
+  };
+  let horizontalStyles = {
+    width: CTInnerWidth,
+    height: horizontalScrollerHeight,
+    bottom: pageHeight,
+    right: (verticalScrollerWidth) ? verticalScrollerWidth : 0
+  };
+  let horizontalBarStyles = {
+    width: horizontalScrollBarWidth,
+    left: -scrollLeft * (CTInnerWidth - horizontalScrollBarWidth) / (scrollContentWidth - scrollContentContainerWidth)
+  };
+  let cornerStyle = {
+    width: verticalScrollerWidth,
+    height: horizontalScrollerHeight,
+    bottom: pageHeight
+  };
 
-  }
-  onMouseUpScrollBar(){
+  return (
+    <div className={classNames(sass.gridScroller)}>
+      {(verticalScrollerWidth) ? (
+        <div data-scroll="vertical" style={verticalStyles}>
+          <div className={classNames(sass.scrollBar)} style={verticalBarStyles} onMouseDown={(e) => onMouseDownScrollBar(e, "vertical")} />
+        </div>
+      ) : null}
+      {(horizontalScrollerHeight) ? (
+        <div data-scroll="horizontal" style={horizontalStyles}>
+          <div className={classNames(sass.scrollBar)} style={horizontalBarStyles} onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
+        </div>
+      ) : null}
+      {(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
+    </div>
+  )
 
-  }
-  onClickScrollTrack(){
-
-  }
-
-  render(){
-    if (!this.props.mounted) return null;
-    if (this.props.verticalScrollerWidth === 0 && this.props.horizontalScrollerHeight === 0) return null;
-
-    let verticalScrollBarHeight = this.props.scrollContentContainerHeight * this.props.CTInnerHeight / this.props.scrollContentHeight,
-        horizontalScrollBarWidth = this.props.scrollContentContainerWidth * this.props.CTInnerWidth / this.props.scrollContentWidth;
-
-    let verticalStyles = {
-      width: this.props.verticalScrollerWidth,
-      height: this.props.CTInnerHeight,
-      bottom: this.props.pageHeight + ((this.props.horizontalScrollerHeight) ? this.props.horizontalScrollerHeight : 0)
-    };
-    let verticalBarStyles = {
-      height: verticalScrollBarHeight,
-      top: - this.props.scrollTop * (this.props.CTInnerHeight - verticalScrollBarHeight) / (this.props.scrollContentHeight - this.props.scrollContentContainerHeight)
-    };
-    let horizontalStyles = {
-      width: this.props.CTInnerWidth,
-      height: this.props.horizontalScrollerHeight,
-      bottom: this.props.pageHeight,
-      right: (this.props.verticalScrollerWidth) ? this.props.verticalScrollerWidth : 0
-    };
-    let horizontalBarStyles = {
-      width: horizontalScrollBarWidth,
-      left: - this.props.scrollLeft * (this.props.CTInnerWidth - horizontalScrollBarWidth) / (this.props.scrollContentWidth - this.props.scrollContentContainerWidth)
-    };
-    let cornerStyle = {
-      width: this.props.verticalScrollerWidth,
-      height: this.props.horizontalScrollerHeight,
-      bottom: this.props.pageHeight
-    };
-
-    return (
-      <div className={classNames(sass.gridScroller)}>
-        {(this.props.verticalScrollerWidth) ? (
-          <div data-scroll="vertical" style={verticalStyles}>
-            <div className={classNames(sass.scrollBar)} style={verticalBarStyles} />
-          </div>
-        ) : null}
-        {(this.props.horizontalScrollerHeight) ? (
-          <div data-scroll="horizontal" style={horizontalStyles}>
-            <div className={classNames(sass.scrollBar)} style={horizontalBarStyles} />
-          </div>
-        ) : null}
-        {(this.props.verticalScrollerWidth && this.props.horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
-      </div>
-    )
-  }
 }
-
-GridScroll.propTypes = {
-  refCallback: PropTypes.func,
-  onMoveScrollBar: PropTypes.func,
-  mounted: PropTypes.bool,
-  optionsScroller: PropTypes.object,
-  CTInnerWidth: PropTypes.number,
-  CTInnerHeight: PropTypes.number,
-  pageHeight: PropTypes.number,
-  verticalScrollerWidth: PropTypes.number,
-  horizontalScrollerHeight: PropTypes.number,
-  scrollContentContainerHeight: PropTypes.number,
-  scrollContentHeight: PropTypes.number,
-  scrollContentContainerWidth: PropTypes.number,
-  scrollContentWidth: PropTypes.number,
-  scrollLeft: PropTypes.number,
-  scrollTop: PropTypes.number,
-};
-
-GridScroll.defaultProps = {
-  scrollLeft: 0,
-  scrollTop: 0
-};
-
-
-export default GridScroll;

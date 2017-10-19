@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {each, extend, extendOwn, isObject, throttle} from 'underscore';
+import { each, extend, extendOwn, isObject, throttle } from 'underscore';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
@@ -77,7 +77,7 @@ const defaultOptions = {
       parentHash: "__hp__",
       selfHash: "__hs__",
       children: "__children__",
-      depth: "__depth__",
+      depth: "__depth__"
     }
   },
   footSum: false
@@ -89,22 +89,19 @@ class GridRoot extends React.Component {
     // props에 추가된 액션만 호출 가능
     this.gridStyles = {};
     this.componentRefs = {};
-    this.data = {}; // 내부연산용 데이터 저장소
     this.state = {
       scrollLeft: 0,
       scrollTop: 0,
-      dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
       options: (() => {
         let options = extend({}, defaultOptions);
         each(props.options, function (v, k) {
-          options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
+          options[k] = isObject(v) ? extendOwn(options[k], v) : v;
         });
         return options;
       })()
     };
     this.refCallback = this.refCallback.bind(this);
-    this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
-    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+    this.onMoveScrollBar = this.onMoveScrollBar.bind(this);
 
     props.init(props, this.state.options);
   }
@@ -130,7 +127,7 @@ class GridRoot extends React.Component {
     if (this.props.options != nextProps.options || this.props.columns != nextProps.columns) {
       if (this.props.options != nextProps.options) {
         each(nextProps.options, (v, k) => {
-          this.state.options[k] = (isObject(v)) ? extendOwn(this.state.options[k], v) : v;
+          this.state.options[k] = isObject(v) ? extendOwn(this.state.options[k], v) : v;
         });
         this.setState({
           options: this.state.options
@@ -148,7 +145,7 @@ class GridRoot extends React.Component {
       this.props.align(this.props, this.gridRootNode);
 
       setTimeout(() => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
+        let { scrollLeft, scrollTop } = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
           scrollWidth: this.gridStyles.scrollContentWidth,
           scrollHeight: this.gridStyles.scrollContentHeight,
           clientWidth: this.gridStyles.scrollContentContainerWidth,
@@ -160,7 +157,6 @@ class GridRoot extends React.Component {
           scrollTop: scrollTop
         });
       });
-
     }
   }
 
@@ -170,7 +166,7 @@ class GridRoot extends React.Component {
   updateDimensions() {
     this.props.align(this.props, this.gridRootNode);
 
-    let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
+    let { scrollLeft, scrollTop } = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
       scrollWidth: this.gridStyles.scrollContentWidth,
       scrollHeight: this.gridStyles.scrollContentHeight,
       clientWidth: this.gridStyles.scrollContentContainerWidth,
@@ -184,12 +180,11 @@ class GridRoot extends React.Component {
   }
 
   handleWheel(e) {
-    let delta = {x: 0, y: 0};
+    let delta = { x: 0, y: 0 };
 
     if (e.detail) {
       delta.y = e.detail * 10;
-    }
-    else {
+    } else {
       if (typeof e.deltaY === "undefined") {
         delta.y = -e.wheelDelta;
         delta.x = 0;
@@ -199,7 +194,7 @@ class GridRoot extends React.Component {
       }
     }
 
-    let {scrollLeft, scrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
+    let { scrollLeft: _scrollLeft, scrollTop: _scrollTop, endScroll } = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
       scrollWidth: this.gridStyles.scrollContentWidth,
       scrollHeight: this.gridStyles.scrollContentHeight,
       clientWidth: this.gridStyles.scrollContentContainerWidth,
@@ -207,8 +202,8 @@ class GridRoot extends React.Component {
     });
 
     this.setState({
-      scrollLeft: scrollLeft,
-      scrollTop: scrollTop
+      scrollLeft: _scrollLeft,
+      scrollTop: _scrollTop
     });
 
     if (!endScroll) {
@@ -217,48 +212,7 @@ class GridRoot extends React.Component {
     }
   }
 
-  onMouseDownScrollBar(e, barName) {
-
-    this.data[barName + '-scroll-bar'] = {
-      startMousePosition: UTIL.getMousePosition(e)
-    };
-
-    const onMouseMove = (ee) => {
-      if (!this.state.dragging) this.setState({dragging: true});
-      const {x, y} = UTIL.getMousePosition(ee);
-      const {startMousePosition} = this.data[barName + '-scroll-bar'];
-
-      const processor = {
-        vertical: () => {
-          let d = y - startMousePosition.y;
-          // let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar();
-          console.log(d);
-        },
-        horizontal: () => {
-          let d = x - startMousePosition.x;
-          console.log(d);
-        }
-      };
-      if (barName in processor) processor[barName]();
-    };
-
-    const offEvent = () => {
-      this.setState({dragging: false});
-      this.data[barName + '-scroll-bar'] = null;
-      // console.log("offEvent");
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', offEvent);
-      document.removeEventListener('mouseleave', offEvent);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', offEvent);
-    document.addEventListener('mouseleave', offEvent);
-  }
-
-  onClickScrollTrack() {
-
-  }
+  onMoveScrollBar() {}
 
   refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
@@ -271,107 +225,100 @@ class GridRoot extends React.Component {
     const options = gridState.get('options').toJS();
     const mounted = gridState.get("mounted");
 
-    let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
-    if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지
-      gridRootStyle["userSelect"] = "none";
-    }
+    let gridRootStyle = Object.assign({ height: this.props.height }, this.props.style);
 
-    return (
-      <div ref="gridRoot"
-           onWheel={e => {
-             this.handleWheel(e);
-           }}
-           className={classNames(sass.gridRoot)}
-           style={gridRootStyle}>
-        <div className={classNames(sass.gridClipBoard)}>
-          <textarea ref="gridClipboard"></textarea>
-        </div>
-        <GridHeader
-          refCallback={this.refCallback}
-          mounted={mounted}
-          optionsHeader={options.header}
-          styles={styles}
-          frozenColumnIndex={options.frozenColumnIndex}
+    return React.createElement(
+      'div',
+      { ref: 'gridRoot',
+        onWheel: e => {
+          this.handleWheel(e);
+        },
+        className: classNames(sass.gridRoot),
+        style: gridRootStyle },
+      React.createElement(
+        'div',
+        { className: classNames(sass.gridClipBoard) },
+        React.createElement('textarea', { ref: 'gridClipboard' })
+      ),
+      React.createElement(GridHeader, {
+        refCallback: this.refCallback,
+        mounted: mounted,
+        optionsHeader: options.header,
+        styles: styles,
+        frozenColumnIndex: options.frozenColumnIndex,
 
-          colGroup={gridState.get('colGroup')}
-          headerTable={gridState.get('headerTable')}
+        colGroup: gridState.get('colGroup'),
+        headerTable: gridState.get('headerTable'),
 
-          asideColGroup={gridState.get('asideColGroup')}
-          leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-          headerColGroup={gridState.get('headerColGroup')}
+        asideColGroup: gridState.get('asideColGroup'),
+        leftHeaderColGroup: gridState.get('leftHeaderColGroup'),
+        headerColGroup: gridState.get('headerColGroup'),
 
-          asideHeaderData={gridState.get('asideHeaderData')}
-          leftHeaderData={gridState.get('leftHeaderData')}
-          headerData={gridState.get('headerData')}
+        asideHeaderData: gridState.get('asideHeaderData'),
+        leftHeaderData: gridState.get('leftHeaderData'),
+        headerData: gridState.get('headerData'),
 
-          scrollLeft={this.state.scrollLeft}
-        />
-        <GridBody
-          refCallback={this.refCallback}
-          mounted={mounted}
-          optionsBody={options.body}
-          styles={styles}
-          frozenColumnIndex={options.frozenColumnIndex}
+        scrollLeft: this.state.scrollLeft
+      }),
+      React.createElement(GridBody, {
+        refCallback: this.refCallback,
+        mounted: mounted,
+        optionsBody: options.body,
+        styles: styles,
+        frozenColumnIndex: options.frozenColumnIndex,
 
-          colGroup={gridState.get('colGroup')}
-          asideColGroup={gridState.get('asideColGroup')}
-          leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-          headerColGroup={gridState.get('headerColGroup')}
+        colGroup: gridState.get('colGroup'),
+        asideColGroup: gridState.get('asideColGroup'),
+        leftHeaderColGroup: gridState.get('leftHeaderColGroup'),
+        headerColGroup: gridState.get('headerColGroup'),
 
-          bodyTable={gridState.get('bodyRowTable')}
-          asideBodyRowData={gridState.get('asideBodyRowData')}
-          asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
-          leftBodyRowData={gridState.get('leftBodyRowData')}
-          leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
-          bodyRowData={gridState.get('bodyRowData')}
-          bodyGroupingData={gridState.get('bodyGroupingData')}
+        bodyTable: gridState.get('bodyRowTable'),
+        asideBodyRowData: gridState.get('asideBodyRowData'),
+        asideBodyGroupingData: gridState.get('asideBodyGroupingData'),
+        leftBodyRowData: gridState.get('leftBodyRowData'),
+        leftBodyGroupingData: gridState.get('leftBodyGroupingData'),
+        bodyRowData: gridState.get('bodyRowData'),
+        bodyGroupingData: gridState.get('bodyGroupingData'),
 
-          list={gridState.get('list')}
+        list: gridState.get('list'),
 
-          scrollLeft={this.state.scrollLeft}
-          scrollTop={this.state.scrollTop}
-        />
-        <GridPage
-          refCallback={this.refCallback}
-          mounted={mounted}
-          styles={styles}
-        />
-        <GridScroll
-          refCallback={this.refCallback}
-          onMouseDownScrollBar={this.onMouseDownScrollBar}
-          mounted={mounted}
-          optionsScroller={options.scroller}
+        scrollLeft: this.state.scrollLeft,
+        scrollTop: this.state.scrollTop
+      }),
+      React.createElement(GridPage, {
+        refCallback: this.refCallback,
+        mounted: mounted,
+        styles: styles
+      }),
+      React.createElement(GridScroll, {
+        refCallback: this.refCallback,
+        onMoveScrollBar: this.onMoveScrollBar,
+        mounted: mounted,
+        optionsScroller: options.scroller,
 
-          CTInnerWidth={styles.CTInnerWidth}
-          CTInnerHeight={styles.CTInnerHeight}
-          pageHeight={styles.pageHeight}
-          verticalScrollerWidth={styles.verticalScrollerWidth}
-          horizontalScrollerHeight={styles.horizontalScrollerHeight}
-          scrollContentContainerHeight={styles.scrollContentContainerHeight}
-          scrollContentHeight={styles.scrollContentHeight}
-          scrollContentContainerWidth={styles.scrollContentContainerWidth}
-          scrollContentWidth={styles.scrollContentWidth}
+        CTInnerWidth: styles.CTInnerWidth,
+        CTInnerHeight: styles.CTInnerHeight,
+        pageHeight: styles.pageHeight,
+        verticalScrollerWidth: styles.verticalScrollerWidth,
+        horizontalScrollerHeight: styles.horizontalScrollerHeight,
+        scrollContentContainerHeight: styles.scrollContentContainerHeight,
+        scrollContentHeight: styles.scrollContentHeight,
+        scrollContentContainerWidth: styles.scrollContentContainerWidth,
+        scrollContentWidth: styles.scrollContentWidth,
 
-          scrollLeft={this.state.scrollLeft}
-          scrollTop={this.state.scrollTop}
-        />
-
-        <div ref="gridVerticalResizer"></div>
-        <div ref="gridHorizontalResizer"></div>
-      </div>
+        scrollLeft: this.state.scrollLeft,
+        scrollTop: this.state.scrollTop
+      }),
+      React.createElement('div', { ref: 'gridVerticalResizer' }),
+      React.createElement('div', { ref: 'gridHorizontalResizer' })
     );
-
   }
 }
-
 
 GridRoot.propTypes = {
   height: PropTypes.string,
   columns: PropTypes.array,
-  data: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object
-  ]),
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   options: PropTypes.shape({
     frozenColumnIndex: PropTypes.number,
     frozenRowIndex: PropTypes.number,
@@ -438,14 +385,11 @@ GridRoot.propTypes = {
         parentHash: PropTypes.string,
         selfHash: PropTypes.string,
         children: PropTypes.string,
-        depth: PropTypes.string,
+        depth: PropTypes.string
       })
     })
   }),
-  footSum: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ])
+  footSum: PropTypes.oneOfType([PropTypes.bool, PropTypes.func])
 };
 
 GridRoot.defaultProps = {

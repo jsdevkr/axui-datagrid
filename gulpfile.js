@@ -13,7 +13,7 @@ const exec = require('gulp-exec');
 const fnObj = {
   paths: {
     src: 'src/',
-    dist_es: 'dist/',
+    dist: 'dist/',
   }
 };
 
@@ -28,14 +28,14 @@ gulp.task('js-ES', function () {
     .pipe(babel({
       presets: ['react']
     }))
-    .pipe(gulp.dest(fnObj.paths.dist_es));
+    .pipe(gulp.dest(fnObj.paths.dist));
 });
 
 gulp.task('scss-ES', function () {
   return gulp.src([
       fnObj.paths.src + '/**/*.scss',
     ], {base: fnObj.paths.src})
-    .pipe(gulp.dest(fnObj.paths.dist_es));
+    .pipe(gulp.dest(fnObj.paths.dist));
 });
 
 /**
@@ -48,26 +48,10 @@ gulp.task('npm publish minor', ['js-ES', 'scss-ES'], shell.task([
   'cd dist && npm version minor -m "version minor" && npm publish'
 ]));
 
-gulp.task('jsdoc build', function () {
-  let options = {
-    continueOnError: false, // default = false, true means don't emit error event
-    pipeStdout: false, // default = false, true means stdout is written to file.contents
-    customTemplatingThing: "test" // content passed to gutil.template()
-  };
-  let reportOptions = {
-    err: true, // default = true, false means don't write err
-    stderr: true, // default = true, false means don't write stderr
-    stdout: true // default = true, false means don't write stdout
-  };
-  return gulp.src('./md.sh')
-    .pipe(exec('./md.sh', options))
-    .pipe(exec.reporter(reportOptions));
-});
-
 gulp.task('dev run!', shell.task([
   'webpack-dev-server --env=d',
 ]));
 
-gulp.task('deploy to docs', shell.task([
+gulp.task('deploy to dev', shell.task([
   'webpack -p --env=p --progress --profile --colors',
 ]));

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../modules';
 
-import AX6UIGrid from 'ax6ui-react-grid/index';
+import AXDataGrid from 'ax-datagrid';
 
 const gridData = [
   {id: 1, title: "제목입니다.", writer: "장기영", date: "2017-10-10"},
@@ -118,13 +118,13 @@ class GridBasic extends React.Component {
 
     return (
       <div>
-        <AX6UIGrid
+        <AXDataGrid
           height={this.state.height}
           style={{fontSize: "12px"}}
           columns={this.state.columns}
           data={this.state.data}
           options={this.state.options}
-        ></AX6UIGrid>
+        />
 
         {this.props.name} /
         {this.state.height}

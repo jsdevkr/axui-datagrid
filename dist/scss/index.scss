@@ -278,11 +278,6 @@
         @include gridCell();
       }
     }
-    tr:last-child{
-      td{
-        border-bottom: $ax6grid-last-row-border;
-      }
-    }
 
   }
 
