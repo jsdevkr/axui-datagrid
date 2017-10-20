@@ -247,7 +247,7 @@ class GridRoot extends React.Component {
           });
         }
       };
-      
+
       if (barName in processor) processor[barName]();
     };
 
@@ -269,7 +269,26 @@ class GridRoot extends React.Component {
     const styles = this.gridStyles;
     const currScrollBarLeft = -this.state.scrollLeft * (styles.CTInnerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop = -this.state.scrollTop * (styles.CTInnerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+    const {x, y} = UTIL.getMousePosition(e);
 
+    const processor = {
+      vertical: () => {
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - this.refs.gridRoot.offsetTop - (styles.verticalScrollBarHeight / 2), styles);
+        this.setState({
+          scrollLeft: scrollLeft,
+          scrollTop: scrollTop
+        });
+      },
+      horizontal: () => {
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        this.setState({
+          scrollLeft: scrollLeft,
+          scrollTop: scrollTop
+        });
+      }
+    };
+
+    if (barName in processor) processor[barName]();
   }
 
   refCallback(_key, el) {
@@ -349,6 +368,7 @@ class GridRoot extends React.Component {
         <GridScroll
           refCallback={this.refCallback}
           onMouseDownScrollBar={this.onMouseDownScrollBar}
+          onClickScrollTrack={this.onClickScrollTrack}
           mounted={mounted}
           optionsScroller={options.scroller}
 

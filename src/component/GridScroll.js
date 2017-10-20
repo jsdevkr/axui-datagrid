@@ -7,6 +7,7 @@ class GridScroll extends React.Component {
   constructor(props) {
     super(props);
 
+    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
   }
 
   /*
@@ -24,18 +25,26 @@ class GridScroll extends React.Component {
     }
   */
 
+  onClickScrollTrack(e, barName) {
+    e.preventDefault();
+    if (e.target.getAttribute("data-scroll")) {
+      this.props.onClickScrollTrack(e, barName);
+    }
+  }
+
   render() {
-    const onMouseDownScrollBar         = this.props.onMouseDownScrollBar,
-          mounted                      = this.props.mounted,
-          CTInnerWidth                 = this.props.CTInnerWidth,
-          CTInnerHeight                = this.props.CTInnerHeight,
-          pageHeight                   = this.props.pageHeight,
-          verticalScrollerWidth        = this.props.verticalScrollerWidth,
-          horizontalScrollerHeight     = this.props.horizontalScrollerHeight,
-          verticalScrollBarHeight      = this.props.verticalScrollBarHeight,
-          horizontalScrollBarWidth     = this.props.horizontalScrollBarWidth,
-          scrollBarLeft                = this.props.scrollBarLeft,
-          scrollBarTop                 = this.props.scrollBarTop;
+    const refCallback              = this.props.refCallback,
+          onMouseDownScrollBar     = this.props.onMouseDownScrollBar,
+          mounted                  = this.props.mounted,
+          CTInnerWidth             = this.props.CTInnerWidth,
+          CTInnerHeight            = this.props.CTInnerHeight,
+          pageHeight               = this.props.pageHeight,
+          verticalScrollerWidth    = this.props.verticalScrollerWidth,
+          horizontalScrollerHeight = this.props.horizontalScrollerHeight,
+          verticalScrollBarHeight  = this.props.verticalScrollBarHeight,
+          horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
+          scrollBarLeft            = this.props.scrollBarLeft,
+          scrollBarTop             = this.props.scrollBarTop;
 
     if (!mounted) return null;
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
@@ -68,13 +77,23 @@ class GridScroll extends React.Component {
     return (
       <div className={classNames(sass.gridScroller)}>
         {(verticalScrollerWidth) ? (
-          <div data-scroll="vertical" style={verticalStyles}>
-            <div className={classNames(sass.scrollBar)} style={verticalBarStyles} onMouseDown={(e) => onMouseDownScrollBar(e, "vertical")} />
+          <div data-scroll="vertical"
+               style={verticalStyles}
+               ref={ref => refCallback("vertical-scroll-track", ref)}
+               onClick={e => this.onClickScrollTrack(e, "vertical")}>
+            <div className={classNames(sass.scrollBar)}
+                 style={verticalBarStyles}
+                 onMouseDown={e => onMouseDownScrollBar(e, "vertical")} />
           </div>
         ) : null}
         {(horizontalScrollerHeight) ? (
-          <div data-scroll="horizontal" style={horizontalStyles}>
-            <div className={classNames(sass.scrollBar)} style={horizontalBarStyles} onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
+          <div data-scroll="horizontal"
+               style={horizontalStyles}
+               ref={ref => refCallback("horizontal-scroll-track", ref)}
+               onClick={e => this.onClickScrollTrack(e, "horizontal")}>
+            <div className={classNames(sass.scrollBar)}
+                 style={horizontalBarStyles}
+                 onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
           </div>
         ) : null}
         {(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
