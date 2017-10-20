@@ -240,13 +240,14 @@ class GridRoot extends React.Component {
           });
         },
         horizontal: () => {
-          let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - startMousePosition.x, currScrollBarTop, styles);
+          let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
           this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop
           });
         }
       };
+      
       if (barName in processor) processor[barName]();
     };
 
@@ -264,7 +265,10 @@ class GridRoot extends React.Component {
     document.addEventListener('mouseleave', offEvent);
   }
 
-  onClickScrollTrack() {
+  onClickScrollTrack(e, barName) {
+    const styles = this.gridStyles;
+    const currScrollBarLeft = -this.state.scrollLeft * (styles.CTInnerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+    const currScrollBarTop = -this.state.scrollTop * (styles.CTInnerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
 
   }
 

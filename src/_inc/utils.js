@@ -776,7 +776,7 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
   SH = scrollContentHeight - scrollContentContainerHeight
 }) {
 
-  let {scrollLeft, scrollTop} = getScrollPosition(scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
+  let {scrollLeft, scrollTop} = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
     scrollWidth: scrollContentWidth,
     scrollHeight: scrollContentHeight,
     clientWidth: scrollContentContainerWidth,
