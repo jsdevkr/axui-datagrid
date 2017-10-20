@@ -10,7 +10,7 @@ class GridScroll extends React.Component {
   }
 
   /*
-  // 사실상 항상 리랜더 해야 하는 컴포넌트
+  // 사실상 항상 리랜더 해야 하는 컴포넌트라서 제어하지 않을 작정
     shouldComponentUpdate(nextProps, nextState) {
       let sameProps = false;
 
@@ -23,6 +23,7 @@ class GridScroll extends React.Component {
       return sameProps;
     }
   */
+
   render() {
     const onMouseDownScrollBar         = this.props.onMouseDownScrollBar,
           mounted                      = this.props.mounted,
@@ -31,19 +32,13 @@ class GridScroll extends React.Component {
           pageHeight                   = this.props.pageHeight,
           verticalScrollerWidth        = this.props.verticalScrollerWidth,
           horizontalScrollerHeight     = this.props.horizontalScrollerHeight,
-          scrollContentContainerHeight = this.props.scrollContentContainerHeight,
-          scrollContentHeight          = this.props.scrollContentHeight,
-          scrollContentContainerWidth  = this.props.scrollContentContainerWidth,
-          scrollContentWidth           = this.props.scrollContentWidth,
-          scrollLeft                   = this.props.scrollLeft,
-          scrollTop                    = this.props.scrollTop;
-
+          verticalScrollBarHeight      = this.props.verticalScrollBarHeight,
+          horizontalScrollBarWidth     = this.props.horizontalScrollBarWidth,
+          scrollBarLeft                = this.props.scrollBarLeft,
+          scrollBarTop                 = this.props.scrollBarTop;
 
     if (!mounted) return null;
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
-
-    let verticalScrollBarHeight  = scrollContentContainerHeight * CTInnerHeight / scrollContentHeight,
-        horizontalScrollBarWidth = scrollContentContainerWidth * CTInnerWidth / scrollContentWidth;
 
     let verticalStyles = {
       width: verticalScrollerWidth,
@@ -52,7 +47,7 @@ class GridScroll extends React.Component {
     };
     let verticalBarStyles = {
       height: verticalScrollBarHeight,
-      top: -scrollTop * (CTInnerHeight - verticalScrollBarHeight) / (scrollContentHeight - scrollContentContainerHeight)
+      top: scrollBarTop
     };
     let horizontalStyles = {
       width: CTInnerWidth,
@@ -62,7 +57,7 @@ class GridScroll extends React.Component {
     };
     let horizontalBarStyles = {
       width: horizontalScrollBarWidth,
-      left: -scrollLeft * (CTInnerWidth - horizontalScrollBarWidth) / (scrollContentWidth - scrollContentContainerWidth)
+      left: scrollBarLeft
     };
     let cornerStyle = {
       width: verticalScrollerWidth,
@@ -85,7 +80,6 @@ class GridScroll extends React.Component {
         {(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
       </div>
     )
-
 
   }
 }

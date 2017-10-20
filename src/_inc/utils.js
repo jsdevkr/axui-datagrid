@@ -9,11 +9,11 @@ import {extend, isArray, isNumber, isObject} from "underscore";
  */
 export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
 
-  let asideTable  = {rows: []},
-      asideColGroup = [],
+  let asideTable      = {rows: []},
+      asideColGroup   = [],
       asidePanelWidth = 0,
-      tempTable_l = {rows: []},
-      tempTable_r = {rows: []};
+      tempTable_l     = {rows: []},
+      tempTable_r     = {rows: []};
 
   for (let i = 0, l = _table.rows.length; i < l; i++) {
     asideTable.rows[i] = {cols: []};
@@ -591,13 +591,16 @@ export function getInnerWidth(element) {
   const cs = window.getComputedStyle(element);
   return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
 }
+
 export function getInnerHeight(element) {
   const cs = window.getComputedStyle(element);
   return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
 }
+
 export function getOuterWidth(element) {
   return element.offsetWidth;
 }
+
 export function getOuterHeight(element) {
   return element.offsetHeight;
 }
@@ -683,6 +686,9 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
 
+  styles.verticalScrollBarHeight = styles.scrollContentContainerHeight * styles.CTInnerHeight / styles.scrollContentHeight;
+  styles.horizontalScrollBarWidth = styles.scrollContentContainerWidth * styles.CTInnerWidth / styles.scrollContentWidth;
+
   return {
     styles
   }
@@ -760,8 +766,25 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
   }
 }
 
-export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {}) {
-  return {
+export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
+  CTInnerWidth, CTInnerHeight, horizontalScrollBarWidth, verticalScrollBarHeight,
+  scrollContentWidth, scrollContentHeight,
+  scrollContentContainerWidth, scrollContentContainerHeight,
+  BW = CTInnerWidth - horizontalScrollBarWidth,
+  BH = CTInnerHeight - verticalScrollBarHeight,
+  SW = scrollContentWidth - scrollContentContainerWidth,
+  SH = scrollContentHeight - scrollContentContainerHeight
+}) {
 
+  let {scrollLeft, scrollTop} = getScrollPosition(scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
+    scrollWidth: scrollContentWidth,
+    scrollHeight: scrollContentHeight,
+    clientWidth: scrollContentContainerWidth,
+    clientHeight: scrollContentContainerHeight
+  });
+
+  return {
+    scrollLeft,
+    scrollTop
   }
 }

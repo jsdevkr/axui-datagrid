@@ -218,6 +218,9 @@ class GridRoot extends React.Component {
   }
 
   onMouseDownScrollBar(e, barName) {
+    const styles = this.gridStyles;
+    const currScrollBarLeft = -this.state.scrollLeft * (styles.CTInnerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+    const currScrollBarTop = -this.state.scrollTop * (styles.CTInnerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
 
     this.data[barName + '-scroll-bar'] = {
       startMousePosition: UTIL.getMousePosition(e)
@@ -230,13 +233,18 @@ class GridRoot extends React.Component {
 
       const processor = {
         vertical: () => {
-          let d = y - startMousePosition.y;
-          // let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar();
-          console.log(d);
+          let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles);
+          this.setState({
+            scrollLeft: scrollLeft,
+            scrollTop: scrollTop
+          });
         },
         horizontal: () => {
-          let d = x - startMousePosition.x;
-          console.log(d);
+          let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - startMousePosition.x, currScrollBarTop, styles);
+          this.setState({
+            scrollLeft: scrollLeft,
+            scrollTop: scrollTop
+          });
         }
       };
       if (barName in processor) processor[barName]();
@@ -345,13 +353,12 @@ class GridRoot extends React.Component {
           pageHeight={styles.pageHeight}
           verticalScrollerWidth={styles.verticalScrollerWidth}
           horizontalScrollerHeight={styles.horizontalScrollerHeight}
-          scrollContentContainerHeight={styles.scrollContentContainerHeight}
-          scrollContentHeight={styles.scrollContentHeight}
-          scrollContentContainerWidth={styles.scrollContentContainerWidth}
-          scrollContentWidth={styles.scrollContentWidth}
 
-          scrollLeft={this.state.scrollLeft}
-          scrollTop={this.state.scrollTop}
+          verticalScrollBarHeight={styles.verticalScrollBarHeight}
+          horizontalScrollBarWidth={styles.horizontalScrollBarWidth}
+
+          scrollBarLeft={-this.state.scrollLeft * (styles.CTInnerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
+          scrollBarTop={-this.state.scrollTop * (styles.CTInnerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
         />
 
         <div ref="gridVerticalResizer"></div>
