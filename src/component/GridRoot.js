@@ -48,7 +48,8 @@ const defaultOptions = {
   },
   scroller: {
     size: 12,
-    barMinSize: 12
+    barMinSize: 12,
+    useVerticalScroll: true
   },
   columnKeys: {
     selected: '__selected__',
@@ -218,6 +219,8 @@ class GridRoot extends React.Component {
   }
 
   onMouseDownScrollBar(e, barName) {
+
+    e.preventDefault();
     const styles = this.gridStyles;
     const currScrollBarLeft = -this.state.scrollLeft * (styles.CTInnerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop = -this.state.scrollTop * (styles.CTInnerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
@@ -251,7 +254,9 @@ class GridRoot extends React.Component {
       if (barName in processor) processor[barName]();
     };
 
-    const offEvent = () => {
+    const offEvent = (e) => {
+      e.preventDefault();
+
       this.setState({dragging: false});
       this.data[barName + '-scroll-bar'] = null;
       // console.log("offEvent");
@@ -438,7 +443,7 @@ GridRoot.propTypes = {
     scroller: PropTypes.shape({
       size: PropTypes.number,
       barMinSize: PropTypes.number,
-      trackPadding: PropTypes.number
+      useVerticalScroll: PropTypes.bool
     }),
     columnKeys: PropTypes.shape({
       selected: PropTypes.string,

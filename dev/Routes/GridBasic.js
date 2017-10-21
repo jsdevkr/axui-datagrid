@@ -47,6 +47,9 @@ const gridOptions = {
   showRowSelector: true,
   columnKeys: {
     modified: "__ABC__"
+  },
+  scroller: {
+    useVerticalScroll: false
   }
 };
 const gridOptions_new = {
@@ -65,6 +68,9 @@ class GridBasic extends React.Component {
     this.state = {
       columns: [
         {key: "id", width: 60, label: "번호", align:"center"},
+        {key: "title", width: 200, label: "제목"},
+        {key: "writer", label: "작성자", align:"center"},
+        {key: "date", label: "작성일", align:"center"},
         {key: "title", width: 200, label: "제목"},
         {key: "writer", label: "작성자", align:"center"},
         {key: "date", label: "작성일", align:"center"}
