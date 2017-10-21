@@ -55,6 +55,7 @@ const initialState = Map({
     tree: {}
   }),
   styles: Map({
+    calculatedHeight: null,
     // 줄번호 + 줄셀렉터의 너비
     asidePanelWidth: null,
     // 틀고정된 컬럼들의 너비

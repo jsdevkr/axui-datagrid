@@ -308,6 +308,9 @@ class GridRoot extends React.Component {
     const mounted = gridState.get("mounted");
 
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
+    if(styles.calculatedHeight !== null){
+      gridRootStyle.height = styles.calculatedHeight;
+    }
     if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지
       gridRootStyle["userSelect"] = "none";
     }

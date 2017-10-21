@@ -49,7 +49,7 @@ const gridOptions = {
     modified: "__ABC__"
   },
   scroller: {
-    useVerticalScroll: false
+    useVerticalScroll: true
   }
 };
 const gridOptions_new = {

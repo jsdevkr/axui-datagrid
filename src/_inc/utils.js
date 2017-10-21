@@ -618,26 +618,14 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   let footSumColumns = state.get('footSumColumns');
   let headerTable = state.get('headerTable');
 
+  styles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
+
   styles.elWidth = getInnerWidth(action.containerDOM);
   styles.elHeight = getInnerHeight(action.containerDOM);
 
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
   styles.rightPanelWidth = 0;
-  styles.headerHeight = 0;
-  styles.frozenRowHeight = 0;
-  styles.headerHeight = 0;
-  styles.footSumHeight = 0;
-  styles.pageHeight = 0;
-
-  styles.scrollContentContainerHeight = 0;
-  styles.scrollContentHeight = 0;
-  styles.scrollContentContainerWidth = 0;
-  styles.scrollContentWidth = 0;
-
-  styles.verticalScrollerWidth = 0;
-  styles.horizontalScrollerHeight = 0;
-  styles.bodyHeight = 0;
 
   colGroup = setColGroupWidth(colGroup, {width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size)}, options);
 
@@ -688,6 +676,14 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
 
   styles.verticalScrollBarHeight = styles.scrollContentContainerHeight * styles.CTInnerHeight / styles.scrollContentHeight;
   styles.horizontalScrollBarWidth = styles.scrollContentContainerWidth * styles.CTInnerWidth / styles.scrollContentWidth;
+
+  if (options.scroller.useVerticalScroll) {
+    styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
+    styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;
+    styles.verticalScrollerWidth = 0;
+    styles.CTInnerWidth = styles.elWidth;
+    styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+  }
 
   return {
     styles
