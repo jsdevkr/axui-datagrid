@@ -346,7 +346,7 @@ class GridRoot extends React.Component {
         <GridBody
           refCallback={this.refCallback}
           mounted={mounted}
-          optionsBody={options.body}
+          options={options}
           styles={styles}
           frozenColumnIndex={options.frozenColumnIndex}
 
