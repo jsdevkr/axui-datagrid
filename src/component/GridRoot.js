@@ -181,7 +181,7 @@ class GridRoot extends React.Component {
       clientWidth: this.gridStyles.scrollContentContainerWidth,
       clientHeight: this.gridStyles.scrollContentContainerHeight
     });
-    if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
+    this.onChangedScrollLeft(scrollLeft);
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
@@ -311,7 +311,7 @@ class GridRoot extends React.Component {
     const styles = this.gridStyles;
     const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
-    let sColIndex, eColIndex;
+    let sColIndex, eColIndex = headerColGroup.size;
     // 프린트 컬럼 시작점과 끝점 연산
     headerColGroup.forEach((col, ci) => {
       if (col._sx <= scrollLeft && col._ex >= scrollLeft) {
@@ -326,11 +326,24 @@ class GridRoot extends React.Component {
     if (this.state.sColIndex !== sColIndex || this.state.eColIndex !== eColIndex) {
       this.state.sColIndex = sColIndex;
       this.state.eColIndex = eColIndex;
+
       this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex + 1);
       this.state.scrollPaddingLeft = this.state._headerColGroup.get(0)._sx;
       this.state._bodyRowData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyRowData'), sColIndex, eColIndex + 1));
       this.state._bodyGroupingData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyGroupingData'), sColIndex, eColIndex + 1));
-      // console.log(this.state._bodyRowData.get('rows')[0].cols[0]);
+
+
+      //console.log(this.state._headerColGroup.toJS());
+      /*
+      if (this.state._headerColGroup.size > 0) {
+
+      }else{
+        this.state._headerColGroup = this.props.gridState.get('headerColGroup');
+        this.state.scrollPaddingLeft = 0;
+        this.state._bodyRowData = this.props.gridState.get('bodyRowData');
+        this.state._bodyGroupingData = this.props.gridState.get('bodyGroupingData');
+      }
+      */
     }
   }
 

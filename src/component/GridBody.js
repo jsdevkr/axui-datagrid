@@ -104,40 +104,42 @@ class GridBody extends React.Component {
             {Range(_scrollConfig.sRowIndex, _scrollConfig.eRowIndex).map(
               (li) => {
                 const item = _list.get(li);
-                return (
-                  _bodyRow.get('rows').map(
-                    (row, ri) => {
-                      return (
-                        <tr
-                          key={ri}
-                          className="">
-                          {row.cols.map((col, ci) => {
+                if(item){
+                  return (
+                    _bodyRow.get('rows').map(
+                      (row, ri) => {
+                        return (
+                          <tr
+                            key={ri}
+                            className="">
+                            {row.cols.map((col, ci) => {
 
 
-                            let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
-                            let classNameItmes = {};
-                            classNameItmes[sass.hasBorder] = true;
-                            if (row.cols.length == ci + 1) {
-                              classNameItmes[sass.isLastColumn] = true;
-                            }
+                              let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
+                              let classNameItmes = {};
+                              classNameItmes[sass.hasBorder] = true;
+                              if (row.cols.length == ci + 1) {
+                                classNameItmes[sass.isLastColumn] = true;
+                              }
 
-                            return (
-                              <td
-                                key={ci}
-                                colSpan={col.colspan}
-                                rowSpan={col.rowspan}
-                                className={classNames(classNameItmes)}
-                                style={{height: cellHeight, minHeight: "1px"}}>
-                                {getFieldSpan(colGroup, col, item, li)}
-                              </td>
-                            );
-                          })}
-                          <td>&nbsp;</td>
-                        </tr>
-                      )
-                    }
+                              return (
+                                <td
+                                  key={ci}
+                                  colSpan={col.colspan}
+                                  rowSpan={col.rowspan}
+                                  className={classNames(classNameItmes)}
+                                  style={{height: cellHeight, minHeight: "1px"}}>
+                                  {getFieldSpan(colGroup, col, item, li)}
+                                </td>
+                              );
+                            })}
+                            <td>&nbsp;</td>
+                          </tr>
+                        )
+                      }
+                    )
                   )
-                )
+                }
               }
             )}
             </tbody>

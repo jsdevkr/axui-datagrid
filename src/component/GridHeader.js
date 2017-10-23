@@ -16,7 +16,7 @@ class GridHeader extends React.Component {
       this.props.mounted !== nextProps.mounted ||
       JSON.stringify(this.props.optionsHeader) !== JSON.stringify(nextProps.optionsHeader) ||
       JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
-      JSON.stringify(this.props.colGroup) !== JSON.stringify(nextProps.colGroup) ||
+      JSON.stringify(this.props.headerColGroup) !== JSON.stringify(nextProps.headerColGroup) ||
       this.props.scrollLeft !== nextProps.scrollLeft
     ) {
       sameProps = true;
