@@ -582,6 +582,19 @@ export function setColGroupWidth(_colGroup, container, options) {
       });
     }
   }
+  // 컬럼의 시작위치와 끝위치 계산
+  for (i = options.frozenColumnIndex; i < _colGroup.size; i++) {
+    _colGroup.update(i, O => {
+      const prevCol = _colGroup.get(i-1);
+      if (i === options.frozenColumnIndex) {
+        O._sx = 0;
+      } else {
+        O._sx = prevCol._ex;
+      }
+      O._ex = O._sx + O._width;
+      return O;
+    });
+  }
 
   return _colGroup;
 }

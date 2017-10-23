@@ -94,6 +94,8 @@ class GridRoot extends React.Component {
     this.state = {
       scrollLeft: 0,
       scrollTop: 0,
+      sColIndex: null,
+      eColIndex: null,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
       options: (() => {
         let options = extend({}, defaultOptions);
@@ -155,7 +157,7 @@ class GridRoot extends React.Component {
           clientWidth: this.gridStyles.scrollContentContainerWidth,
           clientHeight: this.gridStyles.scrollContentContainerHeight
         });
-
+        if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -177,7 +179,7 @@ class GridRoot extends React.Component {
       clientWidth: this.gridStyles.scrollContentContainerWidth,
       clientHeight: this.gridStyles.scrollContentContainerHeight
     });
-
+    if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
@@ -206,7 +208,7 @@ class GridRoot extends React.Component {
       clientWidth: this.gridStyles.scrollContentContainerWidth,
       clientHeight: this.gridStyles.scrollContentContainerHeight
     });
-
+    if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
@@ -244,6 +246,7 @@ class GridRoot extends React.Component {
         },
         horizontal: () => {
           let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
+          if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
           this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop
@@ -286,6 +289,7 @@ class GridRoot extends React.Component {
       },
       horizontal: () => {
         let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -294,6 +298,32 @@ class GridRoot extends React.Component {
     };
 
     if (barName in processor) processor[barName]();
+  }
+
+  onChangedScrollLeft(scrollLeft) {
+    if (scrollLeft > 0) scrollLeft = 0;
+    scrollLeft = Math.abs(scrollLeft);
+    const headerColGroup = this.props.gridState.get('headerColGroup');
+    const styles = this.gridStyles;
+    const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+
+    let sColIndex, eColIndex;
+    // 프린트 컬럼 시작점과 끝점 연산
+    headerColGroup.forEach((col, ci) => {
+      if (col._sx <= scrollLeft && col._ex >= scrollLeft) {
+        sColIndex = ci;
+      }
+      if (col._sx <= scrollLeft + bodyPanelWidth && col._ex >= scrollLeft + bodyPanelWidth) {
+        eColIndex = ci + 1;
+        return false;
+      }
+    });
+
+    this.state.sColIndex = sColIndex;
+    this.state.eColIndex = eColIndex;
+    this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex);
+
+    console.log("scrollLeft : " + scrollLeft, "bodyPanelWidth : " + bodyPanelWidth, sColIndex, eColIndex, this.state._headerColGroup.toJS());
   }
 
   refCallback(_key, el) {
@@ -307,8 +337,12 @@ class GridRoot extends React.Component {
     const options = gridState.get('options').toJS();
     const mounted = gridState.get("mounted");
 
+    if (mounted && this.state.sColIndex === null) {
+      this.onChangedScrollLeft(0);
+    }
+
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
-    if(styles.calculatedHeight !== null){
+    if (styles.calculatedHeight !== null) {
       gridRootStyle.height = styles.calculatedHeight;
     }
     if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지

@@ -108,6 +108,9 @@ class GridBody extends React.Component {
                           key={ri}
                           className="">
                           {row.cols.map((col, ci) => {
+
+
+
                             let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                             let classNameItmes = {};
                             classNameItmes[sass.hasBorder] = true;
@@ -145,7 +148,8 @@ class GridBody extends React.Component {
       eRowIndex: options.frozenRowIndex
     };
     let bodyScrollConfig = {
-      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex
+      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
+      sColIndex: (0)
     };
     bodyScrollConfig.eRowIndex = bodyScrollConfig.sRowIndex + Math.ceil(styles.bodyHeight / styles.bodyTrHeight);
 

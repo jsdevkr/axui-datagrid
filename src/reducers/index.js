@@ -247,6 +247,7 @@ const grid = (state = initialState, action) => {
 
     [act.DID_MOUNT]: () => {
       const {styles} = UTIL.calculateDimensions(state, action);
+
       return state
         .set('mounted', true)
         .set('styles', Map(styles));
