@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {each, extend, extendOwn, isObject, throttle} from 'underscore';
+import {Map} from 'immutable';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
@@ -96,6 +97,7 @@ class GridRoot extends React.Component {
       scrollTop: 0,
       sColIndex: null,
       eColIndex: null,
+      scrollPaddingLeft: 0,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
       options: (() => {
         let options = extend({}, defaultOptions);
@@ -302,7 +304,7 @@ class GridRoot extends React.Component {
 
   onChangedScrollLeft(scrollLeft) {
     if (scrollLeft > 0) scrollLeft = 0;
-    if (this.state.sColIndex !== null && Math.abs(Math.abs(scrollLeft) - Math.abs(this.state.scrollLeft)) < 10) return false;
+    // if (this.state.sColIndex !== null && Math.abs(Math.abs(scrollLeft) - Math.abs(this.state.scrollLeft)) < 10) return false;
 
     scrollLeft = Math.abs(scrollLeft);
     const headerColGroup = this.props.gridState.get('headerColGroup');
@@ -316,16 +318,19 @@ class GridRoot extends React.Component {
         sColIndex = ci;
       }
       if (col._sx <= scrollLeft + bodyPanelWidth && col._ex >= scrollLeft + bodyPanelWidth) {
-        eColIndex = ci + 1;
+        eColIndex = ci;
         return false;
       }
     });
 
-    if (this.state.sColIndex !== sColIndex) {
+    if (this.state.sColIndex !== sColIndex || this.state.eColIndex !== eColIndex) {
       this.state.sColIndex = sColIndex;
       this.state.eColIndex = eColIndex;
-      this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex);
-      console.log("scrollLeft : " + scrollLeft, "bodyPanelWidth : " + bodyPanelWidth, sColIndex, eColIndex, this.state._headerColGroup.toJS());
+      this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex + 1);
+      this.state.scrollPaddingLeft = this.state._headerColGroup.get(0)._sx;
+      this.state._bodyRowData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyRowData'), sColIndex, eColIndex + 1));
+      this.state._bodyGroupingData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyGroupingData'), sColIndex, eColIndex + 1));
+      // console.log(this.state._bodyRowData.get('rows')[0].cols[0]);
     }
   }
 
@@ -390,20 +395,21 @@ class GridRoot extends React.Component {
           colGroup={gridState.get('colGroup')}
           asideColGroup={gridState.get('asideColGroup')}
           leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-          headerColGroup={gridState.get('headerColGroup')}
+          headerColGroup={this.state._headerColGroup}
 
           bodyTable={gridState.get('bodyRowTable')}
           asideBodyRowData={gridState.get('asideBodyRowData')}
           asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
           leftBodyRowData={gridState.get('leftBodyRowData')}
           leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
-          bodyRowData={gridState.get('bodyRowData')}
-          bodyGroupingData={gridState.get('bodyGroupingData')}
+          bodyRowData={this.state._bodyRowData}
+          bodyGroupingData={this.state._bodyGroupingData}
 
           list={gridState.get('list')}
 
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}
+          scrollPaddingLeft={this.state.scrollPaddingLeft}
         />
         <GridPage
           refCallback={this.refCallback}

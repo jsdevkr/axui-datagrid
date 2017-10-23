@@ -73,7 +73,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
               rightCol = extend({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
-          rightCol.colIndex = _frozenColumnIndex;
+          rightCol.colIndex = 0;
           rightCol.colspan = col.colspan - leftCol.colspan;
 
           tempTable_l.rows[r].cols.push(leftCol);
@@ -84,7 +84,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
       }
       else {
         // 오른편
-        tempTable_r.rows[r].cols.push(col);
+        tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
       }
 
       col = null;
@@ -115,31 +115,32 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
  */
 export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnIndex) {
   let tempTable = {rows: []};
-  for (let r = 0, rl = _table.rows.length; r < rl; r++) {
-    let row = _table.rows[r];
-    tempTable.rows[r] = {cols: []};
-    for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col = extend({}, row.cols[c]);
-      let colStartIndex = col.colIndex;
-      let colEndIndex = col.colIndex + col.colspan;
 
-      if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
-        if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
-          // 변형없이 추가
-          tempTable.rows[r].cols.push(col);
-        }
-        else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
-          // 앞에서 걸친경우
-          col.colspan = colEndIndex - _startColumnIndex;
-          tempTable.rows[r].cols.push(col);
-        }
-        else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
-          tempTable.rows[r].cols.push(col);
+  if (_table.size > 0) {
+    _table.get("rows").forEach((row, r) => {
+      tempTable.rows[r] = {cols: []};
+      for (let c = 0, cl = row.cols.length; c < cl; c++) {
+        let col = extend({}, row.cols[c]);
+        let colStartIndex = col.colIndex;
+        let colEndIndex = col.colIndex + col.colspan;
+
+        if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
+          if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
+            // 변형없이 추가
+            tempTable.rows[r].cols.push(col);
+          }
+          else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
+            // 앞에서 걸친경우
+            col.colspan = colEndIndex - _startColumnIndex;
+            tempTable.rows[r].cols.push(col);
+          }
+          else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
+            tempTable.rows[r].cols.push(col);
+          }
         }
       }
-    }
+    });
   }
-
   return tempTable;
 }
 
@@ -585,7 +586,7 @@ export function setColGroupWidth(_colGroup, container, options) {
   // 컬럼의 시작위치와 끝위치 계산
   for (i = options.frozenColumnIndex; i < _colGroup.size; i++) {
     _colGroup.update(i, O => {
-      const prevCol = _colGroup.get(i-1);
+      const prevCol = _colGroup.get(i - 1);
       if (i === options.frozenColumnIndex) {
         O._sx = 0;
       } else {

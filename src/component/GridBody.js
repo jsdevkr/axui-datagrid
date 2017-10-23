@@ -47,7 +47,8 @@ class GridBody extends React.Component {
           bodyGroupingData      = this.props.bodyGroupingData,
           list                  = this.props.list,
           scrollLeft            = this.props.scrollLeft,
-          scrollTop             = this.props.scrollTop;
+          scrollTop             = this.props.scrollTop,
+          scrollPaddingLeft     = this.props.scrollPaddingLeft;
 
     if (!mounted) return null;
 
@@ -82,6 +83,9 @@ class GridBody extends React.Component {
       };
 
       _style.paddingTop = _scrollConfig.sRowIndex * styles.bodyTrHeight;
+      if(_scrollConfig.paddingLeft) {
+        _style.paddingLeft = _scrollConfig.paddingLeft;
+      }
 
       return (
         <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
@@ -108,7 +112,6 @@ class GridBody extends React.Component {
                           key={ri}
                           className="">
                           {row.cols.map((col, ci) => {
-
 
 
                             let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
@@ -151,7 +154,7 @@ class GridBody extends React.Component {
       sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
       sColIndex: (0)
     };
-    bodyScrollConfig.eRowIndex = bodyScrollConfig.sRowIndex + Math.ceil(styles.bodyHeight / styles.bodyTrHeight);
+    bodyScrollConfig.eRowIndex = bodyScrollConfig.sRowIndex + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1;
 
     let topAsideBodyPanelStyle = {
       left: 0,
@@ -250,7 +253,7 @@ class GridBody extends React.Component {
         ) : null}
 
         <div data-scroll-container="body-scroll-container" style={bodyPanelStyle} ref={ref => refCallback("body-scroll-container", ref)}>
-          {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, bodyScrollConfig, bodyScrollStyle)}
+          {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, Object.assign({}, bodyScrollConfig, {paddingLeft: scrollPaddingLeft}), bodyScrollStyle)}
         </div>
 
         {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
