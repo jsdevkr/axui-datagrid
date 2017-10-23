@@ -302,6 +302,8 @@ class GridRoot extends React.Component {
 
   onChangedScrollLeft(scrollLeft) {
     if (scrollLeft > 0) scrollLeft = 0;
+    if (this.state.sColIndex !== null && Math.abs(Math.abs(scrollLeft) - Math.abs(this.state.scrollLeft)) < 10) return false;
+
     scrollLeft = Math.abs(scrollLeft);
     const headerColGroup = this.props.gridState.get('headerColGroup');
     const styles = this.gridStyles;
@@ -319,11 +321,12 @@ class GridRoot extends React.Component {
       }
     });
 
-    this.state.sColIndex = sColIndex;
-    this.state.eColIndex = eColIndex;
-    this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex);
-
-    console.log("scrollLeft : " + scrollLeft, "bodyPanelWidth : " + bodyPanelWidth, sColIndex, eColIndex, this.state._headerColGroup.toJS());
+    if (this.state.sColIndex !== sColIndex) {
+      this.state.sColIndex = sColIndex;
+      this.state.eColIndex = eColIndex;
+      this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex);
+      console.log("scrollLeft : " + scrollLeft, "bodyPanelWidth : " + bodyPanelWidth, sColIndex, eColIndex, this.state._headerColGroup.toJS());
+    }
   }
 
   refCallback(_key, el) {
