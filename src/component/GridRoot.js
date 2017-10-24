@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {each, extend, extendOwn, isObject, throttle} from 'underscore';
+import {each, extend, extendOwn, isEqual, isObject, throttle} from 'underscore';
 import {Map} from 'immutable';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
@@ -322,10 +322,9 @@ class GridRoot extends React.Component {
     let _scrollLeft = Math.abs(this.state.scrollLeft);
     let bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
     let sColIndex = 0, eColIndex = headerColGroup.size;
-    let _headerColGroup;
-    let _bodyRowData;
-    let _bodyGroupingData;
-
+    let _headerColGroup = headerColGroup;
+    let _bodyRowData = gridState.get('bodyRowData');
+    let _bodyGroupingData = gridState.get('bodyGroupingData');
 
     // 프린트 컬럼 시작점과 끝점 연산
     if (mounted) {
@@ -340,10 +339,10 @@ class GridRoot extends React.Component {
       });
       _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
 
-      if (_headerColGroup !== this.data._headerColGroup) {
+      if (typeof this.data._headerColGroup == "undefined" || !isEqual(this.data._headerColGroup, _headerColGroup)) {
         this.data.sColIndex = sColIndex;
         this.data.eColIndex = eColIndex;
-        this.data._headerColGroup = headerColGroup;
+        this.data._headerColGroup = _headerColGroup;
         _bodyRowData = this.data._bodyRowData = Map(UTIL.getTableByStartEndColumnIndex(gridState.get('bodyRowData'), sColIndex, eColIndex + 1));
         _bodyGroupingData = this.data._bodyGroupingData = Map(UTIL.getTableByStartEndColumnIndex(gridState.get('bodyGroupingData'), sColIndex, eColIndex + 1));
       } else {
@@ -404,9 +403,6 @@ class GridRoot extends React.Component {
 
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}
-          sColIndex={this.state.sColIndex}
-          eColIndex={this.state.eColIndex}
-          //scrollPaddingLeft={this.state.scrollPaddingLeft}
         />
         <GridPage
           refCallback={this.refCallback}
