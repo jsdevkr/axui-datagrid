@@ -351,7 +351,6 @@ const grid = (state = initialState, action) => {
         footSumData = dividedObj.rightData;
       }
 
-
       // grouping info
       if (options.body.grouping) {
         if ("by" in options.body.grouping && "columns" in options.body.grouping) {

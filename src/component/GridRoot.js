@@ -91,13 +91,14 @@ class GridRoot extends React.Component {
     // props에 추가된 액션만 호출 가능
     this.gridStyles = {};
     this.componentRefs = {};
-    this.data = {}; // 내부연산용 데이터 저장소
+    this.data = {
+      sColIndex: -1,
+      eColIndex: -1
+    };
+    // 내부연산용 데이터 저장소
     this.state = {
       scrollLeft: 0,
       scrollTop: 0,
-      sColIndex: null,
-      eColIndex: null,
-      scrollPaddingLeft: 0,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
       options: (() => {
         let options = extend({}, defaultOptions);
@@ -137,14 +138,16 @@ class GridRoot extends React.Component {
         each(nextProps.options, (v, k) => {
           this.state.options[k] = (isObject(v)) ? extendOwn(this.state.options[k], v) : v;
         });
-        this.setState({
-          options: this.state.options
-        });
       }
 
-      //this.props.changeOptions(nextProps, this.gridRootNode, this.state.options);
       this.props.updateProps(nextProps, this.gridRootNode, this.state.options);
+      this.data.sColIndex = -1;
+      this.data.eColIndex = -1;
     }
+  }
+
+  componentWillUpdate(nextProps) {
+    // console.log(this.state.sColIndex);
   }
 
   // change props and render
@@ -159,13 +162,11 @@ class GridRoot extends React.Component {
           clientWidth: this.gridStyles.scrollContentContainerWidth,
           clientHeight: this.gridStyles.scrollContentContainerHeight
         });
-        if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
         });
       });
-
     }
   }
 
@@ -181,7 +182,6 @@ class GridRoot extends React.Component {
       clientWidth: this.gridStyles.scrollContentContainerWidth,
       clientHeight: this.gridStyles.scrollContentContainerHeight
     });
-    this.onChangedScrollLeft(scrollLeft);
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
@@ -210,7 +210,6 @@ class GridRoot extends React.Component {
       clientWidth: this.gridStyles.scrollContentContainerWidth,
       clientHeight: this.gridStyles.scrollContentContainerHeight
     });
-    if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
     this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop
@@ -248,7 +247,6 @@ class GridRoot extends React.Component {
         },
         horizontal: () => {
           let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
-          if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
           this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop
@@ -291,7 +289,6 @@ class GridRoot extends React.Component {
       },
       horizontal: () => {
         let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
-        if (this.state.scrollLeft !== scrollLeft) this.onChangedScrollLeft(scrollLeft);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -300,51 +297,6 @@ class GridRoot extends React.Component {
     };
 
     if (barName in processor) processor[barName]();
-  }
-
-  onChangedScrollLeft(scrollLeft) {
-    if (scrollLeft > 0) scrollLeft = 0;
-    // if (this.state.sColIndex !== null && Math.abs(Math.abs(scrollLeft) - Math.abs(this.state.scrollLeft)) < 10) return false;
-
-    scrollLeft = Math.abs(scrollLeft);
-    const headerColGroup = this.props.gridState.get('headerColGroup');
-    const styles = this.gridStyles;
-    const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
-
-    let sColIndex, eColIndex = headerColGroup.size;
-    // 프린트 컬럼 시작점과 끝점 연산
-    headerColGroup.forEach((col, ci) => {
-      if (col._sx <= scrollLeft && col._ex >= scrollLeft) {
-        sColIndex = ci;
-      }
-      if (col._sx <= scrollLeft + bodyPanelWidth && col._ex >= scrollLeft + bodyPanelWidth) {
-        eColIndex = ci;
-        return false;
-      }
-    });
-
-    if (this.state.sColIndex !== sColIndex || this.state.eColIndex !== eColIndex) {
-      this.state.sColIndex = sColIndex;
-      this.state.eColIndex = eColIndex;
-
-      this.state._headerColGroup = this.props.gridState.get('headerColGroup').slice(sColIndex, eColIndex + 1);
-      this.state.scrollPaddingLeft = this.state._headerColGroup.get(0)._sx;
-      this.state._bodyRowData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyRowData'), sColIndex, eColIndex + 1));
-      this.state._bodyGroupingData = Map(UTIL.getTableByStartEndColumnIndex(this.props.gridState.get('bodyGroupingData'), sColIndex, eColIndex + 1));
-
-
-      //console.log(this.state._headerColGroup.toJS());
-      /*
-      if (this.state._headerColGroup.size > 0) {
-
-      }else{
-        this.state._headerColGroup = this.props.gridState.get('headerColGroup');
-        this.state.scrollPaddingLeft = 0;
-        this.state._bodyRowData = this.props.gridState.get('bodyRowData');
-        this.state._bodyGroupingData = this.props.gridState.get('bodyGroupingData');
-      }
-      */
-    }
   }
 
   refCallback(_key, el) {
@@ -357,10 +309,7 @@ class GridRoot extends React.Component {
     const styles = this.gridStyles = gridState.get('styles').toJS();
     const options = gridState.get('options').toJS();
     const mounted = gridState.get("mounted");
-
-    if (mounted && this.state.sColIndex === null) {
-      this.onChangedScrollLeft(0);
-    }
+    const headerColGroup = gridState.get('headerColGroup');
 
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
     if (styles.calculatedHeight !== null) {
@@ -368,6 +317,39 @@ class GridRoot extends React.Component {
     }
     if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지
       gridRootStyle["userSelect"] = "none";
+    }
+
+    let _scrollLeft = Math.abs(this.state.scrollLeft);
+    let bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+    let sColIndex = 0, eColIndex = headerColGroup.size;
+    let _headerColGroup;
+    let _bodyRowData;
+    let _bodyGroupingData;
+
+
+    // 프린트 컬럼 시작점과 끝점 연산
+    if (mounted) {
+      headerColGroup.forEach((col, ci) => {
+        if (col._sx <= _scrollLeft && col._ex >= _scrollLeft) {
+          sColIndex = ci;
+        }
+        if (col._sx <= _scrollLeft + bodyPanelWidth && col._ex >= _scrollLeft + bodyPanelWidth) {
+          eColIndex = ci;
+          return false;
+        }
+      });
+      _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
+
+      if (_headerColGroup !== this.data._headerColGroup) {
+        this.data.sColIndex = sColIndex;
+        this.data.eColIndex = eColIndex;
+        this.data._headerColGroup = headerColGroup;
+        _bodyRowData = this.data._bodyRowData = Map(UTIL.getTableByStartEndColumnIndex(gridState.get('bodyRowData'), sColIndex, eColIndex + 1));
+        _bodyGroupingData = this.data._bodyGroupingData = Map(UTIL.getTableByStartEndColumnIndex(gridState.get('bodyGroupingData'), sColIndex, eColIndex + 1));
+      } else {
+        _bodyRowData = this.data._bodyRowData;
+        _bodyGroupingData = this.data._bodyGroupingData;
+      }
     }
 
     return (
@@ -408,21 +390,23 @@ class GridRoot extends React.Component {
           colGroup={gridState.get('colGroup')}
           asideColGroup={gridState.get('asideColGroup')}
           leftHeaderColGroup={gridState.get('leftHeaderColGroup')}
-          headerColGroup={this.state._headerColGroup}
+          headerColGroup={_headerColGroup}
 
           bodyTable={gridState.get('bodyRowTable')}
           asideBodyRowData={gridState.get('asideBodyRowData')}
           asideBodyGroupingData={gridState.get('asideBodyGroupingData')}
           leftBodyRowData={gridState.get('leftBodyRowData')}
           leftBodyGroupingData={gridState.get('leftBodyGroupingData')}
-          bodyRowData={this.state._bodyRowData}
-          bodyGroupingData={this.state._bodyGroupingData}
+          bodyRowData={_bodyRowData}
+          bodyGroupingData={_bodyGroupingData}
 
           list={gridState.get('list')}
 
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}
-          scrollPaddingLeft={this.state.scrollPaddingLeft}
+          sColIndex={this.state.sColIndex}
+          eColIndex={this.state.eColIndex}
+          //scrollPaddingLeft={this.state.scrollPaddingLeft}
         />
         <GridPage
           refCallback={this.refCallback}

@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
-import {Range} from 'immutable';
+import {Map, Range} from 'immutable';
+import * as UTIL from '../_inc/utils';
 
 class GridBody extends React.Component {
   constructor(props) {
@@ -47,10 +48,11 @@ class GridBody extends React.Component {
           bodyGroupingData      = this.props.bodyGroupingData,
           list                  = this.props.list,
           scrollLeft            = this.props.scrollLeft,
-          scrollTop             = this.props.scrollTop,
-          scrollPaddingLeft     = this.props.scrollPaddingLeft;
+          scrollTop             = this.props.scrollTop;
 
     if (!mounted) return null;
+
+    let scrollPaddingLeft = headerColGroup.get(0)._sx;
 
     const _paintBody = function (_panelName, _style) {
       return (
@@ -83,7 +85,7 @@ class GridBody extends React.Component {
       };
 
       _style.paddingTop = _scrollConfig.sRowIndex * styles.bodyTrHeight;
-      if(_scrollConfig.paddingLeft) {
+      if (_scrollConfig.paddingLeft) {
         _style.paddingLeft = _scrollConfig.paddingLeft;
       }
 
@@ -104,7 +106,7 @@ class GridBody extends React.Component {
             {Range(_scrollConfig.sRowIndex, _scrollConfig.eRowIndex).map(
               (li) => {
                 const item = _list.get(li);
-                if(item){
+                if (item) {
                   return (
                     _bodyRow.get('rows').map(
                       (row, ri) => {
