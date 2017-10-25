@@ -9,7 +9,6 @@ export function init(props, options) {
 
   return {
     type: INIT,
-    columns: props.columns,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
     options: options

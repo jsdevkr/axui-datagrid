@@ -62,7 +62,7 @@ class GridHeader extends React.Component {
         }
 
         if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-          sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup.get(_col.colIndex).sort} />;
+          sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup[_col.colIndex].sort} />;
         }
 
         if (_col.colIndex !== null && typeof _col.colIndex !== "undefined" && optionsHeader.enableFilter) {
@@ -98,7 +98,7 @@ class GridHeader extends React.Component {
               <col />
             </colgroup>
             <tbody>
-            {_bodyRow.get('rows').map(
+            {_bodyRow.rows.map(
               (row, ri) => {
                 return (
                   <tr
@@ -133,7 +133,7 @@ class GridHeader extends React.Component {
 
           {_colGroup.map(
             (col, ci) => {
-              let resizerHeight = optionsHeader.columnHeight * _bodyRow.get('rows').size - optionsHeader.columnBorderWidth;
+              let resizerHeight = optionsHeader.columnHeight * _bodyRow.rows.size - optionsHeader.columnBorderWidth;
               let resizer, resizerLeft = 0;
               if (col.colIndex !== null && typeof col.colIndex !== "undefined") {
                 resizerLeft += col._width;

@@ -52,7 +52,7 @@ class GridBody extends React.Component {
 
     if (!mounted) return null;
 
-    let scrollPaddingLeft = headerColGroup.get(0)._sx;
+    let scrollPaddingLeft = (headerColGroup[0]) ? headerColGroup[0]._sx : 0;
 
     const _paintBody = function (_panelName, _style) {
       return (
@@ -63,7 +63,7 @@ class GridBody extends React.Component {
     };
 
     const paintBody = function (_panelName, _colGroup, _bodyRow, _groupRow, _list, _scrollConfig, _style) {
-
+      
       const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
         let lineHeight = (options.body.columnHeight - options.body.columnPadding * 2 - options.body.columnBorderWidth);
         let colAlign = options.body.align || _col.align;
@@ -108,22 +108,19 @@ class GridBody extends React.Component {
                 const item = _list.get(li);
                 if (item) {
                   return (
-                    _bodyRow.get('rows').map(
+                    _bodyRow.rows.map(
                       (row, ri) => {
                         return (
                           <tr
                             key={ri}
                             className="">
                             {row.cols.map((col, ci) => {
-
-
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItmes = {};
                               classNameItmes[sass.hasBorder] = true;
                               if (row.cols.length == ci + 1) {
                                 classNameItmes[sass.isLastColumn] = true;
                               }
-
                               return (
                                 <td
                                   key={ci}
@@ -155,8 +152,7 @@ class GridBody extends React.Component {
       eRowIndex: options.frozenRowIndex
     };
     let bodyScrollConfig = {
-      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
-      sColIndex: (0)
+      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex
     };
     bodyScrollConfig.eRowIndex = bodyScrollConfig.sRowIndex + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1;
 

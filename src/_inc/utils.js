@@ -116,8 +116,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
 export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnIndex) {
   let tempTable = {rows: []};
 
-  if (_table.size > 0) {
-    _table.get("rows").forEach((row, r) => {
+  if ('rows' in _table) {
+    _table.rows.forEach((row, r) => {
       tempTable.rows[r] = {cols: []};
       for (let c = 0, cl = row.cols.length; c < cl; c++) {
         let col = extend({}, row.cols[c]);
@@ -627,15 +627,15 @@ export function getOuterHeight(element) {
  * @param [styles=state.get('styles').toJS()]
  * @return {{styles: (any | *)}}
  */
-export function calculateDimensions(state, action, colGroup = state.get("colGroup"), options = state.get('options').toJS(), styles = state.get('styles').toJS()) {
-  let list = state.get('list');
-  let footSumColumns = state.get('footSumColumns');
-  let headerTable = state.get('headerTable');
+export function calculateDimensions(containerDOM, gridState, state, colGroup = state.colGroup, options = state.options, styles = state.styles) {
+  let list = gridState.get('list');
+  let footSumColumns = state.footSumColumns;
+  let headerTable = state.headerTable;
 
   styles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
 
-  styles.elWidth = getInnerWidth(action.containerDOM);
-  styles.elHeight = getInnerHeight(action.containerDOM);
+  styles.elWidth = getInnerWidth(containerDOM);
+  styles.elHeight = getInnerHeight(containerDOM);
 
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
@@ -646,14 +646,14 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.frozenPanelWidth = ((colGroup, endIndex) => {
     let width = 0;
     for (let i = 0, l = endIndex; i < l; i++) {
-      width += colGroup.get(i)._width;
+      width += colGroup[i]._width;
     }
     return width;
   })(colGroup, options.frozenColumnIndex);
-  styles.headerHeight = (options.header.display) ? headerTable.get('rows').length * options.header.columnHeight : 0;
+  styles.headerHeight = (options.header.display) ? headerTable.rows.length * options.header.columnHeight : 0;
 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
-  styles.footSumHeight = footSumColumns.size * styles.bodyTrHeight;
+  styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
   styles.pageHeight = (options.page.display) ? options.page.height : 0;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
@@ -668,9 +668,10 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
     return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
   })();
 
-  styles.scrollContentWidth = state.get('headerColGroup').reduce((prev, curr) => {
+  styles.scrollContentWidth = state.headerColGroup.reduce((prev, curr) => {
     return (prev._width || prev) + curr._width
   });
+  
   styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
 
   if (styles.horizontalScrollerHeight > 0) {
@@ -688,11 +689,11 @@ export function calculateDimensions(state, action, colGroup = state.get("colGrou
   styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
 
-  styles.verticalScrollBarHeight = styles.scrollContentContainerHeight * styles.CTInnerHeight / styles.scrollContentHeight;
-  styles.horizontalScrollBarWidth = styles.scrollContentContainerWidth * styles.CTInnerWidth / styles.scrollContentWidth;
+  styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.CTInnerHeight / styles.scrollContentHeight : 0;
+  styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.CTInnerWidth / styles.scrollContentWidth : 0;
 
   if (options.scroller.useVerticalScroll) {
-    styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
+    styles.calculatedHeight = list.length * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
     styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;
     styles.verticalScrollerWidth = 0;
     styles.CTInnerWidth = styles.elWidth;
