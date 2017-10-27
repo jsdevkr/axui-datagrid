@@ -45,7 +45,7 @@ const gridOptions = {
   },
   frozenColumnIndex: 1,
   showLineNumber: true,
-  showRowSelector: true,
+  showRowSelector: false,
   columnKeys: {
     modified: "__ABC__"
   },

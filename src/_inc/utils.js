@@ -30,7 +30,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           width: options.lineNumberColumnWidth,
           _width: options.lineNumberColumnWidth,
           columnAttr: "lineNumber",
-          key: "__index_header__", label: ""
+          key: "__line_number__", label: ""
         });
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);
@@ -42,7 +42,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           width: options.rowSelectorColumnWidth,
           _width: options.rowSelectorColumnWidth,
           columnAttr: "rowSelector",
-          key: "__checkbox_header__", label: ""
+          key: "__row_selector__", label: ""
         });
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);

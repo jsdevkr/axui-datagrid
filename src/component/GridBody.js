@@ -71,7 +71,15 @@ class GridBody extends React.Component {
         let colAlign = options.body.align || _col.align;
         let label;
 
-        label = _item[_col.key];
+        if(_col.key === "__line_number__"){
+          label = _itemIdx + 1;
+        }
+        else if(_col.key === "__row_selector__"){
+          label = <div class="checkBox" style={{maxHeight: (_col.width - 10) + 'px', minHeight:(_col.width - 10) + 'px'}}></div>;
+        }
+        else{
+          label = _item[_col.key];
+        }
 
         return (
           <span
@@ -233,6 +241,7 @@ class GridBody extends React.Component {
       left: scrollLeft
     };
 
+    console.log('render body');
     return (
       <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
         {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}

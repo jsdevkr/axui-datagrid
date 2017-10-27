@@ -19,7 +19,7 @@ const defaultOptions = {
   showRowSelector: false,
   multipleSelect: true,
   columnMinWidth: 100,
-  lineNumberColumnWidth: 30,
+  lineNumberColumnWidth: 40,
   rowSelectorColumnWidth: 26,
   sortable: false,
   remoteSort: false,
@@ -293,9 +293,13 @@ class GridRoot extends React.Component {
     }
 
     if (this.props.options !== nextProps.options || this.props.columns !== nextProps.columns) {
-      this.setState(propsToState(nextProps, extend({}, this.state)));
+      this.data._headerColGroup = undefined;
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
+
+      let newState = propsToState(nextProps, extend({}, this.state, {scrollLeft:0, scrollTop: 0}));
+      newState.styles = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, newState).styles;
+      this.setState(newState);
     }
   }
 
