@@ -1,4 +1,4 @@
-import {List} from 'immutable';
+import {List, Map} from 'immutable';
 import {extend, isArray, isNumber, isObject} from "underscore";
 
 /**
@@ -627,8 +627,8 @@ export function getOuterHeight(element) {
  * @param [styles=state.get('styles').toJS()]
  * @return {{styles: (any | *)}}
  */
-export function calculateDimensions(containerDOM, gridState, state, colGroup = state.colGroup, options = state.options, styles = state.styles) {
-  let list = gridState.get('list');
+export function calculateDimensions(containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = Map(state.styles).toJS()) {
+  let list = storeState.list;
   let footSumColumns = state.footSumColumns;
   let headerTable = state.headerTable;
 
@@ -701,7 +701,7 @@ export function calculateDimensions(containerDOM, gridState, state, colGroup = s
   }
 
   return {
-    styles
+    styles: styles
   }
 }
 

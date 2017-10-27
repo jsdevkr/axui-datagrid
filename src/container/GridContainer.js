@@ -4,16 +4,18 @@ import GridRoot from '../component/GridRoot';
 
 const mapStateToProps = (state) => {
   return {
-    gridState: state
+    store_receivedList: state.get("receivedList"),
+    store_deletedList: state.get("deletedList"),
+    store_list: state.get("list"),
+    store_page: state.get("page"),
+    store_sortInfo: state.get("sortInfo")
   }
 };
 
 // 액션함수 준비
 const mapToDispatch = (dispatch) => ({
   init: (props, options) => dispatch(act.init(props, options)),
-  didMount: (props, containerDOM) => dispatch(act.didMount(props, containerDOM)),
-  align: (props, containerDOM) => dispatch(act.align(props, containerDOM)),
-  setData: (data) => dispatch(act.setData(data)),
+  setData: (data, options) => dispatch(act.setData(data, options)),
   updateProps: (props, containerDOM, options) => dispatch(act.updateProps(props, containerDOM, options))
 });
 

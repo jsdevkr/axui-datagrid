@@ -47,6 +47,7 @@ class GridScroll extends React.Component {
           scrollBarTop             = this.props.scrollBarTop;
 
     if (!mounted) return null;
+    
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
 
     let verticalStyles = {

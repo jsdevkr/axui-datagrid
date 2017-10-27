@@ -15,33 +15,16 @@ export function init(props, options) {
   }
 }
 
-export const DID_MOUNT = 'DID_MOUNT';
-export function didMount(props, containerDOM) {
-  return {
-    type: DID_MOUNT,
-    containerDOM: containerDOM
-  }
-}
-
 /* 그리드 데이터 변경 */
 export const SET_DATA= 'SET_DATA';
-export function setData(data) {
+export function setData(data, options) {
   let Obj_data = propsConverterForData(data);
 
   return {
     type: SET_DATA,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
-  }
-}
-
-
-/* 컨테이너의 크기가 변경되어 엘리먼트의 크기를 조정해야 할 때 */
-export const ALIGN = 'ALIGN';
-export function align(props, containerDOM) {
-  return {
-    type: ALIGN,
-    containerDOM: containerDOM
+    options: options
   }
 }
 

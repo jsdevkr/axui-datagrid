@@ -38,22 +38,11 @@ const grid = (state = initialState, action) => {
         .set('page', isObject(action.page) ? Map(action.page) : false);
     },
 
-    [act.DID_MOUNT]: () => {
-      const {styles} = UTIL.calculateDimensions(state, action);
-
-      return state
-        .set('mounted', true)
-        .set('styles', Map(styles));
-    },
-
     [act.SET_DATA]: () => {
-      let options = state.get('options').toJS();
-      let styles = state.get('styles').toJS();
-
       // 전달받은 리스트 중에 출력할 리스트를 필터링
       let list = action.receivedList.filter(function (item) {
         if (item) {
-          if (item[options.columnKeys.deleted]) {
+          if (item[action.options.columnKeys.deleted]) {
             return false;
           } else {
             return true;
@@ -63,19 +52,11 @@ const grid = (state = initialState, action) => {
       });
 
       list = List(list);
-      styles = UTIL.calculateDimensionsByList(state, list);
 
       return state
-        .set('styles', Map(styles))
         .set('receivedList', List(action.receivedList))
         .set('list', list)
         .set('page', isObject(action.page) ? Map(action.page) : false)
-    },
-
-    [act.ALIGN]: () => {
-      const {styles} = UTIL.calculateDimensions(state, action);
-      return state
-        .set('styles', Map(styles));
     },
 
     [act.UPDATE_PROPS]: () => {

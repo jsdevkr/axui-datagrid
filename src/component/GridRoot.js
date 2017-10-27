@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {each, extend, extendOwn, isEqual, isObject, isArray, throttle} from 'underscore';
-import {Map, List} from 'immutable';
+import {each, extend, extendOwn, isArray, isEqual, isObject, throttle} from 'underscore';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
@@ -85,11 +84,99 @@ const defaultOptions = {
   footSum: false
 };
 
+const propsToState = function (props, state) {
+  let dividedObj;
+
+  // state 계산영역 시작
+  state.headerTable = UTIL.makeHeaderTable(props.columns, state.options);
+  state.bodyRowTable = UTIL.makeBodyRowTable(props.columns, state.options);
+  state.bodyRowMap = UTIL.makeBodyRowMap(state.bodyRowTable, state.options);
+
+  dividedObj = UTIL.divideTableByFrozenColumnIndex(state.headerTable, state.options.frozenColumnIndex, state.options);
+  state.asideHeaderData = dividedObj.asideData;
+  state.asideColGroup = dividedObj.asideColGroup; // asideColGroup은 header, bodyRow 에서 공통으로 사용 한번만 구하면 그만이지만 편의상 header에서 처리하기로 한다.
+  state.leftHeaderData = dividedObj.leftData;
+  state.headerData = dividedObj.rightData;
+  state.styles.asidePanelWidth = dividedObj.asidePanelWidth;
+
+  dividedObj = UTIL.divideTableByFrozenColumnIndex(state.bodyRowTable, state.options.frozenColumnIndex, state.options);
+  state.asideBodyRowData = dividedObj.asideData;
+  state.leftBodyRowData = dividedObj.leftData;
+  state.bodyRowData = dividedObj.rightData;
+
+  // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
+  state.styles.bodyTrHeight = state.bodyRowTable.rows.length * state.options.body.columnHeight;
+
+  state.colGroupMap = {};
+
+  state.headerTable.rows.forEach((row, r) => {
+    row.cols.forEach((col, c) => {
+      state.colGroupMap[col.colIndex] = extend({}, col);
+    });
+  });
+
+  state.colGroup = [];
+  each(state.colGroupMap, (v, k) => {
+    state.colGroup.push(v);
+  });
+
+  state.leftHeaderColGroup = state.colGroup.slice(0, state.options.frozenColumnIndex);
+  state.headerColGroup = state.colGroup.slice(state.options.frozenColumnIndex);
+
+  // footSum
+  state.footSumColumns = [];
+  state.footSumTable = {};
+
+  if (isArray(state.options.footSum)) {
+    state.footSumColumns = state.options.footSum;
+    state.footSumTable = UTIL.makeFootSumTable(state.footSumColumns, state.colGroup, state.options);
+    dividedObj = UTIL.divideTableByFrozenColumnIndex(state.footSumTable, state.options.frozenColumnIndex, state.options);
+    state.leftFootSumData = dividedObj.leftData;
+    state.footSumData = dividedObj.rightData;
+  }
+
+  // grouping info
+  if (state.options.body.grouping) {
+    if ("by" in state.options.body.grouping && "columns" in state.options.body.grouping) {
+      state.bodyGrouping = {
+        by: state.options.body.grouping.by,
+        columns: state.options.body.grouping.columns
+      };
+      state.bodyGroupingTable = UTIL.makeBodyGroupingTable(state.bodyGrouping.columns, state.colGroup, state.options);
+      state.sortInfo = (() => {
+        let sortInfo = {};
+        for (let k = 0, kl = state.bodyGrouping.by.length; k < kl; k++) {
+          sortInfo[state.bodyGrouping.by[k]] = {
+            orderBy: "asc",
+            seq: k,
+            fixed: true
+          };
+          for (let c = 0, cl = colGroup.length; c < cl; c++) {
+            if (state.colGroup[c].key === state.bodyGrouping.by[k]) {
+              state.colGroup[c].sort = "asc";
+              state.colGroup[c].sortFixed = true;
+            }
+          }
+        }
+        return sortInfo;
+      })();
+
+      dividedObj = UTIL.divideTableByFrozenColumnIndex(state.bodyGroupingTable, state.options.frozenColumnIndex, state.options);
+      state.asideBodyGroupingData = dividedObj.asideData;
+      state.leftBodyGroupingData = dividedObj.leftData;
+      state.bodyGroupingData = dividedObj.rightData;
+      state.bodyGroupingMap = UTIL.makeBodyRowMap(state.bodyGroupingTable, state.options);
+    } else {
+      state.options.body.grouping = false;
+    }
+  }
+
+  return state;
+};
+
 class GridRoot extends React.Component {
   constructor(props) {
     super(props);
-
-    let dividedObj;
 
     this.componentRefs = {};
     this.data = {
@@ -171,113 +258,27 @@ class GridRoot extends React.Component {
         return options;
       })()
     };
-
-    // state 계산영역 시작
-    this.state.headerTable = UTIL.makeHeaderTable(this.props.columns, this.state.options);
-    this.state.bodyRowTable = UTIL.makeBodyRowTable(this.props.columns, this.state.options);
-    this.state.bodyRowMap = UTIL.makeBodyRowMap(this.state.bodyRowTable, this.state.options);
-    
-    dividedObj = UTIL.divideTableByFrozenColumnIndex(this.state.headerTable, this.state.options.frozenColumnIndex, this.state.options);
-    this.state.asideHeaderData = dividedObj.asideData;
-    this.state.asideColGroup = dividedObj.asideColGroup; // asideColGroup은 header, bodyRow 에서 공통으로 사용 한번만 구하면 그만이지만 편의상 header에서 처리하기로 한다.
-    this.state.leftHeaderData = dividedObj.leftData;
-    this.state.headerData = dividedObj.rightData;
-    this.state.styles.asidePanelWidth = dividedObj.asidePanelWidth;
-
-    dividedObj = UTIL.divideTableByFrozenColumnIndex(this.state.bodyRowTable, this.state.options.frozenColumnIndex, this.state.options);
-    this.state.asideBodyRowData = dividedObj.asideData;
-    this.state.leftBodyRowData = dividedObj.leftData;
-    this.state.bodyRowData = dividedObj.rightData;
-
-    // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
-    this.state.styles.bodyTrHeight = this.state.bodyRowTable.rows.length * this.state.options.body.columnHeight;
-
-    this.state.colGroupMap = {};
-
-    this.state.headerTable.rows.forEach((row, r) => {
-      row.cols.forEach((col, c) => {
-        this.state.colGroupMap[col.colIndex] = extend({}, col);
-      });
-    });
-
-    this.state.colGroup = [];
-    each(this.state.colGroupMap, (v, k) => {
-      this.state.colGroup.push(v);
-    });
-
-    this.state.leftHeaderColGroup = this.state.colGroup.slice(0, this.state.options.frozenColumnIndex);
-    this.state.headerColGroup = this.state.colGroup.slice(this.state.options.frozenColumnIndex);
-
-    // footSum
-    this.state.footSumColumns = [];
-    this.state.footSumTable = {};
-
-    if (isArray(this.state.options.footSum)) {
-      this.state.footSumColumns = this.state.options.footSum;
-      this.state.footSumTable = UTIL.makeFootSumTable(this.state.footSumColumns, this.state.colGroup, this.state.options);
-      dividedObj = UTIL.divideTableByFrozenColumnIndex(this.state.footSumTable, this.state.options.frozenColumnIndex, this.state.options);
-      this.state.leftFootSumData = dividedObj.leftData;
-      this.state.footSumData = dividedObj.rightData;
-    }
-
-    // grouping info
-    if (this.state.options.body.grouping) {
-      if ("by" in this.state.options.body.grouping && "columns" in this.state.options.body.grouping) {
-        this.state.bodyGrouping = {
-          by: this.state.options.body.grouping.by,
-          columns: this.state.options.body.grouping.columns
-        };
-        this.state.bodyGroupingTable = UTIL.makeBodyGroupingTable(this.state.bodyGrouping.columns, this.state.colGroup, this.state.options);
-        this.state.sortInfo = (() => {
-          let sortInfo = {};
-          for (let k = 0, kl = this.state.bodyGrouping.by.length; k < kl; k++) {
-            sortInfo[this.state.bodyGrouping.by[k]] = {
-              orderBy: "asc",
-              seq: k,
-              fixed: true
-            };
-            for (let c = 0, cl = colGroup.length; c < cl; c++) {
-              if (this.state.colGroup[c].key === this.state.bodyGrouping.by[k]) {
-                this.state.colGroup[c].sort = "asc";
-                this.state.colGroup[c].sortFixed = true;
-              }
-            }
-          }
-          return sortInfo;
-        })();
-
-        dividedObj = UTIL.divideTableByFrozenColumnIndex(this.state.bodyGroupingTable, this.state.options.frozenColumnIndex, this.state.options);
-        this.state.asideBodyGroupingData = dividedObj.asideData;
-        this.state.leftBodyGroupingData = dividedObj.leftData;
-        this.state.bodyGroupingData = dividedObj.rightData;
-        this.state.bodyGroupingMap = UTIL.makeBodyRowMap(this.state.bodyGroupingTable, this.state.options);
-      } else {
-        this.state.options.body.grouping = false;
-      }
-    }
+    this.state = propsToState(props, extend({}, this.state));
 
     // state 계산영역 끝
+    this.props.init(props, this.state.options);
 
     this.refCallback = this.refCallback.bind(this);
     this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
-
-    this.props.init(props, this.state.options);
   }
 
   componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
-    const {styles} = UTIL.calculateDimensions(this.gridRootNode, this.props.gridState, this.state);
+
 
     this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
     window.addEventListener("resize", this.throttled_updateDimensions);
 
     this.setState({
       mounted: true,
-      styles: styles
+      //styles: styles
     });
-    // didMount후에 랜더링이 가능 하므로 불가피하게 setState사용. 다른 대안이 있다면 이 부분 수정 필요.
-    // 하지만 mounted = false 상황에서 아무런 부하가 없도록 하였으니 큰 문제는 없을 것으로 판단됨.
   }
 
   componentWillUnmount() {
@@ -287,48 +288,47 @@ class GridRoot extends React.Component {
   // 변경된 props를 받게 되면
   componentWillReceiveProps(nextProps) {
     // 데이터 체인지
-    if (this.props.data != nextProps.data) {
-      this.props.setData(nextProps.data);
+    if (this.props.data !== nextProps.data) {
+      this.props.setData(nextProps.data, this.state.options);
     }
-    if (this.props.options != nextProps.options || this.props.columns != nextProps.columns) {
-      if (this.props.options != nextProps.options) {
-        each(nextProps.options, (v, k) => {
-          this.state.options[k] = (isObject(v)) ? extendOwn(this.state.options[k], v) : v;
-        });
-      }
 
-      this.props.updateProps(nextProps, this.gridRootNode, this.state.options);
+    if (this.props.options !== nextProps.options || this.props.columns !== nextProps.columns) {
+      this.setState(propsToState(nextProps, extend({}, this.state)));
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.data !== nextProps.data) {
+      return false;
+    }
+    if (
+      this.props.store_list !== nextProps.store_list ||
+      this.props.store_deletedList !== nextProps.store_deletedList ||
+      this.props.store_page !== nextProps.store_page ||
+      this.props.store_sortInfo !== nextProps.store_sortInfo
+    ) {
+      // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이주으로 랜더링 하기 싫음)
+      let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: nextProps.store_list}, this.state);
+      this.setState({
+        styles: styles
+      });
+      return false;
+    }
+    // redux state 가 변경되면 렌더 금지 하고 state 변경.
+    return true;
+  }
+
   componentWillUpdate(nextProps) {
     // console.log(this.state.sColIndex);
+    // shouldComponentUpdate에더 랜더를 방지 하거나. willUpdate에서 this.state.styles값 강제 변경 테스트.
   }
 
   // change props and render
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.height != this.props.height) {
-      //this.props.align(this.props, this.gridRootNode);
-
-      console.log(this.state);
-      
-      const {styles} = UTIL.calculateDimensions(this.gridRootNode, this.props.gridState, this.state);
-
-
-      setTimeout(() => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
-          scrollWidth: this.gridStyles.scrollContentWidth,
-          scrollHeight: this.gridStyles.scrollContentHeight,
-          clientWidth: this.gridStyles.scrollContentContainerWidth,
-          clientHeight: this.gridStyles.scrollContentContainerHeight
-        });
-        this.setState({
-          scrollLeft: scrollLeft,
-          scrollTop: scrollTop
-        });
-      });
+      this.updateDimensions();
     }
   }
 
@@ -336,17 +336,17 @@ class GridRoot extends React.Component {
    * 사용자 함수
    */
   updateDimensions() {
-    this.props.align(this.props, this.gridRootNode);
-
+    let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, this.state);
     let {scrollLeft, scrollTop} = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
-      scrollWidth: this.gridStyles.scrollContentWidth,
-      scrollHeight: this.gridStyles.scrollContentHeight,
-      clientWidth: this.gridStyles.scrollContentContainerWidth,
-      clientHeight: this.gridStyles.scrollContentContainerHeight
+      scrollWidth: styles.scrollContentWidth,
+      scrollHeight: styles.scrollContentHeight,
+      clientWidth: styles.scrollContentContainerWidth,
+      clientHeight: styles.scrollContentContainerHeight
     });
     this.setState({
       scrollLeft: scrollLeft,
-      scrollTop: scrollTop
+      scrollTop: scrollTop,
+      styles: styles
     });
   }
 
@@ -467,7 +467,6 @@ class GridRoot extends React.Component {
   }
 
   render() {
-    const gridState = this.props.gridState;
     const styles = this.state.styles;
     const options = this.state.options;
     const mounted = this.state.mounted;
@@ -501,7 +500,7 @@ class GridRoot extends React.Component {
       });
       _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
 
-      if (typeof this.data._headerColGroup == "undefined" || !isEqual(this.data._headerColGroup, _headerColGroup)) {
+      if (typeof this.data._headerColGroup === "undefined" || !isEqual(this.data._headerColGroup, _headerColGroup)) {
         this.data.sColIndex = sColIndex;
         this.data.eColIndex = eColIndex;
         this.data._headerColGroup = _headerColGroup;
@@ -546,6 +545,8 @@ class GridRoot extends React.Component {
           mounted={mounted}
           options={options}
           styles={styles}
+          CTInnerWidth={styles.CTInnerWidth}
+          CTInnerHeight={styles.CTInnerHeight}
           frozenColumnIndex={options.frozenColumnIndex}
 
           colGroup={this.state.colGroup}
@@ -561,7 +562,7 @@ class GridRoot extends React.Component {
           bodyRowData={_bodyRowData}
           bodyGroupingData={_bodyGroupingData}
 
-          list={gridState.get('list')}
+          list={this.props.store_list}
 
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}

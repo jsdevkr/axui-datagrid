@@ -1,8 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
-import {Map, Range} from 'immutable';
-import * as UTIL from '../_inc/utils';
+import {Range} from 'immutable';
 
 class GridBody extends React.Component {
   constructor(props) {
@@ -16,7 +15,8 @@ class GridBody extends React.Component {
     if (
       this.props.mounted !== nextProps.mounted ||
       JSON.stringify(this.props.options) !== JSON.stringify(nextProps.options) ||
-      JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
+      this.props.CTInnerWidth !== nextProps.CTInnerWidth ||
+      this.props.CTInnerHeight !== nextProps.CTInnerHeight ||
       JSON.stringify(this.props.colGroup) !== JSON.stringify(nextProps.colGroup) ||
       this.props.list !== nextProps.list ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
@@ -48,7 +48,9 @@ class GridBody extends React.Component {
           bodyGroupingData      = this.props.bodyGroupingData,
           list                  = this.props.list,
           scrollLeft            = this.props.scrollLeft,
-          scrollTop             = this.props.scrollTop;
+          scrollTop             = this.props.scrollTop,
+          CTInnerWidth          = this.props.CTInnerWidth,
+          CTInnerHeight         = this.props.CTInnerHeight;
 
     if (!mounted) return null;
 
@@ -63,7 +65,7 @@ class GridBody extends React.Component {
     };
 
     const paintBody = function (_panelName, _colGroup, _bodyRow, _groupRow, _list, _scrollConfig, _style) {
-      
+
       const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
         let lineHeight = (options.body.columnHeight - options.body.columnPadding * 2 - options.body.columnBorderWidth);
         let colAlign = options.body.align || _col.align;
@@ -206,6 +208,7 @@ class GridBody extends React.Component {
       top: styles.bodyHeight - styles.footSumHeight,
       height: styles.footSumHeight
     };
+
     let bodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
