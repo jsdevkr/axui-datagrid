@@ -20,7 +20,7 @@ const defaultOptions = {
   multipleSelect: true,
   columnMinWidth: 100,
   lineNumberColumnWidth: 40,
-  rowSelectorColumnWidth: 26,
+  rowSelectorColumnWidth: 28,
   sortable: false,
   remoteSort: false,
   asidePanelWidth: 0,

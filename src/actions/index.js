@@ -27,15 +27,3 @@ export function setData(data, options) {
     options: options
   }
 }
-
-
-export const UPDATE_PROPS = 'UPDATE_PROPS';
-export function updateProps(props, containerDOM, options) {
-  return {
-    type: UPDATE_PROPS,
-    containerDOM: containerDOM,
-    height: props.height,
-    columns: props.columns,
-    options: options
-  }
-}

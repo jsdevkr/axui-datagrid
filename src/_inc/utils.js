@@ -29,6 +29,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         _col = extend({}, col, {
           width: options.lineNumberColumnWidth,
           _width: options.lineNumberColumnWidth,
+          align: "center",
           columnAttr: "lineNumber",
           key: "__line_number__", label: ""
         });
@@ -41,6 +42,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         _col = extend({}, col, {
           width: options.rowSelectorColumnWidth,
           _width: options.rowSelectorColumnWidth,
+          align: "center",
           columnAttr: "rowSelector",
           key: "__row_selector__", label: ""
         });

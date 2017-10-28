@@ -75,7 +75,7 @@ class GridBody extends React.Component {
           label = _itemIdx + 1;
         }
         else if(_col.key === "__row_selector__"){
-          label = <div class="checkBox" style={{maxHeight: (_col.width - 10) + 'px', minHeight:(_col.width - 10) + 'px'}}></div>;
+          label = <div className={classNames(sass.checkBox)} style={{maxHeight: (_col.width - 10) + 'px', minHeight:(_col.width - 10) + 'px'}}></div>;
         }
         else{
           label = _item[_col.key];
@@ -128,9 +128,23 @@ class GridBody extends React.Component {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItmes = {};
                               classNameItmes[sass.hasBorder] = true;
+
+                              /*
                               if (row.cols.length == ci + 1) {
                                 classNameItmes[sass.isLastColumn] = true;
                               }
+                              */
+
+                              if(col.columnAttr === "lineNumber"){
+                                classNameItmes[sass.lineNumber] = true;
+                              }
+                              else if(col.columnAttr === "rowSelector"){
+                                classNameItmes[sass.rowSelector] = true;
+                              }
+                              else{
+
+                              }
+                              
                               return (
                                 <td
                                   key={ci}

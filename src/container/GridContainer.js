@@ -15,8 +15,7 @@ const mapStateToProps = (state) => {
 // 액션함수 준비
 const mapToDispatch = (dispatch) => ({
   init: (props, options) => dispatch(act.init(props, options)),
-  setData: (data, options) => dispatch(act.setData(data, options)),
-  updateProps: (props, containerDOM, options) => dispatch(act.updateProps(props, containerDOM, options))
+  setData: (data, options) => dispatch(act.setData(data, options))
 });
 
 export default connect(mapStateToProps, mapToDispatch)(GridRoot);

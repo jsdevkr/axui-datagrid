@@ -43,9 +43,9 @@ const gridOptions = {
   header: {
     align: "center"
   },
-  frozenColumnIndex: 1,
+  frozenColumnIndex: 0,
   showLineNumber: true,
-  showRowSelector: false,
+  showRowSelector: true,
   columnKeys: {
     modified: "__ABC__"
   },
