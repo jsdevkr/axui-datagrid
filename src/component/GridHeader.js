@@ -108,9 +108,12 @@ class GridHeader extends React.Component {
                       let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
                       let classNameItmes = {};
                       classNameItmes[sass.hasBorder] = true;
+                      classNameItmes[sass.headerColumn] = true;
+                      /*
                       if (row.cols.length == ci + 1) {
                         classNameItmes[sass.isLastColumn] = true;
                       }
+                      */
 
                       return (
                         <td

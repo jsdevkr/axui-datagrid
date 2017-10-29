@@ -7,7 +7,7 @@ $ax6grid-column-border: 1px solid #ccc !default;
 //== header
 $ax6grid-header-column-color: #222 !default;
 $ax6grid-header-column-border: 1px solid #ccc !default;
-$ax6grid-header-column-box-shadow: inset 1px 1px 0px 0px #fff !default;
+$ax6grid-header-column-box-shadow: inset 1px 1px 0 0 #fff !default;
 $ax6grid-header-column-bg-colors: (#FFFFFF, #F0F0F0) !default;
 $ax6grid-header-column-hover-bg-colors: (#eee, #eee) !default;
 $ax6grid-header-column-resizer-color: #ff3300 !default;
@@ -18,7 +18,7 @@ $ax6grid-header-sorter-color: #000 !default;
 //== aside
 $ax6grid-aside-border: 1px solid darken(#ccc, 0%) !default;
 $ax6grid-aside-bg: #f2f2f2 !default;
-$ax6grid-aside-column-shadow: inset 1px 1px 0px 0px #fff !default;
+$ax6grid-aside-column-shadow: inset 1px 1px 0 0 #fff !default;
 
 $ax6grid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
 

@@ -80,36 +80,23 @@
   &.focused {
     box-shadow: $ax6grid-cell-focused-box-shadow;
   }
+  &.headerColumn{
+    cursor: s-resize;
+    &:hover{
+      background: $ax6grid-row-hover-bg;
+    }
+  }
 
-  &.lineNumber{}
+  &.lineNumber{
+    cursor: e-resize;
+    &:hover{
+      background: $ax6grid-row-hover-bg;
+    }
+  }
   &.rowSelector{
     //padding: 0;
     [data-span] {
 
-    }
-    .checkBox {
-      box-sizing: border-box;
-      display: inline-block;
-      position: relative;
-      border: $ax6grid-cell-checkbox-border;
-      border-radius: $ax6grid-cell-checkbox-border-radius;
-      @include ax-background(to bottom, $ax6grid-cell-checkbox-bg-colors);
-      height: 100%;
-      width: 100%;
-      &:after {
-        content: '';
-        width: 60%;
-        height: 40%;
-        position: absolute;
-        top: 20%;
-        right: 20%;
-        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
-        border-top: none;
-        border-right: none;
-        background: transparent;
-        opacity: 0.0;
-        //@include transform(rotate(-50deg));
-      }
     }
   }
 
@@ -284,6 +271,31 @@
     [data-tnode-item="item"] {
       display: inline-block;
     }
+
+    .checkBox {
+      box-sizing: border-box;
+      display: inline-block;
+      position: relative;
+      border: $ax6grid-cell-checkbox-border;
+      border-radius: $ax6grid-cell-checkbox-border-radius;
+      @include ax-background(to bottom, $ax6grid-cell-checkbox-bg-colors);
+      height: 100%;
+      width: 100%;
+      &:after {
+        content: '';
+        width: 60%;
+        height: 40%;
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0.0;
+        transform: rotate(-50deg);
+      }
+    }
   }
 }
 
@@ -343,6 +355,9 @@
     border: 0 none;
     border-bottom: $ax6grid-header-column-border;
 
+    table tr td{
+      box-shadow: $ax6grid-header-column-box-shadow;
+    }
     [data-panel] {
       &[data-panel="aside-header"] {
         overflow: hidden;
@@ -371,6 +386,9 @@
     }
     [data-panel="aside-body-scroll"] {
       background: $ax6grid-aside-bg;
+      table tr td{
+        box-shadow: $ax6grid-header-column-box-shadow;
+      }
     }
   }
   .gridPage {
