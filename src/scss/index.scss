@@ -80,20 +80,20 @@
   &.focused {
     box-shadow: $ax6grid-cell-focused-box-shadow;
   }
-  &.headerColumn{
+  &.headerColumn {
     cursor: s-resize;
-    &:hover{
+    &:hover {
       background: $ax6grid-row-hover-bg;
     }
   }
 
-  &.lineNumber{
+  &.lineNumber {
     cursor: e-resize;
-    &:hover{
+    &:hover {
       background: $ax6grid-row-hover-bg;
     }
   }
-  &.rowSelector{
+  &.rowSelector {
     //padding: 0;
     [data-span] {
 
@@ -318,8 +318,8 @@
         @include gridCell();
       }
     }
-    tr:last-child{
-      td{
+    tr:last-child {
+      td {
         border-bottom: $ax6grid-last-row-border;
       }
     }
@@ -355,8 +355,27 @@
     border: 0 none;
     border-bottom: $ax6grid-header-column-border;
 
-    table tr td{
+    table tr td {
       box-shadow: $ax6grid-header-column-box-shadow;
+      &.headerCorner {
+        cursor: se-resize;
+        [data-span] {
+          &:before {
+            $triangle-border-width: $ax6grid-font-size/3;
+            position: absolute;
+            right: $triangle-border-width;
+            bottom: $triangle-border-width;
+            content: ' ';
+            display: block;
+            width: 0;
+            height: 0;
+            border-bottom: solid $triangle-border-width $ax6grid-header-column-color;
+            border-right: solid $triangle-border-width $ax6grid-header-column-color;
+            border-left: solid $triangle-border-width transparent;
+            border-top: solid $triangle-border-width transparent;
+          }
+        }
+      }
     }
     [data-panel] {
       &[data-panel="aside-header"] {
@@ -380,13 +399,12 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-
     [data-panel] {
 
     }
     [data-panel="aside-body-scroll"] {
       background: $ax6grid-aside-bg;
-      table tr td{
+      table tr td {
         box-shadow: $ax6grid-header-column-box-shadow;
       }
     }
@@ -409,10 +427,10 @@
     right: 0;
     bottom: 0;
 
-    .scrollBar{
+    .scrollBar {
       position: relative;
       top: 0;
-      left:0;
+      left: 0;
       box-sizing: border-box;
       border: $ax6grid-scroll-bar-border;
       border-radius: $ax6grid-scroll-bar-border-radius;
@@ -420,13 +438,13 @@
       height: 100%;
 
       background: $ax6grid-scroll-bar-bg;
-      &:hover{
+      &:hover {
         border: $ax6grid-scroll-bar-hover-border;
         background: $ax6grid-scroll-bar-hover-bg;
       }
     }
 
-    [data-scroll="vertical"], [data-scroll="horizontal"]{
+    [data-scroll="vertical"], [data-scroll="horizontal"] {
       box-sizing: border-box;
       position: absolute;
       right: 0;
@@ -434,23 +452,23 @@
       background: $ax6grid-scroll-track-bg;
       box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
     }
-    [data-scroll="vertical"]{
+    [data-scroll="vertical"] {
       height: 100%;
       padding: 0 2px;
       border-left: $ax6grid-scroll-track-border;
-      .scrollBar{
+      .scrollBar {
         cursor: ns-resize;
       }
     }
-    [data-scroll="horizontal"]{
+    [data-scroll="horizontal"] {
       width: 100%;
       padding: 2px 0;
       border-top: $ax6grid-scroll-track-border;
-      .scrollBar{
+      .scrollBar {
         cursor: ew-resize;
       }
     }
-    [data-scroll="corner"]{
+    [data-scroll="corner"] {
       box-sizing: border-box;
       position: absolute;
       right: 0;

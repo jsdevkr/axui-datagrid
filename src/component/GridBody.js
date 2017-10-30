@@ -134,7 +134,6 @@ class GridBody extends React.Component {
                                 classNameItmes[sass.isLastColumn] = true;
                               }
                               */
-
                               if(col.columnAttr === "lineNumber"){
                                 classNameItmes[sass.lineNumber] = true;
                               }

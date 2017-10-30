@@ -109,6 +109,9 @@ class GridHeader extends React.Component {
                       let classNameItmes = {};
                       classNameItmes[sass.hasBorder] = true;
                       classNameItmes[sass.headerColumn] = true;
+                      if(col.columnAttr === "lineNumber"){
+                        classNameItmes[sass.headerCorner] = true;
+                      }
                       /*
                       if (row.cols.length == ci + 1) {
                         classNameItmes[sass.isLastColumn] = true;
