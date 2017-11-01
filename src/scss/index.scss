@@ -394,6 +394,14 @@
         top: 0;
       }
     }
+    [data-column-resizer]{
+      position: absolute;
+      top: 0;
+      cursor: ew-resize;
+      &:active{
+        background: rgba(255, 0, 0, 0.3);
+      }
+    }
   }
   .gridBody {
     box-sizing: border-box;

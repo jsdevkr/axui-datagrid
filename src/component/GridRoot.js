@@ -263,9 +263,11 @@ class GridRoot extends React.Component {
     // state 계산영역 끝
     this.props.init(props, this.state.options);
 
-    this.refCallback = this.refCallback.bind(this);
+    // 이벤트 멤버에 바인딩
     this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+    this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
+    this.refCallback = this.refCallback.bind(this);
   }
 
   componentDidMount() {
@@ -297,7 +299,7 @@ class GridRoot extends React.Component {
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = propsToState(nextProps, extend({}, this.state, {scrollLeft:0, scrollTop: 0}));
+      let newState = propsToState(nextProps, extend({}, this.state, {scrollLeft: 0, scrollTop: 0}));
       newState.styles = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, newState).styles;
       this.setState(newState);
     }
@@ -465,6 +467,10 @@ class GridRoot extends React.Component {
     if (barName in processor) processor[barName]();
   }
 
+  onResizeColumnResizer(e) {
+
+  }
+
   refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
     this.componentRefs[_key] = el;
@@ -528,6 +534,7 @@ class GridRoot extends React.Component {
         </div>
         <GridHeader
           refCallback={this.refCallback}
+          onResizeColumnResizer={this.onResizeColumnResizer}
           mounted={mounted}
           optionsHeader={options.header}
           styles={styles}

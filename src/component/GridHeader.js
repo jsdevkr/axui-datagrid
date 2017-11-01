@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import * as UTIL from '../_inc/utils';
 import sass from '../scss/index.scss';
 
 
@@ -7,6 +8,7 @@ class GridHeader extends React.Component {
   constructor(props) {
     super(props);
 
+    this.onMouseDownColumnResizer = this.onMouseDownColumnResizer.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -25,24 +27,54 @@ class GridHeader extends React.Component {
     return sameProps;
   }
 
+  onMouseDownColumnResizer(e, col) {
+    e.preventDefault();
+
+    const prevLeft = e.target.getAttribute("data-prev-left");
+    const currLeft = e.target.getAttribute("data-left");
+    let startMousePosition = UTIL.getMousePosition(e).x;
+
+    console.log(currLeft, startMousePosition);
+    const onMouseMove = (ee) => {
+      const {x, y} = UTIL.getMousePosition(ee);
+
+      console.log(x - startMousePosition);
+    };
+
+    const offEvent = (e) => {
+      e.preventDefault();
+
+      startMousePosition = null;
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', offEvent);
+      document.removeEventListener('mouseleave', offEvent);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', offEvent);
+    document.addEventListener('mouseleave', offEvent);
+  }
+
   render() {
 
-    const refCallback        = this.props.refCallback,
-          mounted            = this.props.mounted,
-          optionsHeader      = this.props.optionsHeader,
-          styles             = this.props.styles,
-          frozenColumnIndex  = this.props.frozenColumnIndex,
-          colGroup           = this.props.colGroup,
-          asideColGroup      = this.props.asideColGroup,
-          leftHeaderColGroup = this.props.leftHeaderColGroup,
-          headerColGroup     = this.props.headerColGroup,
-          asideHeaderData    = this.props.asideHeaderData,
-          leftHeaderData     = this.props.leftHeaderData,
-          headerData         = this.props.headerData,
-          scrollLeft         = this.props.scrollLeft;
+    const refCallback           = this.props.refCallback,
+          onResizeColumnResizer = this.props.onResizeColumnResizer,
+          mounted               = this.props.mounted,
+          optionsHeader         = this.props.optionsHeader,
+          styles                = this.props.styles,
+          frozenColumnIndex     = this.props.frozenColumnIndex,
+          colGroup              = this.props.colGroup,
+          asideColGroup         = this.props.asideColGroup,
+          leftHeaderColGroup    = this.props.leftHeaderColGroup,
+          headerColGroup        = this.props.headerColGroup,
+          asideHeaderData       = this.props.asideHeaderData,
+          leftHeaderData        = this.props.leftHeaderData,
+          headerData            = this.props.headerData,
+          scrollLeft            = this.props.scrollLeft;
 
     if (!mounted) return null;
 
+    const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
     const printHeader = function (_panelName, _colGroup, _bodyRow, _style) {
 
       const getFieldSpan = function (_colGroup, _col) {
@@ -109,7 +141,7 @@ class GridHeader extends React.Component {
                       let classNameItmes = {};
                       classNameItmes[sass.hasBorder] = true;
                       classNameItmes[sass.headerColumn] = true;
-                      if(col.columnAttr === "lineNumber"){
+                      if (col.columnAttr === "lineNumber") {
                         classNameItmes[sass.headerCorner] = true;
                       }
                       /*
@@ -137,20 +169,27 @@ class GridHeader extends React.Component {
             </tbody>
           </table>
 
-          {_colGroup.map(
-            (col, ci) => {
-              let resizerHeight = optionsHeader.columnHeight * _bodyRow.rows.size - optionsHeader.columnBorderWidth;
-              let resizer, resizerLeft = 0;
-              if (col.colIndex !== null && typeof col.colIndex !== "undefined") {
-                resizerLeft += col._width;
-                resizer = <div
-                  key={ci}
-                  data-column-resizer={col.colIndex} style={{height: resizerHeight + 'px', left: (resizerLeft - 4) + 'px'}} />;
+          {(() => {
+            let resizerHeight = optionsHeader.columnHeight * _bodyRow.rows.length - optionsHeader.columnBorderWidth;
+            let resizer, resizerLeft = 0, resizerWidth = 4;
+            return _colGroup.map(
+              (col, ci) => {
+                if (col.colIndex !== null && typeof col.colIndex !== "undefined") {
+                  let prevResizerLeft = resizerLeft;
+                  resizerLeft += col._width;
+                  resizer = <div
+                    key={ci}
+                    data-column-resizer={col.colIndex}
+                    data-prev-left={prevResizerLeft}
+                    data-left={resizerLeft}
+                    style={{width: resizerWidth, height: resizerHeight + 'px', left: (resizerLeft - resizerWidth / 2) + 'px'}}
+                    onMouseDown={e => onMouseDownColumnResizer(e, col)}
+                  />;
+                }
+                return (resizer);
               }
-              return (resizer);
-            }
-          )}
-
+            )
+          })()}
         </div>
       );
     };
