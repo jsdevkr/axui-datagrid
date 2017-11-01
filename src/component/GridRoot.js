@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {each, extend, extendOwn, isArray, isEqual, isObject, throttle} from 'underscore';
+import {fromJS} from 'immutable';
 import classNames from 'classnames';
 import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
@@ -315,14 +316,14 @@ class GridRoot extends React.Component {
       this.props.store_page !== nextProps.store_page ||
       this.props.store_sortInfo !== nextProps.store_sortInfo
     ) {
-      // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이주으로 랜더링 하기 싫음)
+      // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
       let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: nextProps.store_list}, this.state);
       this.setState({
         styles: styles
       });
       return false;
     }
-    // redux state 가 변경되면 렌더 금지 하고 state 변경.
+
     return true;
   }
 
@@ -467,8 +468,25 @@ class GridRoot extends React.Component {
     if (barName in processor) processor[barName]();
   }
 
-  onResizeColumnResizer(e) {
+  onResizeColumnResizer(e, col, newWidth) {
+    let colGroup = fromJS(this.state.colGroup).toJS();
+    colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
 
+    let leftHeaderColGroup = colGroup.slice(0, this.state.options.frozenColumnIndex);
+    let headerColGroup = colGroup.slice(this.state.options.frozenColumnIndex);
+    let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, extend({}, this.state, {
+      colGroup: colGroup,
+      leftHeaderColGroup: leftHeaderColGroup,
+      headerColGroup: headerColGroup
+    }));
+
+    this.data._headerColGroup = undefined;
+    this.setState({
+      colGroup: colGroup,
+      leftHeaderColGroup: leftHeaderColGroup,
+      headerColGroup: headerColGroup,
+      styles: styles
+    });
   }
 
   refCallback(_key, el) {

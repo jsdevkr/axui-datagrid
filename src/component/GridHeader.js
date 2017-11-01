@@ -23,31 +23,39 @@ class GridHeader extends React.Component {
     ) {
       sameProps = true;
     }
-
+    
     return sameProps;
   }
 
   onMouseDownColumnResizer(e, col) {
     e.preventDefault();
 
-    const prevLeft = e.target.getAttribute("data-prev-left");
-    const currLeft = e.target.getAttribute("data-left");
+    const resizer = e.target;
+    const prevLeft = Number(resizer.getAttribute("data-prev-left"));
+    const currLeft = Number(resizer.getAttribute("data-left"));
+    let newWidth;
     let startMousePosition = UTIL.getMousePosition(e).x;
 
-    console.log(currLeft, startMousePosition);
     const onMouseMove = (ee) => {
       const {x, y} = UTIL.getMousePosition(ee);
+      let newLeft = currLeft +  x - startMousePosition;
+      if(newLeft < prevLeft){
+        newLeft = prevLeft;
+      }
 
-      console.log(x - startMousePosition);
+      resizer.style.left = (newLeft-2) + 'px';
+      newWidth = newLeft - prevLeft;
     };
 
     const offEvent = (e) => {
       e.preventDefault();
-
       startMousePosition = null;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
+
+      // console.log(newWidth);
+      this.props.onResizeColumnResizer(e, col, newWidth);
     };
 
     document.addEventListener('mousemove', onMouseMove);
@@ -214,6 +222,8 @@ class GridHeader extends React.Component {
       left: scrollLeft
     };
 
+    console.log("header render");
+    
     return (
       <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
         {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}

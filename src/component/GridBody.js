@@ -254,7 +254,6 @@ class GridBody extends React.Component {
       left: scrollLeft
     };
 
-    console.log('render body');
     return (
       <div className={classNames(sass.gridBody)} style={{height: styles.bodyHeight}}>
         {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
