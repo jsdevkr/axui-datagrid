@@ -46,6 +46,7 @@ class GridScroll extends React.Component {
           horizontalScrollerHeight = this.props.horizontalScrollerHeight,
           verticalScrollBarHeight  = this.props.verticalScrollBarHeight,
           horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
+          scrollerPadding          = this.props.scrollerPadding,
           scrollBarLeft            = this.props.scrollBarLeft,
           scrollBarTop             = this.props.scrollBarTop;
 
@@ -55,18 +56,20 @@ class GridScroll extends React.Component {
 
     let verticalStyles = {
       width: verticalScrollerWidth,
-      height: verticalScrollerHeight,
-      bottom: pageHeight
+      height: verticalScrollerHeight + scrollerPadding * 2,
+      bottom: pageHeight,
+      padding: scrollerPadding
     };
     let verticalBarStyles = {
       height: verticalScrollBarHeight,
       top: scrollBarTop
     };
     let horizontalStyles = {
-      width: horizontalScrollerWidth,
+      width: horizontalScrollerWidth + scrollerPadding * 2,
       height: horizontalScrollerHeight,
-      bottom: 0,
-      right: (verticalScrollerWidth) ? verticalScrollerWidth : 0
+      bottom: pageHeight - horizontalScrollerHeight - 1,
+      right: (verticalScrollerWidth) ? verticalScrollerWidth : 0,
+      padding: scrollerPadding
     };
     let horizontalBarStyles = {
       width: horizontalScrollBarWidth,
@@ -75,29 +78,31 @@ class GridScroll extends React.Component {
     let cornerStyle = {
       width: verticalScrollerWidth,
       height: horizontalScrollerHeight,
-      bottom: 0
+      bottom: pageHeight - horizontalScrollerHeight - 1
     };
 
     return (
       <div className={classNames(sass.gridScroller)}>
         {(verticalScrollerWidth) ? (
-          <div data-scroll="vertical"
-               style={verticalStyles}
-               ref={ref => refCallback("vertical-scroll-track", ref)}
-               onClick={e => this.onClickScrollTrack(e, "vertical")}>
-            <div className={classNames(sass.scrollBar)}
-                 style={verticalBarStyles}
-                 onMouseDown={e => onMouseDownScrollBar(e, "vertical")} />
+          <div data-scroll-track="vertical" style={verticalStyles}>
+            <div data-scroll="vertical"
+                 ref={ref => refCallback("vertical-scroll-track", ref)}
+                 onClick={e => this.onClickScrollTrack(e, "vertical")}>
+              <div className={classNames(sass.scrollBar)}
+                   style={verticalBarStyles}
+                   onMouseDown={e => onMouseDownScrollBar(e, "vertical")} />
+            </div>
           </div>
         ) : null}
         {(horizontalScrollerHeight) ? (
-          <div data-scroll="horizontal"
-               style={horizontalStyles}
-               ref={ref => refCallback("horizontal-scroll-track", ref)}
-               onClick={e => this.onClickScrollTrack(e, "horizontal")}>
-            <div className={classNames(sass.scrollBar)}
-                 style={horizontalBarStyles}
-                 onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
+          <div data-scroll-track="horizontal" style={horizontalStyles}>
+            <div data-scroll="horizontal"
+                 ref={ref => refCallback("horizontal-scroll-track", ref)}
+                 onClick={e => this.onClickScrollTrack(e, "horizontal")}>
+              <div className={classNames(sass.scrollBar)}
+                   style={horizontalBarStyles}
+                   onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
+            </div>
           </div>
         ) : null}
         {(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}

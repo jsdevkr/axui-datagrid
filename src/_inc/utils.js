@@ -674,7 +674,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.scrollContentWidth = state.headerColGroup.reduce((prev, curr) => {
     return (prev._width || prev) + curr._width
   });
-  
+
   styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
 
   if (styles.horizontalScrollerHeight > 0) {
@@ -693,8 +693,9 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
 
 
-  styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight;
-  styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonGroupWidth;
+  styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight - options.scroller.padding * 2;
+  styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonGroupWidth - options.scroller.padding * 2;
+  styles.scrollerPadding = options.scroller.padding;
 
   styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.verticalScrollerHeight / styles.scrollContentHeight : 0;
   styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
@@ -764,9 +765,6 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
   SH = scrollContentHeight - scrollContentContainerHeight
 }) {
 
-  console.log(BW, SW);
-  //console.log(-scrollBarLeft * SW / BW);
-  
   let {scrollLeft, scrollTop} = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
     scrollWidth: scrollContentWidth,
     scrollHeight: scrollContentHeight,

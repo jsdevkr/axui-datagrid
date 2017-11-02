@@ -28,14 +28,14 @@ const defaultOptions = {
   header: {
     display: true,
     align: false,
-    columnHeight: 26,
+    columnHeight: 24,
     columnPadding: 3,
     columnBorderWidth: 1,
     selector: true
   },
   body: {
     align: false,
-    columnHeight: 26,
+    columnHeight: 24,
     columnPadding: 3,
     columnBorderWidth: 1,
     grouping: false,
@@ -45,7 +45,7 @@ const defaultOptions = {
     buttonGroup: {
       width: 200
     },
-    height: 12,
+    height: 20,
     display: true,
     statusDisplay: true,
     navigationItemCount: 5
@@ -53,6 +53,7 @@ const defaultOptions = {
   scroller: {
     size: 12,
     barMinSize: 12,
+    padding: 2,
     useVerticalScroll: true
   },
   columnKeys: {
@@ -460,7 +461,7 @@ class GridRoot extends React.Component {
         });
       },
       horizontal: () => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - styles.pageButtonGroupWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -623,7 +624,7 @@ class GridRoot extends React.Component {
 
           verticalScrollBarHeight={styles.verticalScrollBarHeight}
           horizontalScrollBarWidth={styles.horizontalScrollBarWidth}
-
+          scrollerPadding={styles.scrollerPadding}
           scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
           scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
         />
