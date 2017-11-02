@@ -10,7 +10,12 @@ const initialState = Map({
   deletedList: List([]),
   list: List([]),
   page: Map({}),
-  sortInfo: Map({})
+  sortInfo: Map({}),
+  selectedRowList: {},
+  selectedColumns: {},
+  focusedPosition: {
+    r: 0, c: 0
+  }
 });
 
 // 리듀서 함수 정의

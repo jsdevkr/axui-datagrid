@@ -222,8 +222,6 @@ class GridHeader extends React.Component {
       left: scrollLeft
     };
 
-    console.log("header render");
-    
     return (
       <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
         {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}

@@ -36,10 +36,13 @@ class GridScroll extends React.Component {
     const refCallback              = this.props.refCallback,
           onMouseDownScrollBar     = this.props.onMouseDownScrollBar,
           mounted                  = this.props.mounted,
-          CTInnerWidth             = this.props.CTInnerWidth,
-          CTInnerHeight            = this.props.CTInnerHeight,
+
+          bodyHeight               = this.props.bodyHeight,
           pageHeight               = this.props.pageHeight,
+          pageButtonGroupWidth     = this.props.pageButtonGroupWidth,
+          verticalScrollerHeight   = this.props.verticalScrollerHeight,
           verticalScrollerWidth    = this.props.verticalScrollerWidth,
+          horizontalScrollerWidth  = this.props.horizontalScrollerWidth,
           horizontalScrollerHeight = this.props.horizontalScrollerHeight,
           verticalScrollBarHeight  = this.props.verticalScrollBarHeight,
           horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
@@ -47,22 +50,22 @@ class GridScroll extends React.Component {
           scrollBarTop             = this.props.scrollBarTop;
 
     if (!mounted) return null;
-    
+
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
 
     let verticalStyles = {
       width: verticalScrollerWidth,
-      height: CTInnerHeight,
-      bottom: pageHeight + ((horizontalScrollerHeight) ? horizontalScrollerHeight : 0)
+      height: verticalScrollerHeight,
+      bottom: pageHeight
     };
     let verticalBarStyles = {
       height: verticalScrollBarHeight,
       top: scrollBarTop
     };
     let horizontalStyles = {
-      width: CTInnerWidth,
+      width: horizontalScrollerWidth,
       height: horizontalScrollerHeight,
-      bottom: pageHeight,
+      bottom: 0,
       right: (verticalScrollerWidth) ? verticalScrollerWidth : 0
     };
     let horizontalBarStyles = {
@@ -72,7 +75,7 @@ class GridScroll extends React.Component {
     let cornerStyle = {
       width: verticalScrollerWidth,
       height: horizontalScrollerHeight,
-      bottom: pageHeight
+      bottom: 0
     };
 
     return (

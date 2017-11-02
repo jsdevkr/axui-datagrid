@@ -81,7 +81,7 @@
     box-shadow: $ax6grid-cell-focused-box-shadow;
   }
   &.headerColumn {
-    cursor: s-resize;
+    cursor: default;
     &:hover {
       background: $ax6grid-row-hover-bg;
     }
@@ -426,9 +426,9 @@
     user-select: none;
     box-sizing: border-box;
     overflow: hidden;
-    @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
+    @include ax-background(to bottom, $ax6grid-page-bg-colors);
     border: 0 none;
-    border-top: $ax6grid-header-column-border;
+    border-top: $ax6grid-page-border;
   }
   .gridScroller {
     position: absolute;
@@ -461,6 +461,7 @@
       box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
     }
     [data-scroll="vertical"] {
+
       height: 100%;
       padding: 0 2px;
       border-left: $ax6grid-scroll-track-border;
@@ -472,6 +473,7 @@
       width: 100%;
       padding: 2px 0;
       border-top: $ax6grid-scroll-track-border;
+      border-left: $ax6grid-scroll-track-border;
       .scrollBar {
         cursor: ew-resize;
       }

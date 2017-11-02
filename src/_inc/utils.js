@@ -657,6 +657,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
   styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
   styles.pageHeight = (options.page.display) ? options.page.height : 0;
+  styles.pageButtonGroupWidth = options.page.buttonGroup.width;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
@@ -681,9 +682,9 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   }
 
   // 수평 너비 결정
-  styles.CTInnerWidth = styles.elWidth - styles.verticalScrollerWidth;
+  styles.CTInnerWidth = styles.elWidth;
   // 수직 스크롤러의 높이 결정.
-  styles.CTInnerHeight = styles.elHeight - styles.pageHeight - styles.horizontalScrollerHeight;
+  styles.CTInnerHeight = styles.elHeight - styles.pageHeight;
   // get bodyHeight
   styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
 
@@ -691,8 +692,12 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
 
-  styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.CTInnerHeight / styles.scrollContentHeight : 0;
-  styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.CTInnerWidth / styles.scrollContentWidth : 0;
+
+  styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight;
+  styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonGroupWidth;
+
+  styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.verticalScrollerHeight / styles.scrollContentHeight : 0;
+  styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
 
   if (options.scroller.useVerticalScroll) {
     styles.calculatedHeight = list.length * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
@@ -705,36 +710,6 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   return {
     styles: styles
   }
-}
-
-
-/**
- * list가 변경되면 list의 길이에 따라 변해야 하는 요소의 사이즈 재 계산.
- * @param state
- * @param list
- * @param colGroup
- * @param options
- * @param styles
- * @return {any | *}
- */
-export function calculateDimensionsByList(state, list, colGroup = state.get("colGroup"), options = state.get('options').toJS(), styles = state.get('styles').toJS()) {
-  styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
-  styles.horizontalScrollerHeight = (() => {
-    let totalColGroupWidth = colGroup.reduce((prev, curr) => {
-      return (prev._width || prev) + curr._width
-    });
-
-    // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
-    let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
-    return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
-  })();
-
-  if (styles.horizontalScrollerHeight > 0) {
-    styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
-  }
-
-  styles.scrollContentHeight = styles.bodyTrHeight * list.size;
-  return styles;
 }
 
 /**
@@ -780,15 +755,18 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
 }
 
 export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
-  CTInnerWidth, CTInnerHeight, horizontalScrollBarWidth, verticalScrollBarHeight,
+  horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight,
   scrollContentWidth, scrollContentHeight,
   scrollContentContainerWidth, scrollContentContainerHeight,
-  BW = CTInnerWidth - horizontalScrollBarWidth,
-  BH = CTInnerHeight - verticalScrollBarHeight,
+  BW = horizontalScrollerWidth - horizontalScrollBarWidth,
+  BH = verticalScrollerHeight - verticalScrollBarHeight,
   SW = scrollContentWidth - scrollContentContainerWidth,
   SH = scrollContentHeight - scrollContentContainerHeight
 }) {
 
+  console.log(BW, SW);
+  //console.log(-scrollBarLeft * SW / BW);
+  
   let {scrollLeft, scrollTop} = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
     scrollWidth: scrollContentWidth,
     scrollHeight: scrollContentHeight,
