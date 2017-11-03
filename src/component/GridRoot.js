@@ -45,15 +45,16 @@ const defaultOptions = {
     buttonGroup: {
       width: 200
     },
-    height: 20,
+    height: 19,
     display: true,
     statusDisplay: true,
     navigationItemCount: 5
   },
   scroller: {
-    size: 12,
+    size: 14,
+    arrowSize: 14,
     barMinSize: 12,
-    padding: 2,
+    padding: 3,
     useVerticalScroll: true
   },
   columnKeys: {
@@ -624,6 +625,8 @@ class GridRoot extends React.Component {
 
           verticalScrollBarHeight={styles.verticalScrollBarHeight}
           horizontalScrollBarWidth={styles.horizontalScrollBarWidth}
+
+          scrollerArrowSize={styles.scrollerArrowSize}
           scrollerPadding={styles.scrollerPadding}
           scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
           scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}

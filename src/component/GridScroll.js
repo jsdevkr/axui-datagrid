@@ -36,7 +36,6 @@ class GridScroll extends React.Component {
     const refCallback              = this.props.refCallback,
           onMouseDownScrollBar     = this.props.onMouseDownScrollBar,
           mounted                  = this.props.mounted,
-
           bodyHeight               = this.props.bodyHeight,
           pageHeight               = this.props.pageHeight,
           pageButtonGroupWidth     = this.props.pageButtonGroupWidth,
@@ -46,6 +45,7 @@ class GridScroll extends React.Component {
           horizontalScrollerHeight = this.props.horizontalScrollerHeight,
           verticalScrollBarHeight  = this.props.verticalScrollBarHeight,
           horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
+          scrollerArrowSize        = this.props.scrollerArrowSize,
           scrollerPadding          = this.props.scrollerPadding,
           scrollBarLeft            = this.props.scrollBarLeft,
           scrollBarTop             = this.props.scrollBarTop;
@@ -54,22 +54,32 @@ class GridScroll extends React.Component {
 
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
 
+    let verticalArrowStyles = {
+      width: verticalScrollerWidth,
+      height: scrollerArrowSize
+    };
     let verticalStyles = {
       width: verticalScrollerWidth,
-      height: verticalScrollerHeight + scrollerPadding * 2,
+      height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize * 2,
       bottom: pageHeight,
-      padding: scrollerPadding
+      padding: scrollerPadding,
+      paddingTop: scrollerArrowSize + scrollerPadding
     };
     let verticalBarStyles = {
       height: verticalScrollBarHeight,
       top: scrollBarTop
     };
+    let horizontalArrowStyles = {
+      width: scrollerArrowSize,
+      height: horizontalScrollerHeight
+    };
     let horizontalStyles = {
-      width: horizontalScrollerWidth + scrollerPadding * 2,
+      width: horizontalScrollerWidth + scrollerPadding * 2 + scrollerArrowSize * 2,
       height: horizontalScrollerHeight,
-      bottom: pageHeight - horizontalScrollerHeight - 1,
-      right: (verticalScrollerWidth) ? verticalScrollerWidth : 0,
-      padding: scrollerPadding
+      bottom: (pageHeight - 1 - horizontalScrollerHeight) / 2,
+      right: (pageHeight - 1 - horizontalScrollerHeight) / 2,
+      padding: scrollerPadding,
+      paddingLeft: scrollerArrowSize + scrollerPadding
     };
     let horizontalBarStyles = {
       width: horizontalScrollBarWidth,
@@ -85,6 +95,7 @@ class GridScroll extends React.Component {
       <div className={classNames(sass.gridScroller)}>
         {(verticalScrollerWidth) ? (
           <div data-scroll-track="vertical" style={verticalStyles}>
+            <div data-scroll-arrow="up" style={verticalArrowStyles} />
             <div data-scroll="vertical"
                  ref={ref => refCallback("vertical-scroll-track", ref)}
                  onClick={e => this.onClickScrollTrack(e, "vertical")}>
@@ -92,10 +103,12 @@ class GridScroll extends React.Component {
                    style={verticalBarStyles}
                    onMouseDown={e => onMouseDownScrollBar(e, "vertical")} />
             </div>
+            <div data-scroll-arrow="down" style={verticalArrowStyles}  />
           </div>
         ) : null}
         {(horizontalScrollerHeight) ? (
           <div data-scroll-track="horizontal" style={horizontalStyles}>
+            <div data-scroll-arrow="left" style={horizontalArrowStyles}  />
             <div data-scroll="horizontal"
                  ref={ref => refCallback("horizontal-scroll-track", ref)}
                  onClick={e => this.onClickScrollTrack(e, "horizontal")}>
@@ -103,9 +116,10 @@ class GridScroll extends React.Component {
                    style={horizontalBarStyles}
                    onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
             </div>
+            <div data-scroll-arrow="right" style={horizontalArrowStyles}  />
           </div>
         ) : null}
-        {(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
+
       </div>
     )
 
@@ -113,3 +127,8 @@ class GridScroll extends React.Component {
 }
 
 export default GridScroll;
+
+
+/*
+{(verticalScrollerWidth && horizontalScrollerHeight) ? (<div data-scroll="corner" style={cornerStyle} />) : null}
+ */
