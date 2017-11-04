@@ -272,6 +272,7 @@ class GridRoot extends React.Component {
     // 이벤트 멤버에 바인딩
     this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+    this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
@@ -473,6 +474,38 @@ class GridRoot extends React.Component {
     if (barName in processor) processor[barName]();
   }
 
+  onClickScrollArrow(e, direction) {
+    const styles = this.state.styles;
+
+    const processor = {
+      up: () => {
+        let scrollAmount = styles.scrollContentContainerHeight;
+        this.setState({
+          scrollTop: (this.state.scrollTop + scrollAmount < 0) ? this.state.scrollTop + scrollAmount : 0
+        });
+      },
+      down: () => {
+        let scrollAmount = styles.scrollContentContainerHeight;
+        this.setState({
+          scrollTop: (styles.scrollContentContainerHeight < styles.scrollContentHeight + (this.state.scrollTop - scrollAmount)) ? this.state.scrollTop - scrollAmount : styles.scrollContentContainerHeight - styles.scrollContentHeight
+        });
+      },
+      left: () => {
+        let scrollAmount = styles.scrollContentContainerWidth;
+        this.setState({
+          scrollLeft: (this.state.scrollLeft + scrollAmount < 0) ? this.state.scrollLeft + scrollAmount : 0
+        });
+      },
+      right: () => {
+        let scrollAmount = styles.scrollContentContainerWidth;
+        this.setState({
+          scrollLeft: (styles.scrollContentContainerWidth < styles.scrollContentWidth + (this.state.scrollLeft - scrollAmount)) ? this.state.scrollLeft - scrollAmount : styles.scrollContentContainerWidth - styles.scrollContentWidth
+        });
+      }
+    };
+    if (direction in processor) processor[direction]();
+  }
+
   onResizeColumnResizer(e, col, newWidth) {
     let colGroup = fromJS(this.state.colGroup).toJS();
     colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
@@ -610,6 +643,7 @@ class GridRoot extends React.Component {
           refCallback={this.refCallback}
           onMouseDownScrollBar={this.onMouseDownScrollBar}
           onClickScrollTrack={this.onClickScrollTrack}
+          onClickScrollArrow={this.onClickScrollArrow}
           mounted={mounted}
           optionsScroller={options.scroller}
 
