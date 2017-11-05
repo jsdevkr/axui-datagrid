@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import * as actions from '../modules';
 
 import AXDataGrid from 'ax-datagrid';
+import gridCSS from 'ax-datagrid/scss/index.scss';
 
 const gridData = [
   {id: 1, title: "인생은 해파에게조차 아름답고 장엄하다.", writer: "장기영", date: "2017-10-10"},
@@ -126,6 +127,7 @@ class GridBasic extends React.Component {
     return (
       <div>
         <AXDataGrid
+          gridCSS={gridCSS}
           height={this.state.height}
           style={{fontSize: "12px"}}
           columns={this.state.columns}

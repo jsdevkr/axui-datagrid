@@ -1,7 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import sass from '../scss/index.scss';
-
 
 class GridScroll extends React.Component {
   constructor(props) {
@@ -33,23 +31,24 @@ class GridScroll extends React.Component {
   }
 
   render() {
-    const refCallback              = this.props.refCallback,
-          onMouseDownScrollBar     = this.props.onMouseDownScrollBar,
-          onClickScrollArrow       = this.props.onClickScrollArrow,
-          mounted                  = this.props.mounted,
-          bodyHeight               = this.props.bodyHeight,
-          pageHeight               = this.props.pageHeight,
-          pageButtonGroupWidth     = this.props.pageButtonGroupWidth,
-          verticalScrollerHeight   = this.props.verticalScrollerHeight,
-          verticalScrollerWidth    = this.props.verticalScrollerWidth,
-          horizontalScrollerWidth  = this.props.horizontalScrollerWidth,
-          horizontalScrollerHeight = this.props.horizontalScrollerHeight,
-          verticalScrollBarHeight  = this.props.verticalScrollBarHeight,
-          horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
-          scrollerArrowSize        = this.props.scrollerArrowSize,
-          scrollerPadding          = this.props.scrollerPadding,
-          scrollBarLeft            = this.props.scrollBarLeft,
-          scrollBarTop             = this.props.scrollBarTop;
+    const gridCSS                   = this.props.gridCSS,
+          refCallback               = this.props.refCallback,
+          onMouseDownScrollBar      = this.props.onMouseDownScrollBar,
+          onClickScrollArrow        = this.props.onClickScrollArrow,
+          mounted                   = this.props.mounted,
+          bodyHeight                = this.props.bodyHeight,
+          pageHeight                = this.props.pageHeight,
+          pageButtonsContainerWidth = this.props.pageButtonsContainerWidth,
+          verticalScrollerHeight    = this.props.verticalScrollerHeight,
+          verticalScrollerWidth     = this.props.verticalScrollerWidth,
+          horizontalScrollerWidth   = this.props.horizontalScrollerWidth,
+          horizontalScrollerHeight  = this.props.horizontalScrollerHeight,
+          verticalScrollBarHeight   = this.props.verticalScrollBarHeight,
+          horizontalScrollBarWidth  = this.props.horizontalScrollBarWidth,
+          scrollerArrowSize         = this.props.scrollerArrowSize,
+          scrollerPadding           = this.props.scrollerPadding,
+          scrollBarLeft             = this.props.scrollBarLeft,
+          scrollBarTop              = this.props.scrollBarTop;
 
     if (!mounted) return null;
 
@@ -124,7 +123,7 @@ class GridScroll extends React.Component {
     };
 
     return (
-      <div className={classNames(sass.gridScroller)}>
+      <div className={classNames(gridCSS.scroller)}>
         {(verticalScrollerWidth) ? (
           <div data-scroll-track="vertical" style={verticalStyles}>
             <div data-scroll-arrow="up" style={verticalArrowStyles}>
@@ -133,29 +132,29 @@ class GridScroll extends React.Component {
             <div data-scroll="vertical"
                  ref={ref => refCallback("vertical-scroll-track", ref)}
                  onClick={e => this.onClickScrollTrack(e, "vertical")}>
-              <div className={classNames(sass.scrollBar)}
+              <div className={classNames(gridCSS.scrollBar)}
                    style={verticalBarStyles}
                    onMouseDown={e => onMouseDownScrollBar(e, "vertical")} />
             </div>
             <div data-scroll-arrow="down" style={verticalArrowStyles}>
-              <div data-arrow style={verticalBottomArrowStyles} onClick={e => onClickScrollArrow(e, "down")}  />
+              <div data-arrow style={verticalBottomArrowStyles} onClick={e => onClickScrollArrow(e, "down")} />
             </div>
           </div>
         ) : null}
         {(horizontalScrollerHeight) ? (
           <div data-scroll-track="horizontal" style={horizontalStyles}>
             <div data-scroll-arrow="left" style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalLeftArrowStyles} onClick={e => onClickScrollArrow(e, "left")}  />
+              <div data-arrow style={horizontalLeftArrowStyles} onClick={e => onClickScrollArrow(e, "left")} />
             </div>
             <div data-scroll="horizontal"
                  ref={ref => refCallback("horizontal-scroll-track", ref)}
                  onClick={e => this.onClickScrollTrack(e, "horizontal")}>
-              <div className={classNames(sass.scrollBar)}
+              <div className={classNames(gridCSS.scrollBar)}
                    style={horizontalBarStyles}
                    onMouseDown={(e) => onMouseDownScrollBar(e, "horizontal")} />
             </div>
             <div data-scroll-arrow="right" style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalRightArrowStyles} onClick={e => onClickScrollArrow(e, "right")}  />
+              <div data-arrow style={horizontalRightArrowStyles} onClick={e => onClickScrollArrow(e, "right")} />
             </div>
           </div>
         ) : null}

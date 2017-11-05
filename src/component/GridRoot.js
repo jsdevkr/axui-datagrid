@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import {each, extend, extendOwn, isArray, isEqual, isObject, throttle} from 'underscore';
 import {fromJS} from 'immutable';
-import classNames from 'classnames';
-import sass from '../scss/index.scss';
 import PropTypes from 'prop-types';
 
 import * as UTIL from '../_inc/utils';
@@ -42,8 +41,18 @@ const defaultOptions = {
     mergeCells: false
   },
   page: {
+    buttonsContainerWidth: 200,
+    buttons: [
+      {label: '', onClick: ''},
+      {label: '', onClick: ''},
+      {label: '', onClick: ''},
+      {label: '', onClick: ''},
+      {label: '', onClick: ''},
+      {label: '', onClick: ''}
+    ],
     buttonGroup: {
-      width: 200
+      width: 200,
+
     },
     height: 19,
     display: true,
@@ -463,7 +472,7 @@ class GridRoot extends React.Component {
         });
       },
       horizontal: () => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - styles.pageButtonGroupWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - this.refs.gridRoot.offsetLeft - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -580,15 +589,16 @@ class GridRoot extends React.Component {
 
     return (
       <div ref="gridRoot"
+           className={classNames(this.props.gridCSS.axDatagrid)}
            onWheel={e => {
              this.handleWheel(e);
            }}
-           className={classNames(sass.gridRoot)}
            style={gridRootStyle}>
-        <div className={classNames(sass.gridClipBoard)}>
+        <div className={classNames(this.props.gridCSS.clipBoard)}>
           <textarea ref="gridClipboard"></textarea>
         </div>
         <GridHeader
+          gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
           onResizeColumnResizer={this.onResizeColumnResizer}
           mounted={mounted}
@@ -608,6 +618,7 @@ class GridRoot extends React.Component {
           scrollLeft={this.state.scrollLeft}
         />
         <GridBody
+          gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
           mounted={mounted}
           options={options}
@@ -635,11 +646,13 @@ class GridRoot extends React.Component {
           scrollTop={this.state.scrollTop}
         />
         <GridPage
+          gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
           mounted={mounted}
           styles={styles}
         />
         <GridScroll
+          gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
           onMouseDownScrollBar={this.onMouseDownScrollBar}
           onClickScrollTrack={this.onClickScrollTrack}
@@ -649,7 +662,7 @@ class GridRoot extends React.Component {
 
           bodyHeight={styles.bodyHeight}
           pageHeight={styles.pageHeight}
-          pageButtonGroupWidth={styles.pageButtonGroupWidth}
+          pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
 
           verticalScrollerWidth={styles.verticalScrollerWidth}
           verticalScrollerHeight={styles.verticalScrollerHeight}

@@ -657,7 +657,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
   styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
   styles.pageHeight = (options.page.display) ? options.page.height : 0;
-  styles.pageButtonGroupWidth = options.page.buttonGroup.width;
+  styles.pageButtonsContainerWidth = options.page.buttonsContainerWidth;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
@@ -694,7 +694,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
 
 
   styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight - options.scroller.padding * 2 - options.scroller.arrowSize;
-  styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonGroupWidth - options.scroller.padding * 2 - options.scroller.arrowSize;
+  styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonsContainerWidth - options.scroller.padding * 2 - options.scroller.arrowSize;
   styles.scrollerPadding = options.scroller.padding;
   styles.scrollerArrowSize = options.scroller.arrowSize;
   styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.verticalScrollerHeight / styles.scrollContentHeight : 0;

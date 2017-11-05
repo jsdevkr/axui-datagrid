@@ -1,8 +1,6 @@
 import React from 'react';
-import classNames from 'classnames';
 import * as UTIL from '../_inc/utils';
-import sass from '../scss/index.scss';
-
+import classNames from 'classnames'
 
 class GridHeader extends React.Component {
   constructor(props) {
@@ -23,7 +21,7 @@ class GridHeader extends React.Component {
     ) {
       sameProps = true;
     }
-    
+
     return sameProps;
   }
 
@@ -38,12 +36,12 @@ class GridHeader extends React.Component {
 
     const onMouseMove = (ee) => {
       const {x, y} = UTIL.getMousePosition(ee);
-      let newLeft = currLeft +  x - startMousePosition;
-      if(newLeft < prevLeft){
+      let newLeft = currLeft + x - startMousePosition;
+      if (newLeft < prevLeft) {
         newLeft = prevLeft;
       }
 
-      resizer.style.left = (newLeft-2) + 'px';
+      resizer.style.left = (newLeft - 2) + 'px';
       newWidth = newLeft - prevLeft;
     };
 
@@ -65,7 +63,8 @@ class GridHeader extends React.Component {
 
   render() {
 
-    const refCallback           = this.props.refCallback,
+    const gridCSS               = this.props.gridCSS,
+          refCallback           = this.props.refCallback,
           onResizeColumnResizer = this.props.onResizeColumnResizer,
           mounted               = this.props.mounted,
           optionsHeader         = this.props.optionsHeader,
@@ -147,14 +146,14 @@ class GridHeader extends React.Component {
                     {row.cols.map((col, ci) => {
                       let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
                       let classNameItmes = {};
-                      classNameItmes[sass.hasBorder] = true;
-                      classNameItmes[sass.headerColumn] = true;
+                      classNameItmes[gridCSS.hasBorder] = true;
+                      classNameItmes[gridCSS.headerColumn] = true;
                       if (col.columnAttr === "lineNumber") {
-                        classNameItmes[sass.headerCorner] = true;
+                        classNameItmes[gridCSS.headerCorner] = true;
                       }
                       /*
                       if (row.cols.length == ci + 1) {
-                        classNameItmes[sass.isLastColumn] = true;
+                        classNameItmes[gridCSS.isLastColumn] = true;
                       }
                       */
 
@@ -223,7 +222,7 @@ class GridHeader extends React.Component {
     };
 
     return (
-      <div className={classNames(sass.gridHeader)} style={{height: styles.headerHeight}}>
+      <div className={classNames(gridCSS.header)} style={{height: styles.headerHeight}}>
         {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
         {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
         <div data-scroll-container="header-scroll-container" style={headerPanelStyle}>

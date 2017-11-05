@@ -1,6 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
-import sass from '../scss/index.scss';
+import classNames from 'classnames'
 
 class GridPage extends React.Component {
   constructor(props) {
@@ -24,12 +23,13 @@ class GridPage extends React.Component {
 
   render() {
     const mounted = this.props.mounted,
+          gridCSS = this.props.gridCSS,
           styles = this.props.styles;
 
     if (!mounted) return null;
 
     return (
-      <div className={classNames(sass.gridPage)} style={{height: styles.pageHeight}}>
+      <div className={classNames(gridCSS.page)} style={{height: styles.pageHeight}}>
 
       </div>
     )
