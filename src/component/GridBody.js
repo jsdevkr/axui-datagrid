@@ -31,6 +31,7 @@ class GridBody extends React.Component {
 
     const gridCSS               = this.props.gridCSS,
           refCallback           = this.props.refCallback,
+          onMouseDownBody       = this.props.onMouseDownBody,
           mounted               = this.props.mounted,
           options               = this.props.options,
           styles                = this.props.styles,
@@ -71,13 +72,13 @@ class GridBody extends React.Component {
         let colAlign = options.body.align || _col.align;
         let label;
 
-        if(_col.key === "__line_number__"){
+        if (_col.key === "__line_number__") {
           label = _itemIdx + 1;
         }
-        else if(_col.key === "__row_selector__"){
-          label = <div className={classNames(gridCSS.checkBox)} style={{maxHeight: (_col.width - 10) + 'px', minHeight:(_col.width - 10) + 'px'}}></div>;
+        else if (_col.key === "__row_selector__") {
+          label = <div className={classNames(gridCSS.checkBox)} style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}}></div>;
         }
-        else{
+        else {
           label = _item[_col.key];
         }
 
@@ -125,7 +126,7 @@ class GridBody extends React.Component {
                         return (
                           <tr
                             key={ri}
-                            >
+                          >
                             {row.cols.map((col, ci) => {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItmes = {};
@@ -136,13 +137,13 @@ class GridBody extends React.Component {
                                 classNameItmes[gridCSS.isLastColumn] = true;
                               }
                               */
-                              if(col.columnAttr === "lineNumber"){
+                              if (col.columnAttr === "lineNumber") {
                                 classNameItmes[gridCSS.lineNumber] = true;
                               }
-                              else if(col.columnAttr === "rowSelector"){
+                              else if (col.columnAttr === "rowSelector") {
                                 classNameItmes[gridCSS.rowSelector] = true;
                               }
-                              else{
+                              else {
 
                               }
 
@@ -258,7 +259,10 @@ class GridBody extends React.Component {
     };
 
     return (
-      <div className={classNames(gridCSS.body)} style={{height: styles.bodyHeight}}>
+      <div
+        className={classNames(gridCSS.body)}
+        style={{height: styles.bodyHeight}}
+        onMouseDown={e => onMouseDownBody(e)}>
         {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
         {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
         {(styles.frozenRowHeight > 0) ? (

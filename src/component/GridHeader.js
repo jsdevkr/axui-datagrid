@@ -45,8 +45,8 @@ class GridHeader extends React.Component {
       newWidth = newLeft - prevLeft;
     };
 
-    const offEvent = (e) => {
-      e.preventDefault();
+    const offEvent = (ee) => {
+      ee.preventDefault();
       startMousePosition = null;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);

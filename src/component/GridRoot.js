@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {each, extend, extendOwn, isArray, isFunction, isEqual, isObject, throttle} from 'underscore';
+import {each, extend, extendOwn, isArray, isEqual, isFunction, isObject, throttle} from 'underscore';
 import {fromJS} from 'immutable';
 import PropTypes from 'prop-types';
 
@@ -277,8 +277,8 @@ class GridRoot extends React.Component {
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
     this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
-    this.onUpdateSelectedCells = this.onUpdateSelectedCells.bind(this);
     this.onClickPageButton = this.onClickPageButton.bind(this);
+    this.onMouseDownBody = this.onMouseDownBody.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -401,20 +401,16 @@ class GridRoot extends React.Component {
   }
 
   onMouseDownScrollBar(e, barName) {
-
     e.preventDefault();
     const styles = this.state.styles;
     const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
 
-    this.data[barName + '-scroll-bar'] = {
-      startMousePosition: UTIL.getMousePosition(e)
-    };
+    let startMousePosition = UTIL.getMousePosition(e);
 
     const onMouseMove = (ee) => {
       if (!this.state.dragging) this.setState({dragging: true});
       const {x, y} = UTIL.getMousePosition(ee);
-      const {startMousePosition} = this.data[barName + '-scroll-bar'];
 
       const processor = {
         vertical: () => {
@@ -436,11 +432,11 @@ class GridRoot extends React.Component {
       if (barName in processor) processor[barName]();
     };
 
-    const offEvent = (e) => {
-      e.preventDefault();
+    const offEvent = (ee) => {
+      ee.preventDefault();
 
       this.setState({dragging: false});
-      this.data[barName + '-scroll-bar'] = null;
+      startMousePosition = null;
       // console.log("offEvent");
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
@@ -530,17 +526,13 @@ class GridRoot extends React.Component {
     });
   }
 
-  onUpdateSelectedCells() {
-
-  }
-
   onClickPageButton(e, onClick) {
     const styles = this.state.styles;
     const processor = {
       'PAGE_FIRST': () => {
-          this.setState({
-            scrollTop: 0
-          });
+        this.setState({
+          scrollTop: 0
+        });
       },
       'PAGE_PREV': () => {
       },
@@ -563,6 +555,40 @@ class GridRoot extends React.Component {
     else if (typeof onClick === 'string' && onClick in processor) {
       processor[onClick]();
     }
+  }
+
+  onMouseDownBody(e) {
+    e.preventDefault();
+    let startMousePosition = UTIL.getMousePosition(e);
+
+    // console.log(e.currentTarget);// 바인한 타겟
+    console.log(e.target);
+    const onMouseMove = (ee) => {
+      if (!this.state.dragging) this.setState({dragging: true});
+      
+      const {x, y} = UTIL.getMousePosition(ee);
+      
+      console.log(x, y);
+    };
+
+    const offEvent = (ee) => {
+      ee.preventDefault();
+
+      this.setState({dragging: false});
+      startMousePosition = null;
+      // console.log("offEvent");
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', offEvent);
+      document.removeEventListener('mouseleave', offEvent);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', offEvent);
+    document.addEventListener('mouseleave', offEvent);
+  }
+
+  updateSelectedCells() {
+
   }
 
   refCallback(_key, el) {
@@ -649,7 +675,7 @@ class GridRoot extends React.Component {
         <GridBody
           gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
-          onUpdateSelectedCells={this.onUpdateSelectedCells}
+          onMouseDownBody={this.onMouseDownBody}
           mounted={mounted}
           options={options}
           styles={styles}
