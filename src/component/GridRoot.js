@@ -51,7 +51,11 @@ const defaultOptions = {
       {className: 'datagridIcon-last', onClick: 'PAGE_LAST'}
     ],
     buttonHeight: 16,
-    height: 19
+    height: 19,
+    paging: {
+      currentPage: 0,
+      pageSize: 6
+    }
   },
   scroller: {
     size: 14,
@@ -347,6 +351,9 @@ class GridRoot extends React.Component {
     if (prevProps.height != this.props.height) {
       this.updateDimensions();
     }
+    if (prevState.options.page != this.state.options.page) {
+      this.props.setData(this.props.data, this.state.options);
+    }
   }
 
   /**
@@ -535,20 +542,45 @@ class GridRoot extends React.Component {
   }
 
   onClickPageButton(e, onClick) {
+    const options = this.state.options;
+    const {currentPage, pageSize} = options.page.paging;
+    const totalPages = Math.ceil(this.props.store_receivedList.size / pageSize) - 1;
     const styles = this.state.styles;
+    const setCurrentPage = page => {
+      this.setState({
+        options: {
+          ...options,
+          page: {
+            ...options.page,
+            paging: {
+              ...options.page.paging,
+              currentPage: page
+            },
+          }
+        }
+      });
+    };
     const processor = {
       'PAGE_FIRST': () => {
-          this.setState({
-            scrollTop: 0
-          });
+        this.setState({
+          scrollTop: 0
+        });
       },
       'PAGE_PREV': () => {
+        setCurrentPage(0);
       },
       'PAGE_BACK': () => {
+        if (currentPage) {
+          setCurrentPage(currentPage - 1);
+        }
       },
       'PAGE_PLAY': () => {
+        if (currentPage !== totalPages) {
+          setCurrentPage(currentPage + 1);
+        }
       },
       'PAGE_NEXT': () => {
+        setCurrentPage(totalPages);
       },
       'PAGE_LAST': () => {
         this.setState({
@@ -683,6 +715,7 @@ class GridRoot extends React.Component {
           pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
           pageButtons={options.page.buttons}
           pageButtonHeight={options.page.buttonHeight}
+          paging={options.page.paging}
           list={this.props.store_list}
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}
@@ -763,7 +796,11 @@ GridRoot.propTypes = {
       height: PropTypes.number,
       display: PropTypes.bool,
       statusDisplay: PropTypes.bool,
-      navigationItemCount: PropTypes.number
+      navigationItemCount: PropTypes.number,
+      paging: {
+        pageSize: PropTypes.number,
+        currentPage: PropTypes.number
+      }
     }),
     scroller: PropTypes.shape({
       size: PropTypes.number,

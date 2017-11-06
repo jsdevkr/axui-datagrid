@@ -3,18 +3,6 @@
 //~~~~~~~
 
 @mixin gridRowBackground() {
-  &.tr-0 {
-    background: $ax6grid-row-bg-0;
-  }
-  &.tr-1 {
-    background: $ax6grid-row-bg-1;
-  }
-  &.tr-2 {
-    background: $ax6grid-row-bg-2;
-  }
-  &.tr-3 {
-    background: $ax6grid-row-bg-3;
-  }
   &.hover {
     background: $ax6grid-row-hover-bg;
   }
@@ -79,6 +67,25 @@
   }
   &.focused {
     box-shadow: $ax6grid-cell-focused-box-shadow;
+  }
+  &.headerColumn {
+    cursor: default;
+    &:hover {
+      background: $ax6grid-row-hover-bg;
+    }
+  }
+
+  &.lineNumber {
+    cursor: e-resize;
+    &:hover {
+      background: $ax6grid-row-hover-bg;
+    }
+  }
+  &.rowSelector {
+    //padding: 0;
+    [data-span] {
+
+    }
   }
 
   [data-span] {
@@ -179,7 +186,6 @@
       }
 
     }
-
     [data-editor] {
       position: absolute;
       left: 0;
@@ -192,7 +198,6 @@
         display: none;
       }
     }
-
     [data-select] {
       position: absolute;
       display: block;
@@ -207,7 +212,6 @@
         border-radius: 0;
       }
     }
-
     [data-editor="checkbox"] {
       display: inline-block;
       position: relative;
@@ -235,7 +239,6 @@
         }
       }
     }
-
     [data-tnode-arrow] {
       display: inline-block;
       box-sizing: content-box;
@@ -256,10 +259,60 @@
     [data-tnode-item="item"] {
       display: inline-block;
     }
+
+    .checkBox {
+      box-sizing: border-box;
+      display: inline-block;
+      position: relative;
+      border: $ax6grid-cell-checkbox-border;
+      border-radius: $ax6grid-cell-checkbox-border-radius;
+      @include ax-background(to bottom, $ax6grid-cell-checkbox-bg-colors);
+      height: 100%;
+      width: 100%;
+      &:after {
+        content: '';
+        width: 60%;
+        height: 40%;
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0.0;
+        transform: rotate(-50deg);
+      }
+    }
   }
 }
 
-.gridRoot {
+@mixin data-arrow() {
+  [data-arrow] {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: $ax6grid-scroll-bar-bg;
+    cursor: pointer;
+    &:hover {
+      border-color: $ax6grid-scroll-bar-hover-bg;
+    }
+
+    /*
+    border-bottom: solid $triangle-border-width $ax6grid-scroll-bar-bg;
+    border-right: solid $triangle-border-width transparent;
+    border-left: solid $triangle-border-width transparent;
+    border-top: 0 none;
+    */
+  }
+}
+
+.axDatagrid {
   position: relative;
   background: $ax6grid-bg;
   border: $ax6grid-border;
@@ -278,6 +331,11 @@
         @include gridCell();
       }
     }
+    tr:last-child {
+      td {
+        border-bottom: $ax6grid-last-row-border;
+      }
+    }
 
   }
 
@@ -294,14 +352,14 @@
     }
   }
 
-  .gridClipBoard {
+  .clipBoard {
     position: absolute;
     left: -100%;
     top: -100%;
     height: 0;
     width: 0;
   }
-  .gridHeader {
+  .header {
     user-select: none;
     box-sizing: border-box;
     position: relative;
@@ -310,6 +368,28 @@
     border: 0 none;
     border-bottom: $ax6grid-header-column-border;
 
+    table tr td {
+      box-shadow: $ax6grid-header-column-box-shadow;
+      &.headerCorner {
+        cursor: se-resize;
+        [data-span] {
+          &:before {
+            $triangle-border-width: $ax6grid-font-size/3;
+            position: absolute;
+            right: $triangle-border-width;
+            bottom: $triangle-border-width;
+            content: ' ';
+            display: block;
+            width: 0;
+            height: 0;
+            border-bottom: solid $triangle-border-width $ax6grid-header-column-color;
+            border-right: solid $triangle-border-width $ax6grid-header-column-color;
+            border-left: solid $triangle-border-width transparent;
+            border-top: solid $triangle-border-width transparent;
+          }
+        }
+      }
+    }
     [data-panel] {
       &[data-panel="aside-header"] {
         overflow: hidden;
@@ -327,20 +407,35 @@
         top: 0;
       }
     }
+    [data-column-resizer] {
+      position: absolute;
+      top: 0;
+      cursor: ew-resize;
+      &:active {
+        background: rgba(255, 0, 0, 0.3);
+      }
+    }
   }
-  .gridBody {
+  .body {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-
-    [data-panel] {
-
+    [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-body-scroll"] {
+      tr:nth-child(even) {
+        background: $ax6grid-row-bg-0
+      }
+      tr:nth-child(odd) {
+        background: $ax6grid-row-bg-1
+      }
     }
     [data-panel="aside-body-scroll"] {
       background: $ax6grid-aside-bg;
+      table tr td {
+        box-shadow: $ax6grid-header-column-box-shadow;
+      }
     }
   }
-  .gridPage {
+  .page {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -349,19 +444,59 @@
     user-select: none;
     box-sizing: border-box;
     overflow: hidden;
-    @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
+    @include ax-background(to bottom, $ax6grid-page-bg-colors);
     border: 0 none;
-    border-top: $ax6grid-header-column-border;
+    border-top: $ax6grid-page-border;
+
+    .pageButtons {
+      button {
+        box-sizing: border-box;
+        //border: 1px solid #C9C9C9;
+        border-width: 0;
+        background: transparent;
+        border-radius: 4px;
+        padding: 3px;
+        margin: 0 1px;
+        cursor: pointer;
+        &:hover {
+          background: $ax6grid-scroll-bar-bg;
+        }
+        &:focus {
+          outline: 0;
+        }
+        [data-button-svg] {
+          width: 100%;
+          height: 100%;
+          opacity: 0.6;
+        }
+      }
+    }
   }
-  .gridScroller {
+  .scroller {
     position: absolute;
     right: 0;
     bottom: 0;
 
-    .scrollBar{
+    [data-scroll-track] {
+      background: $ax6grid-scroll-track-bg;
+      box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
+      box-sizing: border-box;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+    [data-scroll-arrow] {
+      position: absolute;
+      box-sizing: border-box;
+    }
+    [data-scroll] {
+      box-sizing: border-box;
+      position: relative;
+    }
+    .scrollBar {
       position: relative;
       top: 0;
-      left:0;
+      left: 0;
       box-sizing: border-box;
       border: $ax6grid-scroll-bar-border;
       border-radius: $ax6grid-scroll-bar-border-radius;
@@ -369,45 +504,51 @@
       height: 100%;
 
       background: $ax6grid-scroll-bar-bg;
-      &:hover{
+      &:hover {
         border: $ax6grid-scroll-bar-hover-border;
         background: $ax6grid-scroll-bar-hover-bg;
       }
     }
 
-    [data-scroll="vertical"], [data-scroll="horizontal"]{
-      box-sizing: border-box;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      background: $ax6grid-scroll-track-bg;
-      box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
+    [data-scroll-arrow="up"] {
+      left: 0;
+      top: 0;
+      @include data-arrow();
     }
-    [data-scroll="vertical"]{
+    [data-scroll-arrow="down"] {
+      left: 0;
+      bottom: 0;
+      @include data-arrow();
+    }
+    [data-scroll="vertical"] {
+      width: 100%;
       height: 100%;
-      padding: 0 2px;
-      border-left: $ax6grid-scroll-track-border;
-      .scrollBar{
+      padding: 0;
+      .scrollBar {
         cursor: ns-resize;
       }
     }
-    [data-scroll="horizontal"]{
+
+    [data-scroll-track="horizontal"] {
+      border-radius: 3px;
+    }
+    [data-scroll-arrow="left"] {
+      left: 0;
+      top: 0;
+      @include data-arrow();
+    }
+    [data-scroll-arrow="right"] {
+      right: 0;
+      top: 0;
+      @include data-arrow();
+    }
+    [data-scroll="horizontal"] {
       width: 100%;
-      padding: 2px 0;
-      border-top: $ax6grid-scroll-track-border;
-      .scrollBar{
+      height: 100%;
+      padding: 0;
+      .scrollBar {
         cursor: ew-resize;
       }
     }
-    [data-scroll="corner"]{
-      box-sizing: border-box;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      background: $ax6grid-scroll-corner-bg;
-      border-top: $ax6grid-scroll-track-border;
-      border-left: $ax6grid-scroll-track-border;
-    }
   }
 }
-

@@ -1,94 +1,229 @@
-import React from 'react';
-import classNames from 'classnames';
-import sass from '../scss/index.scss';
-import PropTypes from 'prop-types';
+'use strict';
 
-class GridScroll extends React.Component {
-  constructor(props) {
-    super(props);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-    this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
-    this.onMouseMoveScrollBar = this.onMouseMoveScrollBar.bind(this);
-    this.onMouseUpScrollBar = this.onMouseUpScrollBar.bind(this);
-    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var GridScroll = function (_React$Component) {
+  _inherits(GridScroll, _React$Component);
+
+  function GridScroll(props) {
+    _classCallCheck(this, GridScroll);
+
+    var _this = _possibleConstructorReturn(this, (GridScroll.__proto__ || Object.getPrototypeOf(GridScroll)).call(this, props));
+
+    _this.onClickScrollTrack = _this.onClickScrollTrack.bind(_this);
+    return _this;
   }
 
-  onMouseDownScrollBar() {}
-  onMouseMoveScrollBar() {}
-  onMouseUpScrollBar() {}
-  onClickScrollTrack() {}
+  /*
+  // 사실상 항상 리랜더 해야 하는 컴포넌트라서 제어하지 않을 작정
+    shouldComponentUpdate(nextProps, nextState) {
+      let sameProps = false;
+       for(const k in this.props){
+        if(typeof nextProps[k] === "undefined" || nextProps[k] !== this.props[k]){
+          sameProps = true;
+        }
+      }
+       return sameProps;
+    }
+  */
 
-  render() {
-    if (!this.props.mounted) return null;
-    if (this.props.verticalScrollerWidth === 0 && this.props.horizontalScrollerHeight === 0) return null;
+  _createClass(GridScroll, [{
+    key: 'onClickScrollTrack',
+    value: function onClickScrollTrack(e, barName) {
+      e.preventDefault();
+      if (e.target.getAttribute("data-scroll")) {
+        this.props.onClickScrollTrack(e, barName);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
-    let verticalScrollBarHeight = this.props.scrollContentContainerHeight * this.props.CTInnerHeight / this.props.scrollContentHeight,
-        horizontalScrollBarWidth = this.props.scrollContentContainerWidth * this.props.CTInnerWidth / this.props.scrollContentWidth;
+      var gridCSS = this.props.gridCSS,
+          refCallback = this.props.refCallback,
+          onMouseDownScrollBar = this.props.onMouseDownScrollBar,
+          onClickScrollArrow = this.props.onClickScrollArrow,
+          mounted = this.props.mounted,
+          bodyHeight = this.props.bodyHeight,
+          pageHeight = this.props.pageHeight,
+          verticalScrollerHeight = this.props.verticalScrollerHeight,
+          verticalScrollerWidth = this.props.verticalScrollerWidth,
+          horizontalScrollerWidth = this.props.horizontalScrollerWidth,
+          horizontalScrollerHeight = this.props.horizontalScrollerHeight,
+          verticalScrollBarHeight = this.props.verticalScrollBarHeight,
+          horizontalScrollBarWidth = this.props.horizontalScrollBarWidth,
+          scrollerArrowSize = this.props.scrollerArrowSize,
+          scrollerPadding = this.props.scrollerPadding,
+          scrollBarLeft = this.props.scrollBarLeft,
+          scrollBarTop = this.props.scrollBarTop;
 
-    let verticalStyles = {
-      width: this.props.verticalScrollerWidth,
-      height: this.props.CTInnerHeight,
-      bottom: this.props.pageHeight + (this.props.horizontalScrollerHeight ? this.props.horizontalScrollerHeight : 0)
-    };
-    let verticalBarStyles = {
-      height: verticalScrollBarHeight,
-      top: -this.props.scrollTop * (this.props.CTInnerHeight - verticalScrollBarHeight) / (this.props.scrollContentHeight - this.props.scrollContentContainerHeight)
-    };
-    let horizontalStyles = {
-      width: this.props.CTInnerWidth,
-      height: this.props.horizontalScrollerHeight,
-      bottom: this.props.pageHeight,
-      right: this.props.verticalScrollerWidth ? this.props.verticalScrollerWidth : 0
-    };
-    let horizontalBarStyles = {
-      width: horizontalScrollBarWidth,
-      left: -this.props.scrollLeft * (this.props.CTInnerWidth - horizontalScrollBarWidth) / (this.props.scrollContentWidth - this.props.scrollContentContainerWidth)
-    };
-    let cornerStyle = {
-      width: this.props.verticalScrollerWidth,
-      height: this.props.horizontalScrollerHeight,
-      bottom: this.props.pageHeight
-    };
+      if (!mounted) return null;
 
-    return React.createElement(
-      'div',
-      { className: classNames(sass.gridScroller) },
-      this.props.verticalScrollerWidth ? React.createElement(
+      if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
+
+      var verticalArrowStyles = {
+        width: verticalScrollerWidth,
+        height: scrollerArrowSize / 2 + scrollerPadding
+      };
+
+      var arrowWidth = (verticalScrollerWidth - scrollerPadding * 2) / 2;
+      var verticalTopArrowStyles = {
+        left: scrollerPadding,
+        top: (verticalArrowStyles.height - arrowWidth) / 2,
+        borderTop: "0 none",
+        borderRight: "solid " + arrowWidth + "px transparent",
+        borderBottomWidth: arrowWidth + "px",
+        borderLeft: "solid " + arrowWidth + "px transparent"
+      };
+      var verticalBottomArrowStyles = {
+        left: scrollerPadding,
+        top: (verticalArrowStyles.height - arrowWidth) / 2,
+        borderTopWidth: arrowWidth + "px",
+        borderRight: "solid " + arrowWidth + "px transparent",
+        borderBottom: "0 none",
+        borderLeft: "solid " + arrowWidth + "px transparent"
+      };
+      var verticalStyles = {
+        width: verticalScrollerWidth,
+        height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize,
+        bottom: pageHeight,
+        padding: scrollerPadding,
+        paddingTop: scrollerArrowSize / 2 + scrollerPadding
+      };
+      var verticalBarStyles = {
+        height: verticalScrollBarHeight,
+        top: scrollBarTop
+      };
+
+      var horizontalArrowStyles = {
+        width: scrollerArrowSize / 2 + scrollerPadding,
+        height: horizontalScrollerHeight
+      };
+
+      var horizontalLeftArrowStyles = {
+        left: (horizontalArrowStyles.width - arrowWidth) / 2,
+        top: scrollerPadding,
+        borderTop: "solid " + arrowWidth + "px transparent",
+        borderRightWidth: arrowWidth + "px",
+        borderBottom: "solid " + arrowWidth + "px transparent",
+        borderLeft: "0 none"
+      };
+      var horizontalRightArrowStyles = {
+        left: (horizontalArrowStyles.width - arrowWidth) / 2,
+        top: scrollerPadding,
+        borderTop: "solid " + arrowWidth + "px transparent",
+        borderRight: "0 none",
+        borderBottom: "solid " + arrowWidth + "px transparent",
+        borderLeftWidth: arrowWidth + "px"
+      };
+      var horizontalStyles = {
+        width: horizontalScrollerWidth + scrollerPadding * 2 + scrollerArrowSize,
+        height: horizontalScrollerHeight,
+        bottom: (pageHeight - 1 - horizontalScrollerHeight) / 2,
+        right: (pageHeight - 1 - horizontalScrollerHeight) / 2,
+        padding: scrollerPadding,
+        paddingLeft: scrollerArrowSize / 2 + scrollerPadding
+      };
+      var horizontalBarStyles = {
+        width: horizontalScrollBarWidth,
+        left: scrollBarLeft
+      };
+
+      return _react2.default.createElement(
         'div',
-        { 'data-scroll': 'vertical', style: verticalStyles },
-        React.createElement('div', { className: classNames(sass.scrollBar), style: verticalBarStyles })
-      ) : null,
-      this.props.horizontalScrollerHeight ? React.createElement(
-        'div',
-        { 'data-scroll': 'horizontal', style: horizontalStyles },
-        React.createElement('div', { className: classNames(sass.scrollBar), style: horizontalBarStyles })
-      ) : null,
-      this.props.verticalScrollerWidth && this.props.horizontalScrollerHeight ? React.createElement('div', { 'data-scroll': 'corner', style: cornerStyle }) : null
-    );
-  }
-}
+        { className: (0, _classnames2.default)(gridCSS.scroller) },
+        verticalScrollerWidth ? _react2.default.createElement(
+          'div',
+          { 'data-scroll-track': 'vertical', style: verticalStyles },
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll-arrow': 'up', style: verticalArrowStyles },
+            _react2.default.createElement('div', { 'data-arrow': true, style: verticalTopArrowStyles, onClick: function onClick(e) {
+                return onClickScrollArrow(e, "up");
+              } })
+          ),
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll': 'vertical',
+              ref: function ref(_ref) {
+                return refCallback("vertical-scroll-track", _ref);
+              },
+              onClick: function onClick(e) {
+                return _this2.onClickScrollTrack(e, "vertical");
+              } },
+            _react2.default.createElement('div', { className: (0, _classnames2.default)(gridCSS.scrollBar),
+              style: verticalBarStyles,
+              onMouseDown: function onMouseDown(e) {
+                return onMouseDownScrollBar(e, "vertical");
+              } })
+          ),
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll-arrow': 'down', style: verticalArrowStyles },
+            _react2.default.createElement('div', { 'data-arrow': true, style: verticalBottomArrowStyles, onClick: function onClick(e) {
+                return onClickScrollArrow(e, "down");
+              } })
+          )
+        ) : null,
+        horizontalScrollerHeight ? _react2.default.createElement(
+          'div',
+          { 'data-scroll-track': 'horizontal', style: horizontalStyles },
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll-arrow': 'left', style: horizontalArrowStyles },
+            _react2.default.createElement('div', { 'data-arrow': true, style: horizontalLeftArrowStyles, onClick: function onClick(e) {
+                return onClickScrollArrow(e, "left");
+              } })
+          ),
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll': 'horizontal',
+              ref: function ref(_ref2) {
+                return refCallback("horizontal-scroll-track", _ref2);
+              },
+              onClick: function onClick(e) {
+                return _this2.onClickScrollTrack(e, "horizontal");
+              } },
+            _react2.default.createElement('div', { className: (0, _classnames2.default)(gridCSS.scrollBar),
+              style: horizontalBarStyles,
+              onMouseDown: function onMouseDown(e) {
+                return onMouseDownScrollBar(e, "horizontal");
+              } })
+          ),
+          _react2.default.createElement(
+            'div',
+            { 'data-scroll-arrow': 'right', style: horizontalArrowStyles },
+            _react2.default.createElement('div', { 'data-arrow': true, style: horizontalRightArrowStyles, onClick: function onClick(e) {
+                return onClickScrollArrow(e, "right");
+              } })
+          )
+        ) : null
+      );
+    }
+  }]);
 
-GridScroll.propTypes = {
-  refCallback: PropTypes.func,
-  onMoveScrollBar: PropTypes.func,
-  mounted: PropTypes.bool,
-  optionsScroller: PropTypes.object,
-  CTInnerWidth: PropTypes.number,
-  CTInnerHeight: PropTypes.number,
-  pageHeight: PropTypes.number,
-  verticalScrollerWidth: PropTypes.number,
-  horizontalScrollerHeight: PropTypes.number,
-  scrollContentContainerHeight: PropTypes.number,
-  scrollContentHeight: PropTypes.number,
-  scrollContentContainerWidth: PropTypes.number,
-  scrollContentWidth: PropTypes.number,
-  scrollLeft: PropTypes.number,
-  scrollTop: PropTypes.number
-};
+  return GridScroll;
+}(_react2.default.Component);
 
-GridScroll.defaultProps = {
-  scrollLeft: 0,
-  scrollTop: 0
-};
-
-export default GridScroll;
+exports.default = GridScroll;
