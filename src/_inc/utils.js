@@ -22,7 +22,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         label: "",
         colspan: 1,
         rowspan: _table.rows.length,
-        colIndex: null
+        rowIndex: 0,
+        colIndex: -1
       }, _col = {};
 
       if (options.showLineNumber) {
@@ -31,7 +32,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           _width: options.lineNumberColumnWidth,
           align: "center",
           columnAttr: "lineNumber",
-          key: "__line_number__", label: ""
+          key: "__line_number__",
+          label: ""
         });
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);

@@ -117,13 +117,15 @@ class GridBody extends React.Component {
               (li) => {
                 const item = _list.get(li);
                 if (item) {
+
+                  //className={classNames(gridCSS["tr-" + (li % 4)])}
                   return (
                     _bodyRow.rows.map(
                       (row, ri) => {
                         return (
                           <tr
                             key={ri}
-                            className="">
+                            >
                             {row.cols.map((col, ci) => {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItmes = {};
@@ -143,10 +145,11 @@ class GridBody extends React.Component {
                               else{
 
                               }
-                              
+
                               return (
                                 <td
                                   key={ci}
+                                  data-pos={li + ',' + col.rowIndex + ',' + col.colIndex}
                                   colSpan={col.colspan}
                                   rowSpan={col.rowspan}
                                   className={classNames(classNameItmes)}

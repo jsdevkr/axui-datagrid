@@ -3,18 +3,6 @@
 //~~~~~~~
 
 @mixin gridRowBackground() {
-  &.tr-0 {
-    background: $ax6grid-row-bg-0;
-  }
-  &.tr-1 {
-    background: $ax6grid-row-bg-1;
-  }
-  &.tr-2 {
-    background: $ax6grid-row-bg-2;
-  }
-  &.tr-3 {
-    background: $ax6grid-row-bg-3;
-  }
   &.hover {
     background: $ax6grid-row-hover-bg;
   }
@@ -432,8 +420,13 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    [data-panel] {
-
+    [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-body-scroll"] {
+      tr:nth-child(even) {
+        background: $ax6grid-row-bg-0
+      }
+      tr:nth-child(odd) {
+        background: $ax6grid-row-bg-1
+      }
     }
     [data-panel="aside-body-scroll"] {
       background: $ax6grid-aside-bg;
@@ -465,11 +458,13 @@
         padding: 3px;
         margin: 0 1px;
         cursor: pointer;
-        &:hover{
+        &:hover {
           background: $ax6grid-scroll-bar-bg;
         }
-        &:focus {outline:0;}
-        [data-button-svg]{
+        &:focus {
+          outline: 0;
+        }
+        [data-button-svg] {
           width: 100%;
           height: 100%;
           opacity: 0.6;
