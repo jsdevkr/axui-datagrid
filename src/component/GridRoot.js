@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {each, extend, extendOwn, isArray, isEqual, isObject, throttle} from 'underscore';
+import {each, extend, extendOwn, isArray, isFunction, isEqual, isObject, throttle} from 'underscore';
 import {fromJS} from 'immutable';
 import PropTypes from 'prop-types';
 
@@ -278,6 +278,7 @@ class GridRoot extends React.Component {
     this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
     this.onUpdateSelectedCells = this.onUpdateSelectedCells.bind(this);
+    this.onClickPageButton = this.onClickPageButton.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -479,7 +480,6 @@ class GridRoot extends React.Component {
 
   onClickScrollArrow(e, direction) {
     const styles = this.state.styles;
-
     const processor = {
       up: () => {
         let scrollAmount = styles.scrollContentContainerHeight;
@@ -532,6 +532,37 @@ class GridRoot extends React.Component {
 
   onUpdateSelectedCells() {
 
+  }
+
+  onClickPageButton(e, onClick) {
+    const styles = this.state.styles;
+    const processor = {
+      'PAGE_FIRST': () => {
+          this.setState({
+            scrollTop: 0
+          });
+      },
+      'PAGE_PREV': () => {
+      },
+      'PAGE_BACK': () => {
+      },
+      'PAGE_PLAY': () => {
+      },
+      'PAGE_NEXT': () => {
+      },
+      'PAGE_LAST': () => {
+        this.setState({
+          scrollTop: styles.scrollContentContainerHeight - styles.scrollContentHeight
+        });
+      }
+    };
+
+    if (isFunction(onClick)) {
+
+    }
+    else if (typeof onClick === 'string' && onClick in processor) {
+      processor[onClick]();
+    }
   }
 
   refCallback(_key, el) {
@@ -640,18 +671,21 @@ class GridRoot extends React.Component {
           bodyGroupingData={_bodyGroupingData}
 
           list={this.props.store_list}
-
           scrollLeft={this.state.scrollLeft}
           scrollTop={this.state.scrollTop}
         />
         <GridPage
           gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
+          onClickPageButton={this.onClickPageButton}
           mounted={mounted}
           styles={styles}
           pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
           pageButtons={options.page.buttons}
           pageButtonHeight={options.page.buttonHeight}
+          list={this.props.store_list}
+          scrollLeft={this.state.scrollLeft}
+          scrollTop={this.state.scrollTop}
         />
         <GridScroll
           gridCSS={this.props.gridCSS}
