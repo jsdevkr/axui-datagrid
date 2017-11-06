@@ -41,23 +41,17 @@ const defaultOptions = {
     mergeCells: false
   },
   page: {
-    buttonsContainerWidth: 200,
+    buttonsContainerWidth: 150,
     buttons: [
-      {label: '', onClick: ''},
-      {label: '', onClick: ''},
-      {label: '', onClick: ''},
-      {label: '', onClick: ''},
-      {label: '', onClick: ''},
-      {label: '', onClick: ''}
+      {className: 'datagridIcon-first', onClick: 'PAGE_FIRST'},
+      {className: 'datagridIcon-prev', onClick: 'PAGE_PREV'},
+      {className: 'datagridIcon-back', onClick: 'PAGE_BACK'},
+      {className: 'datagridIcon-play', onClick: 'PAGE_PLAY'},
+      {className: 'datagridIcon-next', onClick: 'PAGE_NEXT'},
+      {className: 'datagridIcon-last', onClick: 'PAGE_LAST'}
     ],
-    buttonGroup: {
-      width: 200,
-
-    },
-    height: 19,
-    display: true,
-    statusDisplay: true,
-    navigationItemCount: 5
+    buttonHeight: 16,
+    height: 19
   },
   scroller: {
     size: 14,
@@ -283,12 +277,12 @@ class GridRoot extends React.Component {
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
     this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
+    this.onUpdateSelectedCells = this.onUpdateSelectedCells.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
   componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
-
 
     this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
     window.addEventListener("resize", this.throttled_updateDimensions);
@@ -536,6 +530,10 @@ class GridRoot extends React.Component {
     });
   }
 
+  onUpdateSelectedCells() {
+
+  }
+
   refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
     this.componentRefs[_key] = el;
@@ -620,6 +618,7 @@ class GridRoot extends React.Component {
         <GridBody
           gridCSS={this.props.gridCSS}
           refCallback={this.refCallback}
+          onUpdateSelectedCells={this.onUpdateSelectedCells}
           mounted={mounted}
           options={options}
           styles={styles}
@@ -650,6 +649,9 @@ class GridRoot extends React.Component {
           refCallback={this.refCallback}
           mounted={mounted}
           styles={styles}
+          pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
+          pageButtons={options.page.buttons}
+          pageButtonHeight={options.page.buttonHeight}
         />
         <GridScroll
           gridCSS={this.props.gridCSS}
@@ -662,7 +664,7 @@ class GridRoot extends React.Component {
 
           bodyHeight={styles.bodyHeight}
           pageHeight={styles.pageHeight}
-          pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
+
 
           verticalScrollerWidth={styles.verticalScrollerWidth}
           verticalScrollerHeight={styles.verticalScrollerHeight}

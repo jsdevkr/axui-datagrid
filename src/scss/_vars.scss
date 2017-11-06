@@ -87,3 +87,26 @@ $ax6grid-cell-selected-color: #000 !default;
 $ax6grid-resizer-color: #ff3300 !default;
 $ax6grid-resizer-size: 2px !default;
 
+.datagridIcon-first {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Efirst%3C/title%3E%3Cpath d=%22M1.125 10.875v-9.75h1.625v4.469l4.063-4.063v4.063l4.063-4.063v8.938l-4.063-4.063v4.063l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-prev {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eprevious%3C/title%3E%3Cpath d=%22M3.098 10.875v-9.75h1.625v4.469l4.063-4.063v8.938l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-back {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eback%3C/title%3E%3Cpath d=%22M9.75 1.5l-7.5 4.5 7.5 4.5z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-play {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eplay%3C/title%3E%3Cpath d=%22M2.25 1.5l7.5 4.5-7.5 4.5z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-next {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Enext%3C/title%3E%3Cpath d=%22M8.902 1.125v9.75h-1.625v-4.469l-4.063 4.063v-8.938l4.063 4.063v-4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-last {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Elast%3C/title%3E%3Cpath d=%22M10.875 1.125v9.75h-1.625v-4.469l-4.063 4.063v-4.063l-4.063 4.063v-8.938l4.063 4.063v-4.063l4.063 4.063v-4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}

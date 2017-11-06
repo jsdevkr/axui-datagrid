@@ -38,7 +38,6 @@ class GridScroll extends React.Component {
           mounted                   = this.props.mounted,
           bodyHeight                = this.props.bodyHeight,
           pageHeight                = this.props.pageHeight,
-          pageButtonsContainerWidth = this.props.pageButtonsContainerWidth,
           verticalScrollerHeight    = this.props.verticalScrollerHeight,
           verticalScrollerWidth     = this.props.verticalScrollerWidth,
           horizontalScrollerWidth   = this.props.horizontalScrollerWidth,
@@ -158,9 +157,8 @@ class GridScroll extends React.Component {
             </div>
           </div>
         ) : null}
-
       </div>
-    )
+    );
 
   }
 }

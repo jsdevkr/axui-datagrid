@@ -656,7 +656,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
   styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
-  styles.pageHeight = (options.page.display) ? options.page.height : 0;
+  styles.pageHeight = options.page.height;
   styles.pageButtonsContainerWidth = options.page.buttonsContainerWidth;
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;

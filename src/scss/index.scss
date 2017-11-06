@@ -299,7 +299,7 @@
   }
 }
 
-@mixin data-arrow(){
+@mixin data-arrow() {
   [data-arrow] {
     content: ' ';
     display: block;
@@ -311,7 +311,7 @@
     border-style: solid;
     border-color: $ax6grid-scroll-bar-bg;
     cursor: pointer;
-    &:hover{
+    &:hover {
       border-color: $ax6grid-scroll-bar-hover-bg;
     }
 
@@ -454,6 +454,28 @@
     @include ax-background(to bottom, $ax6grid-page-bg-colors);
     border: 0 none;
     border-top: $ax6grid-page-border;
+
+    .pageButtons {
+      button {
+        box-sizing: border-box;
+        //border: 1px solid #C9C9C9;
+        border-width: 0;
+        background: #ECECEC;
+        border-radius: 4px;
+        padding: 3px;
+        margin: 0 1px;
+        cursor: pointer;
+        &:hover{
+          background: $ax6grid-scroll-bar-bg;
+        }
+        &:focus {outline:0;}
+        [data-button-svg]{
+          width: 100%;
+          height: 100%;
+          opacity: 0.6;
+        }
+      }
+    }
   }
   .scroller {
     position: absolute;
@@ -493,10 +515,6 @@
       }
     }
 
-
-    [data-scroll-track="vertical"] {
-      //border-left: $ax6grid-scroll-track-border;
-    }
     [data-scroll-arrow="up"] {
       left: 0;
       top: 0;
