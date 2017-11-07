@@ -56,7 +56,6 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
     }
   }
 
-
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
     let row = _table.rows[r];
 
@@ -77,7 +76,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
               rightCol = extend({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
-          rightCol.colIndex = 0;
+          // rightCol.colIndex = _frozenColumnIndex;
           rightCol.colspan = col.colspan - leftCol.colspan;
 
           tempTable_l.rows[r].cols.push(leftCol);
@@ -88,7 +87,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
       }
       else {
         // 오른편
-        tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
+        //tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
+        tempTable_r.rows[r].cols.push(Object.assign({}, col, {}));
       }
 
       col = null;
@@ -781,7 +781,7 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
 }
 
 export function getSelectedCellByMousePosition({x:sx, y:sy}, {x:ex, y:ey}) {
-  console.log(sx, ex);
+  //console.log(sx, ex);
 
   return [];
 }

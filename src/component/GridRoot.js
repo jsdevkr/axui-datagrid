@@ -561,25 +561,28 @@ class GridRoot extends React.Component {
 
   onMouseDownBody(e) {
     e.preventDefault();
-    let startMousePosition = UTIL.getMousePosition(e);
+    const startMousePosition = UTIL.getMousePosition(e);
+    const dragStartPosition = e.target.getAttribute("data-pos");
+    if (!dragStartPosition) return false;
+
+    console.log(dragStartPosition);
 
     const onMouseMove = (ee) => {
       if (!this.state.dragging) this.setState({dragging: true});
-      
+
       let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, UTIL.getMousePosition(ee));
-      console.log(selectedCells);
+      //console.log(selectedCells);
     };
 
     const offEvent = (ee) => {
       ee.preventDefault();
 
       this.setState({dragging: false});
-      startMousePosition = null;
-      // console.log("offEvent");
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
     };
+
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', offEvent);

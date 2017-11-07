@@ -89,11 +89,11 @@ class GridBody extends React.Component {
           lineHeight: lineHeight + "px",
           textAlign: colAlign
         };
-
+        
         return (
           <span
             data-span
-            data-pos={_itemIdx + ',' + _col.rowIndex + ',' + _col.colIndex}
+            data-pos={_col.colIndex + ',' + _col.rowIndex + ',' + _itemIdx}
             style={spanStyle}>
             {label || ' '}
           </span>
@@ -147,7 +147,7 @@ class GridBody extends React.Component {
                                 </td>
                               );
                             })}
-                            <td>&nbsp;</td>
+                            <td data-pos={'E,0,' + li}>&nbsp;</td>
                           </tr>
                         )
                       }
@@ -246,6 +246,9 @@ class GridBody extends React.Component {
       left: scrollLeft
     };
 
+    //console.table(leftHeaderColGroup);
+    //console.table(bodyRowData.rows[0].cols);
+    
     return (
       <div
         className={classNames(gridCSS.body)}
