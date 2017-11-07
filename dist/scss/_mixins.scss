@@ -30,6 +30,10 @@
   background-image: linear-gradient($pos, $g1, $g2);
 }
 
+@mixin transform(){
+
+}
+
 @mixin sort-arrow($arrow-size, $ratio-0, $ratio-1, $arrow-color, $opacity, $direction) {
   position: absolute;
   content: ' ';

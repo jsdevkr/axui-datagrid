@@ -26,7 +26,7 @@ gulp.task('default', ['js-ES', 'scss-ES'], function () {
 gulp.task('js-ES', function () {
   return gulp.src([fnObj.paths.src + '/**/*.js'])
     .pipe(babel({
-      presets: ['react']
+      presets: ['react', 'es2015', 'stage-0']
     }))
     .pipe(gulp.dest(fnObj.paths.dist));
 });
