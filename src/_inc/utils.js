@@ -779,3 +779,9 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
     scrollTop
   }
 }
+
+export function getSelectedCellByMousePosition({x:sx, y:sy}, {x:ex, y:ey}) {
+  console.log(sx, ex);
+
+  return [];
+}
