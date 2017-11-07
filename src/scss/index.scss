@@ -54,17 +54,9 @@
   position: relative;
   padding: 0;
   border: 0 none;
+  border-right: $ax6grid-column-border;
+  border-bottom: $ax6grid-column-border;
 
-  &.hasBorder {
-    border-right: $ax6grid-column-border;
-    border-bottom: $ax6grid-column-border;
-  }
-  &.isLastColumn {
-    // border-right: 0 none;
-  }
-  &.lineNumberColumn {
-
-  }
   &.focused {
     box-shadow: $ax6grid-cell-focused-box-shadow;
   }

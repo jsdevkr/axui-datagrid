@@ -76,20 +76,25 @@ class GridBody extends React.Component {
           label = _itemIdx + 1;
         }
         else if (_col.key === "__row_selector__") {
-          label = <div className={classNames(gridCSS.checkBox)} style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}}></div>;
+          label = <div
+            className={classNames(gridCSS.checkBox)}
+            style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
         }
         else {
           label = _item[_col.key];
         }
 
+        let spanStyle = {
+          height: (options.body.columnHeight - options.body.columnBorderWidth) + "px",
+          lineHeight: lineHeight + "px",
+          textAlign: colAlign
+        };
+
         return (
           <span
             data-span
-            data-align={colAlign}
-            style={{
-              height: (options.body.columnHeight - options.body.columnBorderWidth) + "px",
-              lineHeight: lineHeight + "px"
-            }}>
+            data-pos={_itemIdx + ',' + _col.rowIndex + ',' + _col.colIndex}
+            style={spanStyle}>
             {label || ' '}
           </span>
         );
@@ -123,12 +128,10 @@ class GridBody extends React.Component {
                       (row, ri) => {
                         return (
                           <tr
-                            key={ri}
-                          >
+                            key={ri}>
                             {row.cols.map((col, ci) => {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItems = {
-                                [gridCSS.hasBorder]: true,
                                 [gridCSS.lineNumber]: (col.columnAttr === "lineNumber"),
                                 [gridCSS.rowSelector]: (col.columnAttr === "rowSelector")
                               };
@@ -136,7 +139,6 @@ class GridBody extends React.Component {
                               return (
                                 <td
                                   key={ci}
-                                  data-pos={li + ',' + col.rowIndex + ',' + col.colIndex}
                                   colSpan={col.colspan}
                                   rowSpan={col.rowspan}
                                   className={classNames(classNameItems)}
