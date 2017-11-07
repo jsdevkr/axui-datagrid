@@ -118,8 +118,6 @@ class GridBody extends React.Component {
               (li) => {
                 const item = _list.get(li);
                 if (item) {
-
-                  //className={classNames(gridCSS["tr-" + (li % 4)])}
                   return (
                     _bodyRow.rows.map(
                       (row, ri) => {
@@ -129,23 +127,11 @@ class GridBody extends React.Component {
                           >
                             {row.cols.map((col, ci) => {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
-                              let classNameItmes = {};
-                              classNameItmes[gridCSS.hasBorder] = true;
-
-                              /*
-                              if (row.cols.length == ci + 1) {
-                                classNameItmes[gridCSS.isLastColumn] = true;
-                              }
-                              */
-                              if (col.columnAttr === "lineNumber") {
-                                classNameItmes[gridCSS.lineNumber] = true;
-                              }
-                              else if (col.columnAttr === "rowSelector") {
-                                classNameItmes[gridCSS.rowSelector] = true;
-                              }
-                              else {
-
-                              }
+                              let classNameItems = {
+                                [gridCSS.hasBorder]: true,
+                                [gridCSS.lineNumber]: (col.columnAttr === "lineNumber"),
+                                [gridCSS.rowSelector]: (col.columnAttr === "rowSelector")
+                              };
 
                               return (
                                 <td
@@ -153,7 +139,7 @@ class GridBody extends React.Component {
                                   data-pos={li + ',' + col.rowIndex + ',' + col.colIndex}
                                   colSpan={col.colspan}
                                   rowSpan={col.rowspan}
-                                  className={classNames(classNameItmes)}
+                                  className={classNames(classNameItems)}
                                   style={{height: cellHeight, minHeight: "1px"}}>
                                   {getFieldSpan(colGroup, col, item, li)}
                                 </td>

@@ -121,7 +121,10 @@ class GridBasic extends React.Component {
     }
 
   }
-
+  gridCallBack(gridInstance){
+    console.log(gridInstance);
+  }
+  
   render() {
 
     return (
@@ -133,6 +136,7 @@ class GridBasic extends React.Component {
           columns={this.state.columns}
           data={this.state.data}
           options={this.state.options}
+          thisCallback={this.gridCallBack}
         />
 
         {this.props.name} /

@@ -145,24 +145,18 @@ class GridHeader extends React.Component {
                     className="">
                     {row.cols.map((col, ci) => {
                       let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
-                      let classNameItmes = {};
-                      classNameItmes[gridCSS.hasBorder] = true;
-                      classNameItmes[gridCSS.headerColumn] = true;
-                      if (col.columnAttr === "lineNumber") {
-                        classNameItmes[gridCSS.headerCorner] = true;
-                      }
-                      /*
-                      if (row.cols.length == ci + 1) {
-                        classNameItmes[gridCSS.isLastColumn] = true;
-                      }
-                      */
+                      let classNameItems = {
+                        [gridCSS.hasBorder]: true,
+                        [gridCSS.headerColumn]: true,
+                        [gridCSS.headerCorner]: (col.columnAttr === "lineNumber")
+                      };
 
                       return (
                         <td
                           key={ci}
                           colSpan={col.colspan}
                           rowSpan={col.rowspan}
-                          className={classNames(classNameItmes)}
+                          className={classNames(classNameItems)}
                           style={{height: cellHeight, minHeight: "1px"}}>
                           {getFieldSpan(colGroup, col)}
                         </td>

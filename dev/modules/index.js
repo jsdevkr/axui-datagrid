@@ -11,7 +11,8 @@ export const remove = createAction(REMOVE);
 
 // 초기 상태를 정의
 const initialState = Map({
-  name: ""
+  name: "",
+  test: ""
 });
 
 export default handleActions({
