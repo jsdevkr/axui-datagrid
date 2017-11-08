@@ -10,6 +10,7 @@ import GridHeader from './GridHeader';
 import GridBody from './GridBody';
 import GridPage from './GridPage';
 import GridScroll from './GridScroll';
+import GridSelector from './GridSelector';
 
 //~~~~~
 const defaultOptions = {
@@ -198,6 +199,10 @@ class GridRoot extends React.Component {
       scrollLeft: null,
       scrollTop: null,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
+      selection: {
+        selecting: false,
+        range: {startOffset:{}, endOffset: {}}
+      },
       isInlineEditing: false,
       focusedColumn: {},
       selectedColumn: {},
@@ -561,16 +566,22 @@ class GridRoot extends React.Component {
 
   onMouseDownBody(e) {
     e.preventDefault();
+    const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
     const dragStartPosition = e.target.getAttribute("data-pos");
     if (!dragStartPosition) return false;
 
+    console.log(this.gridRootNode.offsetLeft, this.gridRootNode.offsetTop);
+    console.log(styles.headerHeight, styles.asidePanelWidth);
     console.log(dragStartPosition);
 
     const onMouseMove = (ee) => {
       if (!this.state.dragging) this.setState({dragging: true});
-
-      let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, UTIL.getMousePosition(ee));
+      let currMousePosition = UTIL.getMousePosition(ee);
+      
+      console.log(currMousePosition);
+      
+      let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, currMousePosition);
       //console.log(selectedCells);
     };
 
@@ -743,14 +754,16 @@ class GridRoot extends React.Component {
           scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
         />
 
-        <div ref="gridVerticalResizer"></div>
-        <div ref="gridHorizontalResizer"></div>
+        <GridSelector
+          class={classNames(this.props.gridCSS.cellSelector)}
+          selecting={this.state.selection.selecting}
+          range={this.state.selection.range}
+        />
       </div>
     );
 
   }
 }
-
 
 GridRoot.propTypes = {
   height: PropTypes.string,
