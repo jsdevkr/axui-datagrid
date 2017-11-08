@@ -11,7 +11,8 @@ class GridSelector extends React.Component {
 
     if (
       this.props.selecting !== nextProps.selecting ||
-      this.props.range !== nextProps.range
+      this.props.selectionStartOffset !== nextProps.selectionStartOffset ||
+      this.props.selectionEndOffset !== nextProps.selectionEndOffset
     ) {
       sameProps = true;
     }
@@ -21,13 +22,24 @@ class GridSelector extends React.Component {
 
   render() {
     const selecting   = this.props.selecting,
-          gridCSS     = this.props.gridCSS;
-    let {startOffset, endOffset} = this.props.range;
+          gridCSS     = this.props.gridCSS,
+          selectionStartOffset = this.props.selectionStartOffset,
+          selectionEndOffset = this.props.selectionEndOffset;
 
     if(!selecting) return null;
 
+    let selectorStyles = {
+      left: selectionStartOffset.x,
+      top: selectionStartOffset.y,
+      width: selectionEndOffset.x - selectionStartOffset.x,
+      height: selectionEndOffset.y - selectionStartOffset.y
+    };
+
     return (
-      <div class={classNames(gridCSS.cellSelector)}></div>
+      <div
+        className={classNames(gridCSS.cellSelector)}
+        style={selectorStyles}
+      />
     )
   }
 }

@@ -543,4 +543,11 @@
       }
     }
   }
+  .cellSelector{
+    position: absolute;
+    box-sizing: border-box;
+    background: #b1d7fe;
+    border: 1px solid #73b3f0;
+    opacity: 0.5;
+  }
 }

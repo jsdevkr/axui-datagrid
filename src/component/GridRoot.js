@@ -199,10 +199,9 @@ class GridRoot extends React.Component {
       scrollLeft: null,
       scrollTop: null,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-      selection: {
-        selecting: false,
-        range: {startOffset:{}, endOffset: {}}
-      },
+      selecting: false,
+      selectionStartOffset:{},
+      selectionEndOffset: {},
       isInlineEditing: false,
       focusedColumn: {},
       selectedColumn: {},
@@ -566,29 +565,46 @@ class GridRoot extends React.Component {
 
   onMouseDownBody(e) {
     e.preventDefault();
-    const styles = this.state.styles;
+    // const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
     const dragStartPosition = e.target.getAttribute("data-pos");
+
     if (!dragStartPosition) return false;
 
-    console.log(this.gridRootNode.offsetLeft, this.gridRootNode.offsetTop);
-    console.log(styles.headerHeight, styles.asidePanelWidth);
-    console.log(dragStartPosition);
+    const topPadding = this.gridRootNode.offsetTop; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
+    const leftPadding = this.gridRootNode.offsetLeft; // + styles.asidePanelWidth;
 
     const onMouseMove = (ee) => {
-      if (!this.state.dragging) this.setState({dragging: true});
       let currMousePosition = UTIL.getMousePosition(ee);
       
-      console.log(currMousePosition);
-      
-      let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, currMousePosition);
+      // let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, currMousePosition);
       //console.log(selectedCells);
+
+
+      // todo : 반대 방향으로 셀렉팅 구현 필요
+      this.setState({
+        dragging: true,
+        selecting: true,
+        selectionStartOffset: {
+          x: startMousePosition.x - leftPadding,
+          y: startMousePosition.y - topPadding
+        },
+        selectionEndOffset: {
+          x: currMousePosition.x - leftPadding,
+          y: currMousePosition.y - topPadding
+        }
+      });
     };
 
     const offEvent = (ee) => {
       ee.preventDefault();
 
-      this.setState({dragging: false});
+      this.setState({
+        dragging: false,
+        selecting: false,
+        selectionStartOffset: null,
+        selectionEndOffset: null
+      });
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
@@ -755,9 +771,10 @@ class GridRoot extends React.Component {
         />
 
         <GridSelector
-          class={classNames(this.props.gridCSS.cellSelector)}
-          selecting={this.state.selection.selecting}
-          range={this.state.selection.range}
+          gridCSS={this.props.gridCSS}
+          selecting={this.state.selecting}
+          selectionStartOffset={this.state.selectionStartOffset}
+          selectionEndOffset={this.state.selectionEndOffset}
         />
       </div>
     );
