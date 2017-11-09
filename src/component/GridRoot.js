@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {each, extend, extendOwn, isArray, isEqual, isFunction, isObject, throttle} from 'underscore';
+import {each, assignWith, isArray, isEqual, isFunction, isObject, throttle} from 'lodash';
 import {fromJS} from 'immutable';
 import PropTypes from 'prop-types';
 
@@ -121,7 +121,7 @@ const propsToState = function (props, state) {
 
   state.headerTable.rows.forEach((row, r) => {
     row.cols.forEach((col, c) => {
-      state.colGroupMap[col.colIndex] = extend({}, col);
+      state.colGroupMap[col.colIndex] = assignWith({}, col);
     });
   });
 
@@ -264,14 +264,14 @@ class GridRoot extends React.Component {
         scrollContentWidth: null
       },
       options: (() => {
-        let options = extend({}, defaultOptions);
+        let options = assignWith({}, defaultOptions);
         each(props.options, function (v, k) {
-          options[k] = (isObject(v)) ? extendOwn(options[k], v) : v;
+          options[k] = (isObject(v)) ? assignWith(options[k], v) : v;
         });
         return options;
       })()
     };
-    this.state = propsToState(props, extend({}, this.state));
+    this.state = propsToState(props, assignWith({}, this.state));
 
     // state 계산영역 끝
     this.props.init(props, this.state.options);
@@ -314,7 +314,7 @@ class GridRoot extends React.Component {
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = propsToState(nextProps, extend({}, this.state, {scrollLeft: 0, scrollTop: 0}));
+      let newState = propsToState(nextProps, assignWith({}, this.state, {scrollLeft: 0, scrollTop: 0}));
       newState.styles = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, newState).styles;
       this.setState(newState);
     }
@@ -515,7 +515,7 @@ class GridRoot extends React.Component {
 
     let leftHeaderColGroup = colGroup.slice(0, this.state.options.frozenColumnIndex);
     let headerColGroup = colGroup.slice(this.state.options.frozenColumnIndex);
-    let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, extend({}, this.state, {
+    let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, assignWith({}, this.state, {
       colGroup: colGroup,
       leftHeaderColGroup: leftHeaderColGroup,
       headerColGroup: headerColGroup

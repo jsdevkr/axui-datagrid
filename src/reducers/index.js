@@ -1,6 +1,6 @@
 import * as act from '../actions';
 import {List, Map, fromJS} from 'immutable';
-import {each, extend, extendOwn, isArray, isNumber, isObject, isString} from "underscore";
+import {each, assignWith, isArray, isNumber, isObject, isString} from "lodash";
 // import {mouseEventNames} from '../_inc/preference';
 import * as UTIL from '../_inc/utils';
 

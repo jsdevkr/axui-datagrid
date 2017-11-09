@@ -1,5 +1,5 @@
 import {List, Map} from 'immutable';
-import {extend, isArray, isNumber, isObject} from "underscore";
+import {assignWith, isArray, isNumber, isObject} from "lodash";
 
 /**
  * @method
@@ -27,7 +27,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
       }, _col = {};
 
       if (options.showLineNumber) {
-        _col = extend({}, col, {
+        _col = assignWith({}, col, {
           width: options.lineNumberColumnWidth,
           _width: options.lineNumberColumnWidth,
           align: "center",
@@ -41,7 +41,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         asidePanelWidth += options.lineNumberColumnWidth;
       }
       if (options.showRowSelector) {
-        _col = extend({}, col, {
+        _col = assignWith({}, col, {
           width: options.rowSelectorColumnWidth,
           _width: options.rowSelectorColumnWidth,
           align: "center",
@@ -72,8 +72,8 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           // 좌측편에 변형없이 추가
           tempTable_l.rows[r].cols.push(col);
         } else {
-          let leftCol  = extend({}, col),
-              rightCol = extend({}, leftCol);
+          let leftCol  = assignWith({}, col),
+              rightCol = assignWith({}, leftCol);
 
           leftCol.colspan = _frozenColumnIndex - leftCol.colIndex;
           // rightCol.colIndex = _frozenColumnIndex;
@@ -124,7 +124,7 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
     _table.rows.forEach((row, r) => {
       tempTable.rows[r] = {cols: []};
       for (let c = 0, cl = row.cols.length; c < cl; c++) {
-        let col = extend({}, row.cols[c]);
+        let col = assignWith({}, row.cols[c]);
         let colStartIndex = col.colIndex;
         let colEndIndex = col.colIndex + col.colspan;
 
@@ -381,7 +381,7 @@ export function makeBodyRowMap(_table, _options) {
   let map = {};
   _table.rows.forEach(function (row) {
     row.cols.forEach(function (col) {
-      map[col.rowIndex + "_" + col.colIndex] = extend({}, col);
+      map[col.rowIndex + "_" + col.colIndex] = assignWith({}, col);
     });
   });
   return map;

@@ -1,4 +1,4 @@
-import {isArray, isObject} from "underscore";
+import {isArray, isObject} from "lodash";
 import { propsConverterForData } from "../_inc/utils";
 
 /* 그리드 초기화 :  */
