@@ -1,0 +1,88 @@
+$icons-font-path: '../../icons/' !default;
+$flags-image-path: '../../images/' !default;
+
+//Font
+$body-font-size: 14px !default;
+$import-google-fonts: true !default;
+$font-url: 'https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin,latin-ext' !default;
+$font-name: 'Lato' !default;
+$font-family: $font-name, 'Helvetica Neue', Arial, Helvetica, sans-serif !default;
+
+// Colors
+// Body
+$body-bg-color:#FFFFFF !default;
+$body-font-color:rgba(0, 0, 0, 0.87) !default;
+
+//Font
+$font-color: rgba(0, 0, 0, 0.87) !default;
+$secondary-font: rgba(0, 0, 0, 0.4) !default;
+
+//links Variables
+$a-font-color:#4183C4 !default;
+$a-hover-font-color: #1e70bf !default;
+
+//Primary
+$primary-color:#2185D0 !default;
+$primary-color--hover:#1678c2 !default;
+$primary-color--focus: #0d71bb !default;
+$primary-color--active: #1a69a4 !default;
+$primary-color-active:#1279c6 !default;
+$primary-color-active--active:#1279c6 !default;
+
+//Secondary
+$secondary-color:#1B1C1D !default;
+$secondary-color--hover:#27292a !default;
+$secondary-color--focus: #2e3032 !default;
+$secondary-color--active: #343637 !default;
+$secondary-color-active:#27292a !default;
+$secondary-color-active--active:#27292a !default;
+
+//Default
+$default-color:#E0E1E2 !default;
+$default-font-color:#rgba(0, 0, 0, 0.6) !default;
+$default-color--active:#BABBBC !default;
+$default-font-color--active:#rgba(0, 0, 0, 0.9) !default;
+$default-color--hover:#CACBCD !default;
+$default-font-color--hover:#rgba(0, 0, 0, 0.8) !default;
+$default-color--focus:#CACBCD !default;
+$default-font-color--focus:#rgba(0, 0, 0, 0.8) !default;
+$default-active-color:#C0C1C2 !default;
+$default-active-font-color:#rgba(0, 0, 0, 0.95) !default;
+$default-active-color--active:#C0C1C2 !default;
+$default-active-color--hover:#C0C1C2 !default;
+$default-active-font-color--hover:#rgba(0, 0, 0, 0.95) !default;
+$default-active-color--focus:#BABBBC !default;
+$default-active-font-color--focus:#rgba(0, 0, 0, 0.9) !default;
+
+
+
+
+//Basic
+
+
+$red:#DB2828 !default;
+$orange:#F2711C !default;
+$yellow:#FBBD08 !default;
+$olive:#B5CC18 !default;
+$green:#21BA45 !default;
+$teal:#00B5AD !default;
+$blue:#2185D0 !default;
+$violet:#6435C9 !default;
+$purple:#A333C8 !default;
+$pink:#E03997 !default;
+$brown:#A5673F !default;
+$grey:#767676 !default;
+$white:#FFFFFF !default;
+$inverted-label:rgba(255, 255, 255, 0.9) !default;
+$inverted-red:#FF695E !default;
+$inverted-orange:#FF851B !default;
+$inverted-yellow:#FFE21F !default;
+$inverted-olive:#D9E778 !default;
+$inverted-green:#2ECC40 !default;
+$inverted-teal:#6DFFFF !default;
+$inverted-blue:#54C8FF !default;
+$inverted-violet:#A291FB !default;
+$inverted-purple:#DC73FF !default;
+$inverted-pink:#FF8EDF !default;
+$inverted-brown:#D67C1C !default;
+$inverted-grey:#DCDDDE !default;

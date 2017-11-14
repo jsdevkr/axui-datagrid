@@ -1,0 +1,3386 @@
+/*!
+ * # Semantic UI 2.2.12 - Button
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Button
+*******************************/
+
+.ui {
+  &.button {
+    cursor: pointer;
+    display: inline-block;
+    min-height: 1em;
+    outline: none;
+    border: none;
+    vertical-align: baseline;
+    background: #E0E1E2 none;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: $font-family;
+    margin: 0em 0.25em 0em 0em;
+    padding: 0.78571429em 1.5em 0.78571429em;
+    text-transform: none;
+    text-shadow: none;
+    font-weight: bold;
+    line-height: 1em;
+    font-style: normal;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0.28571429rem;
+    box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    will-change: '';
+    -webkit-tap-highlight-color: transparent;
+    &:hover {
+      background-color: #CACBCD;
+      background-image: none;
+      box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+      color: rgba(0, 0, 0, 0.8);
+      .icon {
+        opacity: 0.85;
+      }
+    }
+    &:focus {
+      background-color: #CACBCD;
+      color: rgba(0, 0, 0, 0.8);
+      background-image: '' !important;
+      box-shadow: '' !important;
+      .icon {
+        opacity: 0.85;
+      }
+    }
+    &:active {
+      background-color: #BABBBC;
+      background-image: '';
+      color: rgba(0, 0, 0, 0.9);
+      box-shadow: 0px 0px 0px 1px transparent inset, none;
+    }
+  }
+  &.active.button {
+    background-color: #C0C1C2;
+    background-image: none;
+    box-shadow: 0px 0px 0px 1px transparent inset;
+    color: rgba(0, 0, 0, 0.95);
+    &:focus {
+      background-color: #BABBBC;
+      background-image: '';
+      color: rgba(0, 0, 0, 0.9);
+      box-shadow: 0px 0px 0px 1px transparent inset, none;
+    }
+    &:hover {
+      background-color: #C0C1C2;
+      background-image: none;
+      color: rgba(0, 0, 0, 0.95);
+    }
+    &:active {
+      background-color: #C0C1C2;
+      background-image: none;
+    }
+  }
+  &.loading {
+    &.loading.loading.loading.loading.loading.button {
+      position: relative;
+      cursor: default;
+      text-shadow: none !important;
+      color: transparent !important;
+      opacity: 1;
+      pointer-events: auto;
+      -webkit-transition: all 0s linear, opacity 0.1s ease;
+      transition: all 0s linear, opacity 0.1s ease;
+    }
+    &.button {
+      &:before {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 50%;
+        margin: -0.64285714em 0em 0em -0.64285714em;
+        width: 1.28571429em;
+        height: 1.28571429em;
+        border-radius: 500rem;
+        border: 0.2em solid rgba(0, 0, 0, 0.15);
+      }
+      &:after {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 50%;
+        margin: -0.64285714em 0em 0em -0.64285714em;
+        width: 1.28571429em;
+        height: 1.28571429em;
+        -webkit-animation: button-spin 0.6s linear;
+        animation: button-spin 0.6s linear;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+        border-radius: 500rem;
+        border-color: $white transparent transparent;
+        border-style: solid;
+        border-width: 0.2em;
+        box-shadow: 0px 0px 0px 1px transparent;
+      }
+    }
+  }
+  &.labeled.icon.loading.button .icon {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  &.basic.loading.button:not(.inverted) {
+    &:before {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    &:after {
+      border-top-color: $grey;
+    }
+  }
+  &.buttons .disabled.button, &.disabled.button, &.button:disabled {
+    cursor: default;
+    opacity: 0.45 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+  }
+  &.disabled {
+    &.button:hover, &.active.button {
+      cursor: default;
+      opacity: 0.45 !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+    }
+  }
+  &.basic.buttons .ui.disabled.button {
+    border-color: rgba(34, 36, 38, 0.5);
+  }
+  &.animated.button {
+    position: relative;
+    overflow: hidden;
+    padding-right: 0em !important;
+    vertical-align: middle;
+    z-index: 1;
+    .content {
+      will-change: transform, opacity;
+    }
+    .visible.content {
+      position: relative;
+      margin-right: 1.5em;
+    }
+    .hidden.content {
+      position: absolute;
+      width: 100%;
+    }
+    .visible.content, .hidden.content {
+      -webkit-transition: right 0.3s ease 0s;
+      transition: right 0.3s ease 0s;
+    }
+    .visible.content {
+      left: auto;
+      right: 0%;
+    }
+    .hidden.content {
+      top: 50%;
+      left: auto;
+      right: -100%;
+      margin-top: -0.5em;
+    }
+    &:focus .visible.content, &:hover .visible.content {
+      left: auto;
+      right: 200%;
+    }
+    &:focus .hidden.content, &:hover .hidden.content {
+      left: auto;
+      right: 0%;
+    }
+  }
+  &.vertical.animated.button {
+    .visible.content, .hidden.content {
+      -webkit-transition: top 0.3s ease, -webkit-transform 0.3s ease;
+      transition: top 0.3s ease, -webkit-transform 0.3s ease;
+      transition: top 0.3s ease, transform 0.3s ease;
+      transition: top 0.3s ease, transform 0.3s ease, -webkit-transform 0.3s ease;
+    }
+    .visible.content {
+      -webkit-transform: translateY(0%);
+      transform: translateY(0%);
+      right: auto;
+    }
+    .hidden.content {
+      top: -50%;
+      left: 0%;
+      right: auto;
+    }
+    &:focus .visible.content, &:hover .visible.content {
+      -webkit-transform: translateY(200%);
+      transform: translateY(200%);
+      right: auto;
+    }
+    &:focus .hidden.content, &:hover .hidden.content {
+      top: 50%;
+      right: auto;
+    }
+  }
+  &.fade.animated.button {
+    .visible.content, .hidden.content {
+      -webkit-transition: opacity 0.3s ease, -webkit-transform 0.3s ease;
+      transition: opacity 0.3s ease, -webkit-transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease, -webkit-transform 0.3s ease;
+    }
+    .visible.content {
+      left: auto;
+      right: auto;
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+    .hidden.content {
+      opacity: 0;
+      left: 0%;
+      right: auto;
+      -webkit-transform: scale(1.5);
+      transform: scale(1.5);
+    }
+    &:focus .visible.content, &:hover .visible.content {
+      left: auto;
+      right: auto;
+      opacity: 0;
+      -webkit-transform: scale(0.75);
+      transform: scale(0.75);
+    }
+    &:focus .hidden.content, &:hover .hidden.content {
+      left: 0%;
+      right: auto;
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+  &.inverted {
+    &.button {
+      box-shadow: 0px 0px 0px 2px $white inset !important;
+      background: transparent none;
+      color: $white;
+      text-shadow: none !important;
+    }
+    &.buttons .button {
+      margin: 0px 0px 0px -2px;
+      &:first-child {
+        margin-left: 0em;
+      }
+    }
+    &.vertical.buttons .button {
+      margin: 0px 0px -2px 0px;
+      &:first-child {
+        margin-top: 0em;
+      }
+    }
+    &.button {
+      &:hover, &:focus {
+        background: $white;
+        box-shadow: 0px 0px 0px 2px $white inset !important;
+        color: rgba(0, 0, 0, 0.8);
+      }
+      &.active {
+        background: $white;
+        box-shadow: 0px 0px 0px 2px $white inset !important;
+        color: rgba(0, 0, 0, 0.8);
+        &:focus {
+          background: $inverted-grey;
+          box-shadow: 0px 0px 0px 2px $inverted-grey inset !important;
+          color: rgba(0, 0, 0, 0.8);
+        }
+      }
+    }
+  }
+  &.labeled.button {
+    &:not(.icon) {
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      background: none !important;
+      padding: 0px !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    > {
+      .button {
+        margin: 0px;
+      }
+      .label {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        margin: 0px 0px 0px -1px !important;
+        padding: '';
+        font-size: 1em;
+        border-color: rgba(34, 36, 38, 0.15);
+      }
+      .tag.label:before {
+        width: 1.85em;
+        height: 1.85em;
+      }
+    }
+    &:not([class*="left labeled"]) > {
+      .button {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      .label {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
+  }
+  &[class*="left labeled"].button > {
+    .button {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+    .label {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+  &.facebook.button {
+    background-color: #3B5998;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #304d8a;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #2d4373;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.twitter.button {
+    background-color: #55ACEE;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #35a2f4;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #2795e9;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.google.plus.button {
+    background-color: #DD4B39;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #e0321c;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #c23321;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.linkedin.button {
+    background-color: #1F88BE;
+    color: $white;
+    text-shadow: none;
+    &:hover {
+      background-color: #147baf;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #186992;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.youtube.button {
+    background-color: #CC181E;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #bd0d13;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #9e1317;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.instagram.button {
+    background-color: #49769C;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #3d698e;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #395c79;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.pinterest.button {
+    background-color: #BD081C;
+    color: $white;
+    text-shadow: none;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #ac0013;
+      color: $white;
+      text-shadow: none;
+    }
+    &:active {
+      background-color: #8c0615;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.vk.button {
+    background-color: #4D7198;
+    color: $white;
+    background-image: none;
+    box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    &:hover {
+      background-color: #41648a;
+      color: $white;
+    }
+    &:active {
+      background-color: #3c5876;
+      color: $white;
+    }
+  }
+  &.button {
+    > .icon:not(.button) {
+      height: 0.85714286em;
+      opacity: 0.8;
+      margin: 0em 0.42857143em 0em -0.21428571em;
+      -webkit-transition: opacity 0.1s ease;
+      transition: opacity 0.1s ease;
+      vertical-align: '';
+      color: '';
+    }
+    &:not(.icon) > {
+      .icon:not(.button):not(.dropdown) {
+        margin: 0em 0.42857143em 0em -0.21428571em;
+      }
+      .right.icon:not(.button):not(.dropdown) {
+        margin: 0em -0.21428571em 0em 0.42857143em;
+      }
+    }
+  }
+  &[class*="left floated"] {
+    &.buttons, &.button {
+      float: left;
+      margin-left: 0em;
+      margin-right: 0.25em;
+    }
+  }
+  &[class*="right floated"] {
+    &.buttons, &.button {
+      float: right;
+      margin-right: 0em;
+      margin-left: 0.25em;
+    }
+  }
+  &.compact {
+    &.buttons .button, &.button {
+      padding: 0.58928571em 1.125em 0.58928571em;
+    }
+    &.icon {
+      &.buttons .button, &.button {
+        padding: 0.58928571em 0.58928571em 0.58928571em;
+      }
+    }
+    &.labeled.icon {
+      &.buttons .button, &.button {
+        padding: 0.58928571em 3.69642857em 0.58928571em;
+      }
+    }
+  }
+  &.mini {
+    &.buttons {
+      .button, .or {
+        font-size: 0.78571429rem;
+      }
+    }
+    &.button {
+      font-size: 0.78571429rem;
+    }
+  }
+  &.tiny {
+    &.buttons {
+      .button, .or {
+        font-size: 0.85714286rem;
+      }
+    }
+    &.button {
+      font-size: 0.85714286rem;
+    }
+  }
+  &.small {
+    &.buttons {
+      .button, .or {
+        font-size: 0.92857143rem;
+      }
+    }
+    &.button {
+      font-size: 0.92857143rem;
+    }
+  }
+  &.buttons {
+    .button, .or {
+      font-size: 1rem;
+    }
+  }
+  &.button {
+    font-size: 1rem;
+  }
+  &.large {
+    &.buttons {
+      .button, .or {
+        font-size: 1.14285714rem;
+      }
+    }
+    &.button {
+      font-size: 1.14285714rem;
+    }
+  }
+  &.big {
+    &.buttons {
+      .button, .or {
+        font-size: 1.28571429rem;
+      }
+    }
+    &.button {
+      font-size: 1.28571429rem;
+    }
+  }
+  &.huge {
+    &.buttons {
+      .button, .or {
+        font-size: 1.42857143rem;
+      }
+    }
+    &.button {
+      font-size: 1.42857143rem;
+    }
+  }
+  &.massive {
+    &.buttons {
+      .button, .or {
+        font-size: 1.71428571rem;
+      }
+    }
+    &.button {
+      font-size: 1.71428571rem;
+    }
+  }
+  &.icon {
+    &.buttons .button, &.button {
+      padding: 0.78571429em 0.78571429em 0.78571429em;
+    }
+    &.buttons .button > .icon, &.button > .icon {
+      opacity: 0.9;
+      margin: 0em !important;
+      vertical-align: top;
+    }
+  }
+  &.basic {
+    &.buttons .button, &.button {
+      background: transparent none !important;
+      color: rgba(0, 0, 0, 0.6) !important;
+      font-weight: normal;
+      border-radius: 0.28571429rem;
+      text-transform: none;
+      text-shadow: none !important;
+      box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons {
+      box-shadow: none;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+      border-radius: 0.28571429rem;
+      .button {
+        border-radius: 0em;
+        &:hover {
+          background: $white !important;
+          color: rgba(0, 0, 0, 0.8) !important;
+          box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.35) inset, 0px 0px 0px 0px rgba(34, 36, 38, 0.15) inset;
+        }
+      }
+    }
+    &.button:hover, &.buttons .button:focus, &.button:focus {
+      background: $white !important;
+      color: rgba(0, 0, 0, 0.8) !important;
+      box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.35) inset, 0px 0px 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:active, &.button:active {
+      background: #F8F8F8 !important;
+      color: rgba(0, 0, 0, 0.9) !important;
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.15) inset, 0px 1px 4px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .active.button, &.active.button {
+      background: rgba(0, 0, 0, 0.05) !important;
+      box-shadow: '' !important;
+      color: rgba(0, 0, 0, 0.95);
+    }
+    &.buttons .active.button:hover, &.active.button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    &.buttons {
+      .button {
+        &:hover {
+          box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.35) inset, 0px 0px 0px 0px rgba(34, 36, 38, 0.15) inset inset;
+        }
+        &:active {
+          box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.15) inset, 0px 1px 4px 0px rgba(34, 36, 38, 0.15) inset inset;
+        }
+      }
+      .active.button {
+        box-shadow: '' !important;
+      }
+    }
+    &.inverted {
+      &.buttons .button, &.button {
+        background-color: transparent !important;
+        color: #F9FAFB !important;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      }
+      &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus {
+        color: $white !important;
+        box-shadow: 0px 0px 0px 2px $white inset !important;
+      }
+      &.buttons .button:active, &.button:active {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        color: $white !important;
+        box-shadow: 0px 0px 0px 2px $inverted-label inset !important;
+      }
+      &.buttons .active.button, &.active.button {
+        background-color: rgba(255, 255, 255, 0.08);
+        color: $white;
+        text-shadow: none;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.7) inset;
+      }
+      &.buttons .active.button:hover, &.active.button:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0px 0px 0px 2px $white inset !important;
+      }
+    }
+    &.buttons .button {
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+      box-shadow: none;
+    }
+    &.vertical.buttons .button {
+      border-left: none;
+      border-left-width: 0px;
+      border-top: 1px solid rgba(34, 36, 38, 0.15);
+      &:first-child {
+        border-top-width: 0px;
+      }
+    }
+  }
+  &.labeled.icon {
+    &.buttons .button, &.button {
+      position: relative;
+      padding-left: 4.07142857em !important;
+      padding-right: 1.5em !important;
+    }
+    &.buttons > .button > .icon, &.button > .icon {
+      position: absolute;
+      height: 100%;
+      line-height: 1;
+      border-radius: 0px;
+      border-top-left-radius: inherit;
+      border-bottom-left-radius: inherit;
+      text-align: center;
+      margin: 0em;
+      width: 2.57142857em;
+      background-color: rgba(0, 0, 0, 0.05);
+      color: '';
+      box-shadow: -1px 0px 0px 0px transparent inset;
+    }
+    &.buttons > .button > .icon, &.button > .icon {
+      top: 0em;
+      left: 0em;
+    }
+  }
+  &[class*="right labeled"].icon.button {
+    padding-right: 4.07142857em !important;
+    padding-left: 1.5em !important;
+    > .icon {
+      left: auto;
+      right: 0em;
+      border-radius: 0px;
+      border-top-right-radius: inherit;
+      border-bottom-right-radius: inherit;
+      box-shadow: 1px 0px 0px 0px transparent inset;
+    }
+  }
+  &.labeled.icon {
+    &.buttons > .button > .icon:before, &.button > .icon:before, &.buttons > .button > .icon:after, &.button > .icon:after {
+      display: block;
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      text-align: center;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+    &.buttons .button {
+      > .icon {
+        border-radius: 0em;
+      }
+      &:first-child > .icon {
+        border-top-left-radius: 0.28571429rem;
+        border-bottom-left-radius: 0.28571429rem;
+      }
+      &:last-child > .icon {
+        border-top-right-radius: 0.28571429rem;
+        border-bottom-right-radius: 0.28571429rem;
+      }
+    }
+  }
+  &.vertical.labeled.icon.buttons .button {
+    &:first-child > .icon {
+      border-radius: 0em;
+      border-top-left-radius: 0.28571429rem;
+    }
+    &:last-child > .icon {
+      border-radius: 0em;
+      border-bottom-left-radius: 0.28571429rem;
+    }
+  }
+  &.fluid {
+    &[class*="left labeled"].icon.button, &[class*="right labeled"].icon.button {
+      padding-left: 1.5em !important;
+      padding-right: 1.5em !important;
+    }
+  }
+  &.toggle.buttons .active.button, &.buttons .button.toggle.active {
+    background-color: $green !important;
+    box-shadow: none !important;
+    text-shadow: none;
+    color: $white !important;
+  }
+  &.button.toggle.active {
+    background-color: $green !important;
+    box-shadow: none !important;
+    text-shadow: none;
+    color: $white !important;
+    &:hover {
+      background-color: #16ab39 !important;
+      text-shadow: none;
+      color: $white !important;
+    }
+  }
+  &.circular.button {
+    border-radius: 10em;
+    > .icon {
+      width: 1em;
+      vertical-align: baseline;
+    }
+  }
+  &.buttons .or {
+    position: relative;
+    width: 0.3em;
+    height: 2.57142857em;
+    z-index: 3;
+    &:before {
+      position: absolute;
+      text-align: center;
+      border-radius: 500rem;
+      content: 'or';
+      top: 50%;
+      left: 50%;
+      background-color: $white;
+      text-shadow: none;
+      margin-top: -0.89285714em;
+      margin-left: -0.89285714em;
+      width: 1.78571429em;
+      height: 1.78571429em;
+      line-height: 1.78571429em;
+      color: $secondary-font;
+      font-style: normal;
+      font-weight: bold;
+      box-shadow: 0px 0px 0px 1px transparent inset;
+    }
+    &[data-text]:before {
+      content: attr(data-text);
+    }
+  }
+  &.fluid.buttons .or {
+    width: 0em !important;
+    &:after {
+      display: none;
+    }
+  }
+  &.attached {
+    &.button {
+      position: relative;
+      display: block;
+      margin: 0em;
+      border-radius: 0em;
+      box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.15) !important;
+    }
+    &.top.button {
+      border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+    }
+    &.bottom.button {
+      border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+    }
+  }
+  &.left.attached.button {
+    display: inline-block;
+    border-left: none;
+    text-align: right;
+    padding-right: 0.75em;
+    border-radius: 0.28571429rem 0em 0em 0.28571429rem;
+  }
+  &.right.attached.button {
+    display: inline-block;
+    text-align: left;
+    padding-left: 0.75em;
+    border-radius: 0em 0.28571429rem 0.28571429rem 0em;
+  }
+  &.attached.buttons {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 0em;
+    width: auto !important;
+    z-index: 2;
+    margin-left: -1px;
+    margin-right: -1px;
+    .button {
+      margin: 0em;
+      &:first-child, &:last-child {
+        border-radius: 0em;
+      }
+    }
+  }
+  &[class*="top attached"].buttons {
+    margin-bottom: -1px;
+    border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+    .button {
+      &:first-child {
+        border-radius: 0.28571429rem 0em 0em 0em;
+      }
+      &:last-child {
+        border-radius: 0em 0.28571429rem 0em 0em;
+      }
+    }
+  }
+  &[class*="bottom attached"].buttons {
+    margin-top: -1px;
+    border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+    .button {
+      &:first-child {
+        border-radius: 0em 0em 0em 0.28571429rem;
+      }
+      &:last-child {
+        border-radius: 0em 0em 0.28571429rem 0em;
+      }
+    }
+  }
+  &[class*="left attached"].buttons {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    margin-right: 0em;
+    margin-left: -1px;
+    border-radius: 0em 0.28571429rem 0.28571429rem 0em;
+    .button {
+      &:first-child {
+        margin-left: -1px;
+        border-radius: 0em 0.28571429rem 0em 0em;
+      }
+      &:last-child {
+        margin-left: -1px;
+        border-radius: 0em 0em 0.28571429rem 0em;
+      }
+    }
+  }
+  &[class*="right attached"].buttons {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    margin-left: 0em;
+    margin-right: -1px;
+    border-radius: 0.28571429rem 0em 0em 0.28571429rem;
+    .button {
+      &:first-child {
+        margin-left: -1px;
+        border-radius: 0.28571429rem 0em 0em 0em;
+      }
+      &:last-child {
+        margin-left: -1px;
+        border-radius: 0em 0em 0em 0.28571429rem;
+      }
+    }
+  }
+  &.fluid {
+    &.buttons {
+      width: 100%;
+    }
+    &.button {
+      width: 100%;
+      display: block;
+    }
+  }
+  &.two.buttons {
+    width: 100%;
+    > .button {
+      width: 50%;
+    }
+  }
+  &.three.buttons {
+    width: 100%;
+    > .button {
+      width: 33.333%;
+    }
+  }
+  &.four.buttons {
+    width: 100%;
+    > .button {
+      width: 25%;
+    }
+  }
+  &.five.buttons {
+    width: 100%;
+    > .button {
+      width: 20%;
+    }
+  }
+  &.six.buttons {
+    width: 100%;
+    > .button {
+      width: 16.666%;
+    }
+  }
+  &.seven.buttons {
+    width: 100%;
+    > .button {
+      width: 14.285%;
+    }
+  }
+  &.eight.buttons {
+    width: 100%;
+    > .button {
+      width: 12.500%;
+    }
+  }
+  &.nine.buttons {
+    width: 100%;
+    > .button {
+      width: 11.11%;
+    }
+  }
+  &.ten.buttons {
+    width: 100%;
+    > .button {
+      width: 10%;
+    }
+  }
+  &.eleven.buttons {
+    width: 100%;
+    > .button {
+      width: 9.09%;
+    }
+  }
+  &.twelve.buttons {
+    width: 100%;
+    > .button {
+      width: 8.3333%;
+    }
+  }
+  &.fluid.vertical.buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: auto;
+    > .button {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      width: auto;
+    }
+  }
+  &.two.vertical.buttons > .button {
+    height: 50%;
+  }
+  &.three.vertical.buttons > .button {
+    height: 33.333%;
+  }
+  &.four.vertical.buttons > .button {
+    height: 25%;
+  }
+  &.five.vertical.buttons > .button {
+    height: 20%;
+  }
+  &.six.vertical.buttons > .button {
+    height: 16.666%;
+  }
+  &.seven.vertical.buttons > .button {
+    height: 14.285%;
+  }
+  &.eight.vertical.buttons > .button {
+    height: 12.500%;
+  }
+  &.nine.vertical.buttons > .button {
+    height: 11.11%;
+  }
+  &.ten.vertical.buttons > .button {
+    height: 10%;
+  }
+  &.eleven.vertical.buttons > .button {
+    height: 9.09%;
+  }
+  &.twelve.vertical.buttons > .button {
+    height: 8.3333%;
+  }
+  &.black {
+    &.buttons .button {
+      background-color: #1B1C1D;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: #1B1C1D;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #27292a;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #2f3032;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #343637;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #0f0f10;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #0f0f10;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #0f0f10;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.black {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px #1B1C1D inset !important;
+      color: #1B1C1D !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #27292a inset !important;
+      color: #27292a !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #2f3032 inset !important;
+      color: #27292a !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #0f0f10 inset !important;
+      color: #343637 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #343637 inset !important;
+      color: #343637 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.black.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.black {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px #D4D4D5 inset !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .active.button, &.active.button, &.buttons .button:active, &.button:active {
+      background-color: #000000;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #000000 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #000000 inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #000000 inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #000000 inset !important;
+        color: #545454 !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #000000 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #000000 inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.active.button, &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #000000 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #000000 inset !important;
+      color: $white !important;
+    }
+  }
+  &.grey {
+    &.buttons .button {
+      background-color: $grey;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $grey;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #838383;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #8a8a8a;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #909090;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #696969;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #696969;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #696969;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.grey {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $grey inset !important;
+      color: $grey !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #838383 inset !important;
+      color: #838383 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #8a8a8a inset !important;
+      color: #838383 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #696969 inset !important;
+      color: #909090 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #909090 inset !important;
+      color: #909090 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.grey.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.grey {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px #D4D4D5 inset !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #cfd0d2;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #c7c9cb;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #cfd0d2;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #c2c4c5;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #c7c9cb inset !important;
+        color: $inverted-grey !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #cfd0d2 inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #c2c4c5 inset !important;
+        color: $white !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #c2c4c5 inset !important;
+      color: $white !important;
+    }
+  }
+  &.brown {
+    &.buttons .button {
+      background-color: $brown;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $brown;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #975b33;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #90532b;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #805031;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #995a31;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #995a31;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #995a31;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.brown {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $brown inset !important;
+      color: $brown !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #975b33 inset !important;
+      color: #975b33 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #90532b inset !important;
+      color: #975b33 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #995a31 inset !important;
+      color: #805031 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #805031 inset !important;
+      color: #805031 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.brown.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.brown {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-brown inset !important;
+      color: $inverted-brown;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #c86f11;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #c16808;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #cc6f0d;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #a96216;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #c86f11 inset !important;
+        color: $inverted-brown !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #c86f11 inset !important;
+      color: $inverted-brown !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #c86f11 inset !important;
+        color: $inverted-brown !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #c16808 inset !important;
+        color: $inverted-brown !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #cc6f0d inset !important;
+        color: $inverted-brown !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #cc6f0d inset !important;
+      color: $inverted-brown !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #cc6f0d inset !important;
+        color: $inverted-brown !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #a96216 inset !important;
+        color: $inverted-brown !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #a96216 inset !important;
+      color: $inverted-brown !important;
+    }
+  }
+  &.blue {
+    &.buttons .button {
+      background-color: $primary-color;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $primary-color;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: $primary-color--hover;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: $primary-color--focus;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: $primary-color--active;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: $primary-color-active;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: $primary-color-active;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: $primary-color-active;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.blue {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $primary-color inset !important;
+      color: $primary-color !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color--hover inset !important;
+      color: $primary-color--hover !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color--focus inset !important;
+      color: $primary-color--hover !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color-active inset !important;
+      color: $primary-color--active !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px $primary-color--active inset !important;
+      color: $primary-color--active !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.blue.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.blue {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-blue inset !important;
+      color: $inverted-blue;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #3ac0ff;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #2bbbff;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #3ac0ff;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #21b8ff;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+        color: $inverted-blue !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+      color: $inverted-blue !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+        color: $inverted-blue !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #2bbbff inset !important;
+        color: $inverted-blue !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+        color: $inverted-blue !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+      color: $inverted-blue !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #3ac0ff inset !important;
+        color: $inverted-blue !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #21b8ff inset !important;
+        color: $inverted-blue !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #21b8ff inset !important;
+      color: $inverted-blue !important;
+    }
+  }
+  &.green {
+    &.buttons .button {
+      background-color: $green;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $green;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #16ab39;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #0ea432;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #198f35;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #13ae38;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #13ae38;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #13ae38;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.green {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $green inset !important;
+      color: $green !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #16ab39 inset !important;
+      color: #16ab39 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #0ea432 inset !important;
+      color: #16ab39 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #13ae38 inset !important;
+      color: #198f35 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #198f35 inset !important;
+      color: #198f35 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.green.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.green {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-green inset !important;
+      color: $inverted-green;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #22be34;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #19b82b;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #1fc231;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #25a233;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #22be34 inset !important;
+        color: $inverted-green !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #22be34 inset !important;
+      color: $inverted-green !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #22be34 inset !important;
+        color: $inverted-green !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #19b82b inset !important;
+        color: $inverted-green !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #1fc231 inset !important;
+        color: $inverted-green !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #1fc231 inset !important;
+      color: $inverted-green !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #1fc231 inset !important;
+        color: $inverted-green !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #25a233 inset !important;
+        color: $inverted-green !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #25a233 inset !important;
+      color: $inverted-green !important;
+    }
+  }
+  &.orange {
+    &.buttons .button {
+      background-color: $orange;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $orange;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #f26202;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #e55b00;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #cf590c;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #f56100;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #f56100;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #f56100;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.orange {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $orange inset !important;
+      color: $orange !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #f26202 inset !important;
+      color: #f26202 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #e55b00 inset !important;
+      color: #f26202 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #f56100 inset !important;
+      color: #cf590c !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #cf590c inset !important;
+      color: #cf590c !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.orange.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.orange {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-orange inset !important;
+      color: $inverted-orange;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #ff7701;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #f17000;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #ff7701;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #e76b00;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+        color: $inverted-orange !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+      color: $inverted-orange !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+        color: $inverted-orange !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #f17000 inset !important;
+        color: $inverted-orange !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+        color: $inverted-orange !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+      color: $inverted-orange !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #ff7701 inset !important;
+        color: $inverted-orange !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #e76b00 inset !important;
+        color: $inverted-orange !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #e76b00 inset !important;
+      color: $inverted-orange !important;
+    }
+  }
+  &.pink {
+    &.buttons .button {
+      background-color: $pink;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $pink;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #e61a8d;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #e10f85;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #c71f7e;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #ea158d;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #ea158d;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #ea158d;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.pink {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $pink inset !important;
+      color: $pink !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #e61a8d inset !important;
+      color: #e61a8d !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #e10f85 inset !important;
+      color: #e61a8d !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #ea158d inset !important;
+      color: #c71f7e !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #c71f7e inset !important;
+      color: #c71f7e !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.pink.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.pink {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-pink inset !important;
+      color: $inverted-pink;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #ff74d8;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #ff65d3;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #ff74d8;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #ff5bd1;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+        color: $inverted-pink !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+      color: $inverted-pink !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+        color: $inverted-pink !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #ff65d3 inset !important;
+        color: $inverted-pink !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+        color: $inverted-pink !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+      color: $inverted-pink !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #ff74d8 inset !important;
+        color: $inverted-pink !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #ff5bd1 inset !important;
+        color: $inverted-pink !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #ff5bd1 inset !important;
+      color: $inverted-pink !important;
+    }
+  }
+  &.violet {
+    &.buttons .button {
+      background-color: $violet;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $violet;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #5829bb;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #4f20b5;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #502aa1;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #5626bf;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #5626bf;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #5626bf;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.violet {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $violet inset !important;
+      color: $violet !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #5829bb inset !important;
+      color: #5829bb !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #4f20b5 inset !important;
+      color: #5829bb !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #5626bf inset !important;
+      color: #502aa1 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #502aa1 inset !important;
+      color: #502aa1 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.violet.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.violet {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-violet inset !important;
+      color: $inverted-violet;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #8a73ff;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #7d64ff;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #8a73ff;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #7860f9;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+        color: $inverted-violet !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+      color: $inverted-violet !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+        color: $inverted-violet !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #7d64ff inset !important;
+        color: $inverted-violet !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+        color: $inverted-violet !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+      color: $inverted-violet !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #8a73ff inset !important;
+        color: $inverted-violet !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #7860f9 inset !important;
+        color: $inverted-violet !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #7860f9 inset !important;
+      color: $inverted-violet !important;
+    }
+  }
+  &.purple {
+    &.buttons .button {
+      background-color: $purple;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $purple;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #9627ba;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #8f1eb4;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #82299f;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #9724be;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #9724be;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #9724be;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.purple {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $purple inset !important;
+      color: $purple !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #9627ba inset !important;
+      color: #9627ba !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #8f1eb4 inset !important;
+      color: #9627ba !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #9724be inset !important;
+      color: #82299f !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #82299f inset !important;
+      color: #82299f !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.purple.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.purple {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-purple inset !important;
+      color: $inverted-purple;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #d65aff;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #d24aff;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #d65aff;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #cf40ff;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+        color: $inverted-purple !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+      color: $inverted-purple !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+        color: $inverted-purple !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #d24aff inset !important;
+        color: $inverted-purple !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+        color: $inverted-purple !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+      color: $inverted-purple !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #d65aff inset !important;
+        color: $inverted-purple !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #cf40ff inset !important;
+        color: $inverted-purple !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #cf40ff inset !important;
+      color: $inverted-purple !important;
+    }
+  }
+  &.red {
+    &.buttons .button {
+      background-color: $red;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $red;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #d01919;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #ca1010;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #b21e1e;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #d41515;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #d41515;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #d41515;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.red {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $red inset !important;
+      color: $red !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #d01919 inset !important;
+      color: #d01919 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #ca1010 inset !important;
+      color: #d01919 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #d41515 inset !important;
+      color: #b21e1e !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #b21e1e inset !important;
+      color: #b21e1e !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.red.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.red {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-red inset !important;
+      color: $inverted-red;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: $white;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #ff5144;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #ff4335;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #ff5144;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #ff392b;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+        color: $inverted-red !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+      color: $inverted-red !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+        color: $inverted-red !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #ff4335 inset !important;
+        color: $inverted-red !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+        color: $inverted-red !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+      color: $inverted-red !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #ff5144 inset !important;
+        color: $inverted-red !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #ff392b inset !important;
+        color: $inverted-red !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #ff392b inset !important;
+      color: $inverted-red !important;
+    }
+  }
+  &.teal {
+    &.buttons .button {
+      background-color: $teal;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $teal;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #009c95;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #008c86;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #00827c;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #009c95;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #009c95;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #009c95;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.teal {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $teal inset !important;
+      color: $teal !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #009c95 inset !important;
+      color: #009c95 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #008c86 inset !important;
+      color: #009c95 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #009c95 inset !important;
+      color: #00827c !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #00827c inset !important;
+      color: #00827c !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.teal.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.teal {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-teal inset !important;
+      color: $inverted-teal;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #54ffff;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #44ffff;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #54ffff;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #3affff;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+        color: $inverted-teal !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+      color: $inverted-teal !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+        color: $inverted-teal !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #44ffff inset !important;
+        color: $inverted-teal !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+        color: $inverted-teal !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+      color: $inverted-teal !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #54ffff inset !important;
+        color: $inverted-teal !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #3affff inset !important;
+        color: $inverted-teal !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #3affff inset !important;
+      color: $inverted-teal !important;
+    }
+  }
+  &.olive {
+    &.buttons .button {
+      background-color: $olive;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $olive;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #a7bd0d;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #a0b605;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #8d9e13;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #aac109;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #aac109;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #aac109;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.olive {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $olive inset !important;
+      color: $olive !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #a7bd0d inset !important;
+      color: #a7bd0d !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #a0b605 inset !important;
+      color: #a7bd0d !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #aac109 inset !important;
+      color: #8d9e13 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #8d9e13 inset !important;
+      color: #8d9e13 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.olive.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.olive {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-olive inset !important;
+      color: $inverted-olive;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #d8ea5c;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #daef47;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #daed59;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #cddf4d;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #d8ea5c inset !important;
+        color: $inverted-olive !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #d8ea5c inset !important;
+      color: $inverted-olive !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #d8ea5c inset !important;
+        color: $inverted-olive !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #daef47 inset !important;
+        color: $inverted-olive !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #daed59 inset !important;
+        color: $inverted-olive !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #daed59 inset !important;
+      color: $inverted-olive !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #daed59 inset !important;
+        color: $inverted-olive !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #cddf4d inset !important;
+        color: $inverted-olive !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #cddf4d inset !important;
+      color: $inverted-olive !important;
+    }
+  }
+  &.yellow {
+    &.buttons .button {
+      background-color: $yellow;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $yellow;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #eaae00;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #daa300;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #cd9903;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #eaae00;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #eaae00;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #eaae00;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.yellow {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $yellow inset !important;
+      color: $yellow !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #eaae00 inset !important;
+      color: #eaae00 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #daa300 inset !important;
+      color: #eaae00 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #eaae00 inset !important;
+      color: #cd9903 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #cd9903 inset !important;
+      color: #cd9903 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.yellow.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.inverted.yellow {
+    &.buttons .button, &.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px $inverted-yellow inset !important;
+      color: $inverted-yellow;
+    }
+    &.buttons .button:hover, &.button:hover, &.buttons .button:focus, &.button:focus, &.buttons .button.active, &.button.active, &.buttons .button:active, &.button:active {
+      box-shadow: none !important;
+      color: rgba(0, 0, 0, 0.6);
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #ffdf05;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #f5d500;
+    }
+    &.buttons .active.button, &.active.button {
+      background-color: #ffdf05;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #ebcd00;
+    }
+    &.basic.buttons .button, &.buttons .basic.button {
+      background-color: transparent;
+      box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+      color: $white !important;
+    }
+    &.basic {
+      &.button {
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5) inset !important;
+        color: $white !important;
+      }
+      &.buttons .button:hover {
+        box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+        color: $inverted-yellow !important;
+      }
+    }
+    &.buttons .basic.button:hover {
+      box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+      color: $inverted-yellow !important;
+    }
+    &.basic {
+      &.button:hover {
+        box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+        color: $inverted-yellow !important;
+      }
+      &.buttons .button:focus, &.button:focus {
+        box-shadow: 0px 0px 0px 2px #f5d500 inset !important;
+        color: $inverted-yellow !important;
+      }
+      &.buttons .active.button {
+        box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+        color: $inverted-yellow !important;
+      }
+    }
+    &.buttons .basic.active.button {
+      box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+      color: $inverted-yellow !important;
+    }
+    &.basic {
+      &.active.button {
+        box-shadow: 0px 0px 0px 2px #ffdf05 inset !important;
+        color: $inverted-yellow !important;
+      }
+      &.buttons .button:active {
+        box-shadow: 0px 0px 0px 2px #ebcd00 inset !important;
+        color: $inverted-yellow !important;
+      }
+    }
+    &.buttons .basic.button:active, &.basic.button:active {
+      box-shadow: 0px 0px 0px 2px #ebcd00 inset !important;
+      color: $inverted-yellow !important;
+    }
+  }
+  &.primary {
+    &.buttons .button {
+      background-color: $primary-color;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $primary-color;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: $primary-color--hover;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: $primary-color--focus;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: $primary-color--active;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: $primary-color-active;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: $primary-color-active;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: $primary-color-active;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.primary {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $primary-color inset !important;
+      color: $primary-color !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color--hover inset !important;
+      color: $primary-color--hover !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color--focus inset !important;
+      color: $primary-color--hover !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px $primary-color-active inset !important;
+      color: $primary-color--active !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px $primary-color--active inset !important;
+      color: $primary-color--active !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.secondary {
+    &.buttons .button {
+      background-color: #1B1C1D;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: #1B1C1D;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #27292a;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #2e3032;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #343637;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #27292a;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #27292a;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #27292a;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.secondary {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px #1B1C1D inset !important;
+      color: #1B1C1D !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #27292a inset !important;
+      color: #27292a !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #2e3032 inset !important;
+      color: #27292a !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #27292a inset !important;
+      color: #343637 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #343637 inset !important;
+      color: #343637 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.positive {
+    &.buttons .button {
+      background-color: $green;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $green;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #16ab39;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #0ea432;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #198f35;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #13ae38;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #13ae38;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #13ae38;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.positive {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $green inset !important;
+      color: $green !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #16ab39 inset !important;
+      color: #16ab39 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #0ea432 inset !important;
+      color: #16ab39 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #13ae38 inset !important;
+      color: #198f35 !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #198f35 inset !important;
+      color: #198f35 !important;
+    }
+  }
+  &.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
+    margin-left: -1px;
+  }
+  &.negative {
+    &.buttons .button {
+      background-color: $red;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+    }
+    &.button {
+      background-color: $red;
+      color: $white;
+      text-shadow: none;
+      background-image: none;
+      box-shadow: 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background-color: #d01919;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background-color: #ca1010;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .button:active, &.button:active {
+      background-color: #b21e1e;
+      color: $white;
+      text-shadow: none;
+    }
+    &.buttons .active.button {
+      background-color: #d41515;
+      color: $white;
+      text-shadow: none;
+      &:active {
+        background-color: #d41515;
+        color: $white;
+        text-shadow: none;
+      }
+    }
+    &.active.button, &.button .active.button:active {
+      background-color: #d41515;
+      color: $white;
+      text-shadow: none;
+    }
+  }
+  &.basic.negative {
+    &.buttons .button, &.button {
+      box-shadow: 0px 0px 0px 1px $red inset !important;
+      color: $red !important;
+    }
+    &.buttons .button:hover, &.button:hover {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #d01919 inset !important;
+      color: #d01919 !important;
+    }
+    &.buttons .button:focus, &.button:focus {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #ca1010 inset !important;
+      color: #d01919 !important;
+    }
+    &.buttons .active.button, &.active.button {
+      background: transparent !important;
+      box-shadow: 0px 0px 0px 1px #d41515 inset !important;
+      color: #b21e1e !important;
+    }
+    &.buttons .button:active, &.button:active {
+      box-shadow: 0px 0px 0px 1px #b21e1e inset !important;
+      color: #b21e1e !important;
+    }
+  }
+  &.buttons {
+    &:not(.vertical) > .basic.primary.button:not(:first-child) {
+      margin-left: -1px;
+    }
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    font-size: 0em;
+    vertical-align: baseline;
+    margin: 0em 0.25em 0em 0em;
+    &:not(.basic):not(.inverted) {
+      box-shadow: none;
+    }
+    &:after {
+      content: ".";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    .button {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      margin: 0em;
+      border-radius: 0em;
+      margin: 0px 0px 0px 0px;
+    }
+    > .ui.button:not(.basic):not(.inverted), &:not(.basic):not(.inverted) > .button {
+      box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
+    }
+    .button {
+      &:first-child {
+        border-left: none;
+        margin-left: 0em;
+        border-top-left-radius: 0.28571429rem;
+        border-bottom-left-radius: 0.28571429rem;
+      }
+      &:last-child {
+        border-top-right-radius: 0.28571429rem;
+        border-bottom-right-radius: 0.28571429rem;
+      }
+    }
+  }
+  &.vertical.buttons {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    .button {
+      display: block;
+      float: none;
+      width: 100%;
+      margin: 0px 0px 0px 0px;
+      box-shadow: none;
+      border-radius: 0em;
+      &:first-child {
+        border-top-left-radius: 0.28571429rem;
+        border-top-right-radius: 0.28571429rem;
+      }
+      &:last-child {
+        margin-bottom: 0px;
+        border-bottom-left-radius: 0.28571429rem;
+        border-bottom-right-radius: 0.28571429rem;
+      }
+      &:only-child {
+        border-radius: 0.28571429rem;
+      }
+    }
+  }
+}
+
+/* Specificity hack */
+
+@-webkit-keyframes button-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes button-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+

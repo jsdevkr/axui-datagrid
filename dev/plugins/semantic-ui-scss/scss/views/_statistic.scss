@@ -1,0 +1,508 @@
+/*!
+ * # Semantic UI 2.2.12 - Statistic
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+           Statistic
+*******************************/
+
+/* Standalone */
+
+.ui {
+  &.statistic {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: 1em 0em;
+    max-width: auto;
+    + .ui.statistic {
+      margin: 0em 0em 0em 1.5em;
+    }
+    &:first-child {
+      margin-top: 0em;
+    }
+    &:last-child {
+      margin-bottom: 0em;
+    }
+  }
+  &.statistics {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    > .statistic {
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 1 auto;
+      flex: 0 1 auto;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      margin: 0em 1.5em 2em;
+      max-width: auto;
+    }
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 1em -1.5em -2em;
+    &:after {
+      display: block;
+      content: ' ';
+      height: 0px;
+      clear: both;
+      overflow: hidden;
+      visibility: hidden;
+    }
+    &:first-child {
+      margin-top: 0em;
+    }
+    &:last-child {
+      margin-bottom: 0em;
+    }
+    .statistic > .value {
+      font-family: $font-family;
+      font-size: 4rem;
+      font-weight: normal;
+      line-height: 1em;
+      color: #1B1C1D;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  }
+  &.statistic > .value {
+    font-family: $font-family;
+    font-size: 4rem;
+    font-weight: normal;
+    line-height: 1em;
+    color: #1B1C1D;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &.statistics .statistic > .label, &.statistic > .label {
+    font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    color: $font-color;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &.statistics .statistic > .label ~ .value, &.statistic > .label ~ .value, &.statistics .statistic > .value ~ .label, &.statistic > .value ~ .label {
+    margin-top: 0rem;
+  }
+  &.statistics .statistic > .value .icon, &.statistic > .value .icon {
+    opacity: 1;
+    width: auto;
+    margin: 0em;
+  }
+  &.statistics .statistic > .text.value, &.statistic > .text.value {
+    line-height: 1em;
+    min-height: 2em;
+    font-weight: bold;
+    text-align: center;
+  }
+  &.statistics .statistic > .text.value + .label, &.statistic > .text.value + .label {
+    text-align: center;
+  }
+  &.statistics .statistic > .value img, &.statistic > .value img {
+    max-height: 3rem;
+    vertical-align: baseline;
+  }
+  &.ten.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 10%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.nine.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 11.11111111%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.eight.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 12.5%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.seven.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 14.28571429%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.six.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 16.66666667%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.five.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 20%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.four.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 25%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.three.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 33.33333333%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.two.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 50%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.one.statistics {
+    margin: 0em 0em -2em;
+    .statistic {
+      min-width: 100%;
+      margin: 0em 0em 2em;
+    }
+  }
+  &.horizontal {
+    &.statistic {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+    &.statistics {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      margin: 0em;
+      max-width: none;
+      .statistic {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        max-width: none;
+        margin: 1em 0em;
+      }
+    }
+    &.statistic > .text.value {
+      min-height: 0em !important;
+    }
+    &.statistics {
+      > .statistic > .text.value {
+        min-height: 0em !important;
+      }
+      .statistic > .value .icon {
+        width: 1.18em;
+      }
+    }
+    &.statistic > .value .icon {
+      width: 1.18em;
+    }
+    &.statistics .statistic > .value, &.statistic > .value {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    &.statistics .statistic > .label, &.statistic > .label {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0em 0em 0em 0.75em;
+    }
+  }
+  &.red.statistics .statistic > .value, &.statistics .red.statistic > .value, &.red.statistic > .value {
+    color: $red;
+  }
+  &.orange.statistics .statistic > .value, &.statistics .orange.statistic > .value, &.orange.statistic > .value {
+    color: $orange;
+  }
+  &.yellow.statistics .statistic > .value, &.statistics .yellow.statistic > .value, &.yellow.statistic > .value {
+    color: $yellow;
+  }
+  &.olive.statistics .statistic > .value, &.statistics .olive.statistic > .value, &.olive.statistic > .value {
+    color: $olive;
+  }
+  &.green.statistics .statistic > .value, &.statistics .green.statistic > .value, &.green.statistic > .value {
+    color: $green;
+  }
+  &.teal.statistics .statistic > .value, &.statistics .teal.statistic > .value, &.teal.statistic > .value {
+    color: $teal;
+  }
+  &.blue.statistics .statistic > .value, &.statistics .blue.statistic > .value, &.blue.statistic > .value {
+    color: $blue;
+  }
+  &.violet.statistics .statistic > .value, &.statistics .violet.statistic > .value, &.violet.statistic > .value {
+    color: $violet;
+  }
+  &.purple.statistics .statistic > .value, &.statistics .purple.statistic > .value, &.purple.statistic > .value {
+    color: $purple;
+  }
+  &.pink.statistics .statistic > .value, &.statistics .pink.statistic > .value, &.pink.statistic > .value {
+    color: $pink;
+  }
+  &.brown.statistics .statistic > .value, &.statistics .brown.statistic > .value, &.brown.statistic > .value {
+    color: $brown;
+  }
+  &.grey.statistics .statistic > .value, &.statistics .grey.statistic > .value, &.grey.statistic > .value {
+    color: $grey;
+  }
+  &.inverted {
+    &.statistics .statistic > .value, &.statistic .value {
+      color: $white;
+    }
+    &.statistics .statistic > .label, &.statistic .label {
+      color: $inverted-label;
+    }
+    &.red.statistics .statistic > .value {
+      color: $inverted-red;
+    }
+  }
+  &.statistics .inverted.red.statistic > .value {
+    color: $inverted-red;
+  }
+  &.inverted {
+    &.red.statistic > .value {
+      color: $inverted-red;
+    }
+    &.orange.statistics .statistic > .value {
+      color: $inverted-orange;
+    }
+  }
+  &.statistics .inverted.orange.statistic > .value {
+    color: $inverted-orange;
+  }
+  &.inverted {
+    &.orange.statistic > .value {
+      color: $inverted-orange;
+    }
+    &.yellow.statistics .statistic > .value {
+      color: $inverted-yellow;
+    }
+  }
+  &.statistics .inverted.yellow.statistic > .value {
+    color: $inverted-yellow;
+  }
+  &.inverted {
+    &.yellow.statistic > .value {
+      color: $inverted-yellow;
+    }
+    &.olive.statistics .statistic > .value {
+      color: $inverted-olive;
+    }
+  }
+  &.statistics .inverted.olive.statistic > .value {
+    color: $inverted-olive;
+  }
+  &.inverted {
+    &.olive.statistic > .value {
+      color: $inverted-olive;
+    }
+    &.green.statistics .statistic > .value {
+      color: $inverted-green;
+    }
+  }
+  &.statistics .inverted.green.statistic > .value {
+    color: $inverted-green;
+  }
+  &.inverted {
+    &.green.statistic > .value {
+      color: $inverted-green;
+    }
+    &.teal.statistics .statistic > .value {
+      color: $inverted-teal;
+    }
+  }
+  &.statistics .inverted.teal.statistic > .value {
+    color: $inverted-teal;
+  }
+  &.inverted {
+    &.teal.statistic > .value {
+      color: $inverted-teal;
+    }
+    &.blue.statistics .statistic > .value {
+      color: $inverted-blue;
+    }
+  }
+  &.statistics .inverted.blue.statistic > .value {
+    color: $inverted-blue;
+  }
+  &.inverted {
+    &.blue.statistic > .value {
+      color: $inverted-blue;
+    }
+    &.violet.statistics .statistic > .value {
+      color: $inverted-violet;
+    }
+  }
+  &.statistics .inverted.violet.statistic > .value {
+    color: $inverted-violet;
+  }
+  &.inverted {
+    &.violet.statistic > .value {
+      color: $inverted-violet;
+    }
+    &.purple.statistics .statistic > .value {
+      color: $inverted-purple;
+    }
+  }
+  &.statistics .inverted.purple.statistic > .value {
+    color: $inverted-purple;
+  }
+  &.inverted {
+    &.purple.statistic > .value {
+      color: $inverted-purple;
+    }
+    &.pink.statistics .statistic > .value {
+      color: $inverted-pink;
+    }
+  }
+  &.statistics .inverted.pink.statistic > .value {
+    color: $inverted-pink;
+  }
+  &.inverted {
+    &.pink.statistic > .value {
+      color: $inverted-pink;
+    }
+    &.brown.statistics .statistic > .value {
+      color: $inverted-brown;
+    }
+  }
+  &.statistics .inverted.brown.statistic > .value {
+    color: $inverted-brown;
+  }
+  &.inverted {
+    &.brown.statistic > .value {
+      color: $inverted-brown;
+    }
+    &.grey.statistics .statistic > .value {
+      color: $inverted-grey;
+    }
+  }
+  &.statistics .inverted.grey.statistic > .value, &.inverted.grey.statistic > .value {
+    color: $inverted-grey;
+  }
+  &[class*="left floated"].statistic {
+    float: left;
+    margin: 0em 2em 1em 0em;
+  }
+  &[class*="right floated"].statistic {
+    float: right;
+    margin: 0em 0em 1em 2em;
+  }
+  &.floated.statistic:last-child {
+    margin-bottom: 0em;
+  }
+  &.mini {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 1.5rem !important;
+    }
+    &.horizontal {
+      &.statistics .statistic > .value, &.statistic > .value {
+        font-size: 1.5rem !important;
+      }
+    }
+    &.statistics .statistic > .text.value, &.statistic > .text.value {
+      font-size: 1rem !important;
+    }
+  }
+  &.tiny {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 2rem !important;
+    }
+    &.horizontal {
+      &.statistics .statistic > .value, &.statistic > .value {
+        font-size: 2rem !important;
+      }
+    }
+    &.statistics .statistic > .text.value, &.statistic > .text.value {
+      font-size: 1rem !important;
+    }
+  }
+  &.small {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 3rem !important;
+    }
+    &.horizontal {
+      &.statistics .statistic > .value, &.statistic > .value {
+        font-size: 2rem !important;
+      }
+    }
+    &.statistics .statistic > .text.value, &.statistic > .text.value {
+      font-size: 1rem !important;
+    }
+  }
+  &.statistics .statistic > .value, &.statistic > .value {
+    font-size: 4rem !important;
+  }
+  &.horizontal {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 3rem !important;
+    }
+  }
+  &.statistics .statistic > .text.value, &.statistic > .text.value {
+    font-size: 2rem !important;
+  }
+  &.large {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 5rem !important;
+    }
+    &.horizontal {
+      &.statistics .statistic > .value, &.statistic > .value {
+        font-size: 4rem !important;
+      }
+    }
+    &.statistics .statistic > .text.value, &.statistic > .text.value {
+      font-size: 2.5rem !important;
+    }
+  }
+  &.huge {
+    &.statistics .statistic > .value, &.statistic > .value {
+      font-size: 6rem !important;
+    }
+    &.horizontal {
+      &.statistics .statistic > .value, &.statistic > .value {
+        font-size: 5rem !important;
+      }
+    }
+    &.statistics .statistic > .text.value, &.statistic > .text.value {
+      font-size: 2.5rem !important;
+    }
+  }
+}

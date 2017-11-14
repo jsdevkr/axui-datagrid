@@ -1,0 +1,886 @@
+/*!
+ * # Semantic UI 2.2.12 - Table
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+             Table
+*******************************/
+
+/* Prototype */
+
+.ui {
+  &.table {
+    width: 100%;
+    background: $white;
+    margin: 1em 0em;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    box-shadow: none;
+    border-radius: 0.28571429rem;
+    text-align: left;
+    color: $font-color;
+    border-collapse: separate;
+    border-spacing: 0px;
+    &:first-child {
+      margin-top: 0em;
+    }
+    &:last-child {
+      margin-bottom: 0em;
+    }
+    th, td {
+      -webkit-transition: background 0.1s ease, color 0.1s ease;
+      transition: background 0.1s ease, color 0.1s ease;
+    }
+    thead {
+      box-shadow: none;
+      th {
+        cursor: auto;
+        background: #F9FAFB;
+        text-align: inherit;
+        color: $font-color;
+        padding: 0.92857143em 0.78571429em;
+        vertical-align: inherit;
+        font-style: none;
+        font-weight: bold;
+        text-transform: none;
+        border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+        border-left: none;
+      }
+      tr {
+        > th:first-child {
+          border-left: none;
+        }
+        &:first-child > th {
+          &:first-child {
+            border-radius: 0.28571429rem 0em 0em 0em;
+          }
+          &:last-child {
+            border-radius: 0em 0.28571429rem 0em 0em;
+          }
+          &:only-child {
+            border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+          }
+        }
+      }
+    }
+    tfoot {
+      box-shadow: none;
+      th {
+        cursor: auto;
+        border-top: 1px solid rgba(34, 36, 38, 0.15);
+        background: #F9FAFB;
+        text-align: inherit;
+        color: $font-color;
+        padding: 0.78571429em 0.78571429em;
+        vertical-align: middle;
+        font-style: normal;
+        font-weight: normal;
+        text-transform: none;
+      }
+      tr {
+        > th:first-child {
+          border-left: none;
+        }
+        &:first-child > th {
+          &:first-child {
+            border-radius: 0em 0em 0em 0.28571429rem;
+          }
+          &:last-child {
+            border-radius: 0em 0em 0.28571429rem 0em;
+          }
+          &:only-child {
+            border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+          }
+        }
+      }
+    }
+    tr {
+      td {
+        border-top: 1px solid rgba(34, 36, 38, 0.1);
+      }
+      &:first-child td {
+        border-top: none;
+      }
+    }
+    td {
+      padding: 0.78571429em 0.78571429em;
+      text-align: inherit;
+    }
+    > .icon {
+      vertical-align: baseline;
+      &:only-child {
+        margin: 0em;
+      }
+    }
+    &.segment {
+      padding: 0em;
+      &:after {
+        display: none;
+      }
+      &.stacked:after {
+        display: block;
+      }
+    }
+    th .image, td .image {
+      max-width: none;
+      img {
+        max-width: none;
+      }
+    }
+  }
+  &.structured {
+    &.table {
+      border-collapse: collapse;
+      thead th {
+        border-left: none;
+        border-right: none;
+      }
+    }
+    &.sortable.table thead th {
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+      border-right: 1px solid rgba(34, 36, 38, 0.15);
+    }
+    &.basic.table th {
+      border-left: none;
+      border-right: none;
+    }
+    &.celled.table tr {
+      th, td {
+        border-left: 1px solid rgba(34, 36, 38, 0.1);
+        border-right: 1px solid rgba(34, 36, 38, 0.1);
+      }
+    }
+  }
+  &.definition.table {
+    thead:not(.full-width) th:first-child {
+      pointer-events: none;
+      background: transparent;
+      font-weight: normal;
+      color: $secondary-font;
+      box-shadow: -1px -1px 0px 1px $white;
+    }
+    tfoot:not(.full-width) th:first-child {
+      pointer-events: none;
+      background: transparent;
+      font-weight: $secondary-font;
+      color: normal;
+      box-shadow: 1px 1px 0px 1px $white;
+    }
+  }
+  &.celled.definition.table {
+    thead:not(.full-width) th:first-child {
+      box-shadow: 0px -1px 0px 1px $white;
+    }
+    tfoot:not(.full-width) th:first-child {
+      box-shadow: 0px 1px 0px 1px $white;
+    }
+  }
+  &.definition.table {
+    tr td {
+      &:first-child:not(.ignored), &.definition {
+        background: rgba(0, 0, 0, 0.03);
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.95);
+        text-transform: '';
+        box-shadow: '';
+        text-align: '';
+        font-size: 1em;
+        padding-left: '';
+        padding-right: '';
+      }
+    }
+    thead:not(.full-width) th:nth-child(2), tfoot:not(.full-width) th:nth-child(2), td:nth-child(2) {
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+    }
+  }
+  &.table {
+    tr.positive, td.positive {
+      box-shadow: 0px 0px 0px #A3C293 inset;
+    }
+    tr.positive, td.positive {
+      background: #FCFFF5 !important;
+      color: #2C662D !important;
+    }
+    tr.negative, td.negative {
+      box-shadow: 0px 0px 0px #E0B4B4 inset;
+    }
+    tr.negative, td.negative {
+      background: #FFF6F6 !important;
+      color: #9F3A38 !important;
+    }
+    tr.error, td.error {
+      box-shadow: 0px 0px 0px #E0B4B4 inset;
+    }
+    tr.error, td.error {
+      background: #FFF6F6 !important;
+      color: #9F3A38 !important;
+    }
+    tr.warning, td.warning {
+      box-shadow: 0px 0px 0px #C9BA9B inset;
+    }
+    tr.warning, td.warning {
+      background: #FFFAF3 !important;
+      color: #573A08 !important;
+    }
+    tr.active, td.active {
+      box-shadow: 0px 0px 0px $font-color inset;
+    }
+    tr.active, td.active {
+      background: #E0E0E0 !important;
+      color: $font-color !important;
+    }
+    tr {
+      &.disabled td, td.disabled, &.disabled:hover, &:hover td.disabled {
+        pointer-events: none;
+        color: rgba(40, 40, 40, 0.3);
+      }
+    }
+    &[class*="left aligned"], [class*="left aligned"] {
+      text-align: left;
+    }
+    &[class*="center aligned"], [class*="center aligned"] {
+      text-align: center;
+    }
+    &[class*="right aligned"], [class*="right aligned"] {
+      text-align: right;
+    }
+    &[class*="top aligned"], [class*="top aligned"] {
+      vertical-align: top;
+    }
+    &[class*="middle aligned"], [class*="middle aligned"] {
+      vertical-align: middle;
+    }
+    &[class*="bottom aligned"], [class*="bottom aligned"] {
+      vertical-align: bottom;
+    }
+    th.collapsing, td.collapsing {
+      width: 1px;
+      white-space: nowrap;
+    }
+  }
+  &.fixed.table {
+    table-layout: fixed;
+    th, td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  &.selectable.table tbody tr:hover, &.table tbody tr td.selectable:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: rgba(0, 0, 0, 0.95) !important;
+  }
+  &.selectable.inverted.table tbody tr:hover, &.inverted.table tbody tr td.selectable:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: $white !important;
+  }
+  &.table tbody tr td.selectable {
+    padding: 0em;
+    > a:not(.ui) {
+      display: block;
+      color: inherit;
+      padding: 0.78571429em 0.78571429em;
+    }
+  }
+  &.selectable.table tr.error:hover, &.table tr td.selectable.error:hover {
+    background: #ffe7e7 !important;
+    color: #943634 !important;
+  }
+  &.selectable.table tr {
+    &:hover td.error {
+      background: #ffe7e7 !important;
+      color: #943634 !important;
+    }
+    &.warning:hover {
+      background: #fff4e4 !important;
+      color: #493107 !important;
+    }
+  }
+  &.table tr td.selectable.warning:hover {
+    background: #fff4e4 !important;
+    color: #493107 !important;
+  }
+  &.selectable.table tr {
+    &:hover td.warning {
+      background: #fff4e4 !important;
+      color: #493107 !important;
+    }
+    &.active:hover {
+      background: #E0E0E0 !important;
+      color: $font-color !important;
+    }
+  }
+  &.table tr td.selectable.active:hover {
+    background: #E0E0E0 !important;
+    color: $font-color !important;
+  }
+  &.selectable.table tr {
+    &:hover td.active {
+      background: #E0E0E0 !important;
+      color: $font-color !important;
+    }
+    &.positive:hover {
+      background: #f7ffe6 !important;
+      color: #275b28 !important;
+    }
+  }
+  &.table tr td.selectable.positive:hover {
+    background: #f7ffe6 !important;
+    color: #275b28 !important;
+  }
+  &.selectable.table tr {
+    &:hover td.positive {
+      background: #f7ffe6 !important;
+      color: #275b28 !important;
+    }
+    &.negative:hover {
+      background: #ffe7e7 !important;
+      color: #943634 !important;
+    }
+  }
+  &.table tr td.selectable.negative:hover, &.selectable.table tr:hover td.negative {
+    background: #ffe7e7 !important;
+    color: #943634 !important;
+  }
+  &.attached {
+    &.table {
+      top: 0px;
+      bottom: 0px;
+      border-radius: 0px;
+      margin: 0em -1px;
+      width: calc(100% +  2px );
+      max-width: calc(100% +  2px );
+      box-shadow: none;
+      border: 1px solid #D4D4D5;
+    }
+    + .ui.attached.table:not(.top) {
+      border-top: none;
+    }
+  }
+  &[class*="top attached"].table {
+    bottom: 0px;
+    margin-bottom: 0em;
+    top: 0px;
+    margin-top: 1em;
+    border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  }
+  &.table[class*="top attached"]:first-child {
+    margin-top: 0em;
+  }
+  &[class*="bottom attached"].table {
+    bottom: 0px;
+    margin-top: 0em;
+    top: 0px;
+    margin-bottom: 1em;
+    box-shadow: none, none;
+    border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+    &:last-child {
+      margin-bottom: 0em;
+    }
+  }
+  &.striped.table {
+    > tr:nth-child(2n), tbody tr:nth-child(2n) {
+      background-color: rgba(0, 0, 50, 0.02);
+    }
+  }
+  &.inverted.striped.table {
+    > tr:nth-child(2n), tbody tr:nth-child(2n) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+  &.striped.selectable.selectable.selectable.table tbody tr.active:hover {
+    background: #EFEFEF !important;
+    color: rgba(0, 0, 0, 0.95) !important;
+  }
+  &.table {
+    &[class*="single line"], [class*="single line"], &[class*="single line"], [class*="single line"] {
+      white-space: nowrap;
+    }
+  }
+  &.red.table {
+    border-top: 0.2em solid $red;
+  }
+  &.inverted.red.table {
+    background-color: $red !important;
+    color: $white !important;
+  }
+  &.orange.table {
+    border-top: 0.2em solid $orange;
+  }
+  &.inverted.orange.table {
+    background-color: $orange !important;
+    color: $white !important;
+  }
+  &.yellow.table {
+    border-top: 0.2em solid $yellow;
+  }
+  &.inverted.yellow.table {
+    background-color: $yellow !important;
+    color: $white !important;
+  }
+  &.olive.table {
+    border-top: 0.2em solid $olive;
+  }
+  &.inverted.olive.table {
+    background-color: $olive !important;
+    color: $white !important;
+  }
+  &.green.table {
+    border-top: 0.2em solid $green;
+  }
+  &.inverted.green.table {
+    background-color: $green !important;
+    color: $white !important;
+  }
+  &.teal.table {
+    border-top: 0.2em solid $teal;
+  }
+  &.inverted.teal.table {
+    background-color: $teal !important;
+    color: $white !important;
+  }
+  &.blue.table {
+    border-top: 0.2em solid $blue;
+  }
+  &.inverted.blue.table {
+    background-color: $blue !important;
+    color: $white !important;
+  }
+  &.violet.table {
+    border-top: 0.2em solid $violet;
+  }
+  &.inverted.violet.table {
+    background-color: $violet !important;
+    color: $white !important;
+  }
+  &.purple.table {
+    border-top: 0.2em solid $purple;
+  }
+  &.inverted.purple.table {
+    background-color: $purple !important;
+    color: $white !important;
+  }
+  &.pink.table {
+    border-top: 0.2em solid $pink;
+  }
+  &.inverted.pink.table {
+    background-color: $pink !important;
+    color: $white !important;
+  }
+  &.brown.table {
+    border-top: 0.2em solid $brown;
+  }
+  &.inverted.brown.table {
+    background-color: $brown !important;
+    color: $white !important;
+  }
+  &.grey.table {
+    border-top: 0.2em solid $grey;
+  }
+  &.inverted.grey.table {
+    background-color: $grey !important;
+    color: $white !important;
+  }
+  &.black.table {
+    border-top: 0.2em solid #1B1C1D;
+  }
+  &.inverted.black.table {
+    background-color: #1B1C1D !important;
+    color: $white !important;
+  }
+  &.one.column.table td {
+    width: 100%;
+  }
+  &.two.column.table td {
+    width: 50%;
+  }
+  &.three.column.table td {
+    width: 33.33333333%;
+  }
+  &.four.column.table td {
+    width: 25%;
+  }
+  &.five.column.table td {
+    width: 20%;
+  }
+  &.six.column.table td {
+    width: 16.66666667%;
+  }
+  &.seven.column.table td {
+    width: 14.28571429%;
+  }
+  &.eight.column.table td {
+    width: 12.5%;
+  }
+  &.nine.column.table td {
+    width: 11.11111111%;
+  }
+  &.ten.column.table td {
+    width: 10%;
+  }
+  &.eleven.column.table td {
+    width: 9.09090909%;
+  }
+  &.twelve.column.table td {
+    width: 8.33333333%;
+  }
+  &.thirteen.column.table td {
+    width: 7.69230769%;
+  }
+  &.fourteen.column.table td {
+    width: 7.14285714%;
+  }
+  &.fifteen.column.table td {
+    width: 6.66666667%;
+  }
+  &.sixteen.column.table td {
+    width: 6.25%;
+  }
+  &.table {
+    th.one.wide, td.one.wide {
+      width: 6.25%;
+    }
+    th.two.wide, td.two.wide {
+      width: 12.5%;
+    }
+    th.three.wide, td.three.wide {
+      width: 18.75%;
+    }
+    th.four.wide, td.four.wide {
+      width: 25%;
+    }
+    th.five.wide, td.five.wide {
+      width: 31.25%;
+    }
+    th.six.wide, td.six.wide {
+      width: 37.5%;
+    }
+    th.seven.wide, td.seven.wide {
+      width: 43.75%;
+    }
+    th.eight.wide, td.eight.wide {
+      width: 50%;
+    }
+    th.nine.wide, td.nine.wide {
+      width: 56.25%;
+    }
+    th.ten.wide, td.ten.wide {
+      width: 62.5%;
+    }
+    th.eleven.wide, td.eleven.wide {
+      width: 68.75%;
+    }
+    th.twelve.wide, td.twelve.wide {
+      width: 75%;
+    }
+    th.thirteen.wide, td.thirteen.wide {
+      width: 81.25%;
+    }
+    th.fourteen.wide, td.fourteen.wide {
+      width: 87.5%;
+    }
+    th.fifteen.wide, td.fifteen.wide {
+      width: 93.75%;
+    }
+    th.sixteen.wide, td.sixteen.wide {
+      width: 100%;
+    }
+  }
+  &.sortable.table {
+    thead th {
+      cursor: pointer;
+      white-space: nowrap;
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+      color: $font-color;
+      &:first-child {
+        border-left: none;
+      }
+      &.sorted {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        &:hover {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+      }
+      &:after {
+        display: none;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        content: '';
+        height: 1em;
+        width: auto;
+        opacity: 0.8;
+        margin: 0em 0em 0em 0.5em;
+        font-family: 'Icons';
+      }
+      &.ascending:after {
+        content: '\f0d8';
+      }
+      &.descending:after {
+        content: '\f0d7';
+      }
+    }
+    th.disabled:hover {
+      cursor: auto;
+      color: rgba(40, 40, 40, 0.3);
+    }
+    thead th {
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.8);
+      }
+      &.sorted {
+        background: rgba(0, 0, 0, 0.05);
+        color: rgba(0, 0, 0, 0.95);
+        &:after {
+          display: inline-block;
+        }
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+          color: rgba(0, 0, 0, 0.95);
+        }
+      }
+    }
+  }
+  &.inverted {
+    &.sortable.table thead th {
+      &.sorted {
+        background: rgba(255, 255, 255, 0.15) -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+        background: rgba(255, 255, 255, 0.15) linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+        color: $white;
+      }
+      &:hover {
+        background: rgba(255, 255, 255, 0.08) -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+        background: rgba(255, 255, 255, 0.08) linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+        color: $white;
+      }
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+    &.table {
+      background: #333333;
+      color: $inverted-label;
+      border: none;
+      th {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: $inverted-label !important;
+      }
+      tr {
+        td {
+          border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        &.disabled td, td.disabled, &.disabled:hover td, &:hover td.disabled {
+          pointer-events: none;
+          color: rgba(225, 225, 225, 0.3);
+        }
+      }
+    }
+    &.definition.table {
+      tfoot:not(.full-width) th:first-child, thead:not(.full-width) th:first-child {
+        background: $white;
+      }
+      tr td:first-child {
+        background: rgba(255, 255, 255, 0.02);
+        color: $white;
+      }
+    }
+  }
+  &.collapsing.table {
+    width: auto;
+  }
+  &.basic {
+    &.table {
+      background: transparent;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+      box-shadow: none;
+      thead, tfoot {
+        box-shadow: none;
+      }
+      th {
+        background: transparent;
+        border-left: none;
+      }
+      tbody tr {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      td {
+        background: transparent;
+      }
+    }
+    &.striped.table tbody tr:nth-child(2n) {
+      background-color: rgba(0, 0, 0, 0.05) !important;
+    }
+  }
+  &[class*="very basic"].table {
+    border: none;
+    &:not(.sortable):not(.striped) {
+      th, td {
+        padding: '';
+      }
+      th:first-child, td:first-child {
+        padding-left: 0em;
+      }
+      th:last-child, td:last-child {
+        padding-right: 0em;
+      }
+      thead tr:first-child th {
+        padding-top: 0em;
+      }
+    }
+  }
+  &.celled.table tr {
+    th, td {
+      border-left: 1px solid rgba(34, 36, 38, 0.1);
+    }
+    th:first-child, td:first-child {
+      border-left: none;
+    }
+  }
+  &.padded.table {
+    th {
+      padding-left: 1em;
+      padding-right: 1em;
+      padding: 1em 1em;
+    }
+    td {
+      padding: 1em 1em;
+    }
+  }
+  &[class*="very padded"].table {
+    th {
+      padding-left: 1.5em;
+      padding-right: 1.5em;
+    }
+    td {
+      padding: 1.5em 1.5em;
+    }
+  }
+  &.compact.table {
+    th {
+      padding-left: 0.7em;
+      padding-right: 0.7em;
+    }
+    td {
+      padding: 0.5em 0.7em;
+    }
+  }
+  &[class*="very compact"].table {
+    th {
+      padding-left: 0.6em;
+      padding-right: 0.6em;
+    }
+    td {
+      padding: 0.4em 0.6em;
+    }
+  }
+  &.small.table {
+    font-size: 0.9em;
+  }
+  &.table {
+    font-size: 1em;
+  }
+  &.large.table {
+    font-size: 1.1em;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .ui {
+    &.table:not(.unstackable) {
+      width: 100%;
+      tbody {
+        width: auto !important;
+        display: block !important;
+      }
+      tr {
+        width: auto !important;
+        display: block !important;
+        > {
+          th, td {
+            width: auto !important;
+            display: block !important;
+          }
+        }
+      }
+      padding: 0em;
+      thead, tfoot {
+        display: block;
+      }
+      tr {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.1) inset !important;
+        > {
+          th, td {
+            background: none;
+            border: none !important;
+            padding: 0.25em 0.75em !important;
+            box-shadow: none !important;
+          }
+        }
+      }
+      th:first-child, td:first-child {
+        font-weight: bold;
+      }
+    }
+    &.definition.table:not(.unstackable) thead th:first-child {
+      box-shadow: none !important;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  .ui {
+    &[class*="tablet stackable"].table {
+      width: 100% !important;
+      display: block !important;
+      tbody {
+        width: 100% !important;
+        display: block !important;
+      }
+      tr {
+        width: 100% !important;
+        display: block !important;
+        > {
+          th, td {
+            width: 100% !important;
+            display: block !important;
+          }
+        }
+      }
+      padding: 0em;
+      thead, tfoot {
+        display: block;
+      }
+      tr {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        box-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.1) inset !important;
+        > {
+          th, td {
+            background: none;
+            border: none !important;
+            padding: 0.25em 0.75em;
+            box-shadow: none !important;
+          }
+        }
+      }
+    }
+    &.definition[class*="tablet stackable"].table thead th:first-child {
+      box-shadow: none !important;
+    }
+  }
+  /* Definition Table */
+}

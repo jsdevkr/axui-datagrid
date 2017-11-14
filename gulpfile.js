@@ -8,6 +8,15 @@ const shell = require('gulp-shell');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const exec = require('gulp-exec');
+const plumber = require('gulp-plumber');
+const notify = require("gulp-notify");
+
+
+function errorAlert(error) {
+  notify.onError({title: "Gulp Error", message: "Check your terminal", sound: "Purr"})(error); //Error Notification
+  console.log(error.toString());//Prints Error to Console
+  this.emit("end"); //End function
+}
 
 // 전역 오브젝트 모음
 const fnObj = {
@@ -16,6 +25,25 @@ const fnObj = {
     dist: 'dist/',
   }
 };
+
+
+/**
+ * watch
+ */
+gulp.task('scss-watch', function () {
+  gulp.watch(['./dev/scss/**/*.scss'], ['scss']);
+});
+
+/**
+ * SASS
+ */
+gulp.task('scss', function () {
+  gulp.src('./dev/scss/index.scss')
+    .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(sass({outputStyle: 'compressed'}))
+    .pipe(gulp.dest('./dev/scss'));
+});
+
 
 // 걸프 기본 타스크
 gulp.task('default', ['js-ES', 'scss-ES'], function () {

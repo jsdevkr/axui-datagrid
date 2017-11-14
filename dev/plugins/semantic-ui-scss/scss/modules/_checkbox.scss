@@ -1,0 +1,497 @@
+/*!
+ * # Semantic UI 2.2.12 - Checkbox
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+           Checkbox
+*******************************/
+
+.ui {
+  &.checkbox {
+    position: relative;
+    display: inline-block;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    outline: none;
+    vertical-align: baseline;
+    font-style: normal;
+    min-height: 17px;
+    font-size: 1rem;
+    line-height: 17px;
+    min-width: 17px;
+    input {
+      &[type="checkbox"], &[type="radio"] {
+        cursor: pointer;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        opacity: 0 !important;
+        outline: none;
+        z-index: 3;
+        width: 17px;
+        height: 17px;
+      }
+    }
+    .box, label {
+      cursor: auto;
+      position: relative;
+      display: block;
+      padding-left: 1.85714em;
+      outline: none;
+      font-size: 1em;
+    }
+    .box:before, label:before {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 17px;
+      height: 17px;
+      content: '';
+      background: $white;
+      border-radius: 0.21428571rem;
+      -webkit-transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      border: 1px solid #D4D4D5;
+    }
+    .box:after {
+      position: absolute;
+      font-size: 14px;
+      top: 0px;
+      left: 0px;
+      width: 17px;
+      height: 17px;
+      text-align: center;
+      opacity: 0;
+      color: $font-color;
+      -webkit-transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+      transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+    }
+    label {
+      &:after {
+        position: absolute;
+        font-size: 14px;
+        top: 0px;
+        left: 0px;
+        width: 17px;
+        height: 17px;
+        text-align: center;
+        opacity: 0;
+        color: $font-color;
+        -webkit-transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+        transition: border 0.1s ease, opacity 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+        transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+        transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease, -webkit-transform 0.1s ease;
+      }
+      color: $font-color;
+      -webkit-transition: color 0.1s ease;
+      transition: color 0.1s ease;
+    }
+    + label {
+      color: $font-color;
+      -webkit-transition: color 0.1s ease;
+      transition: color 0.1s ease;
+      vertical-align: middle;
+    }
+    .box:hover::before {
+      background: $white;
+      border-color: rgba(34, 36, 38, 0.35);
+    }
+    label:hover {
+      &::before {
+        background: $white;
+        border-color: rgba(34, 36, 38, 0.35);
+      }
+      color: rgba(0, 0, 0, 0.8);
+    }
+    + label:hover {
+      color: rgba(0, 0, 0, 0.8);
+    }
+    .box:active::before, label:active::before {
+      background: #F9FAFB;
+      border-color: rgba(34, 36, 38, 0.35);
+    }
+    .box:active::after, label:active::after {
+      color: rgba(0, 0, 0, 0.95);
+    }
+    input {
+      &:active ~ label {
+        color: rgba(0, 0, 0, 0.95);
+      }
+      &:focus ~ {
+        .box:before, label:before {
+          background: $white;
+          border-color: #96C8DA;
+        }
+        .box:after {
+          color: rgba(0, 0, 0, 0.95);
+        }
+        label {
+          &:after {
+            color: rgba(0, 0, 0, 0.95);
+          }
+          color: rgba(0, 0, 0, 0.95);
+        }
+      }
+      &:checked ~ {
+        .box:before, label:before {
+          background: $white;
+          border-color: rgba(34, 36, 38, 0.35);
+        }
+        .box:after, label:after {
+          opacity: 1;
+          color: rgba(0, 0, 0, 0.95);
+        }
+      }
+      &:not([type=radio]):indeterminate {
+        ~ {
+          .box:before, label:before {
+            background: $white;
+            border-color: rgba(34, 36, 38, 0.35);
+          }
+          .box:after, label:after {
+            opacity: 1;
+            color: rgba(0, 0, 0, 0.95);
+          }
+        }
+        &:focus ~ {
+          .box:before, label:before {
+            background: $white;
+            border-color: #96C8DA;
+          }
+        }
+      }
+      &:checked:focus ~ {
+        .box:before, label:before {
+          background: $white;
+          border-color: #96C8DA;
+        }
+      }
+      &:not([type=radio]):indeterminate:focus ~ {
+        .box:after, label:after {
+          color: rgba(0, 0, 0, 0.95);
+        }
+      }
+      &:checked:focus ~ {
+        .box:after, label:after {
+          color: rgba(0, 0, 0, 0.95);
+        }
+      }
+    }
+  }
+  &.read-only.checkbox {
+    cursor: default;
+    label {
+      cursor: default;
+    }
+  }
+  &.disabled.checkbox {
+    .box:after, label {
+      cursor: default !important;
+      opacity: 0.5;
+      color: #000000;
+    }
+  }
+  &.checkbox input {
+    &[disabled] ~ {
+      .box:after, label {
+        cursor: default !important;
+        opacity: 0.5;
+        color: #000000;
+      }
+    }
+    &.hidden {
+      z-index: -1;
+      + label {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+    }
+  }
+  &.radio.checkbox {
+    min-height: 15px;
+    .box, label {
+      padding-left: 1.85714em;
+    }
+    .box:before, label:before {
+      content: '';
+      -webkit-transform: none;
+      transform: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 500rem;
+      top: 1px;
+      left: 0px;
+    }
+    .box:after, label:after {
+      border: none;
+      content: '' !important;
+      width: 15px;
+      height: 15px;
+      line-height: 15px;
+    }
+    .box:after, label:after {
+      top: 1px;
+      left: 0px;
+      width: 15px;
+      height: 15px;
+      border-radius: 500rem;
+      -webkit-transform: scale(0.46667);
+      transform: scale(0.46667);
+      background-color: $font-color;
+    }
+    input {
+      &:focus ~ {
+        .box:before, label:before {
+          background-color: $white;
+        }
+        .box:after, label:after {
+          background-color: rgba(0, 0, 0, 0.95);
+        }
+      }
+      &:indeterminate ~ {
+        .box:after, label:after {
+          opacity: 0;
+        }
+      }
+      &:checked ~ {
+        .box:before, label:before {
+          background-color: $white;
+        }
+        .box:after, label:after {
+          background-color: rgba(0, 0, 0, 0.95);
+        }
+      }
+      &:focus:checked ~ {
+        .box:before, label:before {
+          background-color: $white;
+        }
+        .box:after, label:after {
+          background-color: rgba(0, 0, 0, 0.95);
+        }
+      }
+    }
+  }
+  &.slider.checkbox {
+    min-height: 1.25rem;
+    input {
+      width: 3.5rem;
+      height: 1.25rem;
+    }
+    .box, label {
+      padding-left: 4.5rem;
+      line-height: 1rem;
+      color: $secondary-font;
+    }
+    .box:before, label:before {
+      display: block;
+      position: absolute;
+      content: '';
+      border: none !important;
+      left: 0em;
+      z-index: 1;
+      top: 0.4rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      width: 3.5rem;
+      height: 0.21428571rem;
+      -webkit-transform: none;
+      transform: none;
+      border-radius: 500rem;
+      -webkit-transition: background 0.3s ease;
+      transition: background 0.3s ease;
+    }
+    .box:after, label:after {
+      background: $white -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      background: $white linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      position: absolute;
+      content: '' !important;
+      opacity: 1;
+      z-index: 2;
+      border: none;
+      box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15), 0px 0px 0px 1px rgba(34, 36, 38, 0.15) inset;
+      width: 1.5rem;
+      height: 1.5rem;
+      top: -0.25rem;
+      left: 0em;
+      -webkit-transform: none;
+      transform: none;
+      border-radius: 500rem;
+      -webkit-transition: left 0.3s ease;
+      transition: left 0.3s ease;
+    }
+    input:focus ~ {
+      .box:before, label:before {
+        background-color: rgba(0, 0, 0, 0.15);
+        border: none;
+      }
+    }
+    .box:hover, label:hover {
+      color: rgba(0, 0, 0, 0.8);
+    }
+    .box:hover::before, label:hover::before {
+      background: rgba(0, 0, 0, 0.15);
+    }
+    input {
+      &:checked ~ {
+        .box, label {
+          color: rgba(0, 0, 0, 0.95) !important;
+        }
+        .box:before, label:before {
+          background-color: #545454 !important;
+        }
+        .box:after, label:after {
+          left: 2rem;
+        }
+      }
+      &:focus:checked ~ {
+        .box, label {
+          color: rgba(0, 0, 0, 0.95) !important;
+        }
+        .box:before, label:before {
+          background-color: #000000 !important;
+        }
+      }
+    }
+  }
+  &.toggle.checkbox {
+    min-height: 1.5rem;
+    input {
+      width: 3.5rem;
+      height: 1.5rem;
+    }
+    .box {
+      min-height: 1.5rem;
+      padding-left: 4.5rem;
+      color: $font-color;
+    }
+    label {
+      min-height: 1.5rem;
+      padding-left: 4.5rem;
+      color: $font-color;
+      padding-top: 0.15em;
+    }
+    .box:before, label:before {
+      display: block;
+      position: absolute;
+      content: '';
+      z-index: 1;
+      -webkit-transform: none;
+      transform: none;
+      border: none;
+      top: 0rem;
+      background: rgba(0, 0, 0, 0.05);
+      box-shadow: none;
+      width: 3.5rem;
+      height: 1.5rem;
+      border-radius: 500rem;
+    }
+    .box:after, label:after {
+      background: $white -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      background: $white linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      position: absolute;
+      content: '' !important;
+      opacity: 1;
+      z-index: 2;
+      border: none;
+      box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15), 0px 0px 0px 1px rgba(34, 36, 38, 0.15) inset;
+      width: 1.5rem;
+      height: 1.5rem;
+      top: 0rem;
+      left: 0em;
+      border-radius: 500rem;
+      -webkit-transition: background 0.3s ease, left 0.3s ease;
+      transition: background 0.3s ease, left 0.3s ease;
+    }
+    input {
+      ~ {
+        .box:after, label:after {
+          left: -0.05rem;
+          box-shadow: none;
+        }
+      }
+      &:focus ~ {
+        .box:before, label:before {
+          background-color: rgba(0, 0, 0, 0.15);
+          border: none;
+        }
+      }
+    }
+    .box:hover::before, label:hover::before {
+      background-color: rgba(0, 0, 0, 0.15);
+      border: none;
+    }
+    input {
+      &:checked ~ {
+        .box, label {
+          color: rgba(0, 0, 0, 0.95) !important;
+        }
+        .box:before, label:before {
+          background-color: $blue !important;
+        }
+        .box:after, label:after {
+          left: 2.15rem;
+          box-shadow: none;
+        }
+      }
+      &:focus:checked ~ {
+        .box, label {
+          color: rgba(0, 0, 0, 0.95) !important;
+        }
+        .box:before, label:before {
+          background-color: #0d71bb !important;
+        }
+      }
+    }
+  }
+  &.fitted {
+    &.checkbox {
+      .box, label {
+        padding-left: 0em !important;
+      }
+    }
+    &.toggle.checkbox, &.slider.checkbox {
+      width: 3.5rem;
+    }
+  }
+  &.checkbox {
+    label:after, .box:after {
+      font-family: 'Checkbox';
+    }
+    input {
+      &:checked ~ {
+        .box:after, label:after {
+          content: '\e800';
+        }
+      }
+      &:indeterminate ~ {
+        .box:after, label:after {
+          font-size: 12px;
+          content: '\e801';
+        }
+      }
+    }
+  }
+}
+
+@font-face {
+  font-family: 'Checkbox';
+  src: url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAALAIAAAwAwT1MvMg8SBD8AAAC8AAAAYGNtYXAYVtCJAAABHAAAAFRnYXNwAAAAEAAAAXAAAAAIZ2x5Zn4huwUAAAF4AAABYGhlYWQGPe1ZAAAC2AAAADZoaGVhB30DyAAAAxAAAAAkaG10eBBKAEUAAAM0AAAAHGxvY2EAmgESAAADUAAAABBtYXhwAAkALwAAA2AAAAAgbmFtZSC8IugAAAOAAAABknBvc3QAAwAAAAAFFAAAACAAAwMTAZAABQAAApkCzAAAAI8CmQLMAAAB6wAzAQkAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAABAAADoAgPA/8AAQAPAAEAAAAABAAAAAAAAAAAAAAAgAAAAAAADAAAAAwAAABwAAQADAAAAHAADAAEAAAAcAAQAOAAAAAoACAACAAIAAQAg6AL//f//AAAAAAAg6AD//f//AAH/4xgEAAMAAQAAAAAAAAAAAAAAAQAB//8ADwABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQAAAAAAAAAAAAIAADc5AQAAAAABAEUAUQO7AvgAGgAAARQHAQYjIicBJjU0PwE2MzIfAQE2MzIfARYVA7sQ/hQQFhcQ/uMQEE4QFxcQqAF2EBcXEE4QAnMWEP4UEBABHRAXFhBOEBCoAXcQEE4QFwAAAAABAAABbgMlAkkAFAAAARUUBwYjISInJj0BNDc2MyEyFxYVAyUQEBf9SRcQEBAQFwK3FxAQAhJtFxAQEBAXbRcQEBAQFwAAAAABAAAASQMlA24ALAAAARUUBwYrARUUBwYrASInJj0BIyInJj0BNDc2OwE1NDc2OwEyFxYdATMyFxYVAyUQEBfuEBAXbhYQEO4XEBAQEBfuEBAWbhcQEO4XEBACEm0XEBDuFxAQEBAX7hAQF20XEBDuFxAQEBAX7hAQFwAAAQAAAAIAAHRSzT9fDzz1AAsEAAAAAADRsdR3AAAAANGx1HcAAAAAA7sDbgAAAAgAAgAAAAAAAAABAAADwP/AAAAEAAAAAAADuwABAAAAAAAAAAAAAAAAAAAABwQAAAAAAAAAAAAAAAIAAAAEAABFAyUAAAMlAAAAAAAAAAoAFAAeAE4AcgCwAAEAAAAHAC0AAQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAOAK4AAQAAAAAAAQAIAAAAAQAAAAAAAgAHAGkAAQAAAAAAAwAIADkAAQAAAAAABAAIAH4AAQAAAAAABQALABgAAQAAAAAABgAIAFEAAQAAAAAACgAaAJYAAwABBAkAAQAQAAgAAwABBAkAAgAOAHAAAwABBAkAAwAQAEEAAwABBAkABAAQAIYAAwABBAkABQAWACMAAwABBAkABgAQAFkAAwABBAkACgA0ALBDaGVja2JveABDAGgAZQBjAGsAYgBvAHhWZXJzaW9uIDIuMABWAGUAcgBzAGkAbwBuACAAMgAuADBDaGVja2JveABDAGgAZQBjAGsAYgBvAHhDaGVja2JveABDAGgAZQBjAGsAYgBvAHhSZWd1bGFyAFIAZQBnAHUAbABhAHJDaGVja2JveABDAGgAZQBjAGsAYgBvAHhGb250IGdlbmVyYXRlZCBieSBJY29Nb29uLgBGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAC4AAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) format("truetype");
+}
+
+/*  UTF Reference
+.check:before { content: '\e800'; }
+.dash:before  { content: '\e801'; }
+.plus:before { content: '\e802'; }
+*/

@@ -1,0 +1,933 @@
+/*!
+ * # Semantic UI 2.2.12 - Form
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Elements
+*******************************/
+
+/*--------------------
+        Form
+---------------------*/
+
+.ui {
+  &.form {
+    position: relative;
+    max-width: 100%;
+    > p {
+      margin: 1em 0em;
+    }
+    .field {
+      clear: both;
+      margin: 0em 0em 1em;
+      &:last-child {
+        margin-bottom: 0em;
+      }
+    }
+    .fields {
+      &:last-child .field {
+        margin-bottom: 0em;
+      }
+      .field {
+        clear: both;
+        margin: 0em;
+      }
+    }
+    .field > label {
+      display: block;
+      margin: 0em 0em 0.28571429rem 0em;
+      color: $font-color;
+      font-size: 0.92857143em;
+      font-weight: bold;
+      text-transform: none;
+    }
+    textarea {
+      width: 100%;
+      vertical-align: top;
+    }
+    input {
+      &:not([type]), &[type="date"], &[type="datetime-local"], &[type="email"], &[type="number"], &[type="password"], &[type="search"], &[type="tel"], &[type="time"], &[type="text"], &[type="file"], &[type="url"] {
+        width: 100%;
+        vertical-align: top;
+      }
+    }
+    ::-webkit-datetime-edit, ::-webkit-inner-spin-button {
+      height: 1.21428571em;
+    }
+    input {
+      &:not([type]), &[type="date"], &[type="datetime-local"], &[type="email"], &[type="number"], &[type="password"], &[type="search"], &[type="tel"], &[type="time"], &[type="text"], &[type="file"], &[type="url"] {
+        font-family: $font-family;
+        margin: 0em;
+        outline: none;
+        -webkit-appearance: none;
+        tap-highlight-color: rgba(255, 255, 255, 0);
+        line-height: 1.21428571em;
+        padding: 0.67857143em 1em;
+        font-size: 1em;
+        background: $white;
+        border: 1px solid rgba(34, 36, 38, 0.15);
+        color: $font-color;
+        border-radius: 0.28571429rem;
+        box-shadow: 0em 0em 0em 0em transparent inset;
+        -webkit-transition: color 0.1s ease, border-color 0.1s ease;
+        transition: color 0.1s ease, border-color 0.1s ease;
+      }
+    }
+    textarea {
+      margin: 0em;
+      -webkit-appearance: none;
+      tap-highlight-color: rgba(255, 255, 255, 0);
+      padding: 0.78571429em 1em;
+      background: $white;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+      outline: none;
+      color: $font-color;
+      border-radius: 0.28571429rem;
+      box-shadow: 0em 0em 0em 0em transparent inset;
+      -webkit-transition: color 0.1s ease, border-color 0.1s ease;
+      transition: color 0.1s ease, border-color 0.1s ease;
+      font-size: 1em;
+      line-height: 1.2857;
+      resize: vertical;
+      &:not([rows]) {
+        height: 12em;
+        min-height: 8em;
+        max-height: 24em;
+      }
+      vertical-align: top;
+    }
+    input {
+      &[type="checkbox"] {
+        vertical-align: top;
+      }
+      &.attached {
+        width: auto;
+      }
+    }
+    select {
+      display: block;
+      height: auto;
+      width: 100%;
+      background: $white;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+      border-radius: 0.28571429rem;
+      box-shadow: 0em 0em 0em 0em transparent inset;
+      padding: 0.62em 1em;
+      color: $font-color;
+      -webkit-transition: color 0.1s ease, border-color 0.1s ease;
+      transition: color 0.1s ease, border-color 0.1s ease;
+    }
+    .field > .selection.dropdown {
+      width: 100%;
+      > .dropdown.icon {
+        float: right;
+      }
+    }
+    .inline {
+      &.fields .field > .selection.dropdown, &.field > .selection.dropdown {
+        width: auto;
+      }
+      &.fields .field > .selection.dropdown > .dropdown.icon, &.field > .selection.dropdown > .dropdown.icon {
+        float: none;
+      }
+    }
+    .field .ui.input, .fields .field .ui.input, .wide.field .ui.input {
+      width: 100%;
+    }
+    .inline {
+      &.fields .field:not(.wide) .ui.input, &.field:not(.wide) .ui.input {
+        width: auto;
+        vertical-align: middle;
+      }
+    }
+    .fields .field .ui.input input, .field .ui.input input {
+      width: auto;
+    }
+    .ten.fields .ui.input input, .nine.fields .ui.input input, .eight.fields .ui.input input, .seven.fields .ui.input input, .six.fields .ui.input input, .five.fields .ui.input input, .four.fields .ui.input input, .three.fields .ui.input input, .two.fields .ui.input input, .wide.field .ui.input input {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      width: 0px;
+    }
+    .success.message, .warning.message, .error.message {
+      display: none;
+    }
+    .message:first-child {
+      margin-top: 0px;
+    }
+    .field .prompt.label {
+      white-space: normal;
+      background: $white !important;
+      border: 1px solid #E0B4B4 !important;
+      color: #9F3A38 !important;
+    }
+    .inline {
+      &.fields .field .prompt, &.field .prompt {
+        vertical-align: top;
+        margin: -0.25em 0em -0.5em 0.5em;
+      }
+      &.fields .field .prompt:before, &.field .prompt:before {
+        border-width: 0px 0px 1px 1px;
+        bottom: auto;
+        right: auto;
+        top: 50%;
+        left: 0em;
+      }
+    }
+    .field.field input:-webkit-autofill {
+      box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
+      border-color: #E5DFA1 !important;
+      &:focus {
+        box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
+        border-color: #D5C315 !important;
+      }
+    }
+    .error.error input:-webkit-autofill {
+      box-shadow: 0px 0px 0px 100px #FFFAF0 inset !important;
+      border-color: #E0B4B4 !important;
+    }
+    ::-webkit-input-placeholder, :-ms-input-placeholder, ::-moz-placeholder {
+      color: rgba(191, 191, 191, 0.87);
+    }
+    :focus {
+      &::-webkit-input-placeholder, &:-ms-input-placeholder, &::-moz-placeholder {
+        color: rgba(115, 115, 115, 0.87);
+      }
+    }
+    .error {
+      ::-webkit-input-placeholder {
+        color: #e7bdbc;
+      }
+      :-ms-input-placeholder {
+        color: #e7bdbc !important;
+      }
+      ::-moz-placeholder {
+        color: #e7bdbc;
+      }
+      :focus {
+        &::-webkit-input-placeholder {
+          color: #da9796;
+        }
+        &:-ms-input-placeholder {
+          color: #da9796 !important;
+        }
+        &::-moz-placeholder {
+          color: #da9796;
+        }
+      }
+    }
+    input {
+      &:not([type]):focus, &[type="date"]:focus, &[type="datetime-local"]:focus, &[type="email"]:focus, &[type="number"]:focus, &[type="password"]:focus, &[type="search"]:focus, &[type="tel"]:focus, &[type="time"]:focus, &[type="text"]:focus, &[type="file"]:focus, &[type="url"]:focus {
+        color: rgba(0, 0, 0, 0.95);
+        border-color: #85B7D9;
+        border-radius: 0.28571429rem;
+        background: $white;
+        box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
+      }
+    }
+    textarea:focus {
+      color: rgba(0, 0, 0, 0.95);
+      border-color: #85B7D9;
+      border-radius: 0.28571429rem;
+      background: $white;
+      box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
+      -webkit-appearance: none;
+    }
+    &.success {
+      .success.message:not(:empty) {
+        display: block;
+      }
+      .compact.success.message:not(:empty) {
+        display: inline-block;
+      }
+      .icon.success.message:not(:empty) {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+      }
+    }
+    &.warning {
+      .warning.message:not(:empty) {
+        display: block;
+      }
+      .compact.warning.message:not(:empty) {
+        display: inline-block;
+      }
+      .icon.warning.message:not(:empty) {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+      }
+    }
+    &.error {
+      .error.message:not(:empty) {
+        display: block;
+      }
+      .compact.error.message:not(:empty) {
+        display: inline-block;
+      }
+      .icon.error.message:not(:empty) {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+      }
+    }
+    .fields.error .field label, .field.error label, .fields.error .field .input, .field.error .input {
+      color: #9F3A38;
+    }
+    .fields.error .field .corner.label, .field.error .corner.label {
+      border-color: #9F3A38;
+      color: $white;
+    }
+    .fields.error .field {
+      textarea, select {
+        background: #FFF6F6;
+        border-color: #E0B4B4;
+        color: #9F3A38;
+        border-radius: '';
+        box-shadow: none;
+      }
+      input {
+        &:not([type]), &[type="date"], &[type="datetime-local"], &[type="email"], &[type="number"], &[type="password"], &[type="search"], &[type="tel"], &[type="time"], &[type="text"], &[type="file"], &[type="url"] {
+          background: #FFF6F6;
+          border-color: #E0B4B4;
+          color: #9F3A38;
+          border-radius: '';
+          box-shadow: none;
+        }
+      }
+    }
+    .field.error {
+      textarea, select {
+        background: #FFF6F6;
+        border-color: #E0B4B4;
+        color: #9F3A38;
+        border-radius: '';
+        box-shadow: none;
+      }
+      input {
+        &:not([type]), &[type="date"], &[type="datetime-local"], &[type="email"], &[type="number"], &[type="password"], &[type="search"], &[type="tel"], &[type="time"], &[type="text"], &[type="file"], &[type="url"] {
+          background: #FFF6F6;
+          border-color: #E0B4B4;
+          color: #9F3A38;
+          border-radius: '';
+          box-shadow: none;
+        }
+      }
+      textarea:focus, select:focus {
+        background: #FFF6F6;
+        border-color: #E0B4B4;
+        color: #9F3A38;
+        -webkit-appearance: none;
+        box-shadow: none;
+      }
+      input {
+        &:not([type]):focus, &[type="date"]:focus, &[type="datetime-local"]:focus, &[type="email"]:focus, &[type="number"]:focus, &[type="password"]:focus, &[type="search"]:focus, &[type="tel"]:focus, &[type="time"]:focus, &[type="text"]:focus, &[type="file"]:focus, &[type="url"]:focus {
+          background: #FFF6F6;
+          border-color: #E0B4B4;
+          color: #9F3A38;
+          -webkit-appearance: none;
+          box-shadow: none;
+        }
+      }
+      select {
+        -webkit-appearance: menulist-button;
+      }
+    }
+    .fields.error .field .ui.dropdown {
+      background: #FFF6F6;
+      color: #9F3A38;
+      .item {
+        background: #FFF6F6;
+        color: #9F3A38;
+      }
+    }
+    .field.error .ui.dropdown {
+      background: #FFF6F6;
+      color: #9F3A38;
+      .text, .item {
+        background: #FFF6F6;
+        color: #9F3A38;
+      }
+    }
+    .fields.error .field .ui.dropdown, .field.error .ui.dropdown, .fields.error .field .ui.dropdown:hover, .field.error .ui.dropdown:hover {
+      border-color: #E0B4B4 !important;
+    }
+    .fields.error .field .ui.dropdown:hover .menu, .field.error .ui.dropdown:hover .menu {
+      border-color: #E0B4B4;
+    }
+    .fields.error .field .ui.multiple.selection.dropdown > .label, .field.error .ui.multiple.selection.dropdown > .label {
+      background-color: #EACBCB;
+      color: #9F3A38;
+    }
+    .fields.error .field .ui.dropdown .menu .item:hover, .field.error .ui.dropdown .menu .item:hover, .fields.error .field .ui.dropdown .menu .selected.item, .field.error .ui.dropdown .menu .selected.item {
+      background-color: #FBE7E7;
+    }
+    .fields.error .field .ui.dropdown .menu .active.item, .field.error .ui.dropdown .menu .active.item {
+      background-color: #FDCFCF !important;
+    }
+    .fields.error .field .checkbox:not(.toggle):not(.slider) label, .field.error .checkbox:not(.toggle):not(.slider) label, .fields.error .field .checkbox:not(.toggle):not(.slider) .box, .field.error .checkbox:not(.toggle):not(.slider) .box {
+      color: #9F3A38;
+    }
+    .fields.error .field .checkbox:not(.toggle):not(.slider) label:before, .field.error .checkbox:not(.toggle):not(.slider) label:before, .fields.error .field .checkbox:not(.toggle):not(.slider) .box:before, .field.error .checkbox:not(.toggle):not(.slider) .box:before {
+      background: #FFF6F6;
+      border-color: #E0B4B4;
+    }
+    .fields.error .field .checkbox label:after, .field.error .checkbox label:after, .fields.error .field .checkbox .box:after, .field.error .checkbox .box:after {
+      color: #9F3A38;
+    }
+    .disabled {
+      &.fields .field, &.field {
+        pointer-events: none;
+        opacity: 0.45;
+      }
+    }
+    .field {
+      :disabled {
+        pointer-events: none;
+        opacity: 0.45;
+      }
+      &.disabled > label {
+        opacity: 0.45;
+      }
+    }
+    .fields.disabled > label {
+      opacity: 0.45;
+    }
+    .field.disabled :disabled {
+      opacity: 1;
+    }
+  }
+  &.loading.form {
+    position: relative;
+    cursor: default;
+    pointer-events: none;
+    &:before {
+      position: absolute;
+      content: '';
+      top: 0%;
+      left: 0%;
+      background: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+    }
+    &:after {
+      position: absolute;
+      content: '';
+      top: 50%;
+      left: 50%;
+      margin: -1.5em 0em 0em -1.5em;
+      width: 3em;
+      height: 3em;
+      -webkit-animation: form-spin 0.6s linear;
+      animation: form-spin 0.6s linear;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+      border-radius: 500rem;
+      border-color: $grey rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1);
+      border-style: solid;
+      border-width: 0.2em;
+      box-shadow: 0px 0px 0px 1px transparent;
+      visibility: visible;
+      z-index: 101;
+    }
+  }
+  &.form .required {
+    &.fields {
+      &:not(.grouped) > .field > label:after, &.grouped > label:after {
+        margin: -0.2em 0em 0em 0.2em;
+        content: '*';
+        color: $red;
+      }
+    }
+    &.field > label:after, &.fields:not(.grouped) > .field > .checkbox:after, &.field > .checkbox:after {
+      margin: -0.2em 0em 0em 0.2em;
+      content: '*';
+      color: $red;
+    }
+    &.fields {
+      &:not(.grouped) > .field > label:after, &.grouped > label:after {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+    &.field > label:after {
+      display: inline-block;
+      vertical-align: top;
+    }
+    &.fields:not(.grouped) > .field > .checkbox:after, &.field > .checkbox:after {
+      position: absolute;
+      top: 0%;
+      left: 100%;
+    }
+  }
+  &.inverted.form label {
+    color: $inverted-label;
+  }
+  &.form .inverted.segment {
+    label {
+      color: $inverted-label;
+    }
+    .ui.checkbox {
+      label, .box {
+        color: $inverted-label;
+      }
+    }
+  }
+  &.inverted.form {
+    .ui.checkbox {
+      label, .box {
+        color: $inverted-label;
+      }
+    }
+    .inline {
+      &.fields {
+        > label {
+          color: $inverted-label;
+        }
+        .field > {
+          label, p {
+            color: $inverted-label;
+          }
+        }
+      }
+      &.field > {
+        label, p {
+          color: $inverted-label;
+        }
+      }
+    }
+    input {
+      &:not([type]), &[type="date"], &[type="datetime-local"], &[type="email"], &[type="number"], &[type="password"], &[type="search"], &[type="tel"], &[type="time"], &[type="text"], &[type="file"], &[type="url"] {
+        background: $white;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: $font-color;
+        box-shadow: none;
+      }
+    }
+  }
+  &.form {
+    .grouped {
+      &.fields {
+        display: block;
+        margin: 0em 0em 1em;
+        &:last-child {
+          margin-bottom: 0em;
+        }
+        > label {
+          margin: 0em 0em 0.28571429rem 0em;
+          color: $font-color;
+          font-size: 0.92857143em;
+          font-weight: bold;
+          text-transform: none;
+        }
+        .field {
+          display: block;
+          margin: 0.5em 0em;
+          padding: 0em;
+        }
+      }
+      &.inline.fields .field {
+        display: block;
+        margin: 0.5em 0em;
+        padding: 0em;
+      }
+    }
+    .fields {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      margin: 0em -0.5em 1em;
+      > .field {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        &:first-child {
+          border-left: none;
+          box-shadow: none;
+        }
+      }
+    }
+    .two.fields > {
+      .fields, .field {
+        width: 50%;
+      }
+    }
+    .three.fields > {
+      .fields, .field {
+        width: 33.33333333%;
+      }
+    }
+    .four.fields > {
+      .fields, .field {
+        width: 25%;
+      }
+    }
+    .five.fields > {
+      .fields, .field {
+        width: 20%;
+      }
+    }
+    .six.fields > {
+      .fields, .field {
+        width: 16.66666667%;
+      }
+    }
+    .seven.fields > {
+      .fields, .field {
+        width: 14.28571429%;
+      }
+    }
+    .eight.fields > {
+      .fields, .field {
+        width: 12.5%;
+      }
+    }
+    .nine.fields > {
+      .fields, .field {
+        width: 11.11111111%;
+      }
+    }
+    .ten.fields > {
+      .fields, .field {
+        width: 10%;
+      }
+    }
+    .fields .wide.field {
+      width: 6.25%;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    }
+    .one.wide.field {
+      width: 6.25% !important;
+    }
+    .two.wide.field {
+      width: 12.5% !important;
+    }
+    .three.wide.field {
+      width: 18.75% !important;
+    }
+    .four.wide.field {
+      width: 25% !important;
+    }
+    .five.wide.field {
+      width: 31.25% !important;
+    }
+    .six.wide.field {
+      width: 37.5% !important;
+    }
+    .seven.wide.field {
+      width: 43.75% !important;
+    }
+    .eight.wide.field {
+      width: 50% !important;
+    }
+    .nine.wide.field {
+      width: 56.25% !important;
+    }
+    .ten.wide.field {
+      width: 62.5% !important;
+    }
+    .eleven.wide.field {
+      width: 68.75% !important;
+    }
+    .twelve.wide.field {
+      width: 75% !important;
+    }
+    .thirteen.wide.field {
+      width: 81.25% !important;
+    }
+    .fourteen.wide.field {
+      width: 87.5% !important;
+    }
+    .fifteen.wide.field {
+      width: 93.75% !important;
+    }
+    .sixteen.wide.field {
+      width: 100% !important;
+    }
+  }
+  &[class*="equal width"].form .fields > .field {
+    width: 100%;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+  }
+  &.form {
+    [class*="equal width"].fields > .field {
+      width: 100%;
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+    .inline {
+      &.fields {
+        margin: 0em 0em 1em;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        .field {
+          margin: 0em;
+          padding: 0em 1em 0em 0em;
+          > {
+            label, p {
+              display: inline-block;
+              width: auto;
+              margin-top: 0em;
+              margin-bottom: 0em;
+              vertical-align: baseline;
+              font-size: 0.92857143em;
+              font-weight: bold;
+              color: $font-color;
+              text-transform: none;
+            }
+          }
+        }
+        > label {
+          display: inline-block;
+          width: auto;
+          margin-top: 0em;
+          margin-bottom: 0em;
+          vertical-align: baseline;
+          font-size: 0.92857143em;
+          font-weight: bold;
+          color: $font-color;
+          text-transform: none;
+        }
+      }
+      &.field > {
+        label, p {
+          display: inline-block;
+          width: auto;
+          margin-top: 0em;
+          margin-bottom: 0em;
+          vertical-align: baseline;
+          font-size: 0.92857143em;
+          font-weight: bold;
+          color: $font-color;
+          text-transform: none;
+        }
+      }
+      &.fields {
+        > label {
+          margin: 0.035714em 1em 0em 0em;
+        }
+        .field > {
+          input, select {
+            display: inline-block;
+            width: auto;
+            margin-top: 0em;
+            margin-bottom: 0em;
+            vertical-align: middle;
+            font-size: 1em;
+          }
+        }
+      }
+      &.field > {
+        input, select {
+          display: inline-block;
+          width: auto;
+          margin-top: 0em;
+          margin-bottom: 0em;
+          vertical-align: middle;
+          font-size: 1em;
+        }
+      }
+      &.fields .field > :first-child, &.field > :first-child {
+        margin: 0em 0.85714286em 0em 0em;
+      }
+      &.fields .field > :only-child, &.field > :only-child {
+        margin: 0em;
+      }
+      &.fields .wide.field {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        > {
+          input, select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  &.mini.form {
+    font-size: 0.78571429rem;
+  }
+  &.tiny.form {
+    font-size: 0.85714286rem;
+  }
+  &.small.form {
+    font-size: 0.92857143rem;
+  }
+  &.form {
+    font-size: 1rem;
+  }
+  &.large.form {
+    font-size: 1.14285714rem;
+  }
+  &.big.form {
+    font-size: 1.28571429rem;
+  }
+  &.huge.form {
+    font-size: 1.42857143rem;
+  }
+  &.massive.form {
+    font-size: 1.71428571rem;
+  }
+}
+
+/*--------------
+    Loading
+---------------*/
+
+@-webkit-keyframes form-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes form-spin {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* Swap to full width on mobile */
+@media only screen and (max-width: 767px) {
+  .ui {
+    &.form .fields {
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+    &[class*="equal width"].form:not(.unstackable) .fields > .field {
+      width: 100% !important;
+      margin: 0em 0em 1em;
+    }
+    &.form:not(.unstackable) {
+      [class*="equal width"].fields:not(.unstackable) > .field {
+        width: 100% !important;
+        margin: 0em 0em 1em;
+      }
+      .two.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .three.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .four.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .five.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .six.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .seven.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .eight.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .nine.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+      .ten.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+          margin: 0em 0em 1em;
+        }
+      }
+    }
+  }
+}
+
+/* Swap to full width on mobile */
+@media only screen and (max-width: 767px) {
+  .ui.form {
+    &:not(.unstackable) {
+      .two.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+        }
+      }
+      .three.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+        }
+      }
+      .four.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+        }
+      }
+      .five.fields:not(.unstackable) > {
+        .fields, .field {
+          width: 100% !important;
+        }
+      }
+      .fields:not(.unstackable) > {
+        .two.wide.field, .three.wide.field, .four.wide.field, .five.wide.field, .six.wide.field, .seven.wide.field, .eight.wide.field, .nine.wide.field, .ten.wide.field, .eleven.wide.field, .twelve.wide.field, .thirteen.wide.field, .fourteen.wide.field, .fifteen.wide.field, .sixteen.wide.field {
+          width: 100% !important;
+        }
+      }
+    }
+    .fields {
+      margin-bottom: 0em;
+    }
+  }
+}

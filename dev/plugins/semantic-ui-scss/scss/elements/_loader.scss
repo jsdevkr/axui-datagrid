@@ -1,0 +1,285 @@
+/*!
+ * # Semantic UI 2.2.12 - Loader
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Loader
+*******************************/
+
+/* Standard Size */
+
+.ui {
+  &.loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0px;
+    text-align: center;
+    z-index: 1000;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    &:before {
+      position: absolute;
+      content: '';
+      top: 0%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 500rem;
+      border: 0.2em solid rgba(0, 0, 0, 0.1);
+    }
+    &:after {
+      position: absolute;
+      content: '';
+      top: 0%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      -webkit-animation: loader 0.6s linear;
+      animation: loader 0.6s linear;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+      border-radius: 500rem;
+      border-color: $grey transparent transparent;
+      border-style: solid;
+      border-width: 0.2em;
+      box-shadow: 0px 0px 0px 1px transparent;
+    }
+  }
+  &.mini.loader {
+    &:before, &:after {
+      width: 1rem;
+      height: 1rem;
+      margin: 0em 0em 0em -0.5rem;
+    }
+  }
+  &.tiny.loader {
+    &:before, &:after {
+      width: 1.14285714rem;
+      height: 1.14285714rem;
+      margin: 0em 0em 0em -0.57142857rem;
+    }
+  }
+  &.small.loader {
+    &:before, &:after {
+      width: 1.71428571rem;
+      height: 1.71428571rem;
+      margin: 0em 0em 0em -0.85714286rem;
+    }
+  }
+  &.loader {
+    &:before, &:after {
+      width: 2.28571429rem;
+      height: 2.28571429rem;
+      margin: 0em 0em 0em -1.14285714rem;
+    }
+  }
+  &.large.loader {
+    &:before, &:after {
+      width: 3.42857143rem;
+      height: 3.42857143rem;
+      margin: 0em 0em 0em -1.71428571rem;
+    }
+  }
+  &.big.loader {
+    &:before, &:after {
+      width: 3.71428571rem;
+      height: 3.71428571rem;
+      margin: 0em 0em 0em -1.85714286rem;
+    }
+  }
+  &.huge.loader {
+    &:before, &:after {
+      width: 4.14285714rem;
+      height: 4.14285714rem;
+      margin: 0em 0em 0em -2.07142857rem;
+    }
+  }
+  &.massive.loader {
+    &:before, &:after {
+      width: 4.57142857rem;
+      height: 4.57142857rem;
+      margin: 0em 0em 0em -2.28571429rem;
+    }
+  }
+  &.dimmer {
+    .loader {
+      display: block;
+    }
+    .ui.loader {
+      color: $inverted-label;
+      &:before {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      &:after {
+        border-color: $white transparent transparent;
+      }
+    }
+  }
+  &.inverted.dimmer .ui.loader {
+    color: $font-color;
+    &:before {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    &:after {
+      border-color: $grey transparent transparent;
+    }
+  }
+  &.text.loader {
+    width: auto !important;
+    height: auto !important;
+    text-align: center;
+    font-style: normal;
+  }
+  &.indeterminate.loader:after {
+    -webkit-animation-direction: reverse;
+    animation-direction: reverse;
+    -webkit-animation-duration: 1.2s;
+    animation-duration: 1.2s;
+  }
+  &.loader {
+    &.active, &.visible {
+      display: block;
+    }
+    &.disabled, &.hidden {
+      display: none;
+    }
+  }
+  &.inverted.dimmer .ui.mini.loader, &.mini.loader {
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.78571429em;
+  }
+  &.inverted.dimmer .ui.tiny.loader, &.tiny.loader {
+    width: 1.14285714rem;
+    height: 1.14285714rem;
+    font-size: 0.85714286em;
+  }
+  &.inverted.dimmer .ui.small.loader, &.small.loader {
+    width: 1.71428571rem;
+    height: 1.71428571rem;
+    font-size: 0.92857143em;
+  }
+  &.inverted.dimmer .ui.loader, &.loader {
+    width: 2.28571429rem;
+    height: 2.28571429rem;
+    font-size: 1em;
+  }
+  &.inverted.dimmer .ui.large.loader, &.large.loader {
+    width: 3.42857143rem;
+    height: 3.42857143rem;
+    font-size: 1.14285714em;
+  }
+  &.inverted.dimmer .ui.big.loader, &.big.loader {
+    width: 3.71428571rem;
+    height: 3.71428571rem;
+    font-size: 1.28571429em;
+  }
+  &.inverted.dimmer .ui.huge.loader, &.huge.loader {
+    width: 4.14285714rem;
+    height: 4.14285714rem;
+    font-size: 1.42857143em;
+  }
+  &.inverted.dimmer .ui.massive.loader, &.massive.loader {
+    width: 4.57142857rem;
+    height: 4.57142857rem;
+    font-size: 1.71428571em;
+  }
+  &.mini.text.loader {
+    min-width: 1rem;
+    padding-top: 1.78571429rem;
+  }
+  &.tiny.text.loader {
+    min-width: 1.14285714rem;
+    padding-top: 1.92857143rem;
+  }
+  &.small.text.loader {
+    min-width: 1.71428571rem;
+    padding-top: 2.5rem;
+  }
+  &.text.loader {
+    min-width: 2.28571429rem;
+    padding-top: 3.07142857rem;
+  }
+  &.large.text.loader {
+    min-width: 3.42857143rem;
+    padding-top: 4.21428571rem;
+  }
+  &.big.text.loader {
+    min-width: 3.71428571rem;
+    padding-top: 4.5rem;
+  }
+  &.huge.text.loader {
+    min-width: 4.14285714rem;
+    padding-top: 4.92857143rem;
+  }
+  &.massive.text.loader {
+    min-width: 4.57142857rem;
+    padding-top: 5.35714286rem;
+  }
+  &.inverted.loader {
+    color: $inverted-label;
+    &:before {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    &:after {
+      border-top-color: $white;
+    }
+  }
+  &.inline.loader {
+    position: relative;
+    vertical-align: middle;
+    margin: 0em;
+    left: 0em;
+    top: 0em;
+    -webkit-transform: none;
+    transform: none;
+    &.active, &.visible {
+      display: inline-block;
+    }
+  }
+  &.centered.inline.loader {
+    &.active, &.visible {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+/* Static Shape */
+
+/* Active Shape */
+
+/* Active Animation */
+@-webkit-keyframes loader {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes loader {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

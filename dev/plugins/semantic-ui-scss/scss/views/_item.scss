@@ -1,0 +1,444 @@
+/*!
+ * # Semantic UI 2.2.12 - Item
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Standard
+*******************************/
+
+/*--------------
+      Item
+---------------*/
+
+.ui {
+  &.items {
+    > .item {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      margin: 1em 0em;
+      width: 100%;
+      min-height: 0px;
+      background: transparent;
+      padding: 0em;
+      border: none;
+      border-radius: 0rem;
+      box-shadow: none;
+      -webkit-transition: box-shadow 0.1s ease;
+      transition: box-shadow 0.1s ease;
+      z-index: '';
+      a {
+        cursor: pointer;
+      }
+    }
+    margin: 1.5em 0em;
+    &:first-child {
+      margin-top: 0em !important;
+    }
+    &:last-child {
+      margin-bottom: 0em !important;
+    }
+    > .item {
+      &:after {
+        display: block;
+        content: ' ';
+        height: 0px;
+        clear: both;
+        overflow: hidden;
+        visibility: hidden;
+      }
+      &:first-child {
+        margin-top: 0em;
+      }
+      &:last-child {
+        margin-bottom: 0em;
+      }
+      > {
+        .image {
+          position: relative;
+          -webkit-box-flex: 0;
+          -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+          display: block;
+          float: none;
+          margin: 0em;
+          padding: 0em;
+          max-height: '';
+          -ms-flex-item-align: top;
+          -ms-grid-row-align: top;
+          align-self: top;
+          > img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0.125rem;
+            border: none;
+          }
+          &:only-child > img {
+            border-radius: 0rem;
+          }
+        }
+        .content {
+          display: block;
+          -webkit-box-flex: 1;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          background: none;
+          margin: 0em;
+          padding: 0em;
+          box-shadow: none;
+          font-size: 1em;
+          border: none;
+          border-radius: 0em;
+          &:after {
+            display: block;
+            content: ' ';
+            height: 0px;
+            clear: both;
+            overflow: hidden;
+            visibility: hidden;
+          }
+        }
+        .image + .content {
+          min-width: 0;
+          width: auto;
+          display: block;
+          margin-left: 0em;
+          -ms-flex-item-align: top;
+          -ms-grid-row-align: top;
+          align-self: top;
+          padding-left: 1.5em;
+        }
+        .content > .header {
+          display: inline-block;
+          margin: -0.21425em 0em 0em;
+          font-family: $font-family;
+          font-weight: bold;
+          color: rgba(0, 0, 0, 0.85);
+          &:not(.ui) {
+            font-size: 1.28571429em;
+          }
+        }
+      }
+      [class*="left floated"] {
+        float: left;
+      }
+      [class*="right floated"] {
+        float: right;
+      }
+      .content img {
+        -ms-flex-item-align: middle;
+        -ms-grid-row-align: middle;
+        align-self: middle;
+        width: '';
+      }
+      img.avatar, .avatar img {
+        width: '';
+        height: '';
+        border-radius: 500rem;
+      }
+      > .content {
+        > .description {
+          margin-top: 0.6em;
+          max-width: auto;
+          font-size: 1em;
+          line-height: 1.4285em;
+          color: $font-color;
+        }
+        p {
+          margin: 0em 0em 0.5em;
+          &:last-child {
+            margin-bottom: 0em;
+          }
+        }
+      }
+      .meta {
+        margin: 0.5em 0em 0.5em;
+        font-size: 1em;
+        line-height: 1em;
+        color: rgba(0, 0, 0, 0.6);
+        * {
+          margin-right: 0.3em;
+        }
+        :last-child {
+          margin-right: 0em;
+        }
+        [class*="right floated"] {
+          margin-right: 0em;
+          margin-left: 0.3em;
+        }
+        > a:not(.ui) {
+          color: $secondary-font;
+          &:hover {
+            color: $font-color;
+          }
+        }
+      }
+      > .content {
+        a:not(.ui) {
+          color: '';
+          -webkit-transition: color 0.1s ease;
+          transition: color 0.1s ease;
+          &:hover {
+            color: '';
+          }
+        }
+        > a.header {
+          color: rgba(0, 0, 0, 0.85);
+          &:hover {
+            color: $a-hover-font-color;
+          }
+        }
+      }
+      > .content {
+        .favorite.icon {
+          cursor: pointer;
+          opacity: 0.75;
+          -webkit-transition: color 0.1s ease;
+          transition: color 0.1s ease;
+          &:hover {
+            opacity: 1;
+            color: #FFB70A;
+          }
+        }
+        .active.favorite.icon {
+          color: #FFE623;
+        }
+        .like.icon {
+          cursor: pointer;
+          opacity: 0.75;
+          -webkit-transition: color 0.1s ease;
+          transition: color 0.1s ease;
+          &:hover {
+            opacity: 1;
+            color: #FF2733;
+          }
+        }
+        .active.like.icon {
+          color: #FF2733;
+        }
+      }
+      .extra {
+        display: block;
+        position: relative;
+        background: none;
+        margin: 0.5rem 0em 0em;
+        width: 100%;
+        padding: 0em 0em 0em;
+        top: 0em;
+        left: 0em;
+        color: $secondary-font;
+        box-shadow: none;
+        -webkit-transition: color 0.1s ease;
+        transition: color 0.1s ease;
+        border-top: none;
+        > {
+          * {
+            margin: 0.25rem 0.5rem 0.25rem 0em;
+          }
+          [class*="right floated"] {
+            margin: 0.25rem 0em 0.25rem 0.5rem;
+          }
+        }
+        &:after {
+          display: block;
+          content: ' ';
+          height: 0px;
+          clear: both;
+          overflow: hidden;
+          visibility: hidden;
+        }
+      }
+      > .image {
+        &:not(.ui) {
+          width: 175px;
+        }
+        + {
+          [class*="top aligned"].content {
+            -ms-flex-item-align: start;
+            align-self: flex-start;
+          }
+          [class*="middle aligned"].content {
+            -ms-flex-item-align: center;
+            -ms-grid-row-align: center;
+            align-self: center;
+          }
+          [class*="bottom aligned"].content {
+            -ms-flex-item-align: end;
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+  }
+  &.relaxed.items > .item {
+    margin: 1.5em 0em;
+  }
+  &[class*="very relaxed"].items > .item {
+    margin: 2em 0em;
+  }
+  &.divided.items > .item {
+    border-top: 1px solid rgba(34, 36, 38, 0.15);
+    margin: 0em;
+    padding: 1em 0em;
+    &:first-child {
+      border-top: none;
+      margin-top: 0em !important;
+      padding-top: 0em !important;
+    }
+    &:last-child {
+      margin-bottom: 0em !important;
+      padding-bottom: 0em !important;
+    }
+  }
+  &.relaxed.divided.items > .item {
+    margin: 0em;
+    padding: 1.5em 0em;
+  }
+  &[class*="very relaxed"].divided.items > .item {
+    margin: 0em;
+    padding: 2em 0em;
+  }
+  &.items a.item:hover, &.link.items > .item:hover {
+    cursor: pointer;
+  }
+  &.items a.item:hover .content .header, &.link.items > .item:hover .content .header {
+    color: $a-hover-font-color;
+  }
+  &.items > .item {
+    font-size: 1em;
+  }
+}
+
+/*--------------
+      Items
+---------------*/
+
+/*--------------
+      Item
+---------------*/
+
+/*--------------
+     Images
+---------------*/
+
+/*--------------
+     Content
+---------------*/
+
+/* Default Header Size */
+
+/*--------------
+     Floated
+---------------*/
+
+/*--------------
+  Content Image
+---------------*/
+
+/*--------------
+   Description
+---------------*/
+
+/*--------------
+    Paragraph
+---------------*/
+
+/*--------------
+      Meta
+---------------*/
+
+/*--------------
+      Links
+---------------*/
+
+/* Generic */
+
+/* Header */
+
+/* Meta */
+
+/*--------------
+     Labels
+---------------*/
+
+/*-----Star----- */
+
+/* Icon */
+
+/*-----Like----- */
+
+/* Icon */
+
+/*----------------
+  Extra Content
+-----------------*/
+
+/*******************************
+          Responsive
+*******************************/
+
+/* Default Image Width */
+
+/* Tablet Only */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .ui.items > .item {
+    margin: 1em 0em;
+    > .image {
+      &:not(.ui) {
+        width: 150px;
+      }
+      + .content {
+        display: block;
+        padding: 0em 0em 0em 1em;
+      }
+    }
+  }
+}
+
+/* Mobile Only */
+@media only screen and (max-width: 767px) {
+  .ui.items:not(.unstackable) > .item {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: 2em 0em;
+    > .image {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 100% !important;
+      width: auto !important;
+      max-height: 250px !important;
+      > img {
+        max-width: 100% !important;
+        width: auto !important;
+        max-height: 250px !important;
+      }
+      + .content {
+        display: block;
+        padding: 1.5em 0em 0em;
+      }
+    }
+  }
+}
+
+/*---------------
+   Unstackable
+----------------*/
+
+@media only screen and (max-width: 767px) {
+  .ui.unstackable.items > .item > .image {
+    width: 125px !important;
+    > img {
+      width: 125px !important;
+    }
+  }
+}

@@ -1,0 +1,189 @@
+/*!
+ * # Semantic UI 2.2.12 - Comment
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Standard
+*******************************/
+
+/*--------------
+    Comments
+---------------*/
+
+.ui {
+  &.comments {
+    margin: 1.5em 0;
+    max-width: 650px;
+    &:first-child {
+      margin-top: 0em;
+    }
+    &:last-child {
+      margin-bottom: 0em;
+    }
+    .comment {
+      position: relative;
+      background: none;
+      margin: 0.5em 0em 0em;
+      padding: 0.5em 0em 0em;
+      border: none;
+      line-height: 1.2;
+      &:first-child {
+        margin-top: 0em;
+        padding-top: 0em;
+      }
+      .comments {
+        margin: 0em 0em 0.5em 0.5em;
+        padding: 1em 0em 1em 1em;
+        &:before {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+        }
+        .comment {
+          border: none;
+          background: none;
+        }
+      }
+      .avatar {
+        display: block;
+        width: 2.5em;
+        height: auto;
+        float: left;
+        margin: 0.2em 0em 0em;
+      }
+      img.avatar, .avatar img {
+        display: block;
+        margin: 0em auto;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.25rem;
+      }
+      > {
+        .content {
+          display: block;
+        }
+        .avatar ~ .content {
+          margin-left: 3.5em;
+        }
+      }
+      .author {
+        font-size: 1em;
+        color: $font-color;
+        font-weight: bold;
+      }
+      a.author {
+        cursor: pointer;
+        &:hover {
+          color: $a-hover-font-color;
+        }
+      }
+      .metadata {
+        display: inline-block;
+        margin-left: 0.5em;
+        color: $secondary-font;
+        font-size: 0.875em;
+        > {
+          * {
+            display: inline-block;
+            margin: 0em 0.5em 0em 0em;
+          }
+          :last-child {
+            margin-right: 0em;
+          }
+        }
+      }
+      .text {
+        margin: 0.25em 0em 0.5em;
+        font-size: 1em;
+        word-wrap: break-word;
+        color: $font-color;
+        line-height: 1.3;
+      }
+      .actions {
+        font-size: 0.875em;
+        a {
+          cursor: pointer;
+          display: inline-block;
+          margin: 0em 0.75em 0em 0em;
+          color: $secondary-font;
+          &:last-child {
+            margin-right: 0em;
+          }
+          &.active, &:hover {
+            color: rgba(0, 0, 0, 0.8);
+          }
+        }
+      }
+      .reply.form {
+        width: 100%;
+        margin-top: 1em;
+      }
+    }
+    > .reply.form {
+      margin-top: 1em;
+    }
+    .reply.form textarea {
+      font-size: 1em;
+      height: 12em;
+    }
+  }
+  &.collapsed.comments {
+    display: none;
+  }
+  &.comments .collapsed {
+    &.comments, &.comment {
+      display: none;
+    }
+  }
+  &.threaded.comments .comment .comments {
+    margin: -1.5em 0 -1em 1.25em;
+    padding: 3em 0em 2em 2.25em;
+    box-shadow: -1px 0px 0px rgba(34, 36, 38, 0.15);
+  }
+  &.minimal.comments .comment {
+    .actions {
+      opacity: 0;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      left: auto;
+      -webkit-transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease;
+      -webkit-transition-delay: 0.1s;
+      transition-delay: 0.1s;
+    }
+    > .content:hover > .actions {
+      opacity: 1;
+    }
+  }
+  &.mini.comments {
+    font-size: 0.78571429rem;
+  }
+  &.tiny.comments {
+    font-size: 0.85714286rem;
+  }
+  &.small.comments {
+    font-size: 0.92857143rem;
+  }
+  &.comments {
+    font-size: 1rem;
+  }
+  &.large.comments {
+    font-size: 1.14285714rem;
+  }
+  &.big.comments {
+    font-size: 1.28571429rem;
+  }
+  &.huge.comments {
+    font-size: 1.42857143rem;
+  }
+  &.massive.comments {
+    font-size: 1.71428571rem;
+  }
+}

@@ -1,0 +1,160 @@
+/*!
+ * # Semantic UI 2.2.12 - Ad
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Copyright 2013 Contributors
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+         Advertisement
+*******************************/
+
+.ui {
+  &.ad {
+    display: block;
+    overflow: hidden;
+    margin: 1em 0em;
+    &:first-child, &:last-child {
+      margin: 0em;
+    }
+    iframe {
+      margin: 0em;
+      padding: 0em;
+      border: none;
+      overflow: hidden;
+    }
+  }
+  &.leaderboard.ad {
+    width: 728px;
+    height: 90px;
+  }
+  &[class*="medium rectangle"].ad {
+    width: 300px;
+    height: 250px;
+  }
+  &[class*="large rectangle"].ad {
+    width: 336px;
+    height: 280px;
+  }
+  &[class*="half page"].ad {
+    width: 300px;
+    height: 600px;
+  }
+  &.square.ad {
+    width: 250px;
+    height: 250px;
+  }
+  &[class*="small square"].ad {
+    width: 200px;
+    height: 200px;
+  }
+  &[class*="small rectangle"].ad {
+    width: 180px;
+    height: 150px;
+  }
+  &[class*="vertical rectangle"].ad {
+    width: 240px;
+    height: 400px;
+  }
+  &.button.ad {
+    width: 120px;
+    height: 90px;
+  }
+  &[class*="square button"].ad {
+    width: 125px;
+    height: 125px;
+  }
+  &[class*="small button"].ad {
+    width: 120px;
+    height: 60px;
+  }
+  &.skyscraper.ad {
+    width: 120px;
+    height: 600px;
+  }
+  &[class*="wide skyscraper"].ad {
+    width: 160px;
+  }
+  &.banner.ad {
+    width: 468px;
+    height: 60px;
+  }
+  &[class*="vertical banner"].ad {
+    width: 120px;
+    height: 240px;
+  }
+  &[class*="top banner"].ad {
+    width: 930px;
+    height: 180px;
+  }
+  &[class*="half banner"].ad {
+    width: 234px;
+    height: 60px;
+  }
+  &[class*="large leaderboard"].ad {
+    width: 970px;
+    height: 90px;
+  }
+  &.billboard.ad {
+    width: 970px;
+    height: 250px;
+  }
+  &.panorama.ad {
+    width: 980px;
+    height: 120px;
+  }
+  &.netboard.ad {
+    width: 580px;
+    height: 400px;
+  }
+  &[class*="large mobile banner"].ad {
+    width: 320px;
+    height: 100px;
+  }
+  &[class*="mobile leaderboard"].ad {
+    width: 320px;
+    height: 50px;
+  }
+  &.mobile.ad {
+    display: none;
+  }
+  &.centered.ad {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &.test.ad {
+    position: relative;
+    background: #545454;
+    &:after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      text-align: center;
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+      content: 'Ad';
+      color: $white;
+      font-size: 1em;
+      font-weight: bold;
+    }
+  }
+  &.mobile.test.ad:after {
+    font-size: 0.85714286em;
+  }
+  &.test.ad[data-text]:after {
+    content: attr(data-text);
+  }
+}
+
+/* Mobile Sizes */
+
+@media only screen and (max-width: 767px) {
+  .ui.mobile.ad {
+    display: block;
+  }
+}

@@ -1,0 +1,717 @@
+/*!
+ * # Semantic UI 2.2.12 - Header
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+            Header
+*******************************/
+
+/* Standard */
+
+.ui.header {
+  border: none;
+  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  padding: 0em 0em;
+  font-family: $font-family;
+  font-weight: bold;
+  line-height: 1.28571429em;
+  text-transform: none;
+  color: $font-color;
+  &:first-child {
+    margin-top: -0.14285714em;
+  }
+  &:last-child {
+    margin-bottom: 0em;
+  }
+  .sub.header {
+    display: block;
+    font-weight: normal;
+    padding: 0em;
+    margin: 0em;
+    font-size: 1rem;
+    line-height: 1.2em;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  > .icon {
+    display: table-cell;
+    opacity: 1;
+    font-size: 1.5em;
+    padding-top: 0em;
+    vertical-align: middle;
+  }
+  .icon:only-child {
+    display: inline-block;
+    padding: 0em;
+    margin-right: 0.75rem;
+  }
+  > {
+    .image:not(.icon), img {
+      display: inline-block;
+      margin-top: 0.14285714em;
+      width: 2.5em;
+      height: auto;
+      vertical-align: middle;
+    }
+    .image:not(.icon):only-child, img:only-child {
+      margin-right: 0.75rem;
+    }
+  }
+  .content {
+    display: inline-block;
+    vertical-align: top;
+  }
+  > {
+    img + .content, .image + .content {
+      padding-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .icon + .content {
+      padding-left: 0.75rem;
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  .ui.label {
+    font-size: '';
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+  + p {
+    margin-top: 0em;
+  }
+}
+
+/*--------------
+   Sub Header
+---------------*/
+
+/*--------------
+      Icon
+---------------*/
+
+/* With Text Node */
+
+/*-------------------
+        Image
+--------------------*/
+
+/*--------------
+     Content
+---------------*/
+
+/* After Image */
+
+/* After Icon */
+
+/*--------------
+ Loose Coupling
+---------------*/
+
+/* Positioning */
+
+/*******************************
+            Types
+*******************************/
+
+/*--------------
+     Page
+---------------*/
+
+h1.ui.header {
+  font-size: 2rem;
+}
+
+h2.ui.header {
+  font-size: 1.71428571rem;
+}
+
+h3.ui.header {
+  font-size: 1.28571429rem;
+}
+
+h4.ui.header {
+  font-size: 1.07142857rem;
+}
+
+h5.ui.header {
+  font-size: 1rem;
+}
+
+/* Sub Header */
+
+h1.ui.header .sub.header, h2.ui.header .sub.header {
+  font-size: 1.14285714rem;
+}
+
+h3.ui.header .sub.header, h4.ui.header .sub.header {
+  font-size: 1rem;
+}
+
+h5.ui.header .sub.header {
+  font-size: 0.92857143rem;
+}
+
+/*--------------
+ Content Heading
+---------------*/
+
+.ui {
+  &.huge.header {
+    min-height: 1em;
+    font-size: 2em;
+  }
+  &.large.header {
+    font-size: 1.71428571em;
+  }
+  &.medium.header {
+    font-size: 1.28571429em;
+  }
+  &.small.header {
+    font-size: 1.07142857em;
+  }
+  &.tiny.header {
+    font-size: 1em;
+  }
+  &.huge.header .sub.header, &.large.header .sub.header {
+    font-size: 1.14285714rem;
+  }
+  &.header .sub.header, &.small.header .sub.header {
+    font-size: 1rem;
+  }
+  &.tiny.header .sub.header {
+    font-size: 0.92857143rem;
+  }
+  &.sub.header {
+    padding: 0em;
+    margin-bottom: 0.14285714rem;
+    font-weight: bold;
+    font-size: 0.85714286em;
+    text-transform: uppercase;
+    color: '';
+  }
+  &.small.sub.header {
+    font-size: 0.78571429em;
+  }
+  &.sub.header {
+    font-size: 0.85714286em;
+  }
+  &.large.sub.header {
+    font-size: 0.92857143em;
+  }
+  &.huge.sub.header {
+    font-size: 1em;
+  }
+  &.icon.header {
+    display: inline-block;
+    text-align: center;
+    margin: 2rem 0em 1rem;
+    &:after {
+      content: '';
+      display: block;
+      height: 0px;
+      clear: both;
+      visibility: hidden;
+    }
+    &:first-child {
+      margin-top: 0em;
+    }
+    .icon {
+      float: none;
+      display: block;
+      width: auto;
+      height: auto;
+      line-height: 1;
+      padding: 0em;
+      font-size: 3em;
+      margin: 0em auto 0.5rem;
+      opacity: 1;
+    }
+    .content {
+      display: block;
+      padding: 0em;
+    }
+    .circular.icon, .square.icon {
+      font-size: 2em;
+    }
+  }
+  &.block.icon.header .icon {
+    margin-bottom: 0em;
+  }
+  &.icon.header.aligned {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+  &.disabled.header {
+    opacity: 0.45;
+  }
+  &.inverted {
+    &.header {
+      color: $white;
+      .sub.header {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+    &.attached.header {
+      background: #545454 -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      background: #545454 linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      box-shadow: none;
+      border-color: transparent;
+    }
+    &.block.header {
+      background: #545454 -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      background: #545454 linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+      box-shadow: none;
+      border-bottom: none;
+    }
+  }
+  &.red.header {
+    color: $red !important;
+  }
+}
+
+/* Sub Header */
+
+/*--------------
+   Sub Heading
+---------------*/
+
+/*-------------------
+        Icon
+--------------------*/
+
+/*******************************
+            States
+*******************************/
+
+/*******************************
+           Variations
+*******************************/
+
+/*-------------------
+      Inverted
+--------------------*/
+
+/*-------------------
+       Colors
+--------------------*/
+
+/*--- Red ---*/
+
+a.ui.red.header:hover {
+  color: #d01919 !important;
+}
+
+.ui {
+  &.red.dividing.header {
+    border-bottom: 2px solid $red;
+  }
+  &.inverted.red.header {
+    color: $inverted-red !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.red.header:hover {
+  color: #ff5144 !important;
+}
+
+/*--- Orange ---*/
+
+.ui.orange.header {
+  color: $orange !important;
+}
+
+a.ui.orange.header:hover {
+  color: #f26202 !important;
+}
+
+.ui {
+  &.orange.dividing.header {
+    border-bottom: 2px solid $orange;
+  }
+  &.inverted.orange.header {
+    color: $inverted-orange !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.orange.header:hover {
+  color: #ff7701 !important;
+}
+
+/*--- Olive ---*/
+
+.ui.olive.header {
+  color: $olive !important;
+}
+
+a.ui.olive.header:hover {
+  color: #a7bd0d !important;
+}
+
+.ui {
+  &.olive.dividing.header {
+    border-bottom: 2px solid $olive;
+  }
+  &.inverted.olive.header {
+    color: $inverted-olive !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.olive.header:hover {
+  color: #d8ea5c !important;
+}
+
+/*--- Yellow ---*/
+
+.ui.yellow.header {
+  color: $yellow !important;
+}
+
+a.ui.yellow.header:hover {
+  color: #eaae00 !important;
+}
+
+.ui {
+  &.yellow.dividing.header {
+    border-bottom: 2px solid $yellow;
+  }
+  &.inverted.yellow.header {
+    color: $inverted-yellow !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.yellow.header:hover {
+  color: #ffdf05 !important;
+}
+
+/*--- Green ---*/
+
+.ui.green.header {
+  color: $green !important;
+}
+
+a.ui.green.header:hover {
+  color: #16ab39 !important;
+}
+
+.ui {
+  &.green.dividing.header {
+    border-bottom: 2px solid $green;
+  }
+  &.inverted.green.header {
+    color: $inverted-green !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.green.header:hover {
+  color: #22be34 !important;
+}
+
+/*--- Teal ---*/
+
+.ui.teal.header {
+  color: $teal !important;
+}
+
+a.ui.teal.header:hover {
+  color: #009c95 !important;
+}
+
+.ui {
+  &.teal.dividing.header {
+    border-bottom: 2px solid $teal;
+  }
+  &.inverted.teal.header {
+    color: $inverted-teal !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.teal.header:hover {
+  color: #54ffff !important;
+}
+
+/*--- Blue ---*/
+
+.ui.blue.header {
+  color: $blue !important;
+}
+
+a.ui.blue.header:hover {
+  color: #1678c2 !important;
+}
+
+.ui {
+  &.blue.dividing.header {
+    border-bottom: 2px solid $blue;
+  }
+  &.inverted.blue.header {
+    color: $inverted-blue !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.blue.header:hover {
+  color: #3ac0ff !important;
+}
+
+/*--- Violet ---*/
+
+.ui.violet.header {
+  color: $violet !important;
+}
+
+a.ui.violet.header:hover {
+  color: #5829bb !important;
+}
+
+.ui {
+  &.violet.dividing.header {
+    border-bottom: 2px solid $violet;
+  }
+  &.inverted.violet.header {
+    color: $inverted-violet !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.violet.header:hover {
+  color: #8a73ff !important;
+}
+
+/*--- Purple ---*/
+
+.ui.purple.header {
+  color: $purple !important;
+}
+
+a.ui.purple.header:hover {
+  color: #9627ba !important;
+}
+
+.ui {
+  &.purple.dividing.header {
+    border-bottom: 2px solid $purple;
+  }
+  &.inverted.purple.header {
+    color: $inverted-purple !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.purple.header:hover {
+  color: #d65aff !important;
+}
+
+/*--- Pink ---*/
+
+.ui.pink.header {
+  color: $pink !important;
+}
+
+a.ui.pink.header:hover {
+  color: #e61a8d !important;
+}
+
+.ui {
+  &.pink.dividing.header {
+    border-bottom: 2px solid $pink;
+  }
+  &.inverted.pink.header {
+    color: $inverted-pink !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.pink.header:hover {
+  color: #ff74d8 !important;
+}
+
+/*--- Brown ---*/
+
+.ui.brown.header {
+  color: $brown !important;
+}
+
+a.ui.brown.header:hover {
+  color: #975b33 !important;
+}
+
+.ui {
+  &.brown.dividing.header {
+    border-bottom: 2px solid $brown;
+  }
+  &.inverted.brown.header {
+    color: $inverted-brown !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.brown.header:hover {
+  color: #c86f11 !important;
+}
+
+/*--- Grey ---*/
+
+.ui.grey.header {
+  color: $grey !important;
+}
+
+a.ui.grey.header:hover {
+  color: #838383 !important;
+}
+
+.ui {
+  &.grey.dividing.header {
+    border-bottom: 2px solid $grey;
+  }
+  &.inverted.grey.header {
+    color: $inverted-grey !important;
+  }
+}
+
+/* Inverted */
+
+a.ui.inverted.grey.header:hover {
+  color: #cfd0d2 !important;
+}
+
+/*-------------------
+       Aligned
+--------------------*/
+
+.ui {
+  &.left.aligned.header {
+    text-align: left;
+  }
+  &.right.aligned.header {
+    text-align: right;
+  }
+  &.centered.header, &.center.aligned.header {
+    text-align: center;
+  }
+  &.justified.header {
+    text-align: justify;
+    &:after {
+      display: inline-block;
+      content: '';
+      width: 100%;
+    }
+  }
+  &.floated.header, &[class*="left floated"].header {
+    float: left;
+    margin-top: 0em;
+    margin-right: 0.5em;
+  }
+  &[class*="right floated"].header {
+    float: right;
+    margin-top: 0em;
+    margin-left: 0.5em;
+  }
+  &.fitted.header {
+    padding: 0em;
+  }
+  &.dividing.header {
+    padding-bottom: 0.21428571rem;
+    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+    .sub.header {
+      padding-bottom: 0.21428571rem;
+    }
+    .icon {
+      margin-bottom: 0em;
+    }
+  }
+  &.inverted.dividing.header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+  &.block.header {
+    background: #F3F4F5;
+    padding: 0.78571429rem 1rem;
+    box-shadow: none;
+    border: 1px solid #D4D4D5;
+    border-radius: 0.28571429rem;
+  }
+  &.tiny.block.header {
+    font-size: 0.85714286rem;
+  }
+  &.small.block.header {
+    font-size: 0.92857143rem;
+  }
+  &.block.header:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-size: 1rem;
+  }
+  &.large.block.header {
+    font-size: 1.14285714rem;
+  }
+  &.huge.block.header {
+    font-size: 1.42857143rem;
+  }
+  &.attached {
+    &.header {
+      background: $white;
+      padding: 0.78571429rem 1rem;
+      margin-left: -1px;
+      margin-right: -1px;
+      box-shadow: none;
+      border: 1px solid #D4D4D5;
+    }
+    &.block.header {
+      background: #F3F4F5;
+    }
+    &:not(.top):not(.bottom).header {
+      margin-top: 0em;
+      margin-bottom: 0em;
+      border-top: none;
+      border-radius: 0em;
+    }
+  }
+  &.top.attached.header {
+    margin-bottom: 0em;
+    border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  }
+  &.bottom.attached.header {
+    margin-top: 0em;
+    border-top: none;
+    border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  }
+  &.tiny.attached.header {
+    font-size: 0.85714286em;
+  }
+  &.small.attached.header {
+    font-size: 0.92857143em;
+  }
+  &.attached.header:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-size: 1em;
+  }
+  &.large.attached.header {
+    font-size: 1.14285714em;
+  }
+  &.huge.attached.header {
+    font-size: 1.42857143em;
+  }
+  &.header:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-size: 1.28571429em;
+  }
+}

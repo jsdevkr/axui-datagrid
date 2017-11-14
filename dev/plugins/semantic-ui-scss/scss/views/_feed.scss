@@ -1,0 +1,232 @@
+/*!
+ * # Semantic UI 2.2.12 - Feed
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+         Activity Feed
+*******************************/
+
+.ui {
+  &.feed {
+    margin: 1em 0em;
+    &:first-child {
+      margin-top: 0em;
+    }
+    &:last-child {
+      margin-bottom: 0em;
+    }
+    > .event {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      width: 100%;
+      padding: 0.21428571rem 0em;
+      margin: 0em;
+      background: none;
+      border-top: none;
+      &:first-child {
+        border-top: 0px;
+        padding-top: 0em;
+      }
+      &:last-child {
+        padding-bottom: 0em;
+        > .content {
+          padding-bottom: 0em;
+        }
+      }
+      > {
+        .label {
+          display: block;
+          -webkit-box-flex: 0;
+          -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+          width: 2.5em;
+          height: auto;
+          -ms-flex-item-align: stretch;
+          -ms-grid-row-align: stretch;
+          align-self: stretch;
+          text-align: left;
+          .icon {
+            opacity: 1;
+            font-size: 1.5em;
+            width: 100%;
+            padding: 0.25em;
+            background: none;
+            border: none;
+            border-radius: none;
+            color: rgba(0, 0, 0, 0.6);
+          }
+          img {
+            width: 100%;
+            height: auto;
+            border-radius: 500rem;
+          }
+          + .content {
+            margin: 0.5em 0em 0.35714286em 1.14285714em;
+          }
+        }
+        .content {
+          display: block;
+          -webkit-box-flex: 1;
+          -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+          -ms-flex-item-align: stretch;
+          -ms-grid-row-align: stretch;
+          align-self: stretch;
+          text-align: left;
+          word-wrap: break-word;
+        }
+      }
+      > .content {
+        a {
+          cursor: pointer;
+        }
+        .date {
+          margin: -0.5rem 0em 0em;
+          padding: 0em;
+          font-weight: normal;
+          font-size: 1em;
+          font-style: normal;
+          color: $secondary-font;
+        }
+        .summary {
+          margin: 0em;
+          font-size: 1em;
+          font-weight: bold;
+          color: $font-color;
+          img {
+            display: inline-block;
+            width: auto;
+            height: 10em;
+            margin: -0.25em 0.25em 0em 0em;
+            border-radius: 0.25em;
+            vertical-align: middle;
+          }
+        }
+        .user {
+          display: inline-block;
+          font-weight: bold;
+          margin-right: 0em;
+          vertical-align: baseline;
+          img {
+            margin: -0.25em 0.25em 0em 0em;
+            width: auto;
+            height: 10em;
+            vertical-align: middle;
+          }
+        }
+        .summary > .date {
+          display: inline-block;
+          float: none;
+          font-weight: normal;
+          font-size: 0.85714286em;
+          font-style: normal;
+          margin: 0em 0em 0em 0.5em;
+          padding: 0em;
+          color: $secondary-font;
+        }
+        .extra {
+          margin: 0.5em 0em 0em;
+          background: none;
+          padding: 0em;
+          color: $font-color;
+          &.images img {
+            display: inline-block;
+            margin: 0em 0.25em 0em 0em;
+            width: 6em;
+          }
+          &.text {
+            padding: 0em;
+            border-left: none;
+            font-size: 1em;
+            max-width: 500px;
+            line-height: 1.4285em;
+          }
+        }
+        .meta {
+          display: inline-block;
+          font-size: 0.85714286em;
+          margin: 0.5em 0em 0em;
+          background: none;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 0em;
+          color: rgba(0, 0, 0, 0.6);
+          > * {
+            position: relative;
+            margin-left: 0.75em;
+            &:after {
+              content: '';
+              color: rgba(0, 0, 0, 0.2);
+              top: 0em;
+              left: -1em;
+              opacity: 1;
+              position: absolute;
+              vertical-align: top;
+            }
+          }
+          .like {
+            color: '';
+            -webkit-transition: 0.2s color ease;
+            transition: 0.2s color ease;
+            &:hover .icon {
+              color: #FF2733;
+            }
+          }
+          .active.like .icon {
+            color: #EF404A;
+          }
+          > :first-child {
+            margin-left: 0em;
+            &::after {
+              display: none;
+            }
+          }
+          a {
+            cursor: pointer;
+            opacity: 1;
+            color: rgba(0, 0, 0, 0.5);
+            -webkit-transition: color 0.1s ease;
+            transition: color 0.1s ease;
+            &:hover {
+              color: rgba(0, 0, 0, 0.95);
+              .icon {
+                color: rgba(0, 0, 0, 0.95);
+              }
+            }
+          }
+          > .icon {
+            cursor: pointer;
+            opacity: 1;
+            color: rgba(0, 0, 0, 0.5);
+            -webkit-transition: color 0.1s ease;
+            transition: color 0.1s ease;
+          }
+          > .icon:hover {
+            color: rgba(0, 0, 0, 0.95);
+          }
+        }
+      }
+    }
+  }
+  &.small.feed {
+    font-size: 0.92857143rem;
+  }
+  &.feed {
+    font-size: 1rem;
+  }
+  &.large.feed {
+    font-size: 1.14285714rem;
+  }
+}

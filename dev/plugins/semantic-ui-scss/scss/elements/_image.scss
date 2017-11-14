@@ -1,0 +1,365 @@
+/*!
+ * # Semantic UI 2.2.12 - Image
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+/*******************************
+             Image
+*******************************/
+
+.ui.image {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  background-color: transparent;
+}
+
+img.ui.image {
+  display: block;
+}
+
+.ui {
+  &.image {
+    svg, img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  &.hidden {
+    &.images, &.image {
+      display: none;
+    }
+    &.transition {
+      &.images, &.image {
+        display: block;
+        visibility: hidden;
+      }
+    }
+  }
+  &.disabled {
+    &.images, &.image {
+      cursor: default;
+      opacity: 0.45;
+    }
+  }
+  &.inline.image {
+    display: inline-block;
+    svg, img {
+      display: inline-block;
+    }
+  }
+  &.top.aligned {
+    &.images .image {
+      display: inline-block;
+      vertical-align: top;
+    }
+    &.image {
+      display: inline-block;
+      vertical-align: top;
+      svg, img {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+  }
+  &.middle.aligned {
+    &.images .image {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    &.image {
+      display: inline-block;
+      vertical-align: middle;
+      svg, img {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+  &.bottom.aligned {
+    &.images .image {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+    &.image {
+      display: inline-block;
+      vertical-align: bottom;
+      svg, img {
+        display: inline-block;
+        vertical-align: bottom;
+      }
+    }
+  }
+  &.rounded {
+    &.images .image, &.image, &.images .image > *, &.image > * {
+      border-radius: 0.3125em;
+    }
+  }
+  &.bordered {
+    &.images {
+      .image, img, svg {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+    &.image {
+      img, svg {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+/*******************************
+            States
+*******************************/
+
+/*******************************
+          Variations
+*******************************/
+
+/*--------------
+     Inline
+---------------*/
+
+/*------------------
+  Vertical Aligned
+-------------------*/
+
+/*--------------
+     Rounded
+---------------*/
+
+/*--------------
+    Bordered
+---------------*/
+
+img.ui.bordered.image {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/*--------------
+    Circular
+---------------*/
+
+.ui {
+  &.circular {
+    &.images, &.image {
+      overflow: hidden;
+    }
+    &.images .image, &.image, &.images .image > *, &.image > * {
+      border-radius: 500rem;
+    }
+  }
+  &.fluid {
+    &.images, &.image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    &.images {
+      img, svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+    &.image {
+      svg, img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  &.avatar {
+    &.images {
+      .image, img, svg {
+        margin-right: 0.25em;
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        border-radius: 500rem;
+      }
+    }
+    &.image {
+      img, svg {
+        margin-right: 0.25em;
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        border-radius: 500rem;
+      }
+      margin-right: 0.25em;
+      display: inline-block;
+      width: 2em;
+      height: 2em;
+      border-radius: 500rem;
+    }
+  }
+  &.spaced.image {
+    display: inline-block !important;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+  &[class*="left spaced"].image {
+    margin-left: 0.5em;
+    margin-right: 0em;
+  }
+  &[class*="right spaced"].image {
+    margin-left: 0em;
+    margin-right: 0.5em;
+  }
+  &.floated {
+    &.image, &.images {
+      float: left;
+      margin-right: 1em;
+      margin-bottom: 1em;
+    }
+  }
+  &.right.floated {
+    &.images, &.image {
+      float: right;
+      margin-right: 0em;
+      margin-bottom: 1em;
+      margin-left: 1em;
+    }
+  }
+  &.floated {
+    &.images:last-child, &.image:last-child {
+      margin-bottom: 0em;
+    }
+  }
+  &.centered {
+    &.images, &.image {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  &.mini {
+    &.images {
+      .image, img, svg {
+        width: 35px;
+        height: auto;
+        font-size: 0.78571429rem;
+      }
+    }
+    &.image {
+      width: 35px;
+      height: auto;
+      font-size: 0.78571429rem;
+    }
+  }
+  &.tiny {
+    &.images {
+      .image, img, svg {
+        width: 80px;
+        height: auto;
+        font-size: 0.85714286rem;
+      }
+    }
+    &.image {
+      width: 80px;
+      height: auto;
+      font-size: 0.85714286rem;
+    }
+  }
+  &.small {
+    &.images {
+      .image, img, svg {
+        width: 150px;
+        height: auto;
+        font-size: 0.92857143rem;
+      }
+    }
+    &.image {
+      width: 150px;
+      height: auto;
+      font-size: 0.92857143rem;
+    }
+  }
+  &.medium {
+    &.images {
+      .image, img, svg {
+        width: 300px;
+        height: auto;
+        font-size: 1rem;
+      }
+    }
+    &.image {
+      width: 300px;
+      height: auto;
+      font-size: 1rem;
+    }
+  }
+  &.large {
+    &.images {
+      .image, img, svg {
+        width: 450px;
+        height: auto;
+        font-size: 1.14285714rem;
+      }
+    }
+    &.image {
+      width: 450px;
+      height: auto;
+      font-size: 1.14285714rem;
+    }
+  }
+  &.big {
+    &.images {
+      .image, img, svg {
+        width: 600px;
+        height: auto;
+        font-size: 1.28571429rem;
+      }
+    }
+    &.image {
+      width: 600px;
+      height: auto;
+      font-size: 1.28571429rem;
+    }
+  }
+  &.huge {
+    &.images {
+      .image, img, svg {
+        width: 800px;
+        height: auto;
+        font-size: 1.42857143rem;
+      }
+    }
+    &.image {
+      width: 800px;
+      height: auto;
+      font-size: 1.42857143rem;
+    }
+  }
+  &.massive {
+    &.images {
+      .image, img, svg {
+        width: 960px;
+        height: auto;
+        font-size: 1.71428571rem;
+      }
+    }
+    &.image {
+      width: 960px;
+      height: auto;
+      font-size: 1.71428571rem;
+    }
+  }
+  &.images {
+    font-size: 0em;
+    margin: 0em -0.25rem 0rem;
+    .image, img, svg {
+      display: inline-block;
+      margin: 0em 0.25rem 0.5rem;
+    }
+  }
+}

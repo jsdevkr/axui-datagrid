@@ -225,7 +225,7 @@ class GridHeader extends React.Component {
       </div>
     )
   }
-}
+};
 
 
-export default GridHeader;
+export GridHeader;

@@ -1,0 +1,36 @@
+{
+  "name": "semantic-ui-scss",
+  "homepage": "https://github.com/thomasJang/semantic-ui-scss",
+  "authors": [
+    "Thomas Jang <tom@axisj.com>"
+  ],
+  "description": "Semantic UI, Extract only 'scss' files",
+  "main": "semantic-ui.scss",
+  "keywords": [
+    "semantic-ui",
+    "scss",
+    "sass"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    ".gitignore",
+    "package.json",
+    "package-lock.json",
+    "gulpfile.js"
+  ],
+  "_release": "065b7579b7",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "065b7579b7cae744e318f0158a1881ba894d454d"
+  },
+  "_source": "https://github.com/thomasJang/semantic-ui-scss.git",
+  "_target": "*",
+  "_originalSource": "semantic-ui-scss",
+  "_direct": true
+}

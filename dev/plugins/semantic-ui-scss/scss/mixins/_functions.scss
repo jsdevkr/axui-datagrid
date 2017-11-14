@@ -1,0 +1,20 @@
+// URL Manipulations
+
+@function semantic-image-url($path , $url) {
+  @if function-exists(image-url) {
+    @return image-url($url);
+  }
+  @else {
+    @return url($path + $url);
+  }
+}
+
+@function semantic-font-url($url) {
+  @if function-exists(font-url) {
+    @return font-url($url);
+  }
+  @else {
+    @return url($icons-font-path + $url);
+  }
+}
+

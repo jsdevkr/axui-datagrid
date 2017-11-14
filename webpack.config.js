@@ -1,38 +1,35 @@
-const fs = require('fs');
 const path = require('path');
-const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const basePath = __dirname;
 
 module.exports = {
-  devtool: 'inline-source-map',
-  entry: {index: './dev/index.js'},
-  output: {
-    path: path.resolve(__dirname, 'dev/dist'),
-    filename: '[name].js',
-    sourceMapFilename: '[name].js.map'
+  context: path.join(basePath, '.'),
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx']
   },
-  devServer: {
-    contentBase: path.join(__dirname, "dev/dist"),
-    compress: true,
-    port: 4000,
-    historyApiFallback: {
-      rewrites: [
-        {from: /./, to: '/'}
-      ]
-    }
+  entry: {
+    app: './dev/index.tsx',
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router',
+    ],
+    vendorStyles: [],
+  },
+  output: {
+    path: path.join(basePath, './dev/dist'),
+    filename: '[name].js',
   },
   module: {
     rules: [
       {
-        test: /\.css$/, use: [
-        {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-            localIdentName: '[path][name]__[local]--[hash:base64:5]'
-          }
-        }
-      ]
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'awesome-typescript-loader',
+        options: {
+          useBabel: true,
+        },
       },
       {
         test: /\.scss$/,
@@ -45,42 +42,69 @@ module.exports = {
               localIdentName: '[local]-[hash:base64:2]'
             }
           },
+          {
+            loader: 'typed-css-modules-loader',
+            options: {
+              camelCase: true
+            }
+          },
           {loader: 'sass-loader'}
         ]
       },
       {
-        test: /\.(png|svg|jpg|gif|ico)$/,
+        test: /\.css$/,
         use: [
-          'file-loader'
-        ]
+          {loader: 'style-loader'},
+          {loader: 'css-loader'}
+        ],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        test: /\.(png|jpg|gif)$/,
         use: [
-          'file-loader'
-        ]
-      },
-      {test: /\.html/, loader: "handlebars-loader"},
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['es2015', 'react']
+          {
+            loader: 'file-loader',
+            options: {}
           }
-        }
-      }
-    ]
+        ]
+      },
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+      },
+    ],
+  },
+  // For development https://webpack.js.org/configuration/devtool/#for-development
+  devtool: 'inline-source-map',
+  devServer: {
+    port: 4000,
+    noInfo: true,
+    historyApiFallback: {
+      rewrites: [
+        {from: /./, to: '/'}
+      ]
+    }
   },
   plugins: [
+    //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, './dev/tmpl/default.html')
-    })
-  ],
-  resolve: {
-    alias: {
-      'ax-datagrid': path.join(__dirname, './src')
-    }
-  }
+      filename: 'index.html', //Name of file in ./dist/
+      template: './dev/index.html', //Name of template in ./src
+      hash: true,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
+    }),
+  ]
 };
