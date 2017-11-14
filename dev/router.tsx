@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {About, Header, MembersPage} from './components';
-import 'semantic-ui-css/semantic.css';
+import './scss/index.css';
 
 export const AppRouter: React.StatelessComponent<{}> = () => {
     return (
         <BrowserRouter>
-            <div className="">
+            <div className="container">
                 <Header />
                 <Switch>
                     <Route exact path="/" component={About} />
