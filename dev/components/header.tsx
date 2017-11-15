@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
+import {Button} from 'semantic-ui-react';
 
 export const Header: React.StatelessComponent<{}> = () => {
   return (
-    <div className="row">
+    <div>
+
+      <Button content='Menu' />
+
       <nav className="navbar navbar-default">
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul className="nav navbar-nav">
