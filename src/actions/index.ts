@@ -20,6 +20,7 @@ export const SET_DATA= 'SET_DATA';
 export function setData(data, options) {
   let Obj_data = propsConverterForData(data);
 
+
   return {
     type: SET_DATA,
     receivedList: Obj_data.receivedList,

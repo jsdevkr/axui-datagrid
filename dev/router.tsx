@@ -1,13 +1,14 @@
 import * as React from 'react';
-import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
+import {BrowserRouter, NavLink, Route, Switch} from 'react-router-dom';
 import {Button, Container, Menu, Segment, Sidebar, Icon} from 'semantic-ui-react';
-import {About, Header, MembersPage} from './components';
+import {BasicDatagrid} from './components';
 
-interface IAppRouterState {
-  visible: boolean
+interface iProps {}
+interface iState {
+  visible: boolean;
 }
 
-export class AppRouter extends React.Component<{}, IAppRouterState> {
+export class AppRouter extends React.Component<iProps, iState> {
   constructor(props) {
     super(props);
 
@@ -19,44 +20,35 @@ export class AppRouter extends React.Component<{}, IAppRouterState> {
   }
 
   public toggleVisibility() {
-    this.setState({ visible: !this.state.visible });
+    this.setState({visible: !this.state.visible});
   }
 
   public render() {
-    const { visible } = this.state;
+    const {visible} = this.state;
 
     return (
       <BrowserRouter>
-
-        <Container className="main-layout">
-
-          <Button onClick={this.toggleVisibility}>Toggle Visibility</Button>
-
+        <Container className='main-layout'>
+          <Button color='yellow' onClick={this.toggleVisibility} icon={visible? 'folder' : 'folder open'} labelPosition='right' content='ax-datagrid Samples' />
           <Sidebar.Pushable as={Segment}>
             <Sidebar as={Menu} animation='push' width='thin' visible={visible} icon='labeled' vertical inverted>
               <Menu.Item name='home'>
-                <NavLink to="/about" className="item" activeClassName="active">About</NavLink>
+                <NavLink to='/basic' className='item' activeClassName='active'>Basic</NavLink>
               </Menu.Item>
               <Menu.Item name='gamepad'>
-                <NavLink to="/members" className="item" activeClassName="active">Members</NavLink>
+                <NavLink to='/members' className='item' activeClassName='active'>Members</NavLink>
               </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher>
-              <Segment padded className="segment-content-view">
-
+              <Segment padded className='segment-content-view'>
                 <Switch>
-                  <Route exact path="/" component={About} />
-                  <Route path="/about" component={About} />
-                  <Route path="/members" component={MembersPage} />
+                  <Route exact path='/' component={BasicDatagrid} />
+                  <Route path='/basic' component={BasicDatagrid} />
                 </Switch>
-
               </Segment>
             </Sidebar.Pusher>
           </Sidebar.Pushable>
-
-
         </Container>
-
       </BrowserRouter>
     );
   }

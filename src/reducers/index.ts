@@ -1,19 +1,17 @@
-import * as act from '../component/actions';
+import * as act from '../actions';
 import {List, Map} from 'immutable';
-import {isObject} from "lodash";
+import {isObject} from 'lodash';
 
 export interface State {
-    receivedList: Array<object>,
-    deletedList: Array<object>,
-    list: Array<object>,
-    page: Object,
-    sortInfo: Object,
-    selectedRowList: Object,
-    selectedColumns: Object,
-    focusedPosition: {
-        r: number, c: number
-    }
-};
+    receivedList: any;
+    deletedList: any;
+    list: any;
+    page: object;
+    sortInfo: object;
+    selectedRowList: any;
+    selectedColumns: any;
+    focusedPosition: any;
+}
 
 // 초기 상태
 const initialState = Map({

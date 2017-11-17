@@ -1,9 +1,7 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import * as actions from '../modules';
-
-import AXDataGrid from '../../src/index';
-import gridCSS from '../../src/scss/index.scss';
+import * as React from 'react';
+import {Button} from 'semantic-ui-react';
+import * as AXDatagrid from '../../src/index';
+import * as gridCSS from '../../src/scss/index.scss';
 
 const gridData = [
   {id: 1, title: "인생은 해파에게조차 아름답고 장엄하다.", writer: "장기영", date: "2017-10-10"},
@@ -63,26 +61,44 @@ const gridOptions_new = {
   showRowSelector: false
 };
 
-class GridBasic extends React.Component {
+interface iProps {
+}
+
+interface IColumns {
+  key: string,
+  width?: number,
+  label?: string,
+  align?: string
+}
+interface iState {
+  height?: string,
+  columns: IColumns[],
+  data: {}[],
+  options: object
+}
+
+
+export class BasicDatagrid extends React.Component<iProps, iState> {
   constructor(props) {
     super(props);
 
     this.state = {
       columns: [
-        {key: "id", width: 60, label: "번호", align:"center"},
+        {key: "id", width: 60, label: "번호", align: "center"},
         {key: "title", width: 100, label: "제목"},
-        {key: "writer", label: "작성자", align:"center"},
-        {key: "date", label: "작성일", align:"center"},
+        {key: "writer", label: "작성자", align: "center"},
+        {key: "date", label: "작성일", align: "center"},
         {key: "title", width: 100, label: "제목"},
-        {key: "writer", label: "작성자", align:"center"},
-        {key: "date", label: "작성일", align:"center"}
+        {key: "writer", label: "작성자", align: "center"},
+        {key: "date", label: "작성일", align: "center"}
       ],
       data: gridData,
       options: gridOptions
-    }
+    };
+
   }
 
-  changeConfig(props) {
+  public changeConfig(props) {
 
     const processor = {
       "restoreData": function () {
@@ -94,10 +110,10 @@ class GridBasic extends React.Component {
       "restoreOptions": function () {
         this.setState({
           columns: [
-            {key: "id", width: 60, label: "번호", align:"center"},
+            {key: "id", width: 60, label: "번호", align: "center"},
             {key: "title", width: 200, label: "제목"},
-            {key: "writer", label: "작성자", align:"center"},
-            {key: "date", label: "작성일", align:"center"}
+            {key: "writer", label: "작성자", align: "center"},
+            {key: "date", label: "작성일", align: "center"}
           ],
           options: gridOptions
         });
@@ -105,9 +121,9 @@ class GridBasic extends React.Component {
       "newOptions": function () {
         this.setState({
           columns: [
-            {key: "id", width: 60, label: "번호", align:"center"},
-            {key: "writer", label: "작성자", align:"center"},
-            {key: "date", label: "작성일", align:"center"}
+            {key: "id", width: 60, label: "번호", align: "center"},
+            {key: "writer", label: "작성자", align: "center"},
+            {key: "date", label: "작성일", align: "center"}
           ],
           options: gridOptions_new
         });
@@ -121,15 +137,14 @@ class GridBasic extends React.Component {
     }
 
   }
-  gridCallBack(gridInstance){
+
+  public gridCallBack(gridInstance) {
     console.log(gridInstance);
   }
-  
-  render() {
 
-    return (
-      <div>
-        <AXDataGrid
+  /*
+
+        <AXDatagrid
           gridCSS={gridCSS}
           height={this.state.height}
           style={{fontSize: "12px"}}
@@ -138,36 +153,23 @@ class GridBasic extends React.Component {
           options={this.state.options}
           thisCallback={this.gridCallBack}
         />
+   */
 
-        {this.props.name} /
-        {this.state.height}
+  public render() {
+    return (
+      <div>
+        <h1>Basic</h1>
 
         <div style={{padding: "10px"}}>
-          <button onClick={e => this.changeConfig({height: "400px"})}>높이변경(400px)</button>
-          <button onClick={e => this.changeConfig({height: "300px"})}>높이변경(300px)</button>
-          <button onClick={e => this.changeConfig("newData")}>데이터변경</button>
-          <button onClick={e => this.changeConfig("restoreData")}>데이터원래대로</button>
-          <button onClick={e => this.changeConfig("newOptions")}>옵션변경</button>
-          <button onClick={e => this.changeConfig("restoreOptions")}>옵션원래대로</button>
-          <button onClick={this.props.onCreate}>state이름 부여</button>
-          <button onClick={this.props.onRemove}>state이름 초기화</button>
+          <Button onClick={e => this.changeConfig({height: "400px"})} content='높이변경(400px)' />
+          <Button onClick={e => this.changeConfig({height: "300px"})} content='높이변경(300px)' />
+          <Button onClick={e => this.changeConfig("newData")} content='데이터변경' />
+          <Button onClick={e => this.changeConfig("restoreData")} content='데이터원래대로' />
+          <Button onClick={e => this.changeConfig("newOptions")} content='옵션변경' />
+          <Button onClick={e => this.changeConfig("restoreOptions")} content='옵션원래대로' />
         </div>
 
       </div>
-    );
+    )
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    name: state.get('name')
-  }
-};
-
-// 액션함수 준비
-const mapToDispatch = (dispatch) => ({
-  onCreate: () => dispatch(actions.create()),
-  onRemove: () => dispatch(actions.remove())
-});
-
-export default connect(mapStateToProps, mapToDispatch)(GridBasic);
