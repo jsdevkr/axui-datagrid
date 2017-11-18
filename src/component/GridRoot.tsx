@@ -235,6 +235,14 @@ const propsToState = function (props, state) {
 };
 
 export class GridRoot extends React.Component<iProps, iState> {
+
+  public static defaultProps: Partial<iProps> = {
+    height: '300px',
+    columns: [],
+    data: [],
+    options: {}
+  };
+
   private componentRefs: any;
   private data: any;
   private gridRootNode: any;
@@ -327,6 +335,10 @@ export class GridRoot extends React.Component<iProps, iState> {
         return options;
       })()
     };
+
+
+    console.log(this.props.height);
+
     this.state = propsToState(props, assignWith({}, this.state));
 
     // state 계산영역 끝
@@ -702,6 +714,9 @@ export class GridRoot extends React.Component<iProps, iState> {
     if (styles.calculatedHeight !== null) {
       gridRootStyle.height = styles.calculatedHeight;
     }
+
+    console.log(gridRootStyle, styles.calculatedHeight);
+
     if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지
       gridRootStyle['userSelect'] = 'none';
     }

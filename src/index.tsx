@@ -40,4 +40,6 @@ class AXDatagrid extends React.Component<iProps, {}> {
   }
 }
 
-export default AXDatagrid;
+export {
+  AXDatagrid
+};
