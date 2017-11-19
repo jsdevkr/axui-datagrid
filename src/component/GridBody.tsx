@@ -1,14 +1,47 @@
-import React from 'react';
+import * as React from 'react';
 import {Range} from 'immutable';
 import classNames from 'classnames'
 
-class GridBody extends React.Component {
-  constructor(props) {
+export namespace GridBody {
+  export interface Props {
+    mounted: boolean;
+    gridCSS: any;
+    styles: any;
+    options: any;
+    frozenColumnIndex: number;
+    colGroup: any;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    bodyTable: any;
+    asideBodyRowData: any;
+    asideBodyGroupingData: any;
+    leftBodyRowData: any;
+    leftBodyGroupingData: any;
+    bodyRowData: any;
+    bodyGroupingData: any;
+    scrollLeft: number;
+    scrollTop: number;
+    CTInnerWidth: number;
+    CTInnerHeight: number;
+    list: any;
+    refCallback: Function;
+    onMouseDownBody: Function;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+
+export class GridBody extends React.Component<GridBody.Props, GridBody.State> {
+  constructor(props: GridBody.Props) {
     super(props);
 
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  public shouldComponentUpdate(nextProps, nextState) {
     let sameProps = false;
 
     if (
@@ -27,31 +60,32 @@ class GridBody extends React.Component {
     return sameProps;
   }
 
-  render() {
-
-    const gridCSS               = this.props.gridCSS,
-          refCallback           = this.props.refCallback,
-          onMouseDownBody       = this.props.onMouseDownBody,
-          mounted               = this.props.mounted,
-          options               = this.props.options,
-          styles                = this.props.styles,
-          frozenColumnIndex     = this.props.frozenColumnIndex,
-          colGroup              = this.props.colGroup,
-          asideColGroup         = this.props.asideColGroup,
-          leftHeaderColGroup    = this.props.leftHeaderColGroup,
-          headerColGroup        = this.props.headerColGroup,
-          bodyTable             = this.props.bodyTable,
-          asideBodyRowData      = this.props.asideBodyRowData,
-          asideBodyGroupingData = this.props.asideBodyGroupingData,
-          leftBodyRowData       = this.props.leftBodyRowData,
-          leftBodyGroupingData  = this.props.leftBodyGroupingData,
-          bodyRowData           = this.props.bodyRowData,
-          bodyGroupingData      = this.props.bodyGroupingData,
-          list                  = this.props.list,
-          scrollLeft            = this.props.scrollLeft,
-          scrollTop             = this.props.scrollTop,
-          CTInnerWidth          = this.props.CTInnerWidth,
-          CTInnerHeight         = this.props.CTInnerHeight;
+  public render() {
+    const {
+      mounted,
+      gridCSS,
+      styles,
+      options,
+      frozenColumnIndex,
+      colGroup,
+      asideColGroup,
+      leftHeaderColGroup,
+      headerColGroup,
+      bodyTable,
+      asideBodyRowData,
+      asideBodyGroupingData,
+      leftBodyRowData,
+      leftBodyGroupingData,
+      bodyRowData,
+      bodyGroupingData,
+      scrollLeft,
+      scrollTop,
+      CTInnerWidth,
+      CTInnerHeight,
+      list,
+      refCallback,
+      onMouseDownBody
+    } = this.props;
 
     if (!mounted) return null;
 
@@ -60,7 +94,7 @@ class GridBody extends React.Component {
     const _paintBody = function (_panelName, _style) {
       return (
         <div data-panel={_panelName} style={_style}>
-          <table></table>
+          <table/>
         </div>
       )
     };
@@ -72,10 +106,10 @@ class GridBody extends React.Component {
         let colAlign = options.body.align || _col.align;
         let label;
 
-        if (_col.key === "__line_number__") {
+        if (_col.key === '__line_number__') {
           label = _itemIdx + 1;
         }
-        else if (_col.key === "__row_selector__") {
+        else if (_col.key === '__row_selector__') {
           label = <div
             className={classNames(gridCSS.checkBox)}
             style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
@@ -85,11 +119,11 @@ class GridBody extends React.Component {
         }
 
         let spanStyle = {
-          height: (options.body.columnHeight - options.body.columnBorderWidth) + "px",
-          lineHeight: lineHeight + "px",
+          height: (options.body.columnHeight - options.body.columnBorderWidth) + 'px',
+          lineHeight: lineHeight + 'px',
           textAlign: colAlign
         };
-        
+
         return (
           <span
             data-span
@@ -107,13 +141,13 @@ class GridBody extends React.Component {
 
       return (
         <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
-          <table style={{height: "100%"}}>
+          <table style={{height: '100%'}}>
             <colgroup>
               {_colGroup.map(
                 (col, ci) => (
                   <col
                     key={ci}
-                    style={{width: col._width + "px"}} />
+                    style={{width: col._width + 'px'}} />
                 )
               )}
               <col />
@@ -132,8 +166,8 @@ class GridBody extends React.Component {
                             {row.cols.map((col, ci) => {
                               let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                               let classNameItems = {
-                                [gridCSS.lineNumber]: (col.columnAttr === "lineNumber"),
-                                [gridCSS.rowSelector]: (col.columnAttr === "rowSelector")
+                                [gridCSS.lineNumber]: (col.columnAttr === 'lineNumber'),
+                                [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                               };
 
                               return (
@@ -142,7 +176,7 @@ class GridBody extends React.Component {
                                   colSpan={col.colspan}
                                   rowSpan={col.rowspan}
                                   className={classNames(classNameItems)}
-                                  style={{height: cellHeight, minHeight: "1px"}}>
+                                  style={{height: cellHeight, minHeight: '1px'}}>
                                   {getFieldSpan(colGroup, col, item, li)}
                                 </td>
                               );
@@ -167,10 +201,9 @@ class GridBody extends React.Component {
       eRowIndex: options.frozenRowIndex
     };
     let bodyScrollConfig = {
-      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex
+      sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
+      eRowIndex: (Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1
     };
-    bodyScrollConfig.eRowIndex = bodyScrollConfig.sRowIndex + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1;
-
     let topAsideBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
@@ -246,43 +279,40 @@ class GridBody extends React.Component {
       left: scrollLeft
     };
 
-    //console.table(leftHeaderColGroup);
-    //console.table(bodyRowData.rows[0].cols);
-    
     return (
       <div
         className={classNames(gridCSS.body)}
         style={{height: styles.bodyHeight}}
         onMouseDown={e => onMouseDownBody(e)}>
-        {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-aside-body", topAsideBodyPanelStyle) : null}
-        {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody("top-left-body", topLeftBodyPanelStyle) : null}
+        {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody('top-aside-body', topAsideBodyPanelStyle) : null}
+        {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? _paintBody('top-left-body', topLeftBodyPanelStyle) : null}
         {(styles.frozenRowHeight > 0) ? (
-          <div data-scroll-container="top-body-scroll-container" style={topBodyPanelStyle}>
-            {_paintBody("top-body-scroll", topBodyScrollStyle)}
+          <div data-scroll-container='top-body-scroll-container' style={topBodyPanelStyle}>
+            {_paintBody('top-body-scroll', topBodyScrollStyle)}
           </div>
         ) : null}
 
         {(styles.asidePanelWidth > 0) ? (
-          <div data-scroll-container="aside-body-scroll-container" style={asideBodyPanelStyle}>
-            {paintBody("aside-body-scroll", asideColGroup, asideBodyRowData, asideBodyGroupingData, list, bodyScrollConfig, asideBodyScrollStyle)}
+          <div data-scroll-container='aside-body-scroll-container' style={asideBodyPanelStyle}>
+            {paintBody('aside-body-scroll', asideColGroup, asideBodyRowData, asideBodyGroupingData, list, bodyScrollConfig, asideBodyScrollStyle)}
           </div>
         ) : null}
 
         {(styles.frozenPanelWidth > 0) ? (
-          <div data-scroll-container="left-body-scroll-container" style={leftBodyPanelStyle}>
-            {paintBody("left-body-scroll", leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, bodyScrollConfig, leftBodyScrollStyle)}
+          <div data-scroll-container='left-body-scroll-container' style={leftBodyPanelStyle}>
+            {paintBody('left-body-scroll', leftHeaderColGroup, leftBodyRowData, leftBodyGroupingData, list, bodyScrollConfig, leftBodyScrollStyle)}
           </div>
         ) : null}
 
-        <div data-scroll-container="body-scroll-container" style={bodyPanelStyle} ref={ref => refCallback("body-scroll-container", ref)}>
-          {paintBody("body-scroll", headerColGroup, bodyRowData, bodyGroupingData, list, Object.assign({}, bodyScrollConfig, {paddingLeft: scrollPaddingLeft}), bodyScrollStyle)}
+        <div data-scroll-container='body-scroll-container' style={bodyPanelStyle} ref={ref => refCallback('body-scroll-container', ref)}>
+          {paintBody('body-scroll', headerColGroup, bodyRowData, bodyGroupingData, list, Object.assign({}, bodyScrollConfig, {paddingLeft: scrollPaddingLeft}), bodyScrollStyle)}
         </div>
 
-        {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-aside-body", bottomAsideBodyPanelStyle) : null}
-        {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody("bottom-left-body", bottomLeftBodyPanelStyle) : null}
+        {(styles.asidePanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody('bottom-aside-body', bottomAsideBodyPanelStyle) : null}
+        {(styles.frozenPanelWidth > 0 && styles.footSumHeight > 0) ? _paintBody('bottom-left-body', bottomLeftBodyPanelStyle) : null}
         {(styles.footSumHeight > 0) ? (
-          <div data-scroll-container="bottom-body-scroll-container" style={bottomBodyPanelStyle}>
-            {_paintBody("bottom-body-scroll", bottomBodyScrollStyle)}
+          <div data-scroll-container='bottom-body-scroll-container' style={bottomBodyPanelStyle}>
+            {_paintBody('bottom-body-scroll', bottomBodyScrollStyle)}
           </div>
         ) : null}
       </div>
@@ -290,5 +320,3 @@ class GridBody extends React.Component {
 
   }
 }
-
-export default GridBody;

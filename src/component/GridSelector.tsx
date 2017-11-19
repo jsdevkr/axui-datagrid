@@ -1,12 +1,33 @@
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames'
 
-class GridSelector extends React.Component {
-  constructor(props) {
-    super(props);
+interface iSelection {
+  x?: number;
+  y?: number;
+}
+
+export namespace GridSelector {
+  export interface Props {
+    selecting: boolean;
+    gridCSS: any;
+    selectionStartOffset: iSelection;
+    selectionEndOffset: iSelection;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  export interface State {
+    /* empty */
+  }
+}
+
+
+
+export class GridSelector extends React.Component<GridSelector.Props, GridSelector.State> {
+  constructor(props: GridSelector.Props) {
+    super(props);
+
+  }
+
+  public shouldComponentUpdate(nextProps, nextState) {
     let sameProps = false;
 
     if (
@@ -20,11 +41,13 @@ class GridSelector extends React.Component {
     return sameProps;
   }
 
-  render() {
-    const selecting   = this.props.selecting,
-          gridCSS     = this.props.gridCSS,
-          selectionStartOffset = this.props.selectionStartOffset,
-          selectionEndOffset = this.props.selectionEndOffset;
+  public render() {
+    const {
+      selecting,
+      gridCSS,
+      selectionStartOffset,
+      selectionEndOffset
+    } = this.props;
 
     if(!selecting) return null;
 
@@ -43,5 +66,3 @@ class GridSelector extends React.Component {
     )
   }
 }
-
-export default GridSelector;

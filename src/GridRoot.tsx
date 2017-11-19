@@ -5,7 +5,7 @@ import {assignWith, each, isArray, isEqual, isFunction, isObject, throttle} from
 import {fromJS} from 'immutable';
 
 import * as UTIL from './_inc/utils';
-import {GridHeader, GridPage} from './component';
+import {GridHeader, GridBody, GridPage, GridScroll, GridSelector} from './component';
 
 
 export namespace GridRoot {
@@ -769,26 +769,47 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           <textarea ref='gridClipboard'></textarea>
         </div>
         <GridHeader
-          gridCSS={this.props.gridCSS}
-          refCallback={this.refCallback}
-          onResizeColumnResizer={this.onResizeColumnResizer}
           mounted={mounted}
+          gridCSS={this.props.gridCSS}
           optionsHeader={options.header}
           styles={styles}
           frozenColumnIndex={options.frozenColumnIndex}
-
           colGroup={this.state.colGroup}
           asideColGroup={this.state.asideColGroup}
           leftHeaderColGroup={this.state.leftHeaderColGroup}
           headerColGroup={this.state.headerColGroup}
-
           asideHeaderData={this.state.asideHeaderData}
           leftHeaderData={this.state.leftHeaderData}
           headerData={this.state.headerData}
-
           scrollLeft={this.state.scrollLeft}
+          refCallback={this.refCallback}
+          onResizeColumnResizer={this.onResizeColumnResizer}
         />
-
+        <GridBody
+          mounted={mounted}
+          gridCSS={this.props.gridCSS}
+          options={options}
+          styles={styles}
+          CTInnerWidth={styles.CTInnerWidth}
+          CTInnerHeight={styles.CTInnerHeight}
+          frozenColumnIndex={options.frozenColumnIndex}
+          colGroup={this.state.colGroup}
+          asideColGroup={this.state.asideColGroup}
+          leftHeaderColGroup={this.state.leftHeaderColGroup}
+          headerColGroup={_headerColGroup}
+          bodyTable={this.state.bodyRowTable}
+          asideBodyRowData={this.state.asideBodyRowData}
+          asideBodyGroupingData={this.state.asideBodyGroupingData}
+          leftBodyRowData={this.state.leftBodyRowData}
+          leftBodyGroupingData={this.state.leftBodyGroupingData}
+          bodyRowData={_bodyRowData}
+          bodyGroupingData={_bodyGroupingData}
+          list={this.props.store_list}
+          scrollLeft={this.state.scrollLeft}
+          scrollTop={this.state.scrollTop}
+          refCallback={this.refCallback}
+          onMouseDownBody={this.onMouseDownBody}
+        />
         <GridPage
           mounted={mounted}
           gridCSS={this.props.gridCSS}
@@ -798,7 +819,32 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           pageButtonHeight={options.page.buttonHeight}
           onClickPageButton={this.onClickPageButton}
         />
-
+        <GridScroll
+          mounted={mounted}
+          gridCSS={this.props.gridCSS}
+          bodyHeight={styles.bodyHeight}
+          pageHeight={styles.pageHeight}
+          verticalScrollerWidth={styles.verticalScrollerWidth}
+          verticalScrollerHeight={styles.verticalScrollerHeight}
+          horizontalScrollerWidth={styles.horizontalScrollerWidth}
+          horizontalScrollerHeight={styles.horizontalScrollerHeight}
+          verticalScrollBarHeight={styles.verticalScrollBarHeight}
+          horizontalScrollBarWidth={styles.horizontalScrollBarWidth}
+          scrollerArrowSize={styles.scrollerArrowSize}
+          scrollerPadding={styles.scrollerPadding}
+          scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
+          scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
+          refCallback={this.refCallback}
+          onMouseDownScrollBar={this.onMouseDownScrollBar}
+          onClickScrollTrack={this.onClickScrollTrack}
+          onClickScrollArrow={this.onClickScrollArrow}
+        />
+        <GridSelector
+          selecting={this.state.selecting}
+          gridCSS={this.props.gridCSS}
+          selectionStartOffset={this.state.selectionStartOffset}
+          selectionEndOffset={this.state.selectionEndOffset}
+        />
       </div>
     );
 

@@ -19,7 +19,7 @@ export namespace GridPage {
 
 
 export class GridPage extends React.Component<GridPage.Props, GridPage.State> {
-  constructor(props) {
+  constructor(props: GridPage.Props) {
     super(props);
   }
 

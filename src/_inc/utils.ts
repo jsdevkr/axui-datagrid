@@ -1,5 +1,5 @@
-import {List, Map} from 'immutable';
-import {assignWith, isArray, isNumber, isObject} from "lodash";
+import { List, Map } from 'immutable';
+import { assignWith, isArray, isNumber, isObject } from 'lodash';
 
 /**
  * @method
@@ -16,10 +16,10 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
       tempTable_r     = {rows: []};
 
   for (let i = 0, l = _table.rows.length; i < l; i++) {
-    asideTable.rows[i] = {cols: []};
+    asideTable.rows[ i ] = {cols: []};
     if (i === 0) {
       let col = {
-        label: "",
+        label: '',
         colspan: 1,
         rowspan: _table.rows.length,
         rowIndex: 0,
@@ -30,13 +30,13 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         _col = assignWith({}, col, {
           width: options.lineNumberColumnWidth,
           _width: options.lineNumberColumnWidth,
-          align: "center",
-          columnAttr: "lineNumber",
-          key: "__line_number__",
-          label: ""
+          align: 'center',
+          columnAttr: 'lineNumber',
+          key: '__line_number__',
+          label: ''
         });
         asideColGroup.push(_col);
-        asideTable.rows[i].cols.push(_col);
+        asideTable.rows[ i ].cols.push(_col);
 
         asidePanelWidth += options.lineNumberColumnWidth;
       }
@@ -44,12 +44,12 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
         _col = assignWith({}, col, {
           width: options.rowSelectorColumnWidth,
           _width: options.rowSelectorColumnWidth,
-          align: "center",
-          columnAttr: "rowSelector",
-          key: "__row_selector__", label: ""
+          align: 'center',
+          columnAttr: 'rowSelector',
+          key: '__row_selector__', label: ''
         });
         asideColGroup.push(_col);
-        asideTable.rows[i].cols.push(_col);
+        asideTable.rows[ i ].cols.push(_col);
 
         asidePanelWidth += options.rowSelectorColumnWidth;
       }
@@ -57,20 +57,20 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
   }
 
   for (let r = 0, rl = _table.rows.length; r < rl; r++) {
-    let row = _table.rows[r];
+    let row = _table.rows[ r ];
 
-    tempTable_l.rows[r] = {cols: []};
-    tempTable_r.rows[r] = {cols: []};
+    tempTable_l.rows[ r ] = {cols: []};
+    tempTable_r.rows[ r ] = {cols: []};
 
     for (let c = 0, cl = row.cols.length; c < cl; c++) {
-      let col           = row.cols[c],
+      let col           = row.cols[ c ],
           colStartIndex = col.colIndex,
           colEndIndex   = col.colIndex + col.colspan;
 
       if (colStartIndex < _frozenColumnIndex) {
         if (colEndIndex <= _frozenColumnIndex) {
           // 좌측편에 변형없이 추가
-          tempTable_l.rows[r].cols.push(col);
+          tempTable_l.rows[ r ].cols.push(col);
         } else {
           let leftCol  = assignWith({}, col),
               rightCol = assignWith({}, leftCol);
@@ -79,16 +79,16 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
           // rightCol.colIndex = _frozenColumnIndex;
           rightCol.colspan = col.colspan - leftCol.colspan;
 
-          tempTable_l.rows[r].cols.push(leftCol);
+          tempTable_l.rows[ r ].cols.push(leftCol);
           if (rightCol.colspan) {
-            tempTable_r.rows[r].cols.push(rightCol);
+            tempTable_r.rows[ r ].cols.push(rightCol);
           }
         }
       }
       else {
         // 오른편
         //tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
-        tempTable_r.rows[r].cols.push(Object.assign({}, col, {}));
+        tempTable_r.rows[ r ].cols.push(Object.assign({}, col, {}));
       }
 
       col = null;
@@ -100,7 +100,7 @@ export function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, optio
   }
 
   // frozenPanelWidth는 컬럼의 너비 _width가 결정된 후에 구해야 함으로 여기서 처리 하지 않는다
-  // _width는 컬럼의 너비가 "*" 또는 "%"일 때에 컨테이너의 너비에 따라 상대적으로 결정된다.
+  // _width는 컬럼의 너비가 '*' 또는 '%'일 때에 컨테이너의 너비에 따라 상대적으로 결정된다.
   return {
     asideData: asideTable,
     asideColGroup: asideColGroup,
@@ -122,24 +122,24 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
 
   if ('rows' in _table) {
     _table.rows.forEach((row, r) => {
-      tempTable.rows[r] = {cols: []};
+      tempTable.rows[ r ] = {cols: []};
       for (let c = 0, cl = row.cols.length; c < cl; c++) {
-        let col = assignWith({}, row.cols[c]);
+        let col = assignWith({}, row.cols[ c ]);
         let colStartIndex = col.colIndex;
         let colEndIndex = col.colIndex + col.colspan;
 
         if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
           if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
             // 변형없이 추가
-            tempTable.rows[r].cols.push(col);
+            tempTable.rows[ r ].cols.push(col);
           }
           else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
             // 앞에서 걸친경우
             col.colspan = colEndIndex - _startColumnIndex;
-            tempTable.rows[r].cols.push(col);
+            tempTable.rows[ r ].cols.push(col);
           }
           else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
-            tempTable.rows[r].cols.push(col);
+            tempTable.rows[ r ].cols.push(col);
           }
         }
       }
@@ -154,7 +154,7 @@ export function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endCol
  * @return {{clientX, clientY}}
  */
 export function getMousePosition(e) {
-  let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[0] : e;
+  let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[ 0 ] : e;
   // clientX, Y 쓰면 스크롤에서 문제 발생
   return {
     x: mouseObj.pageX,
@@ -176,7 +176,7 @@ export function makeHeaderTable(_columns, _options) {
       colIndex = 0;
 
   // todo immutable array
-  const maekRows = function (_columns, depth, parentField) {
+  const maekRows = function (_columns: any, depth: number, parentField?: any) {
     let row = {cols: []};
     let i = 0, l = _columns.size;
     let colspan = 1;
@@ -214,10 +214,10 @@ export function makeHeaderTable(_columns, _options) {
     }
 
     if (row.cols.length > 0) {
-      if (!table.rows[depth]) {
-        table.rows[depth] = {cols: []};
+      if (!table.rows[ depth ]) {
+        table.rows[ depth ] = {cols: []};
       }
-      table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
+      table.rows[ depth ].cols = table.rows[ depth ].cols.concat(row.cols);
       return (row.cols.length - 1) + colspan;
     } else {
       return colspan;
@@ -225,13 +225,13 @@ export function makeHeaderTable(_columns, _options) {
 
   };
 
-  maekRows(columns, 0);
+  maekRows(columns, 0, undefined);
 
   // set rowspan
   for (let r = 0, rl = table.rows.length; r < rl; r++) {
-    for (let c = 0, cl = table.rows[r].cols.length; c < cl; c++) {
-      if (!('columns' in table.rows[r].cols[c])) {
-        table.rows[r].cols[c].rowspan = rl - r;
+    for (let c = 0, cl = table.rows[ r ].cols.length; c < cl; c++) {
+      if (!('columns' in table.rows[ r ].cols[ c ])) {
+        table.rows[ r ].cols[ c ].rowspan = rl - r;
       }
     }
   }
@@ -252,13 +252,13 @@ export function makeBodyRowTable(_columns, _options) {
   };
   let colIndex = 0;
 
-  const maekRows = function (_columns, depth, parentField) {
+  const maekRows = function (_columns: any, depth: number, parentField?: any) {
     let row = {cols: []};
     let i = 0;
     let l = _columns.size;
     let colspan = 1;
 
-    const selfMakeRow = function (__columns) {
+    const selfMakeRow = function (__columns: any, __depth: number) {
       let i = 0;
       let l = __columns.length;
 
@@ -340,10 +340,10 @@ export function makeBodyRowTable(_columns, _options) {
     }
 
     if (row.cols.length > 0) {
-      if (!table.rows[depth]) {
-        table.rows[depth] = {cols: []};
+      if (!table.rows[ depth ]) {
+        table.rows[ depth ] = {cols: []};
       }
-      table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
+      table.rows[ depth ].cols = table.rows[ depth ].cols.concat(row.cols);
       return (row.cols.length - 1) + colspan;
     }
     else {
@@ -356,9 +356,9 @@ export function makeBodyRowTable(_columns, _options) {
   {
     // set rowspan
     for (let r = 0, rl = table.rows.length; r < rl; r++) {
-      let row = table.rows[r];
+      let row = table.rows[ r ];
       for (let c = 0, cl = row.cols.length; c < cl; c++) {
-        let col = row.cols[c];
+        let col = row.cols[ c ];
         if (!('columns' in col)) {
           col.rowspan = rl - r;
         }
@@ -381,7 +381,7 @@ export function makeBodyRowMap(_table, _options) {
   let map = {};
   _table.rows.forEach(function (row) {
     row.cols.forEach(function (col) {
-      map[col.rowIndex + "_" + col.colIndex] = assignWith({}, col);
+      map[ col.rowIndex + '_' + col.colIndex ] = assignWith({}, col);
     });
   });
   return map;
@@ -400,32 +400,32 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
   };
 
   for (let r = 0, rl = _footSumColumns.length; r < rl; r++) {
-    let footSumRow = _footSumColumns[r],
+    let footSumRow = _footSumColumns[ r ],
         addC       = 0;
 
-    table.rows[r] = {cols: []};
+    table.rows[ r ] = {cols: []};
 
     for (let c = 0, cl = footSumRow.length; c < cl; c++) {
       if (addC > colGroup.length) break;
-      let colspan = footSumRow[c].colspan || 1;
-      if (footSumRow[c].label || footSumRow[c].key) {
-        table.rows[r].cols.push({
+      let colspan = footSumRow[ c ].colspan || 1;
+      if (footSumRow[ c ].label || footSumRow[ c ].key) {
+        table.rows[ r ].cols.push({
           colspan: colspan,
           rowspan: 1,
           colIndex: addC,
-          columnAttr: "sum",
-          align: footSumRow[c].align,
-          label: footSumRow[c].label,
-          key: footSumRow[c].key,
-          collector: footSumRow[c].collector,
-          formatter: footSumRow[c].formatter
+          columnAttr: 'sum',
+          align: footSumRow[ c ].align,
+          label: footSumRow[ c ].label,
+          key: footSumRow[ c ].key,
+          collector: footSumRow[ c ].collector,
+          formatter: footSumRow[ c ].formatter
         });
       } else {
-        table.rows[r].cols.push({
+        table.rows[ r ].cols.push({
           colIndex: addC,
           colspan: colspan,
           rowspan: 1,
-          label: "&nbsp;",
+          label: '&nbsp;',
         });
       }
       addC += colspan;
@@ -434,11 +434,11 @@ export function makeFootSumTable(_footSumColumns, colGroup, options) {
 
     if (addC < colGroup.length) {
       for (let c = addC; c < colGroup.length; c++) {
-        table.rows[r].cols.push({
+        table.rows[ r ].cols.push({
           colIndex: (c),
           colspan: 1,
           rowspan: 1,
-          label: "&nbsp;",
+          label: '&nbsp;',
         });
       }
     }
@@ -457,31 +457,31 @@ export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
       r     = 0,
       addC  = 0;
 
-  table.rows[r] = {cols: []};
+  table.rows[ r ] = {cols: []};
 
   for (let c = 0, cl = _bodyGroupingColumns.length; c < cl; c++) {
     if (addC > options.columns.length) break;
-    let colspan = _bodyGroupingColumns[c].colspan || 1;
-    if (_bodyGroupingColumns[c].label || _bodyGroupingColumns[c].key) {
-      table.rows[r].cols.push({
+    let colspan = _bodyGroupingColumns[ c ].colspan || 1;
+    if (_bodyGroupingColumns[ c ].label || _bodyGroupingColumns[ c ].key) {
+      table.rows[ r ].cols.push({
         colspan: colspan,
         rowspan: 1,
         rowIndex: 0,
         colIndex: addC,
-        columnAttr: "default",
-        align: _bodyGroupingColumns[c].align,
-        label: _bodyGroupingColumns[c].label,
-        key: _bodyGroupingColumns[c].key,
-        collector: _bodyGroupingColumns[c].collector,
-        formatter: _bodyGroupingColumns[c].formatter
+        columnAttr: 'default',
+        align: _bodyGroupingColumns[ c ].align,
+        label: _bodyGroupingColumns[ c ].label,
+        key: _bodyGroupingColumns[ c ].key,
+        collector: _bodyGroupingColumns[ c ].collector,
+        formatter: _bodyGroupingColumns[ c ].formatter
       });
     } else {
-      table.rows[r].cols.push({
+      table.rows[ r ].cols.push({
         rowIndex: 0,
         colIndex: addC,
         colspan: colspan,
         rowspan: 1,
-        label: "&nbsp;"
+        label: '&nbsp;'
       });
     }
     addC += colspan;
@@ -489,12 +489,12 @@ export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
 
   if (addC < colGroup.length) {
     for (var c = addC; c < colGroup.length; c++) {
-      table.rows[r].cols.push({
+      table.rows[ r ].cols.push({
         rowIndex: 0,
         colIndex: (c),
         colspan: 1,
         rowspan: 1,
-        label: "&nbsp;",
+        label: '&nbsp;',
       });
     }
   }
@@ -507,18 +507,18 @@ export function findPanelByColumnIndex(_dindex, _colIndex, _rowIndex) {
       _isScrollPanel = false,
       _panels        = [];
 
-  if (this.xvar.frozenRowIndex > _dindex) _panels.push("top");
-  if (this.xvar.frozenColumnIndex > _colIndex) _panels.push("left");
-  _panels.push("body");
+  if (this.xvar.frozenRowIndex > _dindex) _panels.push('top');
+  if (this.xvar.frozenColumnIndex > _colIndex) _panels.push('left');
+  _panels.push('body');
 
   if (this.xvar.frozenColumnIndex <= _colIndex || this.xvar.frozenRowIndex <= _dindex) {
-    _containerPanelName = _panels.join("-");
-    _panels.push("scroll");
+    _containerPanelName = _panels.join('-');
+    _panels.push('scroll');
     _isScrollPanel = true;
   }
 
   return {
-    panelName: _panels.join("-"),
+    panelName: _panels.join('-'),
     containerPanelName: _containerPanelName,
     isScrollPanel: _isScrollPanel
   }
@@ -529,10 +529,10 @@ export function getRealPathForDataItem(_dataPath) {
       _path = [].concat(_dataPath.split(/[\.\[\]]/g));
 
   _path.forEach(function (n) {
-    if (n !== "") path.push("[\"" + n.replace(/['\"]/g, "") + "\"]");
+    if (n !== '') path.push('[\"' + n.replace(/['\"]/g, '') + '\"]');
   });
   _path = null;
-  return path.join("");
+  return path.join('');
 }
 
 /**
@@ -571,9 +571,9 @@ export function setColGroupWidth(_colGroup, container, options) {
   _colGroup.forEach((col, ci) => {
     if (isNumber(col.width)) {
       totalWidth += col._width = col.width;
-    } else if (col.width === "*") {
+    } else if (col.width === '*') {
       autoWidthColGroupIndexs.push(ci);
-    } else if (col.width.substring(col.width.length - 1) === "%") {
+    } else if (col.width.substring(col.width.length - 1) === '%') {
       totalWidth += col._width = container.width * col.width.substring(0, col.width.length - 1) / 100;
     }
   });
@@ -581,7 +581,7 @@ export function setColGroupWidth(_colGroup, container, options) {
   if (autoWidthColGroupIndexs.length > 0) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
-      _colGroup.update(autoWidthColGroupIndexs[i], O => {
+      _colGroup.update(autoWidthColGroupIndexs[ i ], O => {
         O._width = (computedWidth < options.columnMinWidth) ? options.columnMinWidth : computedWidth;
         return O;
       });
@@ -650,7 +650,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.frozenPanelWidth = ((colGroup, endIndex) => {
     let width = 0;
     for (let i = 0, l = endIndex; i < l; i++) {
-      width += colGroup[i]._width;
+      width += colGroup[ i ]._width;
     }
     return width;
   })(colGroup, options.frozenColumnIndex);
@@ -780,7 +780,7 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
   }
 }
 
-export function getSelectedCellByMousePosition({x:sx, y:sy}, {x:ex, y:ey}) {
+export function getSelectedCellByMousePosition({x: sx, y: sy}, {x: ex, y: ey}) {
   //console.log(sx, ex);
 
   return [];
