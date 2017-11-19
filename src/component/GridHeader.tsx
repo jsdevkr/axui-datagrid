@@ -31,9 +31,7 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
   constructor(props: any) {
     super(props);
 
-    this.state = {
-
-    };
+    this.state = {};
     this.onMouseDownColumnResizer = this.onMouseDownColumnResizer.bind(this);
   }
 
@@ -91,49 +89,50 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
 
   public render() {
 
-    const gridCSS = this.props.gridCSS,
-      refCallback = this.props.refCallback,
-      onResizeColumnResizer = this.props.onResizeColumnResizer,
-      mounted = this.props.mounted,
-      optionsHeader = this.props.optionsHeader,
-      styles = this.props.styles,
-      frozenColumnIndex = this.props.frozenColumnIndex,
-      colGroup = this.props.colGroup,
-      asideColGroup = this.props.asideColGroup,
-      leftHeaderColGroup = this.props.leftHeaderColGroup,
-      headerColGroup = this.props.headerColGroup,
-      asideHeaderData = this.props.asideHeaderData,
-      leftHeaderData = this.props.leftHeaderData,
-      headerData = this.props.headerData,
-      scrollLeft = this.props.scrollLeft;
+    const {
+      gridCSS,
+      refCallback,
+      mounted,
+      optionsHeader,
+      styles,
+      frozenColumnIndex,
+      colGroup,
+      asideColGroup,
+      leftHeaderColGroup,
+      headerColGroup,
+      asideHeaderData,
+      leftHeaderData,
+      headerData,
+      scrollLeft
+    } = this.props;
 
     if (!mounted) return null;
 
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const printHeader = function (_panelName, _colGroup, _bodyRow, _style) {
+    const printHeader = function (_panelName : string, _colGroup : any, _bodyRow : any, _style : object) {
 
       const getFieldSpan = function (_colGroup, _col) {
         let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
         let colAlign = optionsHeader.align || _col.align;
         let label, sorter, filter;
 
-        if (_col.key === "__checkbox_header__") {
+        if (_col.key === '__checkbox_header__') {
           if (optionsHeader.selector) {
             label = <div data-checkbox style={{
-              maxHeight: (_col.width - 10) + "px",
-              minHeight: (_col.width - 10) + "px"
+              maxHeight: (_col.width - 10) + 'px',
+              minHeight: (_col.width - 10) + 'px'
             }} />;
           }
         } else {
           label = _col.label;
         }
 
-        if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== "undefined" && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
+        if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
           sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup[_col.colIndex].sort} />;
         }
 
-        if (_col.colIndex !== null && typeof _col.colIndex !== "undefined" && optionsHeader.enableFilter) {
-          filter = <span data-filter={_col.colIndex} data-filter-value="" />;
+        if (_col.colIndex !== null && typeof _col.colIndex !== 'undefined' && optionsHeader.enableFilter) {
+          filter = <span data-filter={_col.colIndex} data-filter-value='' />;
         }
 
         return (
@@ -141,8 +140,8 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
             data-span
             data-align={colAlign}
             style={{
-              height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + "px",
-              lineHeight: lineHeight + "px"
+              height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + 'px',
+              lineHeight: lineHeight + 'px'
             }}>
             {sorter}
             {label || ' '}
@@ -153,13 +152,13 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
 
       return (
         <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
-          <table style={{height: "100%"}}>
+          <table style={{height: '100%'}}>
             <colgroup>
               {_colGroup.map(
                 (col, ci) => (
                   <col
                     key={ci}
-                    style={{width: col._width + "px"}} />
+                    style={{width: col._width + 'px'}} />
                 )
               )}
               <col />
@@ -170,13 +169,13 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
                 return (
                   <tr
                     key={ri}
-                    className="">
+                    className=''>
                     {row.cols.map((col, ci) => {
                       let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
                       let classNameItems = {
                         [gridCSS.hasBorder]: true,
                         [gridCSS.headerColumn]: true,
-                        [gridCSS.headerCorner]: (col.columnAttr === "lineNumber")
+                        [gridCSS.headerCorner]: (col.columnAttr === 'lineNumber')
                       };
 
                       return (
@@ -185,7 +184,7 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
                           colSpan={col.colspan}
                           rowSpan={col.rowspan}
                           className={classNames(classNameItems)}
-                          style={{height: cellHeight, minHeight: "1px"}}>
+                          style={{height: cellHeight, minHeight: '1px'}}>
                           {getFieldSpan(colGroup, col)}
                         </td>
                       );
@@ -203,7 +202,7 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
             let resizer, resizerLeft = 0, resizerWidth = 4;
             return _colGroup.map(
               (col, ci) => {
-                if (col.colIndex !== null && typeof col.colIndex !== "undefined") {
+                if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
                   let prevResizerLeft = resizerLeft;
                   resizerLeft += col._width;
                   resizer = <div
@@ -245,10 +244,10 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
 
     return (
       <div className={classNames(gridCSS.header)} style={{height: styles.headerHeight}}>
-        {(styles.asidePanelWidth > 0) ? printHeader("aside-header", asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
-        {(frozenColumnIndex > 0) ? printHeader("left-header", leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
-        <div data-scroll-container="header-scroll-container" style={headerPanelStyle}>
-          {printHeader("header-scroll", headerColGroup, headerData, headerScrollStyle)}
+        {(styles.asidePanelWidth > 0) ? printHeader('aside-header', asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
+        {(frozenColumnIndex > 0) ? printHeader('left-header', leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
+        <div data-scroll-container='header-scroll-container' style={headerPanelStyle}>
+          {printHeader('header-scroll', headerColGroup, headerData, headerScrollStyle)}
         </div>
       </div>
     )

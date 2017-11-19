@@ -1,12 +1,29 @@
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames'
 
-class GridPage extends React.Component {
+export namespace GridPage {
+  export interface Props {
+    mounted: boolean;
+    gridCSS: any;
+    styles: any;
+    pageButtonsContainerWidth: number;
+    pageButtons: any;
+    pageButtonHeight: number;
+    onClickPageButton: Function
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+
+export class GridPage extends React.Component<GridPage.Props, GridPage.State> {
   constructor(props) {
     super(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  public shouldComponentUpdate(nextProps, nextState) {
     let sameProps = false;
 
     if (
@@ -21,14 +38,16 @@ class GridPage extends React.Component {
     return sameProps;
   }
 
-  render() {
-    const mounted                   = this.props.mounted,
-          gridCSS                   = this.props.gridCSS,
-          styles                    = this.props.styles,
-          pageButtonsContainerWidth = this.props.pageButtonsContainerWidth,
-          pageButtons               = this.props.pageButtons,
-          pageButtonHeight          = this.props.pageButtonHeight,
-          onClickPageButton         = this.props.onClickPageButton;
+  public render() {
+    const {
+      mounted,
+      gridCSS,
+      styles,
+      pageButtonsContainerWidth,
+      pageButtons,
+      pageButtonHeight,
+      onClickPageButton
+    } = this.props;
 
     if (!mounted) return null;
 
@@ -45,5 +64,3 @@ class GridPage extends React.Component {
     )
   }
 }
-
-export default GridPage;

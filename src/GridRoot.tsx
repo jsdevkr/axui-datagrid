@@ -5,7 +5,7 @@ import {assignWith, each, isArray, isEqual, isFunction, isObject, throttle} from
 import {fromJS} from 'immutable';
 
 import * as UTIL from './_inc/utils';
-import {GridHeader} from './component';
+import {GridHeader, GridPage} from './component';
 
 
 export namespace GridRoot {
@@ -787,6 +787,16 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           headerData={this.state.headerData}
 
           scrollLeft={this.state.scrollLeft}
+        />
+
+        <GridPage
+          mounted={mounted}
+          gridCSS={this.props.gridCSS}
+          styles={styles}
+          pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
+          pageButtons={options.page.buttons}
+          pageButtonHeight={options.page.buttonHeight}
+          onClickPageButton={this.onClickPageButton}
         />
 
       </div>
