@@ -53,7 +53,7 @@ export class GridPage extends React.Component<GridPage.Props, GridPage.State> {
 
     return (
       <div className={classNames(gridCSS.page)} style={{height: styles.pageHeight}}>
-        <div className={classNames(gridCSS.pageButtons)} style={{width: pageButtonsContainerWidth, paddingTop: (styles.pageHeight - pageButtonHeight) / 2 - 1}}>
+        <div className={classNames(gridCSS.pageButtons)} style={{width: pageButtonsContainerWidth}}>
           {pageButtons.map((button, bi) => {
             return <button key={bi} style={{height: pageButtonHeight, width: button.width || pageButtonHeight}} onClick={e => onClickPageButton(e, button.onClick)}>
               <div data-button-svg className={classNames(gridCSS[button.className])}></div>

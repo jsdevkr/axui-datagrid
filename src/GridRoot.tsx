@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import {assignWith, each, isArray, isEqual, isFunction, isObject, throttle} from 'lodash';
-import {fromJS} from 'immutable';
+import { assignWith, each, isArray, isEqual, isFunction, isObject, throttle } from 'lodash';
+import { fromJS } from 'immutable';
 
 import * as UTIL from './_inc/utils';
-import {GridHeader, GridBody, GridPage, GridScroll, GridSelector} from './component';
+import { GridBody, GridHeader, GridPage, GridScroll, GridSelector } from './component';
 
 
 export namespace GridRoot {
@@ -106,7 +106,7 @@ const defaultOptions = {
       {className: 'datagridIcon-last', onClick: 'PAGE_LAST'}
     ],
     buttonHeight: 16,
-    height: 19
+    height: 20
   },
   scroller: {
     size: 14,
@@ -175,7 +175,7 @@ const propsToState = function (props, state) {
 
   state.headerTable.rows.forEach((row, r) => {
     row.cols.forEach((col, c) => {
-      state.colGroupMap[col.colIndex] = assignWith({}, col);
+      state.colGroupMap[ col.colIndex ] = assignWith({}, col);
     });
   });
 
@@ -210,15 +210,15 @@ const propsToState = function (props, state) {
       state.sortInfo = (() => {
         let sortInfo = {};
         for (let k = 0, kl = state.bodyGrouping.by.length; k < kl; k++) {
-          sortInfo[state.bodyGrouping.by[k]] = {
+          sortInfo[ state.bodyGrouping.by[ k ] ] = {
             orderBy: 'asc',
             seq: k,
             fixed: true
           };
           for (let c = 0, cl = state.colGroup.length; c < cl; c++) {
-            if (state.colGroup[c].key === state.bodyGrouping.by[k]) {
-              state.colGroup[c].sort = 'asc';
-              state.colGroup[c].sortFixed = true;
+            if (state.colGroup[ c ].key === state.bodyGrouping.by[ k ]) {
+              state.colGroup[ c ].sort = 'asc';
+              state.colGroup[ c ].sortFixed = true;
             }
           }
         }
@@ -334,14 +334,11 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       options: (() => {
         let options = assignWith({}, defaultOptions);
         each(props.options, function (v, k) {
-          options[k] = (isObject(v)) ? assignWith(options[k], v) : v;
+          options[ k ] = (isObject(v)) ? assignWith(options[ k ], v) : v;
         });
         return options;
       })()
     };
-
-
-    console.log(this.props.height);
 
     this.state = propsToState(props, assignWith({}, this.state));
 
@@ -508,7 +505,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       };
 
       if (barName in processor) {
-        processor[barName]();
+        processor[ barName ]();
       }
     };
 
@@ -553,7 +550,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     };
 
     if (barName in processor) {
-      processor[barName]();
+      processor[ barName ]();
     }
   }
 
@@ -586,13 +583,13 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       }
     };
     if (direction in processor) {
-      processor[direction]();
+      processor[ direction ]();
     }
   }
 
   public onResizeColumnResizer(e, col, newWidth) {
     let colGroup = fromJS(this.state.colGroup).toJS();
-    colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
+    colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
     let leftHeaderColGroup = colGroup.slice(0, this.state.options.frozenColumnIndex);
     let headerColGroup = colGroup.slice(this.state.options.frozenColumnIndex);
@@ -640,7 +637,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
     }
     else if (typeof onClick === 'string' && onClick in processor) {
-      processor[onClick]();
+      processor[ onClick ]();
     }
   }
 
@@ -654,15 +651,15 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       return false;
     }
 
-    const topPadding = this.gridRootNode.offsetTop; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
-    const leftPadding = this.gridRootNode.offsetLeft; // + styles.asidePanelWidth;
+    const {x, y} = this.gridRootNode.getBoundingClientRect();
+    const leftPadding = x; // + styles.asidePanelWidth;
+    const topPadding = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
 
     const onMouseMove = (ee) => {
       let currMousePosition = UTIL.getMousePosition(ee);
 
       // let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, currMousePosition);
       // console.log(selectedCells);
-
 
       // todo : 반대 방향으로 셀렉팅 구현 필요
       this.setState({
@@ -705,7 +702,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
   public refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
-    this.componentRefs[_key] = el;
+    this.componentRefs[ _key ] = el;
   }
 
   public render() {
@@ -719,10 +716,8 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       gridRootStyle.height = styles.calculatedHeight;
     }
 
-    console.log(gridRootStyle, styles.calculatedHeight);
-
     if (this.state.dragging) { // 드래깅 중이므로 내부 요소 text select 금지
-      gridRootStyle['userSelect'] = 'none';
+      gridRootStyle[ 'userSelect' ] = 'none';
     }
 
     let _scrollLeft = Math.abs(this.state.scrollLeft);
@@ -760,12 +755,12 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
     return (
       <div ref='gridRoot'
-           className={classNames(this.props.gridCSS['axDatagrid'])}
+           className={classNames(this.props.gridCSS[ 'axDatagrid' ])}
            onWheel={e => {
              this.handleWheel(e);
            }}
            style={gridRootStyle}>
-        <div className={classNames(this.props.gridCSS['clipBoard'])}>
+        <div className={classNames(this.props.gridCSS[ 'clipBoard' ])}>
           <textarea ref='gridClipboard'></textarea>
         </div>
         <GridHeader
