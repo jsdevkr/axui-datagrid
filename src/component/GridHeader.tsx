@@ -1,15 +1,43 @@
-import React from 'react';
+import * as React from 'react';
 import * as UTIL from '../_inc/utils';
 import classNames from 'classnames'
 
-class GridHeader extends React.Component {
-  constructor(props) {
+export namespace GridHeader {
+  export interface Props {
+    gridCSS: any;
+    refCallback: Function;
+    onResizeColumnResizer: Function;
+    mounted: boolean;
+    optionsHeader: any;
+    styles: any;
+    frozenColumnIndex: number;
+    colGroup: any;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    asideHeaderData: any;
+    leftHeaderData: any;
+    headerData: any;
+    scrollLeft: number;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+
+export class GridHeader extends React.Component<GridHeader.Props, GridHeader.State> {
+  constructor(props: any) {
     super(props);
 
+    this.state = {
+
+    };
     this.onMouseDownColumnResizer = this.onMouseDownColumnResizer.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  public shouldComponentUpdate(nextProps, nextState) {
     let sameProps = false;
 
     if (
@@ -25,7 +53,7 @@ class GridHeader extends React.Component {
     return sameProps;
   }
 
-  onMouseDownColumnResizer(e, col) {
+  public onMouseDownColumnResizer(e, col) {
     e.preventDefault();
 
     const resizer = e.target;
@@ -61,23 +89,23 @@ class GridHeader extends React.Component {
     document.addEventListener('mouseleave', offEvent);
   }
 
-  render() {
+  public render() {
 
-    const gridCSS               = this.props.gridCSS,
-          refCallback           = this.props.refCallback,
-          onResizeColumnResizer = this.props.onResizeColumnResizer,
-          mounted               = this.props.mounted,
-          optionsHeader         = this.props.optionsHeader,
-          styles                = this.props.styles,
-          frozenColumnIndex     = this.props.frozenColumnIndex,
-          colGroup              = this.props.colGroup,
-          asideColGroup         = this.props.asideColGroup,
-          leftHeaderColGroup    = this.props.leftHeaderColGroup,
-          headerColGroup        = this.props.headerColGroup,
-          asideHeaderData       = this.props.asideHeaderData,
-          leftHeaderData        = this.props.leftHeaderData,
-          headerData            = this.props.headerData,
-          scrollLeft            = this.props.scrollLeft;
+    const gridCSS = this.props.gridCSS,
+      refCallback = this.props.refCallback,
+      onResizeColumnResizer = this.props.onResizeColumnResizer,
+      mounted = this.props.mounted,
+      optionsHeader = this.props.optionsHeader,
+      styles = this.props.styles,
+      frozenColumnIndex = this.props.frozenColumnIndex,
+      colGroup = this.props.colGroup,
+      asideColGroup = this.props.asideColGroup,
+      leftHeaderColGroup = this.props.leftHeaderColGroup,
+      headerColGroup = this.props.headerColGroup,
+      asideHeaderData = this.props.asideHeaderData,
+      leftHeaderData = this.props.leftHeaderData,
+      headerData = this.props.headerData,
+      scrollLeft = this.props.scrollLeft;
 
     if (!mounted) return null;
 
@@ -226,6 +254,3 @@ class GridHeader extends React.Component {
     )
   }
 };
-
-
-export GridHeader;

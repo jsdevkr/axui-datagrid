@@ -4,63 +4,67 @@ import classNames from 'classnames';
 import {assignWith, each, isArray, isEqual, isFunction, isObject, throttle} from 'lodash';
 import {fromJS} from 'immutable';
 
-import * as UTIL from '../_inc/utils';
+import * as UTIL from './_inc/utils';
+import {GridHeader} from './component';
 
-interface iProps {
-  store_receivedList: any;
-  store_deletedList: any;
-  store_list: any;
-  store_page: object;
-  store_sortInfo: object;
-  gridCSS: any;
-  height: string;
-  style: object;
-  columns: any;
-  data: any;
-  options: object;
-  thisCallback: object;
-  init: Function;
-  setData: Function;
-}
 
-interface iState {
-  mounted: boolean;
-  scrollLeft: number;
-  scrollTop: number;
-  dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-  selecting: boolean;
-  selectionStartOffset: object;
-  selectionEndOffset: object;
-  isInlineEditing: boolean;
-  focusedColumn: object;
-  selectedColumn: object;
-  inlineEditingColumn: object;
-  colGroup: any;
-  colGroupMap: object;
-  asideColGroup: any;
-  leftHeaderColGroup: any;
-  headerColGroup: any;
-  bodyGrouping: any;
-  headerTable: object;
-  asideHeaderData: object;
-  leftHeaderData: object;
-  headerData: object;
-  bodyRowTable: object;
-  asideBodyRowData: object;
-  leftBodyRowData: object;
-  bodyRowData: object;
-  bodyRowMap: object;
-  bodyGroupingTable: object;
-  asideBodyGroupingData: object;
-  leftBodyGroupingData: object;
-  bodyGroupingData: object;
-  bodyGroupingMap: object;
-  footSumColumns: any;
-  footSumTable: object; // footSum의 출력레이아웃
-  leftFootSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
-  footSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-  styles: any;
-  options: any;
+export namespace GridRoot {
+  export interface Props {
+    store_receivedList: any;
+    store_deletedList: any;
+    store_list: any;
+    store_page: object;
+    store_sortInfo: object;
+    gridCSS: any;
+    height: string;
+    style: object;
+    columns: any;
+    data: any;
+    options: object;
+    thisCallback: object;
+    init: Function;
+    setData: Function;
+  }
+
+  export interface State {
+    mounted: boolean;
+    scrollLeft: number;
+    scrollTop: number;
+    dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
+    selecting: boolean;
+    selectionStartOffset: object;
+    selectionEndOffset: object;
+    isInlineEditing: boolean;
+    focusedColumn: object;
+    selectedColumn: object;
+    inlineEditingColumn: object;
+    colGroup: any;
+    colGroupMap: object;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    bodyGrouping: any;
+    headerTable: object;
+    asideHeaderData: object;
+    leftHeaderData: object;
+    headerData: object;
+    bodyRowTable: object;
+    asideBodyRowData: object;
+    leftBodyRowData: object;
+    bodyRowData: object;
+    bodyRowMap: object;
+    bodyGroupingTable: object;
+    asideBodyGroupingData: object;
+    leftBodyGroupingData: object;
+    bodyGroupingData: object;
+    bodyGroupingMap: object;
+    footSumColumns: any;
+    footSumTable: object; // footSum의 출력레이아웃
+    leftFootSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
+    footSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+    styles: any;
+    options: any;
+  }
 }
 
 const defaultOptions = {
@@ -234,9 +238,9 @@ const propsToState = function (props, state) {
   return state;
 };
 
-export class GridRoot extends React.Component<iProps, iState> {
+export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
-  public static defaultProps: Partial<iProps> = {
+  public static defaultProps: Partial<GridRoot.Props> = {
     height: '300px',
     columns: [],
     data: [],
@@ -764,6 +768,26 @@ export class GridRoot extends React.Component<iProps, iState> {
         <div className={classNames(this.props.gridCSS['clipBoard'])}>
           <textarea ref='gridClipboard'></textarea>
         </div>
+        <GridHeader
+          gridCSS={this.props.gridCSS}
+          refCallback={this.refCallback}
+          onResizeColumnResizer={this.onResizeColumnResizer}
+          mounted={mounted}
+          optionsHeader={options.header}
+          styles={styles}
+          frozenColumnIndex={options.frozenColumnIndex}
+
+          colGroup={this.state.colGroup}
+          asideColGroup={this.state.asideColGroup}
+          leftHeaderColGroup={this.state.leftHeaderColGroup}
+          headerColGroup={this.state.headerColGroup}
+
+          asideHeaderData={this.state.asideHeaderData}
+          leftHeaderData={this.state.leftHeaderData}
+          headerData={this.state.headerData}
+
+          scrollLeft={this.state.scrollLeft}
+        />
 
       </div>
     );

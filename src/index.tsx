@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect, Provider} from 'react-redux';
 import {store} from './store';
 import * as act from './actions';
-import {GridRoot} from './component/GridRoot';
+import {GridRoot} from './GridRoot';
 
 interface iProps {
   gridCSS: object;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button} from 'semantic-ui-react';
-import {AXDatagrid} from '../../src/index';
+import {AXDatagrid} from '../../src';
 import * as gridCSS from '../../src/scss/index.scss';
 
 const gridData = [
