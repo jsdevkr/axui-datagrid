@@ -173,8 +173,8 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     // 내부연산용 데이터 저장소
     this.state = {
       mounted: false,
-      scrollLeft: null,
-      scrollTop: null,
+      scrollLeft: 0,
+      scrollTop: 0,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
       selecting: false,
       selectionStartOffset: {},
@@ -569,6 +569,10 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       const currMousePosition = UTIL.getMousePosition(ee);
 
       // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
+      const setStateCall = (currState) => {
+        // todo : cell selection 구하기
+        this.setState(currState);
+      };
       const scrollMoving = (_moving) => {
         let newScrollTop: number = this.state.scrollTop;
         let newScrollLeft: number = this.state.scrollLeft;
@@ -592,9 +596,11 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           clientHeight: this.state.styles.scrollContentContainerHeight
         });
 
-        this.setState({
+        setStateCall({
           scrollTop: scrollTop,
-          scrollLeft: scrollLeft
+          scrollLeft: scrollLeft,
+          selectionStartOffset: this.state.selectionStartOffset,
+          selectionEndOffset: this.state.selectionEndOffset
         });
       };
 
@@ -633,9 +639,11 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         moving.right = true;
       }
 
-      this.setState({
+      setStateCall({
         dragging: true,
         selecting: true,
+        scrollTop: this.state.scrollTop,
+        scrollLeft: this.state.scrollLeft,
         selectionStartOffset: {
           x: p1X,
           y: p1Y
@@ -731,6 +739,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         _bodyGroupingData = this.data._bodyGroupingData;
       }
     }
+
 
     return (
       <div ref='gridRoot'
