@@ -1,5 +1,5 @@
 import { List, Map } from 'immutable';
-import { assignWith, isArray, isNumber, isObject } from 'lodash';
+import { each, assignWith, isArray, isNumber, isObject } from 'lodash';
 
 /**
  * @method
@@ -604,22 +604,41 @@ export function setColGroupWidth(_colGroup, container, options) {
   return _colGroup;
 }
 
-
-export function getInnerWidth(element) {
+/**
+ *
+ * @param element
+ * @return {number}
+ */
+export function getInnerWidth(element: any): number {
   const cs = window.getComputedStyle(element);
   return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
 }
 
-export function getInnerHeight(element) {
+/**
+ *
+ * @param element
+ * @return {number}
+ */
+export function getInnerHeight(element: any): number {
   const cs = window.getComputedStyle(element);
   return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
 }
 
-export function getOuterWidth(element) {
+/**
+ *
+ * @param element
+ * @return {number}
+ */
+export function getOuterWidth(element: any): number {
   return element.offsetWidth;
 }
 
-export function getOuterHeight(element) {
+/**
+ *
+ * @param element
+ * @return {number}
+ */
+export function getOuterHeight(element: any): number {
   return element.offsetHeight;
 }
 
@@ -725,7 +744,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
  * @param clientHeight
  * @return {{scrollLeft: *, scrollTop: *, eventBreak: boolean}}
  */
-export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHeight, clientWidth, clientHeight}) {
+export function getScrollPosition(scrollLeft: number, scrollTop: number, {scrollWidth, scrollHeight, clientWidth, clientHeight}) {
   let endScroll = false;
 
   if (clientHeight > scrollHeight) {
@@ -757,7 +776,25 @@ export function getScrollPosition(scrollLeft, scrollTop, {scrollWidth, scrollHei
   }
 }
 
-export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
+/**
+ *
+ * @param {number} scrollBarLeft
+ * @param {number} scrollBarTop
+ * @param {any} horizontalScrollerWidth
+ * @param {any} verticalScrollerHeight
+ * @param {any} horizontalScrollBarWidth
+ * @param {any} verticalScrollBarHeight
+ * @param {any} scrollContentWidth
+ * @param {any} scrollContentHeight
+ * @param {any} scrollContentContainerWidth
+ * @param {any} scrollContentContainerHeight
+ * @param {any} BW
+ * @param {any} BH
+ * @param {any} SW
+ * @param {any} SH
+ * @return {{scrollLeft: number; scrollTop: number}}
+ */
+export function getScrollPositionByScrollBar(scrollBarLeft: number, scrollBarTop: number, {
   horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight,
   scrollContentWidth, scrollContentHeight,
   scrollContentContainerWidth, scrollContentContainerHeight,
@@ -781,7 +818,96 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, {
 }
 
 export function getSelectedCellByMousePosition({x: sx, y: sy}, {x: ex, y: ey}) {
-  //console.log(sx, ex);
-
   return [];
+}
+
+
+export function propsToState(props, state) {
+  let dividedObj;
+
+  // state 계산영역 시작
+  state.headerTable = makeHeaderTable(props.columns, state.options);
+  state.bodyRowTable = makeBodyRowTable(props.columns, state.options);
+  state.bodyRowMap = makeBodyRowMap(state.bodyRowTable, state.options);
+
+  dividedObj = divideTableByFrozenColumnIndex(state.headerTable, state.options.frozenColumnIndex, state.options);
+  state.asideHeaderData = dividedObj.asideData;
+  state.asideColGroup = dividedObj.asideColGroup; // asideColGroup은 header, bodyRow 에서 공통으로 사용 한번만 구하면 그만이지만 편의상 header에서 처리하기로 한다.
+  state.leftHeaderData = dividedObj.leftData;
+  state.headerData = dividedObj.rightData;
+  state.styles.asidePanelWidth = dividedObj.asidePanelWidth;
+
+  dividedObj = divideTableByFrozenColumnIndex(state.bodyRowTable, state.options.frozenColumnIndex, state.options);
+  state.asideBodyRowData = dividedObj.asideData;
+  state.leftBodyRowData = dividedObj.leftData;
+  state.bodyRowData = dividedObj.rightData;
+
+  // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
+  state.styles.bodyTrHeight = state.bodyRowTable.rows.length * state.options.body.columnHeight;
+
+  state.colGroupMap = {};
+
+  state.headerTable.rows.forEach((row, r) => {
+    row.cols.forEach((col, c) => {
+      state.colGroupMap[ col.colIndex ] = assignWith({}, col);
+    });
+  });
+
+  state.colGroup = [];
+  each(state.colGroupMap, (v, k) => {
+    state.colGroup.push(v);
+  });
+
+  state.leftHeaderColGroup = state.colGroup.slice(0, state.options.frozenColumnIndex);
+  state.headerColGroup = state.colGroup.slice(state.options.frozenColumnIndex);
+
+  // footSum
+  state.footSumColumns = [];
+  state.footSumTable = {};
+
+  if (isArray(state.options.footSum)) {
+    state.footSumColumns = state.options.footSum;
+    state.footSumTable = makeFootSumTable(state.footSumColumns, state.colGroup, state.options);
+    dividedObj = divideTableByFrozenColumnIndex(state.footSumTable, state.options.frozenColumnIndex, state.options);
+    state.leftFootSumData = dividedObj.leftData;
+    state.footSumData = dividedObj.rightData;
+  }
+
+  // grouping info
+  if (state.options.body.grouping) {
+    if ('by' in state.options.body.grouping && 'columns' in state.options.body.grouping) {
+      state.bodyGrouping = {
+        by: state.options.body.grouping.by,
+        columns: state.options.body.grouping.columns
+      };
+      state.bodyGroupingTable = makeBodyGroupingTable(state.bodyGrouping.columns, state.colGroup, state.options);
+      state.sortInfo = (() => {
+        let sortInfo = {};
+        for (let k = 0, kl = state.bodyGrouping.by.length; k < kl; k++) {
+          sortInfo[ state.bodyGrouping.by[ k ] ] = {
+            orderBy: 'asc',
+            seq: k,
+            fixed: true
+          };
+          for (let c = 0, cl = state.colGroup.length; c < cl; c++) {
+            if (state.colGroup[ c ].key === state.bodyGrouping.by[ k ]) {
+              state.colGroup[ c ].sort = 'asc';
+              state.colGroup[ c ].sortFixed = true;
+            }
+          }
+        }
+        return sortInfo;
+      })();
+
+      dividedObj = divideTableByFrozenColumnIndex(state.bodyGroupingTable, state.options.frozenColumnIndex, state.options);
+      state.asideBodyGroupingData = dividedObj.asideData;
+      state.leftBodyGroupingData = dividedObj.leftData;
+      state.bodyGroupingData = dividedObj.rightData;
+      state.bodyGroupingMap = makeBodyRowMap(state.bodyGroupingTable, state.options);
+    } else {
+      state.options.body.grouping = false;
+    }
+  }
+
+  return state;
 }

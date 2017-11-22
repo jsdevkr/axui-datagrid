@@ -42,7 +42,7 @@ const gridOptions = {
   header: {
     align: 'center'
   },
-  frozenColumnIndex: 2,
+  frozenColumnIndex: 0,
   showLineNumber: true,
   showRowSelector: false,
   columnKeys: {
@@ -112,7 +112,10 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
         this.setState({
           columns: [
             {key: 'id', width: 60, label: '번호', align: 'center'},
-            {key: 'title', width: 200, label: '제목'},
+            {key: 'title', width: 100, label: '제목'},
+            {key: 'writer', label: '작성자', align: 'center'},
+            {key: 'date', label: '작성일', align: 'center'},
+            {key: 'title', width: 100, label: '제목'},
             {key: 'writer', label: '작성자', align: 'center'},
             {key: 'date', label: '작성일', align: 'center'}
           ],

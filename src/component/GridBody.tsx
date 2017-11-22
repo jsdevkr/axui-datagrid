@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Range} from 'immutable';
+import { Range } from 'immutable';
 import classNames from 'classnames'
 
 export namespace GridBody {
@@ -62,39 +62,39 @@ export class GridBody extends React.Component<GridBody.Props, GridBody.State> {
 
   public render() {
     const {
-      mounted,
-      gridCSS,
-      styles,
-      options,
-      frozenColumnIndex,
-      colGroup,
-      asideColGroup,
-      leftHeaderColGroup,
-      headerColGroup,
-      bodyTable,
-      asideBodyRowData,
-      asideBodyGroupingData,
-      leftBodyRowData,
-      leftBodyGroupingData,
-      bodyRowData,
-      bodyGroupingData,
-      scrollLeft,
-      scrollTop,
-      CTInnerWidth,
-      CTInnerHeight,
-      list,
-      refCallback,
-      onMouseDownBody
-    } = this.props;
+            mounted,
+            gridCSS,
+            styles,
+            options,
+            frozenColumnIndex,
+            colGroup,
+            asideColGroup,
+            leftHeaderColGroup,
+            headerColGroup,
+            bodyTable,
+            asideBodyRowData,
+            asideBodyGroupingData,
+            leftBodyRowData,
+            leftBodyGroupingData,
+            bodyRowData,
+            bodyGroupingData,
+            scrollLeft,
+            scrollTop,
+            CTInnerWidth,
+            CTInnerHeight,
+            list,
+            refCallback,
+            onMouseDownBody
+          } = this.props;
 
     if (!mounted) return null;
 
-    let scrollPaddingLeft = (headerColGroup[0]) ? headerColGroup[0]._sx : 0;
+    let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx : 0;
 
     const _paintBody = function (_panelName, _style) {
       return (
         <div data-panel={_panelName} style={_style}>
-          <table/>
+          <table />
         </div>
       )
     };
@@ -115,7 +115,7 @@ export class GridBody extends React.Component<GridBody.Props, GridBody.State> {
             style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
         }
         else {
-          label = _item[_col.key];
+          label = _item[ _col.key ];
         }
 
         let spanStyle = {
@@ -204,58 +204,66 @@ export class GridBody extends React.Component<GridBody.Props, GridBody.State> {
       sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
       eRowIndex: (Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1
     };
-    let topAsideBodyPanelStyle = {
+
+    interface iPanelStyle {
+      left?: number;
+      top?: number;
+      width?: number;
+      height?: number;
+    }
+
+    let topAsideBodyPanelStyle : iPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
-    let bottomAsideBodyPanelStyle = {
+    let bottomAsideBodyPanelStyle : iPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: styles.bodyHeight - styles.footSumHeight,
       height: styles.footSumHeight
     };
-    let asideBodyPanelStyle = {
+    let asideBodyPanelStyle : iPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: styles.frozenRowHeight,
       height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
     };
 
-    let topLeftBodyPanelStyle = {
+    let topLeftBodyPanelStyle : iPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
-    let bottomLeftBodyPanelStyle = {
+    let bottomLeftBodyPanelStyle : iPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: styles.bodyHeight - styles.footSumHeight,
       height: styles.footSumHeight
     };
-    let leftBodyPanelStyle = {
+    let leftBodyPanelStyle : iPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: styles.frozenRowHeight,
       height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
     };
 
-    let topBodyPanelStyle = {
+    let topBodyPanelStyle : iPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
-    let bottomBodyPanelStyle = {
+    let bottomBodyPanelStyle : iPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: styles.bodyHeight - styles.footSumHeight,
       height: styles.footSumHeight
     };
 
-    let bodyPanelStyle = {
+    let bodyPanelStyle : iPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: styles.frozenRowHeight,

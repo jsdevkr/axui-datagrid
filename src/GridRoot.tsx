@@ -7,21 +7,20 @@ import { fromJS } from 'immutable';
 import * as UTIL from './_inc/utils';
 import { GridBody, GridHeader, GridPage, GridScroll, GridSelector } from './component';
 
-
 export namespace GridRoot {
   export interface Props {
     store_receivedList: any;
     store_deletedList: any;
     store_list: any;
-    store_page: object;
-    store_sortInfo: object;
+    store_page: any;
+    store_sortInfo: any;
     gridCSS: any;
     height: string;
-    style: object;
+    style: any;
     columns: any;
     data: any;
-    options: object;
-    thisCallback: object;
+    options: any;
+    thisCallback: Function;
     init: Function;
     setData: Function;
   }
@@ -148,96 +147,6 @@ const defaultOptions = {
   footSum: false
 };
 
-const propsToState = function (props, state) {
-  let dividedObj;
-
-  // state 계산영역 시작
-  state.headerTable = UTIL.makeHeaderTable(props.columns, state.options);
-  state.bodyRowTable = UTIL.makeBodyRowTable(props.columns, state.options);
-  state.bodyRowMap = UTIL.makeBodyRowMap(state.bodyRowTable, state.options);
-
-  dividedObj = UTIL.divideTableByFrozenColumnIndex(state.headerTable, state.options.frozenColumnIndex, state.options);
-  state.asideHeaderData = dividedObj.asideData;
-  state.asideColGroup = dividedObj.asideColGroup; // asideColGroup은 header, bodyRow 에서 공통으로 사용 한번만 구하면 그만이지만 편의상 header에서 처리하기로 한다.
-  state.leftHeaderData = dividedObj.leftData;
-  state.headerData = dividedObj.rightData;
-  state.styles.asidePanelWidth = dividedObj.asidePanelWidth;
-
-  dividedObj = UTIL.divideTableByFrozenColumnIndex(state.bodyRowTable, state.options.frozenColumnIndex, state.options);
-  state.asideBodyRowData = dividedObj.asideData;
-  state.leftBodyRowData = dividedObj.leftData;
-  state.bodyRowData = dividedObj.rightData;
-
-  // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
-  state.styles.bodyTrHeight = state.bodyRowTable.rows.length * state.options.body.columnHeight;
-
-  state.colGroupMap = {};
-
-  state.headerTable.rows.forEach((row, r) => {
-    row.cols.forEach((col, c) => {
-      state.colGroupMap[ col.colIndex ] = assignWith({}, col);
-    });
-  });
-
-  state.colGroup = [];
-  each(state.colGroupMap, (v, k) => {
-    state.colGroup.push(v);
-  });
-
-  state.leftHeaderColGroup = state.colGroup.slice(0, state.options.frozenColumnIndex);
-  state.headerColGroup = state.colGroup.slice(state.options.frozenColumnIndex);
-
-  // footSum
-  state.footSumColumns = [];
-  state.footSumTable = {};
-
-  if (isArray(state.options.footSum)) {
-    state.footSumColumns = state.options.footSum;
-    state.footSumTable = UTIL.makeFootSumTable(state.footSumColumns, state.colGroup, state.options);
-    dividedObj = UTIL.divideTableByFrozenColumnIndex(state.footSumTable, state.options.frozenColumnIndex, state.options);
-    state.leftFootSumData = dividedObj.leftData;
-    state.footSumData = dividedObj.rightData;
-  }
-
-  // grouping info
-  if (state.options.body.grouping) {
-    if ('by' in state.options.body.grouping && 'columns' in state.options.body.grouping) {
-      state.bodyGrouping = {
-        by: state.options.body.grouping.by,
-        columns: state.options.body.grouping.columns
-      };
-      state.bodyGroupingTable = UTIL.makeBodyGroupingTable(state.bodyGrouping.columns, state.colGroup, state.options);
-      state.sortInfo = (() => {
-        let sortInfo = {};
-        for (let k = 0, kl = state.bodyGrouping.by.length; k < kl; k++) {
-          sortInfo[ state.bodyGrouping.by[ k ] ] = {
-            orderBy: 'asc',
-            seq: k,
-            fixed: true
-          };
-          for (let c = 0, cl = state.colGroup.length; c < cl; c++) {
-            if (state.colGroup[ c ].key === state.bodyGrouping.by[ k ]) {
-              state.colGroup[ c ].sort = 'asc';
-              state.colGroup[ c ].sortFixed = true;
-            }
-          }
-        }
-        return sortInfo;
-      })();
-
-      dividedObj = UTIL.divideTableByFrozenColumnIndex(state.bodyGroupingTable, state.options.frozenColumnIndex, state.options);
-      state.asideBodyGroupingData = dividedObj.asideData;
-      state.leftBodyGroupingData = dividedObj.leftData;
-      state.bodyGroupingData = dividedObj.rightData;
-      state.bodyGroupingMap = UTIL.makeBodyRowMap(state.bodyGroupingTable, state.options);
-    } else {
-      state.options.body.grouping = false;
-    }
-  }
-
-  return state;
-};
-
 export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
   public static defaultProps: Partial<GridRoot.Props> = {
@@ -251,7 +160,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
   private data: any;
   private gridRootNode: any;
   private throttled_updateDimensions: any;
-  public ref: any;
+  private scrollMovingTimer: any;
 
   constructor(props: any) {
     super(props);
@@ -301,35 +210,35 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       styles: {
         calculatedHeight: null,
         // 줄번호 + 줄셀렉터의 너비
-        asidePanelWidth: null,
+        asidePanelWidth: 0,
         // 틀고정된 컬럼들의 너비
-        frozenPanelWidth: null,
+        frozenPanelWidth: 0,
         // 한줄의 높이
-        bodyTrHeight: null,
+        bodyTrHeight: 0,
         // 컨테이너의 크기
-        elWidth: null,
-        elHeight: null,
-        CTInnerWidth: null,
-        CTInnerHeight: null,
-        rightPanelWidth: null,
+        elWidth: 0,
+        elHeight: 0,
+        CTInnerWidth: 0,
+        CTInnerHeight: 0,
+        rightPanelWidth: 0,
         // 헤더의 높이
-        headerHeight: null,
+        headerHeight: 0,
         // 틀고정된 로우들의 높이
-        frozenRowHeight: null,
+        frozenRowHeight: 0,
         // 풋섬의 높이
-        footSumHeight: null,
+        footSumHeight: 0,
         // 페이징 영역의 높이
-        pageHeight: null,
+        pageHeight: 0,
         // scrollTack 의 크기 (너비, 높이)
-        verticalScrollerWidth: null,
-        horizontalScrollerHeight: null,
+        verticalScrollerWidth: 0,
+        horizontalScrollerHeight: 0,
 
-        bodyHeight: null,
+        bodyHeight: 0,
 
-        scrollContentContainerHeight: null,
-        scrollContentHeight: null,
-        scrollContentContainerWidth: null,
-        scrollContentWidth: null
+        scrollContentContainerHeight: 0,
+        scrollContentHeight: 0,
+        scrollContentContainerWidth: 0,
+        scrollContentWidth: 0
       },
       options: (() => {
         let options = assignWith({}, defaultOptions);
@@ -340,11 +249,10 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       })()
     };
 
-    this.state = propsToState(props, assignWith({}, this.state));
+    this.state = UTIL.propsToState(props, assignWith({}, this.state));
 
     // state 계산영역 끝
     this.props.init(props, this.state.options);
-
 
     // 이벤트 멤버에 바인딩
     this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
@@ -383,7 +291,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = propsToState(nextProps, assignWith({}, this.state, {scrollLeft: 0, scrollTop: 0}));
+      let newState = UTIL.propsToState(nextProps, assignWith({}, this.state, {scrollLeft: 0, scrollTop: 0}));
       newState.styles = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, newState).styles;
       this.setState(newState);
     }
@@ -473,11 +381,11 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     }
   }
 
-  public onMouseDownScrollBar(e, barName) {
+  public onMouseDownScrollBar(e: any, barName: string): void {
     e.preventDefault();
     const styles = this.state.styles;
-    const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-    const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+    const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+    const currScrollBarTop: number = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
 
     let startMousePosition = UTIL.getMousePosition(e);
 
@@ -525,23 +433,24 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     document.addEventListener('mouseleave', offEvent);
   }
 
-  public onClickScrollTrack(e, barName) {
+  public onClickScrollTrack(e: any, barName: string) {
     const styles = this.state.styles;
-    const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-    const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+    const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+    const currScrollBarTop: number = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
     const {x, y} = UTIL.getMousePosition(e);
-    const gridRootElement: any = this.ref.gridRef;
+    const grx: number = this.gridRootNode.getBoundingClientRect().x;
+    const gry: number = this.gridRootNode.getBoundingClientRect().y;
 
     const processor = {
       vertical: () => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gridRootElement.offsetTop - (styles.verticalScrollBarHeight / 2), styles);
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
         });
       },
       horizontal: () => {
-        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - gridRootElement.offsetLeft - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        let {scrollLeft, scrollTop} = UTIL.getScrollPositionByScrollBar(x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
         this.setState({
           scrollLeft: scrollLeft,
           scrollTop: scrollTop
@@ -554,7 +463,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     }
   }
 
-  public onClickScrollArrow(e, direction) {
+  public onClickScrollArrow(e: any, direction: string) {
     const styles = this.state.styles;
     const processor = {
       up: () => {
@@ -587,7 +496,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     }
   }
 
-  public onResizeColumnResizer(e, col, newWidth) {
+  public onResizeColumnResizer(e: any, col, newWidth) {
     let colGroup = fromJS(this.state.colGroup).toJS();
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
@@ -608,7 +517,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     });
   }
 
-  public onClickPageButton(e, onClick) {
+  public onClickPageButton(e: any, onClick: Function) {
     const styles = this.state.styles;
     const processor = {
       'PAGE_FIRST': () => {
@@ -641,7 +550,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     }
   }
 
-  public onMouseDownBody(e) {
+  public onMouseDownBody(e: any) {
     e.preventDefault();
     // const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
@@ -651,34 +560,104 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       return false;
     }
 
+    const {headerHeight, bodyHeight, asidePanelWidth, CTInnerWidth, verticalScrollerWidth, bodyTrHeight} = this.state.styles;
     const {x, y} = this.gridRootNode.getBoundingClientRect();
     const leftPadding = x; // + styles.asidePanelWidth;
     const topPadding = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
 
     const onMouseMove = (ee) => {
-      let currMousePosition = UTIL.getMousePosition(ee);
+      const currMousePosition = UTIL.getMousePosition(ee);
 
-      // let selectedCells = UTIL.getSelectedCellByMousePosition(startMousePosition, currMousePosition);
-      // console.log(selectedCells);
+      // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
+      const scrollMoving = (_moving) => {
+        let newScrollTop: number = this.state.scrollTop;
+        let newScrollLeft: number = this.state.scrollLeft;
+        if (_moving.top) {
+          newScrollTop = this.state.scrollTop + bodyTrHeight;
+        }
+        else if (_moving.bottom) {
+          newScrollTop = this.state.scrollTop - bodyTrHeight;
+        }
+        if (_moving.left) {
+          newScrollLeft = this.state.scrollLeft + bodyTrHeight;
+        }
+        else if (_moving.right) {
+          newScrollLeft = this.state.scrollLeft - bodyTrHeight;
+        }
 
-      // todo : 반대 방향으로 셀렉팅 구현 필요
+        let {scrollLeft, scrollTop} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
+          scrollWidth: this.state.styles.scrollContentWidth,
+          scrollHeight: this.state.styles.scrollContentHeight,
+          clientWidth: this.state.styles.scrollContentContainerWidth,
+          clientHeight: this.state.styles.scrollContentContainerHeight
+        });
+
+        this.setState({
+          scrollTop: scrollTop,
+          scrollLeft: scrollLeft
+        });
+      };
+
+      let x1: number = startMousePosition.x - leftPadding;
+      let y1: number = startMousePosition.y - topPadding;
+      let x2: number = currMousePosition.x - leftPadding;
+      let y2: number = currMousePosition.y - topPadding;
+
+      let p1X: number = Math.min(x1, x2);
+      let p2X: number = Math.max(x1, x2);
+      let p1Y: number = Math.min(y1, y2);
+      let p2Y: number = Math.max(y1, y2);
+
+      let moving = {
+        active: false,
+        top: false,
+        left: false,
+        bottom: false,
+        right: false
+      };
+
+      if (p1Y < headerHeight) {
+        moving.active = true;
+        moving.top = true;
+      }
+      else if (p2Y > headerHeight + bodyHeight) {
+        moving.active = true;
+        moving.bottom = true;
+      }
+      if (p1X < asidePanelWidth) {
+        moving.active = true;
+        moving.left = true;
+      }
+      else if (p2X > CTInnerWidth - verticalScrollerWidth) {
+        moving.active = true;
+        moving.right = true;
+      }
+
       this.setState({
         dragging: true,
         selecting: true,
         selectionStartOffset: {
-          x: startMousePosition.x - leftPadding,
-          y: startMousePosition.y - topPadding
+          x: p1X,
+          y: p1Y
         },
         selectionEndOffset: {
-          x: currMousePosition.x - leftPadding,
-          y: currMousePosition.y - topPadding
+          x: p2X,
+          y: p2Y
         }
       });
+
+      // moving.active 이면 타임 인터벌 시작
+      if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
+      if (moving.active) {
+        this.scrollMovingTimer = setInterval(() => {
+          scrollMoving(moving);
+        }, 60);
+      }
     };
 
     const offEvent = (ee) => {
       ee.preventDefault();
-
+      if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
       this.setState({
         dragging: false,
         selecting: false,
@@ -761,7 +740,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
            }}
            style={gridRootStyle}>
         <div className={classNames(this.props.gridCSS[ 'clipBoard' ])}>
-          <textarea ref='gridClipboard'></textarea>
+          <textarea ref='gridClipboard' />
         </div>
         <GridHeader
           mounted={mounted}

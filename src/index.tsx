@@ -5,13 +5,13 @@ import * as act from './actions';
 import {GridRoot} from './GridRoot';
 
 interface iProps {
-  gridCSS: object;
+  gridCSS: any;
   height: string;
-  style: object;
+  style: any;
   columns: any;
   data: any;
-  options: object;
-  thisCallback: object;
+  options: any;
+  thisCallback: Function;
 }
 
 export const GridRootConnected = connect(
