@@ -722,8 +722,6 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
   }
 
-  console.log(colGroup);
-
   return {
     styles: styles,
     colGroup: colGroup,

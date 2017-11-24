@@ -649,7 +649,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         eRowP = Math.floor(p2yBySC / bodyTrHeight);
 
         console.log(this.state.headerColGroup);
-        // console.log(sRowP, eRowP);
+        // todo : 여기부터 다시 시작
 
         this.setState(currState);
       };
