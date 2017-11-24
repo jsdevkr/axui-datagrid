@@ -55,8 +55,8 @@ export class GridHeader extends React.Component<GridHeader.Props, GridHeader.Sta
     e.preventDefault();
 
     const resizer = e.target;
-    const prevLeft = Number(resizer.getAttribute("data-prev-left"));
-    const currLeft = Number(resizer.getAttribute("data-left"));
+    const prevLeft = Number(resizer.getAttribute('data-prev-left'));
+    const currLeft = Number(resizer.getAttribute('data-left'));
     let newWidth;
     let startMousePosition = UTIL.getMousePosition(e).x;
 

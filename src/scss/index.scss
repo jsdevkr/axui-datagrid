@@ -87,6 +87,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: default;
 
     &[data-multiLine] {
       white-space: normal;
@@ -544,7 +545,7 @@
       }
     }
   }
-  .cellSelector{
+  .cellSelector {
     position: absolute;
     box-sizing: border-box;
     background: #b1d7fe;

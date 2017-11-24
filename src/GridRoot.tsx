@@ -31,8 +31,14 @@ export namespace GridRoot {
     scrollTop: number;
     dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
     selecting: boolean;
-    selectionStartOffset: object;
-    selectionEndOffset: object;
+    selectionStartOffset: {
+      x?: number;
+      y?: number;
+    };
+    selectionEndOffset: {
+      x?: number;
+      y?: number;
+    };
     isInlineEditing: boolean;
     focusedColumn: object;
     selectedColumn: object;
@@ -61,7 +67,35 @@ export namespace GridRoot {
     footSumTable: object; // footSum의 출력레이아웃
     leftFootSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
     footSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-    styles: any;
+    styles: {
+      calculatedHeight: number;
+      asidePanelWidth: number;
+      frozenPanelWidth: number;
+      bodyTrHeight: number;
+      elWidth: number;
+      elHeight: number;
+      CTInnerWidth: number;
+      CTInnerHeight: number;
+      rightPanelWidth: number;
+      headerHeight: number;
+      bodyHeight: number;
+      frozenRowHeight: number;
+      footSumHeight: number;
+      pageHeight: number;
+      verticalScrollerWidth: number;
+      horizontalScrollerHeight: number;
+      scrollContentContainerHeight: number;
+      scrollContentHeight: number;
+      scrollContentContainerWidth: number;
+      scrollContentWidth: number;
+      verticalScrollerHeight: number;
+      verticalScrollBarHeight: number;
+      horizontalScrollerWidth: number;
+      horizontalScrollBarWidth: number;
+      scrollerPadding: number;
+      scrollerArrowSize: number;
+      pageButtonsContainerWidth: number;
+    };
     options: any;
   }
 }
@@ -223,6 +257,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         rightPanelWidth: 0,
         // 헤더의 높이
         headerHeight: 0,
+        bodyHeight: 0,
         // 틀고정된 로우들의 높이
         frozenRowHeight: 0,
         // 풋섬의 높이
@@ -233,12 +268,17 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         verticalScrollerWidth: 0,
         horizontalScrollerHeight: 0,
 
-        bodyHeight: 0,
-
         scrollContentContainerHeight: 0,
         scrollContentHeight: 0,
         scrollContentContainerWidth: 0,
-        scrollContentWidth: 0
+        scrollContentWidth: 0,
+        verticalScrollerHeight: 0,
+        verticalScrollBarHeight: 0,
+        horizontalScrollerWidth: 0,
+        horizontalScrollBarWidth: 0,
+        scrollerPadding: 0,
+        scrollerArrowSize: 0,
+        pageButtonsContainerWidth: 0
       },
       options: (() => {
         let options = assignWith({}, defaultOptions);
@@ -279,8 +319,8 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     window.removeEventListener('resize', this.throttled_updateDimensions);
   }
 
-  // 변경된 props를 받게 되면
   public componentWillReceiveProps(nextProps) {
+    // 변경된 props를 받게 되면
     // 데이터 체인지
     if (this.props.data !== nextProps.data) {
       this.props.setData(nextProps.data, this.state.options);
@@ -308,8 +348,11 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       this.props.store_sortInfo !== nextProps.store_sortInfo
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
+
+      const {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: nextProps.store_list}, this.state);
+
       this.setState({
-        styles: UTIL.calculateDimensions(this.gridRootNode, {list: nextProps.store_list}, this.state).styles
+        styles: styles
       });
       return false;
     }
@@ -323,8 +366,8 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
   }
 
-  // change props and render
   public componentDidUpdate(prevProps, prevState) {
+    // change props and render
     if (prevProps.height !== this.props.height) {
       this.updateDimensions();
     }
@@ -500,12 +543,8 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     let colGroup = fromJS(this.state.colGroup).toJS();
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
-    let leftHeaderColGroup = colGroup.slice(0, this.state.options.frozenColumnIndex);
-    let headerColGroup = colGroup.slice(this.state.options.frozenColumnIndex);
-    let {styles} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, assignWith({}, this.state, {
-      colGroup: colGroup,
-      leftHeaderColGroup: leftHeaderColGroup,
-      headerColGroup: headerColGroup
+    let {styles, leftHeaderColGroup, headerColGroup} = UTIL.calculateDimensions(this.gridRootNode, {list: this.props.store_list}, assignWith({}, this.state, {
+      colGroup: colGroup
     }));
 
     this.data._headerColGroup = undefined;
@@ -555,12 +594,17 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
     // const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
     const dragStartPosition = e.target.getAttribute('data-pos');
+    const startScrollLeft: number = this.state.scrollLeft;
+    const startScrollTop: number = this.state.scrollTop;
 
     if (!dragStartPosition) {
       return false;
     }
 
-    const {headerHeight, bodyHeight, asidePanelWidth, CTInnerWidth, verticalScrollerWidth, bodyTrHeight} = this.state.styles;
+    const {
+            headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight,
+            frozenRowHeight, asidePanelWidth, frozenPanelWidth
+          } = this.state.styles;
     const {x, y} = this.gridRootNode.getBoundingClientRect();
     const leftPadding = x; // + styles.asidePanelWidth;
     const topPadding = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
@@ -569,27 +613,61 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       const currMousePosition = UTIL.getMousePosition(ee);
 
       // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-      const setStateCall = (currState) => {
-        // todo : cell selection 구하기
+      const setStateCall = (currState, _moving?: {
+        active: boolean;
+        top: boolean;
+        bottom: boolean;
+        left: boolean;
+        right: boolean;
+      }) => {
+        let sRowP: number = -1;
+        let eRowP: number = -1;
+        let sColP: number = -1;
+        let eColP: number = -1;
+        // 선택된 시작점으로 부터 그리드 바디의 선택 시작위치값 구하기
+
+        let p1xBySC = currState.selectionStartOffset.x - asidePanelWidth - startScrollLeft;
+        let p1yBySC = currState.selectionStartOffset.y - headerHeight - startScrollTop;
+        let p2xBySC = currState.selectionEndOffset.x - asidePanelWidth - startScrollLeft;
+        let p2yBySC = currState.selectionEndOffset.y - headerHeight - startScrollTop;
+
+        if (_moving && _moving.active) {
+          if (_moving.top) {
+            p1yBySC = currState.selectionStartOffset.y - headerHeight - this.state.scrollTop;
+          } else if (_moving.bottom) {
+            p2yBySC = currState.selectionEndOffset.y - headerHeight - this.state.scrollTop;
+          }
+          // WOW! It's working
+          if (_moving.left) {
+            p1xBySC = currState.selectionStartOffset.x - asidePanelWidth - this.state.scrollLeft;
+          } else if (_moving.right) {
+            p2xBySC = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
+          }
+        }
+
+        sRowP = Math.floor(p1yBySC / bodyTrHeight);
+        eRowP = Math.floor(p2yBySC / bodyTrHeight);
+
+        console.log(this.state.headerColGroup);
+        // console.log(sRowP, eRowP);
+
         this.setState(currState);
       };
-      const scrollMoving = (_moving) => {
+      const scrollMoving = (_moving): boolean => {
         let newScrollTop: number = this.state.scrollTop;
         let newScrollLeft: number = this.state.scrollLeft;
         if (_moving.top) {
           newScrollTop = this.state.scrollTop + bodyTrHeight;
-        }
-        else if (_moving.bottom) {
+        } else if (_moving.bottom) {
           newScrollTop = this.state.scrollTop - bodyTrHeight;
         }
         if (_moving.left) {
           newScrollLeft = this.state.scrollLeft + bodyTrHeight;
-        }
-        else if (_moving.right) {
+        } else if (_moving.right) {
           newScrollLeft = this.state.scrollLeft - bodyTrHeight;
         }
 
-        let {scrollLeft, scrollTop} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
+        let {scrollLeft, scrollTop, endScroll} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
           scrollWidth: this.state.styles.scrollContentWidth,
           scrollHeight: this.state.styles.scrollContentHeight,
           clientWidth: this.state.styles.scrollContentContainerWidth,
@@ -601,7 +679,9 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           scrollLeft: scrollLeft,
           selectionStartOffset: this.state.selectionStartOffset,
           selectionEndOffset: this.state.selectionEndOffset
-        });
+        }, _moving);
+
+        return !endScroll;
       };
 
       let x1: number = startMousePosition.x - leftPadding;
@@ -652,19 +732,22 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
           x: p2X,
           y: p2Y
         }
-      });
+      }, moving);
 
       // moving.active 이면 타임 인터벌 시작
       if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
       if (moving.active) {
         this.scrollMovingTimer = setInterval(() => {
-          scrollMoving(moving);
+          if (!scrollMoving(moving)) {
+            clearInterval(this.scrollMovingTimer);
+          }
         }, 60);
       }
     };
 
     const offEvent = (ee) => {
       ee.preventDefault();
+
       if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
       this.setState({
         dragging: false,
@@ -672,13 +755,14 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         selectionStartOffset: null,
         selectionEndOffset: null
       });
-      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', throttled_onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
     };
 
+    let throttled_onMouseMove = throttle(onMouseMove, 10);
 
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', throttled_onMouseMove);
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
   }
@@ -717,6 +801,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
     // 프린트 컬럼 시작점과 끝점 연산
     if (mounted) {
+
       headerColGroup.forEach((col, ci) => {
         if (col._sx <= _scrollLeft && col._ex >= _scrollLeft) {
           sColIndex = ci;
@@ -739,7 +824,6 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         _bodyGroupingData = this.data._bodyGroupingData;
       }
     }
-
 
     return (
       <div ref='gridRoot'

@@ -588,17 +588,13 @@ export function setColGroupWidth(_colGroup, container, options) {
     }
   }
   // 컬럼의 시작위치와 끝위치 계산
-  for (i = options.frozenColumnIndex; i < _colGroup.size; i++) {
-    _colGroup.update(i, O => {
-      const prevCol = _colGroup.get(i - 1);
-      if (i === options.frozenColumnIndex) {
-        O._sx = 0;
-      } else {
-        O._sx = prevCol._ex;
-      }
-      O._ex = O._sx + O._width;
-      return O;
-    });
+  for (i = options.frozenColumnIndex; i < _colGroup.length; i++) {
+    if (i === options.frozenColumnIndex) {
+      _colGroup[i]._sx = 0;
+    } else {
+      _colGroup[i]._sx = _colGroup[i - 1]._ex;
+    }
+    _colGroup[i]._ex = _colGroup[i]._sx + _colGroup[i]._width;
   }
 
   return _colGroup;
@@ -688,7 +684,6 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
 
     // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
     let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
-
     return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
   })();
 
@@ -708,11 +703,9 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.CTInnerHeight = styles.elHeight - styles.pageHeight;
   // get bodyHeight
   styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
-
-  //
+  // 스크롤컨텐츠의 컨테이너 높이.
   styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
   styles.scrollContentHeight = styles.bodyTrHeight * list.size;
-
 
   styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight - options.scroller.padding * 2 - options.scroller.arrowSize;
   styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonsContainerWidth - options.scroller.padding * 2 - options.scroller.arrowSize;
@@ -729,8 +722,13 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
   }
 
+  console.log(colGroup);
+
   return {
-    styles: styles
+    styles: styles,
+    colGroup: colGroup,
+    leftHeaderColGroup: colGroup.slice(0, options.frozenColumnIndex),
+    headerColGroup: colGroup.slice(options.frozenColumnIndex)
   }
 }
 
