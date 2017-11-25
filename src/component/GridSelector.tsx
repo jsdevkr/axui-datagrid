@@ -1,28 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames'
+import { iGridSelector } from '../_inc/namespaces';
 
-interface iSelection {
-  x?: number;
-  y?: number;
-}
-
-export namespace GridSelector {
-  export interface Props {
-    selecting: boolean;
-    gridCSS: any;
-    selectionStartOffset: iSelection;
-    selectionEndOffset: iSelection;
-  }
-
-  export interface State {
-    /* empty */
-  }
-}
-
-
-
-export class GridSelector extends React.Component<GridSelector.Props, GridSelector.State> {
-  constructor(props: GridSelector.Props) {
+export class GridSelector extends React.Component<iGridSelector.Props, iGridSelector.State> {
+  constructor(props: iGridSelector.Props) {
     super(props);
 
   }

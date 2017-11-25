@@ -97,4 +97,129 @@ export namespace iGridRoot {
     left: boolean;
     right: boolean;
   }
+
+}
+
+export namespace iGridBody {
+  export interface Props {
+    mounted: boolean;
+    gridCSS: any;
+    styles: any;
+    options: any;
+    frozenColumnIndex: number;
+    colGroup: any;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    bodyTable: any;
+    asideBodyRowData: any;
+    asideBodyGroupingData: any;
+    leftBodyRowData: any;
+    leftBodyGroupingData: any;
+    bodyRowData: any;
+    bodyGroupingData: any;
+    scrollLeft: number;
+    scrollTop: number;
+    CTInnerWidth: number;
+    CTInnerHeight: number;
+    list: any;
+    refCallback: Function;
+    onMouseDownBody: Function;
+  }
+
+  export interface State {
+    /* empty */
+  }
+
+  export interface PanelStyle {
+    left?: number;
+    top?: number;
+    width?: number;
+    height?: number;
+  }
+}
+
+export namespace iGridHeader {
+  export interface Props {
+    gridCSS: any;
+    refCallback: Function;
+    onResizeColumnResizer: Function;
+    mounted: boolean;
+    optionsHeader: any;
+    styles: any;
+    frozenColumnIndex: number;
+    colGroup: any;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    asideHeaderData: any;
+    leftHeaderData: any;
+    headerData: any;
+    scrollLeft: number;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+export namespace iGridPage {
+  export interface Props {
+    mounted: boolean;
+    gridCSS: any;
+    styles: any;
+    pageButtonsContainerWidth: number;
+    pageButtons: any;
+    pageButtonHeight: number;
+    onClickPageButton: Function
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+export namespace iGridScroll {
+  export interface Props {
+    mounted: boolean;
+    gridCSS: any;
+    bodyHeight: number;
+    pageHeight: number;
+    verticalScrollerHeight: number;
+    verticalScrollerWidth: number;
+    horizontalScrollerWidth: number;
+    horizontalScrollerHeight: number;
+    verticalScrollBarHeight: number;
+    horizontalScrollBarWidth: number;
+    scrollerArrowSize: number;
+    scrollerPadding: number;
+    scrollBarLeft: number;
+    scrollBarTop: number;
+    refCallback: Function;
+    onMouseDownScrollBar: Function;
+    onClickScrollTrack: Function;
+    onClickScrollArrow: Function;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+interface iSelection {
+  x?: number;
+  y?: number;
+}
+
+export namespace iGridSelector {
+  export interface Props {
+    selecting: boolean;
+    gridCSS: any;
+    selectionStartOffset: iSelection;
+    selectionEndOffset: iSelection;
+  }
+
+  export interface State {
+    /* empty */
+  }
 }

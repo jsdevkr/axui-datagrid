@@ -1,35 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import { iGridScroll } from '../_inc/namespaces';
 
-export namespace GridScroll {
-  export interface Props {
-    mounted: boolean;
-    gridCSS: any;
-    bodyHeight: number;
-    pageHeight: number;
-    verticalScrollerHeight: number;
-    verticalScrollerWidth: number;
-    horizontalScrollerWidth: number;
-    horizontalScrollerHeight: number;
-    verticalScrollBarHeight: number;
-    horizontalScrollBarWidth: number;
-    scrollerArrowSize: number;
-    scrollerPadding: number;
-    scrollBarLeft: number;
-    scrollBarTop: number;
-    refCallback: Function;
-    onMouseDownScrollBar: Function;
-    onClickScrollTrack: Function;
-    onClickScrollArrow: Function;
-  }
-
-  export interface State {
-    /* empty */
-  }
-}
-
-export class GridScroll extends React.Component<GridScroll.Props, GridScroll.State> {
-  constructor(props: GridScroll.Props) {
+export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.State> {
+  constructor(props: iGridScroll.Props) {
     super(props);
 
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);

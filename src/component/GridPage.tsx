@@ -1,25 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames'
+import { iGridPage } from '../_inc/namespaces';
 
-export namespace GridPage {
-  export interface Props {
-    mounted: boolean;
-    gridCSS: any;
-    styles: any;
-    pageButtonsContainerWidth: number;
-    pageButtons: any;
-    pageButtonHeight: number;
-    onClickPageButton: Function
-  }
-
-  export interface State {
-    /* empty */
-  }
-}
-
-
-export class GridPage extends React.Component<GridPage.Props, GridPage.State> {
-  constructor(props: GridPage.Props) {
+export class GridPage extends React.Component<iGridPage.Props, iGridPage.State> {
+  constructor(props: iGridPage.Props) {
     super(props);
   }
 

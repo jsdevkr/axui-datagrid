@@ -420,16 +420,14 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   public onMouseDownBody(e: any) {
     e.preventDefault();
 
-    // const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
     const dragStartPosition = e.target.getAttribute('data-pos');
-    const startScrollLeft: number = this.state.scrollLeft;
-    const startScrollTop: number = this.state.scrollTop;
-
     if (!dragStartPosition) {
       return false;
     }
 
+    const startScrollLeft: number = this.state.scrollLeft;
+    const startScrollTop: number = this.state.scrollTop;
     const {
             headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight,
             frozenRowHeight, asidePanelWidth, frozenPanelWidth
@@ -437,6 +435,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const {x, y} = this.gridRootNode.getBoundingClientRect();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
+
+    console.group('onMouseDownBody');
 
     const onMouseMove = (ee): void => {
       const currMousePosition = UTIL.getMousePosition(ee);
@@ -471,8 +471,16 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         sRowP = Math.floor(p1yBySC / bodyTrHeight);
         eRowP = Math.floor(p2yBySC / bodyTrHeight);
 
-        console.log(this.state.headerColGroup);
-        // todo : 여기부터 다시 시작
+        for (let ci = 0, cl = this.state.headerColGroup.length; ci < cl; ci++) {
+          if (this.state.headerColGroup[ ci ]._sx <= p1xBySC && this.state.headerColGroup[ ci ]._ex >= p2xBySC) {
+            sColP = ci;
+          }
+          if (this.state.headerColGroup[ ci ]._sx <= p2xBySC && this.state.headerColGroup[ ci ]._ex >= p2xBySC) {
+            eColP = ci;
+            break;
+          }
+        }
+        console.log(sColP, eColP);
 
         this.setState(currState);
       };
@@ -581,6 +589,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       document.removeEventListener('mousemove', throttled_onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
+
+      console.groupEnd();
     };
 
     let throttled_onMouseMove = throttle(onMouseMove, 10);
@@ -625,15 +635,16 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     // 프린트 컬럼 시작점과 끝점 연산
     if (mounted) {
 
-      headerColGroup.forEach((col, ci) => {
-        if (col._sx <= _scrollLeft && col._ex >= _scrollLeft) {
+      for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
+        if (headerColGroup[ ci ]._sx <= _scrollLeft && headerColGroup[ ci ]._ex >= _scrollLeft) {
           sColIndex = ci;
         }
-        if (col._sx <= _scrollLeft + bodyPanelWidth && col._ex >= _scrollLeft + bodyPanelWidth) {
+        if (headerColGroup[ ci ]._sx <= _scrollLeft + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + bodyPanelWidth) {
           eColIndex = ci;
-          return false;
+          break;
         }
-      });
+      }
+
       _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
 
       if (typeof this.data._headerColGroup === 'undefined' || !isEqual(this.data._headerColGroup, _headerColGroup)) {
@@ -642,7 +653,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         this.data._headerColGroup = _headerColGroup;
         _bodyRowData = this.data._bodyRowData = UTIL.getTableByStartEndColumnIndex(this.state.bodyRowData, sColIndex, eColIndex + 1);
         _bodyGroupingData = this.data._bodyGroupingData = UTIL.getTableByStartEndColumnIndex(this.state.bodyGroupingData, sColIndex, eColIndex + 1);
-      } else {
+      }
+      else {
         _bodyRowData = this.data._bodyRowData;
         _bodyGroupingData = this.data._bodyGroupingData;
       }
