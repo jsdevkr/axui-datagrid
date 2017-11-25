@@ -1,189 +1,17 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import classNames from 'classnames';
 import { assignWith, each, isArray, isEqual, isFunction, isObject, throttle } from 'lodash';
 import { fromJS } from 'immutable';
+import classNames from 'classnames';
 
 import * as UTIL from './_inc/utils';
+import { iGridRoot } from './_inc/namespaces';
+import { gridOptions } from './_inc/defaults';
 import { GridBody, GridHeader, GridPage, GridScroll, GridSelector } from './component';
 
-export namespace GridRoot {
-  export interface Props {
-    store_receivedList: any;
-    store_deletedList: any;
-    store_list: any;
-    store_page: any;
-    store_sortInfo: any;
-    gridCSS: any;
-    height: string;
-    style: any;
-    columns: any;
-    data: any;
-    options: any;
-    thisCallback: Function;
-    init: Function;
-    setData: Function;
-  }
+export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> {
 
-  export interface State {
-    mounted: boolean;
-    scrollLeft: number;
-    scrollTop: number;
-    dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-    selecting: boolean;
-    selectionStartOffset: {
-      x?: number;
-      y?: number;
-    };
-    selectionEndOffset: {
-      x?: number;
-      y?: number;
-    };
-    isInlineEditing: boolean;
-    focusedColumn: object;
-    selectedColumn: object;
-    inlineEditingColumn: object;
-    colGroup: any;
-    colGroupMap: object;
-    asideColGroup: any;
-    leftHeaderColGroup: any;
-    headerColGroup: any;
-    bodyGrouping: any;
-    headerTable: object;
-    asideHeaderData: object;
-    leftHeaderData: object;
-    headerData: object;
-    bodyRowTable: object;
-    asideBodyRowData: object;
-    leftBodyRowData: object;
-    bodyRowData: object;
-    bodyRowMap: object;
-    bodyGroupingTable: object;
-    asideBodyGroupingData: object;
-    leftBodyGroupingData: object;
-    bodyGroupingData: object;
-    bodyGroupingMap: object;
-    footSumColumns: any;
-    footSumTable: object; // footSum의 출력레이아웃
-    leftFootSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
-    footSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-    styles: {
-      calculatedHeight: number;
-      asidePanelWidth: number;
-      frozenPanelWidth: number;
-      bodyTrHeight: number;
-      elWidth: number;
-      elHeight: number;
-      CTInnerWidth: number;
-      CTInnerHeight: number;
-      rightPanelWidth: number;
-      headerHeight: number;
-      bodyHeight: number;
-      frozenRowHeight: number;
-      footSumHeight: number;
-      pageHeight: number;
-      verticalScrollerWidth: number;
-      horizontalScrollerHeight: number;
-      scrollContentContainerHeight: number;
-      scrollContentHeight: number;
-      scrollContentContainerWidth: number;
-      scrollContentWidth: number;
-      verticalScrollerHeight: number;
-      verticalScrollBarHeight: number;
-      horizontalScrollerWidth: number;
-      horizontalScrollBarWidth: number;
-      scrollerPadding: number;
-      scrollerArrowSize: number;
-      pageButtonsContainerWidth: number;
-    };
-    options: any;
-  }
-}
-
-const defaultOptions = {
-  frozenColumnIndex: 0,
-  frozenRowIndex: 0,
-  showLineNumber: false,
-  showRowSelector: false,
-  multipleSelect: true,
-  columnMinWidth: 100,
-  lineNumberColumnWidth: 40,
-  rowSelectorColumnWidth: 28,
-  sortable: false,
-  remoteSort: false,
-  asidePanelWidth: 0,
-  header: {
-    display: true,
-    align: false,
-    columnHeight: 24,
-    columnPadding: 3,
-    columnBorderWidth: 1,
-    selector: true
-  },
-  body: {
-    align: false,
-    columnHeight: 24,
-    columnPadding: 3,
-    columnBorderWidth: 1,
-    grouping: false,
-    mergeCells: false
-  },
-  page: {
-    buttonsContainerWidth: 150,
-    buttons: [
-      {className: 'datagridIcon-first', onClick: 'PAGE_FIRST'},
-      {className: 'datagridIcon-prev', onClick: 'PAGE_PREV'},
-      {className: 'datagridIcon-back', onClick: 'PAGE_BACK'},
-      {className: 'datagridIcon-play', onClick: 'PAGE_PLAY'},
-      {className: 'datagridIcon-next', onClick: 'PAGE_NEXT'},
-      {className: 'datagridIcon-last', onClick: 'PAGE_LAST'}
-    ],
-    buttonHeight: 16,
-    height: 20
-  },
-  scroller: {
-    size: 14,
-    arrowSize: 14,
-    barMinSize: 12,
-    padding: 3,
-    useVerticalScroll: true
-  },
-  columnKeys: {
-    selected: '__selected__',
-    modified: '__modified__',
-    deleted: '__deleted__',
-    disableSelection: '__disable_selection__'
-  },
-  tree: {
-    use: false,
-    hashDigit: 8,
-    indentWidth: 10,
-    arrowWidth: 15,
-    iconWidth: 18,
-    icons: {
-      openedArrow: '▾',
-      collapsedArrow: '▸',
-      groupIcon: '⊚',
-      collapsedGroupIcon: '⊚',
-      itemIcon: '⊙'
-    },
-    columnKeys: {
-      parentKey: 'pid',
-      selfKey: 'id',
-      collapse: 'collapse',
-      hidden: 'hidden',
-      parentHash: '__hp__',
-      selfHash: '__hs__',
-      children: '__children__',
-      depth: '__depth__'
-    }
-  },
-  footSum: false
-};
-
-export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
-
-  public static defaultProps: Partial<GridRoot.Props> = {
+  public static defaultProps: Partial<iGridRoot.Props> = {
     height: '300px',
     columns: [],
     data: [],
@@ -281,7 +109,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
         pageButtonsContainerWidth: 0
       },
       options: (() => {
-        let options = assignWith({}, defaultOptions);
+        let options = assignWith({}, gridOptions);
         each(props.options, function (v, k) {
           options[ k ] = (isObject(v)) ? assignWith(options[ k ], v) : v;
         });
@@ -591,6 +419,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
   public onMouseDownBody(e: any) {
     e.preventDefault();
+
     // const styles = this.state.styles;
     const startMousePosition = UTIL.getMousePosition(e);
     const dragStartPosition = e.target.getAttribute('data-pos');
@@ -606,20 +435,14 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
             frozenRowHeight, asidePanelWidth, frozenPanelWidth
           } = this.state.styles;
     const {x, y} = this.gridRootNode.getBoundingClientRect();
-    const leftPadding = x; // + styles.asidePanelWidth;
-    const topPadding = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
+    const leftPadding: number = x; // + styles.asidePanelWidth;
+    const topPadding: number = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
 
-    const onMouseMove = (ee) => {
+    const onMouseMove = (ee): void => {
       const currMousePosition = UTIL.getMousePosition(ee);
 
       // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-      const setStateCall = (currState, _moving?: {
-        active: boolean;
-        top: boolean;
-        bottom: boolean;
-        left: boolean;
-        right: boolean;
-      }) => {
+      const setStateCall = (currState, _moving?: iGridRoot.Moving): void => {
         let sRowP: number = -1;
         let eRowP: number = -1;
         let sColP: number = -1;
@@ -653,7 +476,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
 
         this.setState(currState);
       };
-      const scrollMoving = (_moving): boolean => {
+      const scrollMoving = (_moving: iGridRoot.Moving): boolean => {
         let newScrollTop: number = this.state.scrollTop;
         let newScrollLeft: number = this.state.scrollLeft;
         if (_moving.top) {
@@ -694,7 +517,7 @@ export class GridRoot extends React.Component<GridRoot.Props, GridRoot.State> {
       let p1Y: number = Math.min(y1, y2);
       let p2Y: number = Math.max(y1, y2);
 
-      let moving = {
+      let moving: iGridRoot.Moving = {
         active: false,
         top: false,
         left: false,

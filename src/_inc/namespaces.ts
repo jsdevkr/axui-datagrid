@@ -1,0 +1,100 @@
+export namespace iGridRoot {
+  export interface Props {
+    store_receivedList: any;
+    store_deletedList: any;
+    store_list: any;
+    store_page: any;
+    store_sortInfo: any;
+    gridCSS: any;
+    height: string;
+    style: any;
+    columns: any;
+    data: any;
+    options: any;
+    thisCallback: Function;
+    init: Function;
+    setData: Function;
+  }
+
+  export interface State {
+    mounted: boolean;
+    scrollLeft: number;
+    scrollTop: number;
+    dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
+    selecting: boolean;
+    selectionStartOffset: {
+      x?: number;
+      y?: number;
+    };
+    selectionEndOffset: {
+      x?: number;
+      y?: number;
+    };
+    isInlineEditing: boolean;
+    focusedColumn: object;
+    selectedColumn: object;
+    inlineEditingColumn: object;
+    colGroup: any;
+    colGroupMap: object;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    bodyGrouping: any;
+    headerTable: object;
+    asideHeaderData: object;
+    leftHeaderData: object;
+    headerData: object;
+    bodyRowTable: object;
+    asideBodyRowData: object;
+    leftBodyRowData: object;
+    bodyRowData: object;
+    bodyRowMap: object;
+    bodyGroupingTable: object;
+    asideBodyGroupingData: object;
+    leftBodyGroupingData: object;
+    bodyGroupingData: object;
+    bodyGroupingMap: object;
+    footSumColumns: any;
+    footSumTable: object; // footSum의 출력레이아웃
+    leftFootSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
+    footSumData: object; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+    styles: {
+      calculatedHeight: number;
+      asidePanelWidth: number;
+      frozenPanelWidth: number;
+      bodyTrHeight: number;
+      elWidth: number;
+      elHeight: number;
+      CTInnerWidth: number;
+      CTInnerHeight: number;
+      rightPanelWidth: number;
+      headerHeight: number;
+      bodyHeight: number;
+      frozenRowHeight: number;
+      footSumHeight: number;
+      pageHeight: number;
+      verticalScrollerWidth: number;
+      horizontalScrollerHeight: number;
+      scrollContentContainerHeight: number;
+      scrollContentHeight: number;
+      scrollContentContainerWidth: number;
+      scrollContentWidth: number;
+      verticalScrollerHeight: number;
+      verticalScrollBarHeight: number;
+      horizontalScrollerWidth: number;
+      horizontalScrollBarWidth: number;
+      scrollerPadding: number;
+      scrollerArrowSize: number;
+      pageButtonsContainerWidth: number;
+    };
+    options: any;
+  }
+
+  export interface Moving {
+    active: boolean;
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }
+}
