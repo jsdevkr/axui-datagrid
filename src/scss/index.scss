@@ -57,9 +57,7 @@
   border-right: $ax6grid-column-border;
   border-bottom: $ax6grid-column-border;
 
-  &.focused {
-    box-shadow: $ax6grid-cell-focused-box-shadow;
-  }
+
   &.headerColumn {
     cursor: default;
     &:hover {
@@ -81,6 +79,10 @@
   }
   &.selected{
     background: $ax6grid-cell-selected-bg;
+  }
+  &.focused {
+    box-shadow: $ax6grid-cell-focused-box-shadow;
+    background: $ax6grid-cell-focused-bg;
   }
 
   [data-span] {

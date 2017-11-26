@@ -45,6 +45,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionMaxOffset: {},
       selectionRows: {},
       selectionCols: {},
+      focusedRow: -1,
+      focusedCol: -1,
       isInlineEditing: false,
       focusedColumn: {},
       selectedColumn: {},
@@ -513,6 +515,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           console.error('get selection fail', sRow, eRow, sCol, eCol);
         }
 
+        currState.focusedRow = selectEndedRow;
+        currState.focusedCol = selectEndedCol;
+
         this.setState(currState);
       };
 
@@ -645,7 +650,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionMinOffset: null,
       selectionMaxOffset: null,
       selectionRows: {},
-      selectionCols: {}
+      selectionCols: {},
+      focusedRow: selectStartedRow,
+      focusedCol: selectStartedCol
     });
 
     document.addEventListener('mousemove', throttled_onMouseMove);
@@ -764,6 +771,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollTop={this.state.scrollTop}
           selectionRows={this.state.selectionRows}
           selectionCols={this.state.selectionCols}
+          focusedRow={this.state.focusedRow}
+          focusedCol={this.state.focusedCol}
           refCallback={this.refCallback}
           onMouseDownBody={this.onMouseDownBody}
         />

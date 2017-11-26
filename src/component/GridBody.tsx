@@ -22,7 +22,9 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
       this.props.scrollLeft !== nextProps.scrollLeft ||
       this.props.scrollTop !== nextProps.scrollTop ||
       this.props.selectionRows !== nextProps.selectionRows ||
-      this.props.selectionCols !== nextProps.selectionCols
+      this.props.selectionCols !== nextProps.selectionCols ||
+      this.props.focusedRow !== nextProps.focusedRow ||
+      this.props.focusedCol !== nextProps.focusedCol
     ) {
       sameProps = true;
     }
@@ -46,6 +48,8 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             colGroup,
             selectionRows,
             selectionCols,
+            focusedRow,
+            focusedCol,
             refCallback
           } = this.props;
 
@@ -121,6 +125,9 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                             if (_panelName === 'body-scroll') {
                               if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
                                 classNameItems[ gridCSS.selected ] = true;
+                              }
+                              if(focusedRow === li && focusedCol == col.colIndex){
+                                classNameItems[ gridCSS.focused ] = true;
                               }
                             }
 

@@ -34,6 +34,8 @@ export namespace iGridRoot {
     selectionMaxOffset: iSelection;
     selectionRows: any;
     selectionCols: any;
+    focusedRow: number;
+    focusedCol: number;
     isInlineEditing: boolean;
     focusedColumn: object;
     selectedColumn: object;
@@ -129,6 +131,8 @@ export namespace iGridBody {
     scrollTop: number;
     selectionRows: object;
     selectionCols: object;
+    focusedRow: number;
+    focusedCol: number;
     refCallback: Function;
     onMouseDownBody: Function;
   }
