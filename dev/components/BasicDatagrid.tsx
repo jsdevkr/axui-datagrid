@@ -165,6 +165,7 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
         <div style={{padding: '10px'}}>
           <Button onClick={e => this.changeConfig({height: '400px'})} content='높이변경(400px)' />
           <Button onClick={e => this.changeConfig({height: '300px'})} content='높이변경(300px)' />
+          <Button onClick={e => this.changeConfig({height: '200px'})} content='높이변경(200px)' />
           <Button onClick={e => this.changeConfig('newData')} content='데이터변경' />
           <Button onClick={e => this.changeConfig('restoreData')} content='데이터원래대로' />
           <Button onClick={e => this.changeConfig('newOptions')} content='옵션변경' />

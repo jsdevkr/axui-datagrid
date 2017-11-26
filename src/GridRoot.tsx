@@ -386,26 +386,37 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   public onClickPageButton(e: any, onClick: Function) {
     const styles = this.state.styles;
+    const [ABOVE, BELOW, FIRST, LAST] : [string, string, number, number]
+      = ['above', 'below', 0, styles.scrollContentContainerHeight - styles.scrollContentHeight];
+    const setFn: Function = (scrollTop: number, direction: string) => {
+      switch (direction) {
+        case ABOVE:
+          this.setState({scrollTop: scrollTop <= FIRST ? scrollTop : FIRST});
+          break;
+        case BELOW:
+          this.setState({scrollTop: scrollTop >= LAST ? scrollTop : LAST});
+          break;
+      }
+    };
     const processor = {
       'PAGE_FIRST': () => {
-        this.setState({
-          scrollTop: 0
-        });
+        this.setState({scrollTop: FIRST});
       },
       'PAGE_PREV': () => {
-        // styles.bodyTrHeight
+        let size: number = Math.floor(styles.scrollContentContainerHeight / styles.bodyTrHeight);
+        setFn(this.state.scrollTop + styles.bodyTrHeight * (this.state.scrollTop % styles.bodyTrHeight ? (size - 1) : size) - this.state.scrollTop % styles.bodyTrHeight, ABOVE);
       },
       'PAGE_BACK': () => {
+        setFn(this.state.scrollTop - (this.state.scrollTop % styles.bodyTrHeight || -styles.bodyTrHeight), ABOVE);
       },
       'PAGE_PLAY': () => {
-
+        setFn(this.state.scrollTop - styles.bodyTrHeight - this.state.scrollTop % styles.bodyTrHeight, BELOW);
       },
       'PAGE_NEXT': () => {
+        setFn(Math.ceil((this.state.scrollTop - styles.scrollContentContainerHeight) / styles.bodyTrHeight) * styles.bodyTrHeight, BELOW)
       },
       'PAGE_LAST': () => {
-        this.setState({
-          scrollTop: styles.scrollContentContainerHeight - styles.scrollContentHeight
-        });
+        this.setState({scrollTop: LAST});
       }
     };
 
@@ -413,7 +424,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     }
     else if (typeof onClick === 'string' && onClick in processor) {
-      processor[ onClick ]();
+      processor[onClick]();
     }
   }
 
