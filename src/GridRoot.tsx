@@ -41,9 +41,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selecting: false,
       selectionStartOffset: {},
       selectionEndOffset: {},
-      selectionCellRange: {
-        active: false
-      },
+      selectionRows: {},
+      selectionCols: {},
       isInlineEditing: false,
       focusedColumn: {},
       selectedColumn: {},
@@ -472,8 +471,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         let p2xBySC = currState.selectionEndOffset.x - asidePanelWidth - startScrollLeft;
         let p2yBySC = currState.selectionEndOffset.y - headerHeight - startScrollTop;
 
-        if (p1xBySC < 0) p1xBySC = 0;
-
         if (_moving && _moving.active) {
           if (_moving.top) {
             p1yBySC = currState.selectionStartOffset.y - headerHeight - this.state.scrollTop;
@@ -487,6 +484,11 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
             p2xBySC = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
           }
         }
+
+        if (p1yBySC < 0) p1yBySC = 0;
+        if (p2yBySC < 0) p2yBySC = 0;
+        if (p1xBySC < 0) p1xBySC = 0;
+        if (p2xBySC < 0) p2xBySC = 0;
 
         sRow = Math.floor(p1yBySC / bodyTrHeight);
         eRow = Math.floor(p2yBySC / bodyTrHeight);
@@ -507,7 +509,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
           // 종료시점을 구하지 못했다면
           if (eCol === -1) {
-            //this.state.headerColGroup
             const lastCol = last(this.state.headerColGroup);
             if (lastCol._ex <= p2xBySC) {
               eCol = lastCol.colIndex;
@@ -522,20 +523,16 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         }
 
         if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
-          currState.selectionCellRange = {
-            active: true,
-            sRow: sRow,
-            eRow: eRow,
-            sCol: sCol,
-            eCol: eCol
-          }
+          currState.selectionRows = {};
+          currState.selectionCols = {};
+          for (let i = sRow; i < eRow + 1; i++) currState.selectionRows[ i ] = true;
+          for (let i = sCol; i < eCol + 1; i++) currState.selectionCols[ i ] = true;
         }
         else {
-          console.error('get selection fail');
+          console.error('get selection fail', sRow, eRow, sCol, eCol);
         }
 
-        //console.log(currState.selectionCellRange);
-
+        console.log(currState.selectionRows);
         this.setState(currState);
       };
       const scrollMoving = (_moving: iGridRoot.Moving): boolean => {
@@ -638,7 +635,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         dragging: false,
         selecting: false,
         selectionStartOffset: null,
-        selectionEndOffset: null
+        selectionEndOffset: null,
+        selectionRows: {},
+        selectionCols: {}
       });
       document.removeEventListener('mousemove', throttled_onMouseMove);
       document.removeEventListener('mouseup', offEvent);
@@ -649,10 +648,14 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     let throttled_onMouseMove = throttle(onMouseMove, 10);
 
+    // 셀렉션 저장정보 초기화
     this.setState({
-      selectionCellRange: {
-        active: false
-      }
+      dragging: false,
+      selecting: false,
+      selectionStartOffset: null,
+      selectionEndOffset: null,
+      selectionRows: {},
+      selectionCols: {}
     });
 
     document.addEventListener('mousemove', throttled_onMouseMove);

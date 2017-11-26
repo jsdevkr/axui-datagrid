@@ -108,6 +108,9 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                         <tr
                           key={ri}>
                           {row.cols.map((col, ci) => {
+                            
+                            // console.log(col.colIndex);
+                            
                             let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                             let classNameItems = {
                               [gridCSS.lineNumber]: (col.columnAttr === 'lineNumber'),

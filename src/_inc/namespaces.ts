@@ -4,14 +4,6 @@ export interface iSelection {
   y?: number;
 }
 
-export interface iSelectionCellRange {
-  active: boolean;
-  sRow?: number;
-  eRow?: number;
-  sCol?: number;
-  eCol?: number;
-}
-
 export namespace iGridRoot {
   export interface Props {
     store_receivedList: any;
@@ -38,7 +30,8 @@ export namespace iGridRoot {
     selecting: boolean;
     selectionStartOffset: iSelection;
     selectionEndOffset: iSelection;
-    selectionCellRange: iSelectionCellRange;
+    selectionRows: any;
+    selectionCols: any;
     isInlineEditing: boolean;
     focusedColumn: object;
     selectedColumn: object;
