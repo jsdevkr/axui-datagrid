@@ -78,7 +78,7 @@ $ax6grid-cell-focused-bg: lighten(#b1d7fe, 10%) !default;
 $ax6grid-cell-focused-color: #000 !default;
 
 $ax6grid-cell-selected-border-color: #ccc !default;
-$ax6grid-cell-selected-bg: #b1d7fe !default;
+$ax6grid-cell-selected-bg: lighten(#b1d7fe, 10%) !default;
 $ax6grid-cell-selected-color: #000 !default;
 
 //== resizer

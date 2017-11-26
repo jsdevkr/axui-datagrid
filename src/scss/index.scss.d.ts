@@ -10,6 +10,7 @@ export const checkBox: string;
 export const focused: string;
 export const headerColumn: string;
 export const lineNumber: string;
+export const selected: string;
 export const ax5selectDisplay: string;
 export const clipBoard: string;
 export const header: string;

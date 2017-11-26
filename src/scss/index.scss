@@ -79,6 +79,9 @@
 
     }
   }
+  &.selected{
+    background: $ax6grid-cell-selected-bg;
+  }
 
   [data-span] {
     box-sizing: border-box;

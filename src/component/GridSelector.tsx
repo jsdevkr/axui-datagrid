@@ -13,8 +13,8 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
 
     if (
       this.props.selecting !== nextProps.selecting ||
-      this.props.selectionStartOffset !== nextProps.selectionStartOffset ||
-      this.props.selectionEndOffset !== nextProps.selectionEndOffset
+      this.props.selectionMinOffset !== nextProps.selectionMinOffset ||
+      this.props.selectionMaxOffset !== nextProps.selectionMaxOffset
     ) {
       sameProps = true;
     }
@@ -24,19 +24,19 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
 
   public render() {
     const {
-      selecting,
-      gridCSS,
-      selectionStartOffset,
-      selectionEndOffset
-    } = this.props;
+            selecting,
+            gridCSS,
+            selectionMinOffset,
+            selectionMaxOffset
+          } = this.props;
 
-    if(!selecting) return null;
+    if (!selecting) return null;
 
     let selectorStyles = {
-      left: selectionStartOffset.x,
-      top: selectionStartOffset.y,
-      width: selectionEndOffset.x - selectionStartOffset.x,
-      height: selectionEndOffset.y - selectionStartOffset.y
+      left: selectionMinOffset.x,
+      top: selectionMinOffset.y,
+      width: selectionMaxOffset.x - selectionMinOffset.x,
+      height: selectionMaxOffset.y - selectionMinOffset.y
     };
 
     return (

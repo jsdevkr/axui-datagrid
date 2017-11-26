@@ -20,7 +20,9 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
       JSON.stringify(this.props.colGroup) !== JSON.stringify(nextProps.colGroup) ||
       this.props.list !== nextProps.list ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
-      this.props.scrollTop !== nextProps.scrollTop
+      this.props.scrollTop !== nextProps.scrollTop ||
+      this.props.selectionRows !== nextProps.selectionRows ||
+      this.props.selectionCols !== nextProps.selectionCols
     ) {
       sameProps = true;
     }
@@ -42,6 +44,8 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             styles,
             options,
             colGroup,
+            selectionRows,
+            selectionCols,
             refCallback
           } = this.props;
 
@@ -108,14 +112,17 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                         <tr
                           key={ri}>
                           {row.cols.map((col, ci) => {
-                            
-                            // console.log(col.colIndex);
-                            
                             let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                             let classNameItems = {
                               [gridCSS.lineNumber]: (col.columnAttr === 'lineNumber'),
                               [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                             };
+
+                            if (_panelName === 'body-scroll') {
+                              if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
+                                classNameItems[ gridCSS.selected ] = true;
+                              }
+                            }
 
                             return (
                               <td

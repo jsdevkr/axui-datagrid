@@ -30,6 +30,8 @@ export namespace iGridRoot {
     selecting: boolean;
     selectionStartOffset: iSelection;
     selectionEndOffset: iSelection;
+    selectionMinOffset: iSelection;
+    selectionMaxOffset: iSelection;
     selectionRows: any;
     selectionCols: any;
     isInlineEditing: boolean;
@@ -106,8 +108,10 @@ export namespace iGridBody {
   export interface Props {
     mounted: boolean;
     gridCSS: any;
-    styles: any;
     options: any;
+    styles: any;
+    CTInnerWidth: number;
+    CTInnerHeight: number;
     frozenColumnIndex: number;
     colGroup: any;
     asideColGroup: any;
@@ -120,11 +124,11 @@ export namespace iGridBody {
     leftBodyGroupingData: any;
     bodyRowData: any;
     bodyGroupingData: any;
+    list: any;
     scrollLeft: number;
     scrollTop: number;
-    CTInnerWidth: number;
-    CTInnerHeight: number;
-    list: any;
+    selectionRows: object;
+    selectionCols: object;
     refCallback: Function;
     onMouseDownBody: Function;
   }
@@ -212,8 +216,8 @@ export namespace iGridSelector {
   export interface Props {
     selecting: boolean;
     gridCSS: any;
-    selectionStartOffset: iSelection;
-    selectionEndOffset: iSelection;
+    selectionMinOffset: iSelection;
+    selectionMaxOffset: iSelection;
   }
 
   export interface State {
