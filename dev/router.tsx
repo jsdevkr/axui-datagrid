@@ -29,7 +29,7 @@ export class AppRouter extends React.Component<iProps, iState> {
     return (
       <BrowserRouter>
         <Container className='main-layout'>
-          <Button color='yellow' onClick={this.toggleVisibility} icon={visible? 'folder' : 'folder open'} labelPosition='right' content='ax-datagrid Samples' />
+          <Button color='blue' onClick={this.toggleVisibility} icon={visible? 'folder' : 'folder open'} labelPosition='right' content='ax-datagrid Samples' />
           <Sidebar.Pushable as={Segment}>
             <Sidebar as={Menu} animation='push' width='thin' visible={visible} icon='labeled' vertical inverted>
               <Menu.Item name='home'>

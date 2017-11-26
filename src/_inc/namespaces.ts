@@ -1,3 +1,17 @@
+
+export interface iSelection {
+  x?: number;
+  y?: number;
+}
+
+export interface iSelectionCellRange {
+  active: boolean;
+  sRow?: number;
+  eRow?: number;
+  sCol?: number;
+  eCol?: number;
+}
+
 export namespace iGridRoot {
   export interface Props {
     store_receivedList: any;
@@ -22,14 +36,9 @@ export namespace iGridRoot {
     scrollTop: number;
     dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
     selecting: boolean;
-    selectionStartOffset: {
-      x?: number;
-      y?: number;
-    };
-    selectionEndOffset: {
-      x?: number;
-      y?: number;
-    };
+    selectionStartOffset: iSelection;
+    selectionEndOffset: iSelection;
+    selectionCellRange: iSelectionCellRange;
     isInlineEditing: boolean;
     focusedColumn: object;
     selectedColumn: object;
@@ -204,11 +213,6 @@ export namespace iGridScroll {
   export interface State {
     /* empty */
   }
-}
-
-interface iSelection {
-  x?: number;
-  y?: number;
 }
 
 export namespace iGridSelector {

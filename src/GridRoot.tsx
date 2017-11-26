@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { assignWith, each, isArray, isEqual, isFunction, isObject, throttle } from 'lodash';
+import { assignWith, each, isArray, isEqual, isFunction, isObject, last, throttle } from 'lodash';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -41,6 +41,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selecting: false,
       selectionStartOffset: {},
       selectionEndOffset: {},
+      selectionCellRange: {
+        active: false
+      },
       isInlineEditing: false,
       focusedColumn: {},
       selectedColumn: {},
@@ -436,23 +439,23 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight; // todo : 셀렉터의 좌표를 이용하여 선택된 셀 구하기 할 때 필요.
 
-    console.group('onMouseDownBody');
-
     const onMouseMove = (ee): void => {
       const currMousePosition = UTIL.getMousePosition(ee);
 
       // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
       const setStateCall = (currState, _moving?: iGridRoot.Moving): void => {
-        let sRowP: number = -1;
-        let eRowP: number = -1;
-        let sColP: number = -1;
-        let eColP: number = -1;
+        let sRow: number = -1;
+        let eRow: number = -1;
+        let sCol: number = -1;
+        let eCol: number = -1;
         // 선택된 시작점으로 부터 그리드 바디의 선택 시작위치값 구하기
 
         let p1xBySC = currState.selectionStartOffset.x - asidePanelWidth - startScrollLeft;
         let p1yBySC = currState.selectionStartOffset.y - headerHeight - startScrollTop;
         let p2xBySC = currState.selectionEndOffset.x - asidePanelWidth - startScrollLeft;
         let p2yBySC = currState.selectionEndOffset.y - headerHeight - startScrollTop;
+
+        if (p1xBySC < 0) p1xBySC = 0;
 
         if (_moving && _moving.active) {
           if (_moving.top) {
@@ -468,19 +471,53 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           }
         }
 
-        sRowP = Math.floor(p1yBySC / bodyTrHeight);
-        eRowP = Math.floor(p2yBySC / bodyTrHeight);
+        sRow = Math.floor(p1yBySC / bodyTrHeight);
+        eRow = Math.floor(p2yBySC / bodyTrHeight);
 
-        for (let ci = 0, cl = this.state.headerColGroup.length; ci < cl; ci++) {
-          if (this.state.headerColGroup[ ci ]._sx <= p1xBySC && this.state.headerColGroup[ ci ]._ex >= p2xBySC) {
-            sColP = ci;
+        // 선택될 컬럼 인덱스 구하기
+        {
+          let cl = this.state.headerColGroup.length;
+          while (cl--) {
+            const col = this.state.headerColGroup[ cl ];
+            if (col._sx <= p1xBySC && col._ex >= p1xBySC) {
+              sCol = col.colIndex;
+            }
+            if (col._sx <= p2xBySC && col._ex >= p2xBySC) {
+              eCol = col.colIndex;
+            }
+            if (sCol !== -1 && eCol !== -1) break;
           }
-          if (this.state.headerColGroup[ ci ]._sx <= p2xBySC && this.state.headerColGroup[ ci ]._ex >= p2xBySC) {
-            eColP = ci;
-            break;
+
+          // 종료시점을 구하지 못했다면
+          if (eCol === -1) {
+            //this.state.headerColGroup
+            const lastCol = last(this.state.headerColGroup);
+            if (lastCol._ex <= p2xBySC) {
+              eCol = lastCol.colIndex;
+            }
+          }
+          if (sCol === -1) {
+            const fisrtCol = this.state.headerColGroup[ 0 ];
+            if (fisrtCol._sx >= p1xBySC) {
+              sCol = fisrtCol.colIndex;
+            }
           }
         }
-        console.log(sColP, eColP);
+
+        if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
+          currState.selectionCellRange = {
+            active: true,
+            sRow: sRow,
+            eRow: eRow,
+            sCol: sCol,
+            eCol: eCol
+          }
+        }
+        else {
+          console.error('get selection fail');
+        }
+
+        //console.log(currState.selectionCellRange);
 
         this.setState(currState);
       };
@@ -493,9 +530,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           newScrollTop = this.state.scrollTop - bodyTrHeight;
         }
         if (_moving.left) {
-          newScrollLeft = this.state.scrollLeft + bodyTrHeight;
+          newScrollLeft = this.state.scrollLeft + 100;
         } else if (_moving.right) {
-          newScrollLeft = this.state.scrollLeft - bodyTrHeight;
+          newScrollLeft = this.state.scrollLeft - 100;
         }
 
         let {scrollLeft, scrollTop, endScroll} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
@@ -570,7 +607,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       if (moving.active) {
         this.scrollMovingTimer = setInterval(() => {
           if (!scrollMoving(moving)) {
-            clearInterval(this.scrollMovingTimer);
+            // clearInterval(this.scrollMovingTimer);
           }
         }, 60);
       }
@@ -594,6 +631,12 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     };
 
     let throttled_onMouseMove = throttle(onMouseMove, 10);
+
+    this.setState({
+      selectionCellRange: {
+        active: false
+      }
+    });
 
     document.addEventListener('mousemove', throttled_onMouseMove);
     document.addEventListener('mouseup', offEvent);
