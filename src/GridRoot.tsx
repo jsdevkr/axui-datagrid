@@ -135,6 +135,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
     this.onClickPageButton = this.onClickPageButton.bind(this);
     this.onMouseDownBody = this.onMouseDownBody.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -225,7 +226,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     });
   }
 
-  public handleWheel(e) {
+  private handleWheel(e) {
     let delta = {x: 0, y: 0};
 
     if (e.detail) {
@@ -258,7 +259,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
   }
 
-  public onMouseDownScrollBar(e: any, barName: string): void {
+  private onMouseDownScrollBar(e: any, barName: string): void {
     e.preventDefault();
     const styles = this.state.styles;
     const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
@@ -310,7 +311,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     document.addEventListener('mouseleave', offEvent);
   }
 
-  public onClickScrollTrack(e: any, barName: string) {
+  private onClickScrollTrack(e: any, barName: string) {
     const styles = this.state.styles;
     const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop: number = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
@@ -340,7 +341,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
   }
 
-  public onClickScrollArrow(e: any, direction: string) {
+  private onClickScrollArrow(e: any, direction: string) {
     const styles = this.state.styles;
     const processor = {
       up: () => {
@@ -373,7 +374,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
   }
 
-  public onResizeColumnResizer(e: any, col, newWidth) {
+  private onResizeColumnResizer(e: any, col, newWidth) {
     let colGroup = fromJS(this.state.colGroup).toJS();
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
@@ -390,7 +391,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     });
   }
 
-  public onClickPageButton(e: any, onClick: Function) {
+  private onClickPageButton(e: any, onClick: Function) {
     const {
             scrollContentContainerHeight,
             scrollContentHeight,
@@ -440,8 +441,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
   }
 
-
-  public onMouseDownBody(e: any) {
+  private onMouseDownBody(e: any) {
     e.preventDefault();
 
     const startMousePosition = UTIL.getMousePosition(e);
@@ -470,8 +470,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       return i;
     };
     const getColIndex: Function = (x: number, scrollLeft: number): number => {
-      let p = x - asidePanelWidth - scrollLeft;
-      let cl = this.state.headerColGroup.length;
+      const p: number = x - asidePanelWidth - scrollLeft;
+      let cl: number = this.state.headerColGroup.length;
       let i: number = -1;
       while (cl--) {
         const col = this.state.headerColGroup[ cl ];
@@ -479,11 +479,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           i = col.colIndex;
           break;
         }
-      }
-      if (p < 0) i = 0;
-      const lastCol = last(this.state.headerColGroup);
-      if (lastCol._ex <= p) {
-        i = lastCol.colIndex;
       }
       return i;
     };
@@ -498,7 +493,14 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
       const setStateCall = (currState, _moving?: iGridRoot.Moving): void => {
         const selectEndedRow: number = getRowIndex(currState.selectionEndOffset.y, this.state.scrollTop);
-        const selectEndedCol: number = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
+        let selectEndedCol: number = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
+
+        // 컬럼인덱스를 찾지 못했다면
+        if (selectEndedCol === -1) {
+          const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
+          const lastCol = last(this.state.headerColGroup);
+          selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
+        }
 
         let sRow: number = Math.min(selectStartedRow, selectEndedRow);
         let eRow: number = Math.max(selectStartedRow, selectEndedRow);
@@ -636,7 +638,11 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       document.removeEventListener('mouseleave', offEvent);
     };
 
-    let throttled_onMouseMove = throttle(onMouseMove, 10);
+    const throttled_onMouseMove = throttle(onMouseMove, 10);
+
+
+    // todo : ctrl, shift 기능 구현
+console.log(e.metaKey, e.shiftKey);
 
     // 셀렉션 저장정보 초기화
     this.setState({
@@ -652,18 +658,17 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       focusedCol: selectStartedCol
     });
 
-    // todo : linenumber 클릭시
-    // todo : header 클릭시
-    // todo : ctrl, shift 기능 구현
-    // todo : copy 기능 구현
-
-
     document.addEventListener('mousemove', throttled_onMouseMove);
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
   }
 
-  public refCallback(_key, el) {
+  private onKeyDown(e: any) {
+    // todo : copy 기능 구현
+    // todo : focus 이동 구현
+  }
+
+  private refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
     this.componentRefs[ _key ] = el;
   }
@@ -718,7 +723,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         _bodyGroupingData = this.data._bodyGroupingData;
       }
     }
-
 
     return (
       <div ref='gridRoot'
@@ -810,3 +814,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   }
 }
+
+
+// todo : linenumber 클릭시
+// todo : header 클릭시
