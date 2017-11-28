@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import * as UTIL from './_inc/utils';
 import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
-import { GridBody, GridHeader, GridPage, GridScroll, GridSelector } from './component';
+import { GridBody, GridHeader, GridPage, GridScroll } from './component';
 
 export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> {
 
@@ -466,7 +466,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       let i: number = 0;
       i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
       if (i < 0) i = 0;
-      else if (i >= this.props.store_list.length) i = this.props.store_list.length - 1;
+      else if (i >= this.props.store_list.size - 1) i = this.props.store_list.size - 1;
       return i;
     };
     const getColIndex: Function = (x: number, scrollLeft: number): number => {
@@ -480,7 +480,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           break;
         }
       }
-      if(p < 0) i = 0;
+      if (p < 0) i = 0;
       const lastCol = last(this.state.headerColGroup);
       if (lastCol._ex <= p) {
         i = lastCol.colIndex;
@@ -520,7 +520,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         this.setState(currState);
       };
-
       const scrollMoving = (_moving: iGridRoot.Moving): boolean => {
         let newScrollTop: number = this.state.scrollTop;
         let newScrollLeft: number = this.state.scrollLeft;
@@ -635,8 +634,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       document.removeEventListener('mousemove', throttled_onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
-
-      console.groupEnd();
     };
 
     let throttled_onMouseMove = throttle(onMouseMove, 10);
@@ -649,19 +646,21 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionEndOffset: null,
       selectionMinOffset: null,
       selectionMaxOffset: null,
-      selectionRows: {},
-      selectionCols: {},
+      selectionRows: {[selectStartedRow]: true},
+      selectionCols: {[selectStartedCol]: true},
       focusedRow: selectStartedRow,
       focusedCol: selectStartedCol
     });
 
+    // todo : linenumber 클릭시
+    // todo : header 클릭시
+    // todo : ctrl, shift 기능 구현
+    // todo : copy 기능 구현
+
+
     document.addEventListener('mousemove', throttled_onMouseMove);
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
-  }
-
-  public updateSelectedCells() {
-
   }
 
   public refCallback(_key, el) {
@@ -719,6 +718,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         _bodyGroupingData = this.data._bodyGroupingData;
       }
     }
+
 
     return (
       <div ref='gridRoot'
