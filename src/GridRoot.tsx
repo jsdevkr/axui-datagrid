@@ -451,10 +451,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       return false;
     }
 
-    const {
-            headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight,
-            frozenRowHeight, asidePanelWidth, frozenPanelWidth
-          } = this.state.styles;
+    const {headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth} = this.state.styles;
     const {x, y} = this.gridRootNode.getBoundingClientRect();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight;
@@ -643,7 +640,35 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
       // todo : ctrl, shift 기능 구현
-      console.log('here');
+
+      if (e.shiftKey) {
+        let state = {
+          selectionRows: {},
+          selectionCols: {},
+          focusedRow: selectStartedRow,
+          focusedCol: selectStartedCol
+        };
+
+        let sRow: number = Math.min(this.state.focusedRow, selectStartedRow);
+        let sCol: number = Math.min(this.state.focusedCol, selectStartedCol);
+        let eRow: number = Math.max(this.state.focusedRow, selectStartedRow);
+        let eCol: number = Math.max(this.state.focusedCol, selectStartedCol);
+        for (let i = sRow; i < eRow + 1; i++) state.selectionRows[ i ] = true;
+        for (let i = sCol; i < eCol + 1; i++) state.selectionCols[ i ] = true;
+
+        this.setState(state);
+      }
+      else if (e.metaKey) {
+
+        let state = {
+          selectionRows: this.state.selectionRows,
+          selectionCols: this.state.selectionCols,
+          focusedRow: selectStartedRow,
+          focusedCol: selectStartedCol
+        };
+
+      }
+
     }
     else {
 

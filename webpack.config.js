@@ -14,8 +14,7 @@ module.exports = {
       'react',
       'react-dom',
       'react-router',
-    ],
-    vendorStyles: [],
+    ]
   },
   output: {
     path: path.join(basePath, './dev/dist'),
