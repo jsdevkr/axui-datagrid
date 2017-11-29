@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Button} from 'semantic-ui-react';
-import {AXDatagrid} from '../../src';
+import { Button, Divider } from 'semantic-ui-react';
+import { AXDatagrid } from '../../src';
 import * as gridCSS from '../../src/scss/index.scss';
 
 const gridData = [
@@ -135,7 +135,7 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
     };
 
     if (props in processor) {
-      processor[props].call(this);
+      processor[ props ].call(this);
     } else {
       this.setState(props);
     }
@@ -145,7 +145,6 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
   public gridCallBack(gridInstance) {
     console.log(gridInstance);
   }
-
 
   public render() {
     return (
@@ -161,15 +160,18 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
           options={this.state.options}
           thisCallback={this.gridCallBack}
         />
-
-        <div style={{padding: '10px'}}>
-          <Button onClick={e => this.changeConfig({height: '400px'})} content='높이변경(400px)' />
-          <Button onClick={e => this.changeConfig({height: '300px'})} content='높이변경(300px)' />
-          <Button onClick={e => this.changeConfig('newData')} content='데이터변경' />
-          <Button onClick={e => this.changeConfig('restoreData')} content='데이터원래대로' />
-          <Button onClick={e => this.changeConfig('newOptions')} content='옵션변경' />
-          <Button onClick={e => this.changeConfig('restoreOptions')} content='옵션원래대로' />
-        </div>
+        <Divider />
+        <Button.Group basic size='tiny'>
+          <Button onClick={e => this.changeConfig({height: '400px'})} content='setHeight(400px)' />
+          <Button onClick={e => this.changeConfig({height: '300px'})} content='setHeight(300px)' />
+        </Button.Group>
+        <Divider />
+        <Button.Group basic size='tiny'>
+          <Button onClick={e => this.changeConfig('newData')} content='changeData' />
+          <Button onClick={e => this.changeConfig('restoreData')} content='restoreData' />
+          <Button onClick={e => this.changeConfig('newOptions')} content='newOptions' />
+          <Button onClick={e => this.changeConfig('restoreOptions')} content='restoreOptions' />
+        </Button.Group>
 
       </div>
     )

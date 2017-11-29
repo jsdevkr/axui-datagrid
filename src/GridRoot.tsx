@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { assignWith, each, isArray, isEqual, isFunction, isObject, last, throttle } from 'lodash';
+import { assignWith, each, filter, isArray, isEqual, isFunction, isNil, isObject, last, throttle } from 'lodash';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -26,6 +26,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   constructor(props: any) {
     super(props);
+
 
     this.componentRefs = {};
     this.data = {
@@ -640,27 +641,30 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     const throttled_onMouseMove = throttle(onMouseMove, 10);
 
+    if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
+      // todo : ctrl, shift 기능 구현
+      console.log('here');
+    }
+    else {
 
-    // todo : ctrl, shift 기능 구현
-console.log(e.metaKey, e.shiftKey);
+      // 셀렉션 저장정보 초기화
+      this.setState({
+        dragging: false,
+        selecting: false,
+        selectionStartOffset: null,
+        selectionEndOffset: null,
+        selectionMinOffset: null,
+        selectionMaxOffset: null,
+        selectionRows: {[selectStartedRow]: true},
+        selectionCols: {[selectStartedCol]: true},
+        focusedRow: selectStartedRow,
+        focusedCol: selectStartedCol
+      });
 
-    // 셀렉션 저장정보 초기화
-    this.setState({
-      dragging: false,
-      selecting: false,
-      selectionStartOffset: null,
-      selectionEndOffset: null,
-      selectionMinOffset: null,
-      selectionMaxOffset: null,
-      selectionRows: {[selectStartedRow]: true},
-      selectionCols: {[selectStartedCol]: true},
-      focusedRow: selectStartedRow,
-      focusedCol: selectStartedCol
-    });
-
-    document.addEventListener('mousemove', throttled_onMouseMove);
-    document.addEventListener('mouseup', offEvent);
-    document.addEventListener('mouseleave', offEvent);
+      document.addEventListener('mousemove', throttled_onMouseMove);
+      document.addEventListener('mouseup', offEvent);
+      document.addEventListener('mouseleave', offEvent);
+    }
   }
 
   private onKeyDown(e: any) {
