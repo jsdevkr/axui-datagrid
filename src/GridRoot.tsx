@@ -46,6 +46,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionMaxOffset: {},
       selectionRows: {},
       selectionCols: {},
+      deSelections: {},
       focusedRow: -1,
       focusedCol: -1,
       isInlineEditing: false,
@@ -515,8 +516,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           console.error('get selection fail', sRow, eRow, sCol, eCol);
         }
 
-        currState.focusedRow = selectEndedRow;
-        currState.focusedCol = selectEndedCol;
+        //currState.focusedRow = selectEndedRow;
+        //currState.focusedCol = selectEndedCol;
 
         this.setState(currState);
       };
@@ -644,9 +645,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       if (e.shiftKey) {
         let state = {
           selectionRows: {},
-          selectionCols: {},
-          focusedRow: selectStartedRow,
-          focusedCol: selectStartedCol
+          selectionCols: {}
         };
 
         let sRow: number = Math.min(this.state.focusedRow, selectStartedRow);
@@ -659,7 +658,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         this.setState(state);
       }
       else if (e.metaKey) {
-
         let state = {
           selectionRows: this.state.selectionRows,
           selectionCols: this.state.selectionCols,
@@ -667,6 +665,12 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           focusedCol: selectStartedCol
         };
 
+        if(state.selectionRows[selectStartedRow] && state.selectionRows[selectStartedRow]){
+          console.log('d');
+
+        }
+
+        this.setState(state);
       }
 
     }
@@ -804,6 +808,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollTop={this.state.scrollTop}
           selectionRows={this.state.selectionRows}
           selectionCols={this.state.selectionCols}
+          deSelections={this.state.deSelections}
           focusedRow={this.state.focusedRow}
           focusedCol={this.state.focusedCol}
           refCallback={this.refCallback}
