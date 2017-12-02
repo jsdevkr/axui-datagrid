@@ -20,7 +20,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       JSON.stringify(this.props.optionsHeader) !== JSON.stringify(nextProps.optionsHeader) ||
       JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
       JSON.stringify(this.props.headerColGroup) !== JSON.stringify(nextProps.headerColGroup) ||
-      this.props.scrollLeft !== nextProps.scrollLeft
+      this.props.scrollLeft !== nextProps.scrollLeft ||
+      this.props.focusedCol !== nextProps.focusedCol
     ) {
       sameProps = true;
     }
@@ -66,7 +67,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
   private printHeader(_panelName : string, _colGroup : any, _bodyRow : any, _style : object) {
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const {refCallback, optionsHeader, gridCSS} = this.props;
+    const {refCallback, optionsHeader, gridCSS, focusedCol} = this.props;
 
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
@@ -128,11 +129,12 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
                   key={ri}
                   className=''>
                   {row.cols.map((col, ci) => {
+
                     let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
                     let classNameItems = {
-                      [gridCSS.hasBorder]: true,
                       [gridCSS.headerColumn]: true,
-                      [gridCSS.headerCorner]: (col.columnAttr === 'lineNumber')
+                      [gridCSS.headerCorner]: (col.columnAttr === 'lineNumber'),
+                      [gridCSS.focused]: (focusedCol > -1 && col.colIndex === focusedCol)
                     };
 
                     return (

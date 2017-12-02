@@ -486,6 +486,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     let selectStartedRow: number = getRowIndex(startY, startScrollTop);
     let selectStartedCol: number = getColIndex(startX, startScrollLeft);
 
+    if(selectStartedCol < 0) return;
+
     const onMouseMove = (ee): void => {
       const currMousePosition = UTIL.getMousePosition(ee);
 
@@ -784,6 +786,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           leftHeaderData={this.state.leftHeaderData}
           headerData={this.state.headerData}
           scrollLeft={this.state.scrollLeft}
+          focusedCol={this.state.focusedCol}
           refCallback={this.refCallback}
           onResizeColumnResizer={this.onResizeColumnResizer}
         />

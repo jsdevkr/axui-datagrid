@@ -168,6 +168,7 @@ export namespace iGridHeader {
     leftHeaderData: any;
     headerData: any;
     scrollLeft: number;
+    focusedCol: number;
   }
 
   export interface State {

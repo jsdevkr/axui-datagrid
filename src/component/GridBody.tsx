@@ -122,11 +122,16 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                               [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                             };
 
-                            if (_panelName === 'body-scroll') {
+                            if (_panelName === 'aside-body-scroll') {
+                              if (selectionRows[ li ]) {
+                                classNameItems[ gridCSS.focused ] = true;
+                              }
+                            }
+                            else if (_panelName === 'body-scroll') {
                               if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
                                 classNameItems[ gridCSS.selected ] = true;
                               }
-                              if(focusedRow === li && focusedCol == col.colIndex){
+                              if (focusedRow === li && focusedCol == col.colIndex) {
                                 classNameItems[ gridCSS.focused ] = true;
                               }
                             }
