@@ -483,8 +483,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     };
 
     // 선택이 시작된 row / col
-    const selectStartedRow: number = getRowIndex(startY, startScrollTop);
-    const selectStartedCol: number = getColIndex(startX, startScrollLeft);
+    let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+    let selectStartedCol: number = getColIndex(startX, startScrollLeft);
 
     const onMouseMove = (ee): void => {
       const currMousePosition = UTIL.getMousePosition(ee);
@@ -640,10 +640,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const throttled_onMouseMove = throttle(onMouseMove, 10);
 
     if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
-      // todo : ctrl, shift 기능 구현
-
       if (e.shiftKey) {
         let state = {
+          dragging: false,
+          selecting: false,
           selectionRows: {},
           selectionCols: {}
         };
@@ -656,26 +656,29 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         for (let i = sCol; i < eCol + 1; i++) state.selectionCols[ i ] = true;
 
         this.setState(state);
+
+        selectStartedRow = this.state.focusedRow;
+        selectStartedCol = this.state.focusedCol;
+        document.addEventListener('mousemove', throttled_onMouseMove);
+        document.addEventListener('mouseup', offEvent);
+        document.addEventListener('mouseleave', offEvent);
       }
       else if (e.metaKey) {
+        /*
         let state = {
           selectionRows: this.state.selectionRows,
           selectionCols: this.state.selectionCols,
           focusedRow: selectStartedRow,
           focusedCol: selectStartedCol
         };
-
         if(state.selectionRows[selectStartedRow] && state.selectionRows[selectStartedRow]){
-          console.log('d');
 
         }
-
         this.setState(state);
+        */
       }
-
     }
     else {
-
       // 셀렉션 저장정보 초기화
       this.setState({
         dragging: false,
