@@ -68,8 +68,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
   private printHeader(_panelName: string, _colGroup: any, _bodyRow: any, _style: object) {
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const {refCallback, optionsHeader, gridCSS, focusedCol, selectionCols} = this.props;
-
+    const {optionsHeader, gridCSS, focusedCol, selectionCols, onClickHeader} = this.props;
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
       let colAlign = optionsHeader.align || _col.align;
@@ -110,7 +109,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
     };
 
     return (
-      <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
+      <div data-panel={_panelName} style={_style}>
         <table style={{height: '100%'}}>
           <colgroup>
             {_colGroup.map(
@@ -145,6 +144,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
                         colSpan={col.colspan}
                         rowSpan={col.rowspan}
                         className={classNames(classNameItems)}
+                        onClick={(e) => onClickHeader(e, col.colIndex, col.columnAttr)}
                         style={{height: cellHeight, minHeight: '1px'}}>
                         {getFieldSpan(_colGroup, col)}
                       </td>
@@ -187,7 +187,6 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
     const {
             gridCSS,
-            refCallback,
             mounted,
             optionsHeader,
             styles,

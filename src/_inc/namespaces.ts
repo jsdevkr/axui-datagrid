@@ -107,6 +107,34 @@ export namespace iGridRoot {
 
 }
 
+
+export namespace iGridHeader {
+  export interface Props {
+    gridCSS: any;
+    mounted: boolean;
+    optionsHeader: any;
+    styles: any;
+    frozenColumnIndex: number;
+    colGroup: any;
+    asideColGroup: any;
+    leftHeaderColGroup: any;
+    headerColGroup: any;
+    asideHeaderData: any;
+    leftHeaderData: any;
+    headerData: any;
+    scrollLeft: number;
+    focusedCol: number;
+    selectionCols: any;
+    onResizeColumnResizer: Function;
+    onClickHeader: Function;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+
 export namespace iGridBody {
   export interface Props {
     mounted: boolean;
@@ -135,7 +163,6 @@ export namespace iGridBody {
     deSelections: any;
     focusedRow: number;
     focusedCol: number;
-    refCallback?: Function;
     onMouseDownBody: Function;
   }
 
@@ -148,32 +175,6 @@ export namespace iGridBody {
     top?: number;
     width?: number;
     height?: number;
-  }
-}
-
-export namespace iGridHeader {
-  export interface Props {
-    gridCSS: any;
-    refCallback: Function;
-    onResizeColumnResizer: Function;
-    mounted: boolean;
-    optionsHeader: any;
-    styles: any;
-    frozenColumnIndex: number;
-    colGroup: any;
-    asideColGroup: any;
-    leftHeaderColGroup: any;
-    headerColGroup: any;
-    asideHeaderData: any;
-    leftHeaderData: any;
-    headerData: any;
-    scrollLeft: number;
-    focusedCol: number;
-    selectionCols: any;
-  }
-
-  export interface State {
-    /* empty */
   }
 }
 
@@ -209,7 +210,6 @@ export namespace iGridScroll {
     scrollerPadding: number;
     scrollBarLeft: number;
     scrollBarTop: number;
-    refCallback: Function;
     onMouseDownScrollBar: Function;
     onClickScrollTrack: Function;
     onClickScrollArrow: Function;

@@ -48,7 +48,6 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
       scrollerPadding,
       scrollBarLeft,
       scrollBarTop,
-      refCallback,
       onMouseDownScrollBar,
       onClickScrollArrow,
     } = this.props;
@@ -133,7 +132,6 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
               <div data-arrow style={verticalTopArrowStyles} onClick={e => onClickScrollArrow(e, 'up')} />
             </div>
             <div data-scroll='vertical'
-                 ref={ref => refCallback('vertical-scroll-track', ref)}
                  onClick={e => this.onClickScrollTrack(e, 'vertical')}>
               <div className={classNames(gridCSS.scrollBar)}
                    style={verticalBarStyles}
@@ -150,7 +148,6 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
               <div data-arrow style={horizontalLeftArrowStyles} onClick={e => onClickScrollArrow(e, 'left')} />
             </div>
             <div data-scroll='horizontal'
-                 ref={ref => refCallback('horizontal-scroll-track', ref)}
                  onClick={e => this.onClickScrollTrack(e, 'horizontal')}>
               <div className={classNames(gridCSS.scrollBar)}
                    style={horizontalBarStyles}

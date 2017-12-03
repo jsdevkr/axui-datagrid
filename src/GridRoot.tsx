@@ -138,6 +138,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onClickPageButton = this.onClickPageButton.bind(this);
     this.onMouseDownBody = this.onMouseDownBody.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onClickHeader = this.onClickHeader.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -447,20 +448,13 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     e.preventDefault();
 
     const startMousePosition = UTIL.getMousePosition(e);
-    const dragStartPosition = e.target.getAttribute('data-pos');
-    if (!dragStartPosition) {
-      return false;
-    }
-
+    const spanType: string = e.target.getAttribute('data-span');
     const {headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth} = this.state.styles;
     const {x, y} = this.gridRootNode.getBoundingClientRect();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight;
     const startScrollLeft: number = this.state.scrollLeft;
     const startScrollTop: number = this.state.scrollTop;
-    const startX: number = startMousePosition.x - leftPadding;
-    const startY: number = startMousePosition.y - topPadding;
-
     const getRowIndex: Function = (y: number, scrollTop: number): number => {
       let i: number = 0;
       i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
@@ -481,223 +475,256 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
       return i;
     };
+    const proc_bodySelect = (function () {
+      const startX: number = startMousePosition.x - leftPadding;
+      const startY: number = startMousePosition.y - topPadding;
 
-    // 선택이 시작된 row / col
-    let selectStartedRow: number = getRowIndex(startY, startScrollTop);
-    let selectStartedCol: number = getColIndex(startX, startScrollLeft);
+      // 선택이 시작된 row / col
+      let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+      let selectStartedCol: number = getColIndex(startX, startScrollLeft);
 
-    if(selectStartedCol < 0) return;
+      if (selectStartedCol < 0) return;
 
-    const onMouseMove = (ee): void => {
-      const currMousePosition = UTIL.getMousePosition(ee);
+      const onMouseMove = (ee): void => {
+        const currMousePosition = UTIL.getMousePosition(ee);
 
-      // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-      const setStateCall = (currState, _moving?: iGridRoot.Moving): void => {
-        const selectEndedRow: number = getRowIndex(currState.selectionEndOffset.y, this.state.scrollTop);
-        let selectEndedCol: number = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
+        // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
+        const setStateCall = (currState, _moving?: iGridRoot.Moving): void => {
+          const selectEndedRow: number = getRowIndex(currState.selectionEndOffset.y, this.state.scrollTop);
+          let selectEndedCol: number = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
 
-        // 컬럼인덱스를 찾지 못했다면
-        if (selectEndedCol === -1) {
-          const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
-          const lastCol = last(this.state.headerColGroup);
-          selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
-        }
-
-        let sRow: number = Math.min(selectStartedRow, selectEndedRow);
-        let eRow: number = Math.max(selectStartedRow, selectEndedRow);
-        let sCol: number = Math.min(selectStartedCol, selectEndedCol);
-        let eCol: number = Math.max(selectStartedCol, selectEndedCol);
-
-        if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
-          currState.selectionRows = {};
-          currState.selectionCols = {};
-          for (let i = sRow; i < eRow + 1; i++) currState.selectionRows[ i ] = true;
-          for (let i = sCol; i < eCol + 1; i++) currState.selectionCols[ i ] = true;
-        }
-        else {
-          console.error('get selection fail', sRow, eRow, sCol, eCol);
-        }
-
-        //currState.focusedRow = selectEndedRow;
-        //currState.focusedCol = selectEndedCol;
-
-        this.setState(currState);
-      };
-      const scrollMoving = (_moving: iGridRoot.Moving): boolean => {
-        let newScrollTop: number = this.state.scrollTop;
-        let newScrollLeft: number = this.state.scrollLeft;
-        if (_moving.top) {
-          newScrollTop = this.state.scrollTop + bodyTrHeight;
-        } else if (_moving.bottom) {
-          newScrollTop = this.state.scrollTop - bodyTrHeight;
-        }
-        if (_moving.left) {
-          newScrollLeft = this.state.scrollLeft + 100;
-        } else if (_moving.right) {
-          newScrollLeft = this.state.scrollLeft - 100;
-        }
-
-        let {scrollLeft, scrollTop, endScroll} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
-          scrollWidth: this.state.styles.scrollContentWidth,
-          scrollHeight: this.state.styles.scrollContentHeight,
-          clientWidth: this.state.styles.scrollContentContainerWidth,
-          clientHeight: this.state.styles.scrollContentContainerHeight
-        });
-
-        setStateCall({
-          scrollTop: scrollTop,
-          scrollLeft: scrollLeft,
-          selectionEndOffset: this.state.selectionEndOffset
-        }, _moving);
-
-        return !endScroll;
-      };
-
-      let x1: number = startMousePosition.x - leftPadding;
-      let y1: number = startMousePosition.y - topPadding;
-      let x2: number = currMousePosition.x - leftPadding;
-      let y2: number = currMousePosition.y - topPadding;
-
-      let p1X: number = Math.min(x1, x2);
-      let p2X: number = Math.max(x1, x2);
-      let p1Y: number = Math.min(y1, y2);
-      let p2Y: number = Math.max(y1, y2);
-
-      let moving: iGridRoot.Moving = {
-        active: false,
-        top: false,
-        left: false,
-        bottom: false,
-        right: false
-      };
-
-      if (p1Y < headerHeight) {
-        moving.active = true;
-        moving.top = true;
-      }
-      else if (p2Y > headerHeight + bodyHeight) {
-        moving.active = true;
-        moving.bottom = true;
-      }
-      if (p1X < asidePanelWidth) {
-        moving.active = true;
-        moving.left = true;
-      }
-      else if (p2X > CTInnerWidth - verticalScrollerWidth) {
-        moving.active = true;
-        moving.right = true;
-      }
-
-      setStateCall({
-        dragging: true,
-        selecting: true,
-        scrollTop: this.state.scrollTop,
-        scrollLeft: this.state.scrollLeft,
-        selectionStartOffset: {
-          x: x1,
-          y: y1
-        },
-        selectionEndOffset: {
-          x: x2,
-          y: y2
-        },
-        selectionMinOffset: {
-          x: p1X,
-          y: p1Y
-        },
-        selectionMaxOffset: {
-          x: p2X,
-          y: p2Y
-        }
-      }, moving);
-
-      // moving.active 이면 타임 인터벌 시작
-      if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
-      if (moving.active) {
-        this.scrollMovingTimer = setInterval(() => {
-          if (!scrollMoving(moving)) {
-            // clearInterval(this.scrollMovingTimer);
+          // 컬럼인덱스를 찾지 못했다면
+          if (selectEndedCol === -1) {
+            const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
+            const lastCol = last(this.state.headerColGroup);
+            selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
           }
-        }, 60);
-      }
-    };
 
-    const offEvent = (ee) => {
-      ee.preventDefault();
+          let sRow: number = Math.min(selectStartedRow, selectEndedRow);
+          let eRow: number = Math.max(selectStartedRow, selectEndedRow);
+          let sCol: number = Math.min(selectStartedCol, selectEndedCol);
+          let eCol: number = Math.max(selectStartedCol, selectEndedCol);
 
-      if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
-      this.setState({
-        dragging: false,
-        selecting: false,
-        selectionStartOffset: null,
-        selectionEndOffset: null,
-        selectionMinOffset: null,
-        selectionMaxOffset: null
-      });
-      document.removeEventListener('mousemove', throttled_onMouseMove);
-      document.removeEventListener('mouseup', offEvent);
-      document.removeEventListener('mouseleave', offEvent);
-    };
+          if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
+            currState.selectionRows = {};
+            currState.selectionCols = {};
+            for (let i = sRow; i < eRow + 1; i++) currState.selectionRows[ i ] = true;
+            for (let i = sCol; i < eCol + 1; i++) currState.selectionCols[ i ] = true;
+          }
+          else {
+            console.error('get selection fail', sRow, eRow, sCol, eCol);
+          }
 
-    const throttled_onMouseMove = throttle(onMouseMove, 10);
+          //currState.focusedRow = selectEndedRow;
+          //currState.focusedCol = selectEndedCol;
 
-    if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
-      if (e.shiftKey) {
-        let state = {
-          dragging: false,
-          selecting: false,
-          selectionRows: {},
-          selectionCols: {}
+          this.setState(currState);
+        };
+        const scrollMoving = (_moving: iGridRoot.Moving): boolean => {
+          let newScrollTop: number = this.state.scrollTop;
+          let newScrollLeft: number = this.state.scrollLeft;
+          if (_moving.top) {
+            newScrollTop = this.state.scrollTop + bodyTrHeight;
+          } else if (_moving.bottom) {
+            newScrollTop = this.state.scrollTop - bodyTrHeight;
+          }
+          if (_moving.left) {
+            newScrollLeft = this.state.scrollLeft + 100;
+          } else if (_moving.right) {
+            newScrollLeft = this.state.scrollLeft - 100;
+          }
+
+          let {scrollLeft, scrollTop, endScroll} = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
+            scrollWidth: this.state.styles.scrollContentWidth,
+            scrollHeight: this.state.styles.scrollContentHeight,
+            clientWidth: this.state.styles.scrollContentContainerWidth,
+            clientHeight: this.state.styles.scrollContentContainerHeight
+          });
+
+          setStateCall({
+            scrollTop: scrollTop,
+            scrollLeft: scrollLeft,
+            selectionEndOffset: this.state.selectionEndOffset
+          }, _moving);
+
+          return !endScroll;
         };
 
-        let sRow: number = Math.min(this.state.focusedRow, selectStartedRow);
-        let sCol: number = Math.min(this.state.focusedCol, selectStartedCol);
-        let eRow: number = Math.max(this.state.focusedRow, selectStartedRow);
-        let eCol: number = Math.max(this.state.focusedCol, selectStartedCol);
-        for (let i = sRow; i < eRow + 1; i++) state.selectionRows[ i ] = true;
-        for (let i = sCol; i < eCol + 1; i++) state.selectionCols[ i ] = true;
+        let x1: number = startMousePosition.x - leftPadding;
+        let y1: number = startMousePosition.y - topPadding;
+        let x2: number = currMousePosition.x - leftPadding;
+        let y2: number = currMousePosition.y - topPadding;
 
-        this.setState(state);
+        let p1X: number = Math.min(x1, x2);
+        let p2X: number = Math.max(x1, x2);
+        let p1Y: number = Math.min(y1, y2);
+        let p2Y: number = Math.max(y1, y2);
 
-        selectStartedRow = this.state.focusedRow;
-        selectStartedCol = this.state.focusedCol;
+        let moving: iGridRoot.Moving = {
+          active: false,
+          top: false,
+          left: false,
+          bottom: false,
+          right: false
+        };
+
+        if (p1Y < headerHeight) {
+          moving.active = true;
+          moving.top = true;
+        }
+        else if (p2Y > headerHeight + bodyHeight) {
+          moving.active = true;
+          moving.bottom = true;
+        }
+        if (p1X < asidePanelWidth) {
+          moving.active = true;
+          moving.left = true;
+        }
+        else if (p2X > CTInnerWidth - verticalScrollerWidth) {
+          moving.active = true;
+          moving.right = true;
+        }
+
+        setStateCall({
+          dragging: true,
+          selecting: true,
+          scrollTop: this.state.scrollTop,
+          scrollLeft: this.state.scrollLeft,
+          selectionStartOffset: {
+            x: x1,
+            y: y1
+          },
+          selectionEndOffset: {
+            x: x2,
+            y: y2
+          },
+          selectionMinOffset: {
+            x: p1X,
+            y: p1Y
+          },
+          selectionMaxOffset: {
+            x: p2X,
+            y: p2Y
+          }
+        }, moving);
+
+        // moving.active 이면 타임 인터벌 시작
+        if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
+        if (moving.active) {
+          this.scrollMovingTimer = setInterval(() => {
+            if (!scrollMoving(moving)) {
+              // clearInterval(this.scrollMovingTimer);
+            }
+          }, 60);
+        }
+      };
+
+      const offEvent = (ee) => {
+        ee.preventDefault();
+
+        if (this.scrollMovingTimer) clearInterval(this.scrollMovingTimer);
+        this.setState({
+          dragging: false,
+          selecting: false,
+          selectionStartOffset: null,
+          selectionEndOffset: null,
+          selectionMinOffset: null,
+          selectionMaxOffset: null
+        });
+        document.removeEventListener('mousemove', throttled_onMouseMove);
+        document.removeEventListener('mouseup', offEvent);
+        document.removeEventListener('mouseleave', offEvent);
+      };
+
+      const throttled_onMouseMove = throttle(onMouseMove, 10);
+
+      if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
+        if (e.shiftKey) {
+          let state = {
+            dragging: false,
+            selecting: false,
+            selectionRows: {},
+            selectionCols: {}
+          };
+
+          let sRow: number = Math.min(this.state.focusedRow, selectStartedRow);
+          let sCol: number = Math.min(this.state.focusedCol, selectStartedCol);
+          let eRow: number = Math.max(this.state.focusedRow, selectStartedRow);
+          let eCol: number = Math.max(this.state.focusedCol, selectStartedCol);
+          for (let i = sRow; i < eRow + 1; i++) state.selectionRows[ i ] = true;
+          for (let i = sCol; i < eCol + 1; i++) state.selectionCols[ i ] = true;
+
+          this.setState(state);
+
+          selectStartedRow = this.state.focusedRow;
+          selectStartedCol = this.state.focusedCol;
+          document.addEventListener('mousemove', throttled_onMouseMove);
+          document.addEventListener('mouseup', offEvent);
+          document.addEventListener('mouseleave', offEvent);
+        }
+        else if (e.metaKey) {
+          /*
+          let state = {
+            selectionRows: this.state.selectionRows,
+            selectionCols: this.state.selectionCols,
+            focusedRow: selectStartedRow,
+            focusedCol: selectStartedCol
+          };
+          if(state.selectionRows[selectStartedRow] && state.selectionRows[selectStartedRow]){
+
+          }
+          this.setState(state);
+          */
+        }
+      }
+      else {
+        // 셀렉션 저장정보 초기화
+        this.setState({
+          dragging: false,
+          selecting: false,
+          selectionStartOffset: null,
+          selectionEndOffset: null,
+          selectionMinOffset: null,
+          selectionMaxOffset: null,
+          selectionRows: {[selectStartedRow]: true},
+          selectionCols: {[selectStartedCol]: true},
+          focusedRow: selectStartedRow,
+          focusedCol: selectStartedCol
+        });
+
         document.addEventListener('mousemove', throttled_onMouseMove);
         document.addEventListener('mouseup', offEvent);
         document.addEventListener('mouseleave', offEvent);
       }
-      else if (e.metaKey) {
-        /*
-        let state = {
-          selectionRows: this.state.selectionRows,
-          selectionCols: this.state.selectionCols,
-          focusedRow: selectStartedRow,
-          focusedCol: selectStartedCol
-        };
-        if(state.selectionRows[selectStartedRow] && state.selectionRows[selectStartedRow]){
+    }).bind(this);
+    const proc_clickLinenumber = (function () {
+      const startY: number = startMousePosition.y - topPadding;
 
-        }
-        this.setState(state);
-        */
-      }
-    }
-    else {
-      // 셀렉션 저장정보 초기화
-      this.setState({
+      // 선택이 시작된 row / col
+      let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+
+      let state = {
         dragging: false,
         selecting: false,
-        selectionStartOffset: null,
-        selectionEndOffset: null,
-        selectionMinOffset: null,
-        selectionMaxOffset: null,
-        selectionRows: {[selectStartedRow]: true},
-        selectionCols: {[selectStartedCol]: true},
+        selectionRows: {
+          [selectStartedRow]: true
+        },
+        selectionCols: this.state.headerColGroup.map((col, i) => ({[col.colIndex]: true})),
         focusedRow: selectStartedRow,
-        focusedCol: selectStartedCol
-      });
+        focusedCol: 0
+      };
 
-      document.addEventListener('mousemove', throttled_onMouseMove);
-      document.addEventListener('mouseup', offEvent);
-      document.addEventListener('mouseleave', offEvent);
+      this.setState(state);
+
+    }).bind(this);
+
+    if (spanType === 'lineNumber') {
+      // click lineNumber
+      proc_clickLinenumber();
+      // todo : shift 키 액션 구현
+    }
+    else {
+      proc_bodySelect();
     }
   }
 
@@ -706,8 +733,38 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     // todo : focus 이동 구현
   }
 
+  private onClickHeader(e: any, colIndex: number, key: string) {
+    let state = {
+      dragging: false,
+      selecting: false,
+      selectionRows: {},
+      selectionCols: {},
+      focusedRow: 0,
+      focusedCol: -1
+    };
+
+    if (key === 'lineNumber') {
+      state.selectionRows = this.props.store_list.map((item, i) => ({[i]: true})).toJS();
+      state.selectionCols = this.state.headerColGroup.map((col, i) => ({[col.colIndex]: true}));
+      state.focusedRow = 0;
+      state.focusedCol = 0;
+    } else {
+      state.selectionRows = this.props.store_list.map((item, i) => ({[i]: true})).toJS();
+      state.selectionCols = {
+        [colIndex]: true
+      };
+      state.focusedRow = 0;
+      state.focusedCol = colIndex;
+
+      // todo : shift 키 액션 구현
+    }
+
+    this.setState(state);
+  }
+
   private refCallback(_key, el) {
     // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
+    console.log(_key);
     this.componentRefs[ _key ] = el;
   }
 
@@ -787,8 +844,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollLeft={this.state.scrollLeft}
           selectionCols={this.state.selectionCols}
           focusedCol={this.state.focusedCol}
-          refCallback={this.refCallback}
           onResizeColumnResizer={this.onResizeColumnResizer}
+          onClickHeader={this.onClickHeader}
         />
         <GridBody
           mounted={mounted}
@@ -817,7 +874,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           deSelections={this.state.deSelections}
           focusedRow={this.state.focusedRow}
           focusedCol={this.state.focusedCol}
-          refCallback={this.refCallback}
           onMouseDownBody={this.onMouseDownBody}
         />
         <GridPage
@@ -844,7 +900,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollerPadding={styles.scrollerPadding}
           scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
           scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
-          refCallback={this.refCallback}
           onMouseDownScrollBar={this.onMouseDownScrollBar}
           onClickScrollTrack={this.onClickScrollTrack}
           onClickScrollArrow={this.onClickScrollArrow}

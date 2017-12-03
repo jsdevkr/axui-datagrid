@@ -49,14 +49,13 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             selectionRows,
             selectionCols,
             focusedRow,
-            focusedCol,
-            refCallback
+            focusedCol
           } = this.props;
 
     const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
-      let lineHeight = (options.body.columnHeight - options.body.columnPadding * 2 - options.body.columnBorderWidth);
-      let colAlign = options.body.align || _col.align;
-      let label;
+      let lineHeight: number = (options.body.columnHeight - options.body.columnPadding * 2 - options.body.columnBorderWidth);
+      let colAlign: string = options.body.align || _col.align;
+      let label: any;
 
       if (_col.key === '__line_number__') {
         label = _itemIdx + 1;
@@ -78,7 +77,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
 
       return (
         <span
-          data-span
+          data-span={_col.columnAttr || ''}
           data-pos={_col.colIndex + ',' + _col.rowIndex + ',' + _itemIdx}
           style={spanStyle}>
           {label || ' '}
@@ -92,7 +91,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
     }
 
     return (
-      <div data-panel={_panelName} style={_style} ref={ref => refCallback(_panelName, ref)}>
+      <div data-panel={_panelName} style={_style}>
         <table style={{height: '100%'}}>
           <colgroup>
             {_colGroup.map(
@@ -122,7 +121,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                               [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                             };
 
-                            if (_panelName === 'aside-body-scroll') {
+                            if(col.columnAttr === 'lineNumber'){
                               if (focusedRow === li) {
                                 classNameItems[ gridCSS.focused ] = true;
                               }
@@ -130,7 +129,10 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                                 classNameItems[ gridCSS.selected ] = true;
                               }
                             }
-                            else if (_panelName === 'body-scroll') {
+                            else if(col.columnAttr === 'rowSelector'){
+
+                            }
+                            else{
                               if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
                                 classNameItems[ gridCSS.selected ] = true;
                               }
@@ -188,7 +190,6 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             CTInnerWidth,
             CTInnerHeight,
             list,
-            refCallback,
             onMouseDownBody
           } = this.props;
 
@@ -304,7 +305,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
           </div>
         ) : null}
 
-        <div data-scroll-container='body-scroll-container' style={bodyPanelStyle} ref={ref => refCallback('body-scroll-container', ref)}>
+        <div data-scroll-container='body-scroll-container' style={bodyPanelStyle}>
           {this.paintBody('body-scroll', headerColGroup, bodyRowData, bodyGroupingData, list, Object.assign({}, bodyScrollConfig, {paddingLeft: scrollPaddingLeft}), bodyScrollStyle)}
         </div>
 
