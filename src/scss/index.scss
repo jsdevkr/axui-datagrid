@@ -63,6 +63,26 @@
     &:hover {
       background: $ax6grid-row-hover-bg;
     }
+
+    &.selected{
+      @include ax-background(to bottom, $ax6grid-header-column-focused-bg-colors);
+    }
+    &.focused {
+      &:before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-top: 4px solid $ax6grid-header-column-focused-color;
+        border-right: 4px solid transparent;
+        border-bottom: 0 none;
+        border-left: 4px solid transparent;
+        margin-left: -4px;
+      }
+    }
   }
 
   &.lineNumber {
@@ -70,13 +90,36 @@
     &:hover {
       background: $ax6grid-row-hover-bg;
     }
+    &.selected {
+      @include ax-background(to right, $ax6grid-aside-column-focused-bg-colors);
+    }
+    &.focused {
+      &:before{
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-right: 0 none;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid $ax6grid-aside-column-focused-color;
+        margin-top: -4px;
+      }
+    }
   }
   &.rowSelector {
-    //padding: 0;
     [data-span] {
 
     }
+
+    &.focused {
+      background: $ax6grid-aside-bg;
+    }
   }
+
   &.selected{
     background: $ax6grid-cell-selected-bg;
   }

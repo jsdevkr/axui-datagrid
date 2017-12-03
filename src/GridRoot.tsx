@@ -736,7 +736,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     // 프린트 컬럼 시작점과 끝점 연산
     if (mounted) {
-
       for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
         if (headerColGroup[ ci ]._sx <= _scrollLeft && headerColGroup[ ci ]._ex >= _scrollLeft) {
           sColIndex = ci;
@@ -786,6 +785,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           leftHeaderData={this.state.leftHeaderData}
           headerData={this.state.headerData}
           scrollLeft={this.state.scrollLeft}
+          selectionCols={this.state.selectionCols}
           focusedCol={this.state.focusedCol}
           refCallback={this.refCallback}
           onResizeColumnResizer={this.onResizeColumnResizer}
@@ -851,7 +851,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
       </div>
     );
-
   }
 }
 

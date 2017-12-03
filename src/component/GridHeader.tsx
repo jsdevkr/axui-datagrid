@@ -21,6 +21,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
       JSON.stringify(this.props.headerColGroup) !== JSON.stringify(nextProps.headerColGroup) ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
+      this.props.selectionCols !== nextProps.selectionCols ||
       this.props.focusedCol !== nextProps.focusedCol
     ) {
       sameProps = true;
@@ -65,9 +66,9 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
     document.addEventListener('mouseleave', offEvent);
   }
 
-  private printHeader(_panelName : string, _colGroup : any, _bodyRow : any, _style : object) {
+  private printHeader(_panelName: string, _colGroup: any, _bodyRow: any, _style: object) {
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const {refCallback, optionsHeader, gridCSS, focusedCol} = this.props;
+    const {refCallback, optionsHeader, gridCSS, focusedCol, selectionCols} = this.props;
 
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
@@ -86,7 +87,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       }
 
       if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-        sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup[_col.colIndex].sort} />;
+        sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup[ _col.colIndex ].sort} />;
       }
 
       if (_col.colIndex !== null && typeof _col.colIndex !== 'undefined' && optionsHeader.enableFilter) {
@@ -134,7 +135,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
                     let classNameItems = {
                       [gridCSS.headerColumn]: true,
                       [gridCSS.headerCorner]: (col.columnAttr === 'lineNumber'),
-                      [gridCSS.focused]: (focusedCol > -1 && col.colIndex === focusedCol)
+                      [gridCSS.focused]: (focusedCol > -1 && col.colIndex === focusedCol),
+                      [gridCSS.selected]: (selectionCols[ col.colIndex ])
                     };
 
                     return (
@@ -184,21 +186,21 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
   public render() {
 
     const {
-      gridCSS,
-      refCallback,
-      mounted,
-      optionsHeader,
-      styles,
-      frozenColumnIndex,
-      colGroup,
-      asideColGroup,
-      leftHeaderColGroup,
-      headerColGroup,
-      asideHeaderData,
-      leftHeaderData,
-      headerData,
-      scrollLeft
-    } = this.props;
+            gridCSS,
+            refCallback,
+            mounted,
+            optionsHeader,
+            styles,
+            frozenColumnIndex,
+            colGroup,
+            asideColGroup,
+            leftHeaderColGroup,
+            headerColGroup,
+            asideHeaderData,
+            leftHeaderData,
+            headerData,
+            scrollLeft
+          } = this.props;
 
     if (!mounted) return null;
 
@@ -232,4 +234,4 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       </div>
     )
   }
-};
+}
