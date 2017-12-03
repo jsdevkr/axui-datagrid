@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { assignWith, each, filter, isArray, isEqual, isFunction, isNil, isObject, last, throttle } from 'lodash';
+import { assignWith, each, filter, isArray, isEqual, isFunction, isNil, isObject, last, range, throttle } from 'lodash';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -703,16 +703,37 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       // 선택이 시작된 row / col
       let selectStartedRow: number = getRowIndex(startY, startScrollTop);
 
+
       let state = {
         dragging: false,
         selecting: false,
-        selectionRows: {
-          [selectStartedRow]: true
-        },
-        selectionCols: this.state.headerColGroup.map((col, i) => ({[col.colIndex]: true})),
-        focusedRow: selectStartedRow,
+        selectionRows: {},
+        selectionCols: (() => {
+          let cols = {};
+          this.state.headerColGroup.forEach(col => {
+            cols[ col.colIndex ] = true;
+          });
+          return cols;
+        })(),
+        focusedRow: this.state.focusedRow,
         focusedCol: 0
       };
+
+      if (e.shiftKey) {
+        state.selectionRows = (() => {
+          let rows = {};
+          range(Math.min(this.state.focusedRow, selectStartedRow), Math.max(this.state.focusedRow, selectStartedRow) + 1).forEach(i => {
+            rows[ i ] = true;
+          });
+          return rows;
+        })();
+      }
+      else{
+        state.selectionRows = {
+          [selectStartedRow]: true
+        };
+        state.focusedRow = selectStartedRow;
+      }
 
       this.setState(state);
 
@@ -721,7 +742,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     if (spanType === 'lineNumber') {
       // click lineNumber
       proc_clickLinenumber();
-      // todo : shift 키 액션 구현
     }
     else {
       proc_bodySelect();
@@ -740,23 +760,53 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionRows: {},
       selectionCols: {},
       focusedRow: 0,
-      focusedCol: -1
+      focusedCol: this.state.focusedCol
     };
 
     if (key === 'lineNumber') {
-      state.selectionRows = this.props.store_list.map((item, i) => ({[i]: true})).toJS();
-      state.selectionCols = this.state.headerColGroup.map((col, i) => ({[col.colIndex]: true}));
-      state.focusedRow = 0;
-      state.focusedCol = 0;
-    } else {
-      state.selectionRows = this.props.store_list.map((item, i) => ({[i]: true})).toJS();
-      state.selectionCols = {
-        [colIndex]: true
-      };
-      state.focusedRow = 0;
-      state.focusedCol = colIndex;
 
-      // todo : shift 키 액션 구현
+      state.selectionRows = (() => {
+        let rows = {};
+        this.props.store_list.forEach((item, i) => {
+          rows[ i ] = true;
+        });
+        return rows;
+      })();
+      state.selectionCols = (() => {
+        let cols = {};
+        this.state.headerColGroup.forEach(col => {
+          cols[ col.colIndex ] = true;
+        });
+        return cols;
+      })();
+      state.focusedCol = 0;
+
+    } else {
+
+      state.selectionRows = (() => {
+        let rows = {};
+        this.props.store_list.forEach((item, i) => {
+          rows[ i ] = true;
+        });
+        return rows;
+      })();
+
+      if (e.shiftKey) {
+        state.selectionCols = (() => {
+          let cols = {};
+          range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
+            cols[ i ] = true;
+          });
+          return cols;
+        })();
+      }
+      else {
+        state.selectionCols = {
+          [colIndex]: true
+        };
+        state.focusedCol = colIndex;
+      }
+
     }
 
     this.setState(state);
