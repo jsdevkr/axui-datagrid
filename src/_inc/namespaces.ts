@@ -110,6 +110,7 @@ export namespace iGridRoot {
 
 export namespace iGridHeader {
   export interface Props {
+    getRootBounding: Function;
     gridCSS: any;
     mounted: boolean;
     optionsHeader: any;
@@ -130,7 +131,8 @@ export namespace iGridHeader {
   }
 
   export interface State {
-    /* empty */
+    columnResizing: boolean;
+    columnResizerLeft: number;
   }
 }
 

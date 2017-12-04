@@ -8,7 +8,11 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
   constructor(props: iGridHeader.Props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      columnResizing: false,
+      columnResizerLeft: 0
+    };
+
     this.onMouseDownColumnResizer = this.onMouseDownColumnResizer.bind(this);
   }
 
@@ -22,7 +26,9 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       JSON.stringify(this.props.headerColGroup) !== JSON.stringify(nextProps.headerColGroup) ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
       this.props.selectionCols !== nextProps.selectionCols ||
-      this.props.focusedCol !== nextProps.focusedCol
+      this.props.focusedCol !== nextProps.focusedCol ||
+      this.state.columnResizing !== nextState.columnResizing ||
+      this.state.columnResizerLeft !== nextState.columnResizerLeft
     ) {
       sameProps = true;
     }
@@ -36,6 +42,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
     const resizer = e.target;
     const prevLeft = Number(resizer.getAttribute('data-prev-left'));
     const currLeft = Number(resizer.getAttribute('data-left'));
+    const {x: rootX} = this.props.getRootBounding();
+
     let newWidth;
     let startMousePosition = UTIL.getMousePosition(e).x;
 
@@ -45,9 +53,14 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       if (newLeft < prevLeft) {
         newLeft = prevLeft;
       }
+      // resizer.style.left = (newLeft - 2) + 'px';
 
-      resizer.style.left = (newLeft - 2) + 'px';
       newWidth = newLeft - prevLeft;
+
+      this.setState({
+        columnResizing: true,
+        columnResizerLeft: x - rootX + 1
+      });
     };
 
     const offEvent = (ee) => {
@@ -58,6 +71,9 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       document.removeEventListener('mouseleave', offEvent);
 
       // console.log(newWidth);
+      this.setState({
+        columnResizing: false
+      });
       this.props.onResizeColumnResizer(e, col, newWidth);
     };
 
@@ -159,6 +175,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
         </table>
 
         {(() => {
+          if (_panelName === 'aside-header') return null;
           let resizerHeight = optionsHeader.columnHeight * _bodyRow.rows.length - optionsHeader.columnBorderWidth;
           let resizer, resizerLeft = 0, resizerWidth = 4;
           return _colGroup.map(
@@ -230,6 +247,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
         <div data-scroll-container='header-scroll-container' style={headerPanelStyle}>
           {this.printHeader('header-scroll', headerColGroup, headerData, headerScrollStyle)}
         </div>
+
+        {this.state.columnResizing ? <div data-column-resizing style={{left: this.state.columnResizerLeft}} /> : null}
       </div>
     )
   }

@@ -131,6 +131,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.props.init(props, this.state.options);
 
     // 이벤트 멤버에 바인딩
+    this.getRootBounding = this.getRootBounding.bind(this);
     this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
     this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
     this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
@@ -394,6 +395,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     });
   }
 
+  private getRootBounding(){
+    return this.gridRootNode.getBoundingClientRect();
+  }
+
   private onClickPageButton(e: any, onClick: Function) {
     const {
             scrollContentContainerHeight,
@@ -450,7 +455,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const startMousePosition = UTIL.getMousePosition(e);
     const spanType: string = e.target.getAttribute('data-span');
     const {headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth} = this.state.styles;
-    const {x, y} = this.gridRootNode.getBoundingClientRect();
+    const {x, y} = this.getRootBounding();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight;
     const startScrollLeft: number = this.state.scrollLeft;
@@ -879,6 +884,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           <textarea ref='gridClipboard' />
         </div>
         <GridHeader
+          getRootBounding={this.getRootBounding}
           mounted={mounted}
           gridCSS={this.props.gridCSS}
           optionsHeader={options.header}

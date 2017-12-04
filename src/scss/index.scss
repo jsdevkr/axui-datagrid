@@ -453,9 +453,15 @@
       position: absolute;
       top: 0;
       cursor: ew-resize;
-      &:active {
-        background: rgba(255, 0, 0, 0.3);
-      }
+    }
+    [data-column-resizing]{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+      cursor: default;
+      background: rgba(255, 0, 0, 0.3);
     }
   }
   .body {
