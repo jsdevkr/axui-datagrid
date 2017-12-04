@@ -4,6 +4,15 @@ export interface iSelection {
   y?: number;
 }
 
+export interface iColumns {
+  key?: string;
+  width?: number;
+  label?: string;
+  align?: string;
+  formatter?: Function | string;
+  columns?: iColumns[];
+}
+
 export namespace iGridRoot {
   export interface Props {
     store_receivedList: any;
@@ -14,7 +23,7 @@ export namespace iGridRoot {
     gridCSS: any;
     height: string;
     style: any;
-    columns: any;
+    columns: iColumns[];
     data: any;
     options: any;
     thisCallback: Function;

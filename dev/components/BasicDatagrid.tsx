@@ -64,18 +64,28 @@ const gridOptions_new = {
 interface iProps {
 }
 
-interface IColumns {
-  key: string,
-  width?: number,
-  label?: string,
-  align?: string
+interface iColumns {
+  key?: string;
+  width?: number;
+  label?: string;
+  align?: string;
+  formatter?: Function;
+  columns?: iColumns[];
 }
 
 interface iState {
   height?: string,
-  columns: IColumns[],
+  columns: iColumns[],
   data: {}[],
   options: object
+}
+
+interface iFormatterData {
+  list: any;
+  item: any;
+  index: number;
+  key: string;
+  options: any;
 }
 
 
@@ -87,7 +97,12 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
       columns: [
         {key: 'id', width: 60, label: '번호', align: 'center'},
         {key: 'title', width: 100, label: '제목'},
-        {key: 'writer', label: '작성자', align: 'center'},
+        {
+          key: 'writer', label: '작성자', align: 'center',
+          formatter: (data: iFormatterData): string => {
+            return data.item[data.key];
+          }
+        },
         {key: 'date', label: '작성일', align: 'center'},
         {key: 'title', width: 100, label: '제목'},
         {key: 'writer', label: '작성자', align: 'center'},

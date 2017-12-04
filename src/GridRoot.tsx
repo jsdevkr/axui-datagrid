@@ -708,7 +708,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       // 선택이 시작된 row / col
       let selectStartedRow: number = getRowIndex(startY, startScrollTop);
 
-
       let state = {
         dragging: false,
         selecting: false,

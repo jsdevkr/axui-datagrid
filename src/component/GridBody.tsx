@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Range } from 'immutable';
 import classNames from 'classnames'
 import { iGridBody } from '../_inc/namespaces';
+import { isFunction, isString } from 'lodash';
 
 export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> {
   constructor(props: iGridBody.Props) {
@@ -66,7 +67,28 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
           style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
       }
       else {
-        label = _item[ _col.key ];
+        const getValueProcessor = {
+          'date': () => {
+          },
+          'money': () => {
+          }
+        };
+
+        if (isString(_col.formatter) && _col.formatter in getValueProcessor) {
+
+        }
+        else if (isFunction(_col.formatter)) {
+          label = _col.formatter({
+            list: _list,
+            item: _item,
+            index: _itemIdx,
+            key: _col.key,
+            value: _item[ _col.key ],
+            options: options
+          });
+        } else {
+          label = _item[ _col.key ];
+        }
       }
 
       let spanStyle = {
@@ -121,7 +143,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                               [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                             };
 
-                            if(col.columnAttr === 'lineNumber'){
+                            if (col.columnAttr === 'lineNumber') {
                               if (focusedRow === li) {
                                 classNameItems[ gridCSS.focused ] = true;
                               }
@@ -129,10 +151,10 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                                 classNameItems[ gridCSS.selected ] = true;
                               }
                             }
-                            else if(col.columnAttr === 'rowSelector'){
+                            else if (col.columnAttr === 'rowSelector') {
 
                             }
-                            else{
+                            else {
                               if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
                                 classNameItems[ gridCSS.selected ] = true;
                               }
