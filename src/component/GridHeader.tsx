@@ -53,8 +53,6 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       if (newLeft < prevLeft) {
         newLeft = prevLeft;
       }
-      // resizer.style.left = (newLeft - 2) + 'px';
-
       newWidth = newLeft - prevLeft;
 
       this.setState({
@@ -70,7 +68,6 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
 
-      // console.log(newWidth);
       this.setState({
         columnResizing: false
       });

@@ -715,7 +715,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         selectionRows: {},
         selectionCols: (() => {
           let cols = {};
-          this.state.headerColGroup.forEach(col => {
+          this.state.colGroup.forEach(col => {
             cols[ col.colIndex ] = true;
           });
           return cols;
@@ -779,7 +779,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       })();
       state.selectionCols = (() => {
         let cols = {};
-        this.state.headerColGroup.forEach(col => {
+        this.state.colGroup.forEach(col => {
           cols[ col.colIndex ] = true;
         });
         return cols;
