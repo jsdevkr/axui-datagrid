@@ -30,8 +30,17 @@ export const GridRootConnected = connect(
   })
 )(GridRoot);
 
-class AXDatagrid extends React.Component<iProps, {}> {
-  render() {
+export class AXDatagrid extends React.Component<iProps, {}> {
+
+  public static setFormatter(_formatter: any): any{
+    return GridRoot.setFormatter(_formatter);
+  }
+
+  public static getFormatter(): any{
+    return GridRoot.getFormatter();
+  }
+
+  public render() {
     return (
       <Provider store={store}>
         <GridRootConnected {...this.props} />
@@ -39,7 +48,3 @@ class AXDatagrid extends React.Component<iProps, {}> {
     );
   }
 }
-
-export {
-  AXDatagrid
-};

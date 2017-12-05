@@ -3,11 +3,18 @@ import { Button, Divider } from 'semantic-ui-react';
 import { AXDatagrid } from '../../src';
 import * as gridCSS from '../../src/scss/index.scss';
 
+// 사용자 formatter 확장하기
+AXDatagrid.setFormatter({
+  etc: function (data) {
+    return '';
+  }
+});
+
 const gridData = [
-  {id: 1, title: '인생은 해파에게조차 아름답고 장엄하다.', writer: '장기영', date: '2017-10-10'},
-  {id: 2, title: '이 세상에 영원한 것은 아무것도 없다. 우리의 문제들도 그렇다.', writer: '장서우', date: '2017-10-10'},
-  {id: 3, title: '생각은 너무 많고 느끼는 것은 너무 적다.', writer: '이영희', date: '2017-10-10'},
-  {id: 4, title: '실패는 중요하지 않다. ', writer: '황인서', date: '2017-10-10'},
+  {id: 1, title: '인생은 해파에게조차 아름답고 장엄하다.', writer: '장기영', date: '20171205123000', money: 1289301823},
+  {id: 2, title: '이 세상에 영원한 것은 아무것도 없다. 우리의 문제들도 그렇다.', writer: '장서우', date: '2017-10-10', money: 12000},
+  {id: 3, title: '생각은 너무 많고 느끼는 것은 너무 적다.', writer: '이영희', date: '2017-10-10', money: 12000000},
+  {id: 4, title: '실패는 중요하지 않다. ', writer: '황인서', date: '2017-10-10', money: 59800},
   {id: 5, title: '성공한 사람의 인생은 성공한 후에 포장되어 평범한 사람의 인생을 망친다.', writer: '황세진', date: '2017-10-10'},
   {id: 6, title: '너무 고르는 자가 가장 나쁜 것을 갖는다.', writer: '황현진', date: '2017-10-10'},
   {id: 7, title: '위대한 사람은 위대한 꿈을, 평범한 사람은 평범한 꿈을 가지고 있다.', writer: '이서연', date: '2017-10-10'},
@@ -42,7 +49,7 @@ const gridOptions = {
   header: {
     align: 'center'
   },
-  frozenColumnIndex: 2,
+  frozenColumnIndex: 0,
   showLineNumber: true,
   showRowSelector: false,
   columnKeys: {
@@ -69,14 +76,14 @@ interface iColumns {
   width?: number;
   label?: string;
   align?: string;
-  formatter?: Function;
+  formatter?: Function | string;
   columns?: iColumns[];
 }
 
 interface iState {
   height?: string,
   columns: iColumns[],
-  data: {}[],
+  data: any,
   options: object
 }
 
@@ -85,6 +92,7 @@ interface iFormatterData {
   item: any;
   index: number;
   key: string;
+  value: any;
   options: any;
 }
 
@@ -100,13 +108,14 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
         {
           key: 'writer', label: '작성자', align: 'center',
           formatter: (data: iFormatterData): string => {
-            return data.item[data.key];
+            return data.item[ data.key ];
           }
         },
-        {key: 'date', label: '작성일', align: 'center'},
+        {key: 'date', label: '작성일', align: 'center', formatter: 'date'},
+        {key: 'money', label: '돈', align: 'right', formatter: 'money'},
         {key: 'title', width: 100, label: '제목'},
         {key: 'writer', label: '작성자', align: 'center'},
-        {key: 'date', label: '작성일', align: 'center'}
+        {key: 'date', label: '작성일', align: 'center', formatter: 'date'}
       ],
       data: gridData,
       options: gridOptions

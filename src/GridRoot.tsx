@@ -8,6 +8,9 @@ import * as UTIL from './_inc/utils';
 import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridHeader, GridPage, GridScroll } from './component';
+import * as GridFormatter from './_inc/formatter';
+
+let formatter = GridFormatter.getAll();
 
 export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> {
 
@@ -18,16 +21,25 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     options: {}
   };
 
+  public static setFormatter(_formatter) {
+    return formatter = assignWith(formatter, _formatter);
+  }
+
+  public static getFormatter() {
+    return formatter;
+  }
+
   private componentRefs: any;
   private data: any;
   private gridRootNode: any;
   private throttled_updateDimensions: any;
   private scrollMovingTimer: any;
+  private columnFormatter: any;
 
   constructor(props: any) {
     super(props);
 
-
+    this.columnFormatter = GridRoot.getFormatter();
     this.componentRefs = {};
     this.data = {
       sColIndex: -1,
@@ -124,7 +136,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         return options;
       })()
     };
-
     this.state = UTIL.propsToState(props, assignWith({}, this.state));
 
     // state 계산영역 끝
@@ -395,7 +406,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     });
   }
 
-  private getRootBounding(){
+  private getRootBounding() {
     return this.gridRootNode.getBoundingClientRect();
   }
 
@@ -732,7 +743,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           return rows;
         })();
       }
-      else{
+      else {
         state.selectionRows = {
           [selectStartedRow]: true
         };
@@ -905,6 +916,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         <GridBody
           mounted={mounted}
           gridCSS={this.props.gridCSS}
+          columnFormatter={this.columnFormatter}
           options={options}
           styles={styles}
           CTInnerWidth={styles.CTInnerWidth}

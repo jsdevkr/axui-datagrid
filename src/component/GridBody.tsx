@@ -50,7 +50,8 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             selectionRows,
             selectionCols,
             focusedRow,
-            focusedCol
+            focusedCol,
+            columnFormatter
           } = this.props;
 
     const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
@@ -67,25 +68,21 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
           style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
       }
       else {
-        const getValueProcessor = {
-          'date': () => {
-          },
-          'money': () => {
-          }
+
+        let formatterData = {
+          list: _list,
+          item: _item,
+          index: _itemIdx,
+          key: _col.key,
+          value: _item[ _col.key ],
+          options: options
         };
 
-        if (isString(_col.formatter) && _col.formatter in getValueProcessor) {
-
+        if (isString(_col.formatter) && _col.formatter in columnFormatter) {
+          label = columnFormatter[ _col.formatter ](formatterData);
         }
         else if (isFunction(_col.formatter)) {
-          label = _col.formatter({
-            list: _list,
-            item: _item,
-            index: _itemIdx,
-            key: _col.key,
-            value: _item[ _col.key ],
-            options: options
-          });
+          label = _col.formatter(formatterData);
         } else {
           label = _item[ _col.key ];
         }

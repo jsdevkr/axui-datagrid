@@ -13,6 +13,16 @@ export interface iColumns {
   columns?: iColumns[];
 }
 
+export interface iFormatterData {
+  list: any;
+  item: any;
+  index: number;
+  key: string;
+  value: any;
+  options: any;
+}
+
+
 export namespace iGridRoot {
   export interface Props {
     store_receivedList: any;
@@ -116,7 +126,6 @@ export namespace iGridRoot {
 
 }
 
-
 export namespace iGridHeader {
   export interface Props {
     getRootBounding: Function;
@@ -145,11 +154,11 @@ export namespace iGridHeader {
   }
 }
 
-
 export namespace iGridBody {
   export interface Props {
     mounted: boolean;
     gridCSS: any;
+    columnFormatter: any;
     options: any;
     styles: any;
     CTInnerWidth: number;
