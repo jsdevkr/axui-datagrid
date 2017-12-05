@@ -874,8 +874,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         this.data.sColIndex = sColIndex;
         this.data.eColIndex = eColIndex;
         this.data._headerColGroup = _headerColGroup;
-        _bodyRowData = this.data._bodyRowData = UTIL.getTableByStartEndColumnIndex(this.state.bodyRowData, sColIndex, eColIndex + 1);
-        _bodyGroupingData = this.data._bodyGroupingData = UTIL.getTableByStartEndColumnIndex(this.state.bodyGroupingData, sColIndex, eColIndex + 1);
+
+        _bodyRowData = this.data._bodyRowData = UTIL.getTableByStartEndColumnIndex(this.state.bodyRowData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex);
+        _bodyGroupingData = this.data._bodyGroupingData = UTIL.getTableByStartEndColumnIndex(this.state.bodyGroupingData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex);
       }
       else {
         _bodyRowData = this.data._bodyRowData;
