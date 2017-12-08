@@ -769,6 +769,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onClickHeader(e: any, colIndex: number, key: string) {
+    const options = this.state.options;
     let state = {
       dragging: false,
       selecting: false,
@@ -797,31 +798,35 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       state.focusedCol = 0;
 
     } else {
+      if (options.header.clickAction === 'select') {
 
-      state.selectionRows = (() => {
-        let rows = {};
-        this.props.store_list.forEach((item, i) => {
-          rows[ i ] = true;
-        });
-        return rows;
-      })();
-
-      if (e.shiftKey) {
-        state.selectionCols = (() => {
-          let cols = {};
-          range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
-            cols[ i ] = true;
+        state.selectionRows = (() => {
+          let rows = {};
+          this.props.store_list.forEach((item, i) => {
+            rows[ i ] = true;
           });
-          return cols;
+          return rows;
         })();
-      }
-      else {
-        state.selectionCols = {
-          [colIndex]: true
-        };
-        state.focusedCol = colIndex;
-      }
 
+        if (e.shiftKey) {
+          state.selectionCols = (() => {
+            let cols = {};
+            range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
+              cols[ i ] = true;
+            });
+            return cols;
+          })();
+        }
+        else {
+          state.selectionCols = {
+            [colIndex]: true
+          };
+          state.focusedCol = colIndex;
+        }
+      }
+      else if (options.header.clickAction === 'sort') {
+        // todo : header click sort
+      }
     }
 
     this.setState(state);

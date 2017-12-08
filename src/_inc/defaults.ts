@@ -16,7 +16,9 @@ export const gridOptions = {
     columnHeight: 24,
     columnPadding: 3,
     columnBorderWidth: 1,
-    selector: true
+    selector: true,
+    sortable: false,
+    clickAction: 'sort' // sort or select
   },
   body: {
     align: false,

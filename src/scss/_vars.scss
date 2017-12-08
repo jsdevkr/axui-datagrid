@@ -1,97 +1,97 @@
 //==
-$ax6grid-border: 1px solid #ccc !default;
-$ax6grid-bg: #fff !default;
-$ax6grid-font-size: 12px !default;
-$ax6grid-column-border: 1px solid #ccc !default;
+$ax-datagrid-border: 1px solid #ccc !default;
+$ax-datagrid-bg: #fff !default;
+$ax-datagrid-font-size: 12px !default;
+$ax-datagrid-column-border: 1px solid #ccc !default;
 
 //== header
-$ax6grid-header-column-color: #222 !default;
-$ax6grid-header-column-border: 1px solid #ccc !default;
-$ax6grid-header-column-box-shadow: inset 1px 1px 0 0 #fff !default;
-$ax6grid-header-column-bg-colors: (#FFFFFF, #F0F0F0) !default;
-$ax6grid-header-column-hover-bg-colors: (#eee, #eee) !default;
-$ax6grid-header-column-resizer-color: #ff3300 !default;
-$ax6grid-header-column-resizer-size: 4px !default;
-$ax6grid-header-column-focused-bg-colors: (#F0F0F0, #e1e1e1) !default;
-$ax6grid-header-column-focused-color: #222 !default;
+$ax-datagrid-header-column-color: #222 !default;
+$ax-datagrid-header-column-border: 1px solid #ccc !default;
+$ax-datagrid-header-column-box-shadow: inset 1px 1px 0 0 #fff !default;
+$ax-datagrid-header-column-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax-datagrid-header-column-hover-bg-colors: (#eee, #eee) !default;
+$ax-datagrid-header-column-resizer-color: #ff3300 !default;
+$ax-datagrid-header-column-resizer-size: 4px !default;
+$ax-datagrid-header-column-focused-bg-colors: (#F0F0F0, #e1e1e1) !default;
+$ax-datagrid-header-column-focused-color: #0581f2 !default;
 
-$ax6grid-header-sorter-size: 9px !default;
-$ax6grid-header-sorter-color: #000 !default;
+$ax-datagrid-header-sorter-size: 9px !default;
+$ax-datagrid-header-sorter-color: #000 !default;
 
 
 
 //== aside
-$ax6grid-aside-border: 1px solid darken(#ccc, 0%) !default;
-$ax6grid-aside-bg: #f2f2f2 !default;
-$ax6grid-aside-column-shadow: inset 1px 1px 0 0 #fff !default;
-$ax6grid-aside-column-focused-bg-colors: (#f2f2f2, #e1e1e1) !default;
-$ax6grid-aside-column-focused-color: #222 !default;
+$ax-datagrid-aside-border: 1px solid darken(#ccc, 0%) !default;
+$ax-datagrid-aside-bg: #f2f2f2 !default;
+$ax-datagrid-aside-column-shadow: inset 1px 1px 0 0 #fff !default;
+$ax-datagrid-aside-column-focused-bg-colors: (#f2f2f2, #e1e1e1) !default;
+$ax-datagrid-aside-column-focused-color: #0581f2 !default;
 
 
-$ax6grid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
+$ax-datagrid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
 
 //== footsum
-$ax6grid-footsum-bg: #ffe7e2 !default;
-$ax6grid-footsum-line-border: 1px solid darken(#ccc, 10%) !default;
+$ax-datagrid-footsum-bg: #ffe7e2 !default;
+$ax-datagrid-footsum-line-border: 1px solid darken(#ccc, 10%) !default;
 
 //== page
-$ax6grid-page-border: 1px solid #ccc !default;
-$ax6grid-page-bg-colors: (#ECECEC, #dddddd) !default;
-$ax6grid-page-navigation-padding: 5px !default;
-$ax6grid-page-navigation-font-size: 12px !default;
-$ax6grid-page-navigation-btn-min-width: 20px !default;
-$ax6grid-page-navigation-btn-border: 0px none !default;
-$ax6grid-page-navigation-btn-border-radius: 5px !default;
-$ax6grid-page-navigation-btn-bg: transparent !default;
-$ax6grid-page-navigation-btn-font-size: 11px !default;
-$ax6grid-page-navigation-btn-color: #222 !default;
-$ax6grid-page-navigation-btn-hover-bg: #888 !default;
-$ax6grid-page-navigation-btn-hover-color: #fff !default;
+$ax-datagrid-page-border: 1px solid #ccc !default;
+$ax-datagrid-page-bg-colors: (#ECECEC, #dddddd) !default;
+$ax-datagrid-page-navigation-padding: 5px !default;
+$ax-datagrid-page-navigation-font-size: 12px !default;
+$ax-datagrid-page-navigation-btn-min-width: 20px !default;
+$ax-datagrid-page-navigation-btn-border: 0px none !default;
+$ax-datagrid-page-navigation-btn-border-radius: 5px !default;
+$ax-datagrid-page-navigation-btn-bg: transparent !default;
+$ax-datagrid-page-navigation-btn-font-size: 11px !default;
+$ax-datagrid-page-navigation-btn-color: #222 !default;
+$ax-datagrid-page-navigation-btn-hover-bg: #888 !default;
+$ax-datagrid-page-navigation-btn-hover-color: #fff !default;
 
-$ax6grid-page-status-font-size: 12px !default;
-$ax6grid-page-status-padding: 10px !default;
-$ax6grid-page-status-color: #222 !default;
+$ax-datagrid-page-status-font-size: 12px !default;
+$ax-datagrid-page-status-padding: 10px !default;
+$ax-datagrid-page-status-color: #222 !default;
 
 //== scroll
-$ax6grid-scroll-track-shadow: #ccc !default;
-$ax6grid-scroll-track-border: 1px solid #ccc !default;
-$ax6grid-scroll-track-bg: #F9F9F9 !default;
+$ax-datagrid-scroll-track-shadow: #ccc !default;
+$ax-datagrid-scroll-track-border: 1px solid #ccc !default;
+$ax-datagrid-scroll-track-bg: #F9F9F9 !default;
 
-$ax6grid-scroll-bar-border-radius: 10px !default;
-$ax6grid-scroll-bar-border: 0px solid #fff !default;
-$ax6grid-scroll-bar-bg: #B9B9B9 !default;
-$ax6grid-scroll-bar-hover-border: 0px solid #ccc !default;
-$ax6grid-scroll-bar-hover-bg: #888888 !default;
+$ax-datagrid-scroll-bar-border-radius: 10px !default;
+$ax-datagrid-scroll-bar-border: 0px solid #fff !default;
+$ax-datagrid-scroll-bar-bg: #B9B9B9 !default;
+$ax-datagrid-scroll-bar-hover-border: 0px solid #ccc !default;
+$ax-datagrid-scroll-bar-hover-bg: #888888 !default;
 
 //== body.row
-$ax6grid-last-row-border: 1px solid #eee !default;
-$ax6grid-row-bg-0: #f3f3f3 !default;
-$ax6grid-row-bg-1: #fff !default;
-$ax6grid-row-hover-bg: lighten(#cce2f3, 5%) !default;
-$ax6grid-row-grouping-bg: #ffffe7 !default;
-$ax6grid-row-selected: lighten(#b1d7fe, 10%) !default;
+$ax-datagrid-last-row-border: 1px solid #eee !default;
+$ax-datagrid-row-bg-0: #f3f3f3 !default;
+$ax-datagrid-row-bg-1: #fff !default;
+$ax-datagrid-row-hover-bg: lighten(#cce2f3, 5%) !default;
+$ax-datagrid-row-grouping-bg: #ffffe7 !default;
+$ax-datagrid-row-selected: lighten(#b1d7fe, 10%) !default;
 
 //== body.cell
-$ax6grid-cell-padding-row-selector: 5px !default;
-$ax6grid-cell-padding: 3px 5px !default;
+$ax-datagrid-cell-padding-row-selector: 5px !default;
+$ax-datagrid-cell-padding: 3px 5px !default;
 
-$ax6grid-cell-checkbox-border: 1px solid #ccc !default;
-$ax6grid-cell-checkbox-border-radius: 3px !default;
-$ax6grid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
-$ax6grid-cell-disable-checkbox-bg-colors: (darken(nth($ax6grid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax6grid-cell-checkbox-bg-colors, 1), 10%)) !default;
-$ax6grid-cell-checkbox-arrow-color: #3372ff !default;
+$ax-datagrid-cell-checkbox-border: 1px solid #ccc !default;
+$ax-datagrid-cell-checkbox-border-radius: 3px !default;
+$ax-datagrid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax-datagrid-cell-disable-checkbox-bg-colors: (darken(nth($ax-datagrid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax-datagrid-cell-checkbox-bg-colors, 1), 10%)) !default;
+$ax-datagrid-cell-checkbox-arrow-color: #3372ff !default;
 
-$ax6grid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
-$ax6grid-cell-focused-bg: lighten(#b1d7fe, 15%) !default;
-$ax6grid-cell-focused-color: #000 !default;
+$ax-datagrid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
+$ax-datagrid-cell-focused-bg: lighten(#b1d7fe, 15%) !default;
+$ax-datagrid-cell-focused-color: #000 !default;
 
-$ax6grid-cell-selected-border-color: #ccc !default;
-$ax6grid-cell-selected-bg: lighten(#b1d7fe, 10%) !default;
-$ax6grid-cell-selected-color: #000 !default;
+$ax-datagrid-cell-selected-border-color: #ccc !default;
+$ax-datagrid-cell-selected-bg: lighten(#b1d7fe, 10%) !default;
+$ax-datagrid-cell-selected-color: #000 !default;
 
 //== resizer
-$ax6grid-resizer-color: #ff3300 !default;
-$ax6grid-resizer-size: 2px !default;
+$ax-datagrid-resizer-color: #ff3300 !default;
+$ax-datagrid-resizer-size: 2px !default;
 
 .datagridIcon-first {
   background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Efirst%3C/title%3E%3Cpath d=%22M1.125 10.875v-9.75h1.625v4.469l4.063-4.063v4.063l4.063-4.063v8.938l-4.063-4.063v4.063l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;

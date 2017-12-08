@@ -49,7 +49,7 @@ const gridOptions = {
   header: {
     align: 'center'
   },
-  frozenColumnIndex: 2,
+  frozenColumnIndex: 0,
   showLineNumber: true,
   showRowSelector: false,
   columnKeys: {

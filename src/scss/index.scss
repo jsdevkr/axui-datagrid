@@ -4,13 +4,13 @@
 
 @mixin gridRowBackground() {
   &.hover {
-    background: $ax6grid-row-hover-bg;
+    background: $ax-datagrid-row-hover-bg;
   }
   &[data-ax6grid-grouping-tr="true"] {
-    background: $ax6grid-row-grouping-bg;
+    background: $ax-datagrid-row-grouping-bg;
   }
   &[data-ax6grid-selected="true"] {
-    background: $ax6grid-row-selected;
+    background: $ax-datagrid-row-selected;
     td {
       //color: #fff;
       //box-shadow: inset 1px 1px 0px 0px #fff;
@@ -28,12 +28,12 @@
     }
   }
   &[data-ax6grid-disable-selection="true"] {
-    // background: $ax6grid-row-selected;
+    // background: $ax-datagrid-row-selected;
     td {
       &[data-ax6grid-column-attr="rowSelector"] {
         .checkBox {
           cursor: not-allowed;
-          //@include ax-background(top, $ax6grid-cell-disable-checkbox-bg-colors);
+          //@include ax-background(top, $ax-datagrid-cell-disable-checkbox-bg-colors);
           &:after {
             opacity: 0;
           }
@@ -44,7 +44,7 @@
 
   // mergeCells 대상 컬럼 배경생 통일.
   td.merged {
-    // background: $ax6grid-row-bg-1;
+    // background: $ax-datagrid-row-bg-1;
   }
 }
 
@@ -54,17 +54,17 @@
   position: relative;
   padding: 0;
   border: 0 none;
-  border-right: $ax6grid-column-border;
-  border-bottom: $ax6grid-column-border;
+  border-right: $ax-datagrid-column-border;
+  border-bottom: $ax-datagrid-column-border;
 
 
   &.headerColumn {
     cursor: default;
     &:hover {
-      background: $ax6grid-row-hover-bg;
+      background: $ax-datagrid-row-hover-bg;
     }
     &.selected{
-      @include ax-background(to bottom, $ax6grid-header-column-focused-bg-colors);
+      @include ax-background(to bottom, $ax-datagrid-header-column-focused-bg-colors);
     }
     &.focused {
       &:before{
@@ -75,7 +75,7 @@
         left: 50%;
         width: 0;
         height: 0;
-        border-top: 4px solid $ax6grid-header-column-focused-color;
+        border-top: 4px solid $ax-datagrid-header-column-focused-color;
         border-right: 4px solid transparent;
         border-bottom: 0 none;
         border-left: 4px solid transparent;
@@ -87,7 +87,7 @@
     [data-span] {
       cursor: se-resize;
       &:before {
-        $triangle-border-width: $ax6grid-font-size/3;
+        $triangle-border-width: $ax-datagrid-font-size/3;
         position: absolute;
         right: $triangle-border-width;
         bottom: $triangle-border-width;
@@ -95,8 +95,8 @@
         display: block;
         width: 0;
         height: 0;
-        border-bottom: solid $triangle-border-width $ax6grid-header-column-color;
-        border-right: solid $triangle-border-width $ax6grid-header-column-color;
+        border-bottom: solid $triangle-border-width $ax-datagrid-header-column-color;
+        border-right: solid $triangle-border-width $ax-datagrid-header-column-color;
         border-left: solid $triangle-border-width transparent;
         border-top: solid $triangle-border-width transparent;
       }
@@ -108,10 +108,10 @@
       cursor: e-resize;
     }
     &:hover {
-      background: $ax6grid-row-hover-bg;
+      background: $ax-datagrid-row-hover-bg;
     }
     &.selected {
-      @include ax-background(to right, $ax6grid-aside-column-focused-bg-colors);
+      @include ax-background(to right, $ax-datagrid-aside-column-focused-bg-colors);
     }
     &.focused {
       &:before{
@@ -125,7 +125,7 @@
         border-top: 4px solid transparent;
         border-right: 0 none;
         border-bottom: 4px solid transparent;
-        border-left: 4px solid $ax6grid-aside-column-focused-color;
+        border-left: 4px solid $ax-datagrid-aside-column-focused-color;
         margin-top: -4px;
       }
     }
@@ -136,22 +136,22 @@
     }
 
     &.focused {
-      background: $ax6grid-aside-bg;
+      background: $ax-datagrid-aside-bg;
     }
   }
 
   &.selected{
-    background: $ax6grid-cell-selected-bg;
+    background: $ax-datagrid-cell-selected-bg;
   }
   &.focused {
-    box-shadow: $ax6grid-cell-focused-box-shadow;
-    background: $ax6grid-cell-focused-bg;
+    box-shadow: $ax-datagrid-cell-focused-box-shadow;
+    background: $ax-datagrid-cell-focused-bg;
   }
 
   [data-span] {
     box-sizing: border-box;
     display: block;
-    padding: $ax6grid-cell-padding;
+    padding: $ax-datagrid-cell-padding;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -174,11 +174,11 @@
       position: absolute;
       right: 0;
       top: 0;
-      width: $ax6grid-header-column-resizer-size;
+      width: $ax-datagrid-header-column-resizer-size;
       height: 100%;
       cursor: col-resize;
       &:hover {
-        background: $ax6grid-header-column-resizer-color;
+        background: $ax-datagrid-header-column-resizer-color;
         opacity: 0.5;
       }
     }
@@ -193,19 +193,19 @@
       &:before {
         top: 0;
         left: 0;
-        @include sort-arrow($ax6grid-header-sorter-size, 2.5, 2.2, $ax6grid-header-sorter-color, 0.3, "up");
+        @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.2, $ax-datagrid-header-sorter-color, 0.3, "up");
       }
       &:after {
         bottom: 0;
         left: 0;
-        @include sort-arrow($ax6grid-header-sorter-size, 2.5, 2.2, $ax6grid-header-sorter-color, 0.3, "down");
+        @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.2, $ax-datagrid-header-sorter-color, 0.3, "down");
       }
 
       &[data-sorter-order="asc"] {
         &:before {
           top: 2px;
           left: 0;
-          @include sort-arrow($ax6grid-header-sorter-size + 1, 2.5, 2.0, $ax6grid-header-sorter-color, 0.8, "up");
+          @include sort-arrow($ax-datagrid-header-sorter-size + 1, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "up");
         }
         &:after {
           display: none;
@@ -218,7 +218,7 @@
         &:after {
           bottom: 2px;
           left: 0;
-          @include sort-arrow($ax6grid-header-sorter-size + 1, 2.5, 2.0, $ax6grid-header-sorter-color, 0.8, "down");
+          @include sort-arrow($ax-datagrid-header-sorter-size + 1, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "down");
         }
       }
 
@@ -254,7 +254,7 @@
       width: 100%;
       height: 100%;
       border: 0 none;
-      background: $ax6grid-bg;
+      background: $ax-datagrid-bg;
       &::-ms-clear {
         display: none;
       }
@@ -267,7 +267,7 @@
       width: 100%;
       height: 100%;
       border: 0px none;
-      background: $ax6grid-bg;
+      background: $ax-datagrid-bg;
       .ax5select-display {
         height: 100%;
         border-radius: 0;
@@ -276,9 +276,9 @@
     [data-editor="checkbox"] {
       display: inline-block;
       position: relative;
-      border: $ax6grid-cell-checkbox-border;
-      border-radius: $ax6grid-cell-checkbox-border-radius;
-      @include ax-background(top, $ax6grid-cell-checkbox-bg-colors);
+      border: $ax-datagrid-cell-checkbox-border;
+      border-radius: $ax-datagrid-cell-checkbox-border-radius;
+      @include ax-background(top, $ax-datagrid-cell-checkbox-bg-colors);
       height: 100%;
       &:after {
         content: '';
@@ -287,7 +287,7 @@
         position: absolute;
         top: 20%;
         right: 20%;
-        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
+        border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
         border-top: none;
         border-right: none;
         background: transparent;
@@ -325,9 +325,9 @@
       box-sizing: border-box;
       display: inline-block;
       position: relative;
-      border: $ax6grid-cell-checkbox-border;
-      border-radius: $ax6grid-cell-checkbox-border-radius;
-      @include ax-background(to bottom, $ax6grid-cell-checkbox-bg-colors);
+      border: $ax-datagrid-cell-checkbox-border;
+      border-radius: $ax-datagrid-cell-checkbox-border-radius;
+      @include ax-background(to bottom, $ax-datagrid-cell-checkbox-bg-colors);
       height: 100%;
       width: 100%;
       &:after {
@@ -337,7 +337,7 @@
         position: absolute;
         top: 20%;
         right: 20%;
-        border: 0.2em solid $ax6grid-cell-checkbox-arrow-color;
+        border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
         border-top: none;
         border-right: none;
         background: transparent;
@@ -358,14 +358,14 @@
     width: 0;
     height: 0;
     border-style: solid;
-    border-color: $ax6grid-scroll-bar-bg;
+    border-color: $ax-datagrid-scroll-bar-bg;
     cursor: pointer;
     &:hover {
-      border-color: $ax6grid-scroll-bar-hover-bg;
+      border-color: $ax-datagrid-scroll-bar-hover-bg;
     }
 
     /*
-    border-bottom: solid $triangle-border-width $ax6grid-scroll-bar-bg;
+    border-bottom: solid $triangle-border-width $ax-datagrid-scroll-bar-bg;
     border-right: solid $triangle-border-width transparent;
     border-left: solid $triangle-border-width transparent;
     border-top: 0 none;
@@ -375,8 +375,8 @@
 
 .axDatagrid {
   position: relative;
-  background: $ax6grid-bg;
-  border: $ax6grid-border;
+  background: $ax-datagrid-bg;
+  border: $ax-datagrid-border;
   overflow: hidden;
 
   table {
@@ -394,7 +394,7 @@
     }
     tr:last-child {
       td {
-        border-bottom: $ax6grid-last-row-border;
+        border-bottom: $ax-datagrid-last-row-border;
       }
     }
 
@@ -425,23 +425,23 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    @include ax-background(to bottom, $ax6grid-header-column-bg-colors);
+    @include ax-background(to bottom, $ax-datagrid-header-column-bg-colors);
     border: 0 none;
-    border-bottom: $ax6grid-header-column-border;
+    border-bottom: $ax-datagrid-header-column-border;
 
     table tr td {
-      box-shadow: $ax6grid-header-column-box-shadow;
+      box-shadow: $ax-datagrid-header-column-box-shadow;
     }
     [data-panel] {
       &[data-panel="aside-header"] {
         overflow: hidden;
-        border-right: $ax6grid-aside-border;
+        border-right: $ax-datagrid-aside-border;
         td {
           text-align: center;
         }
       }
       &[data-panel="left-header"] {
-        border-right: $ax6grid-frozen-line-border; /// frozen Line color
+        border-right: $ax-datagrid-frozen-line-border; /// frozen Line color
       }
       &[data-panel="header-scroll"] {
         position: absolute;
@@ -470,16 +470,16 @@
     overflow: hidden;
     [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-body-scroll"] {
       tr:nth-child(even) {
-        background: $ax6grid-row-bg-0
+        background: $ax-datagrid-row-bg-0
       }
       tr:nth-child(odd) {
-        background: $ax6grid-row-bg-1
+        background: $ax-datagrid-row-bg-1
       }
     }
     [data-panel="aside-body-scroll"] {
-      background: $ax6grid-aside-bg;
+      background: $ax-datagrid-aside-bg;
       table tr td {
-        box-shadow: $ax6grid-header-column-box-shadow;
+        box-shadow: $ax-datagrid-header-column-box-shadow;
       }
     }
   }
@@ -492,9 +492,9 @@
     user-select: none;
     box-sizing: border-box;
     overflow: hidden;
-    @include ax-background(to bottom, $ax6grid-page-bg-colors);
+    @include ax-background(to bottom, $ax-datagrid-page-bg-colors);
     border: 0 none;
-    border-top: $ax6grid-page-border;
+    border-top: $ax-datagrid-page-border;
 
     .pageButtons {
       padding: 1px;
@@ -508,7 +508,7 @@
         margin: 0 1px;
         cursor: pointer;
         &:hover {
-          background: $ax6grid-scroll-bar-bg;
+          background: $ax-datagrid-scroll-bar-bg;
         }
         &:focus {
           outline: 0;
@@ -527,8 +527,8 @@
     bottom: 0;
 
     [data-scroll-track] {
-      background: $ax6grid-scroll-track-bg;
-      box-shadow: inset 0 0 1px 0 $ax6grid-scroll-track-shadow;
+      background: $ax-datagrid-scroll-track-bg;
+      box-shadow: inset 0 0 1px 0 $ax-datagrid-scroll-track-shadow;
       box-sizing: border-box;
       position: absolute;
       right: 0;
@@ -547,15 +547,15 @@
       top: 0;
       left: 0;
       box-sizing: border-box;
-      border: $ax6grid-scroll-bar-border;
-      border-radius: $ax6grid-scroll-bar-border-radius;
+      border: $ax-datagrid-scroll-bar-border;
+      border-radius: $ax-datagrid-scroll-bar-border-radius;
       width: 100%;
       height: 100%;
 
-      background: $ax6grid-scroll-bar-bg;
+      background: $ax-datagrid-scroll-bar-bg;
       &:hover {
-        border: $ax6grid-scroll-bar-hover-border;
-        background: $ax6grid-scroll-bar-hover-bg;
+        border: $ax-datagrid-scroll-bar-hover-border;
+        background: $ax-datagrid-scroll-bar-hover-bg;
       }
     }
 
