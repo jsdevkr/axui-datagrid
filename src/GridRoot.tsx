@@ -796,6 +796,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         return cols;
       })();
       state.focusedCol = 0;
+      this.setState(state);
 
     } else {
       if (options.header.clickAction === 'select') {
@@ -823,13 +824,15 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           };
           state.focusedCol = colIndex;
         }
+
+        this.setState(state);
       }
       else if (options.header.clickAction === 'sort') {
         // todo : header click sort
+        this.props.sort(this.state.colGroup[colIndex], colIndex);
       }
     }
 
-    this.setState(state);
   }
 
   private refCallback(_key, el) {

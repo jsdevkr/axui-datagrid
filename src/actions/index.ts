@@ -28,3 +28,12 @@ export function setData(data, options) {
     options: options
   }
 }
+
+export const SORT = 'SORT';
+export function sort(col, colIndex){
+  return {
+    type: SORT,
+    col: col,
+    colIndex: colIndex
+  }
+}

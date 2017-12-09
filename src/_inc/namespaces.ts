@@ -39,6 +39,7 @@ export namespace iGridRoot {
     thisCallback: Function;
     init: Function;
     setData: Function;
+    sort: Function;
   }
 
   export interface State {
