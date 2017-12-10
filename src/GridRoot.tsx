@@ -829,7 +829,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
       else if (options.header.clickAction === 'sort') {
         // todo : header click sort
-        this.props.sort(this.state.colGroup[colIndex], colIndex);
+        this.props.sort(this.state.colGroup, colIndex);
       }
     }
 

@@ -30,10 +30,10 @@ export function setData(data, options) {
 }
 
 export const SORT = 'SORT';
-export function sort(col, colIndex){
+export function sort(colGroup, colIndex){
   return {
     type: SORT,
-    col: col,
+    colGroup: colGroup,
     colIndex: colIndex
   }
 }

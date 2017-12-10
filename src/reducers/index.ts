@@ -8,24 +8,18 @@ export interface State {
   list: any;
   page: object;
   sortInfo: object;
-  selectedRowList: any;
-  selectedColumns: any;
-  focusedPosition: any;
 }
 
 // 초기 상태
-const initialState = Map({
+const stateRecord = Record({
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
-  page: Map({}),
-  sortInfo: Map({}),
-  selectedRowList: {},
-  selectedColumns: {},
-  focusedPosition: {
-    r: 0, c: 0
-  }
+  page: {},
+  sortInfo: Map({})
 });
+
+const initialState = new stateRecord();
 
 // 리듀서 함수 정의
 export const gridReducer = (state = initialState, action) => {
@@ -49,7 +43,7 @@ export const gridReducer = (state = initialState, action) => {
       return state
         .set('receivedList', List(action.receivedList))
         .set('list', List(list))
-        .set('page', isObject(action.page) ? Map(action.page) : false);
+        .set('page', isObject(action.page) ? (action.page) : false);
     },
 
     [act.SET_DATA]: () => {
@@ -65,27 +59,66 @@ export const gridReducer = (state = initialState, action) => {
         return false;
       });
 
-      list = List(list);
-
       return state
         .set('receivedList', List(action.receivedList))
-        .set('list', list)
-        .set('page', isObject(action.page) ? Map(action.page) : false)
+        .set('list', List(list))
+        .set('page', isObject(action.page) ? (action.page) : false)
     },
 
     [act.SORT]: () => {
-      let list = List(state.get('list'));
+      let sortInfo = {}, seq: number = 0, sortOrder;
+      let colGroup = List(action.colGroup);
 
-      let sorted = list.sort(
+      state.get('sortInfo').forEach((col, ci) => {
+        sortInfo[ ci ] = col;
+        seq++;
+      });
+
+      colGroup.forEach((col, ci) => {
+        console.log(col);
+        if (col['colIndex'] === action.colIndex) {
+          if (typeof col['sort'] === 'undefined') {
+            sortOrder = 'desc';
+          }
+          else if (col['sort'] === 'desc') {
+            sortOrder = 'asc';
+          } else {
+            sortOrder = undefined;
+          }
+        }
+        col['sort'] = sortOrder;
+      });
+      
+      
+      
+
+      for (var i = 0, l = action.colGroup.length; i < l; i++) {
+
+        if (typeof this.colGroup[ i ].sort !== "undefined") {
+          if (!sortInfo[ this.colGroup[ i ].key ]) {
+            sortInfo[ this.colGroup[ i ].key ] = {
+              seq: seq++,
+              orderBy: this.colGroup[ i ].sort
+            };
+          }
+        }
+      }
+
+
+      let sorted = state.get('list').sort(
         (a, b) => {
-          if (a['title'] < b['title']) { return -1; }
-          if (a['title'] > b['title']) { return 1; }
-          if (a['title'] === b['title']) { return 0; }
+          if (a[ 'title' ] < b[ 'title' ]) {
+            return -1;
+          }
+          if (a[ 'title' ] > b[ 'title' ]) {
+            return 1;
+          }
+          if (a[ 'title' ] === b[ 'title' ]) {
+            return 0;
+          }
         }
       );
 
-      console.log(sorted);
-      
       return state
         .set('list', sorted);
     }

@@ -884,7 +884,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
   styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
 
   if (options.scroller.useVerticalScroll) {
-    styles.calculatedHeight = list.length * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
+    styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
     styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;
     styles.verticalScrollerWidth = 0;
     styles.CTInnerWidth = styles.elWidth;
