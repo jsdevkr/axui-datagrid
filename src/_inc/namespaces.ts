@@ -143,8 +143,9 @@ export namespace iGridHeader {
     leftHeaderData: any;
     headerData: any;
     scrollLeft: number;
-    focusedCol: number;
     selectionCols: any;
+    focusedCol: number;
+    sortInfo: any;
     onResizeColumnResizer: Function;
     onClickHeader: Function;
   }

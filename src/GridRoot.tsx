@@ -827,9 +827,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         this.setState(state);
       }
-      else if (options.header.clickAction === 'sort') {
+      else if (options.header.clickAction === 'sort' && options.header.sortable) {
         // todo : header click sort
-        this.props.sort(this.state.colGroup, colIndex);
+        this.props.sort(this.state.colGroup, colIndex, options);
       }
     }
 
@@ -919,6 +919,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollLeft={this.state.scrollLeft}
           selectionCols={this.state.selectionCols}
           focusedCol={this.state.focusedCol}
+          sortInfo={this.props.store_sortInfo}
           onResizeColumnResizer={this.onResizeColumnResizer}
           onClickHeader={this.onClickHeader}
         />

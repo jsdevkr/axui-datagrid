@@ -27,7 +27,7 @@ export const GridRootConnected = connect(
   (dispatch: any) => ({
     init: (props, options) => dispatch(act.init(props, options)),
     setData: (data, options) => dispatch(act.setData(data, options)),
-    sort: (colGroup, colIndex) => dispatch(act.sort(colGroup, colIndex))
+    sort: (colGroup, colIndex, options) => dispatch(act.sort(colGroup, colIndex, options))
   })
 )(GridRoot);
 

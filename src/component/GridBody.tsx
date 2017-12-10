@@ -15,10 +15,10 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
 
     if (
       this.props.mounted !== nextProps.mounted ||
-      JSON.stringify(this.props.options) !== JSON.stringify(nextProps.options) ||
+      this.props.options !== nextProps.options ||
       this.props.CTInnerWidth !== nextProps.CTInnerWidth ||
       this.props.CTInnerHeight !== nextProps.CTInnerHeight ||
-      JSON.stringify(this.props.colGroup) !== JSON.stringify(nextProps.colGroup) ||
+      this.props.colGroup !== nextProps.colGroup ||
       this.props.list !== nextProps.list ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
       this.props.scrollTop !== nextProps.scrollTop ||

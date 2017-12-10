@@ -21,14 +21,15 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
     if (
       this.props.mounted !== nextProps.mounted ||
-      JSON.stringify(this.props.optionsHeader) !== JSON.stringify(nextProps.optionsHeader) ||
-      JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles) ||
-      JSON.stringify(this.props.headerColGroup) !== JSON.stringify(nextProps.headerColGroup) ||
+      this.props.optionsHeader !== nextProps.optionsHeader ||
+      this.props.styles !== nextProps.styles ||
+      this.props.headerColGroup !== nextProps.headerColGroup ||
       this.props.scrollLeft !== nextProps.scrollLeft ||
       this.props.selectionCols !== nextProps.selectionCols ||
       this.props.focusedCol !== nextProps.focusedCol ||
       this.state.columnResizing !== nextState.columnResizing ||
-      this.state.columnResizerLeft !== nextState.columnResizerLeft
+      this.state.columnResizerLeft !== nextState.columnResizerLeft ||
+      this.props.sortInfo !== nextProps.sortInfo
     ) {
       sameProps = true;
     }
@@ -81,7 +82,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
   private printHeader(_panelName: string, _colGroup: any, _bodyRow: any, _style: object) {
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const {optionsHeader, gridCSS, focusedCol, selectionCols, onClickHeader} = this.props;
+    const {optionsHeader, gridCSS, focusedCol, selectionCols, onClickHeader, sortInfo} = this.props;
+
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
       let colAlign = optionsHeader.align || _col.align;
@@ -98,8 +100,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
         label = _col.label;
       }
 
-      if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && (optionsHeader.sortable === true || _col.sortable === true) && _col.sortable !== false) {
-        sorter = <span data-sorter={_col.colIndex} data-sorter-order={_colGroup[ _col.colIndex ].sort} />;
+      if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && sortInfo[_col.key]) {
+        sorter = <span data-sorter={_col.colIndex} data-sorter-order={sortInfo[_col.key].orderBy} />;
       }
 
       if (_col.colIndex !== null && typeof _col.colIndex !== 'undefined' && optionsHeader.enableFilter) {

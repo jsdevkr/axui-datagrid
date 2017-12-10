@@ -10,15 +10,16 @@ export interface State {
   sortInfo: object;
 }
 
-// 초기 상태
+
 const stateRecord = Record({
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
   page: {},
-  sortInfo: Map({})
+  sortInfo: {}
 });
 
+// 초기 상태
 const initialState = new stateRecord();
 
 // 리듀서 함수 정의
@@ -28,17 +29,10 @@ export const gridReducer = (state = initialState, action) => {
 
       let list; // 그리드에 표현할 목록
 
+      // todo : colGroup으로 sortInfo 생성
+
       // 전달받은 리스트 중에 출력할 리스트를 필터링
-      list = action.receivedList.filter(function (item) {
-        if (item) {
-          if (item[ action.options.columnKeys.deleted ]) {
-            return false;
-          } else {
-            return true;
-          }
-        }
-        return false;
-      });
+      list = action.receivedList.filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
       return state
         .set('receivedList', List(action.receivedList))
@@ -48,16 +42,7 @@ export const gridReducer = (state = initialState, action) => {
 
     [act.SET_DATA]: () => {
       // 전달받은 리스트 중에 출력할 리스트를 필터링
-      let list = action.receivedList.filter(function (item) {
-        if (item) {
-          if (item[ action.options.columnKeys.deleted ]) {
-            return false;
-          } else {
-            return true;
-          }
-        }
-        return false;
-      });
+      let list = action.receivedList.filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
       return state
         .set('receivedList', List(action.receivedList))
@@ -67,59 +52,58 @@ export const gridReducer = (state = initialState, action) => {
 
     [act.SORT]: () => {
       let sortInfo = {}, seq: number = 0, sortOrder;
-      let colGroup = List(action.colGroup);
+      let sortInfoArray = [];
+      let colGroup = action.colGroup;
+      const sortInfoState = state.get('sortInfo');
+      const getValueByKey = function (_item, _key) {
+        return _item[ _key ] || '';
+      };
 
-      state.get('sortInfo').forEach((col, ci) => {
-        sortInfo[ ci ] = col;
+      for (let k in sortInfoState) {
+        sortInfo[ k ] = sortInfoState[ k ];
         seq++;
-      });
-
-      colGroup.forEach((col, ci) => {
-        console.log(col);
-        if (col['colIndex'] === action.colIndex) {
-          if (typeof col['sort'] === 'undefined') {
-            sortOrder = 'desc';
-          }
-          else if (col['sort'] === 'desc') {
-            sortOrder = 'asc';
-          } else {
-            sortOrder = undefined;
-          }
-        }
-        col['sort'] = sortOrder;
-      });
-      
-      
-      
-
-      for (var i = 0, l = action.colGroup.length; i < l; i++) {
-
-        if (typeof this.colGroup[ i ].sort !== "undefined") {
-          if (!sortInfo[ this.colGroup[ i ].key ]) {
-            sortInfo[ this.colGroup[ i ].key ] = {
-              seq: seq++,
-              orderBy: this.colGroup[ i ].sort
-            };
-          }
-        }
       }
 
+      if (sortInfo[ colGroup[ action.colIndex ].key ]) {
+        if (sortInfo[ colGroup[ action.colIndex ].key ].orderBy === 'desc') {
+          sortInfo[ colGroup[ action.colIndex ].key ].orderBy = 'asc';
+        } else if (sortInfo[ colGroup[ action.colIndex ].key ].orderBy === 'asc') {
+          delete sortInfo[ colGroup[ action.colIndex ].key ];
+        }
+      } else {
+        sortInfo[ colGroup[ action.colIndex ].key ] = {
+          seq: seq++,
+          orderBy: 'desc'
+        };
+      }
 
-      let sorted = state.get('list').sort(
+      for (let k in sortInfo) {
+        sortInfoArray[ sortInfo[ k ].seq ] = {key: k, order: sortInfo[ k ].orderBy};
+      }
+      sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+
+      let i = 0, l = sortInfoArray.length, _a_val, _b_val;
+      let sorted = state.get('receivedList').sort(
         (a, b) => {
-          if (a[ 'title' ] < b[ 'title' ]) {
-            return -1;
-          }
-          if (a[ 'title' ] > b[ 'title' ]) {
-            return 1;
-          }
-          if (a[ 'title' ] === b[ 'title' ]) {
-            return 0;
+          for (i = 0; i < l; i++) {
+            _a_val = getValueByKey(a, sortInfoArray[ i ].key);
+            _b_val = getValueByKey(b, sortInfoArray[ i ].key);
+
+            if (typeof _a_val !== typeof _b_val) {
+              _a_val = '' + _a_val;
+              _b_val = '' + _b_val;
+            }
+            if (_a_val < _b_val) {
+              return (sortInfoArray[ i ].order === 'asc') ? -1 : 1;
+            } else if (_a_val > _b_val) {
+              return (sortInfoArray[ i ].order === 'asc') ? 1 : -1;
+            }
           }
         }
-      );
+      ).filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
       return state
+        .set('sortInfo', sortInfo)
         .set('list', sorted);
     }
   };

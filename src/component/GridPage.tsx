@@ -13,7 +13,7 @@ export class GridPage extends React.Component<iGridPage.Props, iGridPage.State> 
     if (
       this.props.mounted !== nextProps.mounted ||
       this.props.pageButtons !== nextProps.pageButtons ||
-      JSON.stringify(this.props.styles) !== JSON.stringify(nextProps.styles)
+      this.props.styles !== nextProps.styles
     ) {
 
       sameProps = true;
