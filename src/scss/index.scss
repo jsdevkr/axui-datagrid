@@ -62,6 +62,34 @@
     cursor: default;
     &:hover {
       background: $ax-datagrid-row-hover-bg;
+      [data-filter] {
+        $filter-size: 6px;
+
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        width: 14px;
+        height: 14px;
+        margin-top: -7px;
+        cursor: pointer;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        background: #fff;
+        opacity: 0.5;
+
+        &:before {
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.8, 2.2, $ax-datagrid-header-sorter-color, 1, "down");
+          top: 50%;
+          left: 50%;
+          margin-top: -$ax-datagrid-header-sorter-size / 2.2 / 2.2;
+          margin-left: -$ax-datagrid-header-sorter-size / 2.8;
+        }
+
+        &:hover{
+          opacity: 1;
+        }
+      }
     }
     &.selected{
       @include ax-background(to bottom, $ax-datagrid-header-column-focused-bg-colors);
@@ -190,22 +218,11 @@
       height: 10px;
       display: inline-block;
 
-      &:before {
-        top: 0;
-        left: 0;
-        @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.2, $ax-datagrid-header-sorter-color, 0.3, "up");
-      }
-      &:after {
-        bottom: 0;
-        left: 0;
-        @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.2, $ax-datagrid-header-sorter-color, 0.3, "down");
-      }
-
       &[data-sorter-order="asc"] {
         &:before {
           top: 2px;
           left: 0;
-          @include sort-arrow($ax-datagrid-header-sorter-size + 1, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "up");
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "up");
         }
         &:after {
           display: none;
@@ -218,32 +235,8 @@
         &:after {
           bottom: 2px;
           left: 0;
-          @include sort-arrow($ax-datagrid-header-sorter-size + 1, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "down");
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "down");
         }
-      }
-
-    }
-    [data-filter] {
-      // 개발중..
-      $filter-size: 10px;
-
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 10px;
-      height: 10px;
-      cursor: pointer;
-
-      &:before {
-        content: ' ';
-        width: 0;
-        height: 0;
-        display: inline-block;
-        border-left: $filter-size/2 solid transparent;
-        border-right: $filter-size/2 solid transparent;
-        border-top: ($filter-size) solid #000;
-        background: transparent;
-        opacity: 1;
       }
 
     }
@@ -346,6 +339,7 @@
       }
     }
   }
+
 }
 
 @mixin data-arrow() {

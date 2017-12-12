@@ -100,12 +100,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
         label = _col.label;
       }
 
-      if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && sortInfo[_col.key]) {
-        sorter = <span data-sorter={_col.colIndex} data-sorter-order={sortInfo[_col.key].orderBy} />;
-      }
-
-      if (_col.colIndex !== null && typeof _col.colIndex !== 'undefined' && optionsHeader.enableFilter) {
-        filter = <span data-filter={_col.colIndex} data-filter-value='' />;
+      if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && sortInfo[ _col.key ]) {
+        sorter = <span data-sorter={_col.colIndex} data-sorter-order={sortInfo[ _col.key ].orderBy} />;
       }
 
       return (
@@ -118,7 +114,6 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
           }}>
           {sorter}
           {label || ' '}
-          {filter}
         </span>
       );
     };
@@ -162,6 +157,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
                         onClick={(e) => onClickHeader(e, col.colIndex, col.columnAttr)}
                         style={{height: cellHeight, minHeight: '1px'}}>
                         {getFieldSpan(_colGroup, col)}
+                        {(optionsHeader.enableFilter && col.key && col.colIndex > -1) ? <span data-filter='true' /> : null}
                       </td>
                     );
                   })}

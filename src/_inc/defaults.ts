@@ -7,7 +7,6 @@ export const gridOptions = {
   columnMinWidth: 100,
   lineNumberColumnWidth: 40,
   rowSelectorColumnWidth: 28,
-  sortable: false,
   remoteSort: false,
   asidePanelWidth: 0,
   header: {
@@ -18,6 +17,7 @@ export const gridOptions = {
     columnBorderWidth: 1,
     selector: true,
     sortable: true,
+    enableFilter: true,
     clickAction: 'sort' // sort or select
   },
   body: {

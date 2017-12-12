@@ -770,36 +770,20 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private onClickHeader(e: any, colIndex: number, key: string) {
     const options = this.state.options;
-    let state = {
-      dragging: false,
-      selecting: false,
-      selectionRows: {},
-      selectionCols: {},
-      focusedRow: 0,
-      focusedCol: this.state.focusedCol
-    };
 
-    if (key === 'lineNumber') {
-
-      state.selectionRows = (() => {
-        let rows = {};
-        this.props.store_list.forEach((item, i) => {
-          rows[ i ] = true;
-        });
-        return rows;
-      })();
-      state.selectionCols = (() => {
-        let cols = {};
-        this.state.colGroup.forEach(col => {
-          cols[ col.colIndex ] = true;
-        });
-        return cols;
-      })();
-      state.focusedCol = 0;
-      this.setState(state);
+    if (e.target.getAttribute('data-filter')) {
 
     } else {
-      if (options.header.clickAction === 'select') {
+      let state = {
+        dragging: false,
+        selecting: false,
+        selectionRows: {},
+        selectionCols: {},
+        focusedRow: 0,
+        focusedCol: this.state.focusedCol
+      };
+
+      if (key === 'lineNumber') {
 
         state.selectionRows = (() => {
           let rows = {};
@@ -808,28 +792,49 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           });
           return rows;
         })();
-
-        if (e.shiftKey) {
-          state.selectionCols = (() => {
-            let cols = {};
-            range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
-              cols[ i ] = true;
-            });
-            return cols;
-          })();
-        }
-        else {
-          state.selectionCols = {
-            [colIndex]: true
-          };
-          state.focusedCol = colIndex;
-        }
-
+        state.selectionCols = (() => {
+          let cols = {};
+          this.state.colGroup.forEach(col => {
+            cols[ col.colIndex ] = true;
+          });
+          return cols;
+        })();
+        state.focusedCol = 0;
         this.setState(state);
-      }
-      else if (options.header.clickAction === 'sort' && options.header.sortable) {
-        // todo : header click sort
-        this.props.sort(this.state.colGroup, colIndex, options);
+
+      } else {
+        if (options.header.clickAction === 'select') {
+
+          state.selectionRows = (() => {
+            let rows = {};
+            this.props.store_list.forEach((item, i) => {
+              rows[ i ] = true;
+            });
+            return rows;
+          })();
+
+          if (e.shiftKey) {
+            state.selectionCols = (() => {
+              let cols = {};
+              range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
+                cols[ i ] = true;
+              });
+              return cols;
+            })();
+          }
+          else {
+            state.selectionCols = {
+              [colIndex]: true
+            };
+            state.focusedCol = colIndex;
+          }
+
+          this.setState(state);
+        }
+        else if (options.header.clickAction === 'sort' && options.header.sortable) {
+          // todo : header click sort
+          this.props.sort(this.state.colGroup, colIndex, options);
+        }
       }
     }
 
