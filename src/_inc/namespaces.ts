@@ -61,6 +61,9 @@ export namespace iGridRoot {
     focusedColumn: object;
     selectedColumn: object;
     inlineEditingColumn: object;
+    columnFilter: {
+      colIndex: number;
+    } | boolean;
     colGroup: any;
     colGroupMap: object;
     asideColGroup: any;
@@ -248,6 +251,17 @@ export namespace iGridSelector {
     gridCSS: any;
     selectionMinOffset: iSelection;
     selectionMaxOffset: iSelection;
+  }
+
+  export interface State {
+    /* empty */
+  }
+}
+
+export namespace iGridColumnFilter {
+  export interface Props {
+    columnFilter: any;
+    gridCSS: any;
   }
 
   export interface State {

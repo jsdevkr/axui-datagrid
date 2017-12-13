@@ -1,5 +1,5 @@
 import { List, Map } from 'immutable';
-import { each, assignWith, isArray, isNumber, isObject, isString } from 'lodash';
+import { each, assignWith, isFunction, isArray, isNumber, isObject, isString } from 'lodash';
 
 let WEEKNAMES = [
   {label: 'SUN'},
@@ -168,6 +168,44 @@ export function cdate(d, cond) {
       return d;
     }
   }
+}
+
+/**
+ * _target의 조상중에 원하는 조건의 엘리먼트가 있는지 검사합니다. 있을 때는 해당 엘리먼트를 반환하고 없으면 false를 반환 합니다
+ * Checks the parent of the target for elements of the desired condition. Returns the element if the element with the desired condition exists, otherwise returns false.
+ * @param _target
+ * @param _predicate
+ * @return {boolean|Element}
+ * @example
+ * ```js
+ * let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
+ *  return element.getAttribute('data-column-filter') === 'true';
+ * });
+ * // false | Element
+ * ```
+ */
+export function findParentNodeByAttr(_target, _predicate) {
+  if (_target) {
+    while ((function () {
+      let result = true;
+      if (typeof _predicate === 'undefined') {
+        _target = (_target.parentNode) ? _target.parentNode : false;
+      }
+      else if (isFunction(_predicate)) {
+        result = _predicate(_target);
+      }
+      return !result;
+    })()) {
+      if (_target.parentNode && _target.parentNode.parentNode) {
+        _target = _target.parentNode;
+      }
+      else {
+        _target = false;
+        break;
+      }
+    }
+  }
+  return _target;
 }
 
 /**
@@ -1076,3 +1114,5 @@ export function propsToState(props, state) {
 
   return state;
 }
+
+

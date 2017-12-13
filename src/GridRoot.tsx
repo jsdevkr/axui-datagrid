@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import * as UTIL from './_inc/utils';
 import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
-import { GridBody, GridHeader, GridPage, GridScroll } from './component';
+import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
 
 let formatter = GridFormatter.getAll();
@@ -65,6 +65,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       focusedColumn: {},
       selectedColumn: {},
       inlineEditingColumn: {},
+      columnFilter: false,
       colGroup: [],
       colGroupMap: {},
       asideColGroup: [],
@@ -773,6 +774,33 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     if (e.target.getAttribute('data-filter')) {
 
+      this.setState({
+        columnFilter: {
+          colIndex: colIndex
+        }
+      });
+
+      const downEvent = (ee) => {
+
+        let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
+          return element.getAttribute('data-column-filter') === 'true';
+        });
+
+        if (downedElement === false) {
+          ee.preventDefault();
+
+          this.setState({
+            columnFilter: false
+          });
+
+          document.removeEventListener('mousedown', downEvent);
+          document.removeEventListener('mouseleave', downEvent);
+        }
+      };
+
+      document.addEventListener('mousedown', downEvent);
+      document.addEventListener('mouseleave', downEvent);
+
     } else {
       let state = {
         dragging: false,
@@ -782,7 +810,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         focusedRow: 0,
         focusedCol: this.state.focusedCol
       };
-
       if (key === 'lineNumber') {
 
         state.selectionRows = (() => {
@@ -802,7 +829,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         state.focusedCol = 0;
         this.setState(state);
 
-      } else {
+      }
+      else {
         if (options.header.clickAction === 'select') {
 
           state.selectionRows = (() => {
@@ -985,6 +1013,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           onMouseDownScrollBar={this.onMouseDownScrollBar}
           onClickScrollTrack={this.onClickScrollTrack}
           onClickScrollArrow={this.onClickScrollArrow}
+        />
+        <GridColumnFilter
+          columnFilter={this.state.columnFilter}
+          gridCSS={this.props.gridCSS}
         />
       </div>
     );
