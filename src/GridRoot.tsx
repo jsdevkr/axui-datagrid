@@ -781,9 +781,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       });
 
       const downEvent = (ee) => {
-
         let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
-          return element.getAttribute('data-column-filter') === 'true';
+          return (element) ? element.getAttribute('data-column-filter') === 'true' : false;
         });
 
         if (downedElement === false) {
@@ -1016,7 +1015,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
         <GridColumnFilter
           columnFilter={this.state.columnFilter}
+          colGroup={this.state.colGroup}
           gridCSS={this.props.gridCSS}
+          styles={styles}
         />
       </div>
     );

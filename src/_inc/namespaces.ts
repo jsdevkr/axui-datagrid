@@ -261,7 +261,9 @@ export namespace iGridSelector {
 export namespace iGridColumnFilter {
   export interface Props {
     columnFilter: any;
+    colGroup: any;
     gridCSS: any;
+    styles: any;
   }
 
   export interface State {

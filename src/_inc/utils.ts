@@ -1,5 +1,5 @@
 import { List, Map } from 'immutable';
-import { each, assignWith, isFunction, isArray, isNumber, isObject, isString } from 'lodash';
+import { assignWith, each, isArray, isElement, isFunction, isNumber, isObject, isString } from 'lodash';
 
 let WEEKNAMES = [
   {label: 'SUN'},
@@ -15,7 +15,7 @@ function times(s, count) {
   return count < 1 ? '' : new Array(count + 1).join(s);
 }
 
-function setDigit(num, length, padder?:any, radix?:any) {
+function setDigit(num, length, padder?: any, radix?: any) {
   let s = num.toString(radix || 10);
   return times((padder || '0'), (length - s.length)) + s;
 }
@@ -34,7 +34,7 @@ function right(str, pos) {
   }
 }
 
-export function localDate(yy, mm, dd, hh?:number, mi?:number, ss?:number) {
+export function localDate(yy, mm, dd, hh?: number, mi?: number, ss?: number) {
   let utcD;
   if (mm < 0) mm = 0;
   if (typeof hh === 'undefined') hh = 12;
@@ -66,14 +66,14 @@ export function cdate(d, cond) {
         d = new Date(d);
       } else {
         aDateTime = d.split(/ /g), aTimes, aTime,
-          aDate = aDateTime[0].split(/\D/g),
-          yy = aDate[0];
-        mm = parseFloat(aDate[1]);
-        dd = parseFloat(aDate[2]);
-        aTime = aDateTime[1] || '09:00';
+          aDate = aDateTime[ 0 ].split(/\D/g),
+          yy = aDate[ 0 ];
+        mm = parseFloat(aDate[ 1 ]);
+        dd = parseFloat(aDate[ 2 ]);
+        aTime = aDateTime[ 1 ] || '09:00';
         aTimes = aTime.substring(0, 5).split(':');
-        hh = parseFloat(aTimes[0]);
-        mi = parseFloat(aTimes[1]);
+        hh = parseFloat(aTimes[ 0 ]);
+        mi = parseFloat(aTimes[ 1 ]);
         if (right(aTime, 2) === 'AM' || right(aTime, 2) === 'PM') hh += 12;
         d = localDate(yy, mm - 1, dd, hh, mi);
       }
@@ -105,7 +105,7 @@ export function cdate(d, cond) {
     if ('return' in cond) {
       return (function () {
 
-        let fStr = cond['return'], nY, nM, nD, nH, nMM, nS, nDW,
+        let fStr = cond[ 'return' ], nY, nM, nD, nH, nMM, nS, nDW,
             yre, regY, mre, regM, dre, regD, hre, regH, mire, regMI, sre, regS, dwre, regDW;
 
         nY = d.getUTCFullYear();
@@ -159,7 +159,7 @@ export function cdate(d, cond) {
           fStr = fStr.replace(regS, nS);
         }
         if (regDW == 'dw') {
-          fStr = fStr.replace(regDW, WEEKNAMES[nDW].label);
+          fStr = fStr.replace(regDW, WEEKNAMES[ nDW ].label);
         }
         return fStr;
       })();
@@ -191,7 +191,7 @@ export function findParentNodeByAttr(_target, _predicate) {
       if (typeof _predicate === 'undefined') {
         _target = (_target.parentNode) ? _target.parentNode : false;
       }
-      else if (isFunction(_predicate)) {
+      else if (isFunction(_predicate) && isElement(_target)) {
         result = _predicate(_target);
       }
       return !result;
@@ -797,11 +797,11 @@ export function setColGroupWidth(_colGroup, container, options) {
   // 컬럼의 시작위치와 끝위치 계산
   for (i = options.frozenColumnIndex; i < _colGroup.length; i++) {
     if (i === options.frozenColumnIndex) {
-      _colGroup[i]._sx = 0;
+      _colGroup[ i ]._sx = 0;
     } else {
-      _colGroup[i]._sx = _colGroup[i - 1]._ex;
+      _colGroup[ i ]._sx = _colGroup[ i - 1 ]._ex;
     }
-    _colGroup[i]._ex = _colGroup[i]._sx + _colGroup[i]._width;
+    _colGroup[ i ]._ex = _colGroup[ i ]._sx + _colGroup[ i ]._width;
   }
 
   return _colGroup;

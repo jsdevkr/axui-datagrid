@@ -24,14 +24,17 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
   public render() {
     const {
             columnFilter,
-            gridCSS
+            colGroup,
+            gridCSS,
+            styles
           } = this.props;
 
     if (columnFilter === false) return null;
 
-    let filterStyles = {};
-
-    console.log('render');
+    let filterStyles = {
+      top: styles.headerHeight,
+      left: styles.asidePanelWidth + colGroup[columnFilter.colIndex]._sx
+    };
 
     return (
       <div
