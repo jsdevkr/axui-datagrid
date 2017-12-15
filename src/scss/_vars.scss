@@ -18,15 +18,12 @@ $ax-datagrid-header-column-focused-color: #0581f2 !default;
 $ax-datagrid-header-sorter-size: 9px !default;
 $ax-datagrid-header-sorter-color: #000 !default;
 
-
-
 //== aside
 $ax-datagrid-aside-border: 1px solid darken(#ccc, 0%) !default;
 $ax-datagrid-aside-bg: #f2f2f2 !default;
 $ax-datagrid-aside-column-shadow: inset 1px 1px 0 0 #fff !default;
 $ax-datagrid-aside-column-focused-bg-colors: (#f2f2f2, #e1e1e1) !default;
 $ax-datagrid-aside-column-focused-color: #0581f2 !default;
-
 
 $ax-datagrid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
 
@@ -92,6 +89,11 @@ $ax-datagrid-cell-selected-color: #000 !default;
 //== resizer
 $ax-datagrid-resizer-color: #ff3300 !default;
 $ax-datagrid-resizer-size: 2px !default;
+
+//== columnFilter
+$ax-datagrid-column-filter-bg: #fff;
+$ax-datagrid-column-filter-border: $ax-datagrid-border;
+$ax-datagrid-column-filter-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 
 .datagridIcon-first {
   background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Efirst%3C/title%3E%3Cpath d=%22M1.125 10.875v-9.75h1.625v4.469l4.063-4.063v4.063l4.063-4.063v8.938l-4.063-4.063v4.063l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;

@@ -263,6 +263,8 @@ export namespace iGridColumnFilter {
     columnFilter: any;
     colGroup: any;
     gridCSS: any;
+    frozenColumnIndex: number;
+    scrollLeft: number;
     styles: any;
   }
 

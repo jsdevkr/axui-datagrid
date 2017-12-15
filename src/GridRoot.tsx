@@ -9,6 +9,8 @@ import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
+import { Simulate } from 'react-dom/test-utils';
+import keyDown = Simulate.keyDown;
 
 let formatter = GridFormatter.getAll();
 
@@ -770,11 +772,14 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onClickHeader(e: any, colIndex: number, key: string) {
+    const styles = this.state.styles;
     const options = this.state.options;
 
     if (e.target.getAttribute('data-filter')) {
 
+      let columnFilterLeft: number = styles.asidePanelWidth + this.state.colGroup[ colIndex ]._sx - 2 + this.state.scrollLeft;
       this.setState({
+        scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
         columnFilter: {
           colIndex: colIndex
         }
@@ -794,13 +799,21 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
           document.removeEventListener('mousedown', downEvent);
           document.removeEventListener('mouseleave', downEvent);
+          document.removeEventListener('keydown', keyDown);
+        }
+      };
+      const keyDown = (ee) => {
+        if (ee.which === 27) {
+          downEvent(ee);
         }
       };
 
       document.addEventListener('mousedown', downEvent);
       document.addEventListener('mouseleave', downEvent);
+      document.addEventListener('keydown', keyDown);
 
     } else {
+
       let state = {
         dragging: false,
         selecting: false,
@@ -1017,6 +1030,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           columnFilter={this.state.columnFilter}
           colGroup={this.state.colGroup}
           gridCSS={this.props.gridCSS}
+          frozenColumnIndex={options.frozenColumnIndex}
+          scrollLeft={this.state.scrollLeft}
           styles={styles}
         />
       </div>

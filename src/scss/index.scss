@@ -605,9 +605,11 @@
     position: absolute;
     left: 0;
     top: 0;
-    background: #fff;
-    border: 1px solid #000;
     width: 180px;
-    height: 180px;
+    height: 300px;
+    background: $ax-datagrid-column-filter-bg;
+    border: $ax-datagrid-column-filter-border;
+    box-shadow: $ax-datagrid-column-filter-box-shadow;
+    border-radius: 5px;
   }
 }
