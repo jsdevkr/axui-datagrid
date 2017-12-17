@@ -57,7 +57,6 @@
   border-right: $ax-datagrid-column-border;
   border-bottom: $ax-datagrid-column-border;
 
-
   &.headerColumn {
     cursor: default;
     &:hover {
@@ -86,16 +85,16 @@
           margin-left: -$ax-datagrid-header-sorter-size / 2.8;
         }
 
-        &:hover{
+        &:hover {
           opacity: 1;
         }
       }
     }
-    &.selected{
+    &.selected {
       @include ax-background(to bottom, $ax-datagrid-header-column-focused-bg-colors);
     }
     &.focused {
-      &:before{
+      &:before {
         content: '';
         display: block;
         position: absolute;
@@ -142,7 +141,7 @@
       @include ax-background(to right, $ax-datagrid-aside-column-focused-bg-colors);
     }
     &.focused {
-      &:before{
+      &:before {
         content: '';
         display: block;
         position: absolute;
@@ -168,7 +167,7 @@
     }
   }
 
-  &.selected{
+  &.selected {
     background: $ax-datagrid-cell-selected-bg;
   }
   &.focused {
@@ -448,7 +447,7 @@
       top: 0;
       cursor: ew-resize;
     }
-    [data-column-resizing]{
+    [data-column-resizing] {
       position: absolute;
       top: 0;
       left: 0;
@@ -601,7 +600,7 @@
     border: 1px solid #73b3f0;
     opacity: 0.5;
   }
-  .columnFilter{
+  .columnFilter {
     position: absolute;
     left: 0;
     top: 0;
@@ -611,5 +610,22 @@
     border: $ax-datagrid-column-filter-border;
     box-shadow: $ax-datagrid-column-filter-box-shadow;
     border-radius: 5px;
+    padding: 5px;
+    [data-options] {
+      height: 100%;
+      border: 1px solid #eee;
+      overflow: auto;
+    }
+    [data-option] {
+      padding: 0 5px;
+      white-space: nowrap;
+      label, input {
+        line-height: 1.43rem;
+      }
+      input[type="checkbox"]{
+        font-size: 1.2rem;
+        margin:0 0.2rem;
+      }
+    }
   }
 }

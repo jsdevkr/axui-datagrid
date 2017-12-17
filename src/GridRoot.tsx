@@ -245,6 +245,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private handleWheel(e) {
+    // 컬럼필터 활성화 상태라면 구문 실행 안함.
+    if (this.state.columnFilter) return true;
+
     let delta = {x: 0, y: 0};
 
     if (e.detail) {
@@ -777,15 +780,12 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     if (e.target.getAttribute('data-filter')) {
 
-      let columnFilterLeft: number = styles.asidePanelWidth + this.state.colGroup[ colIndex ]._sx - 2 + this.state.scrollLeft;
-      this.setState({
-        scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
-        columnFilter: {
-          colIndex: colIndex
-        }
-      });
-
       const downEvent = (ee) => {
+
+        if (ee.target && ee.target.getAttribute && '' + this.state.columnFilter[ 'colIndex' ] === ee.target.getAttribute('data-filter-index')) {
+          return false;
+        }
+
         let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
           return (element) ? element.getAttribute('data-column-filter') === 'true' : false;
         });
@@ -808,9 +808,27 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         }
       };
 
-      document.addEventListener('mousedown', downEvent);
-      document.addEventListener('mouseleave', downEvent);
-      document.addEventListener('keydown', keyDown);
+      if (this.state.columnFilter && this.state.columnFilter[ 'colIndex' ] === colIndex) {
+        this.setState({
+          columnFilter: false
+        });
+
+        document.removeEventListener('mousedown', downEvent);
+        document.removeEventListener('mouseleave', downEvent);
+        document.removeEventListener('keydown', keyDown);
+      } else {
+        let columnFilterLeft: number = styles.asidePanelWidth + this.state.colGroup[ colIndex ]._sx - 2 + this.state.scrollLeft;
+        this.setState({
+          scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
+          columnFilter: {
+            colIndex: colIndex
+          }
+        });
+
+        document.addEventListener('mousedown', downEvent);
+        document.addEventListener('mouseleave', downEvent);
+        document.addEventListener('keydown', keyDown);
+      }
 
     } else {
 
@@ -1029,10 +1047,12 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         <GridColumnFilter
           columnFilter={this.state.columnFilter}
           colGroup={this.state.colGroup}
+          options={options}
           gridCSS={this.props.gridCSS}
           frozenColumnIndex={options.frozenColumnIndex}
           scrollLeft={this.state.scrollLeft}
           styles={styles}
+          list={this.props.store_receivedList}
         />
       </div>
     );

@@ -157,7 +157,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
                         onClick={(e) => onClickHeader(e, col.colIndex, col.columnAttr)}
                         style={{height: cellHeight, minHeight: '1px'}}>
                         {getFieldSpan(_colGroup, col)}
-                        {(optionsHeader.enableFilter && col.key && col.colIndex > -1) ? <span data-filter='true' /> : null}
+                        {(optionsHeader.enableFilter && col.key && col.colIndex > -1) ? <span data-filter='true' data-filter-index={col.colIndex} /> : null}
                       </td>
                     );
                   })}

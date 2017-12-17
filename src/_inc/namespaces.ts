@@ -262,10 +262,12 @@ export namespace iGridColumnFilter {
   export interface Props {
     columnFilter: any;
     colGroup: any;
+    options: any;
     gridCSS: any;
     frozenColumnIndex: number;
     scrollLeft: number;
     styles: any;
+    list: any;
   }
 
   export interface State {
