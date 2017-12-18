@@ -1,5 +1,5 @@
 import * as TYPES from '../_inc/actionTypes';
-import { List, Record } from 'immutable';
+import { List, Record, Map } from 'immutable';
 import { isObject } from 'lodash';
 
 export interface State {
@@ -8,7 +8,7 @@ export interface State {
   list: any;
   page: object;
   sortInfo: object;
-  filterInfo: object;
+  filterInfo: any;
 }
 
 const stateRecord = Record({
@@ -17,7 +17,7 @@ const stateRecord = Record({
   list: List([]),
   page: {},
   sortInfo: {},
-  filterInfo: {}
+  filterInfo: Map({})
 });
 
 // 초기 상태
@@ -109,15 +109,58 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.FILTER]: () => {
-      console.log(action);
-      /*
-      colGroup:[]
-      colIndex:1
-      option: {value, checked, isCheckAll}
-      type:"FILTER"
-       */
+      let filterOptions = List(action.data.filterOptions);
+      let filterInfo = state.get('filterInfo').toJS();
+
+      if (action.data.isCheckAll) {
+        if (action.data.checked) {
+          filterInfo[ action.colIndex ] = false;
+        } else {
+          let filter = {};
+          filterOptions.forEach(O => {
+            filter[ O[ 'value' ] ] = false;
+          });
+          filterInfo[ action.colIndex ] = filter;
+        }
+      }
+      else {
+
+        let filter = {};
+        let isAllChecked = true;
 
 
+        if (action.colIndex in filterInfo) {
+          filterOptions.forEach(O => {
+            if (O[ 'value' ] !== '__check_all__') {
+              if (O[ 'value' ] === action.data.value) {
+                filter[ O[ 'value' ] ] = action.data.checked;
+              } else {
+                filter[ O[ 'value' ] ] = filterInfo[ action.colIndex ][ O[ 'value' ] ]
+              }
+              if(!filter[ O[ 'value' ] ]) isAllChecked = false;
+            }
+          });
+        }
+        else {
+          filterOptions.forEach(O => {
+            if (O[ 'value' ] !== '__check_all__') {
+              if (O[ 'value' ] === action.data.value) {
+                filter[ O[ 'value' ] ] = action.data.checked;
+              } else {
+                filter[ O[ 'value' ] ] = true;
+              }
+              if(!filter[ O[ 'value' ] ]) isAllChecked = false;
+            }
+          });
+        }
+
+        filter[ '__check_all__' ] = isAllChecked;
+
+        filterInfo[ action.colIndex ] = filter;
+      }
+
+      return state
+        .set('filterInfo', Map(filterInfo));
     }
   };
 

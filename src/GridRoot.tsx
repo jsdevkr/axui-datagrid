@@ -200,7 +200,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       this.props.store_list !== nextProps.store_list ||
       this.props.store_deletedList !== nextProps.store_deletedList ||
       this.props.store_page !== nextProps.store_page ||
-      this.props.store_sortInfo !== nextProps.store_sortInfo
+      this.props.store_sortInfo !== nextProps.store_sortInfo ||
+      this.props.store_filterInfo !== nextProps.store_filterInfo
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
 
@@ -900,9 +901,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   }
 
-  private onChangeColumnFilter(colIndex, optionValue, optionChecked, isCheckAll) {
+  private onChangeColumnFilter(colIndex, filterOptions, optionValue, optionChecked, isCheckAll) {
     const options = this.state.options;
-    this.props.filter(this.state.colGroup, options, colIndex, {value: optionValue, checked: optionChecked, isCheckAll: isCheckAll});
+    this.props.filter(this.state.colGroup, options, colIndex, {filterOptions: filterOptions, value: optionValue, checked: optionChecked, isCheckAll: isCheckAll});
   }
 
   private refCallback(_key, el) {

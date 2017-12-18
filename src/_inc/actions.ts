@@ -31,12 +31,18 @@ export function SORT(colGroup: any, options: any, colIndex: number) {
   };
 }
 
-export function FILTER(colGroup: any, options: any, colIndex: number, option: any) {
+export function FILTER(colGroup: any, options: any, colIndex: number, data: { filterOptions: any; value: any; checked: boolean; isCheckAll: boolean; }) {
   return {
     type: TYPES.FILTER,
     colGroup: colGroup,
     options: options,
     colIndex: colIndex,
-    option: option
+    data: data
   };
+}
+
+export function UPDATE() {
+  return {
+    type: TYPES.UPDATE
+  }
 }
