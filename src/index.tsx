@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {connect, Provider} from 'react-redux';
-import {store} from './store';
-import * as act from './actions';
-import {GridRoot} from './GridRoot';
+import { connect, Provider } from 'react-redux';
+import { store } from './store';
+import { GridRoot } from './GridRoot';
+import * as ACT from './_inc/actions';
 
 interface iProps {
   gridCSS: any;
@@ -21,23 +21,25 @@ export const GridRootConnected = connect(
       store_deletedList: state.get('deletedList'),
       store_list: state.get('list'),
       store_page: state.get('page'),
-      store_sortInfo: state.get('sortInfo')
+      store_sortInfo: state.get('sortInfo'),
+      store_filterInfo: state.get('filterInfo')
     };
   },
   (dispatch: any) => ({
-    init: (props, options) => dispatch(act.init(props, options)),
-    setData: (data, options) => dispatch(act.setData(data, options)),
-    sort: (colGroup, colIndex, options) => dispatch(act.sort(colGroup, colIndex, options))
+    init: (props, options) => dispatch(ACT.INIT(props, options)),
+    setData: (data, options) => dispatch(ACT.SET_DATA(data, options)),
+    sort: (colGroup, options, colIndex) => dispatch(ACT.SORT(colGroup, options, colIndex)),
+    filter: (colGroup, options, colIndex, option) => dispatch(ACT.FILTER(colGroup, options, colIndex, option))
   })
 )(GridRoot);
 
 export class AXDatagrid extends React.Component<iProps, {}> {
 
-  public static setFormatter(_formatter: any): any{
+  public static setFormatter(_formatter: any): any {
     return GridRoot.setFormatter(_formatter);
   }
 
-  public static getFormatter(): any{
+  public static getFormatter(): any {
     return GridRoot.getFormatter();
   }
 

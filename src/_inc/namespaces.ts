@@ -30,6 +30,7 @@ export namespace iGridRoot {
     store_list: any;
     store_page: any;
     store_sortInfo: any;
+    store_filterInfo: any;
     gridCSS: any;
     height: string;
     style: any;
@@ -40,6 +41,7 @@ export namespace iGridRoot {
     init: Function;
     setData: Function;
     sort: Function;
+    filter: Function;
   }
 
   export interface State {
@@ -261,6 +263,7 @@ export namespace iGridSelector {
 export namespace iGridColumnFilter {
   export interface Props {
     columnFilter: any;
+    filterInfo: any;
     colGroup: any;
     options: any;
     gridCSS: any;
@@ -268,6 +271,7 @@ export namespace iGridColumnFilter {
     scrollLeft: number;
     styles: any;
     list: any;
+    onChangeColumnFilter: Function;
   }
 
   export interface State {

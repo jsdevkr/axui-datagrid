@@ -14,11 +14,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
             columnFilter,
             colGroup,
             options,
-            list
+            list,
+            onChangeColumnFilter
           } = this.props;
-    const onChangeCheckbox = (e) => {
-      console.log(e.target.value, e.target.checked, e.target.getAttribute('data-check-all'));
-    };
 
     let arr = uniqBy(list
       .filter(item => (item ? !item[ options.columnKeys.deleted ] : false))
@@ -34,11 +32,12 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         <label>
           <input
             type='checkbox'
-            data-check-all={option.checkAll}
             name={colGroup[ columnFilter.colIndex ].key}
             defaultChecked={option.checked}
             value={option.value}
-            onChange={onChangeCheckbox}
+            onChange={e => {
+              onChangeColumnFilter(columnFilter.colIndex, e.target.value, e.target.checked, option.checkAll);
+            }}
           /> {option.value}
         </label>
       </div>;

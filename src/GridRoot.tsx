@@ -47,6 +47,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       sColIndex: -1,
       eColIndex: -1
     };
+
     // 내부연산용 데이터 저장소
     this.state = {
       mounted: false,
@@ -154,6 +155,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onMouseDownBody = this.onMouseDownBody.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onClickHeader = this.onClickHeader.bind(this);
+    this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -891,11 +893,16 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         }
         else if (options.header.clickAction === 'sort' && options.header.sortable) {
           // todo : header click sort
-          this.props.sort(this.state.colGroup, colIndex, options);
+          this.props.sort(this.state.colGroup, options, colIndex);
         }
       }
     }
 
+  }
+
+  private onChangeColumnFilter(colIndex, optionValue, optionChecked, isCheckAll) {
+    const options = this.state.options;
+    this.props.filter(this.state.colGroup, options, colIndex, {value: optionValue, checked: optionChecked, isCheckAll: isCheckAll});
   }
 
   private refCallback(_key, el) {
@@ -1046,6 +1053,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
         <GridColumnFilter
           columnFilter={this.state.columnFilter}
+          filterInfo={this.props.store_filterInfo}
           colGroup={this.state.colGroup}
           options={options}
           gridCSS={this.props.gridCSS}
@@ -1053,12 +1061,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollLeft={this.state.scrollLeft}
           styles={styles}
           list={this.props.store_receivedList}
+          onChangeColumnFilter={this.onChangeColumnFilter}
         />
       </div>
     );
   }
 }
-
-
-// todo : linenumber 클릭시
-// todo : header 클릭시

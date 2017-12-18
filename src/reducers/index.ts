@@ -1,5 +1,5 @@
-import * as act from '../actions';
-import { List, Map, Record } from 'immutable';
+import * as TYPES from '../_inc/actionTypes';
+import { List, Record } from 'immutable';
 import { isObject } from 'lodash';
 
 export interface State {
@@ -8,15 +8,16 @@ export interface State {
   list: any;
   page: object;
   sortInfo: object;
+  filterInfo: object;
 }
-
 
 const stateRecord = Record({
   receivedList: List([]),
   deletedList: List([]),
   list: List([]),
   page: {},
-  sortInfo: {}
+  sortInfo: {},
+  filterInfo: {}
 });
 
 // 초기 상태
@@ -25,7 +26,7 @@ const initialState = new stateRecord();
 // 리듀서 함수 정의
 export const gridReducer = (state = initialState, action) => {
   const processor = {
-    [act.INIT]: () => { // 그리드 데이터 초기화
+    [TYPES.INIT]: () => { // 그리드 데이터 초기화
 
       let list; // 그리드에 표현할 목록
 
@@ -40,7 +41,7 @@ export const gridReducer = (state = initialState, action) => {
         .set('page', isObject(action.page) ? (action.page) : false);
     },
 
-    [act.SET_DATA]: () => {
+    [TYPES.SET_DATA]: () => {
       // 전달받은 리스트 중에 출력할 리스트를 필터링
       let list = action.receivedList.filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
@@ -50,7 +51,7 @@ export const gridReducer = (state = initialState, action) => {
         .set('page', isObject(action.page) ? (action.page) : false)
     },
 
-    [act.SORT]: () => {
+    [TYPES.SORT]: () => {
       let sortInfo = {}, seq: number = 0, sortOrder;
       let sortInfoArray = [];
       let colGroup = action.colGroup;
@@ -105,6 +106,18 @@ export const gridReducer = (state = initialState, action) => {
       return state
         .set('sortInfo', sortInfo)
         .set('list', sorted);
+    },
+
+    [TYPES.FILTER]: () => {
+      console.log(action);
+      /*
+      colGroup:[]
+      colIndex:1
+      option: {value, checked, isCheckAll}
+      type:"FILTER"
+       */
+
+
     }
   };
 
