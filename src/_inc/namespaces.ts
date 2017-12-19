@@ -275,6 +275,6 @@ export namespace iGridColumnFilter {
   }
 
   export interface State {
-    /* empty */
+
   }
 }

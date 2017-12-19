@@ -901,9 +901,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   }
 
-  private onChangeColumnFilter(colIndex, filterOptions, optionValue, optionChecked, isCheckAll) {
+  private onChangeColumnFilter(colIndex, filterInfo) {
     const options = this.state.options;
-    this.props.filter(this.state.colGroup, options, colIndex, {filterOptions: filterOptions, value: optionValue, checked: optionChecked, isCheckAll: isCheckAll});
+
+    this.props.filter(filterInfo);
   }
 
   private refCallback(_key, el) {

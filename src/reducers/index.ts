@@ -109,58 +109,8 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.FILTER]: () => {
-      let filterOptions = List(action.data.filterOptions);
-      let filterInfo = state.get('filterInfo').toJS();
-
-      if (action.data.isCheckAll) {
-        if (action.data.checked) {
-          filterInfo[ action.colIndex ] = false;
-        } else {
-          let filter = {};
-          filterOptions.forEach(O => {
-            filter[ O[ 'value' ] ] = false;
-          });
-          filterInfo[ action.colIndex ] = filter;
-        }
-      }
-      else {
-
-        let filter = {};
-        let isAllChecked = true;
-
-
-        if (action.colIndex in filterInfo) {
-          filterOptions.forEach(O => {
-            if (O[ 'value' ] !== '__check_all__') {
-              if (O[ 'value' ] === action.data.value) {
-                filter[ O[ 'value' ] ] = action.data.checked;
-              } else {
-                filter[ O[ 'value' ] ] = filterInfo[ action.colIndex ][ O[ 'value' ] ]
-              }
-              if(!filter[ O[ 'value' ] ]) isAllChecked = false;
-            }
-          });
-        }
-        else {
-          filterOptions.forEach(O => {
-            if (O[ 'value' ] !== '__check_all__') {
-              if (O[ 'value' ] === action.data.value) {
-                filter[ O[ 'value' ] ] = action.data.checked;
-              } else {
-                filter[ O[ 'value' ] ] = true;
-              }
-              if(!filter[ O[ 'value' ] ]) isAllChecked = false;
-            }
-          });
-        }
-
-        filter[ '__check_all__' ] = isAllChecked;
-
-        filterInfo[ action.colIndex ] = filter;
-      }
-
       return state
-        .set('filterInfo', Map(filterInfo));
+        .set('filterInfo', Map(action.filterInfo));
     }
   };
 

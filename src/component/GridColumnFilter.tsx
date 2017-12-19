@@ -1,25 +1,108 @@
 import * as React from 'react';
 import classNames from 'classnames'
 import { iGridColumnFilter } from '../_inc/namespaces';
+import { List, Map } from 'immutable';
 import { uniqBy } from 'lodash';
 
 export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, iGridColumnFilter.State> {
   constructor(props: iGridColumnFilter.Props) {
     super(props);
 
+    this.state = {};
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+/*
+  public shouldComponentUpdate(nextProps, nextState) {
+
+    let sameProps = false;
+
+    if (this.state.filterInfo !== nextState.filterInfo) {
+      this.props.onChangeColumnFilter(this.props.columnFilter.colIndex, this.state.filterInfo);
+      sameProps = true;
+    }
+
+    if (
+      this.props.columnFilter !== nextProps.columnFilter
+    ) {
+      sameProps = true;
+    }
+
+    return sameProps;
+  }
+*/
+
+  private onChange(colIndex, filterOptions, value, checked, isCheckAll) {
+    const {
+            onChangeColumnFilter
+          } = this.props;
+
+
+    filterOptions = List(filterOptions);
+    let filterInfo = this.props.filterInfo.toJS();
+
+    if (isCheckAll) {
+      if (checked) {
+        filterInfo[ colIndex ] = false;
+      } else {
+        let filter = {};
+        filterOptions.forEach(O => {
+          filter[ O[ 'value' ] ] = false;
+        });
+        filterInfo[ colIndex ] = filter;
+      }
+    }
+    else {
+
+      let filter = {};
+      let isAllChecked = true;
+
+      if (colIndex in filterInfo) {
+        filterOptions.forEach(O => {
+          if (O[ 'value' ] !== '__check_all__') {
+            if (O[ 'value' ] === value) {
+              filter[ O[ 'value' ] ] = checked;
+            } else {
+              filter[ O[ 'value' ] ] = filterInfo[ colIndex ][ O[ 'value' ] ]
+            }
+            if (!filter[ O[ 'value' ] ]) isAllChecked = false;
+          }
+        });
+      }
+      else {
+        filterOptions.forEach(O => {
+          if (O[ 'value' ] !== '__check_all__') {
+            if (O[ 'value' ] === value) {
+              filter[ O[ 'value' ] ] = checked;
+            } else {
+              filter[ O[ 'value' ] ] = true;
+            }
+            if (!filter[ O[ 'value' ] ]) isAllChecked = false;
+          }
+        });
+      }
+
+      filter[ '__check_all__' ] = isAllChecked;
+
+      filterInfo[ colIndex ] = filter;
+    }
+
+    onChangeColumnFilter(colIndex, filterInfo);
   }
 
   private getOptions() {
     const {
+            gridCSS,
             columnFilter,
             colGroup,
             options,
             list,
-            filterInfo,
-            onChangeColumnFilter
+            filterInfo
           } = this.props;
 
     let columnFilterInfo = filterInfo.get('' + columnFilter.colIndex);
+
     let arr = uniqBy(list
       .filter(item => (item ? !item[ options.columnKeys.deleted ] : false))
       .map(item => {
@@ -40,36 +123,19 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
     });
 
     return arr.map((option, i) => {
-      return <div key={i} data-option='' className=''>
-        <label>
-          <input
-            type='checkbox'
-            name={colGroup[ columnFilter.colIndex ].key}
-            value={option.value}
-            checked={option.checked}
-            onChange={e => {
-              onChangeColumnFilter(columnFilter.colIndex, arr, e.target.value, e.target.checked, option.checkAll);
-            }}
-          /> {option.text}
-        </label>
+      return <div
+        key={i}
+        data-option={option.value}
+        data-checked={option.checked}
+        onClick={e => {
+          this.onChange(columnFilter.colIndex, arr, option.value, !option.checked, option.checkAll);
+        }}
+      >
+        <div className={classNames(gridCSS.checkBox)} />
+        <span className={classNames(gridCSS.text)}>{option.text}</span>
       </div>;
     });
   }
-
-  public shouldComponentUpdate(nextProps, nextState) {
-
-    let sameProps = false;
-
-    if (
-      this.props.columnFilter !== nextProps.columnFilter ||
-      this.props.filterInfo !== nextProps.filterInfo
-    ) {
-      sameProps = true;
-    }
-
-    return sameProps;
-  }
-
 
   public render() {
     const {

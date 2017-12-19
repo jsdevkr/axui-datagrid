@@ -619,12 +619,47 @@
     [data-option] {
       padding: 0 5px;
       white-space: nowrap;
-      label, input {
-        line-height: 1.43rem;
+      line-height: 20px;
+      cursor: pointer;
+
+      .checkBox {
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        border: $ax-datagrid-cell-checkbox-border;
+        border-radius: $ax-datagrid-cell-checkbox-border-radius;
+        @include ax-background(to bottom, $ax-datagrid-cell-checkbox-bg-colors);
+        height: 16px;
+        width: 16px;
+
+        &:after {
+          content: '';
+          width: 0.6em;
+          height: 0.4em;
+          position: absolute;
+          top: 0.3em;
+          right: 0.2em;
+          border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
+          border-top: none;
+          border-right: none;
+          background: transparent;
+          opacity: 0.0;
+          transform: rotate(-50deg);
+        }
       }
-      input[type="checkbox"]{
-        font-size: 1.2rem;
-        margin:0 0.2rem;
+      .text{
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 0.4em;
+      }
+
+      &[data-checked="true"] {
+        .checkBox {
+          &:after {
+            opacity: 1;
+          }
+        }
       }
     }
   }

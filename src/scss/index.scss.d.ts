@@ -23,3 +23,4 @@ export const scroller: string;
 export const scrollBar: string;
 export const cellSelector: string;
 export const columnFilter: string;
+export const text: string;
