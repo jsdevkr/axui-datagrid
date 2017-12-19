@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames'
 import { iGridColumnFilter } from '../_inc/namespaces';
-import { List, Map } from 'immutable';
+import { List } from 'immutable';
 import { uniqBy } from 'lodash';
 
 export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, iGridColumnFilter.State> {
@@ -13,25 +13,25 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
     this.onChange = this.onChange.bind(this);
   }
 
-/*
-  public shouldComponentUpdate(nextProps, nextState) {
+  /*
+    public shouldComponentUpdate(nextProps, nextState) {
 
-    let sameProps = false;
+      let sameProps = false;
 
-    if (this.state.filterInfo !== nextState.filterInfo) {
-      this.props.onChangeColumnFilter(this.props.columnFilter.colIndex, this.state.filterInfo);
-      sameProps = true;
+      if (this.state.filterInfo !== nextState.filterInfo) {
+        this.props.onChangeColumnFilter(this.props.columnFilter.colIndex, this.state.filterInfo);
+        sameProps = true;
+      }
+
+      if (
+        this.props.columnFilter !== nextProps.columnFilter
+      ) {
+        sameProps = true;
+      }
+
+      return sameProps;
     }
-
-    if (
-      this.props.columnFilter !== nextProps.columnFilter
-    ) {
-      sameProps = true;
-    }
-
-    return sameProps;
-  }
-*/
+  */
 
   private onChange(colIndex, filterOptions, value, checked, isCheckAll) {
     const {
@@ -64,7 +64,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
             if (O[ 'value' ] === value) {
               filter[ O[ 'value' ] ] = checked;
             } else {
-              filter[ O[ 'value' ] ] = filterInfo[ colIndex ][ O[ 'value' ] ]
+              filter[ O[ 'value' ] ] = (filterInfo[ colIndex ] === false) ? true : filterInfo[ colIndex ][ O[ 'value' ] ];
             }
             if (!filter[ O[ 'value' ] ]) isAllChecked = false;
           }

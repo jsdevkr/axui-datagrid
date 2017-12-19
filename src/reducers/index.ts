@@ -1,5 +1,5 @@
 import * as TYPES from '../_inc/actionTypes';
-import { List, Record, Map } from 'immutable';
+import { List, Map, Record } from 'immutable';
 import { isObject } from 'lodash';
 
 export interface State {
@@ -109,6 +109,10 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.FILTER]: () => {
+      console.log(action.filterInfo);
+
+
+
       return state
         .set('filterInfo', Map(action.filterInfo));
     }

@@ -904,7 +904,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   private onChangeColumnFilter(colIndex, filterInfo) {
     const options = this.state.options;
 
-    this.props.filter(filterInfo);
+    this.props.filter(colIndex, filterInfo);
   }
 
   private refCallback(_key, el) {

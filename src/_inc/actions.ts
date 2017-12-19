@@ -31,10 +31,11 @@ export function SORT(colGroup: any, options: any, colIndex: number) {
   };
 }
 
-export function FILTER(filterInfo: any) {
+export function FILTER(colIndex: number, filterInfo: any) {
   return {
     type: TYPES.FILTER,
-    filterInfo: filterInfo
+    colIndex,
+    filterInfo
   };
 }
 
