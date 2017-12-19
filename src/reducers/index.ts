@@ -109,9 +109,7 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.FILTER]: () => {
-      console.log(action.filterInfo);
-
-
+      console.log(action.colIndex, action.filterInfo);
 
       return state
         .set('filterInfo', Map(action.filterInfo));

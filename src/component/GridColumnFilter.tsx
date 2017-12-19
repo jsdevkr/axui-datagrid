@@ -46,11 +46,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
       if (checked) {
         filterInfo[ colIndex ] = false;
       } else {
-        let filter = {};
-        filterOptions.forEach(O => {
-          filter[ O[ 'value' ] ] = false;
-        });
-        filterInfo[ colIndex ] = filter;
+        filterInfo[ colIndex ] = {
+          ['__check_all__']: false
+        };
       }
     }
     else {
@@ -62,9 +60,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         filterOptions.forEach(O => {
           if (O[ 'value' ] !== '__check_all__') {
             if (O[ 'value' ] === value) {
-              filter[ O[ 'value' ] ] = checked;
+              if (checked) filter[ O[ 'value' ] ] = checked;
             } else {
-              filter[ O[ 'value' ] ] = (filterInfo[ colIndex ] === false) ? true : filterInfo[ colIndex ][ O[ 'value' ] ];
+              if (filterInfo[ colIndex ] && filterInfo[ colIndex ][ O[ 'value' ] ]) filter[ O[ 'value' ] ] = true;
             }
             if (!filter[ O[ 'value' ] ]) isAllChecked = false;
           }
@@ -74,7 +72,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         filterOptions.forEach(O => {
           if (O[ 'value' ] !== '__check_all__') {
             if (O[ 'value' ] === value) {
-              filter[ O[ 'value' ] ] = checked;
+              if (checked) filter[ O[ 'value' ] ] = checked;
             } else {
               filter[ O[ 'value' ] ] = true;
             }
@@ -84,7 +82,6 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
       }
 
       filter[ '__check_all__' ] = isAllChecked;
-
       filterInfo[ colIndex ] = filter;
     }
 
