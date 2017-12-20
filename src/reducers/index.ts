@@ -109,10 +109,43 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.FILTER]: () => {
-      console.log(action.colIndex, action.filterInfo);
+      const checkAll = (action.filterInfo[ action.colIndex ] === false) ? true : action.filterInfo[ action.colIndex ][ '__check_all__' ];
+      let list;
+
+      if (checkAll) {
+        list = state.get('receivedList').filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
+      }
+      else {
+        list = state.get('receivedList').filter(item => {
+          if (item) {
+            if (item[ action.options.columnKeys.deleted ]) return false;
+
+            let value = item[ action.colGroup[ action.colIndex ].key ];
+
+            if (typeof value === 'undefined') {
+              if(!action.filterInfo[ action.colIndex ][ '__UNDEFINED__' ]){
+                return false;
+              }
+            }
+            else {
+              if (!action.filterInfo[ action.colIndex ][ value ]) {
+                return false;
+              }
+            }
+
+            return true;
+          }
+          return false;
+        });
+      }
 
       return state
+        .set('list', List(list))
         .set('filterInfo', Map(action.filterInfo));
+    },
+
+    [TYPES.UPDATE]: () => {
+
     }
   };
 

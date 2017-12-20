@@ -385,12 +385,14 @@
         @include gridCell();
       }
     }
+
+    /*
     tr:last-child {
       td {
         border-bottom: $ax-datagrid-last-row-border;
       }
     }
-
+    */
   }
 
   [data-panel] {

@@ -47,7 +47,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         filterInfo[ colIndex ] = false;
       } else {
         filterInfo[ colIndex ] = {
-          ['__check_all__']: false
+          ['__CHECK_ALL__']: false
         };
       }
     }
@@ -58,11 +58,11 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
 
       if (colIndex in filterInfo) {
         filterOptions.forEach(O => {
-          if (O[ 'value' ] !== '__check_all__') {
+          if (O[ 'value' ] !== '__CHECK_ALL__') {
             if (O[ 'value' ] === value) {
-              if (checked) filter[ O[ 'value' ] ] = checked;
+              filter[ O[ 'value' ] ] = checked;
             } else {
-              if (filterInfo[ colIndex ] && filterInfo[ colIndex ][ O[ 'value' ] ]) filter[ O[ 'value' ] ] = true;
+              filter[ O[ 'value' ] ] = (filterInfo[ colIndex ] === false) ? true : filterInfo[ colIndex ][ O[ 'value' ] ];
             }
             if (!filter[ O[ 'value' ] ]) isAllChecked = false;
           }
@@ -70,9 +70,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
       }
       else {
         filterOptions.forEach(O => {
-          if (O[ 'value' ] !== '__check_all__') {
+          if (O[ 'value' ] !== '__CHECK_ALL__') {
             if (O[ 'value' ] === value) {
-              if (checked) filter[ O[ 'value' ] ] = checked;
+              filter[ O[ 'value' ] ] = checked;
             } else {
               filter[ O[ 'value' ] ] = true;
             }
@@ -81,7 +81,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         });
       }
 
-      filter[ '__check_all__' ] = isAllChecked;
+      filter[ '__CHECK_ALL__' ] = isAllChecked;
       filterInfo[ colIndex ] = filter;
     }
 
@@ -103,26 +103,47 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
     let arr = uniqBy(list
       .filter(item => (item ? !item[ options.columnKeys.deleted ] : false))
       .map(item => {
-        const value = item[ colGroup[ columnFilter.colIndex ].key ];
+        let value = item[ colGroup[ columnFilter.colIndex ].key ];
+        let text: string = value;
+        let checked: boolean = false;
+
+        if (typeof value === 'undefined') {
+          value = '__UNDEFINED__';
+          text = '값 없음';
+        }
+
+        if (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false) {
+          checked = true;
+        }
+        else if (typeof columnFilterInfo !== 'undefined' && columnFilterInfo !== false && typeof columnFilterInfo[ value ] === 'undefined') {
+          checked = columnFilterInfo[ '__CHECK_ALL__' ];
+        }
+        else if (value in columnFilterInfo) {
+          checked = columnFilterInfo[ value ];
+        }
+        else {
+          checked = columnFilterInfo[ '__CHECK_ALL__' ];
+        }
+
         return {
           value: value,
-          text: value || '값 없음',
-          checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ value ])
+          text: text,
+          checked: checked
         };
       })
       .toJS(), 'value');
 
     arr.splice(0, 0, {
-      value: '__check_all__',
+      value: '__CHECK_ALL__',
       text: '전체선택',
       checkAll: true,
-      checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ '__check_all__' ])
+      checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ '__CHECK_ALL__' ])
     });
 
     return arr.map((option, i) => {
       return <div
         key={i}
-        data-option={option.value}
+        data-option
         data-checked={option.checked}
         onClick={e => {
           this.onChange(columnFilter.colIndex, arr, option.value, !option.checked, option.checkAll);

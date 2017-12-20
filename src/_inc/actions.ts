@@ -8,7 +8,7 @@ export function INIT(props: any, options: any) {
     type: TYPES.INIT,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
-    options: options
+    options
   };
 }
 
@@ -18,22 +18,24 @@ export function SET_DATA(data: any, options: any) {
     type: TYPES.SET_DATA,
     receivedList: Obj_data.receivedList,
     page: Obj_data.page,
-    options: options
+    options
   };
 }
 
 export function SORT(colGroup: any, options: any, colIndex: number) {
   return {
     type: TYPES.SORT,
-    colGroup: colGroup,
-    options: options,
-    colIndex: colIndex
+    colGroup,
+    options,
+    colIndex
   };
 }
 
-export function FILTER(colIndex: number, filterInfo: any) {
+export function FILTER(colGroup: any, options: any, colIndex: number, filterInfo: any) {
   return {
     type: TYPES.FILTER,
+    colGroup,
+    options,
     colIndex,
     filterInfo
   };

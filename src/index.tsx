@@ -29,7 +29,7 @@ export const GridRootConnected = connect(
     init: (props, options) => dispatch(ACT.INIT(props, options)),
     setData: (data, options) => dispatch(ACT.SET_DATA(data, options)),
     sort: (colGroup, options, colIndex) => dispatch(ACT.SORT(colGroup, options, colIndex)),
-    filter: (colIndex, filterInfo) => dispatch(ACT.FILTER(colIndex, filterInfo))
+    filter: (colGroup, options, colIndex, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo))
   })
 )(GridRoot);
 
