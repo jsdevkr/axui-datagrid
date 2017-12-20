@@ -91,19 +91,19 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
   private getOptions() {
     const {
             gridCSS,
-            columnFilter,
+            isColumnFilter,
             colGroup,
             options,
             list,
             filterInfo
           } = this.props;
 
-    let columnFilterInfo = filterInfo.get('' + columnFilter.colIndex);
+    let columnFilterInfo = filterInfo.get('' + isColumnFilter);
 
     let arr = uniqBy(list
       .filter(item => (item ? !item[ options.columnKeys.deleted ] : false))
       .map(item => {
-        let value = item[ colGroup[ columnFilter.colIndex ].key ];
+        let value = item[ colGroup[ isColumnFilter ].key ];
         let text: string = value;
         let checked: boolean = false;
 
@@ -146,7 +146,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
         data-option
         data-checked={option.checked}
         onClick={e => {
-          this.onChange(columnFilter.colIndex, arr, option.value, !option.checked, option.checkAll);
+          this.onChange(isColumnFilter, arr, option.value, !option.checked, option.checkAll);
         }}
       >
         <div className={classNames(gridCSS.checkBox)} />
@@ -157,14 +157,14 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
 
   public render() {
     const {
-            columnFilter,
+            isColumnFilter,
             colGroup,
             gridCSS,
             styles,
             scrollLeft
           } = this.props;
 
-    if (columnFilter === false) return null;
+    if (isColumnFilter === false) return null;
 
     const filterWidth: number = 180;
 
@@ -175,9 +175,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
       maxHeight: styles.bodyHeight
     };
 
-    filterStyles.left = styles.asidePanelWidth + colGroup[ columnFilter.colIndex ]._sx - 2 + scrollLeft;
+    filterStyles.left = styles.asidePanelWidth + colGroup[ isColumnFilter ]._sx - 2 + scrollLeft;
     if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
-      filterStyles.left = styles.asidePanelWidth + colGroup[ columnFilter.colIndex ]._ex - 2 + scrollLeft - filterWidth;
+      filterStyles.left = styles.asidePanelWidth + colGroup[ isColumnFilter ]._ex - 2 + scrollLeft - filterWidth;
     }
 
     return (

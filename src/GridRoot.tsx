@@ -61,14 +61,11 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       selectionMaxOffset: {},
       selectionRows: {},
       selectionCols: {},
-      deSelections: {},
       focusedRow: -1,
       focusedCol: -1,
       isInlineEditing: false,
-      focusedColumn: {},
-      selectedColumn: {},
-      inlineEditingColumn: {},
-      columnFilter: false,
+      inlineEditingCell: {},
+      isColumnFilter: false,
       colGroup: [],
       colGroupMap: {},
       asideColGroup: [],
@@ -156,6 +153,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onClickHeader = this.onClickHeader.bind(this);
     this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
+    this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -249,7 +247,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private handleWheel(e) {
     // 컬럼필터 활성화 상태라면 구문 실행 안함.
-    if (this.state.columnFilter) return true;
+    if (this.state.isColumnFilter !== false) return true;
 
     let delta = {x: 0, y: 0};
 
@@ -785,7 +783,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
       const downEvent = (ee) => {
 
-        if (ee.target && ee.target.getAttribute && '' + this.state.columnFilter[ 'colIndex' ] === ee.target.getAttribute('data-filter-index')) {
+        if (ee.target && ee.target.getAttribute && '' + this.state.isColumnFilter === ee.target.getAttribute('data-filter-index')) {
           return false;
         }
 
@@ -797,7 +795,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           ee.preventDefault();
 
           this.setState({
-            columnFilter: false
+            isColumnFilter: false
           });
 
           document.removeEventListener('mousedown', downEvent);
@@ -811,21 +809,20 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         }
       };
 
-      if (this.state.columnFilter && this.state.columnFilter[ 'colIndex' ] === colIndex) {
+      if (this.state.isColumnFilter === colIndex) {
         this.setState({
-          columnFilter: false
+          isColumnFilter: false
         });
 
         document.removeEventListener('mousedown', downEvent);
         document.removeEventListener('mouseleave', downEvent);
         document.removeEventListener('keydown', keyDown);
       } else {
+
         let columnFilterLeft: number = styles.asidePanelWidth + this.state.colGroup[ colIndex ]._sx - 2 + this.state.scrollLeft;
         this.setState({
           scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
-          columnFilter: {
-            colIndex: colIndex
-          }
+          isColumnFilter: colIndex
         });
 
         document.addEventListener('mousedown', downEvent);
@@ -833,7 +830,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         document.addEventListener('keydown', keyDown);
       }
 
-    } else {
+    }
+    else {
 
       let state = {
         dragging: false,
@@ -893,7 +891,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           this.setState(state);
         }
         else if (options.header.clickAction === 'sort' && options.header.sortable) {
-          // todo : header click sort
           this.props.sort(this.state.colGroup, options, colIndex);
         }
       }
@@ -903,6 +900,18 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private onChangeColumnFilter(colIndex, filterInfo) {
     this.props.filter(this.state.colGroup, this.state.options, colIndex, filterInfo);
+  }
+
+  private onDoubleClickCell(e, col: any, li:number) {
+    console.log(e, col, li);
+
+    this.setState({
+      isInlineEditing: true,
+      inlineEditingCell: {
+        row: li,
+        col: col.colIndex
+      }
+    });
   }
 
   private refCallback(_key, el) {
@@ -1018,10 +1027,12 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           scrollTop={this.state.scrollTop}
           selectionRows={this.state.selectionRows}
           selectionCols={this.state.selectionCols}
-          deSelections={this.state.deSelections}
           focusedRow={this.state.focusedRow}
           focusedCol={this.state.focusedCol}
+          isInlineEditing={this.state.isInlineEditing}
+          inlineEditingCell={this.state.inlineEditingCell}
           onMouseDownBody={this.onMouseDownBody}
+          onDoubleClickCell={this.onDoubleClickCell}
         />
         <GridPage
           mounted={mounted}
@@ -1052,7 +1063,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           onClickScrollArrow={this.onClickScrollArrow}
         />
         <GridColumnFilter
-          columnFilter={this.state.columnFilter}
+          isColumnFilter={this.state.isColumnFilter}
           filterInfo={this.props.store_filterInfo}
           colGroup={this.state.colGroup}
           options={options}

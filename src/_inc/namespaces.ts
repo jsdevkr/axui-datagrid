@@ -22,6 +22,11 @@ export interface iFormatterData {
   options: any;
 }
 
+export interface iEditingCell {
+  row?: number;
+  col?: number;
+}
+
 
 export namespace iGridRoot {
   export interface Props {
@@ -56,16 +61,11 @@ export namespace iGridRoot {
     selectionMaxOffset: iSelection;
     selectionRows: any;
     selectionCols: any;
-    deSelections: any;
     focusedRow: number;
     focusedCol: number;
     isInlineEditing: boolean;
-    focusedColumn: object;
-    selectedColumn: object;
-    inlineEditingColumn: object;
-    columnFilter: {
-      colIndex: number;
-    } | boolean;
+    inlineEditingCell: iEditingCell;
+    isColumnFilter: number | boolean;
     colGroup: any;
     colGroupMap: object;
     asideColGroup: any;
@@ -187,10 +187,12 @@ export namespace iGridBody {
     scrollTop: number;
     selectionRows: any;
     selectionCols: any;
-    deSelections: any;
     focusedRow: number;
     focusedCol: number;
+    isInlineEditing: boolean;
+    inlineEditingCell: iEditingCell;
     onMouseDownBody: Function;
+    onDoubleClickCell: Function;
   }
 
   export interface State {
@@ -262,7 +264,7 @@ export namespace iGridSelector {
 
 export namespace iGridColumnFilter {
   export interface Props {
-    columnFilter: any;
+    isColumnFilter: any;
     filterInfo: any;
     colGroup: any;
     options: any;

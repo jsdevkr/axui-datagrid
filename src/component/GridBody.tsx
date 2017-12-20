@@ -25,7 +25,9 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
       this.props.selectionRows !== nextProps.selectionRows ||
       this.props.selectionCols !== nextProps.selectionCols ||
       this.props.focusedRow !== nextProps.focusedRow ||
-      this.props.focusedCol !== nextProps.focusedCol
+      this.props.focusedCol !== nextProps.focusedCol ||
+      this.props.isInlineEditing !== nextProps.isInlineEditing ||
+      this.props.inlineEditingCell !== nextProps.inlineEditingCell
     ) {
       sameProps = true;
     }
@@ -51,8 +53,34 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
             selectionCols,
             focusedRow,
             focusedCol,
-            columnFormatter
+            columnFormatter,
+            onDoubleClickCell,
+            isInlineEditing,
+            inlineEditingCell
           } = this.props;
+
+    const getLabel = function (_colGroup, _col, _item, _itemIdx) {
+      let formatterData = {
+        list: _list,
+        item: _item,
+        index: _itemIdx,
+        key: _col.key,
+        value: _item[ _col.key ],
+        options: options
+      };
+      let label: string;
+
+      if (isString(_col.formatter) && _col.formatter in columnFormatter) {
+        label = columnFormatter[ _col.formatter ](formatterData);
+      }
+      else if (isFunction(_col.formatter)) {
+        label = _col.formatter(formatterData);
+      } else {
+        label = _item[ _col.key ];
+      }
+
+      return label;
+    };
 
     const getFieldSpan = function (_colGroup, _col, _item, _itemIdx) {
       let lineHeight: number = (options.body.columnHeight - options.body.columnPadding * 2 - options.body.columnBorderWidth);
@@ -68,24 +96,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
           style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
       }
       else {
-
-        let formatterData = {
-          list: _list,
-          item: _item,
-          index: _itemIdx,
-          key: _col.key,
-          value: _item[ _col.key ],
-          options: options
-        };
-
-        if (isString(_col.formatter) && _col.formatter in columnFormatter) {
-          label = columnFormatter[ _col.formatter ](formatterData);
-        }
-        else if (isFunction(_col.formatter)) {
-          label = _col.formatter(formatterData);
-        } else {
-          label = _item[ _col.key ];
-        }
+        label = getLabel(_colGroup, _col, _item, _itemIdx);
       }
 
       let spanStyle = {
@@ -139,6 +150,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                               [gridCSS.lineNumber]: (col.columnAttr === 'lineNumber'),
                               [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
                             };
+                            let td: JSX.Element = null;
 
                             if (col.columnAttr === 'lineNumber') {
                               if (focusedRow === li) {
@@ -160,16 +172,29 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                               }
                             }
 
-                            return (
-                              <td
-                                key={ci}
-                                colSpan={col.colspan}
-                                rowSpan={col.rowspan}
-                                className={classNames(classNameItems)}
-                                style={{height: cellHeight, minHeight: '1px'}}>
+                            if (isInlineEditing && inlineEditingCell.row === li && inlineEditingCell.col === col.colIndex) {
+                              td = <td key={ci}
+                                       colSpan={col.colspan}
+                                       rowSpan={col.rowspan}
+                                       className={classNames(classNameItems)}
+                                       style={{height: cellHeight, minHeight: '1px'}}>
+                                <input type='text' defaultValue={getLabel(colGroup, col, item, li)} />
+                              </td>;
+                            }
+                            else {
+                              td = <td key={ci}
+                                       colSpan={col.colspan}
+                                       rowSpan={col.rowspan}
+                                       className={classNames(classNameItems)}
+                                       style={{height: cellHeight, minHeight: '1px'}}
+                                       onDoubleClick={e => {
+                                         onDoubleClickCell(e, col, li);
+                                       }}>
                                 {getFieldSpan(colGroup, col, item, li)}
-                              </td>
-                            );
+                              </td>;
+                            }
+
+                            return td;
                           })}
                           <td data-pos={'E,0,' + li}>&nbsp;</td>
                         </tr>
