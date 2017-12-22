@@ -245,7 +245,8 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
 
   private onEditInput(E_TYPE: string, e) {
     const {
-            updateEditInput
+            updateEditInput,
+            inlineEditingCell
           } = this.props;
     const proc = {
       [E_NAME.BLUR]: () => {
@@ -256,7 +257,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
           updateEditInput('cancel');
         }
         else if(e.which === KEY_CODE.ENTER){
-          updateEditInput('update', e.target.value);
+          updateEditInput('update', inlineEditingCell.row, inlineEditingCell.col, e.target.value);
         }
       }
     };

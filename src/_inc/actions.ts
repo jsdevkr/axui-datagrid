@@ -41,8 +41,13 @@ export function FILTER(colGroup: any, options: any, colIndex: number, filterInfo
   };
 }
 
-export function UPDATE() {
+export function UPDATE(colGroup: any, options: any, row: number, col: number, value: string) {
   return {
-    type: TYPES.UPDATE
+    type: TYPES.UPDATE,
+    colGroup,
+    options,
+    row,
+    col,
+    value
   }
 }

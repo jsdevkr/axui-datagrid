@@ -914,7 +914,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     });
   }
 
-  private updateEditInput(act: string, e?: KeyboardEvent) {
+  private updateEditInput(act: string, row?: number, col?: number, value?: string) {
     const proc = {
       'cancel': () => {
         this.setState({
@@ -923,6 +923,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         });
       },
       'update': () => {
+        this.props.update(this.state.colGroup, this.state.options, row, col, value);
         this.setState({
           isInlineEditing: true,
           inlineEditingCell: {}

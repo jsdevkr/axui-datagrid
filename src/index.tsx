@@ -25,11 +25,12 @@ export const GridRootConnected = connect(
       store_filterInfo: state.get('filterInfo')
     };
   },
-  (dispatch: any) => ({
+  (dispatch: Function) => ({
     init: (props, options) => dispatch(ACT.INIT(props, options)),
     setData: (data, options) => dispatch(ACT.SET_DATA(data, options)),
-    sort: (colGroup, options, colIndex) => dispatch(ACT.SORT(colGroup, options, colIndex)),
-    filter: (colGroup, options, colIndex, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo))
+    sort: (colGroup, options, colIndex: number) => dispatch(ACT.SORT(colGroup, options, colIndex)),
+    filter: (colGroup, options, colIndex: number, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo)),
+    update: (colGroup, options, row: number, col: number, value: string) => dispatch(ACT.UPDATE(colGroup, options, row, col, value))
   })
 )(GridRoot);
 

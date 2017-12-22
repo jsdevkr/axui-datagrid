@@ -47,6 +47,7 @@ export namespace iGridRoot {
     setData: Function;
     sort: Function;
     filter: Function;
+    update: Function;
   }
 
   export interface State {

@@ -123,7 +123,7 @@ export const gridReducer = (state = initialState, action) => {
             let value = item[ action.colGroup[ action.colIndex ].key ];
 
             if (typeof value === 'undefined') {
-              if(!action.filterInfo[ action.colIndex ][ '__UNDEFINED__' ]){
+              if (!action.filterInfo[ action.colIndex ][ '__UNDEFINED__' ]) {
                 return false;
               }
             }
@@ -145,7 +145,15 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.UPDATE]: () => {
+      let list = state.get('list');
 
+      list.update(action.row, item => {
+        item[ action.colGroup[ action.col ].key ] = action.value;
+        return item;
+      });
+
+      return state
+        .set('list', List(list));
     }
   };
 
