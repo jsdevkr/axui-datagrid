@@ -193,6 +193,7 @@ export namespace iGridBody {
     inlineEditingCell: iEditingCell;
     onMouseDownBody: Function;
     onDoubleClickCell: Function;
+    updateEditInput: Function;
   }
 
   export interface State {

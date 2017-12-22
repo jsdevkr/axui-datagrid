@@ -154,6 +154,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onClickHeader = this.onClickHeader.bind(this);
     this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
     this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
+    this.updateEditInput = this.updateEditInput.bind(this);
     this.refCallback = this.refCallback.bind(this);
   }
 
@@ -468,7 +469,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onMouseDownBody(e: any) {
-    e.preventDefault();
 
     const startMousePosition = UTIL.getMousePosition(e);
     const spanType: string = e.target.getAttribute('data-span');
@@ -478,6 +478,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const topPadding: number = y; // + styles.headerHeight;
     const startScrollLeft: number = this.state.scrollLeft;
     const startScrollTop: number = this.state.scrollTop;
+    const startX: number = startMousePosition.x - leftPadding;
+    const startY: number = startMousePosition.y - topPadding;
     const getRowIndex: Function = (y: number, scrollTop: number): number => {
       let i: number = 0;
       i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
@@ -499,13 +501,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       return i;
     };
     const proc_bodySelect = (function () {
-      const startX: number = startMousePosition.x - leftPadding;
-      const startY: number = startMousePosition.y - topPadding;
-
-      // 선택이 시작된 row / col
-      let selectStartedRow: number = getRowIndex(startY, startScrollTop);
-      let selectStartedCol: number = getColIndex(startX, startScrollLeft);
-
       if (selectStartedCol < 0) return;
 
       const onMouseMove = (ee): void => {
@@ -721,11 +716,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
     }).bind(this);
     const proc_clickLinenumber = (function () {
-      const startY: number = startMousePosition.y - topPadding;
-
-      // 선택이 시작된 row / col
-      let selectStartedRow: number = getRowIndex(startY, startScrollTop);
-
       let state = {
         dragging: false,
         selecting: false,
@@ -758,8 +748,17 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
 
       this.setState(state);
-
     }).bind(this);
+
+    // 선택이 시작된 row / col
+    let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+    let selectStartedCol: number = getColIndex(startX, startScrollLeft);
+
+    if (this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol) {
+      // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
+      return false;
+    }
+
 
     if (spanType === 'lineNumber') {
       // click lineNumber
@@ -768,6 +767,9 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     else {
       proc_bodySelect();
     }
+
+    e.preventDefault();
+    return true;
   }
 
   private onKeyDown(e: any) {
@@ -902,9 +904,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.props.filter(this.state.colGroup, this.state.options, colIndex, filterInfo);
   }
 
-  private onDoubleClickCell(e, col: any, li:number) {
-    console.log(e, col, li);
-
+  private onDoubleClickCell(e, col: any, li: number) {
     this.setState({
       isInlineEditing: true,
       inlineEditingCell: {
@@ -912,6 +912,24 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         col: col.colIndex
       }
     });
+  }
+
+  private updateEditInput(act: string, e?: KeyboardEvent) {
+    const proc = {
+      'cancel': () => {
+        this.setState({
+          isInlineEditing: true,
+          inlineEditingCell: {}
+        });
+      },
+      'update': () => {
+        this.setState({
+          isInlineEditing: true,
+          inlineEditingCell: {}
+        });
+      }
+    };
+    proc[ act ]();
   }
 
   private refCallback(_key, el) {
@@ -1033,6 +1051,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           inlineEditingCell={this.state.inlineEditingCell}
           onMouseDownBody={this.onMouseDownBody}
           onDoubleClickCell={this.onDoubleClickCell}
+          updateEditInput={this.updateEditInput}
         />
         <GridPage
           mounted={mounted}

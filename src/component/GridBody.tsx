@@ -4,10 +4,23 @@ import classNames from 'classnames'
 import { iGridBody } from '../_inc/namespaces';
 import { isFunction, isString } from 'lodash';
 
+const E_NAME = {
+  'BLUR': 'BLUR',
+  'KEY_DOWN': 'KEY_DOWN'
+};
+const KEY_CODE = {
+  'ESC': 27,
+  'ENTER': 13
+};
+
 export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> {
+
+  private editInput: HTMLInputElement;
+
   constructor(props: iGridBody.Props) {
     super(props);
 
+    this.onEditInput = this.onEditInput.bind(this);
   }
 
   public shouldComponentUpdate(nextProps, nextState) {
@@ -33,6 +46,14 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
     }
 
     return sameProps;
+  }
+
+  public componentDidUpdate(prevProps, prevState) {
+    if (this.props.inlineEditingCell !== prevProps.inlineEditingCell) {
+      if (this.editInput) {
+        this.editInput.select();
+      }
+    }
   }
 
   private paintBodyTemp(_panelName: string, _style: any) {
@@ -178,7 +199,18 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                                        rowSpan={col.rowspan}
                                        className={classNames(classNameItems)}
                                        style={{height: cellHeight, minHeight: '1px'}}>
-                                <input type='text' defaultValue={getLabel(colGroup, col, item, li)} />
+                                <input type='text'
+                                       ref={input => {
+                                         this.editInput = input;
+                                       }}
+                                       onBlur={e => {
+                                         this.onEditInput(E_NAME.BLUR, e);
+                                       }}
+                                       onKeyDown={e => {
+                                         this.onEditInput(E_NAME.KEY_DOWN, e);
+                                       }}
+                                       data-inline-edit
+                                       defaultValue={item[ col.key ]} />
                               </td>;
                             }
                             else {
@@ -209,6 +241,26 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
         </table>
       </div>
     )
+  }
+
+  private onEditInput(E_TYPE: string, e) {
+    const {
+            updateEditInput
+          } = this.props;
+    const proc = {
+      [E_NAME.BLUR]: () => {
+        updateEditInput('cancel');
+      },
+      [E_NAME.KEY_DOWN]: () => {
+        if(e.which === KEY_CODE.ESC){
+          updateEditInput('cancel');
+        }
+        else if(e.which === KEY_CODE.ENTER){
+          updateEditInput('update', e.target.value);
+        }
+      }
+    };
+    proc[ E_TYPE ]();
   }
 
   public render() {
