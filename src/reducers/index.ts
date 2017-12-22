@@ -52,7 +52,7 @@ export const gridReducer = (state = initialState, action) => {
     },
 
     [TYPES.SORT]: () => {
-      let sortInfo = {}, seq: number = 0, sortOrder;
+      let sortInfo = {}, seq: number = 0;
       let sortInfoArray = [];
       let colGroup = action.colGroup;
       const sortInfoState = state.get('sortInfo');

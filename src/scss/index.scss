@@ -378,6 +378,10 @@
   border: $ax-datagrid-border;
   overflow: hidden;
 
+  &:focus{
+    outline: $ax-datagrid-outline;
+  }
+
   table {
     table-layout: fixed;
     border-collapse: separate;

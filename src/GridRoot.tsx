@@ -9,6 +9,7 @@ import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
+import { KEY_CODE } from './_inc/constant';
 import { Simulate } from 'react-dom/test-utils';
 import keyDown = Simulate.keyDown;
 
@@ -469,7 +470,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onMouseDownBody(e: any) {
-
     const startMousePosition = UTIL.getMousePosition(e);
     const spanType: string = e.target.getAttribute('data-span');
     const {headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth} = this.state.styles;
@@ -500,7 +500,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
       return i;
     };
-    const proc_bodySelect = (function () {
+    const proc_bodySelect = () => {
       if (selectStartedCol < 0) return;
 
       const onMouseMove = (ee): void => {
@@ -714,8 +714,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         document.addEventListener('mouseup', offEvent);
         document.addEventListener('mouseleave', offEvent);
       }
-    }).bind(this);
-    const proc_clickLinenumber = (function () {
+    };
+    const proc_clickLinenumber = () => {
       let state = {
         dragging: false,
         selecting: false,
@@ -748,7 +748,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
 
       this.setState(state);
-    }).bind(this);
+    };
 
     // 선택이 시작된 row / col
     let selectStartedRow: number = getRowIndex(startY, startScrollTop);
@@ -759,7 +759,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       return false;
     }
 
-
     if (spanType === 'lineNumber') {
       // click lineNumber
       proc_clickLinenumber();
@@ -768,13 +767,32 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       proc_bodySelect();
     }
 
-    e.preventDefault();
     return true;
   }
 
   private onKeyDown(e: any) {
     // todo : copy 기능 구현
     // todo : focus 이동 구현
+
+    const proc = {
+      [KEY_CODE.ESC]: () => {
+        
+      },
+      [KEY_CODE.RETURN]: () => {
+        
+      },
+      [KEY_CODE.UP]: () => {
+      },
+      [KEY_CODE.RIGHT]: () => {
+      },
+      [KEY_CODE.DOWN]: () => {
+        console.log('down');
+      },
+      [KEY_CODE.LEFT]: () => {
+      }
+    };
+
+    if (e.which in proc) proc[ e.which ]();
   }
 
   private onClickHeader(e: any, colIndex: number, key: string) {
@@ -996,6 +1014,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
            onWheel={e => {
              this.handleWheel(e);
            }}
+           onKeyDown={this.onKeyDown}
+           tabIndex={(-1)}
            style={gridRootStyle}>
         <div className={classNames(this.props.gridCSS[ 'clipBoard' ])}>
           <textarea ref='gridClipboard' />

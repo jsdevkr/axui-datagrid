@@ -39,6 +39,7 @@ export function localDate(yy, mm, dd, hh?: number, mi?: number, ss?: number) {
   if (mm < 0) mm = 0;
   if (typeof hh === 'undefined') hh = 12;
   if (typeof mi === 'undefined') mi = 0;
+
   utcD = new Date(Date.UTC(yy, mm, dd || 1, hh, mi, ss || 0));
 
   if (mm == 0 && dd == 1 && utcD.getUTCHours() + (utcD.getTimezoneOffset() / 60) < 0) {
@@ -58,7 +59,7 @@ export function cdate(d, cond) {
       ISO_8601_FULL = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|Z)?$/i;
 
   if (isString(d)) {
-    if (d.length == 0) {
+    if (d.length === 0) {
       d = new Date();
     }
     else if (d.length > 15) {
@@ -92,7 +93,7 @@ export function cdate(d, cond) {
     }
     else if (d.length > 2) {
       va = d.replace(/\D/g, '');
-      return localDate(va.substr(0, 4), va.substr(4, 2) - 1, 1);
+      d = localDate(va.substr(0, 4), va.substr(4, 2) - 1, 1);
     }
     else {
       d = new Date();

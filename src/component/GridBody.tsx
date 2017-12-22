@@ -3,15 +3,7 @@ import { Range } from 'immutable';
 import classNames from 'classnames'
 import { iGridBody } from '../_inc/namespaces';
 import { isFunction, isString } from 'lodash';
-
-const E_NAME = {
-  'BLUR': 'BLUR',
-  'KEY_DOWN': 'KEY_DOWN'
-};
-const KEY_CODE = {
-  'ESC': 27,
-  'ENTER': 13
-};
+import { E_NAME, KEY_CODE } from '../_inc/constant';
 
 export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> {
 
@@ -253,10 +245,10 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
         updateEditInput('cancel');
       },
       [E_NAME.KEY_DOWN]: () => {
-        if(e.which === KEY_CODE.ESC){
+        if (e.which === KEY_CODE.ESC) {
           updateEditInput('cancel');
         }
-        else if(e.which === KEY_CODE.ENTER){
+        else if (e.which === KEY_CODE.RETURN) {
           updateEditInput('update', inlineEditingCell.row, inlineEditingCell.col, e.target.value);
         }
       }
