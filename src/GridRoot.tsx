@@ -151,7 +151,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
     this.onClickPageButton = this.onClickPageButton.bind(this);
     this.onMouseDownBody = this.onMouseDownBody.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
     this.onClickHeader = this.onClickHeader.bind(this);
     this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
     this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
@@ -770,25 +770,99 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     return true;
   }
 
-  private onKeyDown(e: any) {
+  private onKeyPress(e: any) {
     // todo : copy 기능 구현
     // todo : focus 이동 구현
+    const styles = this.state.styles;
+    const options = this.state.options;
+
+    const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
+    const eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
 
     const proc = {
       [KEY_CODE.ESC]: () => {
-        
+
       },
       [KEY_CODE.RETURN]: () => {
-        
+
+      },
+      [KEY_CODE.HOME]: () => {
+      },
+      [KEY_CODE.END]: () => {
       },
       [KEY_CODE.UP]: () => {
+        let focusRow = this.state.focusedRow - 1;
+        let scrollTop = this.state.scrollTop;
+        if (sRowIndex >= focusRow) {
+          scrollTop -= (focusRow - sRowIndex - 1) * styles.bodyTrHeight;
+
+          let {scrollTop: newScrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
+            scrollWidth: styles.scrollContentWidth,
+            scrollHeight: styles.scrollContentHeight,
+            clientWidth: styles.scrollContentContainerWidth,
+            clientHeight: styles.scrollContentContainerHeight
+          });
+
+          scrollTop = newScrollTop;
+        }
+
+        if (focusRow < 0) {
+          focusRow = 0;
+        }
+
+        this.setState({
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
+          },
+          focusedRow: focusRow
+        });
       },
       [KEY_CODE.RIGHT]: () => {
+        let focusCol = this.state.focusedCol + 1;
+        this.setState({
+          selectionCols: {
+            [focusCol]: true
+          },
+          focusedCol: focusCol,
+        });
       },
       [KEY_CODE.DOWN]: () => {
-        console.log('down');
+        let focusRow = this.state.focusedRow + 1;
+        let scrollTop = this.state.scrollTop;
+        if (eRowIndex <= focusRow) {
+          scrollTop -= (focusRow - eRowIndex + 1) * styles.bodyTrHeight;
+
+          let {scrollTop: newScrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
+            scrollWidth: styles.scrollContentWidth,
+            scrollHeight: styles.scrollContentHeight,
+            clientWidth: styles.scrollContentContainerWidth,
+            clientHeight: styles.scrollContentContainerHeight
+          });
+
+          scrollTop = newScrollTop;
+        }
+
+        if (focusRow >= this.props.store_list.size) {
+          focusRow = this.props.store_list.size - 1;
+        }
+
+        this.setState({
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
+          },
+          focusedRow: focusRow,
+        });
       },
       [KEY_CODE.LEFT]: () => {
+        let focusCol = this.state.focusedCol - 1;
+        this.setState({
+          selectionCols: {
+            [focusCol]: true
+          },
+          focusedCol: focusCol,
+        });
       }
     };
 
@@ -1014,7 +1088,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
            onWheel={e => {
              this.handleWheel(e);
            }}
-           onKeyDown={this.onKeyDown}
+           onKeyDown={this.onKeyPress}
            tabIndex={(-1)}
            style={gridRootStyle}>
         <div className={classNames(this.props.gridCSS[ 'clipBoard' ])}>
