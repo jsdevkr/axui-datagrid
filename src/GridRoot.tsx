@@ -771,8 +771,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onKeyPress(e: any) {
-    // todo : copy 기능 구현
-
     const styles = this.state.styles;
     const options = this.state.options;
     const headerColGroup = this.state.headerColGroup;
@@ -808,10 +806,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       let scrollLeft: number;
 
       if (sColIndex >= colIndex) {
-        scrollLeft = -headerColGroup[colIndex]._sx;
+        scrollLeft = -headerColGroup[ colIndex ]._sx;
       }
       else if (eColIndex <= colIndex) {
-        scrollLeft = -headerColGroup[colIndex]._ex + (styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth);
+        scrollLeft = -headerColGroup[ colIndex ]._ex + (styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth);
       }
 
       if (typeof scrollLeft !== 'undefined') {
@@ -828,6 +826,32 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       return scrollLeft;
     };
 
+    const metaProc = {
+      [KEY_CODE.C]: () => {
+        const gridClipboard: any = this.refs.gridClipboard;
+        let copysuccess: boolean = false;
+        let copiedString: string = '';
+
+        each(this.state.selectionRows, (row, k) => {
+          const item = this.props.store_list.get(k);
+          each(this.state.selectionCols, (col, ci) => {
+            copiedString += (item[ headerColGroup[ ci ].key ] || '') + '\t';
+          });
+          copiedString += '\n';
+        });
+
+        gridClipboard.value = copiedString;
+        gridClipboard.select();
+
+        try {
+          copysuccess = document.execCommand('copy');
+        } catch (e) {
+
+        }
+
+        return copysuccess;
+      }
+    };
     const proc = {
       [KEY_CODE.ESC]: () => {
 
@@ -909,7 +933,13 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
     };
 
-    if (e.which in proc) proc[ e.which ]();
+    if (e.metaKey) {
+      // console.log('meta', e.which);
+      if (e.which in metaProc) metaProc[ e.which ]();
+    } else {
+      if (e.which in proc) proc[ e.which ]();
+    }
+
   }
 
   private onClickHeader(e: any, colIndex: number, key: string) {
