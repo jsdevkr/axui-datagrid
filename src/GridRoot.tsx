@@ -156,7 +156,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
     this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
     this.updateEditInput = this.updateEditInput.bind(this);
-    this.refCallback = this.refCallback.bind(this);
   }
 
   public componentDidMount() {
@@ -828,6 +827,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     const metaProc = {
       [KEY_CODE.C]: () => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
         const gridClipboard: any = this.refs.gridClipboard;
         let copysuccess: boolean = false;
         let copiedString: string = '';
@@ -849,7 +852,39 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         }
 
+        this.gridRootNode.focus();
         return copysuccess;
+      },
+      [KEY_CODE.A]: () => {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        let state = {
+          dragging: false,
+          selecting: false,
+          selectionRows: {},
+          selectionCols: {},
+          focusedRow: 0,
+          focusedCol: this.state.focusedCol
+        };
+        state.selectionRows = (() => {
+          let rows = {};
+          this.props.store_list.forEach((item, i) => {
+            rows[ i ] = true;
+          });
+          return rows;
+        })();
+        state.selectionCols = (() => {
+          let cols = {};
+          this.state.colGroup.forEach(col => {
+            cols[ col.colIndex ] = true;
+          });
+          return cols;
+        })();
+        state.focusedCol = 0;
+        this.setState(state);
+
       }
     };
     const proc = {
@@ -1008,6 +1043,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         focusedRow: 0,
         focusedCol: this.state.focusedCol
       };
+
       if (key === 'lineNumber') {
 
         state.selectionRows = (() => {
@@ -1096,12 +1132,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
     };
     proc[ act ]();
-  }
-
-  private refCallback(_key, el) {
-    // 하위 컴포넌트에서 전달해주는 ref를 수집 / 갱신
-    console.log(_key);
-    this.componentRefs[ _key ] = el;
   }
 
   public render() {
