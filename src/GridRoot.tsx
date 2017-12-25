@@ -772,12 +772,61 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private onKeyPress(e: any) {
     // todo : copy 기능 구현
-    // todo : focus 이동 구현
+
     const styles = this.state.styles;
     const options = this.state.options;
-
+    const headerColGroup = this.state.headerColGroup;
     const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
     const eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
+    const sColIndex = this.data.sColIndex;
+    const eColIndex = this.data.eColIndex;
+
+    const getAvailScrollTop = (rowIndex: number): number => {
+      let scrollTop: number;
+
+      if (sRowIndex >= rowIndex) {
+        scrollTop = -rowIndex * styles.bodyTrHeight;
+      }
+      else if (eRowIndex <= rowIndex) {
+        scrollTop = -rowIndex * styles.bodyTrHeight + (Math.floor(styles.bodyHeight / styles.bodyTrHeight) * styles.bodyTrHeight - styles.bodyTrHeight);
+      }
+
+      if (typeof scrollTop !== 'undefined') {
+        scrollTop = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
+          scrollWidth: styles.scrollContentWidth,
+          scrollHeight: styles.scrollContentHeight,
+          clientWidth: styles.scrollContentContainerWidth,
+          clientHeight: styles.scrollContentContainerHeight
+        }).scrollTop;
+      } else {
+        scrollTop = this.state.scrollTop
+      }
+
+      return scrollTop;
+    };
+    const getAvailScrollLeft = (colIndex: number): number => {
+      let scrollLeft: number;
+
+      if (sColIndex >= colIndex) {
+        scrollLeft = -headerColGroup[colIndex]._sx;
+      }
+      else if (eColIndex <= colIndex) {
+        scrollLeft = -headerColGroup[colIndex]._ex + (styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth);
+      }
+
+      if (typeof scrollLeft !== 'undefined') {
+        scrollLeft = UTIL.getScrollPosition(scrollLeft, this.state.scrollTop, {
+          scrollWidth: styles.scrollContentWidth,
+          scrollHeight: styles.scrollContentHeight,
+          clientWidth: styles.scrollContentContainerWidth,
+          clientHeight: styles.scrollContentContainerHeight
+        }).scrollLeft;
+      } else {
+        scrollLeft = this.state.scrollLeft
+      }
+
+      return scrollLeft;
+    };
 
     const proc = {
       [KEY_CODE.ESC]: () => {
@@ -787,28 +836,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
       },
       [KEY_CODE.HOME]: () => {
-      },
-      [KEY_CODE.END]: () => {
-      },
-      [KEY_CODE.UP]: () => {
-        let focusRow = this.state.focusedRow - 1;
-        let scrollTop = this.state.scrollTop;
-        if (sRowIndex >= focusRow) {
-          scrollTop -= (focusRow - sRowIndex - 1) * styles.bodyTrHeight;
-
-          let {scrollTop: newScrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
-            scrollWidth: styles.scrollContentWidth,
-            scrollHeight: styles.scrollContentHeight,
-            clientWidth: styles.scrollContentContainerWidth,
-            clientHeight: styles.scrollContentContainerHeight
-          });
-
-          scrollTop = newScrollTop;
-        }
-
-        if (focusRow < 0) {
-          focusRow = 0;
-        }
+        let focusRow = 0;
+        let scrollTop = getAvailScrollTop(focusRow);
 
         this.setState({
           scrollTop: scrollTop,
@@ -818,34 +847,33 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           focusedRow: focusRow
         });
       },
-      [KEY_CODE.RIGHT]: () => {
-        let focusCol = this.state.focusedCol + 1;
+      [KEY_CODE.END]: () => {
+        let focusRow = this.props.store_list.size - 1;
+        let scrollTop = getAvailScrollTop(focusRow);
+
         this.setState({
-          selectionCols: {
-            [focusCol]: true
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
           },
-          focusedCol: focusCol,
+          focusedRow: focusRow
+        });
+      },
+      [KEY_CODE.UP]: () => {
+        let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
+        let scrollTop = getAvailScrollTop(focusRow);
+
+        this.setState({
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
+          },
+          focusedRow: focusRow
         });
       },
       [KEY_CODE.DOWN]: () => {
-        let focusRow = this.state.focusedRow + 1;
-        let scrollTop = this.state.scrollTop;
-        if (eRowIndex <= focusRow) {
-          scrollTop -= (focusRow - eRowIndex + 1) * styles.bodyTrHeight;
-
-          let {scrollTop: newScrollTop, endScroll} = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
-            scrollWidth: styles.scrollContentWidth,
-            scrollHeight: styles.scrollContentHeight,
-            clientWidth: styles.scrollContentContainerWidth,
-            clientHeight: styles.scrollContentContainerHeight
-          });
-
-          scrollTop = newScrollTop;
-        }
-
-        if (focusRow >= this.props.store_list.size) {
-          focusRow = this.props.store_list.size - 1;
-        }
+        let focusRow = (this.state.focusedRow + 1 >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + 1;
+        let scrollTop = getAvailScrollTop(focusRow);
 
         this.setState({
           scrollTop: scrollTop,
@@ -856,8 +884,23 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         });
       },
       [KEY_CODE.LEFT]: () => {
-        let focusCol = this.state.focusedCol - 1;
+        let focusCol = (this.state.focusedCol < 1) ? 0 : this.state.focusedCol - 1;
+        let scrollLeft = getAvailScrollLeft(focusCol);
+
         this.setState({
+          scrollLeft: scrollLeft,
+          selectionCols: {
+            [focusCol]: true
+          },
+          focusedCol: focusCol,
+        });
+      },
+      [KEY_CODE.RIGHT]: () => {
+        let focusCol = (this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : this.state.focusedCol + 1;
+        let scrollLeft = getAvailScrollLeft(focusCol);
+
+        this.setState({
+          scrollLeft: scrollLeft,
           selectionCols: {
             [focusCol]: true
           },
@@ -1036,6 +1079,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const options = this.state.options;
     const mounted = this.state.mounted;
     const headerColGroup = this.state.headerColGroup;
+    const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
     let gridRootStyle = Object.assign({height: this.props.height}, this.props.style);
     if (styles.calculatedHeight !== null) {
@@ -1047,7 +1091,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
 
     let _scrollLeft: number = Math.abs(this.state.scrollLeft);
-    let bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
     let sColIndex: number = 0;
     let eColIndex: number = headerColGroup.length;
     let _headerColGroup = headerColGroup;
