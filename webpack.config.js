@@ -17,8 +17,8 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(basePath, './dev/dist'),
-    filename: '[name].js',
+    path: path.join(basePath, './docs'),
+    filename: '[name].[hash].js',
   },
   module: {
     rules: [
@@ -28,7 +28,7 @@ module.exports = {
         loader: 'awesome-typescript-loader',
         options: {
           useBabel: true,
-        },
+        }
       },
       {
         test: /\.scss$/,
@@ -55,7 +55,7 @@ module.exports = {
         use: [
           {loader: 'style-loader'},
           {loader: 'css-loader'}
-        ],
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
