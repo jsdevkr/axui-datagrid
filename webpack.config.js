@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CnameWebpackPlugin = require('cname-webpack-plugin');
 const webpack = require('webpack');
 const basePath = __dirname;
 
@@ -100,6 +101,9 @@ module.exports = {
     new CleanWebpackPlugin(['docs'], {
       verbose:  true,
       dry:      false
+    }),
+    new CnameWebpackPlugin({
+      domain: 'ax6ui-datagrid.axisj.com',
     }),
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
