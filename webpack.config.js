@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const basePath = __dirname;
@@ -96,6 +97,10 @@ module.exports = {
     }
   },
   plugins: [
+    new CleanWebpackPlugin(['docs'], {
+      verbose:  true,
+      dry:      false
+    }),
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html', //Name of file in ./dist/
