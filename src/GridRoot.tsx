@@ -395,7 +395,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     }
   }
 
-  private onResizeColumnResizer(e: any, col, newWidth) {
+  private onResizeColumnResizer(e: any, col, newWidth: number) {
     let colGroup = fromJS(this.state.colGroup).toJS();
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 

@@ -72,7 +72,8 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
       this.setState({
         columnResizing: false
       });
-      this.props.onResizeColumnResizer(e, col, newWidth);
+
+      if (typeof newWidth !== 'undefined') this.props.onResizeColumnResizer(e, col, newWidth);
     };
 
     document.addEventListener('mousemove', onMouseMove);
