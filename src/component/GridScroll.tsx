@@ -35,7 +35,6 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
 
     const {
       mounted,
-      gridCSS,
       bodyHeight,
       pageHeight,
       verticalScrollerHeight,
@@ -125,7 +124,7 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
     };
 
     return (
-      <div className={classNames(gridCSS.scroller)}>
+      <div className={classNames('axd-scroller')}>
         {(verticalScrollerWidth) ? (
           <div data-scroll-track='vertical' style={verticalStyles}>
             <div data-scroll-arrow='up' style={verticalArrowStyles}>
@@ -133,7 +132,7 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
             </div>
             <div data-scroll='vertical'
                  onClick={e => this.onClickScrollTrack(e, 'vertical')}>
-              <div className={classNames(gridCSS.scrollBar)}
+              <div className={classNames('axd-scroll-bar')}
                    style={verticalBarStyles}
                    onMouseDown={e => onMouseDownScrollBar(e, 'vertical')} />
             </div>
@@ -149,7 +148,7 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
             </div>
             <div data-scroll='horizontal'
                  onClick={e => this.onClickScrollTrack(e, 'horizontal')}>
-              <div className={classNames(gridCSS.scrollBar)}
+              <div className={classNames('axd-scroll-bar')}
                    style={horizontalBarStyles}
                    onMouseDown={(e) => onMouseDownScrollBar(e, 'horizontal')} />
             </div>

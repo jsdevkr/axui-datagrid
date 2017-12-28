@@ -82,7 +82,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
   private printHeader(_panelName: string, _colGroup: any, _bodyRow: any, _style: object) {
     const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-    const {optionsHeader, gridCSS, focusedCol, selectionCols, onClickHeader, sortInfo} = this.props;
+    const {optionsHeader, focusedCol, selectionCols, onClickHeader, sortInfo} = this.props;
 
     const getFieldSpan = function (_colGroup, _col) {
       let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
@@ -142,10 +142,10 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
 
                     let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
                     let classNameItems = {
-                      [gridCSS.headerColumn]: true,
-                      [gridCSS.headerCorner]: (col.columnAttr === 'lineNumber'),
-                      [gridCSS.focused]: (focusedCol > -1 && col.colIndex === focusedCol),
-                      [gridCSS.selected]: (selectionCols[ col.colIndex ])
+                      ['axd-header-column']: true,
+                      ['axd-header-corner']: (col.columnAttr === 'lineNumber'),
+                      ['focused']: (focusedCol > -1 && col.colIndex === focusedCol),
+                      ['selected']: (selectionCols[ col.colIndex ])
                     };
 
                     return (
@@ -198,7 +198,6 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
   public render() {
 
     const {
-            gridCSS,
             mounted,
             optionsHeader,
             styles,
@@ -236,7 +235,7 @@ export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.S
     };
 
     return (
-      <div className={classNames(gridCSS.header)} style={{height: styles.headerHeight}}>
+      <div className={classNames('axd-header')} style={{height: styles.headerHeight}}>
         {(styles.asidePanelWidth > 0) ? this.printHeader('aside-header', asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null}
         {(frozenColumnIndex > 0) ? this.printHeader('left-header', leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null}
         <div data-scroll-container='header-scroll-container' style={headerPanelStyle}>

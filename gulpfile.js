@@ -31,39 +31,31 @@ const fnObj = {
  * watch
  */
 gulp.task('scss-watch', function () {
-  gulp.watch(['./dev/scss/**/*.scss'], ['scss']);
+  gulp.watch(['./dev/scss/**/*.scss'], ['scss-dev']);
+  gulp.watch(['./src/scss/**/*.scss'], ['scss-src']);
 });
 
 /**
  * SASS
  */
-gulp.task('scss', function () {
+gulp.task('scss-dev', function () {
   gulp.src('./dev/scss/index.scss')
     .pipe(plumber({errorHandler: errorAlert}))
     .pipe(sass({outputStyle: 'compressed'}))
     .pipe(gulp.dest('./dev/scss'));
 });
 
+gulp.task('scss-src', function () {
+  gulp.src('./src/scss/index.scss')
+    .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(sass({outputStyle: 'compressed'}))
+    .pipe(gulp.dest('./src/scss'));
+});
+
 
 // 걸프 기본 타스크
-gulp.task('default', ['js-ES', 'scss-ES'], function () {
+gulp.task('default', ['scss-watch'], function () {
   return true;
-});
-
-// task of ES
-gulp.task('js-ES', function () {
-  return gulp.src([fnObj.paths.src + '/**/*.js'])
-    .pipe(babel({
-      presets: ['react']
-    }))
-    .pipe(gulp.dest(fnObj.paths.dist));
-});
-
-gulp.task('scss-ES', function () {
-  return gulp.src([
-      fnObj.paths.src + '/**/*.scss',
-    ], {base: fnObj.paths.src})
-    .pipe(gulp.dest(fnObj.paths.dist));
 });
 
 /**
@@ -76,7 +68,7 @@ gulp.task('npm publish minor', ['js-ES', 'scss-ES'], shell.task([
   'cd dist && npm version minor -m "version minor" && npm publish'
 ]));
 
-gulp.task('dev run!', shell.task([
+gulp.task('dev run!', ['scss-watch'], shell.task([
   'webpack-dev-server --env=d',
 ]));
 

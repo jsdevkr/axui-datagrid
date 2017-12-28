@@ -10,8 +10,6 @@ import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
 import { KEY_CODE } from './_inc/constant';
-import { Simulate } from 'react-dom/test-utils';
-import keyDown = Simulate.keyDown;
 
 let formatter = GridFormatter.getAll();
 
@@ -1187,20 +1185,19 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     return (
       <div ref='gridRoot'
-           className={classNames(this.props.gridCSS[ 'axDatagrid' ])}
+           className={classNames('ax-datagrid')}
            onWheel={e => {
              this.handleWheel(e);
            }}
            onKeyDown={this.onKeyPress}
            tabIndex={(-1)}
            style={gridRootStyle}>
-        <div className={classNames(this.props.gridCSS[ 'clipBoard' ])}>
+        <div className={classNames('axd-clip-board')}>
           <textarea ref='gridClipboard' />
         </div>
         <GridHeader
           getRootBounding={this.getRootBounding}
           mounted={mounted}
-          gridCSS={this.props.gridCSS}
           optionsHeader={options.header}
           styles={styles}
           frozenColumnIndex={options.frozenColumnIndex}
@@ -1220,7 +1217,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
         <GridBody
           mounted={mounted}
-          gridCSS={this.props.gridCSS}
           columnFormatter={this.columnFormatter}
           options={options}
           styles={styles}
@@ -1253,7 +1249,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
         <GridPage
           mounted={mounted}
-          gridCSS={this.props.gridCSS}
           styles={styles}
           pageButtonsContainerWidth={styles.pageButtonsContainerWidth}
           pageButtons={options.page.buttons}
@@ -1262,7 +1257,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         />
         <GridScroll
           mounted={mounted}
-          gridCSS={this.props.gridCSS}
           bodyHeight={styles.bodyHeight}
           pageHeight={styles.pageHeight}
           verticalScrollerWidth={styles.verticalScrollerWidth}
@@ -1284,7 +1278,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           filterInfo={this.props.store_filterInfo}
           colGroup={this.state.colGroup}
           options={options}
-          gridCSS={this.props.gridCSS}
           frozenColumnIndex={options.frozenColumnIndex}
           scrollLeft={this.state.scrollLeft}
           styles={styles}

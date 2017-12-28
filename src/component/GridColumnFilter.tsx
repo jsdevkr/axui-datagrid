@@ -90,7 +90,6 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
 
   private getOptions() {
     const {
-            gridCSS,
             isColumnFilter,
             colGroup,
             options,
@@ -149,8 +148,8 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
           this.onChange(isColumnFilter, arr, option.value, !option.checked, option.checkAll);
         }}
       >
-        <div className={classNames(gridCSS.checkBox)} />
-        <span className={classNames(gridCSS.text)}>{option.text}</span>
+        <div className={classNames('axd-option-check-box')} />
+        <span className={classNames('axd-option-text')}>{option.text}</span>
       </div>;
     });
   }
@@ -159,7 +158,6 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
     const {
             isColumnFilter,
             colGroup,
-            gridCSS,
             styles,
             scrollLeft
           } = this.props;
@@ -183,7 +181,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, i
     return (
       <div
         data-column-filter='true'
-        className={classNames(gridCSS.columnFilter)}
+        className={classNames('axd-column-filter')}
         style={filterStyles}
       >
         <div data-options=''>

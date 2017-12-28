@@ -25,7 +25,6 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
   public render() {
     const {
             selecting,
-            gridCSS,
             selectionMinOffset,
             selectionMaxOffset
           } = this.props;
@@ -41,7 +40,7 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
 
     return (
       <div
-        className={classNames(gridCSS.cellSelector)}
+        className={classNames('')}
         style={selectorStyles}
       />
     )

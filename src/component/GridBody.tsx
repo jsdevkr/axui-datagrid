@@ -58,7 +58,6 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
 
   private paintBody(_panelName: string, _colGroup, _bodyRow, _groupRow, _list, _scrollConfig, _style) {
     const {
-            gridCSS,
             styles,
             options,
             colGroup,
@@ -105,7 +104,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
       }
       else if (_col.key === '__row_selector__') {
         label = <div
-          className={classNames(gridCSS.checkBox)}
+          className={classNames('axd-check-box')}
           style={{maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px'}} />;
       }
       else {
@@ -160,17 +159,17 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                           {row.cols.map((col, ci) => {
                             let cellHeight = options.body.columnHeight * col.rowspan - options.body.columnBorderWidth;
                             let classNameItems = {
-                              [gridCSS.lineNumber]: (col.columnAttr === 'lineNumber'),
-                              [gridCSS.rowSelector]: (col.columnAttr === 'rowSelector')
+                              ['axd-line-number']: (col.columnAttr === 'lineNumber'),
+                              ['axd-row-selector']: (col.columnAttr === 'rowSelector')
                             };
                             let td: JSX.Element = null;
 
                             if (col.columnAttr === 'lineNumber') {
                               if (focusedRow === li) {
-                                classNameItems[ gridCSS.focused ] = true;
+                                classNameItems[ 'focused' ] = true;
                               }
                               if (selectionRows[ li ]) {
-                                classNameItems[ gridCSS.selected ] = true;
+                                classNameItems[ 'selected' ] = true;
                               }
                             }
                             else if (col.columnAttr === 'rowSelector') {
@@ -178,10 +177,10 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                             }
                             else {
                               if (selectionRows[ li ] && selectionCols[ col.colIndex ]) {
-                                classNameItems[ gridCSS.selected ] = true;
+                                classNameItems[ 'selected' ] = true;
                               }
                               if (focusedRow === li && focusedCol == col.colIndex) {
-                                classNameItems[ gridCSS.focused ] = true;
+                                classNameItems[ 'focused' ] = true;
                               }
                             }
 
@@ -212,6 +211,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                                        className={classNames(classNameItems)}
                                        style={{height: cellHeight, minHeight: '1px'}}
                                        onDoubleClick={e => {
+                                         console.log(col);
                                          onDoubleClickCell(e, col, li);
                                        }}>
                                 {getFieldSpan(colGroup, col, item, li)}
@@ -259,7 +259,6 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
   public render() {
     const {
             mounted,
-            gridCSS,
             styles,
             options,
             frozenColumnIndex,
@@ -371,7 +370,7 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
 
     return (
       <div
-        className={classNames(gridCSS.body)}
+        className={classNames('axd-body')}
         style={{height: styles.bodyHeight}}
         onMouseDown={e => onMouseDownBody(e)}>
         {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? this.paintBodyTemp('top-aside-body', topAsideBodyPanelStyle) : null}
@@ -407,6 +406,5 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
         ) : null}
       </div>
     );
-
   }
 }

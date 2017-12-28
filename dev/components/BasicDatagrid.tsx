@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Divider } from 'semantic-ui-react';
 import { AXDatagrid } from '../../src';
-import * as gridCSS from '../../src/scss/index.scss';
 
 // 사용자 formatter 확장하기
 AXDatagrid.setFormatter({
@@ -71,12 +70,17 @@ const gridOptions_new = {
 interface iProps {
 }
 
+interface iColumnEditor {
+  type: string;
+}
+
 interface iColumns {
   key?: string;
   width?: number;
   label?: string;
   align?: string;
   formatter?: Function | string;
+  editor?: Function | iColumnEditor;
   columns?: iColumns[];
 }
 
@@ -104,12 +108,13 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
     this.state = {
       columns: [
         {key: 'id', width: 60, label: '번호', align: 'center'},
-        {key: 'title', width: 100, label: '제목'},
+        {key: 'title', width: 100, label: '제목', editor: {type: 'longtext'}},
         {
           key: 'writer', label: '작성자', align: 'center',
           formatter: (data: iFormatterData): string => {
             return data.item[ data.key ];
-          }
+          },
+          editor: {type: 'text'}
         },
         {key: 'date', label: '작성일', align: 'center', formatter: 'date'},
         {key: 'money', label: '돈', align: 'right', formatter: 'money'},
@@ -176,7 +181,6 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
         <h1>Basic</h1>
 
         <AXDatagrid
-          gridCSS={gridCSS}
           height={this.state.height}
           style={{fontSize: '12px'}}
           columns={this.state.columns}

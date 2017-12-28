@@ -36,7 +36,6 @@ export namespace iGridRoot {
     store_page: any;
     store_sortInfo: any;
     store_filterInfo: any;
-    gridCSS: any;
     height: string;
     style: any;
     columns: iColumns[];
@@ -136,7 +135,6 @@ export namespace iGridRoot {
 export namespace iGridHeader {
   export interface Props {
     getRootBounding: Function;
-    gridCSS: any;
     mounted: boolean;
     optionsHeader: any;
     styles: any;
@@ -165,7 +163,6 @@ export namespace iGridHeader {
 export namespace iGridBody {
   export interface Props {
     mounted: boolean;
-    gridCSS: any;
     columnFormatter: any;
     options: any;
     styles: any;
@@ -212,7 +209,6 @@ export namespace iGridBody {
 export namespace iGridPage {
   export interface Props {
     mounted: boolean;
-    gridCSS: any;
     styles: any;
     pageButtonsContainerWidth: number;
     pageButtons: any;
@@ -228,7 +224,6 @@ export namespace iGridPage {
 export namespace iGridScroll {
   export interface Props {
     mounted: boolean;
-    gridCSS: any;
     bodyHeight: number;
     pageHeight: number;
     verticalScrollerHeight: number;
@@ -254,7 +249,6 @@ export namespace iGridScroll {
 export namespace iGridSelector {
   export interface Props {
     selecting: boolean;
-    gridCSS: any;
     selectionMinOffset: iSelection;
     selectionMaxOffset: iSelection;
   }
@@ -270,7 +264,6 @@ export namespace iGridColumnFilter {
     filterInfo: any;
     colGroup: any;
     options: any;
-    gridCSS: any;
     frozenColumnIndex: number;
     scrollLeft: number;
     styles: any;

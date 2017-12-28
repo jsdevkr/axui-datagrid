@@ -6,20 +6,20 @@
   &.hover {
     background: $ax-datagrid-row-hover-bg;
   }
-  &[data-ax6grid-grouping-tr="true"] {
+  &[data-grouping-tr="true"] {
     background: $ax-datagrid-row-grouping-bg;
   }
-  &[data-ax6grid-selected="true"] {
+  &[data-selected="true"] {
     background: $ax-datagrid-row-selected;
     td {
       //color: #fff;
       //box-shadow: inset 1px 1px 0px 0px #fff;
-      &[data-ax6grid-column-attr="rowSelector"],
-      &[data-ax6grid-column-attr="lineNumber"] {
+      &[data-column-attr="rowSelector"],
+      &[data-column-attr="lineNumber"] {
         box-shadow: none;
       }
-      &[data-ax6grid-column-attr="rowSelector"] {
-        .checkBox {
+      &[data-column-attr="rowSelector"] {
+        .axd-check-box {
           &:after {
             opacity: 1;
           }
@@ -27,11 +27,11 @@
       }
     }
   }
-  &[data-ax6grid-disable-selection="true"] {
+  &[data-disable-selection="true"] {
     // background: $ax-datagrid-row-selected;
     td {
-      &[data-ax6grid-column-attr="rowSelector"] {
-        .checkBox {
+      &[data-column-attr="rowSelector"] {
+        .axd-check-box {
           cursor: not-allowed;
           //@include ax-background(top, $ax-datagrid-cell-disable-checkbox-bg-colors);
           &:after {
@@ -57,7 +57,7 @@
   border-right: $ax-datagrid-column-border;
   border-bottom: $ax-datagrid-column-border;
 
-  &.headerColumn {
+  &.axd-header-column {
     cursor: default;
     &:hover {
       background: $ax-datagrid-row-hover-bg;
@@ -110,7 +110,7 @@
       }
     }
   }
-  &.headerCorner {
+  &.axd-header-corner {
     [data-span] {
       cursor: se-resize;
       &:before {
@@ -130,7 +130,7 @@
     }
   }
 
-  &.lineNumber {
+  &.axd-line-number {
     [data-span] {
       cursor: e-resize;
     }
@@ -157,11 +157,10 @@
       }
     }
   }
-  &.rowSelector {
+  &.axd-row-selector {
     [data-span] {
 
     }
-
     &.focused {
       background: $ax-datagrid-aside-bg;
     }
@@ -314,7 +313,7 @@
       display: inline-block;
     }
 
-    .checkBox {
+    .axd-check-box {
       box-sizing: border-box;
       display: inline-block;
       position: relative;
@@ -373,7 +372,7 @@
   }
 }
 
-.axDatagrid {
+.ax-datagrid {
   position: relative;
   background: $ax-datagrid-bg;
   border: $ax-datagrid-border;
@@ -419,7 +418,7 @@
     }
   }
 
-  .clipBoard {
+  .axd-clip-board {
     position: absolute;
     z-index: -1;
     left: -100%;
@@ -427,7 +426,7 @@
     height: 0;
     width: 0;
   }
-  .header {
+  .axd-header {
     user-select: none;
     box-sizing: border-box;
     position: relative;
@@ -471,7 +470,7 @@
       background: rgba(255, 0, 0, 0.3);
     }
   }
-  .body {
+  .axd-body {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -490,7 +489,7 @@
       }
     }
   }
-  .page {
+  .axd-page {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -502,33 +501,32 @@
     @include ax-background(to bottom, $ax-datagrid-page-bg-colors);
     border: 0 none;
     border-top: $ax-datagrid-page-border;
-
-    .pageButtons {
-      padding: 1px;
-      button {
-        box-sizing: border-box;
-        //border: 1px solid #C9C9C9;
-        border-width: 0;
-        background: transparent;
-        border-radius: 4px;
-        padding: 3px;
-        margin: 0 1px;
-        cursor: pointer;
-        &:hover {
-          background: $ax-datagrid-scroll-bar-bg;
-        }
-        &:focus {
-          outline: 0;
-        }
-        [data-button-svg] {
-          width: 100%;
-          height: 100%;
-          opacity: 0.6;
-        }
+  }
+  .axd-page-buttons {
+    padding: 1px;
+    button {
+      box-sizing: border-box;
+      //border: 1px solid #C9C9C9;
+      border-width: 0;
+      background: transparent;
+      border-radius: 4px;
+      padding: 3px;
+      margin: 0 1px;
+      cursor: pointer;
+      &:hover {
+        background: $ax-datagrid-scroll-bar-bg;
+      }
+      &:focus {
+        outline: 0;
+      }
+      [data-button-svg] {
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
       }
     }
   }
-  .scroller {
+  .axd-scroller {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -549,22 +547,7 @@
       box-sizing: border-box;
       position: relative;
     }
-    .scrollBar {
-      position: relative;
-      top: 0;
-      left: 0;
-      box-sizing: border-box;
-      border: $ax-datagrid-scroll-bar-border;
-      border-radius: $ax-datagrid-scroll-bar-border-radius;
-      width: 100%;
-      height: 100%;
 
-      background: $ax-datagrid-scroll-bar-bg;
-      &:hover {
-        border: $ax-datagrid-scroll-bar-hover-border;
-        background: $ax-datagrid-scroll-bar-hover-bg;
-      }
-    }
 
     [data-scroll-arrow="up"] {
       left: 0;
@@ -607,14 +590,30 @@
       }
     }
   }
-  .cellSelector {
+  .axd-scroll-bar {
+    position: relative;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border: $ax-datagrid-scroll-bar-border;
+    border-radius: $ax-datagrid-scroll-bar-border-radius;
+    width: 100%;
+    height: 100%;
+
+    background: $ax-datagrid-scroll-bar-bg;
+    &:hover {
+      border: $ax-datagrid-scroll-bar-hover-border;
+      background: $ax-datagrid-scroll-bar-hover-bg;
+    }
+  }
+  .axd-cell-selector {
     position: absolute;
     box-sizing: border-box;
     background: #b1d7fe;
     border: 1px solid #73b3f0;
     opacity: 0.5;
   }
-  .columnFilter {
+  .axd-column-filter {
     position: absolute;
     left: 0;
     top: 0;
@@ -636,7 +635,7 @@
       line-height: 20px;
       cursor: pointer;
 
-      .checkBox {
+      .axd-option-check-box {
         box-sizing: border-box;
         display: inline-block;
         vertical-align: middle;
@@ -662,7 +661,7 @@
           transform: rotate(-50deg);
         }
       }
-      .text {
+      .axd-option-text {
         display: inline-block;
         vertical-align: middle;
         padding-left: 0.4em;
@@ -670,7 +669,7 @@
       }
 
       &[data-checked="true"] {
-        .checkBox {
+        .axd-option-check-box {
           &:after {
             opacity: 1;
           }

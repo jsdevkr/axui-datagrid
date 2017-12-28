@@ -5,7 +5,6 @@ import { GridRoot } from './GridRoot';
 import * as ACT from './_inc/actions';
 
 interface iProps {
-  gridCSS: any;
   height: string;
   style: any;
   columns: any;
