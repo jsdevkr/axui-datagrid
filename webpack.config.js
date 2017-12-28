@@ -102,6 +102,12 @@ module.exports = {
       template: './dev/index.html', //Name of template in ./src
       hash: true,
     }),
+    new HtmlWebpackPlugin({
+      chunks: [],
+      filename: '404.html',
+      template: './dev/404.html',
+      hash: false,
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
