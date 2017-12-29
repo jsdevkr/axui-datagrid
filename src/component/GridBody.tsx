@@ -212,7 +212,6 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
                                        className={classNames(classNameItems)}
                                        style={{height: cellHeight, minHeight: '1px'}}
                                        onDoubleClick={e => {
-                                         console.log(col);
                                          onDoubleClickCell(e, col, li);
                                        }}>
                                 {getFieldSpan(colGroup, col, item, li)}

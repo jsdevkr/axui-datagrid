@@ -209,7 +209,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       this.props.store_filterInfo !== nextProps.store_filterInfo
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
-
       const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );
 
       this.setState( {
@@ -447,31 +446,22 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
     const processor = {
       'PAGE_FIRST': () => {
-        this.setState( {
-          scrollTop: FIRST,
-          selectionRows: { focusRow: true },
-          focusedRow: START
-        } );
+        this.onKeyAction( KEY_CODE.HOME );
       },
       'PAGE_PREV': () => {
-        let size: number = Math.floor( scrollContentContainerHeight / bodyTrHeight );
-        setFn( this.state.scrollTop + bodyTrHeight * (this.state.scrollTop % bodyTrHeight ? (size - 1) : size) - this.state.scrollTop % bodyTrHeight, ABOVE );
+        this.onKeyAction( KEY_CODE.PAGE_UP );
       },
       'PAGE_BACK': () => {
-        setFn( this.state.scrollTop - (this.state.scrollTop % bodyTrHeight || -bodyTrHeight), ABOVE );
+        this.onKeyAction( KEY_CODE.UP );
       },
       'PAGE_PLAY': () => {
-        setFn( this.state.scrollTop - bodyTrHeight - this.state.scrollTop % bodyTrHeight, BELOW );
+        this.onKeyAction( KEY_CODE.DOWN );
       },
       'PAGE_NEXT': () => {
-        setFn( Math.ceil( (this.state.scrollTop - scrollContentContainerHeight) / bodyTrHeight ) * bodyTrHeight, BELOW )
+        this.onKeyAction( KEY_CODE.PAGE_DOWN );
       },
       'PAGE_LAST': () => {
-        this.setState( {
-          scrollTop: LAST,
-          selectionRows: { focusRow: true },
-          focusedRow: END
-        } );
+        this.onKeyAction( KEY_CODE.END );
       }
     };
 
@@ -785,7 +775,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     return true;
   }
 
-  private onKeyAction( keyAction: string ) {
+  private onKeyAction( keyAction: number ) {
     const options = this.state.options;
     const styles = this.state.styles;
     const headerColGroup = this.state.headerColGroup;
@@ -793,6 +783,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const eRowIndex = (Math.floor( -this.state.scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex) + Math.floor( styles.bodyHeight / styles.bodyTrHeight );
     const sColIndex = this.data.sColIndex;
     const eColIndex = this.data.eColIndex;
+    const pRowSize = Math.floor( styles.bodyHeight / styles.bodyTrHeight );
 
     const getAvailScrollTop = ( rowIndex: number ): number => {
       let scrollTop: number;
@@ -801,7 +792,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         scrollTop = -rowIndex * styles.bodyTrHeight;
       }
       else if ( eRowIndex <= rowIndex ) {
-        scrollTop = -rowIndex * styles.bodyTrHeight + (Math.floor( styles.bodyHeight / styles.bodyTrHeight ) * styles.bodyTrHeight - styles.bodyTrHeight);
+        scrollTop = -rowIndex * styles.bodyTrHeight + (pRowSize * styles.bodyTrHeight - styles.bodyTrHeight);
       }
 
       if ( typeof scrollTop !== 'undefined' ) {
@@ -811,7 +802,8 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           clientWidth: styles.scrollContentContainerWidth,
           clientHeight: styles.scrollContentContainerHeight
         } ).scrollTop;
-      } else {
+      }
+      else {
         scrollTop = this.state.scrollTop
       }
 
@@ -873,10 +865,28 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         } );
       },
       [KEY_CODE.PAGE_UP]: () => {
+        let focusRow = (this.state.focusedRow - pRowSize < 1) ? 0 : this.state.focusedRow - pRowSize;
+        let scrollTop = getAvailScrollTop( focusRow );
 
+        this.setState( {
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
+          },
+          focusedRow: focusRow
+        } );
       },
       [KEY_CODE.PAGE_DOWN]: () => {
+        let focusRow = (this.state.focusedRow + pRowSize >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + pRowSize;
+        let scrollTop = getAvailScrollTop( focusRow );
 
+        this.setState( {
+          scrollTop: scrollTop,
+          selectionRows: {
+            [focusRow]: true
+          },
+          focusedRow: focusRow,
+        } );
       },
       [KEY_CODE.UP]: () => {
         let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
@@ -1135,13 +1145,17 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onDoubleClickCell( e, col: any, li: number ) {
-    this.setState( {
-      isInlineEditing: true,
-      inlineEditingCell: {
-        row: li,
-        col: col.colIndex
-      }
-    } );
+    if ( col.editor ) {
+
+      this.setState( {
+        isInlineEditing: true,
+        inlineEditingCell: {
+          row: li,
+          col: col.colIndex,
+          editor: col.editor
+        }
+      } );
+    }
   }
 
   private updateEditInput( act: string, row?: number, col?: number, value?: string ) {

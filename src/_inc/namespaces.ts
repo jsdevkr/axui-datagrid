@@ -24,6 +24,7 @@ export interface iFormatterData {
 export interface iEditingCell {
   row?: number;
   col?: number;
+  editor?: any;
 }
 
 
