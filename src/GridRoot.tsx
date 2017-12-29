@@ -422,23 +422,27 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
             scrollContentHeight,
             bodyTrHeight
           } = this.state.styles;
-    const [ ABOVE, BELOW, FIRST, LAST ] : [ string, string, number, number ]
-            = [ 'above', 'below', 0, scrollContentContainerHeight - scrollContentHeight ];
+    const [ ABOVE, BELOW, FIRST, LAST, START, END ] : [ string, string, number, number, number, number ]
+            = [ 'above', 'below', 0, scrollContentContainerHeight - scrollContentHeight, 0, scrollContentHeight / bodyTrHeight - 1 ];
 
     const setFn: Function = (scrollTop: number, direction: string) => {
       switch (direction) {
         case ABOVE:
-          this.setState({scrollTop: Math.min(scrollTop, FIRST)});
+          this.setState({scrollTop: Math.min(scrollTop, FIRST), selectionRows: {focusRow: true}, focusedRow: Math.max(Math.floor(-scrollTop / bodyTrHeight), START)});
           break;
         case BELOW:
-          this.setState({scrollTop: Math.max(scrollTop, LAST)});
+          this.setState({scrollTop: Math.max(scrollTop, LAST), selectionRows: {focusRow: true}, focusedRow: Math.min(Math.floor(-scrollTop / bodyTrHeight), END)});
           break;
       }
     };
 
     const processor = {
       'PAGE_FIRST': () => {
-        this.setState({scrollTop: FIRST});
+        this.setState({
+          scrollTop: FIRST,
+          selectionRows: {focusRow: true},
+          focusedRow: START
+        });
       },
       'PAGE_PREV': () => {
         let size: number = Math.floor(scrollContentContainerHeight / bodyTrHeight);
@@ -454,7 +458,11 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         setFn(Math.ceil((this.state.scrollTop - scrollContentContainerHeight) / bodyTrHeight) * bodyTrHeight, BELOW)
       },
       'PAGE_LAST': () => {
-        this.setState({scrollTop: LAST});
+        this.setState({
+          scrollTop: LAST,
+          selectionRows: {focusRow: true},
+          focusedRow: END
+        });
       }
     };
 
