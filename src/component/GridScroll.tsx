@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import { iGridScroll } from '../_inc/namespaces';
 
 export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.State> {
-  constructor(props: iGridScroll.Props) {
-    super(props);
+  constructor( props: iGridScroll.Props ) {
+    super( props );
 
-    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+    this.onClickScrollTrack = this.onClickScrollTrack.bind( this );
   }
 
   /*
@@ -24,36 +24,36 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
     }
   */
 
-  public onClickScrollTrack(e, barName) {
+  public onClickScrollTrack( e, barName ) {
     e.preventDefault();
-    if (e.target.getAttribute('data-scroll')) {
-      this.props.onClickScrollTrack(e, barName);
+    if ( e.target.getAttribute( 'data-scroll' ) ) {
+      this.props.onClickScrollTrack( e, barName );
     }
   }
 
   public render() {
 
     const {
-      mounted,
-      bodyHeight,
-      pageHeight,
-      verticalScrollerHeight,
-      verticalScrollerWidth,
-      horizontalScrollerWidth,
-      horizontalScrollerHeight,
-      verticalScrollBarHeight,
-      horizontalScrollBarWidth,
-      scrollerArrowSize,
-      scrollerPadding,
-      scrollBarLeft,
-      scrollBarTop,
-      onMouseDownScrollBar,
-      onClickScrollArrow,
-    } = this.props;
+            mounted,
+            bodyHeight,
+            pageHeight,
+            verticalScrollerHeight,
+            verticalScrollerWidth,
+            horizontalScrollerWidth,
+            horizontalScrollerHeight,
+            verticalScrollBarHeight,
+            horizontalScrollBarWidth,
+            scrollerArrowSize,
+            scrollerPadding,
+            scrollBarLeft,
+            scrollBarTop,
+            onMouseDownScrollBar,
+            onClickScrollArrow,
+          } = this.props;
 
-    if (!mounted) return null;
+    if ( !mounted ) return null;
 
-    if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) return null;
+    if ( verticalScrollerWidth === 0 && horizontalScrollerHeight === 0 ) return null;
 
     let verticalArrowStyles = {
       width: verticalScrollerWidth,
@@ -124,36 +124,36 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
     };
 
     return (
-      <div className={classNames('axd-scroller')}>
+      <div className={classNames( 'axd-scroller' )}>
         {(verticalScrollerWidth) ? (
           <div data-scroll-track='vertical' style={verticalStyles}>
             <div data-scroll-arrow='up' style={verticalArrowStyles}>
-              <div data-arrow style={verticalTopArrowStyles} onClick={e => onClickScrollArrow(e, 'up')} />
+              <div data-arrow style={verticalTopArrowStyles} onClick={e => onClickScrollArrow( e, 'up' )} />
             </div>
             <div data-scroll='vertical'
-                 onClick={e => this.onClickScrollTrack(e, 'vertical')}>
-              <div className={classNames('axd-scroll-bar')}
+                 onClick={e => this.onClickScrollTrack( e, 'vertical' )}>
+              <div className={classNames( 'axd-scroll-bar' )}
                    style={verticalBarStyles}
-                   onMouseDown={e => onMouseDownScrollBar(e, 'vertical')} />
+                   onMouseDown={e => onMouseDownScrollBar( e, 'vertical' )} />
             </div>
             <div data-scroll-arrow='down' style={verticalArrowStyles}>
-              <div data-arrow style={verticalBottomArrowStyles} onClick={e => onClickScrollArrow(e, 'down')} />
+              <div data-arrow style={verticalBottomArrowStyles} onClick={e => onClickScrollArrow( e, 'down' )} />
             </div>
           </div>
         ) : null}
         {(horizontalScrollerHeight) ? (
           <div data-scroll-track='horizontal' style={horizontalStyles}>
             <div data-scroll-arrow='left' style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalLeftArrowStyles} onClick={e => onClickScrollArrow(e, 'left')} />
+              <div data-arrow style={horizontalLeftArrowStyles} onClick={e => onClickScrollArrow( e, 'left' )} />
             </div>
             <div data-scroll='horizontal'
-                 onClick={e => this.onClickScrollTrack(e, 'horizontal')}>
-              <div className={classNames('axd-scroll-bar')}
+                 onClick={e => this.onClickScrollTrack( e, 'horizontal' )}>
+              <div className={classNames( 'axd-scroll-bar' )}
                    style={horizontalBarStyles}
-                   onMouseDown={(e) => onMouseDownScrollBar(e, 'horizontal')} />
+                   onMouseDown={( e ) => onMouseDownScrollBar( e, 'horizontal' )} />
             </div>
             <div data-scroll-arrow='right' style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalRightArrowStyles} onClick={e => onClickScrollArrow(e, 'right')} />
+              <div data-arrow style={horizontalRightArrowStyles} onClick={e => onClickScrollArrow( e, 'right' )} />
             </div>
           </div>
         ) : null}

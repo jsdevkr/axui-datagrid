@@ -72,6 +72,6 @@ gulp.task('dev run!', ['scss-watch'], shell.task([
   'webpack-dev-server --env=d',
 ]));
 
-gulp.task('deploy to dev', shell.task([
+gulp.task('deploy to docs', shell.task([
   'webpack -p --env=p --progress --profile --colors',
 ]));

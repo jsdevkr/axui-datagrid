@@ -1,4 +1,3 @@
-
 export interface iSelection {
   x?: number;
   y?: number;

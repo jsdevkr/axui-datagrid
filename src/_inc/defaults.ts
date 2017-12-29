@@ -31,12 +31,12 @@ export const gridOptions = {
   page: {
     buttonsContainerWidth: 150,
     buttons: [
-      {className: 'datagridIcon-first', onClick: 'PAGE_FIRST'},
-      {className: 'datagridIcon-prev', onClick: 'PAGE_PREV'},
-      {className: 'datagridIcon-back', onClick: 'PAGE_BACK'},
-      {className: 'datagridIcon-play', onClick: 'PAGE_PLAY'},
-      {className: 'datagridIcon-next', onClick: 'PAGE_NEXT'},
-      {className: 'datagridIcon-last', onClick: 'PAGE_LAST'}
+      { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+      { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+      { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+      { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+      { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+      { className: 'datagridIcon-last', onClick: 'PAGE_LAST' }
     ],
     buttonHeight: 16,
     height: 20

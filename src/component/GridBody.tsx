@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Range } from 'immutable';
 import classNames from 'classnames'
+import isFunction from 'lodash-es/isFunction';
+import isString from 'lodash-es/isString';
 import { iGridBody } from '../_inc/namespaces';
-import { isFunction, isString } from 'lodash';
 import { E_NAME, KEY_CODE } from '../_inc/constant';
 
 export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> {

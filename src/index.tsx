@@ -14,29 +14,29 @@ interface iProps {
 }
 
 export const GridRootConnected = connect(
-  (state: any) => {
+  ( state: any ) => {
     return {
-      store_receivedList: state.get('receivedList'),
-      store_deletedList: state.get('deletedList'),
-      store_list: state.get('list'),
-      store_page: state.get('page'),
-      store_sortInfo: state.get('sortInfo'),
-      store_filterInfo: state.get('filterInfo')
+      store_receivedList: state.get( 'receivedList' ),
+      store_deletedList: state.get( 'deletedList' ),
+      store_list: state.get( 'list' ),
+      store_page: state.get( 'page' ),
+      store_sortInfo: state.get( 'sortInfo' ),
+      store_filterInfo: state.get( 'filterInfo' )
     };
   },
-  (dispatch: Function) => ({
-    init: (props, options) => dispatch(ACT.INIT(props, options)),
-    setData: (data, options) => dispatch(ACT.SET_DATA(data, options)),
-    sort: (colGroup, options, colIndex: number) => dispatch(ACT.SORT(colGroup, options, colIndex)),
-    filter: (colGroup, options, colIndex: number, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo)),
-    update: (colGroup, options, row: number, col: number, value: string) => dispatch(ACT.UPDATE(colGroup, options, row, col, value))
+  ( dispatch: Function ) => ({
+    init: ( props, options ) => dispatch( ACT.INIT( props, options ) ),
+    setData: ( data, options ) => dispatch( ACT.SET_DATA( data, options ) ),
+    sort: ( colGroup, options, colIndex: number ) => dispatch( ACT.SORT( colGroup, options, colIndex ) ),
+    filter: ( colGroup, options, colIndex: number, filterInfo ) => dispatch( ACT.FILTER( colGroup, options, colIndex, filterInfo ) ),
+    update: ( colGroup, options, row: number, col: number, value: string ) => dispatch( ACT.UPDATE( colGroup, options, row, col, value ) )
   })
-)(GridRoot);
+)( GridRoot );
 
 export class AXDatagrid extends React.Component<iProps, {}> {
 
-  public static setFormatter(_formatter: any): any {
-    return GridRoot.setFormatter(_formatter);
+  public static setFormatter( _formatter: any ): any {
+    return GridRoot.setFormatter( _formatter );
   }
 
   public static getFormatter(): any {

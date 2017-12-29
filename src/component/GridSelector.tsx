@@ -3,12 +3,12 @@ import classNames from 'classnames'
 import { iGridSelector } from '../_inc/namespaces';
 
 export class GridSelector extends React.Component<iGridSelector.Props, iGridSelector.State> {
-  constructor(props: iGridSelector.Props) {
-    super(props);
+  constructor( props: iGridSelector.Props ) {
+    super( props );
 
   }
 
-  public shouldComponentUpdate(nextProps, nextState) {
+  public shouldComponentUpdate( nextProps, nextState ) {
     let sameProps = false;
 
     if (
@@ -29,7 +29,7 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
             selectionMaxOffset
           } = this.props;
 
-    if (!selecting) return null;
+    if ( !selecting ) return null;
 
     let selectorStyles = {
       left: selectionMinOffset.x,
@@ -40,7 +40,7 @@ export class GridSelector extends React.Component<iGridSelector.Props, iGridSele
 
     return (
       <div
-        className={classNames('')}
+        className={classNames( '' )}
         style={selectorStyles}
       />
     )
