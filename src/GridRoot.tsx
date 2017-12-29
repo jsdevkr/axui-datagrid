@@ -425,25 +425,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   }
 
   private onClickPageButton( e: any, onClick: Function ) {
-    const {
-            scrollContentContainerHeight,
-            scrollContentHeight,
-            bodyTrHeight
-          } = this.state.styles;
-    const [ ABOVE, BELOW, FIRST, LAST, START, END ] : [ string, string, number, number, number, number ]
-            = [ 'above', 'below', 0, scrollContentContainerHeight - scrollContentHeight, 0, scrollContentHeight / bodyTrHeight - 1 ];
-
-    const setFn: Function = ( scrollTop: number, direction: string ) => {
-      switch ( direction ) {
-        case ABOVE:
-          this.setState( { scrollTop: Math.min( scrollTop, FIRST ), selectionRows: { focusRow: true }, focusedRow: Math.max( Math.floor( -scrollTop / bodyTrHeight ), START ) } );
-          break;
-        case BELOW:
-          this.setState( { scrollTop: Math.max( scrollTop, LAST ), selectionRows: { focusRow: true }, focusedRow: Math.min( Math.floor( -scrollTop / bodyTrHeight ), END ) } );
-          break;
-      }
-    };
-
     const processor = {
       'PAGE_FIRST': () => {
         this.onKeyAction( KEY_CODE.HOME );
@@ -466,7 +447,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     };
 
     if ( isFunction( onClick ) ) {
-
+      onClick();
     }
     else if ( typeof onClick === 'string' && onClick in processor ) {
       processor[ onClick ]();
