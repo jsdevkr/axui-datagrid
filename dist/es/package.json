@@ -1,6 +1,6 @@
 {
   "name": "datagrid-es",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React DataGrid - UI components that display data in table format (for React)",
   "main": "",
   "repository": "https://github.com/axui/datagrid",
@@ -9,6 +9,7 @@
     "immutable": "^3.8.2",
     "lodash-es": "^4.17.4",
     "react": "^16.1.1",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.1.1",
     "react-redux": "^5.0.6"
   },
