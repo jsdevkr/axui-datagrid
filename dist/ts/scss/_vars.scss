@@ -1,0 +1,123 @@
+//==
+$ax-datagrid-border: 1px solid #ccc !default;
+$ax-datagrid-bg: #fff !default;
+$ax-datagrid-font-size: 12px !default;
+$ax-datagrid-column-border: 1px solid #ccc !default;
+$ax-datagrid-outline: #eee solid 1px !default;
+
+//== header
+$ax-datagrid-header-column-color: #222 !default;
+$ax-datagrid-header-column-border: 1px solid #ccc !default;
+$ax-datagrid-header-column-box-shadow: inset 1px 1px 0 0 #fff !default;
+$ax-datagrid-header-column-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax-datagrid-header-column-hover-bg-colors: (#eee, #eee) !default;
+$ax-datagrid-header-column-resizer-color: #ff3300 !default;
+$ax-datagrid-header-column-resizer-size: 4px !default;
+$ax-datagrid-header-column-focused-bg-colors: (#F0F0F0, #e1e1e1) !default;
+$ax-datagrid-header-column-focused-color: #0581f2 !default;
+
+$ax-datagrid-header-sorter-size: 9px !default;
+$ax-datagrid-header-sorter-color: #000 !default;
+
+//== aside
+$ax-datagrid-aside-border: 1px solid darken(#ccc, 0%) !default;
+$ax-datagrid-aside-bg: #f2f2f2 !default;
+$ax-datagrid-aside-column-shadow: inset 1px 1px 0 0 #fff !default;
+$ax-datagrid-aside-column-focused-bg-colors: (#f2f2f2, #e1e1e1) !default;
+$ax-datagrid-aside-column-focused-color: #0581f2 !default;
+
+$ax-datagrid-frozen-line-border: 1px solid darken(#ccc, 10%) !default;
+
+//== footsum
+$ax-datagrid-footsum-bg: #ffe7e2 !default;
+$ax-datagrid-footsum-line-border: 1px solid darken(#ccc, 10%) !default;
+
+//== page
+$ax-datagrid-page-border: 1px solid #ccc !default;
+$ax-datagrid-page-bg-colors: (#ECECEC, #dddddd) !default;
+$ax-datagrid-page-navigation-padding: 5px !default;
+$ax-datagrid-page-navigation-font-size: 12px !default;
+$ax-datagrid-page-navigation-btn-min-width: 20px !default;
+$ax-datagrid-page-navigation-btn-border: 0px none !default;
+$ax-datagrid-page-navigation-btn-border-radius: 5px !default;
+$ax-datagrid-page-navigation-btn-bg: transparent !default;
+$ax-datagrid-page-navigation-btn-font-size: 11px !default;
+$ax-datagrid-page-navigation-btn-color: #222 !default;
+$ax-datagrid-page-navigation-btn-hover-bg: #888 !default;
+$ax-datagrid-page-navigation-btn-hover-color: #fff !default;
+
+$ax-datagrid-page-status-font-size: 12px !default;
+$ax-datagrid-page-status-padding: 10px !default;
+$ax-datagrid-page-status-color: #222 !default;
+
+//== scroll
+$ax-datagrid-scroll-track-shadow: #ccc !default;
+$ax-datagrid-scroll-track-border: 1px solid #ccc !default;
+$ax-datagrid-scroll-track-bg: #F9F9F9 !default;
+
+$ax-datagrid-scroll-bar-border-radius: 10px !default;
+$ax-datagrid-scroll-bar-border: 0px solid #fff !default;
+$ax-datagrid-scroll-bar-bg: #B9B9B9 !default;
+$ax-datagrid-scroll-bar-hover-border: 0px solid #ccc !default;
+$ax-datagrid-scroll-bar-hover-bg: #888888 !default;
+
+//== body.row
+$ax-datagrid-last-row-border: 1px solid #eee !default;
+$ax-datagrid-row-bg-0: #f3f3f3 !default;
+$ax-datagrid-row-bg-1: #fff !default;
+$ax-datagrid-row-hover-bg: lighten(#cce2f3, 5%) !default;
+$ax-datagrid-row-grouping-bg: #ffffe7 !default;
+$ax-datagrid-row-selected: lighten(#b1d7fe, 10%) !default;
+
+//== body.cell
+$ax-datagrid-cell-padding-row-selector: 5px !default;
+$ax-datagrid-cell-padding: 3px 5px !default;
+
+$ax-datagrid-cell-checkbox-border: 1px solid #ccc !default;
+$ax-datagrid-cell-checkbox-border-radius: 3px !default;
+$ax-datagrid-cell-checkbox-bg-colors: (#FFFFFF, #F0F0F0) !default;
+$ax-datagrid-cell-disable-checkbox-bg-colors: (darken(nth($ax-datagrid-cell-checkbox-bg-colors, 2), 10%), darken(nth($ax-datagrid-cell-checkbox-bg-colors, 1), 10%)) !default;
+$ax-datagrid-cell-checkbox-arrow-color: #3372ff !default;
+
+$ax-datagrid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2 !default;
+$ax-datagrid-cell-focused-bg: lighten(#b1d7fe, 15%) !default;
+$ax-datagrid-cell-focused-color: #000 !default;
+
+$ax-datagrid-cell-selected-border-color: #ccc !default;
+$ax-datagrid-cell-selected-bg: lighten(#b1d7fe, 10%) !default;
+$ax-datagrid-cell-selected-color: #000 !default;
+
+$ax-datagrid-cell-editInput-border: 1px solid #0581f2 !default;
+
+//== resizer
+$ax-datagrid-resizer-color: #ff3300 !default;
+$ax-datagrid-resizer-size: 2px !default;
+
+//== columnFilter
+$ax-datagrid-column-filter-bg: #fff;
+$ax-datagrid-column-filter-border: $ax-datagrid-border;
+$ax-datagrid-column-filter-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+
+.datagridIcon-first {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Efirst%3C/title%3E%3Cpath d=%22M1.125 10.875v-9.75h1.625v4.469l4.063-4.063v4.063l4.063-4.063v8.938l-4.063-4.063v4.063l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-prev {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eprevious%3C/title%3E%3Cpath d=%22M3.098 10.875v-9.75h1.625v4.469l4.063-4.063v8.938l-4.063-4.063v4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-back {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eback%3C/title%3E%3Cpath d=%22M9.75 1.5l-7.5 4.5 7.5 4.5z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-play {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Eplay%3C/title%3E%3Cpath d=%22M2.25 1.5l7.5 4.5-7.5 4.5z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-next {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Enext%3C/title%3E%3Cpath d=%22M8.902 1.125v9.75h-1.625v-4.469l-4.063 4.063v-8.938l4.063 4.063v-4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}
+
+.datagridIcon-last {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Elast%3C/title%3E%3Cpath d=%22M10.875 1.125v9.75h-1.625v-4.469l-4.063 4.063v-4.063l-4.063 4.063v-8.938l4.063 4.063v-4.063l4.063 4.063v-4.469z%22%3E%3C/path%3E%3C/svg%3E') no-repeat center center;
+}

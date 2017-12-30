@@ -1,0 +1,680 @@
+@import "vars";
+@import "mixins";
+//~~~~~~~
+
+@mixin gridRowBackground() {
+  &.hover {
+    background: $ax-datagrid-row-hover-bg;
+  }
+  &[data-grouping-tr="true"] {
+    background: $ax-datagrid-row-grouping-bg;
+  }
+  &[data-selected="true"] {
+    background: $ax-datagrid-row-selected;
+    td {
+      //color: #fff;
+      //box-shadow: inset 1px 1px 0px 0px #fff;
+      &[data-column-attr="rowSelector"],
+      &[data-column-attr="lineNumber"] {
+        box-shadow: none;
+      }
+      &[data-column-attr="rowSelector"] {
+        .axd-check-box {
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+  &[data-disable-selection="true"] {
+    // background: $ax-datagrid-row-selected;
+    td {
+      &[data-column-attr="rowSelector"] {
+        .axd-check-box {
+          cursor: not-allowed;
+          //@include ax-background(top, $ax-datagrid-cell-disable-checkbox-bg-colors);
+          &:after {
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+
+  // mergeCells 대상 컬럼 배경생 통일.
+  td.merged {
+    // background: $ax-datagrid-row-bg-1;
+  }
+}
+
+@mixin gridCell() {
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+  border: 0 none;
+  border-right: $ax-datagrid-column-border;
+  border-bottom: $ax-datagrid-column-border;
+
+  &.axd-header-column {
+    cursor: default;
+    &:hover {
+      background: $ax-datagrid-row-hover-bg;
+      [data-filter] {
+        $filter-size: 6px;
+
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        width: 14px;
+        height: 14px;
+        margin-top: -7px;
+        cursor: pointer;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background: #fff;
+        opacity: 0.5;
+
+        &:before {
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.8, 2.2, $ax-datagrid-header-sorter-color, 1, "down");
+          top: 50%;
+          left: 50%;
+          margin-top: -$ax-datagrid-header-sorter-size / 2.2 / 2.2;
+          margin-left: -$ax-datagrid-header-sorter-size / 2.8;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    &.selected {
+      @include ax-background(to bottom, $ax-datagrid-header-column-focused-bg-colors);
+    }
+    &.focused {
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-top: 4px solid $ax-datagrid-header-column-focused-color;
+        border-right: 4px solid transparent;
+        border-bottom: 0 none;
+        border-left: 4px solid transparent;
+        margin-left: -4px;
+      }
+    }
+  }
+  &.axd-header-corner {
+    [data-span] {
+      cursor: se-resize;
+      &:before {
+        $triangle-border-width: $ax-datagrid-font-size/3;
+        position: absolute;
+        right: $triangle-border-width;
+        bottom: $triangle-border-width;
+        content: ' ';
+        display: block;
+        width: 0;
+        height: 0;
+        border-bottom: solid $triangle-border-width $ax-datagrid-header-column-color;
+        border-right: solid $triangle-border-width $ax-datagrid-header-column-color;
+        border-left: solid $triangle-border-width transparent;
+        border-top: solid $triangle-border-width transparent;
+      }
+    }
+  }
+
+  &.axd-line-number {
+    [data-span] {
+      cursor: e-resize;
+    }
+    &:hover {
+      background: $ax-datagrid-row-hover-bg;
+    }
+    &.selected {
+      @include ax-background(to right, $ax-datagrid-aside-column-focused-bg-colors);
+    }
+    &.focused {
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-right: 0 none;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid $ax-datagrid-aside-column-focused-color;
+        margin-top: -4px;
+      }
+    }
+  }
+  &.axd-row-selector {
+    [data-span] {
+
+    }
+    &.focused {
+      background: $ax-datagrid-aside-bg;
+    }
+  }
+
+  &.selected {
+    background: $ax-datagrid-cell-selected-bg;
+  }
+  &.focused {
+    box-shadow: $ax-datagrid-cell-focused-box-shadow;
+    background: $ax-datagrid-cell-focused-bg;
+  }
+
+  [data-span] {
+    user-select: none;
+    box-sizing: border-box;
+    display: block;
+    padding: $ax-datagrid-cell-padding;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+
+    &[data-multiLine] {
+      white-space: normal;
+    }
+    &[data-align="left"] {
+      text-align: left;
+    }
+    &[data-align="center"] {
+      text-align: center;
+    }
+    &[data-align="right"] {
+      text-align: right;
+    }
+
+    [data-resizer] {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: $ax-datagrid-header-column-resizer-size;
+      height: 100%;
+      cursor: col-resize;
+      &:hover {
+        background: $ax-datagrid-header-column-resizer-color;
+        opacity: 0.5;
+      }
+    }
+    [data-sorter] {
+      position: relative;
+      //right: 0;
+      //top: 2px;
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+
+      &[data-sorter-order="asc"] {
+        &:before {
+          top: 2px;
+          left: 0;
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "up");
+        }
+        &:after {
+          display: none;
+        }
+      }
+      &[data-sorter-order="desc"] {
+        &:before {
+          display: none;
+        }
+        &:after {
+          bottom: 2px;
+          left: 0;
+          @include sort-arrow($ax-datagrid-header-sorter-size, 2.5, 2.0, $ax-datagrid-header-sorter-color, 0.8, "down");
+        }
+      }
+
+    }
+    [data-editor] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border: 0 none;
+      background: $ax-datagrid-bg;
+      &::-ms-clear {
+        display: none;
+      }
+    }
+    [data-select] {
+      position: absolute;
+      display: block;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border: 0px none;
+      background: $ax-datagrid-bg;
+      .ax5select-display {
+        height: 100%;
+        border-radius: 0;
+      }
+    }
+    [data-editor="checkbox"] {
+      display: inline-block;
+      position: relative;
+      border: $ax-datagrid-cell-checkbox-border;
+      border-radius: $ax-datagrid-cell-checkbox-border-radius;
+      @include ax-background(top, $ax-datagrid-cell-checkbox-bg-colors);
+      height: 100%;
+      &:after {
+        content: '';
+        width: 60%;
+        height: 40%;
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0.0;
+        // @include transform(rotate(-50deg));
+      }
+      &[data-checked="true"] {
+        &:after {
+          opacity: 1.0;
+        }
+      }
+    }
+    [data-tnode-arrow] {
+      display: inline-block;
+      box-sizing: content-box;
+      text-align: right;
+      text-shadow: 0 -1px #fff;
+      padding: 0 5px 0 0;
+    }
+    a[data-tnode-arrow] {
+      cursor: pointer;
+      text-decoration: none;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    [data-tnode-item="group"] {
+      display: inline-block;
+    }
+    [data-tnode-item="item"] {
+      display: inline-block;
+    }
+
+    .axd-check-box {
+      box-sizing: border-box;
+      display: inline-block;
+      position: relative;
+      border: $ax-datagrid-cell-checkbox-border;
+      border-radius: $ax-datagrid-cell-checkbox-border-radius;
+      @include ax-background(to bottom, $ax-datagrid-cell-checkbox-bg-colors);
+      height: 100%;
+      width: 100%;
+      &:after {
+        content: '';
+        width: 60%;
+        height: 40%;
+        position: absolute;
+        top: 20%;
+        right: 20%;
+        border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0.0;
+        transform: rotate(-50deg);
+      }
+    }
+  }
+  [data-inline-edit] {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: $ax-datagrid-cell-editInput-border;
+    display: block;
+  }
+}
+
+@mixin data-arrow() {
+  [data-arrow] {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: $ax-datagrid-scroll-bar-bg;
+    cursor: pointer;
+    &:hover {
+      border-color: $ax-datagrid-scroll-bar-hover-bg;
+    }
+
+    /*
+    border-bottom: solid $triangle-border-width $ax-datagrid-scroll-bar-bg;
+    border-right: solid $triangle-border-width transparent;
+    border-left: solid $triangle-border-width transparent;
+    border-top: 0 none;
+    */
+  }
+}
+
+.ax-datagrid {
+  position: relative;
+  background: $ax-datagrid-bg;
+  border: $ax-datagrid-border;
+  overflow: hidden;
+
+  &:focus{
+    outline: $ax-datagrid-outline;
+  }
+
+  table {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0 none;
+    width: 100%;
+    tr {
+      border-bottom: 0 none;
+      @include gridRowBackground();
+      td {
+        @include gridCell();
+      }
+    }
+
+    /*
+    tr:last-child {
+      td {
+        border-bottom: $ax-datagrid-last-row-border;
+      }
+    }
+    */
+  }
+
+  [data-panel] {
+    position: absolute;
+    box-sizing: border-box;
+  }
+  [data-scroll-container] {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    [data-panel] {
+
+    }
+  }
+
+  .axd-clip-board {
+    position: absolute;
+    z-index: -1;
+    left: -100%;
+    top: -100%;
+    height: 0;
+    width: 0;
+  }
+  .axd-header {
+    user-select: none;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    @include ax-background(to bottom, $ax-datagrid-header-column-bg-colors);
+    border: 0 none;
+    border-bottom: $ax-datagrid-header-column-border;
+
+    table tr td {
+      box-shadow: $ax-datagrid-header-column-box-shadow;
+    }
+    [data-panel] {
+      &[data-panel="aside-header"] {
+        overflow: hidden;
+        border-right: $ax-datagrid-aside-border;
+        td {
+          text-align: center;
+        }
+      }
+      &[data-panel="left-header"] {
+        border-right: $ax-datagrid-frozen-line-border; /// frozen Line color
+      }
+      &[data-panel="header-scroll"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+    [data-column-resizer] {
+      position: absolute;
+      top: 0;
+      cursor: ew-resize;
+    }
+    [data-column-resizing] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+      cursor: default;
+      background: rgba(255, 0, 0, 0.3);
+    }
+  }
+  .axd-body {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-body-scroll"] {
+      tr:nth-child(even) {
+        background: $ax-datagrid-row-bg-0
+      }
+      tr:nth-child(odd) {
+        background: $ax-datagrid-row-bg-1
+      }
+    }
+    [data-panel="aside-body-scroll"] {
+      background: $ax-datagrid-aside-bg;
+      table tr td {
+        box-shadow: $ax-datagrid-header-column-box-shadow;
+      }
+    }
+  }
+  .axd-page {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    user-select: none;
+    box-sizing: border-box;
+    overflow: hidden;
+    @include ax-background(to bottom, $ax-datagrid-page-bg-colors);
+    border: 0 none;
+    border-top: $ax-datagrid-page-border;
+  }
+  .axd-page-buttons {
+    padding: 1px;
+    button {
+      box-sizing: border-box;
+      //border: 1px solid #C9C9C9;
+      border-width: 0;
+      background: transparent;
+      border-radius: 4px;
+      padding: 3px;
+      margin: 0 1px;
+      cursor: pointer;
+      &:hover {
+        background: $ax-datagrid-scroll-bar-bg;
+      }
+      &:focus {
+        outline: 0;
+      }
+      [data-button-svg] {
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+      }
+    }
+  }
+  .axd-scroller {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    [data-scroll-track] {
+      background: $ax-datagrid-scroll-track-bg;
+      box-shadow: inset 0 0 1px 0 $ax-datagrid-scroll-track-shadow;
+      box-sizing: border-box;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+    [data-scroll-arrow] {
+      position: absolute;
+      box-sizing: border-box;
+    }
+    [data-scroll] {
+      box-sizing: border-box;
+      position: relative;
+    }
+
+
+    [data-scroll-arrow="up"] {
+      left: 0;
+      top: 0;
+      @include data-arrow();
+    }
+    [data-scroll-arrow="down"] {
+      left: 0;
+      bottom: 0;
+      @include data-arrow();
+    }
+    [data-scroll="vertical"] {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      .scrollBar {
+        cursor: ns-resize;
+      }
+    }
+
+    [data-scroll-track="horizontal"] {
+      border-radius: 3px;
+    }
+    [data-scroll-arrow="left"] {
+      left: 0;
+      top: 0;
+      @include data-arrow();
+    }
+    [data-scroll-arrow="right"] {
+      right: 0;
+      top: 0;
+      @include data-arrow();
+    }
+    [data-scroll="horizontal"] {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      .scrollBar {
+        cursor: ew-resize;
+      }
+    }
+  }
+  .axd-scroll-bar {
+    position: relative;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border: $ax-datagrid-scroll-bar-border;
+    border-radius: $ax-datagrid-scroll-bar-border-radius;
+    width: 100%;
+    height: 100%;
+
+    background: $ax-datagrid-scroll-bar-bg;
+    &:hover {
+      border: $ax-datagrid-scroll-bar-hover-border;
+      background: $ax-datagrid-scroll-bar-hover-bg;
+    }
+  }
+  .axd-cell-selector {
+    position: absolute;
+    box-sizing: border-box;
+    background: #b1d7fe;
+    border: 1px solid #73b3f0;
+    opacity: 0.5;
+  }
+  .axd-column-filter {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 180px;
+    height: 300px;
+    background: $ax-datagrid-column-filter-bg;
+    border: $ax-datagrid-column-filter-border;
+    box-shadow: $ax-datagrid-column-filter-box-shadow;
+    border-radius: 5px;
+    padding: 5px;
+    [data-options] {
+      height: 100%;
+      border: 1px solid #eee;
+      overflow: auto;
+    }
+    [data-option] {
+      padding: 0 5px;
+      white-space: nowrap;
+      line-height: 20px;
+      cursor: pointer;
+
+      .axd-option-check-box {
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        border: $ax-datagrid-cell-checkbox-border;
+        border-radius: $ax-datagrid-cell-checkbox-border-radius;
+        @include ax-background(to bottom, $ax-datagrid-cell-checkbox-bg-colors);
+        height: 16px;
+        width: 16px;
+
+        &:after {
+          content: '';
+          width: 0.6em;
+          height: 0.4em;
+          position: absolute;
+          top: 0.3em;
+          right: 0.2em;
+          border: 0.2em solid $ax-datagrid-cell-checkbox-arrow-color;
+          border-top: none;
+          border-right: none;
+          background: transparent;
+          opacity: 0.0;
+          transform: rotate(-50deg);
+        }
+      }
+      .axd-option-text {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 0.4em;
+        user-select: none;
+      }
+
+      &[data-checked="true"] {
+        .axd-option-check-box {
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}
