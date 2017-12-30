@@ -103,7 +103,7 @@ module.exports = {
       dry:      false
     }),
     new CnameWebpackPlugin({
-      domain: 'ax6ui-datagrid.axisj.com',
+      domain: 'axui-datagrid.axisj.com',
     }),
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({

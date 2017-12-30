@@ -87,7 +87,7 @@ gulp.task( 'ES npm publish patch', [ 'dist-scss', 'dist-ES' ], shell.task( [
   'cd dist/es && npm version patch -m "version patch" && npm publish'
 ] ) );
 gulp.task( 'TS npm publish patch', [ 'dist-scss', 'dist-TS' ], shell.task( [
-  'cd dist/es && npm version patch -m "version patch" && npm publish'
+  'cd dist/ts && npm version patch -m "version patch" && npm publish'
 ] ) );
 
 gulp.task( 'dev run!', [ 'scss-watch' ], shell.task( [
