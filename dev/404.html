@@ -1,14 +1,10 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta http-equiv="refresh" content="0; url=/" />
-    <script>
-      location.href = '/';
-    </script>
+    <!-- Hack to redirect SPA routes back to the index.html -->
+    <meta http-equiv="refresh" content="0;URL='https://axui-datagrid.axisj.com'" />
+    <script>sessionStorage.redirect = location.href</script>
 </head>
-<body>
-404 pages
-</body>
+<body></body>
 </html>

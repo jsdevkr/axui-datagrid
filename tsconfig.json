@@ -8,10 +8,13 @@
     "sourceMap": true,
     "jsx": "react",
     "noLib": false,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
   },
   "compileOnSave": false,
   "exclude": [
     "node_modules", "src"
-  ]
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "useCache": true
+  }
 }

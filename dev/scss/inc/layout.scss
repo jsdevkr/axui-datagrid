@@ -1,9 +1,15 @@
-.ui.container{
-  &.main-layout{
-    padding: 1em 0;
-  }
-}
+
 
 .segment-content-view{
   min-height: 500px;
+}
+
+.SideNav{
+  .ui.vertical.menu {
+    background: transparent;
+    width: auto;
+    box-shadow: none;
+    border-radius: 0;
+    border: 0 none;
+  }
 }

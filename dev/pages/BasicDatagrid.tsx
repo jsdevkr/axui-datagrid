@@ -67,41 +67,7 @@ const gridOptions_new = {
   showRowSelector: false
 };
 
-interface iProps {
-}
-
-interface iColumnEditor {
-  type: string;
-}
-
-interface iColumns {
-  key?: string;
-  width?: number;
-  label?: string;
-  align?: string;
-  formatter?: Function | string;
-  editor?: Function | iColumnEditor;
-  columns?: iColumns[];
-}
-
-interface iState {
-  height?: string,
-  columns: iColumns[],
-  data: any,
-  options: object
-}
-
-interface iFormatterData {
-  list: any;
-  item: any;
-  index: number;
-  key: string;
-  value: any;
-  options: any;
-}
-
-
-export class BasicDatagrid extends React.Component<iProps, iState> {
+export class BasicDatagrid extends React.Component<iBasicDatagridProps, iBasicDatagridState> {
   constructor(props) {
     super(props);
 
@@ -126,6 +92,7 @@ export class BasicDatagrid extends React.Component<iProps, iState> {
       options: gridOptions
     };
 
+    this.gridCallBack = this.gridCallBack.bind(this);
   }
 
   public changeConfig(props) {
