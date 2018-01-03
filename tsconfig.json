@@ -9,10 +9,15 @@
     "jsx": "react",
     "noLib": false,
     "suppressImplicitAnyIndexErrors": true,
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@root/*": ["/*"]
+    }
   },
   "compileOnSave": false,
   "exclude": [
-    "node_modules", "src"
+    "node_modules"
   ],
   "awesomeTypescriptLoaderOptions": {
     "useCache": true

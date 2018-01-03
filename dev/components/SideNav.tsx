@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Menu, Icon } from 'semantic-ui-react';
-import pkg from '../../package.json';
+import pkg from '@root/package.json';
 
 export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
   constructor( props ) {
@@ -24,11 +24,11 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
         <Menu.Item>
           <Menu.Header>Start</Menu.Header>
           <Menu.Menu>
-            <Menu.Item as={Link} to='/'>
+            <Menu.Item as={NavLink} to='/introduction' activeClassName='active'>
               Introduction
             </Menu.Item>
-            <Menu.Item as={Link} to='/basic'>
-              basic
+            <Menu.Item as={NavLink} to='/usage' activeClassName='active'>
+              Usage
             </Menu.Item>
             <Menu.Item as='a' href={pkg.repository}>
               <Icon name='github' /> GitHub
@@ -39,7 +39,7 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
         <Menu.Item>
           <Menu.Header>Props</Menu.Header>
           <Menu.Menu>
-            <Menu.Item as={Link} to='/basic'>
+            <Menu.Item as={NavLink} to='/basic' activeClassName='active'>
               basic
             </Menu.Item>
             <Menu.Item name='height' onClick={this.handleItemClick} />

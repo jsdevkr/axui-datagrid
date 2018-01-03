@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Divider } from 'semantic-ui-react';
-import { AXDatagrid } from '../../src';
+import { AXDatagrid } from '@src/index';
 
 // 사용자 formatter 확장하기
 AXDatagrid.setFormatter({

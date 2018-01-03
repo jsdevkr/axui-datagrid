@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Container, Segment } from 'semantic-ui-react';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
 import { SideNav } from './components'
-import { Introduction, BasicDatagrid } from './pages';
+import { BasicDatagrid, Introduction, Usage } from './pages';
 
+const RedirectToIntro = () => <Redirect to='/introduction' />
 
 interface iProps {
 }
@@ -38,14 +38,14 @@ export class AppRouter extends React.Component<iProps, iState> {
         <div style={style.container}>
           <SideNav style={style.menu} />
           <div style={mainStyle}>
-            <Container>
 
-                <Switch>
-                  <Route exact path='/' component={Introduction} />
-                  <Route path='/basic' component={BasicDatagrid} />
-                </Switch>
+            <Switch>
+              <Route exact path='/' render={RedirectToIntro} />
+              <Route exact path='/introduction' component={Introduction} />
+              <Route path='/Usage' component={Usage} />
+              <Route path='/basic' component={BasicDatagrid} />
+            </Switch>
 
-            </Container>
           </div>
         </div>
 

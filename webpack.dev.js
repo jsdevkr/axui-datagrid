@@ -6,7 +6,11 @@ const basePath = __dirname;
 module.exports = {
   context: path.join(basePath, '.'),
   resolve: {
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx'],
+    alias: {
+      '@src': path.resolve(__dirname, 'src/'),
+      '@root': path.resolve(__dirname, '')
+    }
   },
   entry: {
     app: './dev/index.tsx',
