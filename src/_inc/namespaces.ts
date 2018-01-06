@@ -275,3 +275,67 @@ export namespace iGridColumnFilter {
 
   }
 }
+
+export namespace iGridBodyPanel {
+  export interface Props {
+    styles: any;
+    options: any;
+    colGroup: any;
+    selectionRows: any;
+    selectionCols: any;
+    focusedRow: any;
+    focusedCol: any;
+    columnFormatter: any;
+    onDoubleClickCell: any;
+    updateEditInput: any;
+    isInlineEditing: any;
+    inlineEditingCell: any;
+
+    list: any;
+    panelName: string;
+    panelColGroup: any;
+    panelBodyRow: any;
+    panelGroupRow: any;
+    panelScrollConfig: {
+      sRowIndex: number;
+      eRowIndex: number;
+    };
+    panelLeft?: number;
+    panelTop?: number;
+    panelPaddingLeft?: number;
+  }
+
+  export interface State {
+
+  }
+}
+
+export namespace iGridBodyCell {
+  export interface Props {
+    columnHeight: number;
+    columnPadding: number;
+    columnBorderWidth: number;
+    bodyAlign: string;
+    focusedRow: number;
+    focusedCol: number;
+    selectionRows: any;
+    selectionCols: any;
+    columnFormatter: any;
+    isInlineEditing: any;
+    inlineEditingCell: any;
+
+    list: any;
+    li: number;
+    colGroup: any;
+    col: any;
+    ci: number;
+    value: any;
+
+    onEditInput: Function;
+    onDoubleClickCell: Function;
+  }
+
+  export interface State {
+
+  }
+}

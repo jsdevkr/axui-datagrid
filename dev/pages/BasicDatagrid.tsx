@@ -168,6 +168,7 @@ export class BasicDatagrid extends React.Component<iBasicDatagridProps, iBasicDa
           <Button onClick={e => this.changeConfig('restoreOptions')} content='restoreOptions' />
         </Button.Group>
 
+
       </div>
     )
   }
