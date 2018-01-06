@@ -84,7 +84,7 @@ export const gridReducer = ( state = initialState, action ) => {
       sortInfoArray = sortInfoArray.filter( o => typeof o !== 'undefined' );
 
       let i = 0, l = sortInfoArray.length, _a_val, _b_val;
-      let sorted = state.get( 'receivedList' ).sort(
+      let sorted = state.get( 'list' ).sort(
         ( a, b ) => {
           for ( i = 0; i < l; i++ ) {
             _a_val = getValueByKey( a, sortInfoArray[ i ].key );
@@ -101,7 +101,7 @@ export const gridReducer = ( state = initialState, action ) => {
             }
           }
         }
-      ).filter( item => (item ? !item[ action.options.columnKeys.deleted ] : false) );
+      );
 
       return state
         .set( 'sortInfo', sortInfo )
