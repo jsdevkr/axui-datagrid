@@ -60,7 +60,7 @@ export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.S
       height: scrollerArrowSize / 2 + scrollerPadding
     };
 
-    let arrowWidth = (verticalScrollerWidth - scrollerPadding * 2) / 2;
+    let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
     let verticalTopArrowStyles = {
       left: scrollerPadding,
       top: (verticalArrowStyles.height - arrowWidth) / 2,

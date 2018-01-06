@@ -212,6 +212,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );
 
       this.setState( {
+        scrollTop: 0,
         styles: styles
       } );
       return false;
