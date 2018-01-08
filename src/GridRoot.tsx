@@ -61,7 +61,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       scrollLeft: 0,
       scrollTop: 0,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-      selecting: false,
+
       selectionStartOffset: {},
       selectionEndOffset: {},
       selectionMinOffset: {},
@@ -592,7 +592,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         setStateCall( {
           dragging: true,
-          selecting: true,
+
           scrollTop: this.state.scrollTop,
           scrollLeft: this.state.scrollLeft,
           selectionStartOffset: {
@@ -630,7 +630,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         if ( this.scrollMovingTimer ) clearInterval( this.scrollMovingTimer );
         this.setState( {
           dragging: false,
-          selecting: false,
+
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
@@ -647,7 +647,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         if ( e.shiftKey ) {
           let state = {
             dragging: false,
-            selecting: false,
+
             selectionRows: {},
             selectionCols: {}
           };
@@ -684,9 +684,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
       else {
         // 셀렉션 저장정보 초기화
+
         this.setState( {
           dragging: false,
-          selecting: false,
+
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
@@ -697,6 +698,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           focusedCol: selectStartedCol
         } );
 
+
         document.addEventListener( 'mousemove', throttled_onMouseMove );
         document.addEventListener( 'mouseup', offEvent );
         document.addEventListener( 'mouseleave', offEvent );
@@ -705,7 +707,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const proc_clickLinenumber = () => {
       let state = {
         dragging: false,
-        selecting: false,
+
         selectionRows: {},
         selectionCols: (() => {
           let cols = {};
@@ -963,7 +965,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         let state = {
           dragging: false,
-          selecting: false,
+
           selectionRows: {},
           selectionCols: {},
           focusedRow: 0,
@@ -1058,7 +1060,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
       let state = {
         dragging: false,
-        selecting: false,
+
         selectionRows: {},
         selectionCols: {},
         focusedRow: 0,
@@ -1128,7 +1130,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private onDoubleClickCell( e, col: any, li: number ) {
     if ( col.editor ) {
-
       this.setState( {
         isInlineEditing: true,
         inlineEditingCell: {

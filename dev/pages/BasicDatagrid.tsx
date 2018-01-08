@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Divider } from 'semantic-ui-react';
+import { Container, Segment, Button, Divider } from 'semantic-ui-react';
 import { AXDatagrid } from '@src/index';
 
 // 사용자 formatter 확장하기
@@ -144,32 +144,36 @@ export class BasicDatagrid extends React.Component<iBasicDatagridProps, iBasicDa
 
   public render() {
     return (
-      <div>
-        <h1>Basic</h1>
+      <Container>
+        <Segment basic padded>
+          <h1>Basic</h1>
+        </Segment>
 
-        <AXDatagrid
-          height={this.state.height}
-          style={{fontSize: '12px'}}
-          columns={this.state.columns}
-          data={this.state.data}
-          options={this.state.options}
-          thisCallback={this.gridCallBack}
-        />
-        <Divider />
-        <Button.Group basic size='tiny'>
-          <Button onClick={e => this.changeConfig({height: '400px'})} content='setHeight(400px)' />
-          <Button onClick={e => this.changeConfig({height: '300px'})} content='setHeight(300px)' />
-        </Button.Group>
-        <Divider />
-        <Button.Group basic size='tiny'>
-          <Button onClick={e => this.changeConfig('newData')} content='changeData' />
-          <Button onClick={e => this.changeConfig('restoreData')} content='restoreData' />
-          <Button onClick={e => this.changeConfig('newOptions')} content='newOptions' />
-          <Button onClick={e => this.changeConfig('restoreOptions')} content='restoreOptions' />
-        </Button.Group>
+        <Segment basic padded>
+          <AXDatagrid
+            height={this.state.height}
+            style={{fontSize: '12px'}}
+            columns={this.state.columns}
+            data={this.state.data}
+            options={this.state.options}
+            thisCallback={this.gridCallBack}
+          />
+          <Divider />
+          <Button.Group basic size='tiny'>
+            <Button onClick={e => this.changeConfig({height: '400px'})} content='setHeight(400px)' />
+            <Button onClick={e => this.changeConfig({height: '300px'})} content='setHeight(300px)' />
+          </Button.Group>
+          <Divider />
+          <Button.Group basic size='tiny'>
+            <Button onClick={e => this.changeConfig('newData')} content='changeData' />
+            <Button onClick={e => this.changeConfig('restoreData')} content='restoreData' />
+            <Button onClick={e => this.changeConfig('newOptions')} content='newOptions' />
+            <Button onClick={e => this.changeConfig('restoreOptions')} content='restoreOptions' />
+          </Button.Group>
 
+        </Segment>
 
-      </div>
+      </Container>
     )
   }
 }

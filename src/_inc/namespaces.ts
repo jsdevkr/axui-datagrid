@@ -54,7 +54,7 @@ export namespace iGridRoot {
     scrollLeft: number;
     scrollTop: number;
     dragging: boolean; // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-    selecting: boolean;
+
     selectionStartOffset: iSelection;
     selectionEndOffset: iSelection;
     selectionMinOffset: iSelection;

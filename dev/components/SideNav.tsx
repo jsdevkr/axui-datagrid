@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Icon, Menu } from 'semantic-ui-react';
 import pkg from '@root/package.json';
 
 export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
@@ -37,30 +37,23 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
         </Menu.Item>
 
         <Menu.Item>
-          <Menu.Header>Props</Menu.Header>
+          <Menu.Header>Attributes</Menu.Header>
+          <Menu.Menu>
+            <Menu.Item as={NavLink} to='/props' activeClassName='active'>
+              Props
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/options' activeClassName='active'>
+              Options
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu.Item>
+
+        <Menu.Item>
+          <Menu.Header>Usage</Menu.Header>
           <Menu.Menu>
             <Menu.Item as={NavLink} to='/basic' activeClassName='active'>
               basic
             </Menu.Item>
-            <Menu.Item name='height' onClick={this.handleItemClick} />
-            <Menu.Item name='style' onClick={this.handleItemClick} />
-            <Menu.Item name='columns' onClick={this.handleItemClick} />
-            <Menu.Item name='data' onClick={this.handleItemClick} />
-            <Menu.Item name='options' onClick={this.handleItemClick} />
-          </Menu.Menu>
-        </Menu.Item>
-
-        <Menu.Item>
-          <Menu.Header>Options</Menu.Header>
-          <Menu.Menu>
-            <Menu.Item name='header' onClick={this.handleItemClick} />
-          </Menu.Menu>
-        </Menu.Item>
-
-        <Menu.Item>
-          <Menu.Header>Events</Menu.Header>
-          <Menu.Menu>
-            <Menu.Item name='onClick' onClick={this.handleItemClick} />
           </Menu.Menu>
         </Menu.Item>
 
