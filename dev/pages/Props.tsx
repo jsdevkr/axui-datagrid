@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Header, Segment, List } from 'semantic-ui-react';
-import pkg from '@root/package.json';
+import { Container, Segment, Header } from 'semantic-ui-react';
+import { PropsTable } from '../components'
+import { datagridProps } from '../declarations/datagridProps'
+
 
 interface iProps {
 }
@@ -10,9 +11,9 @@ interface iState {
 }
 
 
-export class Usage extends React.Component<iProps, iState> {
-  constructor(props) {
-    super(props);
+export class Props extends React.Component<iProps, iState> {
+  constructor( props ) {
+    super( props );
 
   }
 
@@ -20,17 +21,12 @@ export class Usage extends React.Component<iProps, iState> {
     return (
       <Container>
         <Segment basic padded>
-          <h1>Usage</h1>
+          <h1>Props</h1>
         </Segment>
 
         <Segment basic padded>
-          <Header as='h2' dividing>NPM</Header>
-          <Segment>
-            <pre>$ npm install {pkg.name}-es -S</pre>
-          </Segment>
-          <Segment>
-            <pre>$ npm install {pkg.name}-ts -S</pre>
-          </Segment>
+          <Header as='h2' dividing>Summary</Header>
+          <PropsTable props={datagridProps} />
         </Segment>
       </Container>
     )
