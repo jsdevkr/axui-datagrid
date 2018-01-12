@@ -43,8 +43,8 @@ export class Introduction extends React.Component<iProps, iState> {
           <Header as='h2' dividing>React + ES6 + TS</Header>
           <p>
             The AXUI datagrid was developed using the React framework. So do not use jQuery.<br/>
-            In order to adapt to rapidly changing JS development environment, we use 'babel' to create code based on ES6, and use Typescript for systematic development.
-            If you're trying to build a web application with React, and you want to make all the code you use in your project complete ES6, the AXUI datagrid will be a good choice.
+            In order to adapt to rapidly changing JS development environment, we use 'babel' to create code based on ES6 + TS, and use Typescript for systematic development.
+            If you're trying to build a web application with React, and you want to make all the code you use in your project complete ES6 + TS, the AXUI datagrid will be a good choice.
           </p>
         </Segment>
 

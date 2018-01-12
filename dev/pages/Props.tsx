@@ -21,11 +21,9 @@ export class Props extends React.Component<iProps, iState> {
     return (
       <Container>
         <Segment basic padded>
-          <h1>Props</h1>
+          <Header as='h1'>Props</Header>
         </Segment>
-
         <Segment basic padded>
-          <Header as='h2' dividing>Summary</Header>
           <PropsTable props={datagridProps} />
         </Segment>
       </Container>

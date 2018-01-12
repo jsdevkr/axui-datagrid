@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table } from 'semantic-ui-react';
-import { map } from 'lodash-es';
+import map from 'lodash-es/map';
 import { PropsTableRow } from './PropsTableRow';
 
 const PropsTable = ( { props } ) => (

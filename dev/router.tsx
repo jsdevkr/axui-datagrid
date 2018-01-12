@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
-import { SideNav } from './components'
+import { SideNav, ExampleRoot } from './components'
 import { BasicDatagrid, Introduction, Usage, Props } from './pages';
 
 const RedirectToIntro = () => <Redirect to='/introduction' />
@@ -41,10 +41,10 @@ export class AppRouter extends React.Component<iProps, iState> {
 
             <Switch>
               <Route exact path='/' render={RedirectToIntro} />
-              <Route exact path='/introduction' component={Introduction} />
+              <Route path='/introduction' component={Introduction} />
               <Route path='/Usage' component={Usage} />
               <Route path='/props' component={Props} />
-              <Route path='/basic' component={BasicDatagrid} />
+              <Route path='/sample/:name' component={ExampleRoot} />
             </Switch>
 
           </div>

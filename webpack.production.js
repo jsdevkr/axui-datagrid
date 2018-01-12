@@ -23,6 +23,7 @@ module.exports = {
   output: {
     path: path.join(basePath, './docs'),
     filename: '[name].[hash].js',
+    publicPath: '/'
   },
   module: {
     rules: [
