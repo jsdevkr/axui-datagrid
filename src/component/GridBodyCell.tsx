@@ -1,14 +1,13 @@
 import * as React from 'react';
 import classNames from 'classnames'
-import { iGridBodyCell } from '../_inc/namespaces';
 import { E_NAME } from '../_inc/constant';
 import isString from 'lodash-es/isString';
 import isFunction from 'lodash-es/isFunction';
 
-export class GridBodyCell extends React.Component<iGridBodyCell.Props, iGridBodyCell.State> {
+export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyCellState> {
   private editInput: HTMLInputElement;
 
-  constructor( props: iGridBodyCell.Props ) {
+  constructor( props: iGridBodyCellProps ) {
     super( props );
 
     this.state = {};

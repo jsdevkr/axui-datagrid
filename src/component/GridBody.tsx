@@ -1,11 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames'
-import { iGridBody } from '../_inc/namespaces';
 import { GridBodyPanel } from './GridBodyPanel';
 
-export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> {
+export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
 
-  constructor( props: iGridBody.Props ) {
+  constructor( props: iGridBodyProps ) {
     super( props );
   }
 
@@ -71,38 +70,38 @@ export class GridBody extends React.Component<iGridBody.Props, iGridBody.State> 
       eRowIndex: (Math.floor( -scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex) + Math.ceil( styles.bodyHeight / styles.bodyTrHeight ) + 1
     };
 
-    let topAsideBodyPanelStyle: iGridBody.PanelStyle = {
+    let topAsideBodyPanelStyle: iGridBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
-    let topLeftBodyPanelStyle: iGridBody.PanelStyle = {
+    let topLeftBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
-    let topBodyPanelStyle: iGridBody.PanelStyle = {
+    let topBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: 0,
       height: styles.frozenRowHeight
     };
 
-    let asideBodyPanelStyle: iGridBody.PanelStyle = {
+    let asideBodyPanelStyle: iGridBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: styles.frozenRowHeight,
       height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
     };
-    let leftBodyPanelStyle: iGridBody.PanelStyle = {
+    let leftBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: styles.frozenRowHeight,
       height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
     };
-    let bodyPanelStyle: iGridBody.PanelStyle = {
+    let bodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: styles.frozenRowHeight,

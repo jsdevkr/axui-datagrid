@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Container, Segment, Header } from 'semantic-ui-react';
 import { PropsTable } from '../components'
-import { datagridProps } from '../declarations/datagridProps'
+import { datagridProps } from '../inc/datagridProps'
 
 
 interface iProps {

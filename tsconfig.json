@@ -13,7 +13,12 @@
     "paths": {
       "@src/*": ["src/*"],
       "@root/*": ["/*"]
-    }
+    },
+    "typeRoots" : [
+      "./node_modules/@types",
+      "./dev/typings",
+      "./src/typings"
+    ]
   },
   "compileOnSave": false,
   "exclude": [

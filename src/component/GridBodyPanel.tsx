@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { iGridBodyPanel } from '../_inc/namespaces';
 import { Range } from 'immutable';
 import { E_NAME, KEY_CODE } from '../_inc/constant';
 import { GridBodyCell } from './GridBodyCell';
 
-export class GridBodyPanel extends React.Component<iGridBodyPanel.Props, iGridBodyPanel.State> {
+export class GridBodyPanel extends React.Component<iGridBodyPanelProps, iGridBodyPanelState> {
 
-  constructor( props: iGridBodyPanel.Props ) {
+  constructor( props: iGridBodyPanelProps ) {
     super( props );
 
     this.state = {};

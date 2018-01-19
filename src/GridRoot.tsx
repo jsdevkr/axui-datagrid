@@ -13,7 +13,6 @@ import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
 import * as UTIL from './_inc/utils';
-import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
@@ -21,9 +20,9 @@ import { KEY_CODE } from './_inc/constant';
 
 let formatter = GridFormatter.getAll();
 
-export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> {
+export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
-  public static defaultProps: Partial<iGridRoot.Props> = {
+  public static defaultProps: Partial<iGridRootProps> = {
     height: '300px',
     columns: [],
     data: [],
@@ -237,7 +236,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   /**
    * 사용자 함수
    */
-  public updateDimensions() {
+  private updateDimensions() {
     let { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, this.state );
     let { scrollLeft, scrollTop } = UTIL.getScrollPosition( this.state.scrollLeft, this.state.scrollTop, {
       scrollWidth: styles.scrollContentWidth,
@@ -493,7 +492,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         const currMousePosition = UTIL.getMousePosition( ee );
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-        const setStateCall = ( currState, _moving?: iGridRoot.Moving ): void => {
+        const setStateCall = ( currState, _moving?: iGridRootMoving ): void => {
           const selectEndedRow: number = getRowIndex( currState.selectionEndOffset.y, this.state.scrollTop );
           let selectEndedCol: number = getColIndex( currState.selectionEndOffset.x, this.state.scrollLeft );
 
@@ -524,7 +523,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
           this.setState( currState );
         };
-        const scrollMoving = ( _moving: iGridRoot.Moving ): boolean => {
+        const scrollMoving = ( _moving: iGridRootMoving ): boolean => {
           let newScrollTop: number = this.state.scrollTop;
           let newScrollLeft: number = this.state.scrollLeft;
           let scrollLeft, scrollTop, endScroll;
@@ -565,7 +564,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         let p1Y: number = Math.min( y1, y2 );
         let p2Y: number = Math.max( y1, y2 );
 
-        let moving: iGridRoot.Moving = {
+        let moving: iGridRootMoving = {
           active: false,
           top: false,
           left: false,

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import classNames from 'classnames'
-import { iGridColumnFilter } from '../_inc/namespaces';
 import { List } from 'immutable';
 import uniqBy from 'lodash-es/uniqBy';
 
-export class GridColumnFilter extends React.Component<iGridColumnFilter.Props, iGridColumnFilter.State> {
-  constructor( props: iGridColumnFilter.Props ) {
+export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iGridColumnFilterState> {
+  constructor( props: iGridColumnFilterProps ) {
     super( props );
 
     this.state = {};

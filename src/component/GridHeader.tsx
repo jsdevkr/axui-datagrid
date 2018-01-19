@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as UTIL from '../_inc/utils';
 import classNames from 'classnames'
-import { iGridHeader } from '../_inc/namespaces';
 
 
-export class GridHeader extends React.Component<iGridHeader.Props, iGridHeader.State> {
-  constructor( props: iGridHeader.Props ) {
+export class GridHeader extends React.Component<iGridHeaderProps, iGridHeaderState> {
+  constructor( props: iGridHeaderProps ) {
     super( props );
 
     this.state = {

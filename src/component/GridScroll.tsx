@@ -1,9 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { iGridScroll } from '../_inc/namespaces';
 
-export class GridScroll extends React.Component<iGridScroll.Props, iGridScroll.State> {
-  constructor( props: iGridScroll.Props ) {
+export class GridScroll extends React.Component<iGridScrollProps, iGridScrollState> {
+  constructor( props: iGridScrollProps ) {
     super( props );
 
     this.onClickScrollTrack = this.onClickScrollTrack.bind( this );
