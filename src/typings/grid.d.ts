@@ -1,3 +1,12 @@
+interface iAXDatagridProps {
+  height: string;
+  style: any;
+  columns: any;
+  data: any;
+  options: any;
+  [propName: string]: any;
+}
+
 interface iSelection {
   x?: number;
   y?: number;
@@ -40,7 +49,6 @@ interface iGridRootProps {
   columns: iColumns[];
   data: any;
   options: any;
-  thisCallback: Function;
   init: Function;
   setData: Function;
   sort: Function;

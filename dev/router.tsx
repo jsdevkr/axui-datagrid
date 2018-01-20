@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
 import { SideNav, ExampleRoot } from './components'
-import { BasicDatagrid, Introduction, Usage, Props } from './pages';
+import { Introduction, Usage, Props } from './pages';
 
 const RedirectToIntro = () => <Redirect to='/introduction' />
 
