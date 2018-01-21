@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames'
 import { List } from 'immutable';
 import uniqBy from 'lodash-es/uniqBy';
+import { GridColumnFilterOption } from './GridColumnFilterOption'
 
 export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iGridColumnFilterState> {
   constructor( props: iGridColumnFilterProps ) {
@@ -87,81 +88,55 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
     onChangeColumnFilter( colIndex, filterInfo );
   }
 
-  private getOptions() {
-    const {
-            isColumnFilter,
-            colGroup,
-            options,
-            list,
-            filterInfo
-          } = this.props;
-
-    let columnFilterInfo = filterInfo.get( '' + isColumnFilter );
-
-    let arr = uniqBy( list
-      .filter( item => (item ? !item[ options.columnKeys.deleted ] : false) )
-      .map( item => {
-        let value = item[ colGroup[ isColumnFilter ].key ];
-        let text: string = value;
-        let checked: boolean = false;
-
-        if ( typeof value === 'undefined' ) {
-          value = '__UNDEFINED__';
-          text = '값 없음';
-        }
-
-        if ( typeof columnFilterInfo === 'undefined' || columnFilterInfo === false ) {
-          checked = true;
-        }
-        else if ( typeof columnFilterInfo !== 'undefined' && columnFilterInfo !== false && typeof columnFilterInfo[ value ] === 'undefined' ) {
-          checked = columnFilterInfo[ '__CHECK_ALL__' ];
-        }
-        else if ( value in columnFilterInfo ) {
-          checked = columnFilterInfo[ value ];
-        }
-        else {
-          checked = columnFilterInfo[ '__CHECK_ALL__' ];
-        }
-
-        return {
-          value: value,
-          text: text,
-          checked: checked
-        };
-      } )
-      .toJS(), 'value' );
-
-    arr.splice( 0, 0, {
-      value: '__CHECK_ALL__',
-      text: '전체선택',
-      checkAll: true,
-      checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ '__CHECK_ALL__' ])
-    } );
-
-    return arr.map( ( option, i ) => {
-      return <div
-        key={i}
-        data-option
-        data-checked={option.checked}
-        onClick={e => {
-          this.onChange( isColumnFilter, arr, option.value, !option.checked, option.checkAll );
-        }}
-      >
-        <div className={classNames( 'axd-option-check-box' )} />
-        <span className={classNames( 'axd-option-text' )}>{option.text}</span>
-      </div>;
-    } );
-  }
-
   public render() {
     const {
             isColumnFilter,
             colGroup,
             styles,
-            scrollLeft
+            scrollLeft,
+            filterInfo,
+            list
           } = this.props;
 
     if ( isColumnFilter === false ) return null;
+
+    let columnFilterInfo = filterInfo.get( '' + isColumnFilter );
+    let options = uniqBy( list.map( item => {
+      let value = item[ colGroup[ isColumnFilter ].key ];
+      let text: string = value;
+      let checked: boolean = false;
+
+      if ( typeof value === 'undefined' ) {
+        value = '__UNDEFINED__';
+        text = '값 없음';
+      }
+
+      if ( typeof columnFilterInfo === 'undefined' || columnFilterInfo === false ) {
+        checked = true;
+      }
+      else if ( typeof columnFilterInfo !== 'undefined' && columnFilterInfo !== false && typeof columnFilterInfo[ value ] === 'undefined' ) {
+        checked = columnFilterInfo[ '__CHECK_ALL__' ];
+      }
+      else if ( value in columnFilterInfo ) {
+        checked = columnFilterInfo[ value ];
+      }
+      else {
+        checked = columnFilterInfo[ '__CHECK_ALL__' ];
+      }
+
+      return {
+        value: value,
+        text: text,
+        checked: checked
+      };
+    } ).toJS(), 'value' );
+
+    options.splice( 0, 0, {
+      value: '__CHECK_ALL__',
+      text: '전체선택',
+      checkAll: true,
+      checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ '__CHECK_ALL__' ])
+    } );
 
     const filterWidth: number = 180;
 
@@ -183,9 +158,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
         className={classNames( 'axd-column-filter' )}
         style={filterStyles}
       >
-        <div data-options=''>
-          {this.getOptions()}
-        </div>
+        <GridColumnFilterOption options={options} onChange={(value, checked, checkAll) => {
+          this.onChange(isColumnFilter, options, value, checked, checkAll);
+        }} />
       </div>
     )
   }

@@ -259,6 +259,12 @@ interface iGridSelectorState {
 }
 
 
+interface iGridColumnFilterOption{
+  value: string;
+  text: string;
+  checked: boolean;
+  checkAll?: boolean;
+}
 interface iGridColumnFilterProps {
   isColumnFilter: any;
   filterInfo: any;
@@ -272,6 +278,14 @@ interface iGridColumnFilterProps {
 }
 
 interface iGridColumnFilterState {
+}
+
+interface iGridColumnFilterOptionProps {
+  options: iGridColumnFilterOption[];
+  onChange: Function;
+}
+
+interface iGridColumnFilterOptionState {
 
 }
 
