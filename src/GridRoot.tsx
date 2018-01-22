@@ -1308,7 +1308,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
           frozenColumnIndex={options.frozenColumnIndex}
           scrollLeft={this.state.scrollLeft}
           styles={styles}
-          list={this.props.store_list}
+          list={this.props.store_receivedList}
           onChangeColumnFilter={this.onChangeColumnFilter}
         />
       </div>

@@ -286,7 +286,11 @@ interface iGridColumnFilterOptionProps {
 }
 
 interface iGridColumnFilterOptionState {
-
+  mounted: boolean;
+  scrollTop: number;
+  clientHeight: number;
+  scrollHeight: number;
+  optionItemHeight: number;
 }
 
 interface iGridBodyPanelProps {

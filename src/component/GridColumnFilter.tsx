@@ -13,26 +13,6 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
     this.onChange = this.onChange.bind( this );
   }
 
-  /*
-    public shouldComponentUpdate(nextProps, nextState) {
-
-      let sameProps = false;
-
-      if (this.state.filterInfo !== nextState.filterInfo) {
-        this.props.onChangeColumnFilter(this.props.columnFilter.colIndex, this.state.filterInfo);
-        sameProps = true;
-      }
-
-      if (
-        this.props.columnFilter !== nextProps.columnFilter
-      ) {
-        sameProps = true;
-      }
-
-      return sameProps;
-    }
-  */
-
   private onChange( colIndex, filterOptions, value, checked, isCheckAll ) {
     const {
             onChangeColumnFilter
@@ -93,6 +73,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
             isColumnFilter,
             colGroup,
             styles,
+            options,
             scrollLeft,
             filterInfo,
             list
@@ -101,7 +82,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
     if ( isColumnFilter === false ) return null;
 
     let columnFilterInfo = filterInfo.get( '' + isColumnFilter );
-    let options = uniqBy( list.map( item => {
+    let filterOptions = uniqBy( list
+      .filter( item => (item ? !item[ options.columnKeys.deleted ] : false) )
+      .map( item => {
       let value = item[ colGroup[ isColumnFilter ].key ];
       let text: string = value;
       let checked: boolean = false;
@@ -131,7 +114,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
       };
     } ).toJS(), 'value' );
 
-    options.splice( 0, 0, {
+    filterOptions.splice( 0, 0, {
       value: '__CHECK_ALL__',
       text: '전체선택',
       checkAll: true,
@@ -144,7 +127,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
       top: styles.headerHeight - 2,
       left: 100,
       width: filterWidth,
-      maxHeight: styles.bodyHeight
+      height: styles.bodyHeight
     };
 
     filterStyles.left = styles.asidePanelWidth + colGroup[ isColumnFilter ]._sx - 2 + scrollLeft;
@@ -158,8 +141,8 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
         className={classNames( 'axd-column-filter' )}
         style={filterStyles}
       >
-        <GridColumnFilterOption options={options} onChange={(value, checked, checkAll) => {
-          this.onChange(isColumnFilter, options, value, checked, checkAll);
+        <GridColumnFilterOption options={filterOptions} onChange={(value, checked, checkAll) => {
+          this.onChange(isColumnFilter, filterOptions, value, checked, checkAll);
         }} />
       </div>
     )

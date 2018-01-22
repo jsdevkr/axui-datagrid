@@ -40,7 +40,6 @@ const gridData = [
   {id: 28, title: '친구란 같은 공간에서 서로 말이 없어도 어색하지 않은 관계이다.', writer: '양수빈', date: '2017-10-10'},
   {id: 29, title: '운은 계획에서 비롯된다.', writer: '양미정', date: '2017-10-10'},
   {id: 30, title: '잘 했고 잘 하고 있 잘 할거야.', writer: '임정혜', date: '2017-10-10'}
-
 ];
 const gridData_new = [];
 

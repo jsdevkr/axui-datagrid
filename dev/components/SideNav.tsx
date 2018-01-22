@@ -51,6 +51,9 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
             <Menu.Item as={NavLink} to='/sample/LargeData' activeClassName='active'>
               LargeData
             </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/Formatter' activeClassName='active'>
+              Formatter
+            </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
 
