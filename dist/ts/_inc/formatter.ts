@@ -1,4 +1,3 @@
-import { iFormatterData } from './namespaces';
 import { cdate } from './utils';
 
 /**

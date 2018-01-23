@@ -1,23 +1,9 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = require("react");
-var classnames_1 = require("classnames");
-var GridScroll = /** @class */ (function (_super) {
-    __extends(GridScroll, _super);
-    function GridScroll(props) {
-        var _this = _super.call(this, props) || this;
-        _this.onClickScrollTrack = _this.onClickScrollTrack.bind(_this);
-        return _this;
+import * as React from 'react';
+import classNames from 'classnames';
+export class GridScroll extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
     }
     /*
     // 사실상 항상 리랜더 해야 하는 컴포넌트라서 제어하지 않을 작정
@@ -33,25 +19,24 @@ var GridScroll = /** @class */ (function (_super) {
         return sameProps;
       }
     */
-    GridScroll.prototype.onClickScrollTrack = function (e, barName) {
+    onClickScrollTrack(e, barName) {
         e.preventDefault();
         if (e.target.getAttribute('data-scroll')) {
             this.props.onClickScrollTrack(e, barName);
         }
-    };
-    GridScroll.prototype.render = function () {
-        var _this = this;
-        var _a = this.props, mounted = _a.mounted, bodyHeight = _a.bodyHeight, pageHeight = _a.pageHeight, verticalScrollerHeight = _a.verticalScrollerHeight, verticalScrollerWidth = _a.verticalScrollerWidth, horizontalScrollerWidth = _a.horizontalScrollerWidth, horizontalScrollerHeight = _a.horizontalScrollerHeight, verticalScrollBarHeight = _a.verticalScrollBarHeight, horizontalScrollBarWidth = _a.horizontalScrollBarWidth, scrollerArrowSize = _a.scrollerArrowSize, scrollerPadding = _a.scrollerPadding, scrollBarLeft = _a.scrollBarLeft, scrollBarTop = _a.scrollBarTop, onMouseDownScrollBar = _a.onMouseDownScrollBar, onClickScrollArrow = _a.onClickScrollArrow;
+    }
+    render() {
+        const { mounted, bodyHeight, pageHeight, verticalScrollerHeight, verticalScrollerWidth, horizontalScrollerWidth, horizontalScrollerHeight, verticalScrollBarHeight, horizontalScrollBarWidth, scrollerArrowSize, scrollerPadding, scrollBarLeft, scrollBarTop, onMouseDownScrollBar, onClickScrollArrow, } = this.props;
         if (!mounted)
             return null;
         if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0)
             return null;
-        var verticalArrowStyles = {
+        let verticalArrowStyles = {
             width: verticalScrollerWidth,
             height: scrollerArrowSize / 2 + scrollerPadding
         };
-        var arrowWidth = (verticalScrollerWidth - scrollerPadding * 2) / 2;
-        var verticalTopArrowStyles = {
+        let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
+        let verticalTopArrowStyles = {
             left: scrollerPadding,
             top: (verticalArrowStyles.height - arrowWidth) / 2,
             borderTop: '0 none',
@@ -59,7 +44,7 @@ var GridScroll = /** @class */ (function (_super) {
             borderBottomWidth: (arrowWidth) + 'px',
             borderLeft: 'solid ' + arrowWidth + 'px transparent'
         };
-        var verticalBottomArrowStyles = {
+        let verticalBottomArrowStyles = {
             left: scrollerPadding,
             top: (verticalArrowStyles.height - arrowWidth) / 2,
             borderTopWidth: (arrowWidth) + 'px',
@@ -67,22 +52,22 @@ var GridScroll = /** @class */ (function (_super) {
             borderBottom: '0 none',
             borderLeft: 'solid ' + arrowWidth + 'px transparent'
         };
-        var verticalStyles = {
+        let verticalStyles = {
             width: verticalScrollerWidth,
             height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize,
             bottom: pageHeight,
             padding: scrollerPadding,
             paddingTop: scrollerArrowSize / 2 + scrollerPadding
         };
-        var verticalBarStyles = {
+        let verticalBarStyles = {
             height: verticalScrollBarHeight,
             top: scrollBarTop
         };
-        var horizontalArrowStyles = {
+        let horizontalArrowStyles = {
             width: scrollerArrowSize / 2 + scrollerPadding,
             height: horizontalScrollerHeight
         };
-        var horizontalLeftArrowStyles = {
+        let horizontalLeftArrowStyles = {
             left: (horizontalArrowStyles.width - arrowWidth) / 2,
             top: scrollerPadding,
             borderTop: 'solid ' + arrowWidth + 'px transparent',
@@ -90,7 +75,7 @@ var GridScroll = /** @class */ (function (_super) {
             borderBottom: 'solid ' + arrowWidth + 'px transparent',
             borderLeft: '0 none'
         };
-        var horizontalRightArrowStyles = {
+        let horizontalRightArrowStyles = {
             left: (horizontalArrowStyles.width - arrowWidth) / 2,
             top: scrollerPadding,
             borderTop: 'solid ' + arrowWidth + 'px transparent',
@@ -98,7 +83,7 @@ var GridScroll = /** @class */ (function (_super) {
             borderBottom: 'solid ' + arrowWidth + 'px transparent',
             borderLeftWidth: (arrowWidth) + 'px'
         };
-        var horizontalStyles = {
+        let horizontalStyles = {
             width: horizontalScrollerWidth + scrollerPadding * 2 + scrollerArrowSize,
             height: horizontalScrollerHeight,
             bottom: (pageHeight - 1 - horizontalScrollerHeight) / 2,
@@ -106,35 +91,24 @@ var GridScroll = /** @class */ (function (_super) {
             padding: scrollerPadding,
             paddingLeft: scrollerArrowSize / 2 + scrollerPadding
         };
-        var horizontalBarStyles = {
+        let horizontalBarStyles = {
             width: horizontalScrollBarWidth,
             left: scrollBarLeft
         };
-        return (<div className={classnames_1["default"]('axd-scroller')}>
-        {(verticalScrollerWidth) ? (<div data-scroll-track='vertical' style={verticalStyles}>
-            <div data-scroll-arrow='up' style={verticalArrowStyles}>
-              <div data-arrow style={verticalTopArrowStyles} onClick={function (e) { return onClickScrollArrow(e, 'up'); }}/>
-            </div>
-            <div data-scroll='vertical' onClick={function (e) { return _this.onClickScrollTrack(e, 'vertical'); }}>
-              <div className={classnames_1["default"]('axd-scroll-bar')} style={verticalBarStyles} onMouseDown={function (e) { return onMouseDownScrollBar(e, 'vertical'); }}/>
-            </div>
-            <div data-scroll-arrow='down' style={verticalArrowStyles}>
-              <div data-arrow style={verticalBottomArrowStyles} onClick={function (e) { return onClickScrollArrow(e, 'down'); }}/>
-            </div>
-          </div>) : null}
-        {(horizontalScrollerHeight) ? (<div data-scroll-track='horizontal' style={horizontalStyles}>
-            <div data-scroll-arrow='left' style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalLeftArrowStyles} onClick={function (e) { return onClickScrollArrow(e, 'left'); }}/>
-            </div>
-            <div data-scroll='horizontal' onClick={function (e) { return _this.onClickScrollTrack(e, 'horizontal'); }}>
-              <div className={classnames_1["default"]('axd-scroll-bar')} style={horizontalBarStyles} onMouseDown={function (e) { return onMouseDownScrollBar(e, 'horizontal'); }}/>
-            </div>
-            <div data-scroll-arrow='right' style={horizontalArrowStyles}>
-              <div data-arrow style={horizontalRightArrowStyles} onClick={function (e) { return onClickScrollArrow(e, 'right'); }}/>
-            </div>
-          </div>) : null}
-      </div>);
-    };
-    return GridScroll;
-}(React.Component));
-exports.GridScroll = GridScroll;
+        return (React.createElement("div", { className: classNames('axd-scroller') },
+            (verticalScrollerWidth) ? (React.createElement("div", { "data-scroll-track": 'vertical', style: verticalStyles },
+                React.createElement("div", { "data-scroll-arrow": 'up', style: verticalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => onClickScrollArrow(e, 'up') })),
+                React.createElement("div", { "data-scroll": 'vertical', onClick: e => this.onClickScrollTrack(e, 'vertical') },
+                    React.createElement("div", { className: classNames('axd-scroll-bar'), style: verticalBarStyles, onMouseDown: e => onMouseDownScrollBar(e, 'vertical') })),
+                React.createElement("div", { "data-scroll-arrow": 'down', style: verticalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => onClickScrollArrow(e, 'down') })))) : null,
+            (horizontalScrollerHeight) ? (React.createElement("div", { "data-scroll-track": 'horizontal', style: horizontalStyles },
+                React.createElement("div", { "data-scroll-arrow": 'left', style: horizontalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => onClickScrollArrow(e, 'left') })),
+                React.createElement("div", { "data-scroll": 'horizontal', onClick: e => this.onClickScrollTrack(e, 'horizontal') },
+                    React.createElement("div", { className: classNames('axd-scroll-bar'), style: horizontalBarStyles, onMouseDown: (e) => onMouseDownScrollBar(e, 'horizontal') })),
+                React.createElement("div", { "data-scroll-arrow": 'right', style: horizontalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => onClickScrollArrow(e, 'right') })))) : null));
+    }
+}

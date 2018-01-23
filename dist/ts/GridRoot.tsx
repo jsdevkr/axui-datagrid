@@ -13,7 +13,6 @@ import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
 import * as UTIL from './_inc/utils';
-import { iGridRoot } from './_inc/namespaces';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
@@ -21,9 +20,9 @@ import { KEY_CODE } from './_inc/constant';
 
 let formatter = GridFormatter.getAll();
 
-export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> {
+export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
-  public static defaultProps: Partial<iGridRoot.Props> = {
+  public static defaultProps: Partial<iGridRootProps> = {
     height: '300px',
     columns: [],
     data: [],
@@ -61,7 +60,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       scrollLeft: 0,
       scrollTop: 0,
       dragging: false, // 사용자가 드래깅 중인 경우 (style.userSelect=none 처리)
-      selecting: false,
+
       selectionStartOffset: {},
       selectionEndOffset: {},
       selectionMinOffset: {},
@@ -212,6 +211,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );
 
       this.setState( {
+        scrollTop: 0,
         styles: styles
       } );
       return false;
@@ -236,7 +236,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
   /**
    * 사용자 함수
    */
-  public updateDimensions() {
+  private updateDimensions() {
     let { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, this.state );
     let { scrollLeft, scrollTop } = UTIL.getScrollPosition( this.state.scrollLeft, this.state.scrollTop, {
       scrollWidth: styles.scrollContentWidth,
@@ -492,7 +492,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         const currMousePosition = UTIL.getMousePosition( ee );
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-        const setStateCall = ( currState, _moving?: iGridRoot.Moving ): void => {
+        const setStateCall = ( currState, _moving?: iGridRootMoving ): void => {
           const selectEndedRow: number = getRowIndex( currState.selectionEndOffset.y, this.state.scrollTop );
           let selectEndedCol: number = getColIndex( currState.selectionEndOffset.x, this.state.scrollLeft );
 
@@ -523,7 +523,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
           this.setState( currState );
         };
-        const scrollMoving = ( _moving: iGridRoot.Moving ): boolean => {
+        const scrollMoving = ( _moving: iGridRootMoving ): boolean => {
           let newScrollTop: number = this.state.scrollTop;
           let newScrollLeft: number = this.state.scrollLeft;
           let scrollLeft, scrollTop, endScroll;
@@ -564,7 +564,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         let p1Y: number = Math.min( y1, y2 );
         let p2Y: number = Math.max( y1, y2 );
 
-        let moving: iGridRoot.Moving = {
+        let moving: iGridRootMoving = {
           active: false,
           top: false,
           left: false,
@@ -591,7 +591,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         setStateCall( {
           dragging: true,
-          selecting: true,
+
           scrollTop: this.state.scrollTop,
           scrollLeft: this.state.scrollLeft,
           selectionStartOffset: {
@@ -629,7 +629,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         if ( this.scrollMovingTimer ) clearInterval( this.scrollMovingTimer );
         this.setState( {
           dragging: false,
-          selecting: false,
+
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
@@ -646,7 +646,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
         if ( e.shiftKey ) {
           let state = {
             dragging: false,
-            selecting: false,
+
             selectionRows: {},
             selectionCols: {}
           };
@@ -683,9 +683,10 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
       }
       else {
         // 셀렉션 저장정보 초기화
+
         this.setState( {
           dragging: false,
-          selecting: false,
+
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
@@ -696,6 +697,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
           focusedCol: selectStartedCol
         } );
 
+
         document.addEventListener( 'mousemove', throttled_onMouseMove );
         document.addEventListener( 'mouseup', offEvent );
         document.addEventListener( 'mouseleave', offEvent );
@@ -704,7 +706,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const proc_clickLinenumber = () => {
       let state = {
         dragging: false,
-        selecting: false,
+
         selectionRows: {},
         selectionCols: (() => {
           let cols = {};
@@ -962,7 +964,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
         let state = {
           dragging: false,
-          selecting: false,
+
           selectionRows: {},
           selectionCols: {},
           focusedRow: 0,
@@ -1057,7 +1059,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
       let state = {
         dragging: false,
-        selecting: false,
+
         selectionRows: {},
         selectionCols: {},
         focusedRow: 0,
@@ -1127,7 +1129,6 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
 
   private onDoubleClickCell( e, col: any, li: number ) {
     if ( col.editor ) {
-
       this.setState( {
         isInlineEditing: true,
         inlineEditingCell: {
@@ -1165,7 +1166,7 @@ export class GridRoot extends React.Component<iGridRoot.Props, iGridRoot.State> 
     const headerColGroup = this.state.headerColGroup;
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
-    let gridRootStyle = Object.assign( { height: this.props.height }, this.props.style );
+    let gridRootStyle = assignWith( { height: this.props.height }, this.props.style );
     if ( styles.calculatedHeight !== null ) {
       gridRootStyle.height = styles.calculatedHeight;
     }

@@ -1,14 +1,12 @@
-"use strict";
-exports.__esModule = true;
-var utils_1 = require("./utils");
+import { cdate } from './utils';
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-function money(data) {
+export function money(data) {
     if (typeof data.value !== 'undefined') {
-        var val = ('' + data.value).replace(/[^0-9^\.^\-]/g, ''), regExpPattern = new RegExp('([0-9])([0-9][0-9][0-9][,.])'), arrNumber = val.split('.');
+        let val = ('' + data.value).replace(/[^0-9^\.^\-]/g, ''), regExpPattern = new RegExp('([0-9])([0-9][0-9][0-9][,.])'), arrNumber = val.split('.');
         arrNumber[0] += '.';
         do {
             arrNumber[0] = arrNumber[0].replace(regExpPattern, '$1,$2');
@@ -19,31 +17,27 @@ function money(data) {
         return '';
     }
 }
-exports.money = money;
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-function date(data) {
-    return utils_1.cdate(data.value, { 'return': 'yyyy-MM-dd' });
+export function date(data) {
+    return cdate(data.value, { 'return': 'yyyy-MM-dd' });
 }
-exports.date = date;
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-function datetime(data) {
-    return utils_1.cdate(data.value, { 'return': 'yyyy-MM-dd hh:mm:ss' });
+export function datetime(data) {
+    return cdate(data.value, { 'return': 'yyyy-MM-dd hh:mm:ss' });
 }
-exports.datetime = datetime;
 /**
  *
  */
-function getAll() {
+export function getAll() {
     return {
-        money: money, date: date
+        money, date
     };
 }
-exports.getAll = getAll;

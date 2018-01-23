@@ -1,9 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames'
-import { iGridSelector } from '../_inc/namespaces';
 
-export class GridSelector extends React.Component<iGridSelector.Props, iGridSelector.State> {
-  constructor( props: iGridSelector.Props ) {
+export class GridSelector extends React.Component<iGridSelectorProps, iGridSelectorState> {
+  constructor( props: iGridSelectorProps ) {
     super( props );
 
   }

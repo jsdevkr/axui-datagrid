@@ -4,15 +4,6 @@ import { store } from './store';
 import { GridRoot } from './GridRoot';
 import * as ACT from './_inc/actions';
 
-interface iProps {
-  height: string;
-  style: any;
-  columns: any;
-  data: any;
-  options: any;
-  thisCallback: Function;
-}
-
 export const GridRootConnected = connect(
   ( state: any ) => {
     return {
@@ -33,7 +24,7 @@ export const GridRootConnected = connect(
   })
 )( GridRoot );
 
-export class AXDatagrid extends React.Component<iProps, {}> {
+export class AXDatagrid extends React.Component<iAXDatagridProps, any> {
 
   public static setFormatter( _formatter: any ): any {
     return GridRoot.setFormatter( _formatter );

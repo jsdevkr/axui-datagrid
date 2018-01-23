@@ -1,50 +1,36 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = require("react");
-var ReactDOM = require("react-dom");
-var assignWith_1 = require("lodash-es/assignWith");
-var each_1 = require("lodash-es/each");
-var isEqual_1 = require("lodash-es/isEqual");
-var isFunction_1 = require("lodash-es/isFunction");
-var isObject_1 = require("lodash-es/isObject");
-var last_1 = require("lodash-es/last");
-var range_1 = require("lodash-es/range");
-var throttle_1 = require("lodash-es/throttle");
-var immutable_1 = require("immutable");
-var classnames_1 = require("classnames");
-var UTIL = require("./_inc/utils");
-var defaults_1 = require("./_inc/defaults");
-var component_1 = require("./component");
-var GridFormatter = require("./_inc/formatter");
-var constant_1 = require("./_inc/constant");
-var formatter = GridFormatter.getAll();
-var GridRoot = /** @class */ (function (_super) {
-    __extends(GridRoot, _super);
-    function GridRoot(props) {
-        var _this = _super.call(this, props) || this;
-        _this.columnFormatter = GridRoot.getFormatter();
-        _this.componentRefs = {};
-        _this.data = {
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import assignWith from 'lodash-es/assignWith';
+import each from 'lodash-es/each';
+import isEqual from 'lodash-es/isEqual';
+import isFunction from 'lodash-es/isFunction';
+import isObject from 'lodash-es/isObject';
+import last from 'lodash-es/last';
+import range from 'lodash-es/range';
+import throttle from 'lodash-es/throttle';
+import { fromJS } from 'immutable';
+import classNames from 'classnames';
+import * as UTIL from './_inc/utils';
+import { gridOptions } from './_inc/defaults';
+import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
+import * as GridFormatter from './_inc/formatter';
+import { KEY_CODE } from './_inc/constant';
+let formatter = GridFormatter.getAll();
+export class GridRoot extends React.Component {
+    constructor(props) {
+        super(props);
+        this.columnFormatter = GridRoot.getFormatter();
+        this.componentRefs = {};
+        this.data = {
             sColIndex: -1,
             eColIndex: -1
         };
         // 내부연산용 데이터 저장소
-        _this.state = {
+        this.state = {
             mounted: false,
             scrollLeft: 0,
             scrollTop: 0,
             dragging: false,
-            selecting: false,
             selectionStartOffset: {},
             selectionEndOffset: {},
             selectionMinOffset: {},
@@ -118,50 +104,49 @@ var GridRoot = /** @class */ (function (_super) {
                 scrollerArrowSize: 0,
                 pageButtonsContainerWidth: 0
             },
-            options: (function () {
-                var options = assignWith_1["default"]({}, defaults_1.gridOptions);
-                each_1["default"](props.options, function (v, k) {
-                    options[k] = (isObject_1["default"](v)) ? assignWith_1["default"](options[k], v) : v;
+            options: (() => {
+                let options = assignWith({}, gridOptions);
+                each(props.options, function (v, k) {
+                    options[k] = (isObject(v)) ? assignWith(options[k], v) : v;
                 });
                 return options;
             })()
         };
-        _this.state = UTIL.propsToState(props, assignWith_1["default"]({}, _this.state));
+        this.state = UTIL.propsToState(props, assignWith({}, this.state));
         // state 계산영역 끝
-        _this.props.init(props, _this.state.options);
+        this.props.init(props, this.state.options);
         // 이벤트 멤버에 바인딩
-        _this.getRootBounding = _this.getRootBounding.bind(_this);
-        _this.onMouseDownScrollBar = _this.onMouseDownScrollBar.bind(_this);
-        _this.onClickScrollTrack = _this.onClickScrollTrack.bind(_this);
-        _this.onClickScrollArrow = _this.onClickScrollArrow.bind(_this);
-        _this.onResizeColumnResizer = _this.onResizeColumnResizer.bind(_this);
-        _this.onClickPageButton = _this.onClickPageButton.bind(_this);
-        _this.onMouseDownBody = _this.onMouseDownBody.bind(_this);
-        _this.onKeyPress = _this.onKeyPress.bind(_this);
-        _this.onClickHeader = _this.onClickHeader.bind(_this);
-        _this.onChangeColumnFilter = _this.onChangeColumnFilter.bind(_this);
-        _this.onDoubleClickCell = _this.onDoubleClickCell.bind(_this);
-        _this.updateEditInput = _this.updateEditInput.bind(_this);
-        return _this;
+        this.getRootBounding = this.getRootBounding.bind(this);
+        this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
+        this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+        this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
+        this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
+        this.onClickPageButton = this.onClickPageButton.bind(this);
+        this.onMouseDownBody = this.onMouseDownBody.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
+        this.onClickHeader = this.onClickHeader.bind(this);
+        this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
+        this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
+        this.updateEditInput = this.updateEditInput.bind(this);
     }
-    GridRoot.setFormatter = function (_formatter) {
-        return formatter = assignWith_1["default"](formatter, _formatter);
-    };
-    GridRoot.getFormatter = function () {
+    static setFormatter(_formatter) {
+        return formatter = assignWith(formatter, _formatter);
+    }
+    static getFormatter() {
         return formatter;
-    };
-    GridRoot.prototype.componentDidMount = function () {
+    }
+    componentDidMount() {
         this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
-        this.throttled_updateDimensions = throttle_1["default"](this.updateDimensions.bind(this), 100);
+        this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
         window.addEventListener('resize', this.throttled_updateDimensions);
         this.setState({
             mounted: true
         });
-    };
-    GridRoot.prototype.componentWillUnmount = function () {
+    }
+    componentWillUnmount() {
         window.removeEventListener('resize', this.throttled_updateDimensions);
-    };
-    GridRoot.prototype.componentWillReceiveProps = function (nextProps) {
+    }
+    componentWillReceiveProps(nextProps) {
         // 변경된 props를 받게 되면
         // 데이터 체인지
         if (this.props.data !== nextProps.data) {
@@ -171,12 +156,12 @@ var GridRoot = /** @class */ (function (_super) {
             this.data._headerColGroup = undefined;
             this.data.sColIndex = -1;
             this.data.eColIndex = -1;
-            var newState = UTIL.propsToState(nextProps, assignWith_1["default"]({}, this.state, { scrollLeft: 0, scrollTop: 0 }));
+            let newState = UTIL.propsToState(nextProps, assignWith({}, this.state, { scrollLeft: 0, scrollTop: 0 }));
             newState.styles = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, newState).styles;
             this.setState(newState);
         }
-    };
-    GridRoot.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+    }
+    shouldComponentUpdate(nextProps, nextState) {
         if (this.props.data !== nextProps.data) {
             return false;
         }
@@ -186,44 +171,45 @@ var GridRoot = /** @class */ (function (_super) {
             this.props.store_sortInfo !== nextProps.store_sortInfo ||
             this.props.store_filterInfo !== nextProps.store_filterInfo) {
             // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
-            var styles = UTIL.calculateDimensions(this.gridRootNode, { list: nextProps.store_list }, this.state).styles;
+            const { styles } = UTIL.calculateDimensions(this.gridRootNode, { list: nextProps.store_list }, this.state);
             this.setState({
+                scrollTop: 0,
                 styles: styles
             });
             return false;
         }
         return true;
-    };
-    GridRoot.prototype.componentWillUpdate = function (nextProps) {
+    }
+    componentWillUpdate(nextProps) {
         // console.log(this.state.sColIndex);
         // shouldComponentUpdate에더 랜더를 방지 하거나. willUpdate에서 this.state.styles값 강제 변경 테스트.
-    };
-    GridRoot.prototype.componentDidUpdate = function (prevProps, prevState) {
+    }
+    componentDidUpdate(prevProps, prevState) {
         // change props and render
         if (prevProps.height !== this.props.height) {
             this.updateDimensions();
         }
-    };
+    }
     /**
      * 사용자 함수
      */
-    GridRoot.prototype.updateDimensions = function () {
-        var styles = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, this.state).styles;
-        var _a = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
+    updateDimensions() {
+        let { styles } = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, this.state);
+        let { scrollLeft, scrollTop } = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
             scrollWidth: styles.scrollContentWidth,
             scrollHeight: styles.scrollContentHeight,
             clientWidth: styles.scrollContentContainerWidth,
             clientHeight: styles.scrollContentContainerHeight
-        }), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
+        });
         this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop,
             styles: styles
         });
-    };
-    GridRoot.prototype.handleWheel = function (e) {
-        var scrollLeft, scrollTop, endScroll;
-        var delta = { x: 0, y: 0 };
+    }
+    handleWheel(e) {
+        let scrollLeft, scrollTop, endScroll;
+        let delta = { x: 0, y: 0 };
         // 컬럼필터 활성화 상태라면 구문 실행 안함.
         if (this.state.isColumnFilter !== false)
             return true;
@@ -240,12 +226,12 @@ var GridRoot = /** @class */ (function (_super) {
                 delta.x = e.deltaX;
             }
         }
-        (_a = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
+        ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
             scrollWidth: this.state.styles.scrollContentWidth,
             scrollHeight: this.state.styles.scrollContentHeight,
             clientWidth: this.state.styles.scrollContentContainerWidth,
             clientHeight: this.state.styles.scrollContentContainerHeight
-        }), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop, endScroll = _a.endScroll);
+        }));
         this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop
@@ -254,31 +240,29 @@ var GridRoot = /** @class */ (function (_super) {
             e.preventDefault();
             e.stopPropagation();
         }
-        var _a;
-    };
-    GridRoot.prototype.onMouseDownScrollBar = function (e, barName) {
-        var _this = this;
+    }
+    onMouseDownScrollBar(e, barName) {
         e.preventDefault();
-        var styles = this.state.styles;
-        var currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-        var currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
-        var startMousePosition = UTIL.getMousePosition(e);
-        var onMouseMove = function (ee) {
-            if (!_this.state.dragging) {
-                _this.setState({ dragging: true });
+        const styles = this.state.styles;
+        const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+        const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+        let startMousePosition = UTIL.getMousePosition(e);
+        const onMouseMove = (ee) => {
+            if (!this.state.dragging) {
+                this.setState({ dragging: true });
             }
-            var _a = UTIL.getMousePosition(ee), x = _a.x, y = _a.y;
-            var processor = {
-                vertical: function () {
-                    var _a = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
-                    _this.setState({
+            const { x, y } = UTIL.getMousePosition(ee);
+            const processor = {
+                vertical: () => {
+                    let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles);
+                    this.setState({
                         scrollLeft: scrollLeft,
                         scrollTop: scrollTop
                     });
                 },
-                horizontal: function () {
-                    var _a = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
-                    _this.setState({
+                horizontal: () => {
+                    let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
+                    this.setState({
                         scrollLeft: scrollLeft,
                         scrollTop: scrollTop
                     });
@@ -288,9 +272,9 @@ var GridRoot = /** @class */ (function (_super) {
                 processor[barName]();
             }
         };
-        var offEvent = function (ee) {
+        const offEvent = (ee) => {
             ee.preventDefault();
-            _this.setState({ dragging: false });
+            this.setState({ dragging: false });
             startMousePosition = null;
             // console.log('offEvent');
             document.removeEventListener('mousemove', onMouseMove);
@@ -300,25 +284,24 @@ var GridRoot = /** @class */ (function (_super) {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', offEvent);
         document.addEventListener('mouseleave', offEvent);
-    };
-    GridRoot.prototype.onClickScrollTrack = function (e, barName) {
-        var _this = this;
-        var styles = this.state.styles;
-        var currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-        var currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
-        var _a = UTIL.getMousePosition(e), x = _a.x, y = _a.y;
-        var _b = this.gridRootNode.getBoundingClientRect(), grx = _b.x, gry = _b.y;
-        var processor = {
-            vertical: function () {
-                var _a = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
-                _this.setState({
+    }
+    onClickScrollTrack(e, barName) {
+        const styles = this.state.styles;
+        const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+        const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+        const { x, y } = UTIL.getMousePosition(e);
+        const { x: grx, y: gry } = this.gridRootNode.getBoundingClientRect();
+        const processor = {
+            vertical: () => {
+                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles);
+                this.setState({
                     scrollLeft: scrollLeft,
                     scrollTop: scrollTop
                 });
             },
-            horizontal: function () {
-                var _a = UTIL.getScrollPositionByScrollBar(x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
-                _this.setState({
+            horizontal: () => {
+                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+                this.setState({
                     scrollLeft: scrollLeft,
                     scrollTop: scrollTop
                 });
@@ -327,45 +310,45 @@ var GridRoot = /** @class */ (function (_super) {
         if (barName in processor) {
             processor[barName]();
         }
-    };
-    GridRoot.prototype.onClickScrollArrow = function (e, direction) {
-        var _this = this;
-        var styles = this.state.styles;
-        var processor = {
-            up: function () {
-                var scrollAmount = styles.scrollContentContainerHeight;
-                _this.setState({
-                    scrollTop: (_this.state.scrollTop + scrollAmount < 0) ? _this.state.scrollTop + scrollAmount : 0
+    }
+    onClickScrollArrow(e, direction) {
+        const styles = this.state.styles;
+        const processor = {
+            up: () => {
+                let scrollAmount = styles.scrollContentContainerHeight;
+                this.setState({
+                    scrollTop: (this.state.scrollTop + scrollAmount < 0) ? this.state.scrollTop + scrollAmount : 0
                 });
             },
-            down: function () {
-                var scrollAmount = styles.scrollContentContainerHeight;
-                _this.setState({
-                    scrollTop: (styles.scrollContentContainerHeight < styles.scrollContentHeight + (_this.state.scrollTop - scrollAmount)) ? _this.state.scrollTop - scrollAmount : styles.scrollContentContainerHeight - styles.scrollContentHeight
+            down: () => {
+                let scrollAmount = styles.scrollContentContainerHeight;
+                this.setState({
+                    scrollTop: (styles.scrollContentContainerHeight < styles.scrollContentHeight + (this.state.scrollTop - scrollAmount)) ? this.state.scrollTop - scrollAmount : styles.scrollContentContainerHeight - styles.scrollContentHeight
                 });
             },
-            left: function () {
-                var scrollAmount = styles.scrollContentContainerWidth;
-                _this.setState({
-                    scrollLeft: (_this.state.scrollLeft + scrollAmount < 0) ? _this.state.scrollLeft + scrollAmount : 0
+            left: () => {
+                let scrollAmount = styles.scrollContentContainerWidth;
+                this.setState({
+                    scrollLeft: (this.state.scrollLeft + scrollAmount < 0) ? this.state.scrollLeft + scrollAmount : 0
                 });
             },
-            right: function () {
-                var scrollAmount = styles.scrollContentContainerWidth;
-                _this.setState({
-                    scrollLeft: (styles.scrollContentContainerWidth < styles.scrollContentWidth + (_this.state.scrollLeft - scrollAmount)) ? _this.state.scrollLeft - scrollAmount : styles.scrollContentContainerWidth - styles.scrollContentWidth
+            right: () => {
+                let scrollAmount = styles.scrollContentContainerWidth;
+                this.setState({
+                    scrollLeft: (styles.scrollContentContainerWidth < styles.scrollContentWidth + (this.state.scrollLeft - scrollAmount)) ? this.state.scrollLeft - scrollAmount : styles.scrollContentContainerWidth - styles.scrollContentWidth
                 });
             }
         };
         if (direction in processor) {
             processor[direction]();
         }
-    };
-    GridRoot.prototype.onResizeColumnResizer = function (e, col, newWidth) {
-        var colGroup = immutable_1.fromJS(this.state.colGroup).toJS();
-        var styles, leftHeaderColGroup, headerColGroup;
+    }
+    onResizeColumnResizer(e, col, newWidth) {
+        let colGroup = fromJS(this.state.colGroup).toJS();
+        let styles, leftHeaderColGroup, headerColGroup;
         colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
-        (_a = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, assignWith_1["default"]({}, this.state, { colGroup: colGroup })), styles = _a.styles, leftHeaderColGroup = _a.leftHeaderColGroup, headerColGroup = _a.headerColGroup);
+        ({ styles, leftHeaderColGroup, headerColGroup }
+            = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, assignWith({}, this.state, { colGroup: colGroup })));
         this.data._headerColGroup = undefined;
         this.setState({
             colGroup: colGroup,
@@ -373,67 +356,64 @@ var GridRoot = /** @class */ (function (_super) {
             headerColGroup: headerColGroup,
             styles: styles
         });
-        var _a;
-    };
-    GridRoot.prototype.getRootBounding = function () {
+    }
+    getRootBounding() {
         return this.gridRootNode.getBoundingClientRect();
-    };
-    GridRoot.prototype.onClickPageButton = function (e, onClick) {
-        var _this = this;
-        var processor = {
-            'PAGE_FIRST': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.HOME);
+    }
+    onClickPageButton(e, onClick) {
+        const processor = {
+            'PAGE_FIRST': () => {
+                this.onKeyAction(KEY_CODE.HOME);
             },
-            'PAGE_PREV': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.PAGE_UP);
+            'PAGE_PREV': () => {
+                this.onKeyAction(KEY_CODE.PAGE_UP);
             },
-            'PAGE_BACK': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.UP);
+            'PAGE_BACK': () => {
+                this.onKeyAction(KEY_CODE.UP);
             },
-            'PAGE_PLAY': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.DOWN);
+            'PAGE_PLAY': () => {
+                this.onKeyAction(KEY_CODE.DOWN);
             },
-            'PAGE_NEXT': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.PAGE_DOWN);
+            'PAGE_NEXT': () => {
+                this.onKeyAction(KEY_CODE.PAGE_DOWN);
             },
-            'PAGE_LAST': function () {
-                _this.onKeyAction(constant_1.KEY_CODE.END);
+            'PAGE_LAST': () => {
+                this.onKeyAction(KEY_CODE.END);
             }
         };
-        if (isFunction_1["default"](onClick)) {
+        if (isFunction(onClick)) {
             onClick();
         }
         else if (typeof onClick === 'string' && onClick in processor) {
             processor[onClick]();
         }
-    };
-    GridRoot.prototype.onMouseDownBody = function (e) {
-        var _this = this;
-        var startMousePosition = UTIL.getMousePosition(e);
-        var spanType = e.target.getAttribute('data-span');
-        var _a = this.state.styles, headerHeight = _a.headerHeight, bodyHeight = _a.bodyHeight, CTInnerWidth = _a.CTInnerWidth, verticalScrollerWidth = _a.verticalScrollerWidth, bodyTrHeight = _a.bodyTrHeight, asidePanelWidth = _a.asidePanelWidth;
-        var _b = this.getRootBounding(), x = _b.x, y = _b.y;
-        var leftPadding = x; // + styles.asidePanelWidth;
-        var topPadding = y; // + styles.headerHeight;
-        var startScrollLeft = this.state.scrollLeft;
-        var startScrollTop = this.state.scrollTop;
-        var startX = startMousePosition.x - leftPadding;
-        var startY = startMousePosition.y - topPadding;
-        var getRowIndex = function (y, scrollTop) {
-            var i = 0;
+    }
+    onMouseDownBody(e) {
+        const startMousePosition = UTIL.getMousePosition(e);
+        const spanType = e.target.getAttribute('data-span');
+        const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
+        const { x, y } = this.getRootBounding();
+        const leftPadding = x; // + styles.asidePanelWidth;
+        const topPadding = y; // + styles.headerHeight;
+        const startScrollLeft = this.state.scrollLeft;
+        const startScrollTop = this.state.scrollTop;
+        const startX = startMousePosition.x - leftPadding;
+        const startY = startMousePosition.y - topPadding;
+        const getRowIndex = (y, scrollTop) => {
+            let i = 0;
             i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
             if (i < 0)
                 i = 0;
-            else if (i >= _this.props.store_list.size - 1)
-                i = _this.props.store_list.size - 1;
+            else if (i >= this.props.store_list.size - 1)
+                i = this.props.store_list.size - 1;
             return i;
         };
-        var getColIndex = function (x, scrollLeft) {
-            var p = x - asidePanelWidth - scrollLeft;
-            var cl = _this.state.headerColGroup.length;
-            var i = -1;
+        const getColIndex = (x, scrollLeft) => {
+            const p = x - asidePanelWidth - scrollLeft;
+            let cl = this.state.headerColGroup.length;
+            let i = -1;
             while (cl--) {
-                var col = _this.state.headerColGroup[cl];
+                const col = this.state.headerColGroup[cl];
                 if (col._sx <= p && col._ex >= p) {
                     i = col.colIndex;
                     break;
@@ -441,31 +421,31 @@ var GridRoot = /** @class */ (function (_super) {
             }
             return i;
         };
-        var proc_bodySelect = function () {
+        const proc_bodySelect = () => {
             if (selectStartedCol < 0)
                 return;
-            var onMouseMove = function (ee) {
-                var currMousePosition = UTIL.getMousePosition(ee);
+            const onMouseMove = (ee) => {
+                const currMousePosition = UTIL.getMousePosition(ee);
                 // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-                var setStateCall = function (currState, _moving) {
-                    var selectEndedRow = getRowIndex(currState.selectionEndOffset.y, _this.state.scrollTop);
-                    var selectEndedCol = getColIndex(currState.selectionEndOffset.x, _this.state.scrollLeft);
+                const setStateCall = (currState, _moving) => {
+                    const selectEndedRow = getRowIndex(currState.selectionEndOffset.y, this.state.scrollTop);
+                    let selectEndedCol = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
                     // 컬럼인덱스를 찾지 못했다면
                     if (selectEndedCol === -1) {
-                        var p = currState.selectionEndOffset.x - asidePanelWidth - _this.state.scrollLeft;
-                        var lastCol = last_1["default"](_this.state.headerColGroup);
+                        const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
+                        const lastCol = last(this.state.headerColGroup);
                         selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
                     }
-                    var sRow = Math.min(selectStartedRow, selectEndedRow);
-                    var eRow = Math.max(selectStartedRow, selectEndedRow);
-                    var sCol = Math.min(selectStartedCol, selectEndedCol);
-                    var eCol = Math.max(selectStartedCol, selectEndedCol);
+                    let sRow = Math.min(selectStartedRow, selectEndedRow);
+                    let eRow = Math.max(selectStartedRow, selectEndedRow);
+                    let sCol = Math.min(selectStartedCol, selectEndedCol);
+                    let eCol = Math.max(selectStartedCol, selectEndedCol);
                     if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
                         currState.selectionRows = {};
                         currState.selectionCols = {};
-                        for (var i = sRow; i < eRow + 1; i++)
+                        for (let i = sRow; i < eRow + 1; i++)
                             currState.selectionRows[i] = true;
-                        for (var i = sCol; i < eCol + 1; i++)
+                        for (let i = sCol; i < eCol + 1; i++)
                             currState.selectionCols[i] = true;
                     }
                     else {
@@ -473,47 +453,46 @@ var GridRoot = /** @class */ (function (_super) {
                     }
                     //currState.focusedRow = selectEndedRow;
                     //currState.focusedCol = selectEndedCol;
-                    _this.setState(currState);
+                    this.setState(currState);
                 };
-                var scrollMoving = function (_moving) {
-                    var newScrollTop = _this.state.scrollTop;
-                    var newScrollLeft = _this.state.scrollLeft;
-                    var scrollLeft, scrollTop, endScroll;
+                const scrollMoving = (_moving) => {
+                    let newScrollTop = this.state.scrollTop;
+                    let newScrollLeft = this.state.scrollLeft;
+                    let scrollLeft, scrollTop, endScroll;
                     if (_moving.top) {
-                        newScrollTop = _this.state.scrollTop + bodyTrHeight;
+                        newScrollTop = this.state.scrollTop + bodyTrHeight;
                     }
                     else if (_moving.bottom) {
-                        newScrollTop = _this.state.scrollTop - bodyTrHeight;
+                        newScrollTop = this.state.scrollTop - bodyTrHeight;
                     }
                     if (_moving.left) {
-                        newScrollLeft = _this.state.scrollLeft + 100;
+                        newScrollLeft = this.state.scrollLeft + 100;
                     }
                     else if (_moving.right) {
-                        newScrollLeft = _this.state.scrollLeft - 100;
+                        newScrollLeft = this.state.scrollLeft - 100;
                     }
-                    (_a = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
-                        scrollWidth: _this.state.styles.scrollContentWidth,
-                        scrollHeight: _this.state.styles.scrollContentHeight,
-                        clientWidth: _this.state.styles.scrollContentContainerWidth,
-                        clientHeight: _this.state.styles.scrollContentContainerHeight
-                    }), scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop, endScroll = _a.endScroll);
+                    ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
+                        scrollWidth: this.state.styles.scrollContentWidth,
+                        scrollHeight: this.state.styles.scrollContentHeight,
+                        clientWidth: this.state.styles.scrollContentContainerWidth,
+                        clientHeight: this.state.styles.scrollContentContainerHeight
+                    }));
                     setStateCall({
                         scrollTop: scrollTop,
                         scrollLeft: scrollLeft,
-                        selectionEndOffset: _this.state.selectionEndOffset
+                        selectionEndOffset: this.state.selectionEndOffset
                     }, _moving);
                     return !endScroll;
-                    var _a;
                 };
-                var x1 = startMousePosition.x - leftPadding;
-                var y1 = startMousePosition.y - topPadding;
-                var x2 = currMousePosition.x - leftPadding;
-                var y2 = currMousePosition.y - topPadding;
-                var p1X = Math.min(x1, x2);
-                var p2X = Math.max(x1, x2);
-                var p1Y = Math.min(y1, y2);
-                var p2Y = Math.max(y1, y2);
-                var moving = {
+                let x1 = startMousePosition.x - leftPadding;
+                let y1 = startMousePosition.y - topPadding;
+                let x2 = currMousePosition.x - leftPadding;
+                let y2 = currMousePosition.y - topPadding;
+                let p1X = Math.min(x1, x2);
+                let p2X = Math.max(x1, x2);
+                let p1Y = Math.min(y1, y2);
+                let p2Y = Math.max(y1, y2);
+                let moving = {
                     active: false,
                     top: false,
                     left: false,
@@ -538,9 +517,8 @@ var GridRoot = /** @class */ (function (_super) {
                 }
                 setStateCall({
                     dragging: true,
-                    selecting: true,
-                    scrollTop: _this.state.scrollTop,
-                    scrollLeft: _this.state.scrollLeft,
+                    scrollTop: this.state.scrollTop,
+                    scrollLeft: this.state.scrollLeft,
                     selectionStartOffset: {
                         x: x1,
                         y: y1
@@ -559,23 +537,22 @@ var GridRoot = /** @class */ (function (_super) {
                     }
                 }, moving);
                 // moving.active 이면 타임 인터벌 시작
-                if (_this.scrollMovingTimer)
-                    clearInterval(_this.scrollMovingTimer);
+                if (this.scrollMovingTimer)
+                    clearInterval(this.scrollMovingTimer);
                 if (moving.active) {
-                    _this.scrollMovingTimer = setInterval(function () {
+                    this.scrollMovingTimer = setInterval(() => {
                         if (!scrollMoving(moving)) {
                             // clearInterval(this.scrollMovingTimer);
                         }
                     }, 60);
                 }
             };
-            var offEvent = function (ee) {
+            const offEvent = (ee) => {
                 ee.preventDefault();
-                if (_this.scrollMovingTimer)
-                    clearInterval(_this.scrollMovingTimer);
-                _this.setState({
+                if (this.scrollMovingTimer)
+                    clearInterval(this.scrollMovingTimer);
+                this.setState({
                     dragging: false,
-                    selecting: false,
                     selectionStartOffset: null,
                     selectionEndOffset: null,
                     selectionMinOffset: null,
@@ -585,26 +562,25 @@ var GridRoot = /** @class */ (function (_super) {
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
             };
-            var throttled_onMouseMove = throttle_1["default"](onMouseMove, 10);
-            if (e.metaKey || e.shiftKey && _this.state.focusedRow > -1 && _this.state.focusedCol > -1) {
+            const throttled_onMouseMove = throttle(onMouseMove, 10);
+            if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
                 if (e.shiftKey) {
-                    var state = {
+                    let state = {
                         dragging: false,
-                        selecting: false,
                         selectionRows: {},
                         selectionCols: {}
                     };
-                    var sRow = Math.min(_this.state.focusedRow, selectStartedRow);
-                    var sCol = Math.min(_this.state.focusedCol, selectStartedCol);
-                    var eRow = Math.max(_this.state.focusedRow, selectStartedRow);
-                    var eCol = Math.max(_this.state.focusedCol, selectStartedCol);
-                    for (var i = sRow; i < eRow + 1; i++)
+                    let sRow = Math.min(this.state.focusedRow, selectStartedRow);
+                    let sCol = Math.min(this.state.focusedCol, selectStartedCol);
+                    let eRow = Math.max(this.state.focusedRow, selectStartedRow);
+                    let eCol = Math.max(this.state.focusedCol, selectStartedCol);
+                    for (let i = sRow; i < eRow + 1; i++)
                         state.selectionRows[i] = true;
-                    for (var i = sCol; i < eCol + 1; i++)
+                    for (let i = sCol; i < eCol + 1; i++)
                         state.selectionCols[i] = true;
-                    _this.setState(state);
-                    selectStartedRow = _this.state.focusedRow;
-                    selectStartedCol = _this.state.focusedCol;
+                    this.setState(state);
+                    selectStartedRow = this.state.focusedRow;
+                    selectStartedCol = this.state.focusedCol;
                     document.addEventListener('mousemove', throttled_onMouseMove);
                     document.addEventListener('mouseup', offEvent);
                     document.addEventListener('mouseleave', offEvent);
@@ -626,15 +602,14 @@ var GridRoot = /** @class */ (function (_super) {
             }
             else {
                 // 셀렉션 저장정보 초기화
-                _this.setState({
+                this.setState({
                     dragging: false,
-                    selecting: false,
                     selectionStartOffset: null,
                     selectionEndOffset: null,
                     selectionMinOffset: null,
                     selectionMaxOffset: null,
-                    selectionRows: (_a = {}, _a[selectStartedRow] = true, _a),
-                    selectionCols: (_b = {}, _b[selectStartedCol] = true, _b),
+                    selectionRows: { [selectStartedRow]: true },
+                    selectionCols: { [selectStartedCol]: true },
                     focusedRow: selectStartedRow,
                     focusedCol: selectStartedCol
                 });
@@ -642,44 +617,41 @@ var GridRoot = /** @class */ (function (_super) {
                 document.addEventListener('mouseup', offEvent);
                 document.addEventListener('mouseleave', offEvent);
             }
-            var _a, _b;
         };
-        var proc_clickLinenumber = function () {
-            var state = {
+        const proc_clickLinenumber = () => {
+            let state = {
                 dragging: false,
-                selecting: false,
                 selectionRows: {},
-                selectionCols: (function () {
-                    var cols = {};
-                    _this.state.colGroup.forEach(function (col) {
+                selectionCols: (() => {
+                    let cols = {};
+                    this.state.colGroup.forEach(col => {
                         cols[col.colIndex] = true;
                     });
                     return cols;
                 })(),
-                focusedRow: _this.state.focusedRow,
+                focusedRow: this.state.focusedRow,
                 focusedCol: 0
             };
             if (e.shiftKey) {
-                state.selectionRows = (function () {
-                    var rows = {};
-                    range_1["default"](Math.min(_this.state.focusedRow, selectStartedRow), Math.max(_this.state.focusedRow, selectStartedRow) + 1).forEach(function (i) {
+                state.selectionRows = (() => {
+                    let rows = {};
+                    range(Math.min(this.state.focusedRow, selectStartedRow), Math.max(this.state.focusedRow, selectStartedRow) + 1).forEach(i => {
                         rows[i] = true;
                     });
                     return rows;
                 })();
             }
             else {
-                state.selectionRows = (_a = {},
-                    _a[selectStartedRow] = true,
-                    _a);
+                state.selectionRows = {
+                    [selectStartedRow]: true
+                };
                 state.focusedRow = selectStartedRow;
             }
-            _this.setState(state);
-            var _a;
+            this.setState(state);
         };
         // 선택이 시작된 row / col
-        var selectStartedRow = getRowIndex(startY, startScrollTop);
-        var selectStartedCol = getColIndex(startX, startScrollLeft);
+        let selectStartedRow = getRowIndex(startY, startScrollTop);
+        let selectStartedCol = getColIndex(startX, startScrollLeft);
         if (this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol) {
             // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
             return false;
@@ -692,19 +664,18 @@ var GridRoot = /** @class */ (function (_super) {
             proc_bodySelect();
         }
         return true;
-    };
-    GridRoot.prototype.onKeyAction = function (keyAction) {
-        var _this = this;
-        var options = this.state.options;
-        var styles = this.state.styles;
-        var headerColGroup = this.state.headerColGroup;
-        var sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
-        var eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
-        var sColIndex = this.data.sColIndex;
-        var eColIndex = this.data.eColIndex;
-        var pRowSize = Math.floor(styles.bodyHeight / styles.bodyTrHeight);
-        var getAvailScrollTop = function (rowIndex) {
-            var scrollTop;
+    }
+    onKeyAction(keyAction) {
+        const options = this.state.options;
+        const styles = this.state.styles;
+        const headerColGroup = this.state.headerColGroup;
+        const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
+        const eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
+        const sColIndex = this.data.sColIndex;
+        const eColIndex = this.data.eColIndex;
+        const pRowSize = Math.floor(styles.bodyHeight / styles.bodyTrHeight);
+        const getAvailScrollTop = (rowIndex) => {
+            let scrollTop;
             if (sRowIndex >= rowIndex) {
                 scrollTop = -rowIndex * styles.bodyTrHeight;
             }
@@ -712,7 +683,7 @@ var GridRoot = /** @class */ (function (_super) {
                 scrollTop = -rowIndex * styles.bodyTrHeight + (pRowSize * styles.bodyTrHeight - styles.bodyTrHeight);
             }
             if (typeof scrollTop !== 'undefined') {
-                scrollTop = UTIL.getScrollPosition(_this.state.scrollLeft, scrollTop, {
+                scrollTop = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
                     scrollWidth: styles.scrollContentWidth,
                     scrollHeight: styles.scrollContentHeight,
                     clientWidth: styles.scrollContentContainerWidth,
@@ -720,12 +691,12 @@ var GridRoot = /** @class */ (function (_super) {
                 }).scrollTop;
             }
             else {
-                scrollTop = _this.state.scrollTop;
+                scrollTop = this.state.scrollTop;
             }
             return scrollTop;
         };
-        var getAvailScrollLeft = function (colIndex) {
-            var scrollLeft;
+        const getAvailScrollLeft = (colIndex) => {
+            let scrollLeft;
             if (sColIndex >= colIndex) {
                 scrollLeft = -headerColGroup[colIndex]._sx;
             }
@@ -733,7 +704,7 @@ var GridRoot = /** @class */ (function (_super) {
                 scrollLeft = -headerColGroup[colIndex]._ex + (styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth);
             }
             if (typeof scrollLeft !== 'undefined') {
-                scrollLeft = UTIL.getScrollPosition(scrollLeft, _this.state.scrollTop, {
+                scrollLeft = UTIL.getScrollPosition(scrollLeft, this.state.scrollTop, {
                     scrollWidth: styles.scrollContentWidth,
                     scrollHeight: styles.scrollContentHeight,
                     clientWidth: styles.scrollContentContainerWidth,
@@ -741,129 +712,119 @@ var GridRoot = /** @class */ (function (_super) {
                 }).scrollLeft;
             }
             else {
-                scrollLeft = _this.state.scrollLeft;
+                scrollLeft = this.state.scrollLeft;
             }
             return scrollLeft;
         };
-        var proc = (_a = {},
-            _a[constant_1.KEY_CODE.ESC] = function () {
+        const proc = {
+            [KEY_CODE.ESC]: () => {
             },
-            _a[constant_1.KEY_CODE.RETURN] = function () {
+            [KEY_CODE.RETURN]: () => {
             },
-            _a[constant_1.KEY_CODE.HOME] = function () {
-                var focusRow = 0;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
+            [KEY_CODE.HOME]: () => {
+                let focusRow = 0;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
                     scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
+                    selectionRows: {
+                        [focusRow]: true
+                    },
                     focusedRow: focusRow
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.END] = function () {
-                var focusRow = _this.props.store_list.size - 1;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
+            [KEY_CODE.END]: () => {
+                let focusRow = this.props.store_list.size - 1;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
                     scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
+                    selectionRows: {
+                        [focusRow]: true
+                    },
                     focusedRow: focusRow
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.PAGE_UP] = function () {
-                var focusRow = (_this.state.focusedRow - pRowSize < 1) ? 0 : _this.state.focusedRow - pRowSize;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
+            [KEY_CODE.PAGE_UP]: () => {
+                let focusRow = (this.state.focusedRow - pRowSize < 1) ? 0 : this.state.focusedRow - pRowSize;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
                     scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
+                    selectionRows: {
+                        [focusRow]: true
+                    },
                     focusedRow: focusRow
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.PAGE_DOWN] = function () {
-                var focusRow = (_this.state.focusedRow + pRowSize >= _this.props.store_list.size) ? _this.props.store_list.size - 1 : _this.state.focusedRow + pRowSize;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
+            [KEY_CODE.PAGE_DOWN]: () => {
+                let focusRow = (this.state.focusedRow + pRowSize >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + pRowSize;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
                     scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
+                    selectionRows: {
+                        [focusRow]: true
+                    },
+                    focusedRow: focusRow,
+                });
+            },
+            [KEY_CODE.UP]: () => {
+                let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
+                    scrollTop: scrollTop,
+                    selectionRows: {
+                        [focusRow]: true
+                    },
                     focusedRow: focusRow
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.UP] = function () {
-                var focusRow = (_this.state.focusedRow < 1) ? 0 : _this.state.focusedRow - 1;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
+            [KEY_CODE.DOWN]: () => {
+                let focusRow = (this.state.focusedRow + 1 >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + 1;
+                let scrollTop = getAvailScrollTop(focusRow);
+                this.setState({
                     scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
-                    focusedRow: focusRow
+                    selectionRows: {
+                        [focusRow]: true
+                    },
+                    focusedRow: focusRow,
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.DOWN] = function () {
-                var focusRow = (_this.state.focusedRow + 1 >= _this.props.store_list.size) ? _this.props.store_list.size - 1 : _this.state.focusedRow + 1;
-                var scrollTop = getAvailScrollTop(focusRow);
-                _this.setState({
-                    scrollTop: scrollTop,
-                    selectionRows: (_a = {},
-                        _a[focusRow] = true,
-                        _a),
-                    focusedRow: focusRow
-                });
-                var _a;
-            },
-            _a[constant_1.KEY_CODE.LEFT] = function () {
-                var focusCol = (_this.state.focusedCol < 1) ? 0 : _this.state.focusedCol - 1;
-                var scrollLeft = getAvailScrollLeft(focusCol);
-                _this.setState({
+            [KEY_CODE.LEFT]: () => {
+                let focusCol = (this.state.focusedCol < 1) ? 0 : this.state.focusedCol - 1;
+                let scrollLeft = getAvailScrollLeft(focusCol);
+                this.setState({
                     scrollLeft: scrollLeft,
-                    selectionCols: (_a = {},
-                        _a[focusCol] = true,
-                        _a),
-                    focusedCol: focusCol
+                    selectionCols: {
+                        [focusCol]: true
+                    },
+                    focusedCol: focusCol,
                 });
-                var _a;
             },
-            _a[constant_1.KEY_CODE.RIGHT] = function () {
-                var focusCol = (_this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : _this.state.focusedCol + 1;
-                var scrollLeft = getAvailScrollLeft(focusCol);
-                _this.setState({
+            [KEY_CODE.RIGHT]: () => {
+                let focusCol = (this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : this.state.focusedCol + 1;
+                let scrollLeft = getAvailScrollLeft(focusCol);
+                this.setState({
                     scrollLeft: scrollLeft,
-                    selectionCols: (_a = {},
-                        _a[focusCol] = true,
-                        _a),
-                    focusedCol: focusCol
+                    selectionCols: {
+                        [focusCol]: true
+                    },
+                    focusedCol: focusCol,
                 });
-                var _a;
-            },
-            _a);
+            }
+        };
         if (keyAction in proc)
             proc[keyAction]();
-        var _a;
-    };
-    GridRoot.prototype.onKeyPress = function (e) {
-        var _this = this;
-        var headerColGroup = this.state.headerColGroup;
-        var metaProc = (_a = {},
-            _a[constant_1.KEY_CODE.C] = function () {
+    }
+    onKeyPress(e) {
+        const headerColGroup = this.state.headerColGroup;
+        const metaProc = {
+            [KEY_CODE.C]: () => {
                 e.preventDefault();
                 e.stopPropagation();
-                var gridClipboard = _this.refs.gridClipboard;
-                var copysuccess = false;
-                var copiedString = '';
-                each_1["default"](_this.state.selectionRows, function (row, k) {
-                    var item = _this.props.store_list.get(k);
-                    each_1["default"](_this.state.selectionCols, function (col, ci) {
+                const gridClipboard = this.refs.gridClipboard;
+                let copysuccess = false;
+                let copiedString = '';
+                each(this.state.selectionRows, (row, k) => {
+                    const item = this.props.store_list.get(k);
+                    each(this.state.selectionCols, (col, ci) => {
                         copiedString += (item[headerColGroup[ci].key] || '') + '\t';
                     });
                     copiedString += '\n';
@@ -875,38 +836,37 @@ var GridRoot = /** @class */ (function (_super) {
                 }
                 catch (e) {
                 }
-                _this.gridRootNode.focus();
+                this.gridRootNode.focus();
                 return copysuccess;
             },
-            _a[constant_1.KEY_CODE.A] = function () {
+            [KEY_CODE.A]: () => {
                 e.preventDefault();
                 e.stopPropagation();
-                var state = {
+                let state = {
                     dragging: false,
-                    selecting: false,
                     selectionRows: {},
                     selectionCols: {},
                     focusedRow: 0,
-                    focusedCol: _this.state.focusedCol
+                    focusedCol: this.state.focusedCol
                 };
-                state.selectionRows = (function () {
-                    var rows = {};
-                    _this.props.store_list.forEach(function (item, i) {
+                state.selectionRows = (() => {
+                    let rows = {};
+                    this.props.store_list.forEach((item, i) => {
                         rows[i] = true;
                     });
                     return rows;
                 })();
-                state.selectionCols = (function () {
-                    var cols = {};
-                    _this.state.colGroup.forEach(function (col) {
+                state.selectionCols = (() => {
+                    let cols = {};
+                    this.state.colGroup.forEach(col => {
                         cols[col.colIndex] = true;
                     });
                     return cols;
                 })();
                 state.focusedCol = 0;
-                _this.setState(state);
-            },
-            _a);
+                this.setState(state);
+            }
+        };
         if (e.metaKey) {
             // console.log('meta', e.which);
             if (e.which in metaProc)
@@ -915,74 +875,71 @@ var GridRoot = /** @class */ (function (_super) {
         else {
             this.onKeyAction(e.which);
         }
-        var _a;
-    };
-    GridRoot.prototype.onClickHeader = function (e, colIndex, key) {
-        var _this = this;
-        var styles = this.state.styles;
-        var options = this.state.options;
+    }
+    onClickHeader(e, colIndex, key) {
+        const styles = this.state.styles;
+        const options = this.state.options;
         if (e.target.getAttribute('data-filter')) {
-            var downEvent_1 = function (ee) {
-                if (ee.target && ee.target.getAttribute && '' + _this.state.isColumnFilter === ee.target.getAttribute('data-filter-index')) {
+            const downEvent = (ee) => {
+                if (ee.target && ee.target.getAttribute && '' + this.state.isColumnFilter === ee.target.getAttribute('data-filter-index')) {
                     return false;
                 }
-                var downedElement = UTIL.findParentNodeByAttr(ee.target, function (element) {
+                let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
                     return (element) ? element.getAttribute('data-column-filter') === 'true' : false;
                 });
                 if (downedElement === false) {
                     ee.preventDefault();
-                    _this.setState({
+                    this.setState({
                         isColumnFilter: false
                     });
-                    document.removeEventListener('mousedown', downEvent_1);
-                    document.removeEventListener('mouseleave', downEvent_1);
-                    document.removeEventListener('keydown', keyDown_1);
+                    document.removeEventListener('mousedown', downEvent);
+                    document.removeEventListener('mouseleave', downEvent);
+                    document.removeEventListener('keydown', keyDown);
                 }
             };
-            var keyDown_1 = function (ee) {
+            const keyDown = (ee) => {
                 if (ee.which === 27) {
-                    downEvent_1(ee);
+                    downEvent(ee);
                 }
             };
             if (this.state.isColumnFilter === colIndex) {
                 this.setState({
                     isColumnFilter: false
                 });
-                document.removeEventListener('mousedown', downEvent_1);
-                document.removeEventListener('mouseleave', downEvent_1);
-                document.removeEventListener('keydown', keyDown_1);
+                document.removeEventListener('mousedown', downEvent);
+                document.removeEventListener('mouseleave', downEvent);
+                document.removeEventListener('keydown', keyDown);
             }
             else {
-                var columnFilterLeft = styles.asidePanelWidth + this.state.colGroup[colIndex]._sx - 2 + this.state.scrollLeft;
+                let columnFilterLeft = styles.asidePanelWidth + this.state.colGroup[colIndex]._sx - 2 + this.state.scrollLeft;
                 this.setState({
                     scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
                     isColumnFilter: colIndex
                 });
-                document.addEventListener('mousedown', downEvent_1);
-                document.addEventListener('mouseleave', downEvent_1);
-                document.addEventListener('keydown', keyDown_1);
+                document.addEventListener('mousedown', downEvent);
+                document.addEventListener('mouseleave', downEvent);
+                document.addEventListener('keydown', keyDown);
             }
         }
         else {
-            var state = {
+            let state = {
                 dragging: false,
-                selecting: false,
                 selectionRows: {},
                 selectionCols: {},
                 focusedRow: 0,
                 focusedCol: this.state.focusedCol
             };
             if (key === 'lineNumber') {
-                state.selectionRows = (function () {
-                    var rows = {};
-                    _this.props.store_list.forEach(function (item, i) {
+                state.selectionRows = (() => {
+                    let rows = {};
+                    this.props.store_list.forEach((item, i) => {
                         rows[i] = true;
                     });
                     return rows;
                 })();
-                state.selectionCols = (function () {
-                    var cols = {};
-                    _this.state.colGroup.forEach(function (col) {
+                state.selectionCols = (() => {
+                    let cols = {};
+                    this.state.colGroup.forEach(col => {
                         cols[col.colIndex] = true;
                     });
                     return cols;
@@ -992,26 +949,26 @@ var GridRoot = /** @class */ (function (_super) {
             }
             else {
                 if (options.header.clickAction === 'select') {
-                    state.selectionRows = (function () {
-                        var rows = {};
-                        _this.props.store_list.forEach(function (item, i) {
+                    state.selectionRows = (() => {
+                        let rows = {};
+                        this.props.store_list.forEach((item, i) => {
                             rows[i] = true;
                         });
                         return rows;
                     })();
                     if (e.shiftKey) {
-                        state.selectionCols = (function () {
-                            var cols = {};
-                            range_1["default"](Math.min(_this.state.focusedCol, colIndex), Math.max(_this.state.focusedCol, colIndex) + 1).forEach(function (i) {
+                        state.selectionCols = (() => {
+                            let cols = {};
+                            range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
                                 cols[i] = true;
                             });
                             return cols;
                         })();
                     }
                     else {
-                        state.selectionCols = (_a = {},
-                            _a[colIndex] = true,
-                            _a);
+                        state.selectionCols = {
+                            [colIndex]: true
+                        };
                         state.focusedCol = colIndex;
                     }
                     this.setState(state);
@@ -1021,12 +978,11 @@ var GridRoot = /** @class */ (function (_super) {
                 }
             }
         }
-        var _a;
-    };
-    GridRoot.prototype.onChangeColumnFilter = function (colIndex, filterInfo) {
+    }
+    onChangeColumnFilter(colIndex, filterInfo) {
         this.props.filter(this.state.colGroup, this.state.options, colIndex, filterInfo);
-    };
-    GridRoot.prototype.onDoubleClickCell = function (e, col, li) {
+    }
+    onDoubleClickCell(e, col, li) {
         if (col.editor) {
             this.setState({
                 isInlineEditing: true,
@@ -1037,49 +993,47 @@ var GridRoot = /** @class */ (function (_super) {
                 }
             });
         }
-    };
-    GridRoot.prototype.updateEditInput = function (act, row, col, value) {
-        var _this = this;
-        var proc = {
-            'cancel': function () {
-                _this.setState({
+    }
+    updateEditInput(act, row, col, value) {
+        const proc = {
+            'cancel': () => {
+                this.setState({
                     isInlineEditing: true,
                     inlineEditingCell: {}
                 });
             },
-            'update': function () {
-                _this.props.update(_this.state.colGroup, _this.state.options, row, col, value);
-                _this.setState({
+            'update': () => {
+                this.props.update(this.state.colGroup, this.state.options, row, col, value);
+                this.setState({
                     isInlineEditing: true,
                     inlineEditingCell: {}
                 });
             }
         };
         proc[act]();
-    };
-    GridRoot.prototype.render = function () {
-        var _this = this;
-        var styles = this.state.styles;
-        var options = this.state.options;
-        var mounted = this.state.mounted;
-        var headerColGroup = this.state.headerColGroup;
-        var bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
-        var gridRootStyle = Object.assign({ height: this.props.height }, this.props.style);
+    }
+    render() {
+        const styles = this.state.styles;
+        const options = this.state.options;
+        const mounted = this.state.mounted;
+        const headerColGroup = this.state.headerColGroup;
+        const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+        let gridRootStyle = assignWith({ height: this.props.height }, this.props.style);
         if (styles.calculatedHeight !== null) {
             gridRootStyle.height = styles.calculatedHeight;
         }
         if (this.state.dragging) {
             gridRootStyle['userSelect'] = 'none';
         }
-        var _scrollLeft = Math.abs(this.state.scrollLeft);
-        var sColIndex = 0;
-        var eColIndex = headerColGroup.length;
-        var _headerColGroup = headerColGroup;
-        var _bodyRowData = this.state.bodyRowData;
-        var _bodyGroupingData = this.state.bodyGroupingData;
+        let _scrollLeft = Math.abs(this.state.scrollLeft);
+        let sColIndex = 0;
+        let eColIndex = headerColGroup.length;
+        let _headerColGroup = headerColGroup;
+        let _bodyRowData = this.state.bodyRowData;
+        let _bodyGroupingData = this.state.bodyGroupingData;
         // 프린트 컬럼 시작점과 끝점 연산
         if (mounted) {
-            for (var ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
+            for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
                 if (headerColGroup[ci]._sx <= _scrollLeft && headerColGroup[ci]._ex >= _scrollLeft) {
                     sColIndex = ci;
                 }
@@ -1089,7 +1043,7 @@ var GridRoot = /** @class */ (function (_super) {
                 }
             }
             _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
-            if (typeof this.data._headerColGroup === 'undefined' || !isEqual_1["default"](this.data._headerColGroup, _headerColGroup)) {
+            if (typeof this.data._headerColGroup === 'undefined' || !isEqual(this.data._headerColGroup, _headerColGroup)) {
                 this.data.sColIndex = sColIndex;
                 this.data.eColIndex = eColIndex;
                 this.data._headerColGroup = _headerColGroup;
@@ -1101,25 +1055,21 @@ var GridRoot = /** @class */ (function (_super) {
                 _bodyGroupingData = this.data._bodyGroupingData;
             }
         }
-        return (<div ref='gridRoot' className={classnames_1["default"]('ax-datagrid')} onWheel={function (e) {
-            _this.handleWheel(e);
-        }} onKeyDown={this.onKeyPress} tabIndex={(-1)} style={gridRootStyle}>
-        <div className={classnames_1["default"]('axd-clip-board')}>
-          <textarea ref='gridClipboard'/>
-        </div>
-        <component_1.GridHeader getRootBounding={this.getRootBounding} mounted={mounted} optionsHeader={options.header} styles={styles} frozenColumnIndex={options.frozenColumnIndex} colGroup={this.state.colGroup} asideColGroup={this.state.asideColGroup} leftHeaderColGroup={this.state.leftHeaderColGroup} headerColGroup={this.state.headerColGroup} asideHeaderData={this.state.asideHeaderData} leftHeaderData={this.state.leftHeaderData} headerData={this.state.headerData} scrollLeft={this.state.scrollLeft} selectionCols={this.state.selectionCols} focusedCol={this.state.focusedCol} sortInfo={this.props.store_sortInfo} onResizeColumnResizer={this.onResizeColumnResizer} onClickHeader={this.onClickHeader}/>
-        <component_1.GridBody mounted={mounted} columnFormatter={this.columnFormatter} options={options} styles={styles} CTInnerWidth={styles.CTInnerWidth} CTInnerHeight={styles.CTInnerHeight} frozenColumnIndex={options.frozenColumnIndex} colGroup={this.state.colGroup} asideColGroup={this.state.asideColGroup} leftHeaderColGroup={this.state.leftHeaderColGroup} headerColGroup={_headerColGroup} bodyTable={this.state.bodyRowTable} asideBodyRowData={this.state.asideBodyRowData} asideBodyGroupingData={this.state.asideBodyGroupingData} leftBodyRowData={this.state.leftBodyRowData} leftBodyGroupingData={this.state.leftBodyGroupingData} bodyRowData={_bodyRowData} bodyGroupingData={_bodyGroupingData} list={this.props.store_list} scrollLeft={this.state.scrollLeft} scrollTop={this.state.scrollTop} selectionRows={this.state.selectionRows} selectionCols={this.state.selectionCols} focusedRow={this.state.focusedRow} focusedCol={this.state.focusedCol} isInlineEditing={this.state.isInlineEditing} inlineEditingCell={this.state.inlineEditingCell} onMouseDownBody={this.onMouseDownBody} onDoubleClickCell={this.onDoubleClickCell} updateEditInput={this.updateEditInput}/>
-        <component_1.GridPage mounted={mounted} styles={styles} pageButtonsContainerWidth={styles.pageButtonsContainerWidth} pageButtons={options.page.buttons} pageButtonHeight={options.page.buttonHeight} onClickPageButton={this.onClickPageButton}/>
-        <component_1.GridScroll mounted={mounted} bodyHeight={styles.bodyHeight} pageHeight={styles.pageHeight} verticalScrollerWidth={styles.verticalScrollerWidth} verticalScrollerHeight={styles.verticalScrollerHeight} horizontalScrollerWidth={styles.horizontalScrollerWidth} horizontalScrollerHeight={styles.horizontalScrollerHeight} verticalScrollBarHeight={styles.verticalScrollBarHeight} horizontalScrollBarWidth={styles.horizontalScrollBarWidth} scrollerArrowSize={styles.scrollerArrowSize} scrollerPadding={styles.scrollerPadding} scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)} scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)} onMouseDownScrollBar={this.onMouseDownScrollBar} onClickScrollTrack={this.onClickScrollTrack} onClickScrollArrow={this.onClickScrollArrow}/>
-        <component_1.GridColumnFilter isColumnFilter={this.state.isColumnFilter} filterInfo={this.props.store_filterInfo} colGroup={this.state.colGroup} options={options} frozenColumnIndex={options.frozenColumnIndex} scrollLeft={this.state.scrollLeft} styles={styles} list={this.props.store_receivedList} onChangeColumnFilter={this.onChangeColumnFilter}/>
-      </div>);
-    };
-    GridRoot.defaultProps = {
-        height: '300px',
-        columns: [],
-        data: [],
-        options: {}
-    };
-    return GridRoot;
-}(React.Component));
-exports.GridRoot = GridRoot;
+        return (React.createElement("div", { ref: 'gridRoot', className: classNames('ax-datagrid'), onWheel: e => {
+                this.handleWheel(e);
+            }, onKeyDown: this.onKeyPress, tabIndex: (-1), style: gridRootStyle },
+            React.createElement("div", { className: classNames('axd-clip-board') },
+                React.createElement("textarea", { ref: 'gridClipboard' })),
+            React.createElement(GridHeader, { getRootBounding: this.getRootBounding, mounted: mounted, optionsHeader: options.header, styles: styles, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: this.state.headerColGroup, asideHeaderData: this.state.asideHeaderData, leftHeaderData: this.state.leftHeaderData, headerData: this.state.headerData, scrollLeft: this.state.scrollLeft, selectionCols: this.state.selectionCols, focusedCol: this.state.focusedCol, sortInfo: this.props.store_sortInfo, onResizeColumnResizer: this.onResizeColumnResizer, onClickHeader: this.onClickHeader }),
+            React.createElement(GridBody, { mounted: mounted, columnFormatter: this.columnFormatter, options: options, styles: styles, CTInnerWidth: styles.CTInnerWidth, CTInnerHeight: styles.CTInnerHeight, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: _headerColGroup, bodyTable: this.state.bodyRowTable, asideBodyRowData: this.state.asideBodyRowData, asideBodyGroupingData: this.state.asideBodyGroupingData, leftBodyRowData: this.state.leftBodyRowData, leftBodyGroupingData: this.state.leftBodyGroupingData, bodyRowData: _bodyRowData, bodyGroupingData: _bodyGroupingData, list: this.props.store_list, scrollLeft: this.state.scrollLeft, scrollTop: this.state.scrollTop, selectionRows: this.state.selectionRows, selectionCols: this.state.selectionCols, focusedRow: this.state.focusedRow, focusedCol: this.state.focusedCol, isInlineEditing: this.state.isInlineEditing, inlineEditingCell: this.state.inlineEditingCell, onMouseDownBody: this.onMouseDownBody, onDoubleClickCell: this.onDoubleClickCell, updateEditInput: this.updateEditInput }),
+            React.createElement(GridPage, { mounted: mounted, styles: styles, pageButtonsContainerWidth: styles.pageButtonsContainerWidth, pageButtons: options.page.buttons, pageButtonHeight: options.page.buttonHeight, onClickPageButton: this.onClickPageButton }),
+            React.createElement(GridScroll, { mounted: mounted, bodyHeight: styles.bodyHeight, pageHeight: styles.pageHeight, verticalScrollerWidth: styles.verticalScrollerWidth, verticalScrollerHeight: styles.verticalScrollerHeight, horizontalScrollerWidth: styles.horizontalScrollerWidth, horizontalScrollerHeight: styles.horizontalScrollerHeight, verticalScrollBarHeight: styles.verticalScrollBarHeight, horizontalScrollBarWidth: styles.horizontalScrollBarWidth, scrollerArrowSize: styles.scrollerArrowSize, scrollerPadding: styles.scrollerPadding, scrollBarLeft: -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth), scrollBarTop: -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight), onMouseDownScrollBar: this.onMouseDownScrollBar, onClickScrollTrack: this.onClickScrollTrack, onClickScrollArrow: this.onClickScrollArrow }),
+            React.createElement(GridColumnFilter, { isColumnFilter: this.state.isColumnFilter, filterInfo: this.props.store_filterInfo, colGroup: this.state.colGroup, options: options, frozenColumnIndex: options.frozenColumnIndex, scrollLeft: this.state.scrollLeft, styles: styles, list: this.props.store_receivedList, onChangeColumnFilter: this.onChangeColumnFilter })));
+    }
+}
+GridRoot.defaultProps = {
+    height: '300px',
+    columns: [],
+    data: [],
+    options: {}
+};

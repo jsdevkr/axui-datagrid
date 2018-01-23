@@ -12,6 +12,7 @@ const plumber = require( 'gulp-plumber' );
 const notify = require( "gulp-notify" );
 
 const ts = require( "gulp-typescript" );
+const tsProject = ts.createProject('tsconfig.json');
 
 function errorAlert( error ) {
   notify.onError( { title: "Gulp Error", message: "Check your terminal", sound: "Purr" } )( error ); //Error Notification
@@ -60,22 +61,22 @@ gulp.task( 'default', [ 'scss-watch' ], function () {
 } );
 
 // task for ES5
-gulp.task( 'dist-ES', function () {
+gulp.task( 'dist-ES', [ 'dist-scss' ], function () {
   return gulp.src( [ fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx' ] )
-    .pipe( ts() )
+    .pipe( tsProject() )
     .pipe( gulp.dest( fnObj.paths.dist + '/es' ) );
 } );
 
-gulp.task( 'dist-scss', ['scss-src'], function () {
-  return gulp.src([
+gulp.task( 'dist-scss', [ 'scss-src' ], function () {
+  return gulp.src( [
       fnObj.paths.src + '/**/*.scss',
       fnObj.paths.src + '/**/*.css',
-    ], {base: fnObj.paths.src})
-    .pipe(gulp.dest(fnObj.paths.dist + '/ts'))
-    .pipe(gulp.dest(fnObj.paths.dist + '/es'));
+    ], { base: fnObj.paths.src } )
+    .pipe( gulp.dest( fnObj.paths.dist + '/ts' ) )
+    .pipe( gulp.dest( fnObj.paths.dist + '/es' ) );
 } );
 
-gulp.task( 'dist-TS', function () {
+gulp.task( 'dist-TS', [ 'dist-scss' ], function () {
   return gulp.src( [ fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx' ] )
     .pipe( gulp.dest( fnObj.paths.dist + '/ts' ) );
 } );
@@ -83,10 +84,10 @@ gulp.task( 'dist-TS', function () {
 /**
  * npm publish
  */
-gulp.task( 'ES npm publish patch', [ 'dist-scss', 'dist-ES' ], shell.task( [
+gulp.task( 'ES npm publish patch', [ 'dist-ES' ], shell.task( [
   'cd dist/es && npm version patch -m "version patch" && npm publish'
 ] ) );
-gulp.task( 'TS npm publish patch', [ 'dist-scss', 'dist-TS' ], shell.task( [
+gulp.task( 'TS npm publish patch', [ 'dist-TS' ], shell.task( [
   'cd dist/ts && npm version patch -m "version patch" && npm publish'
 ] ) );
 

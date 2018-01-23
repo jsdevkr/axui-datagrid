@@ -1166,7 +1166,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const headerColGroup = this.state.headerColGroup;
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
-    let gridRootStyle = Object.assign( { height: this.props.height }, this.props.style );
+    let gridRootStyle = assignWith( { height: this.props.height }, this.props.style );
     if ( styles.calculatedHeight !== null ) {
       gridRootStyle.height = styles.calculatedHeight;
     }

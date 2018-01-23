@@ -305,7 +305,7 @@ export function divideTableByFrozenColumnIndex( _table, _frozenColumnIndex, opti
       else {
         // 오른편
         //tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
-        tempTable_r.rows[ r ].cols.push( Object.assign( {}, col, {} ) );
+        tempTable_r.rows[ r ].cols.push( assignWith( {}, col, {} ) );
       }
 
       col = null;

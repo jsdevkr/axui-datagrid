@@ -305,7 +305,7 @@ export function divideTableByFrozenColumnIndex( _table, _frozenColumnIndex, opti
       else {
         // 오른편
         //tempTable_r.rows[r].cols.push(Object.assign({}, col, {colIndex: col.colIndex - _frozenColumnIndex}));
-        tempTable_r.rows[ r ].cols.push( Object.assign( {}, col, {} ) );
+        tempTable_r.rows[ r ].cols.push( assignWith( {}, col, {} ) );
       }
 
       col = null;
@@ -929,8 +929,13 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
   styles.scrollerPadding = options.scroller.padding;
   styles.scrollerArrowSize = options.scroller.arrowSize;
   styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.verticalScrollerHeight / styles.scrollContentHeight : 0;
+  if ( options.scroller.barMinSize > styles.verticalScrollBarHeight ) {
+    styles.verticalScrollBarHeight = options.scroller.barMinSize;
+  }
   styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
-
+  if ( options.scroller.barMinSize > styles.horizontalScrollBarWidth ) {
+    styles.horizontalScrollBarWidth = options.scroller.barMinSize;
+  }
   if ( options.scroller.useVerticalScroll ) {
     styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
     styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;

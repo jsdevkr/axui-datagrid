@@ -1,107 +1,75 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var React = require("react");
-var classnames_1 = require("classnames");
-var immutable_1 = require("immutable");
-var uniqBy_1 = require("lodash-es/uniqBy");
-var GridColumnFilter = /** @class */ (function (_super) {
-    __extends(GridColumnFilter, _super);
-    function GridColumnFilter(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {};
-        _this.onChange = _this.onChange.bind(_this);
-        return _this;
+import * as React from 'react';
+import classNames from 'classnames';
+import { List } from 'immutable';
+import uniqBy from 'lodash-es/uniqBy';
+import { GridColumnFilterOption } from './GridColumnFilterOption';
+export class GridColumnFilter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+        this.onChange = this.onChange.bind(this);
     }
-    /*
-      public shouldComponentUpdate(nextProps, nextState) {
-  
-        let sameProps = false;
-  
-        if (this.state.filterInfo !== nextState.filterInfo) {
-          this.props.onChangeColumnFilter(this.props.columnFilter.colIndex, this.state.filterInfo);
-          sameProps = true;
-        }
-  
-        if (
-          this.props.columnFilter !== nextProps.columnFilter
-        ) {
-          sameProps = true;
-        }
-  
-        return sameProps;
-      }
-    */
-    GridColumnFilter.prototype.onChange = function (colIndex, filterOptions, value, checked, isCheckAll) {
-        var onChangeColumnFilter = this.props.onChangeColumnFilter;
-        filterOptions = immutable_1.List(filterOptions);
-        var filterInfo = this.props.filterInfo.toJS();
+    onChange(colIndex, filterOptions, value, checked, isCheckAll) {
+        const { onChangeColumnFilter } = this.props;
+        filterOptions = List(filterOptions);
+        let filterInfo = this.props.filterInfo.toJS();
         if (isCheckAll) {
             if (checked) {
                 filterInfo[colIndex] = false;
             }
             else {
-                filterInfo[colIndex] = (_a = {},
-                    _a['__CHECK_ALL__'] = false,
-                    _a);
+                filterInfo[colIndex] = {
+                    ['__CHECK_ALL__']: false
+                };
             }
         }
         else {
-            var filter_1 = {};
-            var isAllChecked_1 = true;
+            let filter = {};
+            let isAllChecked = true;
             if (colIndex in filterInfo) {
-                filterOptions.forEach(function (O) {
+                filterOptions.forEach(O => {
                     if (O['value'] !== '__CHECK_ALL__') {
                         if (O['value'] === value) {
-                            filter_1[O['value']] = checked;
+                            filter[O['value']] = checked;
                         }
                         else {
-                            filter_1[O['value']] = (filterInfo[colIndex] === false) ? true : filterInfo[colIndex][O['value']];
+                            filter[O['value']] = (filterInfo[colIndex] === false) ? true : filterInfo[colIndex][O['value']];
                         }
-                        if (!filter_1[O['value']])
-                            isAllChecked_1 = false;
+                        if (!filter[O['value']])
+                            isAllChecked = false;
                     }
                 });
             }
             else {
-                filterOptions.forEach(function (O) {
+                filterOptions.forEach(O => {
                     if (O['value'] !== '__CHECK_ALL__') {
                         if (O['value'] === value) {
-                            filter_1[O['value']] = checked;
+                            filter[O['value']] = checked;
                         }
                         else {
-                            filter_1[O['value']] = true;
+                            filter[O['value']] = true;
                         }
-                        if (!filter_1[O['value']])
-                            isAllChecked_1 = false;
+                        if (!filter[O['value']])
+                            isAllChecked = false;
                     }
                 });
             }
-            filter_1['__CHECK_ALL__'] = isAllChecked_1;
-            filterInfo[colIndex] = filter_1;
+            filter['__CHECK_ALL__'] = isAllChecked;
+            filterInfo[colIndex] = filter;
         }
         onChangeColumnFilter(colIndex, filterInfo);
-        var _a;
-    };
-    GridColumnFilter.prototype.getOptions = function () {
-        var _this = this;
-        var _a = this.props, isColumnFilter = _a.isColumnFilter, colGroup = _a.colGroup, options = _a.options, list = _a.list, filterInfo = _a.filterInfo;
-        var columnFilterInfo = filterInfo.get('' + isColumnFilter);
-        var arr = uniqBy_1["default"](list
-            .filter(function (item) { return (item ? !item[options.columnKeys.deleted] : false); })
-            .map(function (item) {
-            var value = item[colGroup[isColumnFilter].key];
-            var text = value;
-            var checked = false;
+    }
+    render() {
+        const { isColumnFilter, colGroup, styles, options, scrollLeft, filterInfo, list } = this.props;
+        if (isColumnFilter === false)
+            return null;
+        let columnFilterInfo = filterInfo.get('' + isColumnFilter);
+        let filterOptions = uniqBy(list
+            .filter(item => (item ? !item[options.columnKeys.deleted] : false))
+            .map(item => {
+            let value = item[colGroup[isColumnFilter].key];
+            let text = value;
+            let checked = false;
             if (typeof value === 'undefined') {
                 value = '__UNDEFINED__';
                 text = '값 없음';
@@ -123,44 +91,27 @@ var GridColumnFilter = /** @class */ (function (_super) {
                 text: text,
                 checked: checked
             };
-        })
-            .toJS(), 'value');
-        arr.splice(0, 0, {
+        }).toJS(), 'value');
+        filterOptions.splice(0, 0, {
             value: '__CHECK_ALL__',
             text: '전체선택',
             checkAll: true,
             checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo['__CHECK_ALL__'])
         });
-        return arr.map(function (option, i) {
-            return <div key={i} data-option data-checked={option.checked} onClick={function (e) {
-                _this.onChange(isColumnFilter, arr, option.value, !option.checked, option.checkAll);
-            }}>
-        <div className={classnames_1["default"]('axd-option-check-box')}/>
-        <span className={classnames_1["default"]('axd-option-text')}>{option.text}</span>
-      </div>;
-        });
-    };
-    GridColumnFilter.prototype.render = function () {
-        var _a = this.props, isColumnFilter = _a.isColumnFilter, colGroup = _a.colGroup, styles = _a.styles, scrollLeft = _a.scrollLeft;
-        if (isColumnFilter === false)
-            return null;
-        var filterWidth = 180;
-        var filterStyles = {
+        const filterWidth = 180;
+        let filterStyles = {
             top: styles.headerHeight - 2,
             left: 100,
             width: filterWidth,
-            maxHeight: styles.bodyHeight
+            height: styles.bodyHeight
         };
         filterStyles.left = styles.asidePanelWidth + colGroup[isColumnFilter]._sx - 2 + scrollLeft;
         if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
             filterStyles.left = styles.asidePanelWidth + colGroup[isColumnFilter]._ex - 2 + scrollLeft - filterWidth;
         }
-        return (<div data-column-filter='true' className={classnames_1["default"]('axd-column-filter')} style={filterStyles}>
-        <div data-options=''>
-          {this.getOptions()}
-        </div>
-      </div>);
-    };
-    return GridColumnFilter;
-}(React.Component));
-exports.GridColumnFilter = GridColumnFilter;
+        return (React.createElement("div", { "data-column-filter": 'true', className: classNames('axd-column-filter'), style: filterStyles },
+            React.createElement(GridColumnFilterOption, { options: filterOptions, onChange: (value, checked, checkAll) => {
+                    this.onChange(isColumnFilter, filterOptions, value, checked, checkAll);
+                } })));
+    }
+}

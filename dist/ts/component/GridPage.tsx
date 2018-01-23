@@ -1,9 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames'
-import { iGridPage } from '../_inc/namespaces';
 
-export class GridPage extends React.Component<iGridPage.Props, iGridPage.State> {
-  constructor( props: iGridPage.Props ) {
+export class GridPage extends React.Component<iGridPageProps, iGridPageState> {
+  constructor( props: iGridPageProps ) {
     super( props );
   }
 
