@@ -2,14 +2,7 @@ import * as React from 'react';
 import { Container, Segment } from 'semantic-ui-react';
 import { AXDatagrid } from '@src/index';
 
-// 사용자 formatter 확장하기
-AXDatagrid.setFormatter({
-  MY_FORMATTER: function (data) {
-    return 'MY_FORMATTER';
-  }
-});
-
-export class Formatter extends React.Component<any, any> {
+export class DisabledVerticalScroll extends React.Component<any, any> {
   constructor( props ) {
     super( props );
 
@@ -49,12 +42,17 @@ export class Formatter extends React.Component<any, any> {
     this.state = {
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title', formatter: 'MY_FORMATTER'},
+        { key: 'title', width: 200, label: 'Title'},
         { key: 'writer', label: 'Writer', align: 'center'},
         { key: 'date', label: 'Date', align: 'center', formatter: 'date'},
         { key: 'money', label: 'Money', align: 'right', formatter: 'money'}
       ],
-      data: gridData
+      data: gridData,
+      options: {
+        scroller: {
+          disabledVerticalScroll: true
+        }
+      }
     }
   }
 
@@ -62,14 +60,12 @@ export class Formatter extends React.Component<any, any> {
     return (
       <Container>
         <Segment basic padded>
-          <h1>Formatter</h1>
+          <h1>DisabledVerticalScroll</h1>
         </Segment>
 
         <Segment basic padded>
           <p>
-            브라우저에 많은양의 데이터를 표현하기 위해서는 많은양의 HTML 노드가 필요합니다. 하지만 많은 양의 HTML 노드를 브라우저에 표현하게 되면 브라우저의 처리속도가 떨어져
-            사용자에게 불편을 주게 됩니다.
-            AXUI datagrid는 그리드 컨테이너 영역안에 사용자가 현재 보려는 영역만 출력하는 방식으로 구현되어 아주 많은 양의 데이터를 표현할 수 있습니다.
+            세로스크롤을 사용하지 않습니다.
           </p>
           <AXDatagrid
             height={this.state.height}

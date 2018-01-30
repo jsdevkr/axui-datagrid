@@ -54,6 +54,9 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
             <Menu.Item as={NavLink} to='/sample/Formatter' activeClassName='active'>
               Formatter
             </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/DisabledVerticalScroll' activeClassName='active'>
+              DisabledVerticalScroll
+            </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
 

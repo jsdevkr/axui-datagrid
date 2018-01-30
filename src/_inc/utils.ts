@@ -936,12 +936,15 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
   if ( options.scroller.barMinSize > styles.horizontalScrollBarWidth ) {
     styles.horizontalScrollBarWidth = options.scroller.barMinSize;
   }
-  if ( options.scroller.useVerticalScroll ) {
+
+  if ( options.scroller.disabledVerticalScroll ) {
     styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
     styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;
     styles.verticalScrollerWidth = 0;
     styles.CTInnerWidth = styles.elWidth;
     styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+  } else {
+
   }
 
   return {

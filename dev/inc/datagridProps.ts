@@ -5,6 +5,7 @@ import isObject from 'lodash-es/isObject';
 import isFunction from 'lodash-es/isFunction';
 import isBoolean from 'lodash-es/isBoolean';
 import { gridOptions } from '@src/_inc/defaults';
+import optionDesc from './optionDesc';
 
 interface iDatagridProps {
   name: string;
@@ -99,32 +100,37 @@ function parseOption( prefix: string, options: any ) {
       datagridProps.push( {
         name: prefix + key,
         defaultValue: value,
-        type: 'string'
+        type: 'string',
+        description: optionDesc[prefix + key] || ''
       } )
     } else if ( isNumber( value ) ) {
       datagridProps.push( {
         name: prefix + key,
         defaultValue: value,
-        type: 'number'
+        type: 'number',
+        description: optionDesc[prefix + key] || ''
       } )
     } else if ( isBoolean( value ) ) {
       datagridProps.push( {
         name: prefix + key,
         defaultValue: '' + value,
-        type: 'boolean'
+        type: 'boolean',
+        description: optionDesc[prefix + key] || ''
       } )
     } else if ( isObject( value ) ) {
       datagridProps.push( {
         name: prefix + key,
         defaultValue: '',
-        type: 'object'
+        type: 'object',
+        description: optionDesc[prefix + key] || ''
       } );
       parseOption( prefix + key + '.', value );
     } else if ( isFunction( value ) ) {
       datagridProps.push( {
         name: prefix + key,
         defaultValue: '',
-        type: 'function'
+        type: 'function',
+        description: optionDesc[prefix + key] || ''
       } )
     }
   } );

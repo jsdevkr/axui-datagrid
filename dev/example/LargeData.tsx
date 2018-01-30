@@ -8,7 +8,7 @@ export class LargeData extends React.Component<any, any> {
 
     let gridData = [];
 
-    for ( let i = 1; i < 600000; i++ ) {
+    for ( let i = 1; i < 1000; i++ ) {
       gridData.push( {
         id: i, title: 'title ' + i, writer: 'Thomas', date: '2018-01-20', money: 100 * i
       } )
@@ -29,15 +29,8 @@ export class LargeData extends React.Component<any, any> {
         header: {
           align: 'center'
         },
-        frozenColumnIndex: 0,
         showLineNumber: true,
-        showRowSelector: false,
-        columnKeys: {
-          modified: '__ABC__'
-        },
-        scroller: {
-          useVerticalScroll: false
-        }
+        showRowSelector: false
       }
     }
   }

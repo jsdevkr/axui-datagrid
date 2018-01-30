@@ -4,7 +4,6 @@ interface iAXDatagridProps {
   columns: any;
   data: any;
   options: any;
-  [propName: string]: any;
 }
 
 interface iSelection {
