@@ -155,7 +155,6 @@ export class BasicDatagrid extends React.Component<iBasicDatagridProps, iBasicDa
             columns={this.state.columns}
             data={this.state.data}
             options={this.state.options}
-            thisCallback={this.gridCallBack}
           />
           <Divider />
           <Button.Group basic size='tiny'>

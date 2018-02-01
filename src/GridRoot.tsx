@@ -465,6 +465,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const { x, y } = this.getRootBounding();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight;
+
     const startScrollLeft: number = this.state.scrollLeft;
     const startScrollTop: number = this.state.scrollTop;
     const startX: number = startMousePosition.x - leftPadding;
