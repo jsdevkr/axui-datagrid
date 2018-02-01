@@ -46,7 +46,7 @@ export const gridOptions = {
         arrowSize: 14,
         barMinSize: 12,
         padding: 3,
-        useVerticalScroll: true
+        disabledVerticalScroll: false
     },
     columnKeys: {
         selected: '__selected__',

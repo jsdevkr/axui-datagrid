@@ -772,8 +772,8 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     let footSumColumns = state.footSumColumns;
     let headerTable = state.headerTable;
     styles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
-    styles.elWidth = getInnerWidth(containerDOM);
-    styles.elHeight = getInnerHeight(containerDOM);
+    styles.elWidth = getOuterWidth(containerDOM);
+    styles.elHeight = getOuterHeight(containerDOM);
     styles.CTInnerWidth = styles.elWidth;
     styles.CTInnerHeight = styles.elHeight;
     styles.rightPanelWidth = 0;
@@ -815,6 +815,16 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     // 스크롤컨텐츠의 컨테이너 높이.
     styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
     styles.scrollContentHeight = styles.bodyTrHeight * list.size;
+    if (options.scroller.disabledVerticalScroll) {
+        styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight;
+        styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight;
+        styles.verticalScrollerWidth = 0;
+        styles.CTInnerWidth = styles.elWidth;
+        styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+        styles.scrollContentContainerHeight = styles.scrollContentHeight;
+    }
+    else {
+    }
     styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight - options.scroller.padding * 2 - options.scroller.arrowSize;
     styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonsContainerWidth - options.scroller.padding * 2 - options.scroller.arrowSize;
     styles.scrollerPadding = options.scroller.padding;
@@ -826,13 +836,6 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
     if (options.scroller.barMinSize > styles.horizontalScrollBarWidth) {
         styles.horizontalScrollBarWidth = options.scroller.barMinSize;
-    }
-    if (options.scroller.useVerticalScroll) {
-        styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight + styles.horizontalScrollerHeight;
-        styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight + styles.horizontalScrollerHeight;
-        styles.verticalScrollerWidth = 0;
-        styles.CTInnerWidth = styles.elWidth;
-        styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
     }
     return {
         styles: styles,

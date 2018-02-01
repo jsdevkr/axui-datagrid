@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import assignWith from 'lodash-es/assignWith';
+import assign from 'lodash-es/assign';
 import each from 'lodash-es/each';
 import isEqual from 'lodash-es/isEqual';
 import isFunction from 'lodash-es/isFunction';
@@ -9,6 +9,7 @@ import isObject from 'lodash-es/isObject';
 import last from 'lodash-es/last';
 import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
+import divide from 'lodash/divide';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -30,7 +31,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
   };
 
   public static setFormatter( _formatter ) {
-    return formatter = assignWith( formatter, _formatter );
+    return formatter = assign( formatter, _formatter );
   }
 
   public static getFormatter() {
@@ -47,6 +48,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
   constructor( props: any ) {
     super( props );
 
+
     this.columnFormatter = GridRoot.getFormatter();
     this.componentRefs = {};
     this.data = {
@@ -55,7 +57,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     };
 
     // 내부연산용 데이터 저장소
-    this.state = {
+    let defaultState = {
       mounted: false,
       scrollLeft: 0,
       scrollTop: 0,
@@ -136,14 +138,15 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         pageButtonsContainerWidth: 0
       },
       options: (() => {
-        let options = assignWith( {}, gridOptions );
+        let options = assign( {}, gridOptions );
         each( props.options, function ( v, k ) {
-          options[ k ] = (isObject( v )) ? assignWith( options[ k ], v ) : v;
+          options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
         } );
         return options;
       })()
     };
-    this.state = UTIL.propsToState( props, assignWith( {}, this.state ) );
+
+    this.state = UTIL.propsToState( props, assign( {}, defaultState ) );
 
     // state 계산영역 끝
     this.props.init( props, this.state.options );
@@ -190,7 +193,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = UTIL.propsToState( nextProps, assignWith( {}, this.state, { scrollLeft: 0, scrollTop: 0 } ) );
+      let newState = UTIL.propsToState( nextProps, assign( {}, this.state, { scrollLeft: 0, scrollTop: 0 } ) );
       newState.styles = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, newState ).styles;
       this.setState( newState );
     }
@@ -278,8 +281,8 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     } ));
 
     this.setState( {
-      scrollLeft: scrollLeft,
-      scrollTop: scrollTop
+      scrollLeft: scrollLeft || 0,
+      scrollTop: scrollTop || 0
     } );
 
     if ( !endScroll ) {
@@ -306,15 +309,16 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         vertical: () => {
           let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles );
           this.setState( {
-            scrollLeft: scrollLeft,
-            scrollTop: scrollTop
+            scrollLeft: scrollLeft || 0,
+            scrollTop: scrollTop || 0
           } );
         },
         horizontal: () => {
           let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles );
+
           this.setState( {
-            scrollLeft: scrollLeft,
-            scrollTop: scrollTop
+            scrollLeft: scrollLeft || 0,
+            scrollTop: scrollTop || 0
           } );
         }
       };
@@ -351,15 +355,15 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       vertical: () => {
         let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles );
         this.setState( {
-          scrollLeft: scrollLeft,
-          scrollTop: scrollTop
+          scrollLeft: scrollLeft || 0,
+          scrollTop: scrollTop || 0
         } );
       },
       horizontal: () => {
         let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles );
         this.setState( {
-          scrollLeft: scrollLeft,
-          scrollTop: scrollTop
+          scrollLeft: scrollLeft || 0,
+          scrollTop: scrollTop || 0
         } );
       }
     };
@@ -409,7 +413,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
     ( { styles, leftHeaderColGroup, headerColGroup }
-      = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, assignWith( {}, this.state, { colGroup: colGroup } ) ) )
+      = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, assign( {}, this.state, { colGroup: colGroup } ) ) )
 
     this.data._headerColGroup = undefined;
     this.setState( {
@@ -1166,7 +1170,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const headerColGroup = this.state.headerColGroup;
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
-    let gridRootStyle = assignWith( { height: this.props.height }, this.props.style );
+    let gridRootStyle = assign( { height: this.props.height }, this.props.style );
     if ( styles.calculatedHeight !== null ) {
       gridRootStyle.height = styles.calculatedHeight;
     }
@@ -1181,6 +1185,8 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     let _headerColGroup = headerColGroup;
     let _bodyRowData = this.state.bodyRowData;
     let _bodyGroupingData = this.state.bodyGroupingData;
+    let scrollBarLeft = 0;
+    let scrollBarTop = 0;
 
     // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
@@ -1208,6 +1214,9 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         _bodyRowData = this.data._bodyRowData;
         _bodyGroupingData = this.data._bodyGroupingData;
       }
+
+      scrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / ((styles.scrollContentWidth - styles.scrollContentContainerWidth) || 1);
+      scrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / ((styles.scrollContentHeight - styles.scrollContentContainerHeight) || 1);
     }
 
     return (
@@ -1294,8 +1303,8 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
           horizontalScrollBarWidth={styles.horizontalScrollBarWidth}
           scrollerArrowSize={styles.scrollerArrowSize}
           scrollerPadding={styles.scrollerPadding}
-          scrollBarLeft={-this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth)}
-          scrollBarTop={-this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight)}
+          scrollBarLeft={scrollBarLeft}
+          scrollBarTop={scrollBarTop}
           onMouseDownScrollBar={this.onMouseDownScrollBar}
           onClickScrollTrack={this.onClickScrollTrack}
           onClickScrollArrow={this.onClickScrollArrow}
