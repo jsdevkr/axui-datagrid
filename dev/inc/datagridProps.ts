@@ -4,7 +4,7 @@ import isNumber from 'lodash-es/isNumber';
 import isObject from 'lodash-es/isObject';
 import isFunction from 'lodash-es/isFunction';
 import isBoolean from 'lodash-es/isBoolean';
-import { gridOptions } from '@src/_inc/defaults';
+import { gridOptions } from 'datagrid-ts/_inc/defaults';
 import optionDesc from './optionDesc';
 
 interface iDatagridProps {

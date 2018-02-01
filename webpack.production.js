@@ -12,7 +12,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
     alias: {
-      '@src': path.resolve(__dirname, 'src/'),
+      'datagrid-ts': path.resolve(__dirname, 'src/'),
       '@root': path.resolve(__dirname, '')
     }
   },

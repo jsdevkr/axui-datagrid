@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Container, Segment } from 'semantic-ui-react';
-import { AXDatagrid } from '@src/index';
+import { AXDatagrid } from 'datagrid-ts/index';
 
 export class LargeData extends React.Component<any, any> {
   constructor( props ) {
