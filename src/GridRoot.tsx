@@ -138,6 +138,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         pageButtonsContainerWidth: 0
       },
       options: (() => {
+        // todo : 옵션 초기화 함수로 분리
         let options = assign( {}, gridOptions );
         each( props.options, function ( v, k ) {
           options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
@@ -188,12 +189,26 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       this.props.setData( nextProps.data, this.state.options );
     }
 
+
     if ( this.props.options !== nextProps.options || this.props.columns !== nextProps.columns ) {
       this.data._headerColGroup = undefined;
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = UTIL.propsToState( nextProps, assign( {}, this.state, { scrollLeft: 0, scrollTop: 0 } ) );
+      let newState =  assign( {}, this.state, {
+        scrollLeft: 0,
+        scrollTop: 0,
+        options: (() => {
+          let options = assign( {}, gridOptions );
+          each( nextProps.options, function ( v, k ) {
+            options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
+          } );
+          return options;
+        })()
+      } );
+
+      newState = UTIL.propsToState( nextProps, newState );
+
       newState.styles = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, newState ).styles;
       this.setState( newState );
     }
