@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Header, Image, List, Segment } from 'semantic-ui-react';
 import axuiLogo from '../assets/axui-logo.png';
+import {features} from './features';
 
 export const Introduction = ( props ) => (
   <Container>
@@ -13,40 +14,27 @@ export const Introduction = ( props ) => (
 
     <Segment basic padded>
       <h1>Introduction</h1>
-    </Segment>
-
-    <Segment basic padded>
-      <Header as='h2' dividing>Background</Header>
       <p>
-        AXUI datagrid is a 'datagrid' component created with 'React + ES6 + TS' code for chrome application development.<br />
-        A 'datagrid' is a component that represents data as a spreadsheet. The DataGrid component has many different functions depending on the user's various needs.
-        AXUI datagrid believes that expressing large amounts of data at high speed and supporting developers fully support 'React + ES6 + TS' development environment is the most important value.
+        AXUI datagrid는 모던 웹 애플리케이션 개발을 위해 'React + ES6 + TS' 코드로 제작된 'datagrid UI component' 입니다.
+        <br />
+        'datagrid UI component'는 데이터를 스프레드시트 처럼 보여주는 UI를 말합니다. datagrid에 필요한 기능을 사용자가 원하는 데로 모두 만든다면 끝이 없겠지만
+        대용량의 데이터를 빠른속도로 출력하고 컨트롤 하는 것과 완벽한 'React + ES6 + TS' 개발환경을 지원하는 것을 가장 중요한 가치로 생각하고 디자인 되었습니다.
       </p>
+
+      <Header as='h3' dividing>Main features</Header>
       <List>
-        <List.Item icon='check' content='React + ES6 + TS' />
-        <List.Item icon='check' content='Expressing large amounts of data' />
-        <List.Item icon='check' content='Formatting data' />
+        {features.map((f, fi) => {
+          return <List.Item key={fi} icon='check' content={f.title} />
+        })}
       </List>
       <p>
-        Installation instructions are provided in the <Link to='/usage'>Usage</Link> section.
+        설치방법은 <Link to='/usage'>Usage</Link> 에서 참고하세요.
       </p>
     </Segment>
 
-    <Segment basic padded>
-      <Header as='h2' dividing>React + ES6 + TS</Header>
-      <p>
-        The AXUI datagrid was developed using the React framework. So do not use jQuery.<br />
-        In order to adapt to rapidly changing JS development environment, we use 'babel' to create code based on ES6 + TS, and use Typescript for systematic development.
-        If you're trying to build a web application with React, and you want to make all the code you use in your project complete ES6 + TS, the AXUI datagrid will be a good choice.
-      </p>
-    </Segment>
-
-    <Segment basic padded>
-      <Header as='h2' dividing>Feature</Header>
-      <p>
-
-      </p>
-    </Segment>
+    {features.map((f, fi) => {
+      return <f.Component key={fi} />
+    })}
 
   </Container>
 );

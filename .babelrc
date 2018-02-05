@@ -1,7 +1,7 @@
 {
-  "presets": [
-    [
-      "es2015", "react"
-    ]
-  ]
+  "presets": [["env", {
+    "targets": {
+      "browsers": ["last 2 versions", "> 1% in KR"]
+    }
+  }], "react", "stage-0"]
 }
