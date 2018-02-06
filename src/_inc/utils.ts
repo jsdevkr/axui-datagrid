@@ -805,8 +805,9 @@ export function setColGroupWidth( _colGroup, container, options ) {
     }
   }
   // 컬럼의 시작위치와 끝위치 계산
-  for ( i = options.frozenColumnIndex; i < _colGroup.length; i++ ) {
-    if ( i === options.frozenColumnIndex ) {
+
+  for ( i = 0; i < _colGroup.length; i++ ) {
+    if ( i === 0 ) {
       _colGroup[ i ]._sx = 0;
     } else {
       _colGroup[ i ]._sx = _colGroup[ i - 1 ]._ex;

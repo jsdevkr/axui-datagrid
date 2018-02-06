@@ -60,7 +60,7 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
 
     if ( !mounted ) return null;
 
-    let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx : 0;
+    let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx - styles.frozenPanelWidth : 0;
     let topBodyScrollConfig: iGridBodyPanelScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,

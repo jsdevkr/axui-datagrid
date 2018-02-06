@@ -493,16 +493,18 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       return i;
     };
     const getColIndex: Function = ( x: number, scrollLeft: number ): number => {
+      // todo : x - asidePanelWidth가 styles.frozenColumnWidth 안쪽이라면?
       const p: number = x - asidePanelWidth - scrollLeft;
-      let cl: number = this.state.headerColGroup.length;
+      let cl: number = this.state.colGroup.length;
       let i: number = -1;
       while ( cl-- ) {
-        const col = this.state.headerColGroup[ cl ];
+        const col = this.state.colGroup[ cl ];
         if ( col._sx <= p && col._ex >= p ) {
           i = col.colIndex;
           break;
         }
       }
+
       return i;
     };
     const proc_bodySelect = () => {
@@ -761,6 +763,8 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     // 선택이 시작된 row / col
     let selectStartedRow: number = getRowIndex( startY, startScrollTop );
     let selectStartedCol: number = getColIndex( startX, startScrollLeft );
+
+    console.log(selectStartedRow, selectStartedCol);
 
     if ( this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol ) {
       // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
@@ -1206,16 +1210,16 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
     // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
+
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft && headerColGroup[ ci ]._ex >= _scrollLeft ) {
+        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
           sColIndex = ci;
         }
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + bodyPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth ) {
           eColIndex = ci;
           break;
         }
       }
-
       _headerColGroup = headerColGroup.slice( sColIndex, eColIndex + 1 );
 
       if ( typeof this.data._headerColGroup === 'undefined' || !isEqual( this.data._headerColGroup, _headerColGroup ) ) {
