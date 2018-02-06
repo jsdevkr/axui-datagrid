@@ -474,7 +474,7 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-body-scroll"] {
+    [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-left-body-scroll"], [data-panel="top-body-scroll"] {
       tr:nth-child(even) {
         background: $ax-datagrid-row-bg-0
       }
@@ -482,7 +482,7 @@
         background: $ax-datagrid-row-bg-1
       }
     }
-    [data-panel="aside-body-scroll"] {
+    [data-panel="top-aside-body-scroll"], [data-panel="aside-body-scroll"] {
       background: $ax-datagrid-aside-bg;
       table tr td {
         box-shadow: $ax-datagrid-header-column-box-shadow;

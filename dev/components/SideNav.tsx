@@ -52,7 +52,19 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
               LargeData
             </Menu.Item>
             <Menu.Item as={NavLink} to='/sample/Formatter' activeClassName='active'>
-              Formatter
+              Formatting of data
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/FrozenColumnRow' activeClassName='active'>
+              Frozen column and row
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/MultiColumnHeader' activeClassName='active'>
+              Multi column header
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/InlineEdit' activeClassName='active'>
+              Inline edit
+            </Menu.Item>
+            <Menu.Item as={NavLink} to='/sample/Event' activeClassName='active'>
+              Event
             </Menu.Item>
             <Menu.Item as={NavLink} to='/sample/DisabledVerticalScroll' activeClassName='active'>
               DisabledVerticalScroll

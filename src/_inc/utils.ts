@@ -889,6 +889,7 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
   styles.headerHeight = (options.header.display) ? headerTable.rows.length * options.header.columnHeight : 0;
 
   styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
+
   styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
   styles.pageHeight = options.page.height;
   styles.pageButtonsContainerWidth = options.page.buttonsContainerWidth;
@@ -922,8 +923,7 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
   styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
   // 스크롤컨텐츠의 컨테이너 높이.
   styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
-  styles.scrollContentHeight = styles.bodyTrHeight * list.size;
-
+  styles.scrollContentHeight = styles.bodyTrHeight * (list.size > options.frozenRowIndex ? list.size - options.frozenRowIndex : 0);
 
   if ( options.scroller.disabledVerticalScroll ) {
     styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight;

@@ -11,7 +11,7 @@ export class SourceCodeEditor extends React.Component<any, any> {
 
   public render() {
     return (
-      <SyntaxHighlighter language='javascript' style={docco}>{this.props.code}</SyntaxHighlighter>
+      <SyntaxHighlighter language='javascript' style={docco}>{this.props.code ? this.props.code : this.props.children}</SyntaxHighlighter>
     );
   }
 }

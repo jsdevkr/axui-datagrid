@@ -61,11 +61,13 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
     if ( !mounted ) return null;
 
     let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx : 0;
-    let topBodyScrollConfig = {
+    let topBodyScrollConfig: iGridBodyPanelScrollConfig = {
+      frozenRowIndex: 0,
       sRowIndex: 0,
       eRowIndex: options.frozenRowIndex
     };
-    let bodyScrollConfig = {
+    let bodyScrollConfig: iGridBodyPanelScrollConfig = {
+      frozenRowIndex: options.frozenRowIndex,
       sRowIndex: Math.floor( -scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex,
       eRowIndex: (Math.floor( -scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex) + Math.ceil( styles.bodyHeight / styles.bodyTrHeight ) + 1
     };
@@ -157,7 +159,7 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
               panelBodyRow={leftBodyRowData}
               panelGroupRow={leftBodyGroupingData}
               list={list}
-              panelScrollConfig={bodyScrollConfig}
+              panelScrollConfig={topBodyScrollConfig}
             />
           </div>
         ) : null}
@@ -182,7 +184,9 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
               panelGroupRow={bodyGroupingData}
               list={list}
               panelScrollConfig={topBodyScrollConfig}
-              panelLeft={scrollLeft} />
+              panelLeft={scrollLeft}
+              panelPaddingLeft={scrollPaddingLeft}
+            />
           </div>
         ) : null}
 
@@ -266,3 +270,5 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
     );
   }
 }
+
+// todo : 틀고정시 마우스 선택 포지션 다시 계산.

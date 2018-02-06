@@ -208,6 +208,11 @@ interface iGridBodyPanelStyle {
   height?: number;
 }
 
+interface iGridBodyPanelScrollConfig {
+  frozenRowIndex?: number;
+  sRowIndex: number;
+  eRowIndex: number;
+}
 
 interface iGridPageProps {
   mounted: boolean;
@@ -311,10 +316,7 @@ interface iGridBodyPanelProps {
   panelColGroup: any;
   panelBodyRow: any;
   panelGroupRow: any;
-  panelScrollConfig: {
-    sRowIndex: number;
-    eRowIndex: number;
-  };
+  panelScrollConfig: iGridBodyPanelScrollConfig;
   panelLeft?: number;
   panelTop?: number;
   panelPaddingLeft?: number;
