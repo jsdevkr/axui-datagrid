@@ -76,38 +76,38 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
       left: 0,
       width: styles.asidePanelWidth,
       top: 0,
-      height: styles.frozenRowHeight
+      height: styles.frozenPanelHeight
     };
     let topLeftBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: 0,
-      height: styles.frozenRowHeight
+      height: styles.frozenPanelHeight
     };
     let topBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: 0,
-      height: styles.frozenRowHeight
+      height: styles.frozenPanelHeight
     };
 
     let asideBodyPanelStyle: iGridBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
-      top: styles.frozenRowHeight,
-      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+      top: styles.frozenPanelHeight,
+      height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
     };
     let leftBodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
-      top: styles.frozenRowHeight,
-      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+      top: styles.frozenPanelHeight,
+      height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
     };
     let bodyPanelStyle: iGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-      top: styles.frozenRowHeight,
-      height: styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight
+      top: styles.frozenPanelHeight,
+      height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
     };
 
     return (
@@ -115,7 +115,7 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
         className={classNames( 'axd-body' )}
         style={{ height: styles.bodyHeight }}
         onMouseDown={e => onMouseDownBody( e )}>
-        {(styles.asidePanelWidth > 0 && styles.frozenRowHeight > 0) ? (
+        {(styles.asidePanelWidth > 0 && styles.frozenPanelHeight > 0) ? (
           <div data-scroll-container='top-aside-body-scroll-container' style={topAsideBodyPanelStyle}>
             <GridBodyPanel
               styles={this.props.styles}
@@ -139,7 +139,7 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
             />
           </div>
         ) : null}
-        {(styles.frozenPanelWidth > 0 && styles.frozenRowHeight > 0) ? (
+        {(styles.frozenPanelWidth > 0 && styles.frozenPanelHeight > 0) ? (
           <div data-scroll-container='top-left-body-scroll-container' style={topLeftBodyPanelStyle}>
             <GridBodyPanel
               styles={this.props.styles}
@@ -163,7 +163,7 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
             />
           </div>
         ) : null}
-        {(styles.frozenRowHeight > 0) ? (
+        {(styles.frozenPanelHeight > 0) ? (
           <div data-scroll-container='top-body-scroll-container' style={topBodyPanelStyle}>
             <GridBodyPanel
               styles={this.props.styles}

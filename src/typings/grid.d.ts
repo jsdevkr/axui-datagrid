@@ -108,7 +108,7 @@ interface iGridRootState {
     rightPanelWidth: number;
     headerHeight: number;
     bodyHeight: number;
-    frozenRowHeight: number;
+    frozenPanelHeight: number;
     footSumHeight: number;
     pageHeight: number;
     verticalScrollerWidth: number;

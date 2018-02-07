@@ -9,7 +9,6 @@ import isObject from 'lodash-es/isObject';
 import last from 'lodash-es/last';
 import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
-import divide from 'lodash/divide';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -116,7 +115,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         headerHeight: 0,
         bodyHeight: 0,
         // 틀고정된 로우들의 높이
-        frozenRowHeight: 0,
+        frozenPanelHeight: 0,
         // 풋섬의 높이
         footSumHeight: 0,
         // 페이징 영역의 높이
@@ -195,7 +194,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState =  assign( {}, this.state, {
+      let newState = assign( {}, this.state, {
         scrollLeft: 0,
         scrollTop: 0,
         options: (() => {
@@ -474,6 +473,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
   }
 
   private onMouseDownBody( e: any ) {
+    const { frozenPanelWidth, frozenPanelHeight } = this.state.styles;
     const startMousePosition = UTIL.getMousePosition( e );
     const spanType: string = e.target.getAttribute( 'data-span' );
     const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
@@ -486,6 +486,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
     const getRowIndex: Function = ( y: number, scrollTop: number ): number => {
+      if ( y - headerHeight < frozenPanelHeight ) scrollTop = 0;
       let i: number = 0;
       i = Math.floor( (y - headerHeight - scrollTop) / bodyTrHeight );
       if ( i < 0 ) i = 0;
@@ -493,7 +494,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       return i;
     };
     const getColIndex: Function = ( x: number, scrollLeft: number ): number => {
-      // todo : x - asidePanelWidth가 styles.frozenColumnWidth 안쪽이라면?
+      if ( x - asidePanelWidth < frozenPanelWidth ) scrollLeft = 0;
       const p: number = x - asidePanelWidth - scrollLeft;
       let cl: number = this.state.colGroup.length;
       let i: number = -1;
@@ -504,7 +505,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
           break;
         }
       }
-
       return i;
     };
     const proc_bodySelect = () => {
@@ -719,7 +719,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
           focusedCol: selectStartedCol
         } );
 
-
         document.addEventListener( 'mousemove', throttled_onMouseMove );
         document.addEventListener( 'mouseup', offEvent );
         document.addEventListener( 'mouseleave', offEvent );
@@ -763,8 +762,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     // 선택이 시작된 row / col
     let selectStartedRow: number = getRowIndex( startY, startScrollTop );
     let selectStartedCol: number = getColIndex( startX, startScrollLeft );
-
-    console.log(selectStartedRow, selectStartedCol);
 
     if ( this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol ) {
       // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
