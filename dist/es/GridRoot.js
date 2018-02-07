@@ -84,7 +84,7 @@ export class GridRoot extends React.Component {
                 headerHeight: 0,
                 bodyHeight: 0,
                 // 틀고정된 로우들의 높이
-                frozenRowHeight: 0,
+                frozenPanelHeight: 0,
                 // 풋섬의 높이
                 footSumHeight: 0,
                 // 페이징 영역의 높이
@@ -105,6 +105,7 @@ export class GridRoot extends React.Component {
                 pageButtonsContainerWidth: 0
             },
             options: (() => {
+                // todo : 옵션 초기화 함수로 분리
                 let options = assign({}, gridOptions);
                 each(props.options, function (v, k) {
                     options[k] = (isObject(v)) ? assign({}, options[k], v) : v;
@@ -156,7 +157,18 @@ export class GridRoot extends React.Component {
             this.data._headerColGroup = undefined;
             this.data.sColIndex = -1;
             this.data.eColIndex = -1;
-            let newState = UTIL.propsToState(nextProps, assign({}, this.state, { scrollLeft: 0, scrollTop: 0 }));
+            let newState = assign({}, this.state, {
+                scrollLeft: 0,
+                scrollTop: 0,
+                options: (() => {
+                    let options = assign({}, gridOptions);
+                    each(nextProps.options, function (v, k) {
+                        options[k] = (isObject(v)) ? assign({}, options[k], v) : v;
+                    });
+                    return options;
+                })()
+            });
+            newState = UTIL.propsToState(nextProps, newState);
             newState.styles = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, newState).styles;
             this.setState(newState);
         }
@@ -389,6 +401,7 @@ export class GridRoot extends React.Component {
         }
     }
     onMouseDownBody(e) {
+        const { frozenPanelWidth, frozenPanelHeight } = this.state.styles;
         const startMousePosition = UTIL.getMousePosition(e);
         const spanType = e.target.getAttribute('data-span');
         const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
@@ -400,6 +413,8 @@ export class GridRoot extends React.Component {
         const startX = startMousePosition.x - leftPadding;
         const startY = startMousePosition.y - topPadding;
         const getRowIndex = (y, scrollTop) => {
+            if (y - headerHeight < frozenPanelHeight)
+                scrollTop = 0;
             let i = 0;
             i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
             if (i < 0)
@@ -409,11 +424,13 @@ export class GridRoot extends React.Component {
             return i;
         };
         const getColIndex = (x, scrollLeft) => {
+            if (x - asidePanelWidth < frozenPanelWidth)
+                scrollLeft = 0;
             const p = x - asidePanelWidth - scrollLeft;
-            let cl = this.state.headerColGroup.length;
+            let cl = this.state.colGroup.length;
             let i = -1;
             while (cl--) {
-                const col = this.state.headerColGroup[cl];
+                const col = this.state.colGroup[cl];
                 if (col._sx <= p && col._ex >= p) {
                     i = col.colIndex;
                     break;
@@ -1036,10 +1053,10 @@ export class GridRoot extends React.Component {
         // 프린트 컬럼 시작점과 끝점 연산
         if (mounted) {
             for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
-                if (headerColGroup[ci]._sx <= _scrollLeft && headerColGroup[ci]._ex >= _scrollLeft) {
+                if (headerColGroup[ci]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ci]._ex >= _scrollLeft + styles.frozenPanelWidth) {
                     sColIndex = ci;
                 }
-                if (headerColGroup[ci]._sx <= _scrollLeft + bodyPanelWidth && headerColGroup[ci]._ex >= _scrollLeft + bodyPanelWidth) {
+                if (headerColGroup[ci]._sx <= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth && headerColGroup[ci]._ex >= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth) {
                     eColIndex = ci;
                     break;
                 }

@@ -336,8 +336,8 @@ export function getMousePosition(e) {
     let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[0] : e;
     // clientX, Y 쓰면 스크롤에서 문제 발생
     return {
-        x: mouseObj.pageX,
-        y: mouseObj.pageY
+        x: mouseObj.clientX,
+        y: mouseObj.clientY
     };
 }
 /**
@@ -714,8 +714,8 @@ export function setColGroupWidth(_colGroup, container, options) {
         }
     }
     // 컬럼의 시작위치와 끝위치 계산
-    for (i = options.frozenColumnIndex; i < _colGroup.length; i++) {
-        if (i === options.frozenColumnIndex) {
+    for (i = 0; i < _colGroup.length; i++) {
+        if (i === 0) {
             _colGroup[i]._sx = 0;
         }
         else {
@@ -786,7 +786,7 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
         return width;
     })(colGroup, options.frozenColumnIndex);
     styles.headerHeight = (options.header.display) ? headerTable.rows.length * options.header.columnHeight : 0;
-    styles.frozenRowHeight = options.frozenRowIndex * styles.bodyTrHeight;
+    styles.frozenPanelHeight = options.frozenRowIndex * styles.bodyTrHeight;
     styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
     styles.pageHeight = options.page.height;
     styles.pageButtonsContainerWidth = options.page.buttonsContainerWidth;
@@ -813,8 +813,8 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
     // get bodyHeight
     styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
     // 스크롤컨텐츠의 컨테이너 높이.
-    styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenRowHeight - styles.footSumHeight;
-    styles.scrollContentHeight = styles.bodyTrHeight * list.size;
+    styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight;
+    styles.scrollContentHeight = styles.bodyTrHeight * (list.size > options.frozenRowIndex ? list.size - options.frozenRowIndex : 0);
     if (options.scroller.disabledVerticalScroll) {
         styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight;
         styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight;

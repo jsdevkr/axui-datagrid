@@ -63,7 +63,7 @@ export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
             <Menu.Item as={NavLink} to='/sample/InlineEdit' activeClassName='active'>
               Inline edit
             </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/Event' activeClassName='active'>
+            <Menu.Item as={NavLink} to='/sample/EventReceive' activeClassName='active'>
               Event
             </Menu.Item>
             <Menu.Item as={NavLink} to='/sample/DisabledVerticalScroll' activeClassName='active'>

@@ -9,7 +9,6 @@ import isObject from 'lodash-es/isObject';
 import last from 'lodash-es/last';
 import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
-import divide from 'lodash/divide';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
 
@@ -116,7 +115,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         headerHeight: 0,
         bodyHeight: 0,
         // 틀고정된 로우들의 높이
-        frozenRowHeight: 0,
+        frozenPanelHeight: 0,
         // 풋섬의 높이
         footSumHeight: 0,
         // 페이징 영역의 높이
@@ -138,6 +137,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         pageButtonsContainerWidth: 0
       },
       options: (() => {
+        // todo : 옵션 초기화 함수로 분리
         let options = assign( {}, gridOptions );
         each( props.options, function ( v, k ) {
           options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
@@ -188,12 +188,26 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       this.props.setData( nextProps.data, this.state.options );
     }
 
+
     if ( this.props.options !== nextProps.options || this.props.columns !== nextProps.columns ) {
       this.data._headerColGroup = undefined;
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = UTIL.propsToState( nextProps, assign( {}, this.state, { scrollLeft: 0, scrollTop: 0 } ) );
+      let newState = assign( {}, this.state, {
+        scrollLeft: 0,
+        scrollTop: 0,
+        options: (() => {
+          let options = assign( {}, gridOptions );
+          each( nextProps.options, function ( v, k ) {
+            options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
+          } );
+          return options;
+        })()
+      } );
+
+      newState = UTIL.propsToState( nextProps, newState );
+
       newState.styles = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, newState ).styles;
       this.setState( newState );
     }
@@ -459,17 +473,20 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
   }
 
   private onMouseDownBody( e: any ) {
+    const { frozenPanelWidth, frozenPanelHeight } = this.state.styles;
     const startMousePosition = UTIL.getMousePosition( e );
     const spanType: string = e.target.getAttribute( 'data-span' );
     const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
     const { x, y } = this.getRootBounding();
     const leftPadding: number = x; // + styles.asidePanelWidth;
     const topPadding: number = y; // + styles.headerHeight;
+
     const startScrollLeft: number = this.state.scrollLeft;
     const startScrollTop: number = this.state.scrollTop;
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
     const getRowIndex: Function = ( y: number, scrollTop: number ): number => {
+      if ( y - headerHeight < frozenPanelHeight ) scrollTop = 0;
       let i: number = 0;
       i = Math.floor( (y - headerHeight - scrollTop) / bodyTrHeight );
       if ( i < 0 ) i = 0;
@@ -477,11 +494,12 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
       return i;
     };
     const getColIndex: Function = ( x: number, scrollLeft: number ): number => {
+      if ( x - asidePanelWidth < frozenPanelWidth ) scrollLeft = 0;
       const p: number = x - asidePanelWidth - scrollLeft;
-      let cl: number = this.state.headerColGroup.length;
+      let cl: number = this.state.colGroup.length;
       let i: number = -1;
       while ( cl-- ) {
-        const col = this.state.headerColGroup[ cl ];
+        const col = this.state.colGroup[ cl ];
         if ( col._sx <= p && col._ex >= p ) {
           i = col.colIndex;
           break;
@@ -700,7 +718,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
           focusedRow: selectStartedRow,
           focusedCol: selectStartedCol
         } );
-
 
         document.addEventListener( 'mousemove', throttled_onMouseMove );
         document.addEventListener( 'mouseup', offEvent );
@@ -1190,16 +1207,16 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
     // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
+
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft && headerColGroup[ ci ]._ex >= _scrollLeft ) {
+        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
           sColIndex = ci;
         }
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + bodyPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth ) {
           eColIndex = ci;
           break;
         }
       }
-
       _headerColGroup = headerColGroup.slice( sColIndex, eColIndex + 1 );
 
       if ( typeof this.data._headerColGroup === 'undefined' || !isEqual( this.data._headerColGroup, _headerColGroup ) ) {

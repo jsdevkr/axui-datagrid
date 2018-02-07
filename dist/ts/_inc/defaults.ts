@@ -1,7 +1,7 @@
 export const gridOptions = {
   frozenColumnIndex: 0,
   frozenRowIndex: 0,
-  showLineNumber: false,
+  showLineNumber: true,
   showRowSelector: false,
   multipleSelect: true,
   columnMinWidth: 100,

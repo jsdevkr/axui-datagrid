@@ -13,6 +13,7 @@ export class GridBodyPanel extends React.Component<iGridBodyPanelProps, iGridBod
     this.onEditInput = this.onEditInput.bind( this );
   }
 
+  /*
   public shouldComponentUpdate( nextProps, nextState ) {
 
     let sameProps = false;
@@ -35,6 +36,7 @@ export class GridBodyPanel extends React.Component<iGridBodyPanelProps, iGridBod
 
     return sameProps;
   }
+  */
 
   private onEditInput( E_TYPE: string, e ) {
     const {
@@ -86,7 +88,7 @@ export class GridBodyPanel extends React.Component<iGridBodyPanelProps, iGridBod
     let panelStyle = {
       left: panelLeft,
       top: panelTop,
-      paddingTop: panelScrollConfig.sRowIndex * styles.bodyTrHeight,
+      paddingTop: (panelScrollConfig.sRowIndex - panelScrollConfig.frozenRowIndex) * styles.bodyTrHeight,
       paddingLeft: 0
     };
 

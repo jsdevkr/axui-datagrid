@@ -8,23 +8,30 @@ export class GridBodyPanel extends React.Component {
         this.state = {};
         this.onEditInput = this.onEditInput.bind(this);
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        let sameProps = false;
-        if (this.props.options !== nextProps.options ||
-            this.props.colGroup !== nextProps.colGroup ||
-            this.props.list !== nextProps.list ||
-            this.props.selectionRows !== nextProps.selectionRows ||
-            this.props.selectionCols !== nextProps.selectionCols ||
-            this.props.focusedRow !== nextProps.focusedRow ||
-            this.props.focusedCol !== nextProps.focusedCol ||
-            this.props.panelLeft !== nextProps.panelLeft ||
-            this.props.panelTop !== nextProps.panelTop ||
-            this.props.isInlineEditing !== nextProps.isInlineEditing ||
-            this.props.inlineEditingCell !== nextProps.inlineEditingCell) {
-            sameProps = true;
-        }
-        return sameProps;
+    /*
+    public shouldComponentUpdate( nextProps, nextState ) {
+  
+      let sameProps = false;
+  
+      if (
+        this.props.options !== nextProps.options ||
+        this.props.colGroup !== nextProps.colGroup ||
+        this.props.list !== nextProps.list ||
+        this.props.selectionRows !== nextProps.selectionRows ||
+        this.props.selectionCols !== nextProps.selectionCols ||
+        this.props.focusedRow !== nextProps.focusedRow ||
+        this.props.focusedCol !== nextProps.focusedCol ||
+        this.props.panelLeft !== nextProps.panelLeft ||
+        this.props.panelTop !== nextProps.panelTop ||
+        this.props.isInlineEditing !== nextProps.isInlineEditing ||
+        this.props.inlineEditingCell !== nextProps.inlineEditingCell
+      ) {
+        sameProps = true;
+      }
+  
+      return sameProps;
     }
+    */
     onEditInput(E_TYPE, e) {
         const { updateEditInput, inlineEditingCell } = this.props;
         const proc = {
@@ -47,7 +54,7 @@ export class GridBodyPanel extends React.Component {
         let panelStyle = {
             left: panelLeft,
             top: panelTop,
-            paddingTop: panelScrollConfig.sRowIndex * styles.bodyTrHeight,
+            paddingTop: (panelScrollConfig.sRowIndex - panelScrollConfig.frozenRowIndex) * styles.bodyTrHeight,
             paddingLeft: 0
         };
         if (panelPaddingLeft) {
