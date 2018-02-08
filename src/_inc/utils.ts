@@ -587,8 +587,6 @@ export function makeBodyRowTable( _columns, _options ) {
     row = null;
   }
 
-  console.log( table );
-
   return table;
 }
 
