@@ -1188,14 +1188,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
     let gridRootStyle = assign( { height: this.props.height }, this.props.style );
-    if ( styles.calculatedHeight !== null ) {
-      gridRootStyle.height = styles.calculatedHeight;
-    }
-
-    if ( this.state.dragging ) { // 드래깅 중이므로 내부 요소 text select 금지
-      gridRootStyle[ 'userSelect' ] = 'none';
-    }
-
     let _scrollLeft: number = Math.abs( this.state.scrollLeft );
     let sColIndex: number = 0;
     let eColIndex: number = headerColGroup.length;
@@ -1205,9 +1197,15 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     let scrollBarLeft = 0;
     let scrollBarTop = 0;
 
+    if ( styles.calculatedHeight !== null ) {
+      gridRootStyle.height = styles.calculatedHeight;
+    }
+    if ( this.state.dragging ) { // 드래깅 중이므로 내부 요소 text select 금지
+      gridRootStyle[ 'userSelect' ] = 'none';
+    }
+
     // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
-
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
         if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
           sColIndex = ci;
