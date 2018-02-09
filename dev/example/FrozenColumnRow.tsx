@@ -70,12 +70,12 @@ export class FrozenColumnRow extends React.Component<any, any> {
     return (
       <Container>
         <Segment basic padded>
-          <h1>Frozen Column & Row</h1>
+          <h1>Frozen Column &amp; Row</h1>
         </Segment>
 
         <Segment basic padded>
           <p>
-
+            틀고정에 대한 설명글
           </p>
           <AXDatagrid
             height={this.state.height}

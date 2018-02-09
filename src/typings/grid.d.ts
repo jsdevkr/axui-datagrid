@@ -163,6 +163,22 @@ interface iGridHeaderState {
   columnResizerLeft: number;
 }
 
+interface iGridHeaderPanelProps{
+  panelName: string;
+  colGroup: any;
+  bodyRow: any;
+  style: any;
+  optionsHeader: any;
+  focusedCol: number;
+  selectionCols: any;
+  onClickHeader: Function;
+  sortInfo: any;
+  onMouseDownColumnResizer: Function;
+}
+interface iGridHeaderPanelState{
+
+}
+
 
 interface iGridBodyProps {
   mounted: boolean;

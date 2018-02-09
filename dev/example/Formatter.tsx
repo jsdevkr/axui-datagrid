@@ -67,9 +67,7 @@ export class Formatter extends React.Component<any, any> {
 
         <Segment basic padded>
           <p>
-            브라우저에 많은양의 데이터를 표현하기 위해서는 많은양의 HTML 노드가 필요합니다. 하지만 많은 양의 HTML 노드를 브라우저에 표현하게 되면 브라우저의 처리속도가 떨어져
-            사용자에게 불편을 주게 됩니다.
-            AXUI datagrid는 그리드 컨테이너 영역안에 사용자가 현재 보려는 영역만 출력하는 방식으로 구현되어 아주 많은 양의 데이터를 표현할 수 있습니다.
+            Formatter에 대한 간단 설명글 작성
           </p>
           <AXDatagrid
             height={this.state.height}

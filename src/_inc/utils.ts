@@ -668,7 +668,6 @@ export function makeFootSumTable( _footSumColumns, colGroup, options ) {
   return table;
 }
 
-
 export function makeBodyGroupingTable( _bodyGroupingColumns, colGroup, options ) {
   let table = {
         rows: []
