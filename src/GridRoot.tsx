@@ -20,9 +20,9 @@ import { KEY_CODE } from './_inc/constant';
 
 let formatter = GridFormatter.getAll();
 
-export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
+export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridRootState> {
 
-  public static defaultProps: Partial<iGridRootProps> = {
+  public static defaultProps: Partial<iAXDataGridRootProps> = {
     height: '300px',
     columns: [],
     data: [],
@@ -514,7 +514,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         const currMousePosition = UTIL.getMousePosition( ee );
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-        const setStateCall = ( currState, _moving?: iGridRootMoving ): void => {
+        const setStateCall = ( currState, _moving?: iAXDataGridRootMoving ): void => {
           const selectEndedRow: number = getRowIndex( currState.selectionEndOffset.y, this.state.scrollTop );
           let selectEndedCol: number = getColIndex( currState.selectionEndOffset.x, this.state.scrollLeft );
 
@@ -545,7 +545,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
           this.setState( currState );
         };
-        const scrollMoving = ( _moving: iGridRootMoving ): boolean => {
+        const scrollMoving = ( _moving: iAXDataGridRootMoving ): boolean => {
           let newScrollTop: number = this.state.scrollTop;
           let newScrollLeft: number = this.state.scrollLeft;
           let scrollLeft, scrollTop, endScroll;
@@ -586,7 +586,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         let p1Y: number = Math.min( y1, y2 );
         let p2Y: number = Math.max( y1, y2 );
 
-        let moving: iGridRootMoving = {
+        let moving: iAXDataGridRootMoving = {
           active: false,
           top: false,
           left: false,

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import cx from 'classnames'
 
-export class GridHeaderPanel extends React.Component<iGridHeaderPanelProps, iGridHeaderPanelState> {
+export class GridHeaderPanel extends React.Component<iAXDataGridHeaderPanelProps, iAXDataGridHeaderPanelState> {
 
-  constructor( props: iGridHeaderPanelProps ) {
+  constructor( props: iAXDataGridHeaderPanelProps ) {
     super( props );
 
     this.state = {};

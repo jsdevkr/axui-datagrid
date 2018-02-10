@@ -4,10 +4,10 @@ import { E_NAME } from '../_inc/constant';
 import isString from 'lodash-es/isString';
 import isFunction from 'lodash-es/isFunction';
 
-export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyCellState> {
+export class GridBodyCell extends React.Component<iAXDataGridBodyCellProps, iAXDataGridBodyCellState> {
   private editInput: HTMLInputElement;
 
-  constructor( props: iGridBodyCellProps ) {
+  constructor( props: iAXDataGridBodyCellProps ) {
     super( props );
 
     this.state = {};

@@ -24,7 +24,7 @@ export const GridRootConnected = connect(
   })
 )( GridRoot );
 
-export class AXDatagrid extends React.Component<iAXDatagridProps, any> {
+export class AXDatagrid extends React.Component<iAXDataGridProps, any> {
 
   public static setFormatter( _formatter: any ): any {
     return GridRoot.setFormatter( _formatter );
