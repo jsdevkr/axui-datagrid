@@ -1,5 +1,5 @@
 import { createStore, Store } from 'redux';
-import { gridReducer, State } from './reducers';
+import { gridReducer, State } from './redux/reducer';
 
 export const store: Store<State> = createStore(
   gridReducer,

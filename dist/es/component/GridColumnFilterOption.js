@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Range } from 'immutable';
 import throttle from 'lodash-es/throttle';
 import classNames from 'classnames';
-import { getInnerHeight } from '../_inc/utils';
+import { getInnerHeight } from '../util';
 export class GridColumnFilterOption extends React.Component {
     constructor(props) {
         super(props);

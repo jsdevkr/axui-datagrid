@@ -1,4 +1,4 @@
-import * as TYPES from '../_inc/actionTypes';
+import * as TYPES from './actionTypes';
 import { List, Map, Record } from 'immutable';
 import isObject from 'lodash-es/isObject';
 

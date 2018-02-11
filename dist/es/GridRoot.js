@@ -10,7 +10,7 @@ import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
 import { fromJS } from 'immutable';
 import classNames from 'classnames';
-import * as UTIL from './_inc/utils';
+import * as UTIL from './util';
 import { gridOptions } from './_inc/defaults';
 import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';

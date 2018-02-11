@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect, Provider } from 'react-redux';
 import { store } from './store';
 import { GridRoot } from './GridRoot';
-import * as ACT from './_inc/actions';
+import * as ACT from './redux/actions';
 
 export const GridRootConnected = connect(
   ( state: any ) => {

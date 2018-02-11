@@ -1,5 +1,5 @@
 import * as TYPES from './actionTypes';
-import { propsConverterForData } from '../_inc/utils';
+import { propsConverterForData } from '../util';
 
 export function INIT( props: any, options: any ) {
   let Obj_data = propsConverterForData( props.data );

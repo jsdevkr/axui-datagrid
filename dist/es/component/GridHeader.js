@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as UTIL from '../_inc/utils';
+import * as UTIL from '../util';
 import cx from 'classnames';
 import { GridHeaderPanel } from './GridHeaderPanel';
 export class GridHeader extends React.Component {
