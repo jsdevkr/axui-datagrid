@@ -86,7 +86,7 @@ module.exports = {
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
-      },
+      }
     ],
   },
   // For development https://webpack.js.org/configuration/devtool/#for-development

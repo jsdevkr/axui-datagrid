@@ -60,19 +60,19 @@ gulp.task( 'default', [ 'scss-watch' ], function () {
   return true;
 } );
 
-// task for ES5
-gulp.task( 'dist-ES', [ 'dist-scss' ], function () {
-  return gulp.src( [ fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx' ] )
-    .pipe( tsProject() )
-    .pipe( gulp.dest( fnObj.paths.dist + '/es' ) );
-} );
-
 gulp.task( 'dist-scss', [ 'scss-src' ], function () {
   return gulp.src( [
       fnObj.paths.src + '/**/*.scss',
       fnObj.paths.src + '/**/*.css',
     ], { base: fnObj.paths.src } )
     .pipe( gulp.dest( fnObj.paths.dist + '/ts' ) )
+    .pipe( gulp.dest( fnObj.paths.dist + '/es' ) );
+} );
+
+// task for ES5
+gulp.task( 'dist-ES', [ 'dist-scss' ], function () {
+  return gulp.src( [ fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx' ] )
+    .pipe( tsProject() )
     .pipe( gulp.dest( fnObj.paths.dist + '/es' ) );
 } );
 
@@ -87,12 +87,13 @@ gulp.task( 'dist-TS', [ 'dist-scss' ], function () {
 gulp.task( 'ES npm publish patch', [ 'dist-ES' ], shell.task( [
   'cd dist/es && npm version patch -m "version patch" && npm publish'
 ] ) );
+
 gulp.task( 'TS npm publish patch', [ 'dist-TS' ], shell.task( [
   'cd dist/ts && npm version patch -m "version patch" && npm publish'
 ] ) );
 
 gulp.task( 'dev run!', [ 'scss-watch' ], shell.task( [
-  'webpack-dev-server',
+  'webpack-dev-server'
 ] ) );
 
 gulp.task( 'deploy to docs', shell.task( [
