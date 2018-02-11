@@ -54,29 +54,5 @@ export const gridOptions = {
         deleted: '__deleted__',
         disableSelection: '__disable_selection__'
     },
-    tree: {
-        use: false,
-        hashDigit: 8,
-        indentWidth: 10,
-        arrowWidth: 15,
-        iconWidth: 18,
-        icons: {
-            openedArrow: '▾',
-            collapsedArrow: '▸',
-            groupIcon: '⊚',
-            collapsedGroupIcon: '⊚',
-            itemIcon: '⊙'
-        },
-        columnKeys: {
-            parentKey: 'pid',
-            selfKey: 'id',
-            collapse: 'collapse',
-            hidden: 'hidden',
-            parentHash: '__hp__',
-            selfHash: '__hs__',
-            children: '__children__',
-            depth: '__depth__'
-        }
-    },
     footSum: false
 };

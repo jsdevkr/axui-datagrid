@@ -2,9 +2,9 @@ import * as React from 'react';
 import classNames from 'classnames'
 import { GridBodyPanel } from './GridBodyPanel';
 
-export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
+export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridBodyState> {
 
-  constructor( props: iGridBodyProps ) {
+  constructor( props: iAXDataGridBodyProps ) {
     super( props );
   }
 
@@ -61,49 +61,49 @@ export class GridBody extends React.Component<iGridBodyProps, iGridBodyState> {
     if ( !mounted ) return null;
 
     let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx - styles.frozenPanelWidth : 0;
-    let topBodyScrollConfig: iGridBodyPanelScrollConfig = {
+    let topBodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,
       eRowIndex: options.frozenRowIndex
     };
-    let bodyScrollConfig: iGridBodyPanelScrollConfig = {
+    let bodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
       frozenRowIndex: options.frozenRowIndex,
       sRowIndex: Math.floor( -scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex,
       eRowIndex: (Math.floor( -scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex) + Math.ceil( styles.bodyHeight / styles.bodyTrHeight ) + 1
     };
 
-    let topAsideBodyPanelStyle: iGridBodyPanelStyle = {
+    let topAsideBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: 0,
       height: styles.frozenPanelHeight
     };
-    let topLeftBodyPanelStyle: iGridBodyPanelStyle = {
+    let topLeftBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: 0,
       height: styles.frozenPanelHeight
     };
-    let topBodyPanelStyle: iGridBodyPanelStyle = {
+    let topBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: 0,
       height: styles.frozenPanelHeight
     };
 
-    let asideBodyPanelStyle: iGridBodyPanelStyle = {
+    let asideBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: 0,
       width: styles.asidePanelWidth,
       top: styles.frozenPanelHeight,
       height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
     };
-    let leftBodyPanelStyle: iGridBodyPanelStyle = {
+    let leftBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: styles.asidePanelWidth,
       width: styles.frozenPanelWidth,
       top: styles.frozenPanelHeight,
       height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
     };
-    let bodyPanelStyle: iGridBodyPanelStyle = {
+    let bodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: styles.frozenPanelWidth + styles.asidePanelWidth,
       width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
       top: styles.frozenPanelHeight,

@@ -3,9 +3,9 @@ import { Range } from 'immutable';
 import { E_NAME, KEY_CODE } from '../_inc/constant';
 import { GridBodyCell } from './GridBodyCell';
 
-export class GridBodyPanel extends React.Component<iGridBodyPanelProps, iGridBodyPanelState> {
+export class GridBodyPanel extends React.Component<iAXDataGridBodyPanelProps, iAXDataGridBodyPanelState> {
 
-  constructor( props: iGridBodyPanelProps ) {
+  constructor( props: iAXDataGridBodyPanelProps ) {
     super( props );
 
     this.state = {};

@@ -4,8 +4,8 @@ import { List } from 'immutable';
 import uniqBy from 'lodash-es/uniqBy';
 import { GridColumnFilterOption } from './GridColumnFilterOption'
 
-export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iGridColumnFilterState> {
-  constructor( props: iGridColumnFilterProps ) {
+export class GridColumnFilter extends React.Component<iAXDataGridColumnFilterProps, iAXDataGridColumnFilterState> {
+  constructor( props: iAXDataGridColumnFilterProps ) {
     super( props );
 
     this.state = {};
@@ -85,7 +85,7 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
     let filterOptions = uniqBy( list
       .filter( item => (item ? !item[ options.columnKeys.deleted ] : false) )
       .map( item => {
-      let value = item[ colGroup[ isColumnFilter ].key ];
+      let value = item[ colGroup[ Number(isColumnFilter) ].key ];
       let text: string = value;
       let checked: boolean = false;
 
@@ -130,9 +130,9 @@ export class GridColumnFilter extends React.Component<iGridColumnFilterProps, iG
       height: styles.bodyHeight
     };
 
-    filterStyles.left = styles.asidePanelWidth + colGroup[ isColumnFilter ]._sx - 2 + scrollLeft;
+    filterStyles.left = styles.asidePanelWidth + colGroup[ Number(isColumnFilter) ]._sx - 2 + scrollLeft;
     if ( filterStyles.left + filterWidth > styles.CTInnerWidth ) {
-      filterStyles.left = styles.asidePanelWidth + colGroup[ isColumnFilter ]._ex - 2 + scrollLeft - filterWidth;
+      filterStyles.left = styles.asidePanelWidth + colGroup[ Number(isColumnFilter) ]._ex - 2 + scrollLeft - filterWidth;
     }
 
     return (

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames'
 
-export class GridSelector extends React.Component<iGridSelectorProps, iGridSelectorState> {
-  constructor( props: iGridSelectorProps ) {
+export class GridSelector extends React.Component<iAXDataGridSelectorProps, iAXDataGridSelectorState> {
+  constructor( props: iAXDataGridSelectorProps ) {
     super( props );
 
   }

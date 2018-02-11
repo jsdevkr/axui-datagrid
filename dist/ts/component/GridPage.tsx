@@ -1,8 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames'
 
-export class GridPage extends React.Component<iGridPageProps, iGridPageState> {
-  constructor( props: iGridPageProps ) {
+export class GridPage extends React.Component<iAXDataGridPageProps, iAXDataGridPageState> {
+  constructor( props: iAXDataGridPageProps ) {
     super( props );
   }
 

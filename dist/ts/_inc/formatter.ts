@@ -5,7 +5,7 @@ import { cdate } from './utils';
  * @param {iFormatterData} data
  * @return {string}
  */
-export function money( data: iFormatterData ): string {
+export function money( data: iAXDataGridFormatterData ): string {
   if ( typeof data.value !== 'undefined' ) {
     let val           = ('' + data.value).replace( /[^0-9^\.^\-]/g, '' ),
         regExpPattern = new RegExp( '([0-9])([0-9][0-9][0-9][,.])' ),
@@ -28,7 +28,7 @@ export function money( data: iFormatterData ): string {
  * @param {iFormatterData} data
  * @return {string}
  */
-export function date( data: iFormatterData ): string {
+export function date( data: iAXDataGridFormatterData ): string {
   return cdate( data.value, { 'return': 'yyyy-MM-dd' } );
 }
 
@@ -37,7 +37,7 @@ export function date( data: iFormatterData ): string {
  * @param {iFormatterData} data
  * @return {string}
  */
-export function datetime( data: iFormatterData ): string {
+export function datetime( data: iAXDataGridFormatterData ): string {
   return cdate( data.value, { 'return': 'yyyy-MM-dd hh:mm:ss' } );
 }
 

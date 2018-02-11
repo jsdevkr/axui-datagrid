@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as UTIL from '../_inc/utils';
-import classNames from 'classnames';
+import cx from 'classnames';
+import { GridHeaderPanel } from './GridHeaderPanel';
 export class GridHeader extends React.Component {
     constructor(props) {
         super(props);
@@ -63,68 +64,6 @@ export class GridHeader extends React.Component {
         document.addEventListener('mouseleave', offEvent);
     }
     printHeader(_panelName, _colGroup, _bodyRow, _style) {
-        const onMouseDownColumnResizer = this.onMouseDownColumnResizer;
-        const { optionsHeader, focusedCol, selectionCols, onClickHeader, sortInfo } = this.props;
-        const getFieldSpan = function (_colGroup, _col) {
-            let lineHeight = (optionsHeader.columnHeight - optionsHeader.columnPadding * 2 - optionsHeader.columnBorderWidth);
-            let colAlign = optionsHeader.align || _col.align;
-            let label, sorter, filter;
-            if (_col.key === '__checkbox_header__') {
-                if (optionsHeader.selector) {
-                    label = React.createElement("div", { "data-checkbox": true, style: {
-                            maxHeight: (_col.width - 10) + 'px',
-                            minHeight: (_col.width - 10) + 'px'
-                        } });
-                }
-            }
-            else {
-                label = _col.label;
-            }
-            if (_col.key && _col.colIndex !== null && typeof _col.colIndex !== 'undefined' && sortInfo[_col.key]) {
-                sorter = React.createElement("span", { "data-sorter": _col.colIndex, "data-sorter-order": sortInfo[_col.key].orderBy });
-            }
-            return (React.createElement("span", { "data-span": true, "data-align": colAlign, style: {
-                    height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + 'px',
-                    lineHeight: lineHeight + 'px'
-                } },
-                sorter,
-                label || ' '));
-        };
-        return (React.createElement("div", { "data-panel": _panelName, style: _style },
-            React.createElement("table", { style: { height: '100%' } },
-                React.createElement("colgroup", null,
-                    _colGroup.map((col, ci) => (React.createElement("col", { key: ci, style: { width: col._width + 'px' } }))),
-                    React.createElement("col", null)),
-                React.createElement("tbody", null, _bodyRow.rows.map((row, ri) => {
-                    return (React.createElement("tr", { key: ri, className: '' },
-                        row.cols.map((col, ci) => {
-                            let cellHeight = optionsHeader.columnHeight * col.rowspan - optionsHeader.columnBorderWidth;
-                            let classNameItems = {
-                                ['axd-header-column']: true,
-                                ['axd-header-corner']: (col.columnAttr === 'lineNumber'),
-                                ['focused']: (focusedCol > -1 && col.colIndex === focusedCol),
-                                ['selected']: (selectionCols[col.colIndex])
-                            };
-                            return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: classNames(classNameItems), onClick: (e) => onClickHeader(e, col.colIndex, col.columnAttr), style: { height: cellHeight, minHeight: '1px' } },
-                                getFieldSpan(_colGroup, col),
-                                (optionsHeader.enableFilter && col.key && col.colIndex > -1) ? React.createElement("span", { "data-filter": 'true', "data-filter-index": col.colIndex }) : null));
-                        }),
-                        React.createElement("td", null, "\u00A0")));
-                }))),
-            (() => {
-                if (_panelName === 'aside-header')
-                    return null;
-                let resizerHeight = optionsHeader.columnHeight * _bodyRow.rows.length - optionsHeader.columnBorderWidth;
-                let resizer, resizerLeft = 0, resizerWidth = 4;
-                return _colGroup.map((col, ci) => {
-                    if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
-                        let prevResizerLeft = resizerLeft;
-                        resizerLeft += col._width;
-                        resizer = React.createElement("div", { key: ci, "data-column-resizer": col.colIndex, "data-prev-left": prevResizerLeft, "data-left": resizerLeft, style: { width: resizerWidth, height: resizerHeight + 'px', left: (resizerLeft - resizerWidth / 2) + 'px' }, onMouseDown: e => onMouseDownColumnResizer(e, col) });
-                    }
-                    return (resizer);
-                });
-            })()));
     }
     render() {
         const { mounted, optionsHeader, styles, frozenColumnIndex, colGroup, asideColGroup, leftHeaderColGroup, headerColGroup, asideHeaderData, leftHeaderData, headerData, scrollLeft } = this.props;
@@ -149,10 +88,11 @@ export class GridHeader extends React.Component {
             height: styles.headerHeight,
             left: scrollLeft
         };
-        return (React.createElement("div", { className: classNames('axd-header'), style: { height: styles.headerHeight } },
-            (styles.asidePanelWidth > 0) ? this.printHeader('aside-header', asideColGroup, asideHeaderData, asideHeaderPanelStyle) : null,
-            (frozenColumnIndex > 0) ? this.printHeader('left-header', leftHeaderColGroup, leftHeaderData, leftHeaderPanelStyle) : null,
-            React.createElement("div", { "data-scroll-container": 'header-scroll-container', style: headerPanelStyle }, this.printHeader('header-scroll', headerColGroup, headerData, headerScrollStyle)),
+        return (React.createElement("div", { className: cx('axd-header'), style: { height: styles.headerHeight } },
+            (styles.asidePanelWidth > 0) ? React.createElement(GridHeaderPanel, { panelName: 'aside-header', colGroup: asideColGroup, bodyRow: asideHeaderData, style: asideHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer }) : null,
+            (frozenColumnIndex > 0) ? React.createElement(GridHeaderPanel, { panelName: 'left-header', colGroup: leftHeaderColGroup, bodyRow: leftHeaderData, style: leftHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer }) : null,
+            React.createElement("div", { "data-scroll-container": 'header-scroll-container', style: headerPanelStyle },
+                React.createElement(GridHeaderPanel, { panelName: 'header-scroll', colGroup: headerColGroup, bodyRow: headerData, style: headerScrollStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer })),
             this.state.columnResizing ? React.createElement("div", { "data-column-resizing": true, style: { left: this.state.columnResizerLeft } }) : null));
     }
 }

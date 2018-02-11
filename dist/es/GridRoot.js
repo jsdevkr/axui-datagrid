@@ -1036,12 +1036,6 @@ export class GridRoot extends React.Component {
         const headerColGroup = this.state.headerColGroup;
         const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
         let gridRootStyle = assign({ height: this.props.height }, this.props.style);
-        if (styles.calculatedHeight !== null) {
-            gridRootStyle.height = styles.calculatedHeight;
-        }
-        if (this.state.dragging) {
-            gridRootStyle['userSelect'] = 'none';
-        }
         let _scrollLeft = Math.abs(this.state.scrollLeft);
         let sColIndex = 0;
         let eColIndex = headerColGroup.length;
@@ -1050,6 +1044,12 @@ export class GridRoot extends React.Component {
         let _bodyGroupingData = this.state.bodyGroupingData;
         let scrollBarLeft = 0;
         let scrollBarTop = 0;
+        if (styles.calculatedHeight !== null) {
+            gridRootStyle.height = styles.calculatedHeight;
+        }
+        if (this.state.dragging) {
+            gridRootStyle['userSelect'] = 'none';
+        }
         // 프린트 컬럼 시작점과 끝점 연산
         if (mounted) {
             for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {

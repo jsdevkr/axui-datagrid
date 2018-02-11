@@ -83,7 +83,7 @@ export class GridBodyCell extends React.Component {
     }
     render() {
         const { columnHeight, columnBorderWidth, focusedRow, focusedCol, selectionRows, selectionCols, isInlineEditing, inlineEditingCell, onDoubleClickCell, list, li, colGroup, col, ci, value, onEditInput } = this.props;
-        let cellHeight = columnHeight * col.rowspan - columnBorderWidth;
+        let cellHeight = columnHeight * col.rowspan;
         let classNameItems = {
             ['axd-line-number']: (col.columnAttr === 'lineNumber'),
             ['axd-row-selector']: (col.columnAttr === 'rowSelector')

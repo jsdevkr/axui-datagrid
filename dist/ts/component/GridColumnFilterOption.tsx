@@ -6,10 +6,10 @@ import classNames from 'classnames';
 import { getInnerHeight } from '../_inc/utils';
 
 
-export class GridColumnFilterOption extends React.Component<iGridColumnFilterOptionProps, iGridColumnFilterOptionState> {
+export class GridColumnFilterOption extends React.Component<iAXDataGridColumnFilterOptionProps, iAXDataGridColumnFilterOptionState> {
   private throttled_onScroll: Function;
 
-  constructor( props: iGridColumnFilterOptionProps ) {
+  constructor( props: iAXDataGridColumnFilterOptionProps ) {
     super( props );
 
     this.state = {

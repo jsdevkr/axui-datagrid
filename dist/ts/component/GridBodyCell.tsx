@@ -4,10 +4,10 @@ import { E_NAME } from '../_inc/constant';
 import isString from 'lodash-es/isString';
 import isFunction from 'lodash-es/isFunction';
 
-export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyCellState> {
+export class GridBodyCell extends React.Component<iAXDataGridBodyCellProps, iAXDataGridBodyCellState> {
   private editInput: HTMLInputElement;
 
-  constructor( props: iGridBodyCellProps ) {
+  constructor( props: iAXDataGridBodyCellProps ) {
     super( props );
 
     this.state = {};
@@ -123,7 +123,9 @@ export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyC
             onEditInput
           } = this.props;
 
-    let cellHeight = columnHeight * col.rowspan - columnBorderWidth;
+    let cellHeight = columnHeight * col.rowspan;
+
+
     let classNameItems = {
       ['axd-line-number']: (col.columnAttr === 'lineNumber'),
       ['axd-row-selector']: (col.columnAttr === 'rowSelector')
@@ -154,10 +156,10 @@ export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyC
       return (
         <td
           key={ci}
-            colSpan={col.colspan}
-            rowSpan={col.rowspan}
-            className={classNames( classNameItems )}
-            style={{ height: cellHeight, minHeight: '1px' }}>
+          colSpan={col.colspan}
+          rowSpan={col.rowspan}
+          className={classNames( classNameItems )}
+          style={{ height: cellHeight, minHeight: '1px' }}>
           <input type='text'
                  ref={input => {
                    this.editInput = input;
@@ -177,14 +179,14 @@ export class GridBodyCell extends React.Component<iGridBodyCellProps, iGridBodyC
       return (
         <td
           key={ci}
-            colSpan={col.colspan}
-            rowSpan={col.rowspan}
-            className={classNames( classNameItems )}
-            style={{ height: cellHeight, minHeight: '1px' }}
-            onDoubleClick={e => {
-              onDoubleClickCell( e, col, li );
-            }}>
-          {this.getFieldSpan( colGroup, col, list.get(li), li )}
+          colSpan={col.colspan}
+          rowSpan={col.rowspan}
+          className={classNames( classNameItems )}
+          style={{ height: cellHeight, minHeight: '1px' }}
+          onDoubleClick={e => {
+            onDoubleClickCell( e, col, li );
+          }}>
+          {this.getFieldSpan( colGroup, col, list.get( li ), li )}
         </td>
       )
     }

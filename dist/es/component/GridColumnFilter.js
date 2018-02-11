@@ -67,7 +67,7 @@ export class GridColumnFilter extends React.Component {
         let filterOptions = uniqBy(list
             .filter(item => (item ? !item[options.columnKeys.deleted] : false))
             .map(item => {
-            let value = item[colGroup[isColumnFilter].key];
+            let value = item[colGroup[Number(isColumnFilter)].key];
             let text = value;
             let checked = false;
             if (typeof value === 'undefined') {
@@ -105,9 +105,9 @@ export class GridColumnFilter extends React.Component {
             width: filterWidth,
             height: styles.bodyHeight
         };
-        filterStyles.left = styles.asidePanelWidth + colGroup[isColumnFilter]._sx - 2 + scrollLeft;
+        filterStyles.left = styles.asidePanelWidth + colGroup[Number(isColumnFilter)]._sx - 2 + scrollLeft;
         if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
-            filterStyles.left = styles.asidePanelWidth + colGroup[isColumnFilter]._ex - 2 + scrollLeft - filterWidth;
+            filterStyles.left = styles.asidePanelWidth + colGroup[Number(isColumnFilter)]._ex - 2 + scrollLeft - filterWidth;
         }
         return (React.createElement("div", { "data-column-filter": 'true', className: classNames('axd-column-filter'), style: filterStyles },
             React.createElement(GridColumnFilterOption, { options: filterOptions, onChange: (value, checked, checkAll) => {

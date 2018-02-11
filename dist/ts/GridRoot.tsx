@@ -20,9 +20,9 @@ import { KEY_CODE } from './_inc/constant';
 
 let formatter = GridFormatter.getAll();
 
-export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
+export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridRootState> {
 
-  public static defaultProps: Partial<iGridRootProps> = {
+  public static defaultProps: Partial<iAXDataGridRootProps> = {
     height: '300px',
     columns: [],
     data: [],
@@ -514,7 +514,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         const currMousePosition = UTIL.getMousePosition( ee );
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-        const setStateCall = ( currState, _moving?: iGridRootMoving ): void => {
+        const setStateCall = ( currState, _moving?: iAXDataGridRootMoving ): void => {
           const selectEndedRow: number = getRowIndex( currState.selectionEndOffset.y, this.state.scrollTop );
           let selectEndedCol: number = getColIndex( currState.selectionEndOffset.x, this.state.scrollLeft );
 
@@ -545,7 +545,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
 
           this.setState( currState );
         };
-        const scrollMoving = ( _moving: iGridRootMoving ): boolean => {
+        const scrollMoving = ( _moving: iAXDataGridRootMoving ): boolean => {
           let newScrollTop: number = this.state.scrollTop;
           let newScrollLeft: number = this.state.scrollLeft;
           let scrollLeft, scrollTop, endScroll;
@@ -586,7 +586,7 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
         let p1Y: number = Math.min( y1, y2 );
         let p2Y: number = Math.max( y1, y2 );
 
-        let moving: iGridRootMoving = {
+        let moving: iAXDataGridRootMoving = {
           active: false,
           top: false,
           left: false,
@@ -1188,14 +1188,6 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
     let gridRootStyle = assign( { height: this.props.height }, this.props.style );
-    if ( styles.calculatedHeight !== null ) {
-      gridRootStyle.height = styles.calculatedHeight;
-    }
-
-    if ( this.state.dragging ) { // 드래깅 중이므로 내부 요소 text select 금지
-      gridRootStyle[ 'userSelect' ] = 'none';
-    }
-
     let _scrollLeft: number = Math.abs( this.state.scrollLeft );
     let sColIndex: number = 0;
     let eColIndex: number = headerColGroup.length;
@@ -1205,9 +1197,15 @@ export class GridRoot extends React.Component<iGridRootProps, iGridRootState> {
     let scrollBarLeft = 0;
     let scrollBarTop = 0;
 
+    if ( styles.calculatedHeight !== null ) {
+      gridRootStyle.height = styles.calculatedHeight;
+    }
+    if ( this.state.dragging ) { // 드래깅 중이므로 내부 요소 text select 금지
+      gridRootStyle[ 'userSelect' ] = 'none';
+    }
+
     // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
-
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
         if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
           sColIndex = ci;

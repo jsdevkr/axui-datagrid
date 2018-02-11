@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import assignWith from 'lodash-es/assignWith';
 import each from 'lodash-es/each';
@@ -386,7 +386,7 @@ export function getMousePosition( e ) {
  * @return {{rows: Array}}
  */
 export function makeHeaderTable( _columns, _options ) {
-  let columns  = List( _columns ),
+  let columns  = fromJS( _columns ).toJS(),
       table    = {
         rows: []
       },
@@ -395,11 +395,11 @@ export function makeHeaderTable( _columns, _options ) {
   // todo immutable array
   const maekRows = function ( _columns: any, depth: number, parentField?: any ) {
     let row = { cols: [] };
-    let i = 0, l = _columns.size;
+    let i = 0, l = _columns.length;
     let colspan = 1;
 
     for ( ; i < l; i++ ) {
-      let field = _columns.get( i );
+      let field = _columns[ i ];
       colspan = 1;
 
       if ( !field.hidden ) {
@@ -416,16 +416,16 @@ export function makeHeaderTable( _columns, _options ) {
           }
         })();
 
-        row.cols.push( field ); // 복제된 필드 삽입
-
         if ( 'columns' in field ) {
           colspan = maekRows( field.columns, depth + 1, field );
         } else {
           field.width = ('width' in field) ? field.width : _options.columnMinWidth;
         }
         field.colspan = colspan;
-      } else {
 
+        row.cols.push( field ); // 복제된 필드 삽입
+
+      } else {
 
       }
     }
@@ -439,7 +439,6 @@ export function makeHeaderTable( _columns, _options ) {
     } else {
       return colspan;
     }
-
   };
 
   maekRows( columns, 0, undefined );
@@ -463,7 +462,7 @@ export function makeHeaderTable( _columns, _options ) {
  * @return {{rows: Array}}
  */
 export function makeBodyRowTable( _columns, _options ) {
-  let columns = List( _columns );
+  let columns = fromJS( _columns ).toJS();
   let table = {
     rows: []
   };
@@ -472,7 +471,7 @@ export function makeBodyRowTable( _columns, _options ) {
   const maekRows = function ( _columns: any, depth: number, parentField?: any ) {
     let row = { cols: [] };
     let i = 0;
-    let l = _columns.size;
+    let l = _columns.length;
     let colspan = 1;
 
     const selfMakeRow = function ( __columns: any, __depth: number ) {
@@ -480,7 +479,7 @@ export function makeBodyRowTable( _columns, _options ) {
       let l = __columns.length;
 
       for ( ; i < l; i++ ) {
-        let field   = __columns,
+        let field   = __columns[i],
             colspan = 1;
 
         if ( !field.hidden ) {
@@ -488,8 +487,9 @@ export function makeBodyRowTable( _columns, _options ) {
           if ( 'key' in field ) {
             field.colspan = 1;
             field.rowspan = 1;
+            field.depth = __depth;
 
-            field.rowIndex = depth;
+            field.rowIndex = __depth;
             field.colIndex = (function () {
               if ( !parentField ) {
                 return colIndex++;
@@ -501,13 +501,13 @@ export function makeBodyRowTable( _columns, _options ) {
 
             row.cols.push( field );
             if ( 'columns' in field ) {
-              colspan = maekRows( field.columns, depth + 1, field );
+              colspan = maekRows( field.columns, __depth + 1, field );
             }
             field.colspan = colspan;
           }
           else {
             if ( 'columns' in field ) {
-              selfMakeRow( field.columns, depth );
+              selfMakeRow( field.columns, __depth );
             }
           }
         }
@@ -518,14 +518,16 @@ export function makeBodyRowTable( _columns, _options ) {
     };
 
     for ( ; i < l; i++ ) {
-      let field = _columns.get( i );
+      let field = _columns[ i ];
       colspan = 1;
 
       if ( !field.hidden ) {
 
         if ( 'key' in field ) {
+
           field.colspan = 1;
           field.rowspan = 1;
+          field.depth = depth;
 
           field.rowIndex = depth;
           field.colIndex = (function () {
@@ -538,12 +540,13 @@ export function makeBodyRowTable( _columns, _options ) {
           })();
 
           row.cols.push( field );
+
           if ( 'columns' in field ) {
             colspan = maekRows( field.columns, depth + 1, field );
           }
           field.colspan = colspan;
-        }
-        else {
+
+        } else {
           if ( 'columns' in field ) {
             selfMakeRow( field.columns, depth );
           }
@@ -570,19 +573,18 @@ export function makeBodyRowTable( _columns, _options ) {
 
   maekRows( columns, 0 );
 
-  {
-    // set rowspan
-    for ( let r = 0, rl = table.rows.length; r < rl; r++ ) {
-      let row = table.rows[ r ];
-      for ( let c = 0, cl = row.cols.length; c < cl; c++ ) {
-        let col = row.cols[ c ];
-        if ( !('columns' in col) ) {
-          col.rowspan = rl - r;
-        }
-        col = null;
+
+  // set rowspan
+  for ( let r = 0, rl = table.rows.length; r < rl; r++ ) {
+    let row = table.rows[ r ];
+    for ( let c = 0, cl = row.cols.length; c < cl; c++ ) {
+      let col = row.cols[ c ];
+      if ( !('columns' in col) ) {
+        col.rowspan = rl - r;
       }
-      row = null;
+      col = null;
     }
+    row = null;
   }
 
   return table;
@@ -665,7 +667,6 @@ export function makeFootSumTable( _footSumColumns, colGroup, options ) {
 
   return table;
 }
-
 
 export function makeBodyGroupingTable( _bodyGroupingColumns, colGroup, options ) {
   let table = {
