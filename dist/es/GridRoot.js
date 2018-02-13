@@ -9,10 +9,10 @@ import last from 'lodash-es/last';
 import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
 import { fromJS } from 'immutable';
-import classNames from 'classnames';
+import cx from 'classnames';
 import * as UTIL from './util';
 import { gridOptions } from './_inc/defaults';
-import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
+import { GridBody, GridColumnFilter, GridHeader, GridPage, GridRootContainer, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
 import { KEY_CODE } from './_inc/constant';
 let formatter = GridFormatter.getAll();
@@ -124,11 +124,13 @@ export class GridRoot extends React.Component {
         this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
         this.onClickPageButton = this.onClickPageButton.bind(this);
         this.onMouseDownBody = this.onMouseDownBody.bind(this);
+        this.onWheel = this.onWheel.bind(this);
         this.onKeyPress = this.onKeyPress.bind(this);
         this.onClickHeader = this.onClickHeader.bind(this);
         this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
         this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
         this.updateEditInput = this.updateEditInput.bind(this);
+        this.onFireEvent = this.onFireEvent.bind(this);
     }
     static setFormatter(_formatter) {
         return formatter = assign(formatter, _formatter);
@@ -218,40 +220,6 @@ export class GridRoot extends React.Component {
             scrollTop: scrollTop,
             styles: styles
         });
-    }
-    handleWheel(e) {
-        let scrollLeft, scrollTop, endScroll;
-        let delta = { x: 0, y: 0 };
-        // 컬럼필터 활성화 상태라면 구문 실행 안함.
-        if (this.state.isColumnFilter !== false)
-            return true;
-        if (e.detail) {
-            delta.y = e.detail * 10;
-        }
-        else {
-            if (typeof e.deltaY === 'undefined') {
-                delta.y = -e.wheelDelta;
-                delta.x = 0;
-            }
-            else {
-                delta.y = e.deltaY;
-                delta.x = e.deltaX;
-            }
-        }
-        ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
-            scrollWidth: this.state.styles.scrollContentWidth,
-            scrollHeight: this.state.styles.scrollContentHeight,
-            clientWidth: this.state.styles.scrollContentContainerWidth,
-            clientHeight: this.state.styles.scrollContentContainerHeight
-        }));
-        this.setState({
-            scrollLeft: scrollLeft || 0,
-            scrollTop: scrollTop || 0
-        });
-        if (!endScroll) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
     }
     onMouseDownScrollBar(e, barName) {
         e.preventDefault();
@@ -830,6 +798,40 @@ export class GridRoot extends React.Component {
         if (keyAction in proc)
             proc[keyAction]();
     }
+    onWheel(e) {
+        let scrollLeft, scrollTop, endScroll;
+        let delta = { x: 0, y: 0 };
+        // 컬럼필터 활성화 상태라면 구문 실행 안함.
+        if (this.state.isColumnFilter !== false)
+            return true;
+        if (e.detail) {
+            delta.y = e.detail * 10;
+        }
+        else {
+            if (typeof e.deltaY === 'undefined') {
+                delta.y = -e.wheelDelta;
+                delta.x = 0;
+            }
+            else {
+                delta.y = e.deltaY;
+                delta.x = e.deltaX;
+            }
+        }
+        ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
+            scrollWidth: this.state.styles.scrollContentWidth,
+            scrollHeight: this.state.styles.scrollContentHeight,
+            clientWidth: this.state.styles.scrollContentContainerWidth,
+            clientHeight: this.state.styles.scrollContentContainerHeight
+        }));
+        this.setState({
+            scrollLeft: scrollLeft || 0,
+            scrollTop: scrollTop || 0
+        });
+        if (!endScroll) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
     onKeyPress(e) {
         const headerColGroup = this.state.headerColGroup;
         const metaProc = {
@@ -891,6 +893,8 @@ export class GridRoot extends React.Component {
         }
         else {
             this.onKeyAction(e.which);
+            e.preventDefault();
+            e.stopPropagation();
         }
     }
     onClickHeader(e, colIndex, key) {
@@ -1029,6 +1033,19 @@ export class GridRoot extends React.Component {
         };
         proc[act]();
     }
+    onFireEvent(eventName, e) {
+        const processor = {
+            'wheel': () => {
+                this.onWheel(e);
+            },
+            'keydown': () => {
+                this.onKeyPress(e);
+            }
+        };
+        if (eventName in processor) {
+            processor[eventName]();
+        }
+    }
     render() {
         const styles = this.state.styles;
         const options = this.state.options;
@@ -1050,7 +1067,6 @@ export class GridRoot extends React.Component {
         if (this.state.dragging) {
             gridRootStyle['userSelect'] = 'none';
         }
-        // 프린트 컬럼 시작점과 끝점 연산
         if (mounted) {
             for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
                 if (headerColGroup[ci]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ci]._ex >= _scrollLeft + styles.frozenPanelWidth) {
@@ -1076,10 +1092,8 @@ export class GridRoot extends React.Component {
             scrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / ((styles.scrollContentWidth - styles.scrollContentContainerWidth) || 1);
             scrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / ((styles.scrollContentHeight - styles.scrollContentContainerHeight) || 1);
         }
-        return (React.createElement("div", { ref: 'gridRoot', className: classNames('ax-datagrid'), onWheel: e => {
-                this.handleWheel(e);
-            }, onKeyDown: this.onKeyPress, tabIndex: (-1), style: gridRootStyle },
-            React.createElement("div", { className: classNames('axd-clip-board') },
+        return (React.createElement(GridRootContainer, { ref: 'gridRoot', onFireEvent: this.onFireEvent, style: gridRootStyle },
+            React.createElement("div", { className: cx('axd-clip-board') },
                 React.createElement("textarea", { ref: 'gridClipboard' })),
             React.createElement(GridHeader, { getRootBounding: this.getRootBounding, mounted: mounted, optionsHeader: options.header, styles: styles, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: this.state.headerColGroup, asideHeaderData: this.state.asideHeaderData, leftHeaderData: this.state.leftHeaderData, headerData: this.state.headerData, scrollLeft: this.state.scrollLeft, selectionCols: this.state.selectionCols, focusedCol: this.state.focusedCol, sortInfo: this.props.store_sortInfo, onResizeColumnResizer: this.onResizeColumnResizer, onClickHeader: this.onClickHeader }),
             React.createElement(GridBody, { mounted: mounted, columnFormatter: this.columnFormatter, options: options, styles: styles, CTInnerWidth: styles.CTInnerWidth, CTInnerHeight: styles.CTInnerHeight, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: _headerColGroup, bodyTable: this.state.bodyRowTable, asideBodyRowData: this.state.asideBodyRowData, asideBodyGroupingData: this.state.asideBodyGroupingData, leftBodyRowData: this.state.leftBodyRowData, leftBodyGroupingData: this.state.leftBodyGroupingData, bodyRowData: _bodyRowData, bodyGroupingData: _bodyGroupingData, list: this.props.store_list, scrollLeft: this.state.scrollLeft, scrollTop: this.state.scrollTop, selectionRows: this.state.selectionRows, selectionCols: this.state.selectionCols, focusedRow: this.state.focusedRow, focusedCol: this.state.focusedCol, isInlineEditing: this.state.isInlineEditing, inlineEditingCell: this.state.inlineEditingCell, onMouseDownBody: this.onMouseDownBody, onDoubleClickCell: this.onDoubleClickCell, updateEditInput: this.updateEditInput }),

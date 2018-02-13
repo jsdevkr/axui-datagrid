@@ -10,13 +10,14 @@ import last from 'lodash-es/last';
 import range from 'lodash-es/range';
 import throttle from 'lodash-es/throttle';
 import { fromJS } from 'immutable';
-import classNames from 'classnames';
+import cx from 'classnames';
 
 import * as UTIL from './util';
 import { gridOptions } from './_inc/defaults';
-import { GridBody, GridColumnFilter, GridHeader, GridPage, GridScroll } from './component';
+import { GridBody, GridColumnFilter, GridHeader, GridPage, GridRootContainer, GridScroll } from './component';
 import * as GridFormatter from './_inc/formatter';
 import { KEY_CODE } from './_inc/constant';
+
 
 let formatter = GridFormatter.getAll();
 
@@ -46,7 +47,6 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
   constructor( props: any ) {
     super( props );
-
 
     this.columnFormatter = GridRoot.getFormatter();
     this.componentRefs = {};
@@ -159,11 +159,13 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     this.onResizeColumnResizer = this.onResizeColumnResizer.bind( this );
     this.onClickPageButton = this.onClickPageButton.bind( this );
     this.onMouseDownBody = this.onMouseDownBody.bind( this );
+    this.onWheel = this.onWheel.bind( this );
     this.onKeyPress = this.onKeyPress.bind( this );
     this.onClickHeader = this.onClickHeader.bind( this );
     this.onChangeColumnFilter = this.onChangeColumnFilter.bind( this );
     this.onDoubleClickCell = this.onDoubleClickCell.bind( this );
     this.updateEditInput = this.updateEditInput.bind( this );
+    this.onFireEvent = this.onFireEvent.bind( this );
   }
 
   public componentDidMount() {
@@ -266,43 +268,6 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       scrollTop: scrollTop,
       styles: styles
     } );
-  }
-
-  private handleWheel( e ) {
-    let scrollLeft, scrollTop, endScroll;
-    let delta = { x: 0, y: 0 };
-
-    // 컬럼필터 활성화 상태라면 구문 실행 안함.
-    if ( this.state.isColumnFilter !== false ) return true;
-    if ( e.detail ) {
-      delta.y = e.detail * 10;
-    }
-    else {
-      if ( typeof e.deltaY === 'undefined' ) {
-        delta.y = -e.wheelDelta;
-        delta.x = 0;
-      } else {
-        delta.y = e.deltaY;
-        delta.x = e.deltaX;
-      }
-    }
-
-    ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition( this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
-      scrollWidth: this.state.styles.scrollContentWidth,
-      scrollHeight: this.state.styles.scrollContentHeight,
-      clientWidth: this.state.styles.scrollContentContainerWidth,
-      clientHeight: this.state.styles.scrollContentContainerHeight
-    } ));
-
-    this.setState( {
-      scrollLeft: scrollLeft || 0,
-      scrollTop: scrollTop || 0
-    } );
-
-    if ( !endScroll ) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
   }
 
   private onMouseDownScrollBar( e: any, barName: string ): void {
@@ -945,6 +910,43 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     if ( keyAction in proc ) proc[ keyAction ]();
   }
 
+  private onWheel( e: any ) {
+    let scrollLeft, scrollTop, endScroll;
+    let delta = { x: 0, y: 0 };
+
+    // 컬럼필터 활성화 상태라면 구문 실행 안함.
+    if ( this.state.isColumnFilter !== false ) return true;
+    if ( e.detail ) {
+      delta.y = e.detail * 10;
+    }
+    else {
+      if ( typeof e.deltaY === 'undefined' ) {
+        delta.y = -e.wheelDelta;
+        delta.x = 0;
+      } else {
+        delta.y = e.deltaY;
+        delta.x = e.deltaX;
+      }
+    }
+
+    ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition( this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
+      scrollWidth: this.state.styles.scrollContentWidth,
+      scrollHeight: this.state.styles.scrollContentHeight,
+      clientWidth: this.state.styles.scrollContentContainerWidth,
+      clientHeight: this.state.styles.scrollContentContainerHeight
+    } ));
+
+    this.setState( {
+      scrollLeft: scrollLeft || 0,
+      scrollTop: scrollTop || 0
+    } );
+
+    if ( !endScroll ) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
   private onKeyPress( e: any ) {
     const headerColGroup = this.state.headerColGroup;
 
@@ -1017,6 +1019,9 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
     else {
       this.onKeyAction( e.which );
+
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -1180,6 +1185,21 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     proc[ act ]();
   }
 
+  private onFireEvent( eventName: string, e ) {
+    const processor = {
+      'wheel': () => {
+        this.onWheel( e );
+      },
+      'keydown': () => {
+        this.onKeyPress( e );
+      }
+    };
+
+    if ( eventName in processor ) {
+      processor[ eventName ]();
+    }
+  }
+
   public render() {
     const styles = this.state.styles;
     const options = this.state.options;
@@ -1204,7 +1224,6 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       gridRootStyle[ 'userSelect' ] = 'none';
     }
 
-    // 프린트 컬럼 시작점과 끝점 연산
     if ( mounted ) {
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
         if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
@@ -1235,15 +1254,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
 
     return (
-      <div ref='gridRoot'
-           className={classNames( 'ax-datagrid' )}
-           onWheel={e => {
-             this.handleWheel( e );
-           }}
-           onKeyDown={this.onKeyPress}
-           tabIndex={(-1)}
-           style={gridRootStyle}>
-        <div className={classNames( 'axd-clip-board' )}>
+      <GridRootContainer ref='gridRoot'
+                         onFireEvent={this.onFireEvent}
+                         style={gridRootStyle}>
+        <div className={cx( 'axd-clip-board' )}>
           <textarea ref='gridClipboard' />
         </div>
         <GridHeader
@@ -1335,7 +1349,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
           list={this.props.store_receivedList}
           onChangeColumnFilter={this.onChangeColumnFilter}
         />
-      </div>
+      </GridRootContainer>
     );
   }
 }

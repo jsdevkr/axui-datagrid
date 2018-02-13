@@ -1,3 +1,4 @@
+export { GridRootContainer } from './GridRootContainer';
 export { GridHeader } from './GridHeader';
 export { GridBody } from './GridBody';
 export { GridPage } from './GridPage';

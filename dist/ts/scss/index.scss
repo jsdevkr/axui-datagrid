@@ -500,11 +500,11 @@
     position: relative;
     overflow: hidden;
     [data-panel="body-scroll"], [data-panel="left-body-scroll"], [data-panel="top-left-body-scroll"], [data-panel="top-body-scroll"] {
-      tr:nth-child(even) {
-        background: $ax-datagrid-row-bg-0
-      }
-      tr:nth-child(odd) {
+      tr{
         background: $ax-datagrid-row-bg-1
+      }
+      tr.odded-line{
+        background: $ax-datagrid-row-bg-0;
       }
     }
     [data-panel="top-aside-body-scroll"], [data-panel="aside-body-scroll"] {

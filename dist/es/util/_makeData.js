@@ -10,11 +10,9 @@ export function makeHeaderTable(_columns, _options) {
     let columns = fromJS(_columns).toJS(), table = {
         rows: []
     }, colIndex = 0;
-    // todo immutable array
     const maekRows = function (_columns, depth, parentField) {
         let row = { cols: [] };
-        let i = 0, l = _columns.length;
-        let colspan = 1;
+        let i = 0, l = _columns.length, colspan = 1;
         for (; i < l; i++) {
             let field = _columns[i];
             colspan = 1;
@@ -39,8 +37,6 @@ export function makeHeaderTable(_columns, _options) {
                 }
                 field.colspan = colspan;
                 row.cols.push(field); // 복제된 필드 삽입
-            }
-            else {
             }
         }
         if (row.cols.length > 0) {

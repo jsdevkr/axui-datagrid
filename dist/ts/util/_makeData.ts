@@ -14,11 +14,9 @@ export function makeHeaderTable( _columns, _options ) {
       },
       colIndex = 0;
 
-  // todo immutable array
-  const maekRows = function ( _columns: any, depth: number, parentField?: any ) {
+  const maekRows = function ( _columns: iAXDataGridColumns[], depth: number, parentField?: any ) : number {
     let row = { cols: [] };
-    let i = 0, l = _columns.length;
-    let colspan = 1;
+    let i = 0, l = _columns.length, colspan = 1;
 
     for ( ; i < l; i++ ) {
       let field = _columns[ i ];
@@ -46,9 +44,6 @@ export function makeHeaderTable( _columns, _options ) {
         field.colspan = colspan;
 
         row.cols.push( field ); // 복제된 필드 삽입
-
-      } else {
-
       }
     }
 
@@ -62,7 +57,6 @@ export function makeHeaderTable( _columns, _options ) {
       return colspan;
     }
   };
-
   maekRows( columns, 0, undefined );
 
   // set rowspan

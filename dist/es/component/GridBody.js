@@ -29,52 +29,54 @@ export class GridBody extends React.Component {
         const { mounted, styles, options, frozenColumnIndex, colGroup, asideColGroup, leftHeaderColGroup, headerColGroup, bodyTable, asideBodyRowData, asideBodyGroupingData, leftBodyRowData, leftBodyGroupingData, bodyRowData, bodyGroupingData, scrollLeft, scrollTop, CTInnerWidth, CTInnerHeight, list, onMouseDownBody } = this.props;
         if (!mounted)
             return null;
+        const { bodyHeight, bodyTrHeight, asidePanelWidth, frozenPanelWidth, frozenPanelHeight, rightPanelWidth, footSumHeight } = styles;
+        const { frozenRowIndex } = options;
         let scrollPaddingLeft = (headerColGroup[0]) ? headerColGroup[0]._sx - styles.frozenPanelWidth : 0;
         let topBodyScrollConfig = {
             frozenRowIndex: 0,
             sRowIndex: 0,
-            eRowIndex: options.frozenRowIndex
+            eRowIndex: frozenRowIndex
         };
         let bodyScrollConfig = {
-            frozenRowIndex: options.frozenRowIndex,
-            sRowIndex: Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex,
-            eRowIndex: (Math.floor(-scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.ceil(styles.bodyHeight / styles.bodyTrHeight) + 1
+            frozenRowIndex: frozenRowIndex,
+            sRowIndex: Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex,
+            eRowIndex: (Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex) + Math.ceil(bodyHeight / bodyTrHeight) + 1
         };
         let topAsideBodyPanelStyle = {
             left: 0,
-            width: styles.asidePanelWidth,
+            width: asidePanelWidth,
             top: 0,
-            height: styles.frozenPanelHeight
+            height: frozenPanelHeight
         };
         let topLeftBodyPanelStyle = {
-            left: styles.asidePanelWidth,
-            width: styles.frozenPanelWidth,
+            left: asidePanelWidth,
+            width: frozenPanelWidth,
             top: 0,
-            height: styles.frozenPanelHeight
+            height: frozenPanelHeight
         };
         let topBodyPanelStyle = {
-            left: styles.frozenPanelWidth + styles.asidePanelWidth,
-            width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
+            left: frozenPanelWidth + asidePanelWidth,
+            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
             top: 0,
-            height: styles.frozenPanelHeight
+            height: frozenPanelHeight
         };
         let asideBodyPanelStyle = {
             left: 0,
-            width: styles.asidePanelWidth,
-            top: styles.frozenPanelHeight,
-            height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
+            width: asidePanelWidth,
+            top: frozenPanelHeight,
+            height: bodyHeight - frozenPanelHeight - footSumHeight
         };
         let leftBodyPanelStyle = {
-            left: styles.asidePanelWidth,
-            width: styles.frozenPanelWidth,
-            top: styles.frozenPanelHeight,
-            height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
+            left: asidePanelWidth,
+            width: frozenPanelWidth,
+            top: frozenPanelHeight,
+            height: bodyHeight - frozenPanelHeight - footSumHeight
         };
         let bodyPanelStyle = {
-            left: styles.frozenPanelWidth + styles.asidePanelWidth,
-            width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-            top: styles.frozenPanelHeight,
-            height: styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight
+            left: frozenPanelWidth + asidePanelWidth,
+            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            top: frozenPanelHeight,
+            height: bodyHeight - frozenPanelHeight - footSumHeight
         };
         return (React.createElement("div", { className: classNames('axd-body'), style: { height: styles.bodyHeight }, onMouseDown: e => onMouseDownBody(e) },
             (styles.asidePanelWidth > 0 && styles.frozenPanelHeight > 0) ? (React.createElement("div", { "data-scroll-container": 'top-aside-body-scroll-container', style: topAsideBodyPanelStyle },
