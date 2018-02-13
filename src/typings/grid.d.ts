@@ -9,6 +9,11 @@ interface iAXDataGridColumns {
   label?: string;
   align?: string;
   formatter?: Function | string;
+  colspan?: number;
+  rowspan?: number;
+  rowIndex?: number;
+  colIndex?: number;
+  hidden?: boolean;
   columns?: iAXDataGridColumns[];
 }
 

@@ -11,19 +11,6 @@ declare module '*.jpg' {
   export default value;
 }
 
-interface iSideNavProps {
-  style: any;
-}
-
-interface iSideNavState {
-
-}
-
-
-
-interface iBasicDatagridProps {
-}
-
 interface iColumnEditor {
   type: string;
 }
@@ -36,13 +23,6 @@ interface iColumns {
   formatter?: Function | string;
   editor?: Function | iColumnEditor;
   columns?: iColumns[];
-}
-
-interface iBasicDatagridState {
-  height?: string,
-  columns: iColumns[],
-  data: any,
-  options: object
 }
 
 interface iFormatterData {

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Range } from 'immutable';
 import { E_NAME, KEY_CODE } from '../_inc/constant';
 import { GridBodyCell } from './GridBodyCell';
+import cx from 'classnames';
 
 export class GridBodyPanel extends React.Component<iAXDataGridBodyPanelProps, iAXDataGridBodyPanelState> {
 
@@ -12,31 +13,6 @@ export class GridBodyPanel extends React.Component<iAXDataGridBodyPanelProps, iA
 
     this.onEditInput = this.onEditInput.bind( this );
   }
-
-  /*
-  public shouldComponentUpdate( nextProps, nextState ) {
-
-    let sameProps = false;
-
-    if (
-      this.props.options !== nextProps.options ||
-      this.props.colGroup !== nextProps.colGroup ||
-      this.props.list !== nextProps.list ||
-      this.props.selectionRows !== nextProps.selectionRows ||
-      this.props.selectionCols !== nextProps.selectionCols ||
-      this.props.focusedRow !== nextProps.focusedRow ||
-      this.props.focusedCol !== nextProps.focusedCol ||
-      this.props.panelLeft !== nextProps.panelLeft ||
-      this.props.panelTop !== nextProps.panelTop ||
-      this.props.isInlineEditing !== nextProps.isInlineEditing ||
-      this.props.inlineEditingCell !== nextProps.inlineEditingCell
-    ) {
-      sameProps = true;
-    }
-
-    return sameProps;
-  }
-  */
 
   private onEditInput( E_TYPE: string, e ) {
     const {
@@ -85,16 +61,13 @@ export class GridBodyPanel extends React.Component<iAXDataGridBodyPanelProps, iA
             panelPaddingLeft = 0
           } = this.props;
 
-    let panelStyle = {
+    const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
+    const panelStyle = {
       left: panelLeft,
       top: panelTop,
-      paddingTop: (panelScrollConfig.sRowIndex - panelScrollConfig.frozenRowIndex) * styles.bodyTrHeight,
-      paddingLeft: 0
+      paddingTop: (sRowIndex - frozenRowIndex) * styles.bodyTrHeight,
+      paddingLeft: (panelPaddingLeft) ? panelPaddingLeft : 0
     };
-
-    if ( panelPaddingLeft ) {
-      panelStyle.paddingLeft = panelPaddingLeft;
-    }
 
     return (
       <div data-panel={panelName} style={panelStyle}>
@@ -110,16 +83,19 @@ export class GridBodyPanel extends React.Component<iAXDataGridBodyPanelProps, iA
             <col />
           </colgroup>
           <tbody>
-          {Range( panelScrollConfig.sRowIndex, panelScrollConfig.eRowIndex ).map(
+          {Range( sRowIndex, eRowIndex ).map(
             ( li ) => {
               const item = list.get( li );
+              const trClassNames = {
+                ['odded-line']: li % 2
+              };
               if ( item ) {
                 return (
                   panelBodyRow.rows.map(
                     ( row, ri ) => {
                       return (
                         <tr
-                          key={ri}>
+                          key={ri} className={cx( trClassNames )}>
                           {row.cols.map( ( col, ci ) => {
                             return <GridBodyCell
                               key={ci}

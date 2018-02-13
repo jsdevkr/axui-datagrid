@@ -3,11 +3,15 @@ import { NavLink } from 'react-router-dom';
 import { Icon, Menu } from 'semantic-ui-react';
 import pkg from '@root/package.json';
 
-export class SideNav extends React.Component<iSideNavProps, iSideNavState> {
+export class SideNav extends React.Component<any, any> {
   constructor( props ) {
     super( props );
 
     this.handleItemClick = this.handleItemClick.bind( this );
+  }
+
+  public componentWillUpdate() {
+    window.scrollTo( 0, 0 );
   }
 
   private handleItemClick() {

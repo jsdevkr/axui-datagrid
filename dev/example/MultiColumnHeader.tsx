@@ -33,7 +33,6 @@ export class MultiColumnHeader extends React.Component<any, any> {
           { key: 'date', label: 'Date', formatter: 'date' }
         ]
         },
-        { key: 'date', label: 'Date', formatter: 'date' },
         { key: 'money', label: 'Money', formatter: 'money' }
       ],
       data: gridData,

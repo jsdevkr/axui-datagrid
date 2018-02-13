@@ -1,19 +1,12 @@
 import * as React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
-import { SideNav, ExampleRoot } from './components'
-import { Introduction, Usage, Props } from './pages';
+import { ExampleRoot, SideNav } from './components'
+import { Introduction, Props, Usage } from './pages';
 
 const RedirectToIntro = () => <Redirect to='/introduction' />
 
-interface iProps {
-}
-
-interface iState {
-  visible: boolean;
-}
-
-export class AppRouter extends React.Component<iProps, iState> {
+export class AppRouter extends React.Component<any, any> {
   constructor( props ) {
     super( props );
 
