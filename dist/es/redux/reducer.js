@@ -16,13 +16,15 @@ export const gridReducer = (state = initialState, action) => {
     const processor = {
         [TYPES.INIT]: () => {
             let list; // 그리드에 표현할 목록
-            // todo : colGroup으로 sortInfo 생성
             // 전달받은 리스트 중에 출력할 리스트를 필터링
             list = action.receivedList.filter(item => (item ? !item[action.options.columnKeys.deleted] : false));
             return state
                 .set('receivedList', List(action.receivedList))
+                .set('deletedList', List([]))
                 .set('list', List(list))
-                .set('page', isObject(action.page) ? (action.page) : false);
+                .set('page', isObject(action.page) ? (action.page) : false)
+                .set('sortInfo', {})
+                .set('filterInfo', Map({}));
         },
         [TYPES.SET_DATA]: () => {
             // 전달받은 리스트 중에 출력할 리스트를 필터링

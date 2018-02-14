@@ -1,4 +1,3 @@
-
 interface iAXDataGridHeaderProps {
   getRootBounding: Function;
   mounted: boolean;
@@ -43,5 +42,21 @@ interface iAXDataGridHeaderPanelProps {
 }
 
 interface iAXDataGridHeaderPanelState {
+
+}
+
+
+interface iAXDataGridHeaderCellProps {
+  bodyRow: any;
+  optionsHeader: iAXDataGridOptionHeader;
+  focusedCol: number;
+  selectionCols: any;
+  sortInfo: object;
+  ri: number;
+  col: any;
+  onClickHeader: Function;
+}
+
+interface iAXDataGridHeaderCellState {
 
 }

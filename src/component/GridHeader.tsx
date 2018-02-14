@@ -3,7 +3,6 @@ import * as UTIL from '../util';
 import cx from 'classnames'
 import { GridHeaderPanel } from './GridHeaderPanel';
 
-
 export class GridHeader extends React.Component<iAXDataGridHeaderProps, iAXDataGridHeaderState> {
   constructor( props: iAXDataGridHeaderProps ) {
     super( props );
