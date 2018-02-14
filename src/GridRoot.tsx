@@ -168,7 +168,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     this.onFireEvent = this.onFireEvent.bind( this );
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode( this.refs.gridRoot );
 
     this.throttled_updateDimensions = throttle( this.updateDimensions.bind( this ), 100 );
@@ -179,11 +179,11 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     } );
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     window.removeEventListener( 'resize', this.throttled_updateDimensions );
   }
 
-  public componentWillReceiveProps( nextProps ) {
+  componentWillReceiveProps( nextProps ) {
     // 변경된 props를 받게 되면
     // 데이터 체인지
     if ( this.props.data !== nextProps.data ) {
@@ -215,7 +215,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  public shouldComponentUpdate( nextProps, nextState ) {
+  shouldComponentUpdate( nextProps, nextState ) {
     if ( this.props.data !== nextProps.data ) {
       return false;
     }
@@ -239,13 +239,13 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     return true;
   }
 
-  public componentWillUpdate( nextProps ) {
+  componentWillUpdate( nextProps ) {
     // console.log(this.state.sColIndex);
     // shouldComponentUpdate에더 랜더를 방지 하거나. willUpdate에서 this.state.styles값 강제 변경 테스트.
 
   }
 
-  public componentDidUpdate( prevProps, prevState ) {
+  componentDidUpdate( prevProps, prevState ) {
     // change props and render
     if ( prevProps.height !== this.props.height ) {
       this.updateDimensions();
@@ -1019,9 +1019,11 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
     else {
       this.onKeyAction( e.which );
-
-      e.preventDefault();
-      e.stopPropagation();
+      
+      if(!this.state.isInlineEditing) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
   }
 
@@ -1170,14 +1172,14 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     const proc = {
       'cancel': () => {
         this.setState( {
-          isInlineEditing: true,
+          isInlineEditing: false,
           inlineEditingCell: {}
         } );
       },
       'update': () => {
         this.props.update( this.state.colGroup, this.state.options, row, col, value );
         this.setState( {
-          isInlineEditing: true,
+          isInlineEditing: false,
           inlineEditingCell: {}
         } );
       }
@@ -1200,7 +1202,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  public render() {
+  render() {
     const styles = this.state.styles;
     const options = this.state.options;
     const mounted = this.state.mounted;

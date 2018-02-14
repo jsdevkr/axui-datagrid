@@ -1,12 +1,16 @@
+import { hot } from 'react-hot-loader';
 import * as React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
+
 import { ExampleRoot, SideNav } from './components'
 import { Introduction, Props, Usage } from './pages';
 
+
+
 const RedirectToIntro = () => <Redirect to='/introduction' />
 
-export class AppRouter extends React.Component<any, any> {
+class AppRouter extends React.Component<any, any> {
   constructor( props ) {
     super( props );
 
@@ -17,7 +21,7 @@ export class AppRouter extends React.Component<any, any> {
     this.toggleVisibility = this.toggleVisibility.bind( this );
   }
 
-  public toggleVisibility() {
+  private toggleVisibility() {
     this.setState( { visible: !this.state.visible } );
   }
 
@@ -47,3 +51,6 @@ export class AppRouter extends React.Component<any, any> {
     );
   }
 }
+
+
+export default hot(module)(AppRouter);

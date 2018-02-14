@@ -3,5 +3,6 @@
     "targets": {
       "browsers": ["last 2 versions", "> 1% in KR"]
     }
-  }], "react", "stage-0"]
+  }], "react", "stage-0"],
+  "plugins": ["react-hot-loader/babel"]
 }

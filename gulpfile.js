@@ -93,7 +93,7 @@ gulp.task( 'TS npm publish patch', [ 'dist-TS' ], shell.task( [
 ] ) );
 
 gulp.task( 'dev run!', [ 'scss-watch' ], shell.task( [
-  'webpack-dev-server'
+  'webpack-dev-server --hotOnly'
 ] ) );
 
 gulp.task( 'deploy to docs', shell.task( [

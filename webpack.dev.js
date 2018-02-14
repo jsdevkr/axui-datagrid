@@ -90,10 +90,11 @@ module.exports = {
     ],
   },
   // For development https://webpack.js.org/configuration/devtool/#for-development
-  devtool: 'inline-source-map',
+  devtool: 'eval',
   devServer: {
     port: 4000,
     noInfo: true,
+    hot: true,
     historyApiFallback: {
       rewrites: [
         {from: /.*/, to: '/'}
@@ -111,5 +112,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
   ]
 };

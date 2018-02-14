@@ -13,7 +13,7 @@ export class GridBodyCell extends React.Component<iAXDataGridBodyCellProps, iAXD
     this.state = {};
   }
 
-  public componentDidUpdate( prevProps, prevState ) {
+  componentDidUpdate( prevProps, prevState ) {
     if ( this.props.inlineEditingCell !== prevProps.inlineEditingCell ) {
       if ( this.editInput ) {
         this.editInput.select();
@@ -78,7 +78,7 @@ export class GridBodyCell extends React.Component<iAXDataGridBodyCellProps, iAXD
     );
   }
 
-  public render() {
+  render() {
 
     const {
             columnHeight,
