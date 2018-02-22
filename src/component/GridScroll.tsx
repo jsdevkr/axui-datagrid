@@ -1,5 +1,5 @@
 import * as React from 'react';
-import classNames from 'classnames';
+import cx from 'classnames';
 
 export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataGridScrollState> {
   constructor( props: iAXDataGridScrollProps ) {
@@ -7,21 +7,6 @@ export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataG
 
     this.onClickScrollTrack = this.onClickScrollTrack.bind( this );
   }
-
-  /*
-  // 사실상 항상 리랜더 해야 하는 컴포넌트라서 제어하지 않을 작정
-    shouldComponentUpdate(nextProps, nextState) {
-      let sameProps = false;
-
-      for(const k in this.props){
-        if(typeof nextProps[k] === 'undefined' || nextProps[k] !== this.props[k]){
-          sameProps = true;
-        }
-      }
-
-      return sameProps;
-    }
-  */
 
   public onClickScrollTrack( e, barName ) {
     e.preventDefault();
@@ -51,15 +36,15 @@ export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataG
           } = this.props;
 
     if ( !mounted ) return null;
-
     if ( verticalScrollerWidth === 0 && horizontalScrollerHeight === 0 ) return null;
 
+    let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
     let verticalArrowStyles = {
       width: verticalScrollerWidth,
       height: scrollerArrowSize / 2 + scrollerPadding
     };
 
-    let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
+
     let verticalTopArrowStyles = {
       left: scrollerPadding,
       top: (verticalArrowStyles.height - arrowWidth) / 2,
@@ -123,7 +108,7 @@ export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataG
     };
 
     return (
-      <div className={classNames( 'axd-scroller' )}>
+      <div className={cx( 'axd-scroller' )}>
         {(verticalScrollerWidth) ? (
           <div data-scroll-track='vertical' style={verticalStyles}>
             <div data-scroll-arrow='up' style={verticalArrowStyles}>
@@ -131,7 +116,7 @@ export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataG
             </div>
             <div data-scroll='vertical'
                  onClick={e => this.onClickScrollTrack( e, 'vertical' )}>
-              <div className={classNames( 'axd-scroll-bar' )}
+              <div className={cx( 'axd-scroll-bar' )}
                    style={verticalBarStyles}
                    onMouseDown={e => onMouseDownScrollBar( e, 'vertical' )} />
             </div>
@@ -147,7 +132,7 @@ export class GridScroll extends React.Component<iAXDataGridScrollProps, iAXDataG
             </div>
             <div data-scroll='horizontal'
                  onClick={e => this.onClickScrollTrack( e, 'horizontal' )}>
-              <div className={classNames( 'axd-scroll-bar' )}
+              <div className={cx( 'axd-scroll-bar' )}
                    style={horizontalBarStyles}
                    onMouseDown={( e ) => onMouseDownScrollBar( e, 'horizontal' )} />
             </div>

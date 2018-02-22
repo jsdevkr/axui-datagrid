@@ -3,11 +3,7 @@
 // 필요한 모듈선언
 const gulp = require( 'gulp' );
 const sass = require( 'gulp-sass' );
-const babel = require( 'gulp-babel' );
 const shell = require( 'gulp-shell' );
-const uglify = require( 'gulp-uglify' );
-const rename = require( 'gulp-rename' );
-const exec = require( 'gulp-exec' );
 const plumber = require( 'gulp-plumber' );
 const notify = require( "gulp-notify" );
 

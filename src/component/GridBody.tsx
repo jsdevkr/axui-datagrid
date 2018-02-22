@@ -62,6 +62,7 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
 
     const { bodyHeight, bodyTrHeight, asidePanelWidth, frozenPanelWidth, frozenPanelHeight, rightPanelWidth, footSumHeight } = styles;
     const { frozenRowIndex } = options;
+    const sRowIndex = Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex;
 
     let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx - styles.frozenPanelWidth : 0;
     let topBodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
@@ -71,8 +72,8 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
     };
     let bodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
       frozenRowIndex: frozenRowIndex,
-      sRowIndex: Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex,
-      eRowIndex: (Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex) + Math.ceil( bodyHeight / bodyTrHeight ) + 1
+      sRowIndex: sRowIndex,
+      eRowIndex: sRowIndex + Math.ceil( bodyHeight / bodyTrHeight ) + 1
     };
     let topAsideBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: 0,

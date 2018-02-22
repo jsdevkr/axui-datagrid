@@ -32,7 +32,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'awesome-typescript-loader',
         options: {
-          useBabel: true,
+          useBabel: true
         }
       },
       {
@@ -92,12 +92,13 @@ module.exports = {
   // For development https://webpack.js.org/configuration/devtool/#for-development
   devtool: 'eval',
   devServer: {
+    host: '0.0.0.0',
     port: 4000,
     noInfo: true,
     hot: true,
     historyApiFallback: {
       rewrites: [
-        {from: /.*/, to: '/'}
+        {from: /./, to: '/'}
       ]
     }
   },

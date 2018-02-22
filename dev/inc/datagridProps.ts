@@ -17,7 +17,7 @@ interface iDatagridProps {
   [propName: string]: any
 }
 
-let datagridProps: [ iDatagridProps ] = [
+let datagridProps: iDatagridProps[] = [
   {
     name: 'height',
     defaultValue: '\'300px\'',

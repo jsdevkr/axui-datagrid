@@ -130,4 +130,6 @@ interface iAXDataGridProps {
   columns: iAXDataGridColumns[];
   data: any;
   options: iAXDataGridOption;
+  onBeforeEvent?: Function;
+  onAfterEvent?: Function;
 }

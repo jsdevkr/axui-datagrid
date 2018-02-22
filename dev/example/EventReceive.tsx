@@ -37,11 +37,18 @@ export class EventReceive extends React.Component<any, any> {
         header: {
           align: 'center'
         }
-      }
+      },
+      eventLog: []
     }
   }
 
-  public render() {
+  private receiveEvent(eventName){
+    this.setState({
+      eventLog: [eventName].concat(this.state.eventLog)
+    });
+  }
+
+  render() {
     return (
       <Container>
         <Segment basic padded>
@@ -58,19 +65,12 @@ export class EventReceive extends React.Component<any, any> {
             columns={this.state.columns}
             data={this.state.data}
             options={this.state.options}
+            onBeforeEvent={( e, eventName ) => {
+              this.receiveEvent(eventName);
+            }}
           />
 
-          <p>
-            onClick
-            onMouseDown
-            onMouseUp
-            onKeyDown
-            onKeyUp
-            onFocus
-            onBlur
-            onChange
-            onChangeFocus
-          </p>
+          <textarea style={{width:'100%', height:'400px'}} value={this.state.eventLog.join('\n')}></textarea>
 
         </Segment>
       </Container>

@@ -80,10 +80,6 @@ export class GridHeader extends React.Component<iAXDataGridHeaderProps, iAXDataG
     document.addEventListener( 'mouseleave', offEvent );
   }
 
-  private printHeader( _panelName: string, _colGroup: any, _bodyRow: any, _style: object ) {
-
-  }
-
   public render() {
 
     const {

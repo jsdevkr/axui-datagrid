@@ -1019,8 +1019,8 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
     else {
       this.onKeyAction( e.which );
-      
-      if(!this.state.isInlineEditing) {
+
+      if ( !this.state.isInlineEditing ) {
         e.preventDefault();
         e.stopPropagation();
       }
@@ -1188,18 +1188,40 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
   }
 
   private onFireEvent( eventName: string, e ) {
+    const that = {};
     const processor = {
       'wheel': () => {
         this.onWheel( e );
       },
       'keydown': () => {
         this.onKeyPress( e );
+      },
+      'keyup': () => {
+
+      },
+      'mousedown': () => {
+
+      },
+      'mouseup': () => {
+
+      },
+      'click': () => {
+
       }
     };
+
+    if ( this.props.onBeforeEvent ) {
+      this.props.onBeforeEvent( e, eventName, that );
+    }
 
     if ( eventName in processor ) {
       processor[ eventName ]();
     }
+
+    if ( this.props.onAfterEvent ) {
+      this.props.onAfterEvent( e, eventName, that );
+    }
+
   }
 
   render() {
@@ -1216,8 +1238,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     let _headerColGroup = headerColGroup;
     let _bodyRowData = this.state.bodyRowData;
     let _bodyGroupingData = this.state.bodyGroupingData;
-    let scrollBarLeft = 0;
-    let scrollBarTop = 0;
+    let scrollBarLeft: number = 0;
+    let scrollBarTop: number = 0;
+    let viewSX: number = _scrollLeft + styles.frozenPanelWidth;
+    let viewEX: number = _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth;
 
     if ( styles.calculatedHeight !== null ) {
       gridRootStyle.height = styles.calculatedHeight;
@@ -1228,10 +1252,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
     if ( mounted ) {
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= viewSX && headerColGroup[ ci ]._ex >= viewSX ) {
           sColIndex = ci;
         }
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= viewEX && headerColGroup[ ci ]._ex >= viewEX ) {
           eColIndex = ci;
           break;
         }

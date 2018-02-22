@@ -47,6 +47,7 @@ export class Formatter extends React.Component<any, any> {
     ];
 
     this.state = {
+      height: '400px',
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
         { key: 'title', width: 200, label: 'Title', formatter: 'MY_FORMATTER'},
@@ -67,7 +68,7 @@ export class Formatter extends React.Component<any, any> {
 
         <Segment basic padded>
           <p>
-            Formatter에 대한 간단 설명글 작성
+            Formatter를 이용하면 셀에 서식을 적용하거나 수식을 적용하여 값을 표현할 수 있습니다.
           </p>
           <AXDatagrid
             height={this.state.height}

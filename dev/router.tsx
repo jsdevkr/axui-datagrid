@@ -6,8 +6,6 @@ import style from './Style';
 import { ExampleRoot, SideNav } from './components'
 import { Introduction, Props, Usage } from './pages';
 
-
-
 const RedirectToIntro = () => <Redirect to='/introduction' />
 
 class AppRouter extends React.Component<any, any> {

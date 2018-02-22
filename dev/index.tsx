@@ -5,6 +5,6 @@ import './scss/index.css';
 import 'datagrid-ts/scss/index.css';
 
 ReactDOM.render(
-    <AppRouter />,
+    <AppRouter warnings={false} />,
     document.getElementById('root')
 );
