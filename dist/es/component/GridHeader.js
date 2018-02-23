@@ -63,8 +63,6 @@ export class GridHeader extends React.Component {
         document.addEventListener('mouseup', offEvent);
         document.addEventListener('mouseleave', offEvent);
     }
-    printHeader(_panelName, _colGroup, _bodyRow, _style) {
-    }
     render() {
         const { mounted, optionsHeader, styles, frozenColumnIndex, colGroup, asideColGroup, leftHeaderColGroup, headerColGroup, asideHeaderData, leftHeaderData, headerData, scrollLeft } = this.props;
         if (!mounted)

@@ -219,12 +219,14 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     if ( this.props.data !== nextProps.data ) {
       return false;
     }
+
     if (
       this.props.store_list !== nextProps.store_list ||
       this.props.store_deletedList !== nextProps.store_deletedList ||
       this.props.store_page !== nextProps.store_page ||
       this.props.store_sortInfo !== nextProps.store_sortInfo ||
-      this.props.store_filterInfo !== nextProps.store_filterInfo
+      this.props.store_filterInfo !== nextProps.store_filterInfo ||
+      this.props.height !== nextProps.height
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
       const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );

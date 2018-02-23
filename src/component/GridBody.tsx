@@ -8,31 +8,6 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
     super( props );
   }
 
-  public shouldComponentUpdate( nextProps, nextState ) {
-    let sameProps = false;
-
-    if (
-      this.props.mounted !== nextProps.mounted ||
-      this.props.options !== nextProps.options ||
-      this.props.CTInnerWidth !== nextProps.CTInnerWidth ||
-      this.props.CTInnerHeight !== nextProps.CTInnerHeight ||
-      this.props.colGroup !== nextProps.colGroup ||
-      this.props.list !== nextProps.list ||
-      this.props.scrollLeft !== nextProps.scrollLeft ||
-      this.props.scrollTop !== nextProps.scrollTop ||
-      this.props.selectionRows !== nextProps.selectionRows ||
-      this.props.selectionCols !== nextProps.selectionCols ||
-      this.props.focusedRow !== nextProps.focusedRow ||
-      this.props.focusedCol !== nextProps.focusedCol ||
-      this.props.isInlineEditing !== nextProps.isInlineEditing ||
-      this.props.inlineEditingCell !== nextProps.inlineEditingCell
-    ) {
-      sameProps = true;
-    }
-
-    return sameProps;
-  }
-
   public render() {
     const {
             mounted,

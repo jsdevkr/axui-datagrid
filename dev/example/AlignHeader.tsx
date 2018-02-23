@@ -73,7 +73,7 @@ export class AlignHeader extends React.Component<any, any> {
 
   }
 
-  public render() {
+  render() {
     return (
       <Container>
         <Segment basic padded>

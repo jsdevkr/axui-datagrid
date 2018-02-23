@@ -168,7 +168,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     this.onFireEvent = this.onFireEvent.bind( this );
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     this.gridRootNode = ReactDOM.findDOMNode( this.refs.gridRoot );
 
     this.throttled_updateDimensions = throttle( this.updateDimensions.bind( this ), 100 );
@@ -179,11 +179,11 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     } );
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     window.removeEventListener( 'resize', this.throttled_updateDimensions );
   }
 
-  public componentWillReceiveProps( nextProps ) {
+  componentWillReceiveProps( nextProps ) {
     // 변경된 props를 받게 되면
     // 데이터 체인지
     if ( this.props.data !== nextProps.data ) {
@@ -215,16 +215,18 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  public shouldComponentUpdate( nextProps, nextState ) {
+  shouldComponentUpdate( nextProps, nextState ) {
     if ( this.props.data !== nextProps.data ) {
       return false;
     }
+
     if (
       this.props.store_list !== nextProps.store_list ||
       this.props.store_deletedList !== nextProps.store_deletedList ||
       this.props.store_page !== nextProps.store_page ||
       this.props.store_sortInfo !== nextProps.store_sortInfo ||
-      this.props.store_filterInfo !== nextProps.store_filterInfo
+      this.props.store_filterInfo !== nextProps.store_filterInfo ||
+      this.props.height !== nextProps.height
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
       const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );
@@ -239,13 +241,13 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     return true;
   }
 
-  public componentWillUpdate( nextProps ) {
+  componentWillUpdate( nextProps ) {
     // console.log(this.state.sColIndex);
     // shouldComponentUpdate에더 랜더를 방지 하거나. willUpdate에서 this.state.styles값 강제 변경 테스트.
 
   }
 
-  public componentDidUpdate( prevProps, prevState ) {
+  componentDidUpdate( prevProps, prevState ) {
     // change props and render
     if ( prevProps.height !== this.props.height ) {
       this.updateDimensions();
@@ -1020,8 +1022,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     else {
       this.onKeyAction( e.which );
 
-      e.preventDefault();
-      e.stopPropagation();
+      if ( !this.state.isInlineEditing ) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
   }
 
@@ -1170,14 +1174,14 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     const proc = {
       'cancel': () => {
         this.setState( {
-          isInlineEditing: true,
+          isInlineEditing: false,
           inlineEditingCell: {}
         } );
       },
       'update': () => {
         this.props.update( this.state.colGroup, this.state.options, row, col, value );
         this.setState( {
-          isInlineEditing: true,
+          isInlineEditing: false,
           inlineEditingCell: {}
         } );
       }
@@ -1186,21 +1190,43 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
   }
 
   private onFireEvent( eventName: string, e ) {
+    const that = {};
     const processor = {
       'wheel': () => {
         this.onWheel( e );
       },
       'keydown': () => {
         this.onKeyPress( e );
+      },
+      'keyup': () => {
+
+      },
+      'mousedown': () => {
+
+      },
+      'mouseup': () => {
+
+      },
+      'click': () => {
+
       }
     };
+
+    if ( this.props.onBeforeEvent ) {
+      this.props.onBeforeEvent( e, eventName, that );
+    }
 
     if ( eventName in processor ) {
       processor[ eventName ]();
     }
+
+    if ( this.props.onAfterEvent ) {
+      this.props.onAfterEvent( e, eventName, that );
+    }
+
   }
 
-  public render() {
+  render() {
     const styles = this.state.styles;
     const options = this.state.options;
     const mounted = this.state.mounted;
@@ -1214,8 +1240,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     let _headerColGroup = headerColGroup;
     let _bodyRowData = this.state.bodyRowData;
     let _bodyGroupingData = this.state.bodyGroupingData;
-    let scrollBarLeft = 0;
-    let scrollBarTop = 0;
+    let scrollBarLeft: number = 0;
+    let scrollBarTop: number = 0;
+    let viewSX: number = _scrollLeft + styles.frozenPanelWidth;
+    let viewEX: number = _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth;
 
     if ( styles.calculatedHeight !== null ) {
       gridRootStyle.height = styles.calculatedHeight;
@@ -1226,10 +1254,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
     if ( mounted ) {
       for ( let ci = 0, cl = headerColGroup.length; ci < cl; ci++ ) {
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= viewSX && headerColGroup[ ci ]._ex >= viewSX ) {
           sColIndex = ci;
         }
-        if ( headerColGroup[ ci ]._sx <= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth && headerColGroup[ ci ]._ex >= _scrollLeft + styles.frozenPanelWidth + bodyPanelWidth ) {
+        if ( headerColGroup[ ci ]._sx <= viewEX && headerColGroup[ ci ]._ex >= viewEX ) {
           eColIndex = ci;
           break;
         }

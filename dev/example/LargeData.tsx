@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container, Segment, Divider, Button } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
 export class LargeData extends React.Component<any, any> {
@@ -36,7 +36,7 @@ export class LargeData extends React.Component<any, any> {
     }
 
     this.state = {
-      height: 400,
+      height: 300,
       columns: [
         {
           key: 'a',
@@ -46,13 +46,9 @@ export class LargeData extends React.Component<any, any> {
         },
         { key: 'b', label: '필드B', align: 'center' },
         { key: 'c', label: '필드C', align: 'center' },
-        {
-          label: '필드C', columns: [
-          { key: 'price', label: '단가', formatter: 'money', align: 'right' },
-          { key: 'amount', label: '수량', formatter: 'money', align: 'right' },
-          { key: 'cost', label: '금액', align: 'right', formatter: 'money' }
-        ]
-        },
+        { key: 'price', label: '단가', formatter: 'money', align: 'right' },
+        { key: 'amount', label: '수량', formatter: 'money', align: 'right' },
+        { key: 'cost', label: '금액', align: 'right', formatter: 'money' },
         { key: 'saleDt', label: '판매일자', align: 'center' },
         { key: 'customer', label: '고객명', align: 'center' },
         { key: 'saleType', label: '판매타입', align: 'center' }
@@ -69,7 +65,25 @@ export class LargeData extends React.Component<any, any> {
     }
   }
 
-  public render() {
+  public changeConfig( props, value ) {
+
+    const processor = {
+      'setHeight': function () {
+        this.setState( {
+          height: value
+        } );
+      }
+    };
+
+    if ( props in processor ) {
+      processor[ props ].call( this );
+    } else {
+      this.setState( value );
+    }
+
+  }
+
+  render() {
     return (
       <Container>
         <Segment basic padded>
@@ -89,6 +103,14 @@ export class LargeData extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
           />
+
+          <Divider />
+          <Button.Group basic size='tiny'>
+            <Button onClick={e => this.changeConfig( 'setHeight', 300 )} content='height : 300' />
+            <Button onClick={e => this.changeConfig( 'setHeight', 400 )} content='height : 400' />
+            <Button onClick={e => this.changeConfig( 'setHeight', 500 )} content='height : 500' />
+          </Button.Group>
+
         </Segment>
       </Container>
     )

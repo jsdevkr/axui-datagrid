@@ -7,12 +7,16 @@ import assignWith from 'lodash-es/assignWith';
  * @return {{rows: Array}}
  */
 export function makeHeaderTable(_columns, _options) {
-    let columns = fromJS(_columns).toJS(), table = {
+    const columns = fromJS(_columns).toJS();
+    let table = {
         rows: []
-    }, colIndex = 0;
-    const maekRows = function (_columns, depth, parentField) {
+    };
+    let colIndex = 0;
+    function maekRows(_columns, depth, parentField) {
         let row = { cols: [] };
-        let i = 0, l = _columns.length, colspan = 1;
+        let i = 0;
+        let l = _columns.length;
+        let colspan = 1;
         for (; i < l; i++) {
             let field = _columns[i];
             colspan = 1;
@@ -49,16 +53,16 @@ export function makeHeaderTable(_columns, _options) {
         else {
             return colspan;
         }
-    };
-    maekRows(columns, 0, undefined);
-    // set rowspan
-    for (let r = 0, rl = table.rows.length; r < rl; r++) {
-        for (let c = 0, cl = table.rows[r].cols.length; c < cl; c++) {
-            if (!('columns' in table.rows[r].cols[c])) {
-                table.rows[r].cols[c].rowspan = rl - r;
-            }
-        }
     }
+    maekRows(columns, 0);
+    // set rowspan
+    table.rows.forEach((row, ri) => {
+        row.cols.forEach((col) => {
+            if (!('columns' in col)) {
+                col.rowspan = table.rows.length - ri;
+            }
+        });
+    });
     return table;
 }
 /**
@@ -68,7 +72,7 @@ export function makeHeaderTable(_columns, _options) {
  * @return {{rows: Array}}
  */
 export function makeBodyRowTable(_columns, _options) {
-    let columns = fromJS(_columns).toJS();
+    const columns = fromJS(_columns).toJS();
     let table = {
         rows: []
     };
@@ -161,17 +165,13 @@ export function makeBodyRowTable(_columns, _options) {
     };
     maekRows(columns, 0);
     // set rowspan
-    for (let r = 0, rl = table.rows.length; r < rl; r++) {
-        let row = table.rows[r];
-        for (let c = 0, cl = row.cols.length; c < cl; c++) {
-            let col = row.cols[c];
+    table.rows.forEach((row, ri) => {
+        row.cols.forEach((col) => {
             if (!('columns' in col)) {
-                col.rowspan = rl - r;
+                col.rowspan = table.rows.length - ri;
             }
-            col = null;
-        }
-        row = null;
-    }
+        });
+    });
     return table;
 }
 /**
@@ -281,7 +281,7 @@ export function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
         addC += colspan;
     }
     if (addC < colGroup.length) {
-        for (var c = addC; c < colGroup.length; c++) {
+        for (let c = addC; c < colGroup.length; c++) {
             table.rows[r].cols.push({
                 rowIndex: 0,
                 colIndex: (c),

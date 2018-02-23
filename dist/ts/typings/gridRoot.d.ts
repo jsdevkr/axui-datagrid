@@ -16,6 +16,8 @@ interface iAXDataGridRootProps {
   sort: Function;
   filter: Function;
   update: Function;
+  onBeforeEvent?: Function;
+  onAfterEvent?: Function;
 }
 
 interface iAXDataGridRootState {

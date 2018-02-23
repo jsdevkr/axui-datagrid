@@ -25,6 +25,7 @@ export class InlineEdit extends React.Component<any, any> {
     ];
 
     this.state = {
+      height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
         { key: 'title', width: 200, label: 'Title', editor: { type: 'text' } },
@@ -42,6 +43,7 @@ export class InlineEdit extends React.Component<any, any> {
   }
 
   public render() {
+
     return (
       <Container>
         <Segment basic padded>

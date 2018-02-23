@@ -56,6 +56,7 @@ export class EventReceive extends React.Component<any, any> {
         </Segment>
 
         <Segment basic padded>
+
           <p>
             Event
           </p>
@@ -70,7 +71,9 @@ export class EventReceive extends React.Component<any, any> {
             }}
           />
 
-          <textarea style={{width:'100%', height:'400px'}} value={this.state.eventLog.join('\n')}></textarea>
+          <textarea
+            style={{width:'100%', height:'400px'}}
+            value={this.state.eventLog.join('\n')} />
 
         </Segment>
       </Container>

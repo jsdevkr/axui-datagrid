@@ -1,6 +1,6 @@
 {
   "name": "datagrid-es",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "React DataGrid - UI components that display data in table format (for React)",
   "main": "index.js",
   "repository": "https://github.com/axui/datagrid",

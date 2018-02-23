@@ -8,31 +8,6 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
     super( props );
   }
 
-  public shouldComponentUpdate( nextProps, nextState ) {
-    let sameProps = false;
-
-    if (
-      this.props.mounted !== nextProps.mounted ||
-      this.props.options !== nextProps.options ||
-      this.props.CTInnerWidth !== nextProps.CTInnerWidth ||
-      this.props.CTInnerHeight !== nextProps.CTInnerHeight ||
-      this.props.colGroup !== nextProps.colGroup ||
-      this.props.list !== nextProps.list ||
-      this.props.scrollLeft !== nextProps.scrollLeft ||
-      this.props.scrollTop !== nextProps.scrollTop ||
-      this.props.selectionRows !== nextProps.selectionRows ||
-      this.props.selectionCols !== nextProps.selectionCols ||
-      this.props.focusedRow !== nextProps.focusedRow ||
-      this.props.focusedCol !== nextProps.focusedCol ||
-      this.props.isInlineEditing !== nextProps.isInlineEditing ||
-      this.props.inlineEditingCell !== nextProps.inlineEditingCell
-    ) {
-      sameProps = true;
-    }
-
-    return sameProps;
-  }
-
   public render() {
     const {
             mounted,
@@ -62,6 +37,7 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
 
     const { bodyHeight, bodyTrHeight, asidePanelWidth, frozenPanelWidth, frozenPanelHeight, rightPanelWidth, footSumHeight } = styles;
     const { frozenRowIndex } = options;
+    const sRowIndex = Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex;
 
     let scrollPaddingLeft = (headerColGroup[ 0 ]) ? headerColGroup[ 0 ]._sx - styles.frozenPanelWidth : 0;
     let topBodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
@@ -71,8 +47,8 @@ export class GridBody extends React.Component<iAXDataGridBodyProps, iAXDataGridB
     };
     let bodyScrollConfig: iAXDataGridBodyPanelScrollConfig = {
       frozenRowIndex: frozenRowIndex,
-      sRowIndex: Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex,
-      eRowIndex: (Math.floor( -scrollTop / bodyTrHeight ) + frozenRowIndex) + Math.ceil( bodyHeight / bodyTrHeight ) + 1
+      sRowIndex: sRowIndex,
+      eRowIndex: sRowIndex + Math.ceil( bodyHeight / bodyTrHeight ) + 1
     };
     let topAsideBodyPanelStyle: iAXDataGridBodyPanelStyle = {
       left: 0,
