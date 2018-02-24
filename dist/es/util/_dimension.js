@@ -78,11 +78,13 @@ export function setColGroupWidth(_colGroup, container, options) {
 }
 /**
  *
+ * @param containerDOM
+ * @param storeState
  * @param state
- * @param action
- * @param [options=state.get('options').toJS()]
- * @param [styles=state.get('styles').toJS()]
- * @return {{styles: (any | *)}}
+ * @param {any} colGroup
+ * @param {any} options
+ * @param {any} styles
+ * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
  */
 export function calculateDimensions(containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = Map(state.styles).toJS()) {
     let list = storeState.list;

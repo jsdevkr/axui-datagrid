@@ -50,3 +50,9 @@ export function getMousePosition(e) {
         y: mouseObj.clientY
     };
 }
+export function cssNumber(val) {
+    const re = /\D?(\d+)([a-zA-Z%]*)/i;
+    const found = ('' + val).match(re);
+    const unit = found[2] || 'px';
+    return found[1] + unit;
+}
