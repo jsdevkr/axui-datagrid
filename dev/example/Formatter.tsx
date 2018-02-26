@@ -64,11 +64,8 @@ export class Formatter extends React.Component<any, any> {
       <Container>
         <Segment basic padded>
           <h1>Formatter</h1>
-        </Segment>
-
-        <Segment basic padded>
           <p>
-            Formatter를 이용하면 셀에 서식을 적용하거나 수식을 적용하여 값을 표현할 수 있습니다.
+            내장된 'date', 'money' formatter 외에도 datagrid의 static 함수인 setFormatter 함수를 이용하여 사용자 formatter를 만들 수 있습니다.
           </p>
           <AXDatagrid
             height={this.state.height}

@@ -78,9 +78,6 @@ export class AlignHeader extends React.Component<any, any> {
       <Container>
         <Segment basic padded>
           <h1>AlignHeader</h1>
-        </Segment>
-
-        <Segment basic padded>
           <AXDatagrid
             height={this.state.height}
             style={{ fontSize: '12px' }}

@@ -49,9 +49,6 @@ export class MultiColumnHeader extends React.Component<any, any> {
       <Container>
         <Segment basic padded>
           <h1>Multi Column Header</h1>
-        </Segment>
-
-        <Segment basic padded>
           <p>
 
           </p>

@@ -61,11 +61,8 @@ export class DisabledVerticalScroll extends React.Component<any, any> {
       <Container>
         <Segment basic padded>
           <h1>DisabledVerticalScroll</h1>
-        </Segment>
-
-        <Segment basic padded>
           <p>
-            세로스크롤을 사용하지 않습니다.
+            options.disabledVerticalScroll를 true로 설정하면 데이터 그리드의 바디 영역의 스크롤 없이 처리합니다.
           </p>
           <AXDatagrid
             height={this.state.height}

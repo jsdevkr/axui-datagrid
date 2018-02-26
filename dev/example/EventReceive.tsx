@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Segment } from 'semantic-ui-react';
+import { Container, Segment, Divider } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
 export class EventReceive extends React.Component<any, any> {
@@ -53,12 +53,8 @@ export class EventReceive extends React.Component<any, any> {
       <Container>
         <Segment basic padded>
           <h1>Event</h1>
-        </Segment>
-
-        <Segment basic padded>
-
           <p>
-            Event
+            onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의 이벤트가 발생될때 callback을 받을 수 있습니다.
           </p>
           <AXDatagrid
             height={this.state.height}
@@ -70,7 +66,7 @@ export class EventReceive extends React.Component<any, any> {
               this.receiveEvent(eventName);
             }}
           />
-
+          <Divider />
           <textarea
             style={{width:'100%', height:'400px'}}
             value={this.state.eventLog.join('\n')} />

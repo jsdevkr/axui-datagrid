@@ -7,8 +7,8 @@
 # Install
 
 ```
-npm install ax-datagrid-es -S
+npm install datagrid-es -S
 ```
 ```
-npm install ax-datagrid-ts -S
+npm install datagrid-ts -S
 ```
