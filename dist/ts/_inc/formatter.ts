@@ -1,4 +1,4 @@
-import { cdate } from '../util';
+import {printDate} from 'print-date';
 
 /**
  *
@@ -29,7 +29,7 @@ export function money( data: iAXDataGridFormatterData ): string {
  * @return {string}
  */
 export function date( data: iAXDataGridFormatterData ): string {
-  return cdate( data.value, { 'return': 'yyyy-MM-dd' } );
+  return printDate( data.value, 'yyyy-MM-dd' );
 }
 
 /**
@@ -38,7 +38,7 @@ export function date( data: iAXDataGridFormatterData ): string {
  * @return {string}
  */
 export function datetime( data: iAXDataGridFormatterData ): string {
-  return cdate( data.value, { 'return': 'yyyy-MM-dd hh:mm:ss' } );
+  return printDate( data.value, 'yyyy-MM-dd hh:mm:ss' );
 }
 
 /**
@@ -46,6 +46,6 @@ export function datetime( data: iAXDataGridFormatterData ): string {
  */
 export function getAll() {
   return {
-    money, date
+    money, date, datetime
   }
 }

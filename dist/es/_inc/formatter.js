@@ -1,4 +1,4 @@
-import { cdate } from '../util';
+import { printDate } from 'print-date';
 /**
  *
  * @param {iFormatterData} data
@@ -23,7 +23,7 @@ export function money(data) {
  * @return {string}
  */
 export function date(data) {
-    return cdate(data.value, { 'return': 'yyyy-MM-dd' });
+    return printDate(data.value, 'yyyy-MM-dd');
 }
 /**
  *
@@ -31,13 +31,13 @@ export function date(data) {
  * @return {string}
  */
 export function datetime(data) {
-    return cdate(data.value, { 'return': 'yyyy-MM-dd hh:mm:ss' });
+    return printDate(data.value, 'yyyy-MM-dd hh:mm:ss');
 }
 /**
  *
  */
 export function getAll() {
     return {
-        money, date
+        money, date, datetime
     };
 }
