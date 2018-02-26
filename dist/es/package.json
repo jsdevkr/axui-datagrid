@@ -1,6 +1,6 @@
 {
   "name": "datagrid-es",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "React DataGrid - UI components that display data in table format (for React)",
   "main": "index.js",
   "repository": "https://github.com/axui/datagrid",
@@ -11,14 +11,10 @@
     "react": "^16.2.0",
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6"
+    "react-redux": "^5.0.6",
+    "print-date": "0.0.4"
   },
   "devDependencies": {
-    "@types/react": "^16.0.24",
-    "@types/react-dom": "^16.0.3",
-    "@types/react-redux": "^5.0.13",
-    "@types/react-router": "^4.0.17",
-    "@types/react-router-dom": "^4.2.1",
     "awesome-typescript-loader": "^3.3.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
@@ -68,10 +64,7 @@
     "webpack-dev-server": "^2.9.4",
     "webpack-merge": "^4.1.1"
   },
-  "scripts": {
-    "webpack": "webpack --progress --colors",
-    "start": "webpack-dev-server --env=d"
-  },
+  "scripts": {},
   "author": "tom@axisj.com",
   "license": "MIT",
   "pre-push": []
