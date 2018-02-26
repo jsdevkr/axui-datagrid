@@ -7,11 +7,24 @@ export class SideNav extends React.Component<any, any> {
   constructor( props ) {
     super( props );
 
+    this.state = {
+      exampleItems: [
+        { to: '/sample/LargeData', label: 'LargeData' },
+        { to: '/sample/Formatter', label: 'Formatting of data' },
+        { to: '/sample/FrozenColumnRow', label: 'Frozen column and row' },
+        { to: '/sample/MultiColumnHeader', label: 'Multi column header' },
+        { to: '/sample/InlineEdit', label: 'Inline edit' },
+        { to: '/sample/EventReceive', label: 'Event' },
+        { to: '/sample/DisabledVerticalScroll', label: 'DisabledVerticalScroll' },
+        { to: '/sample/AlignHeader', label: 'AlignHeader' }
+      ]
+    };
+
     this.handleItemClick = this.handleItemClick.bind( this );
   }
 
-  public componentWillUpdate() {
-    window.scrollTo( 0, 0 );
+  public componentWillUpdate( nextProps, nextState ) {
+
   }
 
   private handleItemClick() {
@@ -52,30 +65,13 @@ export class SideNav extends React.Component<any, any> {
         <Menu.Item>
           <Menu.Header>Example</Menu.Header>
           <Menu.Menu>
-            <Menu.Item as={NavLink} to='/sample/LargeData' activeClassName='active'>
-              LargeData
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/Formatter' activeClassName='active'>
-              Formatting of data
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/FrozenColumnRow' activeClassName='active'>
-              Frozen column and row
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/MultiColumnHeader' activeClassName='active'>
-              Multi column header
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/InlineEdit' activeClassName='active'>
-              Inline edit
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/EventReceive' activeClassName='active'>
-              Event
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/DisabledVerticalScroll' activeClassName='active'>
-              DisabledVerticalScroll
-            </Menu.Item>
-            <Menu.Item as={NavLink} to='/sample/AlignHeader' activeClassName='active'>
-              AlignHeader
-            </Menu.Item>
+
+            {this.state.exampleItems.map((item, i) => {
+              return <Menu.Item key={i} as={NavLink} to={item.to} activeClassName='active'>
+                {item.label}
+              </Menu.Item>
+            })}
+
           </Menu.Menu>
         </Menu.Item>
 

@@ -1,7 +1,8 @@
 import { hot } from 'react-hot-loader';
 import * as React from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
+import { withRouter } from 'react-router';
 
 import { ExampleRoot, SideNav } from './components'
 import { Introduction, Props, Usage } from './pages';
@@ -19,6 +20,12 @@ class AppRouter extends React.Component<any, any> {
     this.toggleVisibility = this.toggleVisibility.bind( this );
   }
 
+  componentDidUpdate( prevProps ) {
+    if ( this.props.location !== prevProps.location ) {
+      window.scrollTo( 0, 0 );
+    }
+  }
+
   private toggleVisibility() {
     this.setState( { visible: !this.state.visible } );
   }
@@ -28,27 +35,23 @@ class AppRouter extends React.Component<any, any> {
     const mainStyle = style.main;
 
     return (
-      <BrowserRouter>
+      <div style={style.container}>
+        <SideNav style={style.menu} />
+        <div style={mainStyle}>
 
-        <div style={style.container}>
-          <SideNav style={style.menu} />
-          <div style={mainStyle}>
+          <Switch>
+            <Route exact path='/' render={RedirectToIntro} />
+            <Route path='/introduction' component={Introduction} />
+            <Route path='/Usage' component={Usage} />
+            <Route path='/props' component={Props} />
+            <Route path='/sample/:name' component={ExampleRoot} />
+          </Switch>
 
-            <Switch>
-              <Route exact path='/' render={RedirectToIntro} />
-              <Route path='/introduction' component={Introduction} />
-              <Route path='/Usage' component={Usage} />
-              <Route path='/props' component={Props} />
-              <Route path='/sample/:name' component={ExampleRoot} />
-            </Switch>
-
-          </div>
         </div>
-
-      </BrowserRouter>
+      </div>
     );
   }
 }
 
 
-export default hot(module)(AppRouter);
+export default hot( module )( withRouter( AppRouter ) );
