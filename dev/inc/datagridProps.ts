@@ -89,7 +89,9 @@ let datagridProps: iDatagridProps[] = [
     type: 'object',
     description: '',
     required: false
-  }
+  },
+  {name: 'onBeforeEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false},
+  {name: 'onAfterEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false}
 ];
 
 //console.log(gridOptions);
