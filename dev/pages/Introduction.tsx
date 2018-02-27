@@ -20,16 +20,6 @@ export const Introduction = ( props ) => (
         'datagrid UI component'는 데이터를 스프레드시트 처럼 보여주는 UI를 말합니다. datagrid에 필요한 기능을 사용자가 원하는 데로 모두 만든다면 끝이 없겠지만
         대용량의 데이터를 빠른속도로 출력하고 컨트롤 하는 것과 완벽한 'React + ES6 + TS' 개발환경을 지원하는 것을 가장 중요한 가치로 생각하고 디자인 되었습니다.
       </p>
-
-      <Header as='h3' dividing>Main features</Header>
-      <List>
-        {features.map((f, fi) => {
-          return <List.Item key={fi} icon='check' content={f.title} />
-        })}
-      </List>
-      <p>
-        설치방법은 <Link to='/usage'>Usage</Link> 에서 참고하세요.
-      </p>
     </Segment>
 
     {features.map((f, fi) => {

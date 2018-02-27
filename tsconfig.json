@@ -12,7 +12,7 @@
     "baseUrl": "./",
     "paths": {
       "datagrid-ts/*": ["src/*"],
-      "@root/*": ["/*"]
+      "@root/*": ["./*"]
     },
     "typeRoots" : [
       "./node_modules/@types",

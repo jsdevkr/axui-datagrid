@@ -10,7 +10,7 @@ const expressingLargeAmountData= ( props ) => (
       또한 행뿐만아니라 열에 대해서도 보여지는 영역만 출력되므로 최소한의 DOM엘리먼트만 브라우저에 출력됩니다.
     </p>
     <p>
-      <Link to='/sample/LargeData'>대용량 데이터 샘플보기</Link>
+      <Link to='/sample/LargeData'>대용량 데이터 예제보기</Link>
     </p>
   </Segment>
 );

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Segment, Header } from 'semantic-ui-react';
-import { SourceCodeEditor } from '../../components/SourceCodeEditor';
+import { Header, Segment } from 'semantic-ui-react';
+import { SourceCodeEditor } from '@root/dev/components';
+import { Link } from 'react-router-dom';
 
-const formattingData= ( props ) => (
+const formattingData = ( props ) => (
   <Segment basic padded>
     <Header as='h2' dividing>Formatting of data</Header>
     <p>
@@ -10,7 +11,7 @@ const formattingData= ( props ) => (
     </p>
 
     <SourceCodeEditor>
-{`
+      {`
 AXDatagrid.setFormatter({
   MY_FORMATTER: function (data) {
     return 'MY_FORMATTER';
@@ -26,6 +27,10 @@ columns: [
 ]
 `}
     </SourceCodeEditor>
+
+    <p>
+      <Link to='/sample/Formatter'>Formatter 예제보기</Link>
+    </p>
   </Segment>
 );
 

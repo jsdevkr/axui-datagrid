@@ -52,7 +52,7 @@ gulp.task( 'scss-src', function () {
 
 
 // 걸프 기본 타스크
-gulp.task( 'default', [ 'scss-watch' ], function () {
+gulp.task( 'default', ['dev run!'], function () {
   return true;
 } );
 
@@ -87,6 +87,15 @@ gulp.task( 'ES npm publish patch', [ 'dist-ES' ], shell.task( [
 gulp.task( 'TS npm publish patch', [ 'dist-TS' ], shell.task( [
   'cd dist/ts && npm version patch -m "version patch" && npm publish'
 ] ) );
+
+gulp.task( 'ES npm publish minor', [ 'dist-ES' ], shell.task( [
+  'cd dist/es && npm version minor -m "version minor" && npm publish'
+] ) );
+
+gulp.task( 'TS npm publish minor', [ 'dist-TS' ], shell.task( [
+  'cd dist/ts && npm version minor -m "version minor" && npm publish'
+] ) );
+
 
 gulp.task( 'dev run!', [ 'scss-watch' ], shell.task( [
   'webpack-dev-server --hotOnly'
