@@ -9,7 +9,7 @@ export const Introduction = ( props ) => (
 
     <Segment textAlign={'center'} basic padded>
       <Image src={axuiLogo} size='small' centered />
-      <h1>AXUI datagrid</h1>
+      <h1>axui datagrid</h1>
     </Segment>
 
     <Segment basic padded>

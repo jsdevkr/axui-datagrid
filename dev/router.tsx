@@ -1,5 +1,5 @@
-import { hot } from 'react-hot-loader';
 import * as React from 'react';
+import { hot } from 'react-hot-loader';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
 import { withRouter } from 'react-router';
