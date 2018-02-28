@@ -1,4 +1,5 @@
 import * as React from 'react';
+import assign from 'lodash-es/assign';
 import { Container, Divider, Form, Segment, Select, Button } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
@@ -71,7 +72,7 @@ export class FrozenColumnRow extends React.Component<any, any> {
         } );
       },
       'setOptions': () => {
-        this.setState( { options: Object.assign( {}, this.state.options, value ) } );
+        this.setState( { options: assign( {}, this.state.options, value ) } );
       }
     };
 

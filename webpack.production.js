@@ -37,6 +37,14 @@ module.exports = {
         loader: 'awesome-typescript-loader',
         options: {
           useBabel: true,
+          babelOptions: {
+            babelrc: false, /* Important line */
+            presets: [ [ "env", {
+              "targets": {
+                "browsers": [ "last 2 versions", "> 1% in KR" ]
+              }
+            } ], "react", "stage-0" ]
+          }
         }
       },
       {

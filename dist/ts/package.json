@@ -12,7 +12,7 @@
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
-    "print-date": "0.0.4"
+    "print-date": "0.1.2"
   },
   "devDependencies": {
     "@types/react": "^16.0.24",
