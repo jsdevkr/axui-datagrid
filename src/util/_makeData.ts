@@ -14,7 +14,7 @@ export function makeHeaderTable( _columns, _options ) {
   };
   let colIndex = 0;
 
-  function maekRows( _columns: iAXDataGridColumns[], depth: number, parentField?: any ): number {
+  function makeRows( _columns: iAXDataGridColumns[], depth: number, parentField?: any ): number {
     let row = { cols: [] };
     let i = 0
     let l = _columns.length
@@ -39,7 +39,7 @@ export function makeHeaderTable( _columns, _options ) {
         })();
 
         if ( 'columns' in field ) {
-          colspan = maekRows( field.columns, depth + 1, field );
+          colspan = makeRows( field.columns, depth + 1, field );
         } else {
           field.width = ('width' in field) ? field.width : _options.columnMinWidth;
         }
@@ -60,7 +60,7 @@ export function makeHeaderTable( _columns, _options ) {
     }
   }
 
-  maekRows( columns, 0 );
+  makeRows( columns, 0 );
 
   // set rowspan
   table.rows.forEach( ( row, ri ) => {
@@ -87,7 +87,7 @@ export function makeBodyRowTable( _columns, _options ) {
   };
   let colIndex = 0;
 
-  const maekRows = function ( _columns: any, depth: number, parentField?: any ): number {
+  const makeRows = function ( _columns: any, depth: number, parentField?: any ): number {
     let row = { cols: [] };
     let i = 0;
     let l = _columns.length;
@@ -120,7 +120,7 @@ export function makeBodyRowTable( _columns, _options ) {
 
             row.cols.push( field );
             if ( 'columns' in field ) {
-              colspan = maekRows( field.columns, __depth + 1, field );
+              colspan = makeRows( field.columns, __depth + 1, field );
             }
             field.colspan = colspan;
           }
@@ -161,7 +161,7 @@ export function makeBodyRowTable( _columns, _options ) {
           row.cols.push( field );
 
           if ( 'columns' in field ) {
-            colspan = maekRows( field.columns, depth + 1, field );
+            colspan = makeRows( field.columns, depth + 1, field );
           }
           field.colspan = colspan;
 
@@ -190,7 +190,7 @@ export function makeBodyRowTable( _columns, _options ) {
     }
   };
 
-  maekRows( columns, 0 );
+  makeRows( columns, 0 );
 
   // set rowspan
   table.rows.forEach( ( row, ri ) => {
