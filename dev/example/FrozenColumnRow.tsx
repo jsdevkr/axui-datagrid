@@ -1,6 +1,6 @@
 import * as React from 'react';
 import assign from 'lodash-es/assign';
-import { Container, Divider, Form, Segment, Select, Button } from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Segment, Select } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
 export class FrozenColumnRow extends React.Component<any, any> {
@@ -87,7 +87,7 @@ export class FrozenColumnRow extends React.Component<any, any> {
     return (
       <Container>
         <Segment basic padded>
-          <h1>Frozen Column &amp; Row</h1>
+          <h1>Frozen Column {'&'} Row</h1>
           <p>
             options.frozenColumnIndex, options.frozenRowIndex를 정하면 그리드에 틀고정영역을 설정 할 수 있습니다.
           </p>
@@ -140,8 +140,6 @@ export class FrozenColumnRow extends React.Component<any, any> {
           </Button.Group>
 
         </Segment>
-
-
       </Container>
     )
   }

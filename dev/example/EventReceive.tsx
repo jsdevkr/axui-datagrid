@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Segment, Divider } from 'semantic-ui-react';
+import { Container, Divider, Segment } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
 export class EventReceive extends React.Component<any, any> {
@@ -42,10 +42,10 @@ export class EventReceive extends React.Component<any, any> {
     }
   }
 
-  private receiveEvent(eventName){
-    this.setState({
-      eventLog: [eventName].concat(this.state.eventLog)
-    });
+  private receiveEvent( eventName ) {
+    this.setState( {
+      eventLog: [ eventName ].concat( this.state.eventLog )
+    } );
   }
 
   render() {
@@ -63,13 +63,13 @@ export class EventReceive extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
             onBeforeEvent={( e, eventName ) => {
-              this.receiveEvent(eventName);
+              this.receiveEvent( eventName );
             }}
           />
           <Divider />
           <textarea
-            style={{width:'100%', height:'400px'}}
-            value={this.state.eventLog.join('\n')} />
+            style={{ width: '100%', height: '400px', padding: '10px' }}
+            value={this.state.eventLog.join( '\n' )} />
 
         </Segment>
       </Container>
