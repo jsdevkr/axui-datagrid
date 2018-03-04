@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import map from 'lodash-es/map';
 import { PropsTableRow } from './PropsTableRow';
 
-const PropsTable = ( { props } ) => (
+export const PropsTable = ( { props } ) => (
   <Table basic='very'>
     <Table.Header>
       <Table.Row>
@@ -18,5 +18,3 @@ const PropsTable = ( { props } ) => (
     </Table.Body>
   </Table>
 );
-
-export default PropsTable;

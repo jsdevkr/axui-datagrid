@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
 const basePath = __dirname;
 
@@ -40,7 +41,9 @@ module.exports = {
                 "browsers": [ "last 2 versions", "> 1% in KR" ]
               }
             } ], "react", "stage-0" ],
-            plugins: ["react-hot-loader/babel"]
+            plugins: [
+              "react-hot-loader/babel"
+            ]
           }
         }
       },
@@ -66,10 +69,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {loader: 'style-loader'},
-          {loader: 'css-loader'}
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -122,6 +125,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
+    new ExtractTextPlugin("styles.css"),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ]

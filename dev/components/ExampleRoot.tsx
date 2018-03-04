@@ -6,7 +6,7 @@ import { Container, Divider, Grid, Segment, Icon, Button } from 'semantic-ui-rea
 import pkg from '@root/package.json';
 
 
-const ExampleRoot = ( props ) => {
+export const ExampleRoot = ( props ) => {
   const name = get( props, 'match.params.name' );
   const Layout = Examples[ name ];
   const sourceCode = require( '!raw-loader!../example/' + name + '.tsx' );
@@ -33,6 +33,4 @@ const ExampleRoot = ( props ) => {
     </Container>
   </div>
 
-}
-
-export default ExampleRoot;
+};

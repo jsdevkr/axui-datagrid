@@ -1,4 +1,5 @@
 export * from './SideNav';
-export { default as ExampleRoot } from './ExampleRoot';
-export { default as PropsTable } from './PropsTable';
-export * from './SourceCodeEditor';
+export * from './ExampleRoot';
+export * from './PropsTable';
+export * from './SourceCodeEditor'
+export * from './Loading';
