@@ -2,20 +2,20 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CnameWebpackPlugin = require('cname-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 const basePath = __dirname;
 
 webpack.logLevel = 'NONE';
 
 const babelOptions = {
-  plugins: [ 'react-hot-loader/babel' ],
+  plugins: ['react-hot-loader/babel'],
   presets: [
     [
       'env',
       {
         targets: {
-          browsers: [ 'last 2 versions', '> 1% in KR' ],
+          browsers: ['last 2 versions', '> 1% in KR'],
         },
       },
     ],
@@ -31,21 +31,17 @@ module.exports = {
     modules: ['dev', 'node_modules'],
     alias: {
       'datagrid-ts': path.resolve(__dirname, 'src/'),
-      '@root': path.resolve(__dirname, '')
-    }
+      '@root': path.resolve(__dirname, ''),
+    },
   },
   entry: {
     app: './dev/index.tsx',
-    vendor: [
-      'react',
-      'react-dom',
-      'react-router',
-    ]
+    vendor: ['react', 'react-dom', 'react-router'],
   },
   output: {
     path: path.join(basePath, './docs'),
     filename: '[name].[hash].js',
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -57,7 +53,7 @@ module.exports = {
             loader: 'babel-loader',
             options: { ...babelOptions, cacheDirectory: true },
           },
-        ]
+        ],
       },
       {
         test: /\.tsx?$/,
@@ -73,75 +69,72 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          {loader: 'style-loader'},
+          { loader: 'style-loader' },
           {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: '[local]-[hash:base64:3]'
-            }
+              localIdentName: '[local]-[hash:base64:3]',
+            },
           },
           {
             loader: 'typed-css-modules-loader',
             options: {
-              camelCase: true
-            }
+              camelCase: true,
+            },
           },
-          {loader: 'sass-loader'}
-        ]
+          { loader: 'sass-loader' },
+        ],
       },
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader"
-        })
+          fallback: 'style-loader',
+          use: 'css-loader',
+        }),
       },
       {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
-            options: {}
-          }
-        ]
+            options: {},
+          },
+        ],
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream',
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
       },
     ],
   },
   plugins: [
-    new webpack.NormalModuleReplacementPlugin(
-      /^pages$/,
-      'pages/index.async',
-    ),
-    new ExtractTextPlugin("styles.css"),
+    new webpack.NormalModuleReplacementPlugin(/^pages$/, 'pages/index.async'),
+    new ExtractTextPlugin('styles.css'),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
-      debug: false
+      debug: false,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
       comments: false,
-      warnings: false
+      warnings: false,
     }),
     new CleanWebpackPlugin(['docs'], {
-      verbose:  true,
-      dry:      false
+      verbose: true,
+      dry: false,
     }),
     new CnameWebpackPlugin({
       domain: 'axui-datagrid.axisj.com',
@@ -151,7 +144,7 @@ module.exports = {
       filename: 'index.html', //Name of file in ./dist/
       template: './dev/index.html', //Name of template in ./src
       favicon: './dev/assets/favicon.ico',
-      hash: true
+      hash: true,
     }),
     new HtmlWebpackPlugin({
       chunks: [],
@@ -162,5 +155,5 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
-  ]
+  ],
 };

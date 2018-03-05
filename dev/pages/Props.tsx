@@ -4,7 +4,7 @@ import { PropsTable } from '../components'
 import { datagridProps } from '../inc/datagridProps'
 
 
-export const Props = (props) => (
+const Props = (props) => (
   <Container>
     <Segment basic padded>
       <Header as='h1'>Props</Header>

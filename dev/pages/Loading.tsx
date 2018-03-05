@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const Loading = ( { props } ) => (
+const Loading = ( { props } ) => (
   <div>Loading</div>
 );
 

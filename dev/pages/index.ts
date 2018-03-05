@@ -1,4 +1,4 @@
-export { Introduction } from './Introduction';
-export { Usage } from './Usage';
-export { Props } from './Props';
-export { ExampleRoot } from './ExampleRoot';
+export { default as Introduction } from './Introduction';
+export { default as Usage } from './Usage';
+export { default as Props } from './Props';
+export { default as ExampleRoot } from './ExampleRoot';
