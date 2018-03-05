@@ -44,7 +44,7 @@ export default function asyncRoute( getComponent ) {
     componentWillReceiveProps( nextProps ) {
       if ( isHMR() ) {
         // console.log( module );
-        console.log( 'this.loadComponent()', this.state.Component );
+        // console.log( 'this.loadComponent()', this.state.Component );
         this.loadComponent();
       }
     }
