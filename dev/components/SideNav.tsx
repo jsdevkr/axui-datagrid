@@ -79,3 +79,5 @@ export class SideNav extends React.Component<any, any> {
     )
   }
 }
+
+export default SideNav;

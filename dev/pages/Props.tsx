@@ -14,3 +14,5 @@ export const Props = (props) => (
     </Segment>
   </Container>
 );
+
+export default Props;

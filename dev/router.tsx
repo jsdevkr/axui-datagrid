@@ -3,47 +3,8 @@ import { hot } from 'react-hot-loader';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import style from './Style';
 import { withRouter } from 'react-router';
-import asyncRoute from './components/asyncRoute';
-
-const Introduction = asyncRoute(() => {
-  return new Promise(resolve => {
-    import('./pages/Introduction').then((c) => {
-      resolve(c.Introduction);
-    });
-  });
-});
-
-const Usage = asyncRoute(() => {
-  return new Promise(resolve => {
-    import('./pages/Usage').then((c) => {
-      resolve(c.Usage);
-    });
-  });
-});
-
-const Props = asyncRoute(() => {
-  return new Promise(resolve => {
-    import('./pages/Props').then((c) => {
-      resolve(c.Props);
-    });
-  });
-});
-
-const SideNav = asyncRoute(() => {
-  return new Promise(resolve => {
-    import('./components/SideNav').then((c) => {
-      resolve(c.SideNav);
-    });
-  });
-});
-
-const ExampleRoot = asyncRoute(() => {
-  return new Promise(resolve => {
-    import('./components/ExampleRoot').then((c) => {
-      resolve(c.ExampleRoot);
-    });
-  });
-});
+import { SideNav } from './components';
+import * as Pages from './pages';
 
 const RedirectToIntro = () => <Redirect to='/introduction' />;
 
@@ -79,10 +40,10 @@ class AppRouter extends React.Component<any, any> {
 
           <Switch>
             <Route exact path='/' render={RedirectToIntro} />
-            <Route path='/introduction' component={Introduction} />
-            <Route path='/Usage' component={Usage} />
-            <Route path='/props' component={Props} />
-            <Route path='/sample/:name' component={ExampleRoot} />
+            <Route exact path='/introduction' render={() => <Pages.Introduction />} />
+            <Route path='/Usage' render={() => <Pages.Usage />} />
+            <Route path='/props' render={() => <Pages.Props />} />
+            <Route path='/sample/:name' render={( p ) => <Pages.ExampleRoot {...p} />} />
           </Switch>
 
         </div>
@@ -90,6 +51,5 @@ class AppRouter extends React.Component<any, any> {
     );
   }
 }
-
 
 export default hot( module )( withRouter( AppRouter ) );

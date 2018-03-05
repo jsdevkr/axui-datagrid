@@ -62,3 +62,5 @@ export class Datagrid extends React.Component<any, any> {
     </Segment>
   </Container>
 );
+
+export default Usage;

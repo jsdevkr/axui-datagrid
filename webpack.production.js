@@ -39,13 +39,26 @@ module.exports = {
         options: {
           useBabel: true,
           babelOptions: {
-            babelrc: false, /* Important line */
+            babelrc: false,
             presets: [ [ "env", {
               "targets": {
                 "browsers": [ "last 2 versions", "> 1% in KR" ]
               }
             } ], "react", "stage-0" ]
           }
+        }
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          babelrc: false,
+          presets: [ [ "env", {
+            "targets": {
+              "browsers": [ "last 2 versions", "> 1% in KR" ]
+            }
+          } ], "react", "stage-0" ]
         }
       },
       {
@@ -103,6 +116,10 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /^\.\/pages$/,
+      '\.\/pages/index.async',
+    ),
     new ExtractTextPlugin("styles.css"),
     new webpack.LoaderOptionsPlugin({
       minimize: true,

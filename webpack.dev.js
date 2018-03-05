@@ -1,16 +1,16 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const webpack = require('webpack');
+const path = require( 'path' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+const webpack = require( 'webpack' );
 const basePath = __dirname;
 
 module.exports = {
-  context: path.join(basePath, '.'),
+  context: path.join( basePath, '.' ),
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: [ '.js', '.ts', '.tsx' ],
     alias: {
-      'datagrid-ts': path.resolve(__dirname, 'src/'),
-      '@root': path.resolve(__dirname, '')
+      'datagrid-ts': path.resolve( __dirname, 'src/' ),
+      '@root': path.resolve( __dirname, '' )
     }
   },
   entry: {
@@ -22,7 +22,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(basePath, './docs'),
+    path: path.join( basePath, './docs' ),
     filename: '[name].[hash].js',
     publicPath: '/'
   },
@@ -48,9 +48,25 @@ module.exports = {
         }
       },
       {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          babelrc: false, /* Important line */
+          presets: [ [ "env", {
+            "targets": {
+              "browsers": [ "last 2 versions", "> 1% in KR" ]
+            }
+          } ], "react", "stage-0" ],
+          plugins: [
+            "react-hot-loader/babel"
+          ]
+        }
+      },
+      {
         test: /\.scss$/,
         use: [
-          {loader: 'style-loader'},
+          { loader: 'style-loader' },
           {
             loader: 'css-loader',
             options: {
@@ -64,15 +80,15 @@ module.exports = {
               camelCase: true
             }
           },
-          {loader: 'sass-loader'}
+          { loader: 'sass-loader' }
         ]
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
+        use: ExtractTextPlugin.extract( {
           fallback: "style-loader",
           use: "css-loader"
-        })
+        } )
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -110,22 +126,26 @@ module.exports = {
     hot: true,
     historyApiFallback: {
       rewrites: [
-        {from: /./, to: '/'}
+        { from: /./, to: '/' }
       ]
     }
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /^\.\/pages$/,
+     '\.\/pages/index.async',
+    ),
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin( {
       filename: 'index.html', //Name of file in ./dist/
       template: './dev/index.html', //Name of template in ./src
       favicon: './dev/assets/favicon.ico',
       hash: true
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
-    }),
-    new ExtractTextPlugin("styles.css"),
+    } ),
+    new webpack.optimize.CommonsChunkPlugin( {
+      names: [ 'vendor', 'manifest' ],
+    } ),
+    new ExtractTextPlugin( "styles.css" ),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ]

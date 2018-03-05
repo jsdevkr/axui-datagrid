@@ -3,8 +3,7 @@ import get from 'lodash-es/get';
 import * as Examples from '../example';
 import { SourceCodeEditor } from '@root/dev/components';
 import { Container, Divider, Grid, Segment, Icon, Button } from 'semantic-ui-react';
-import pkg from '@root/package.json';
-
+import pkg from '@root/dist/ts/package.json';
 
 export const ExampleRoot = ( props ) => {
   const name = get( props, 'match.params.name' );
@@ -34,3 +33,5 @@ export const ExampleRoot = ( props ) => {
   </div>
 
 };
+
+export default ExampleRoot;

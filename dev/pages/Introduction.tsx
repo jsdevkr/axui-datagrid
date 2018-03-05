@@ -28,3 +28,5 @@ export const Introduction = ( props ) => (
 
   </Container>
 );
+
+export default Introduction;
