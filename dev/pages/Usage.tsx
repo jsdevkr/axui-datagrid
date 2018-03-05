@@ -1,20 +1,18 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Header, Segment, List } from 'semantic-ui-react';
-import pkg from '@root/package.json';
-import { SourceCodeEditor } from '@root/dev/components';
+import { Container, Header, Segment } from 'semantic-ui-react';
+import { SourceCodeEditor } from 'components';
 
-export const Usage = (props) => (
+export const Usage = ( props ) => (
   <Container>
     <Segment basic padded>
       <h1>Usage</h1>
 
       <Header as='h3' dividing>Install</Header>
       <Segment>
-        <pre>$ npm install {pkg.name}-es -S</pre>
+        <pre>$ npm install datagrid-es -S</pre>
       </Segment>
       <Segment>
-        <pre>$ npm install {pkg.name}-ts -S</pre>
+        <pre>$ npm install datagrid-ts -S</pre>
       </Segment>
 
       <Header as='h3' dividing>ES6 Import</Header>

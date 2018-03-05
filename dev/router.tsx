@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import style from './Style';
+import style from 'Style';
 import { withRouter } from 'react-router';
-import { SideNav } from './components';
-import * as Pages from './pages';
+import { SideNav } from 'components';
+import * as Pages from 'pages';
 
 const RedirectToIntro = () => <Redirect to='/introduction' />;
 

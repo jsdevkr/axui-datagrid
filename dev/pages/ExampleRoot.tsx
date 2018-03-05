@@ -1,7 +1,7 @@
 import * as React from 'react';
 import get from 'lodash-es/get';
 import * as Examples from '../example';
-import { SourceCodeEditor } from '@root/dev/components';
+import { SourceCodeEditor } from 'components';
 import { Container, Divider, Grid, Segment, Icon, Button } from 'semantic-ui-react';
 import pkg from '@root/dist/ts/package.json';
 

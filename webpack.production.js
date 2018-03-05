@@ -8,10 +8,27 @@ const basePath = __dirname;
 
 webpack.logLevel = 'NONE';
 
+const babelOptions = {
+  plugins: [ 'react-hot-loader/babel' ],
+  presets: [
+    [
+      'env',
+      {
+        targets: {
+          browsers: [ 'last 2 versions', '> 1% in KR' ],
+        },
+      },
+    ],
+    'react',
+    'stage-0',
+  ],
+};
+
 module.exports = {
   context: path.join(basePath, '.'),
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
+    modules: ['dev', 'node_modules'],
     alias: {
       'datagrid-ts': path.resolve(__dirname, 'src/'),
       '@root': path.resolve(__dirname, '')
@@ -33,33 +50,25 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loader: 'awesome-typescript-loader',
-        options: {
-          useBabel: true,
-          babelOptions: {
-            babelrc: false,
-            presets: [ [ "env", {
-              "targets": {
-                "browsers": [ "last 2 versions", "> 1% in KR" ]
-              }
-            } ], "react", "stage-0" ]
-          }
-        }
-      },
-      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          babelrc: false,
-          presets: [ [ "env", {
-            "targets": {
-              "browsers": [ "last 2 versions", "> 1% in KR" ]
-            }
-          } ], "react", "stage-0" ]
-        }
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { ...babelOptions, cacheDirectory: true },
+          },
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { ...babelOptions, cacheDirectory: true },
+          },
+          { loader: 'awesome-typescript-loader' },
+        ],
       },
       {
         test: /\.scss$/,

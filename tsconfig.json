@@ -3,7 +3,6 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "esModuleInterop": true,
     "declaration": false,
     "noImplicitAny": false,
     "sourceMap": true,
@@ -13,13 +12,16 @@
     "baseUrl": "./",
     "paths": {
       "datagrid-ts/*": ["src/*"],
-      "@root/*": ["./*"]
+      "@root/*": ["./*"],
+      "*": ["dev/*"]
     },
     "typeRoots" : [
       "./node_modules/@types",
       "./dev/typings",
       "./src/typings"
-    ]
+    ],
+    "lib": ["dom", "esnext"],
+    "esModuleInterop": true
   },
   "compileOnSave": false,
   "exclude": [

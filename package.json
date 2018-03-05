@@ -81,8 +81,9 @@
     "webpack-merge": "^4.1.2"
   },
   "scripts": {
-    "webpack": "webpack --progress --colors",
-    "start": "webpack-dev-server --env=d"
+    "webpack": "NODE_ENV=production webpack --progress --colors",
+    "start": "NODE_ENV=development webpack-dev-server --hotOnly",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
   },
   "author": "tom@axisj.com",
   "license": "MIT",

@@ -4,22 +4,34 @@ const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
 const webpack = require( 'webpack' );
 const basePath = __dirname;
 
+const babelOptions = {
+  plugins: [ 'react-hot-loader/babel' ],
+  presets: [
+    [
+      'env',
+      {
+        targets: {
+          browsers: [ 'last 2 versions', '> 1% in KR' ],
+        },
+      },
+    ],
+    'react',
+    'stage-0',
+  ],
+};
+
 module.exports = {
   context: path.join( basePath, '.' ),
   resolve: {
     extensions: [ '.js', '.ts', '.tsx' ],
+    modules: ['dev', 'node_modules'],
     alias: {
       'datagrid-ts': path.resolve( __dirname, 'src/' ),
       '@root': path.resolve( __dirname, '' )
     }
   },
   entry: {
-    app: './dev/index.tsx',
-    vendor: [
-      'react',
-      'react-dom',
-      'react-router',
-    ]
+    app: './dev/index.tsx'
   },
   output: {
     path: path.join( basePath, './docs' ),
@@ -29,39 +41,25 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loader: 'awesome-typescript-loader',
-        options: {
-          useBabel: true,
-          babelOptions: {
-            babelrc: false, /* Important line */
-            presets: [ [ "env", {
-              "targets": {
-                "browsers": [ "last 2 versions", "> 1% in KR" ]
-              }
-            } ], "react", "stage-0" ],
-            plugins: [
-              "react-hot-loader/babel"
-            ]
-          }
-        }
-      },
-      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          babelrc: false, /* Important line */
-          presets: [ [ "env", {
-            "targets": {
-              "browsers": [ "last 2 versions", "> 1% in KR" ]
-            }
-          } ], "react", "stage-0" ],
-          plugins: [
-            "react-hot-loader/babel"
-          ]
-        }
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { ...babelOptions, cacheDirectory: true },
+          },
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { ...babelOptions, cacheDirectory: true },
+          },
+          { loader: 'awesome-typescript-loader' },
+        ],
       },
       {
         test: /\.scss$/,
@@ -133,8 +131,13 @@ module.exports = {
   plugins: [
     new webpack.NormalModuleReplacementPlugin(
       /^\.\/pages$/,
-     '\.\/pages/index.async',
+      '\.\/pages/index.async',
     ),
+    // chunk
+    new webpack.optimize.CommonsChunkPlugin( {
+      name: 'vendor',
+      minChunks: ( { resource } ) => /node_modules/.test( resource ),
+    } ),
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin( {
       filename: 'index.html', //Name of file in ./dist/

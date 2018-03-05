@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Segment, Header } from 'semantic-ui-react';
-import { SourceCodeEditor } from '@root/dev/components';
+import { SourceCodeEditor } from 'components';
 import { Link } from 'react-router-dom';
 
 const multiColumnHeader= ( props ) => (

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Header, Image, List, Segment } from 'semantic-ui-react';
+import { Container, Image, Segment } from 'semantic-ui-react';
 import axuiLogo from '../assets/axui-logo.png';
-import {features} from './features';
+import { features } from './features';
 
 export const Introduction = ( props ) => (
   <Container>
@@ -22,9 +21,9 @@ export const Introduction = ( props ) => (
       </p>
     </Segment>
 
-    {features.map((f, fi) => {
+    {features.map( ( f, fi ) => {
       return <f.Component key={fi} />
-    })}
+    } )}
 
   </Container>
 );
