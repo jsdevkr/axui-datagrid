@@ -130,8 +130,8 @@ module.exports = {
   },
   plugins: [
     new webpack.NormalModuleReplacementPlugin(
-      /^\.\/pages$/,
-      '\.\/pages/index.async',
+      /^pages$/,
+      'pages/index.async',
     ),
     // chunk
     new webpack.optimize.CommonsChunkPlugin( {

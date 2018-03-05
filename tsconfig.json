@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "declaration": false,
     "noImplicitAny": false,
@@ -11,9 +11,9 @@
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": "./",
     "paths": {
-      "datagrid-ts/*": ["src/*"],
+      "datagrid-ts/*": ["./src/*"],
       "@root/*": ["./*"],
-      "*": ["dev/*"]
+      "*": ["./dev/*"]
     },
     "typeRoots" : [
       "./node_modules/@types",

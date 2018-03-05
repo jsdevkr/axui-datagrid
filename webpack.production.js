@@ -126,8 +126,8 @@ module.exports = {
   },
   plugins: [
     new webpack.NormalModuleReplacementPlugin(
-      /^\.\/pages$/,
-      '\.\/pages/index.async',
+      /^pages$/,
+      'pages/index.async',
     ),
     new ExtractTextPlugin("styles.css"),
     new webpack.LoaderOptionsPlugin({
