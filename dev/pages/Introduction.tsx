@@ -6,7 +6,7 @@ import { features } from './features';
 const Introduction = props => (
   <Container>
     <Segment textAlign={'center'} basic padded>
-      <Image src={axuiLogo} size='small' centered />
+      <Image src={axuiLogo} size="small" centered />
       <h1>axui datagrid</h1>
     </Segment>
 
@@ -24,9 +24,9 @@ const Introduction = props => (
       </p>
     </Segment>
 
-    {features.map( ( f, fi ) => {
+    {features.map((f, fi) => {
       return <f.Component key={fi} />;
-    } )}
+    })}
   </Container>
 );
 

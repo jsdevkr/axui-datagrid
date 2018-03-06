@@ -1,6 +1,5 @@
 {
-  "rules": {
-    "ter-indent": [true, 2],
-    "quotemark": [true, "single", "avoid-escape"]
-  }
+  "extends": [
+    "tslint-config-prettier"
+  ]
 }

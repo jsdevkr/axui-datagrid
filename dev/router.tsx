@@ -6,27 +6,27 @@ import { withRouter } from 'react-router';
 import { SideNav } from 'components';
 import * as Pages from 'pages';
 
-const RedirectToIntro = () => <Redirect to='/introduction' />;
+const RedirectToIntro = () => <Redirect to="/introduction" />;
 
 class AppRouter extends React.Component<any, any> {
-  constructor( props ) {
-    super( props );
+  constructor(props) {
+    super(props);
 
     this.state = {
-      visible: false
+      visible: false,
     };
 
-    this.toggleVisibility = this.toggleVisibility.bind( this );
+    this.toggleVisibility = this.toggleVisibility.bind(this);
   }
 
-  componentDidUpdate( prevProps ) {
-    if ( this.props.location !== prevProps.location ) {
-      window.scrollTo( 0, 0 );
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0);
     }
   }
 
   private toggleVisibility() {
-    this.setState( { visible: !this.state.visible } );
+    this.setState({ visible: !this.state.visible });
   }
 
   public render() {
@@ -37,19 +37,24 @@ class AppRouter extends React.Component<any, any> {
       <div style={style.container}>
         <SideNav style={style.menu} />
         <div style={mainStyle}>
-
           <Switch>
-            <Route exact path='/' render={RedirectToIntro} />
-            <Route exact path='/introduction' render={() => <Pages.Introduction />} />
-            <Route path='/Usage' render={() => <Pages.Usage />} />
-            <Route path='/props' render={() => <Pages.Props />} />
-            <Route path='/sample/:name' render={( p ) => <Pages.ExampleRoot {...p} />} />
+            <Route exact path="/" render={RedirectToIntro} />
+            <Route
+              exact
+              path="/introduction"
+              render={() => <Pages.Introduction />}
+            />
+            <Route path="/Usage" render={() => <Pages.Usage />} />
+            <Route path="/props" render={() => <Pages.Props />} />
+            <Route
+              path="/sample/:name"
+              render={p => <Pages.ExampleRoot {...p} />}
+            />
           </Switch>
-
         </div>
       </div>
     );
   }
 }
 
-export default hot( module )( withRouter( AppRouter ) );
+export default hot(module)(withRouter(AppRouter));

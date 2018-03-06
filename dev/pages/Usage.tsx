@@ -2,12 +2,14 @@ import * as React from 'react';
 import { Container, Header, Segment } from 'semantic-ui-react';
 import { SourceCodeEditor } from 'components';
 
-const Usage = ( props ) => (
+const Usage = props => (
   <Container>
     <Segment basic padded>
       <h1>Usage</h1>
 
-      <Header as='h3' dividing>Install</Header>
+      <Header as="h3" dividing>
+        Install
+      </Header>
       <Segment>
         <pre>$ npm install datagrid-es -S</pre>
       </Segment>
@@ -15,7 +17,9 @@ const Usage = ( props ) => (
         <pre>$ npm install datagrid-ts -S</pre>
       </Segment>
 
-      <Header as='h3' dividing>Example</Header>
+      <Header as="h3" dividing>
+        Example
+      </Header>
 
       <SourceCodeEditor>
         {`
@@ -53,10 +57,8 @@ export class Datagrid extends React.Component<any, any> {
     )
   }
 }
-
 `}
       </SourceCodeEditor>
-
     </Segment>
   </Container>
 );
