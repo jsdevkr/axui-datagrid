@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { get } from 'lodash-es';
+import { get } from 'lodash';
 import * as Examples from '../example';
 import { SourceCodeEditor } from 'components';
 import { Container, Divider, Grid, Icon, Segment } from 'semantic-ui-react';

@@ -9,7 +9,8 @@
     "classnames": "^2.2.5",
     "immutable": "^3.8.2",
     "lodash": "^4.17.5",
-    "print-date": "^0.1.2",
+    "lodash-es": "^4.17.5",
+    "print-date": "^0.1.3",
     "react": "^16.2.0",
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.2.0",
@@ -33,6 +34,7 @@
     "babel-plugin-lodash": "^3.3.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-es2015-modules-amd": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
@@ -99,7 +101,8 @@
   "scripts": {
     "webpack": "NODE_ENV=production webpack --progress --colors",
     "start": "NODE_ENV=development webpack-dev-server --hotOnly",
-    "tslint-check": "tslint-config-prettier-check ./tslint.json"
+    "tslint-check": "tslint-config-prettier-check ./tslint.json",
+    "test": "NODE_ENV=test jest"
   },
   "author": "tom@axisj.com",
   "license": "MIT",
@@ -107,7 +110,8 @@
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
+        "tsConfigFile": "tsconfig.json",
+        "useBabelrc": true
       }
     },
     "transform": {
@@ -122,6 +126,10 @@
       "jsx",
       "json",
       "node"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
     ]
   }
 }
