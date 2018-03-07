@@ -1,8 +1,7 @@
 import * as React from 'react';
 import cx from 'classnames'
 import { E_NAME } from '../_inc/constant';
-import isString from 'lodash-es/isString';
-import isFunction from 'lodash-es/isFunction';
+import {isString, isFunction} from 'lodash';
 
 export class GridBodyCell extends React.Component<iAXDataGridBodyCellProps, iAXDataGridBodyCellState> {
   private editInput: HTMLInputElement;

@@ -1,10 +1,12 @@
-import { printDate } from 'print-date';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const print_date_1 = require("print-date");
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-export function money(data) {
+function money(data) {
     if (typeof data.value !== 'undefined') {
         let val = ('' + data.value).replace(/[^0-9^\.^\-]/g, ''), regExpPattern = new RegExp('([0-9])([0-9][0-9][0-9][,.])'), arrNumber = val.split('.');
         arrNumber[0] += '.';
@@ -17,27 +19,31 @@ export function money(data) {
         return '';
     }
 }
+exports.money = money;
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-export function date(data) {
-    return printDate(data.value, 'yyyy-MM-dd');
+function date(data) {
+    return print_date_1.printDate(data.value, 'yyyy-MM-dd');
 }
+exports.date = date;
 /**
  *
  * @param {iFormatterData} data
  * @return {string}
  */
-export function datetime(data) {
-    return printDate(data.value, 'yyyy-MM-dd hh:mm:ss');
+function datetime(data) {
+    return print_date_1.printDate(data.value, 'yyyy-MM-dd hh:mm:ss');
 }
+exports.datetime = datetime;
 /**
  *
  */
-export function getAll() {
+function getAll() {
     return {
         money, date, datetime
     };
 }
+exports.getAll = getAll;

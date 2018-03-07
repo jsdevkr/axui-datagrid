@@ -1,12 +1,14 @@
-export var E_NAME;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var E_NAME;
 (function (E_NAME) {
     E_NAME["BLUR"] = "BLUR";
     E_NAME["KEY_DOWN"] = "KEY_DOWN";
     E_NAME["KEY_UP"] = "KEY_UP";
     E_NAME["CLICK"] = "CLICK";
     E_NAME["DBL_CLICK"] = "DBL_CLICK";
-})(E_NAME || (E_NAME = {}));
-export var KEY_CODE;
+})(E_NAME = exports.E_NAME || (exports.E_NAME = {}));
+var KEY_CODE;
 (function (KEY_CODE) {
     KEY_CODE[KEY_CODE["BACKSPACE"] = 8] = "BACKSPACE";
     KEY_CODE[KEY_CODE["DELETE"] = 46] = "DELETE";
@@ -27,4 +29,4 @@ export var KEY_CODE;
     KEY_CODE[KEY_CODE["C"] = 67] = "C";
     KEY_CODE[KEY_CODE["X"] = 88] = "X";
     KEY_CODE[KEY_CODE["Q"] = 91] = "Q";
-})(KEY_CODE || (KEY_CODE = {}));
+})(KEY_CODE = exports.KEY_CODE || (exports.KEY_CODE = {}));

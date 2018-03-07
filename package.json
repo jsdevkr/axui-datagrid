@@ -68,7 +68,6 @@
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.4.2",
     "jsx-loader": "^0.13.2",
-    "lodash-webpack-plugin": "^0.11.4",
     "node-sass": "^4.7.2",
     "prettier": "^1.11.1",
     "raw-loader": "^0.5.1",
@@ -114,6 +113,10 @@
         "useBabelrc": true
       }
     },
+    "setupFiles": [
+      "./tests/test-shim.js",
+      "./tests/test-setup.js"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.jsx?$": "babel-jest"
@@ -126,6 +129,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "modulePaths": [
+      "src"
     ],
     "moduleDirectories": [
       "node_modules",

@@ -1,22 +1,27 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import assign from 'lodash-es/assign';
-import each from 'lodash-es/each';
-import isEqual from 'lodash-es/isEqual';
-import isFunction from 'lodash-es/isFunction';
-import isObject from 'lodash-es/isObject';
-import last from 'lodash-es/last';
-import range from 'lodash-es/range';
-import throttle from 'lodash-es/throttle';
-import { fromJS } from 'immutable';
-import cx from 'classnames';
-import * as UTIL from './util';
-import { gridOptions } from './_inc/defaults';
-import { GridBody, GridColumnFilter, GridHeader, GridPage, GridRootContainer, GridScroll } from './component';
-import * as GridFormatter from './_inc/formatter';
-import { KEY_CODE } from './_inc/constant';
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const ReactDOM = __importStar(require("react-dom"));
+const lodash_1 = require("lodash");
+const immutable_1 = require("immutable");
+const classnames_1 = __importDefault(require("classnames"));
+const UTIL = __importStar(require("./util"));
+const defaults_1 = require("./_inc/defaults");
+const component_1 = require("./component");
+const GridFormatter = __importStar(require("./_inc/formatter"));
+const constant_1 = require("./_inc/constant");
 let formatter = GridFormatter.getAll();
-export class GridRoot extends React.Component {
+class GridRoot extends React.Component {
     constructor(props) {
         super(props);
         this.columnFormatter = GridRoot.getFormatter();
@@ -106,14 +111,14 @@ export class GridRoot extends React.Component {
             },
             options: (() => {
                 // todo : 옵션 초기화 함수로 분리
-                let options = assign({}, gridOptions);
-                each(props.options, function (v, k) {
-                    options[k] = (isObject(v)) ? assign({}, options[k], v) : v;
+                let options = lodash_1.assign({}, defaults_1.gridOptions);
+                lodash_1.each(props.options, function (v, k) {
+                    options[k] = (lodash_1.isObject(v)) ? lodash_1.assign({}, options[k], v) : v;
                 });
                 return options;
             })()
         };
-        this.state = UTIL.propsToState(props, assign({}, defaultState));
+        this.state = UTIL.propsToState(props, lodash_1.assign({}, defaultState));
         // state 계산영역 끝
         this.props.init(props, this.state.options);
         // 이벤트 멤버에 바인딩
@@ -133,14 +138,14 @@ export class GridRoot extends React.Component {
         this.onFireEvent = this.onFireEvent.bind(this);
     }
     static setFormatter(_formatter) {
-        return formatter = assign(formatter, _formatter);
+        return formatter = lodash_1.assign(formatter, _formatter);
     }
     static getFormatter() {
         return formatter;
     }
     componentDidMount() {
         this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
-        this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
+        this.throttled_updateDimensions = lodash_1.throttle(this.updateDimensions.bind(this), 100);
         window.addEventListener('resize', this.throttled_updateDimensions);
         this.setState({
             mounted: true
@@ -159,13 +164,13 @@ export class GridRoot extends React.Component {
             this.data._headerColGroup = undefined;
             this.data.sColIndex = -1;
             this.data.eColIndex = -1;
-            let newState = assign({}, this.state, {
+            let newState = lodash_1.assign({}, this.state, {
                 scrollLeft: 0,
                 scrollTop: 0,
                 options: (() => {
-                    let options = assign({}, gridOptions);
-                    each(nextProps.options, function (v, k) {
-                        options[k] = (isObject(v)) ? assign({}, options[k], v) : v;
+                    let options = lodash_1.assign({}, defaults_1.gridOptions);
+                    lodash_1.each(nextProps.options, function (v, k) {
+                        options[k] = (lodash_1.isObject(v)) ? lodash_1.assign({}, options[k], v) : v;
                     });
                     return options;
                 })()
@@ -328,11 +333,11 @@ export class GridRoot extends React.Component {
         }
     }
     onResizeColumnResizer(e, col, newWidth) {
-        let colGroup = fromJS(this.state.colGroup).toJS();
+        let colGroup = immutable_1.fromJS(this.state.colGroup).toJS();
         let styles, leftHeaderColGroup, headerColGroup;
         colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
         ({ styles, leftHeaderColGroup, headerColGroup }
-            = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, assign({}, this.state, { colGroup: colGroup })));
+            = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, lodash_1.assign({}, this.state, { colGroup: colGroup })));
         this.data._headerColGroup = undefined;
         this.setState({
             colGroup: colGroup,
@@ -347,25 +352,25 @@ export class GridRoot extends React.Component {
     onClickPageButton(e, onClick) {
         const processor = {
             'PAGE_FIRST': () => {
-                this.onKeyAction(KEY_CODE.HOME);
+                this.onKeyAction(constant_1.KEY_CODE.HOME);
             },
             'PAGE_PREV': () => {
-                this.onKeyAction(KEY_CODE.PAGE_UP);
+                this.onKeyAction(constant_1.KEY_CODE.PAGE_UP);
             },
             'PAGE_BACK': () => {
-                this.onKeyAction(KEY_CODE.UP);
+                this.onKeyAction(constant_1.KEY_CODE.UP);
             },
             'PAGE_PLAY': () => {
-                this.onKeyAction(KEY_CODE.DOWN);
+                this.onKeyAction(constant_1.KEY_CODE.DOWN);
             },
             'PAGE_NEXT': () => {
-                this.onKeyAction(KEY_CODE.PAGE_DOWN);
+                this.onKeyAction(constant_1.KEY_CODE.PAGE_DOWN);
             },
             'PAGE_LAST': () => {
-                this.onKeyAction(KEY_CODE.END);
+                this.onKeyAction(constant_1.KEY_CODE.END);
             }
         };
-        if (isFunction(onClick)) {
+        if (lodash_1.isFunction(onClick)) {
             onClick();
         }
         else if (typeof onClick === 'string' && onClick in processor) {
@@ -422,7 +427,7 @@ export class GridRoot extends React.Component {
                     // 컬럼인덱스를 찾지 못했다면
                     if (selectEndedCol === -1) {
                         const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
-                        const lastCol = last(this.state.headerColGroup);
+                        const lastCol = lodash_1.last(this.state.headerColGroup);
                         selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
                     }
                     let sRow = Math.min(selectStartedRow, selectEndedRow);
@@ -551,7 +556,7 @@ export class GridRoot extends React.Component {
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
             };
-            const throttled_onMouseMove = throttle(onMouseMove, 10);
+            const throttled_onMouseMove = lodash_1.throttle(onMouseMove, 10);
             if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
                 if (e.shiftKey) {
                     let state = {
@@ -624,7 +629,7 @@ export class GridRoot extends React.Component {
             if (e.shiftKey) {
                 state.selectionRows = (() => {
                     let rows = {};
-                    range(Math.min(this.state.focusedRow, selectStartedRow), Math.max(this.state.focusedRow, selectStartedRow) + 1).forEach(i => {
+                    lodash_1.range(Math.min(this.state.focusedRow, selectStartedRow), Math.max(this.state.focusedRow, selectStartedRow) + 1).forEach(i => {
                         rows[i] = true;
                     });
                     return rows;
@@ -706,11 +711,11 @@ export class GridRoot extends React.Component {
             return scrollLeft;
         };
         const proc = {
-            [KEY_CODE.ESC]: () => {
+            [constant_1.KEY_CODE.ESC]: () => {
             },
-            [KEY_CODE.RETURN]: () => {
+            [constant_1.KEY_CODE.RETURN]: () => {
             },
-            [KEY_CODE.HOME]: () => {
+            [constant_1.KEY_CODE.HOME]: () => {
                 let focusRow = 0;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -721,7 +726,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow
                 });
             },
-            [KEY_CODE.END]: () => {
+            [constant_1.KEY_CODE.END]: () => {
                 let focusRow = this.props.store_list.size - 1;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -732,7 +737,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow
                 });
             },
-            [KEY_CODE.PAGE_UP]: () => {
+            [constant_1.KEY_CODE.PAGE_UP]: () => {
                 let focusRow = (this.state.focusedRow - pRowSize < 1) ? 0 : this.state.focusedRow - pRowSize;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -743,7 +748,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow
                 });
             },
-            [KEY_CODE.PAGE_DOWN]: () => {
+            [constant_1.KEY_CODE.PAGE_DOWN]: () => {
                 let focusRow = (this.state.focusedRow + pRowSize >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + pRowSize;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -754,7 +759,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow,
                 });
             },
-            [KEY_CODE.UP]: () => {
+            [constant_1.KEY_CODE.UP]: () => {
                 let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -765,7 +770,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow
                 });
             },
-            [KEY_CODE.DOWN]: () => {
+            [constant_1.KEY_CODE.DOWN]: () => {
                 let focusRow = (this.state.focusedRow + 1 >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + 1;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
@@ -776,7 +781,7 @@ export class GridRoot extends React.Component {
                     focusedRow: focusRow,
                 });
             },
-            [KEY_CODE.LEFT]: () => {
+            [constant_1.KEY_CODE.LEFT]: () => {
                 let focusCol = (this.state.focusedCol < 1) ? 0 : this.state.focusedCol - 1;
                 let scrollLeft = getAvailScrollLeft(focusCol);
                 this.setState({
@@ -787,7 +792,7 @@ export class GridRoot extends React.Component {
                     focusedCol: focusCol,
                 });
             },
-            [KEY_CODE.RIGHT]: () => {
+            [constant_1.KEY_CODE.RIGHT]: () => {
                 let focusCol = (this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : this.state.focusedCol + 1;
                 let scrollLeft = getAvailScrollLeft(focusCol);
                 this.setState({
@@ -839,15 +844,15 @@ export class GridRoot extends React.Component {
     onKeyPress(e) {
         const headerColGroup = this.state.headerColGroup;
         const metaProc = {
-            [KEY_CODE.C]: () => {
+            [constant_1.KEY_CODE.C]: () => {
                 e.preventDefault();
                 e.stopPropagation();
                 const gridClipboard = this.refs.gridClipboard;
                 let copysuccess = false;
                 let copiedString = '';
-                each(this.state.selectionRows, (row, k) => {
+                lodash_1.each(this.state.selectionRows, (row, k) => {
                     const item = this.props.store_list.get(k);
-                    each(this.state.selectionCols, (col, ci) => {
+                    lodash_1.each(this.state.selectionCols, (col, ci) => {
                         copiedString += (item[headerColGroup[ci].key] || '') + '\t';
                     });
                     copiedString += '\n';
@@ -862,7 +867,7 @@ export class GridRoot extends React.Component {
                 this.gridRootNode.focus();
                 return copysuccess;
             },
-            [KEY_CODE.A]: () => {
+            [constant_1.KEY_CODE.A]: () => {
                 e.preventDefault();
                 e.stopPropagation();
                 let state = {
@@ -986,7 +991,7 @@ export class GridRoot extends React.Component {
                     if (e.shiftKey) {
                         state.selectionCols = (() => {
                             let cols = {};
-                            range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
+                            lodash_1.range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
                                 cols[i] = true;
                             });
                             return cols;
@@ -1073,7 +1078,7 @@ export class GridRoot extends React.Component {
         const mounted = this.state.mounted;
         const headerColGroup = this.state.headerColGroup;
         const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
-        let gridRootStyle = assign({ height: this.props.height }, this.props.style);
+        let gridRootStyle = lodash_1.assign({ height: this.props.height }, this.props.style);
         let _scrollLeft = Math.abs(this.state.scrollLeft);
         let sColIndex = 0;
         let eColIndex = headerColGroup.length;
@@ -1101,7 +1106,7 @@ export class GridRoot extends React.Component {
                 }
             }
             _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
-            if (typeof this.data._headerColGroup === 'undefined' || !isEqual(this.data._headerColGroup, _headerColGroup)) {
+            if (typeof this.data._headerColGroup === 'undefined' || !lodash_1.isEqual(this.data._headerColGroup, _headerColGroup)) {
                 this.data.sColIndex = sColIndex;
                 this.data.eColIndex = eColIndex;
                 this.data._headerColGroup = _headerColGroup;
@@ -1115,14 +1120,14 @@ export class GridRoot extends React.Component {
             scrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / ((styles.scrollContentWidth - styles.scrollContentContainerWidth) || 1);
             scrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / ((styles.scrollContentHeight - styles.scrollContentContainerHeight) || 1);
         }
-        return (React.createElement(GridRootContainer, { ref: 'gridRoot', onFireEvent: this.onFireEvent, style: gridRootStyle },
-            React.createElement("div", { className: cx('axd-clip-board') },
+        return (React.createElement(component_1.GridRootContainer, { ref: 'gridRoot', onFireEvent: this.onFireEvent, style: gridRootStyle },
+            React.createElement("div", { className: classnames_1.default('axd-clip-board') },
                 React.createElement("textarea", { ref: 'gridClipboard' })),
-            React.createElement(GridHeader, { getRootBounding: this.getRootBounding, mounted: mounted, optionsHeader: options.header, styles: styles, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: this.state.headerColGroup, asideHeaderData: this.state.asideHeaderData, leftHeaderData: this.state.leftHeaderData, headerData: this.state.headerData, scrollLeft: this.state.scrollLeft, selectionCols: this.state.selectionCols, focusedCol: this.state.focusedCol, sortInfo: this.props.store_sortInfo, onResizeColumnResizer: this.onResizeColumnResizer, onClickHeader: this.onClickHeader }),
-            React.createElement(GridBody, { mounted: mounted, columnFormatter: this.columnFormatter, options: options, styles: styles, CTInnerWidth: styles.CTInnerWidth, CTInnerHeight: styles.CTInnerHeight, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: _headerColGroup, bodyTable: this.state.bodyRowTable, asideBodyRowData: this.state.asideBodyRowData, asideBodyGroupingData: this.state.asideBodyGroupingData, leftBodyRowData: this.state.leftBodyRowData, leftBodyGroupingData: this.state.leftBodyGroupingData, bodyRowData: _bodyRowData, bodyGroupingData: _bodyGroupingData, list: this.props.store_list, scrollLeft: this.state.scrollLeft, scrollTop: this.state.scrollTop, selectionRows: this.state.selectionRows, selectionCols: this.state.selectionCols, focusedRow: this.state.focusedRow, focusedCol: this.state.focusedCol, isInlineEditing: this.state.isInlineEditing, inlineEditingCell: this.state.inlineEditingCell, onMouseDownBody: this.onMouseDownBody, onDoubleClickCell: this.onDoubleClickCell, updateEditInput: this.updateEditInput }),
-            React.createElement(GridPage, { mounted: mounted, styles: styles, pageButtonsContainerWidth: styles.pageButtonsContainerWidth, pageButtons: options.page.buttons, pageButtonHeight: options.page.buttonHeight, onClickPageButton: this.onClickPageButton }),
-            React.createElement(GridScroll, { mounted: mounted, bodyHeight: styles.bodyHeight, pageHeight: styles.pageHeight, verticalScrollerWidth: styles.verticalScrollerWidth, verticalScrollerHeight: styles.verticalScrollerHeight, horizontalScrollerWidth: styles.horizontalScrollerWidth, horizontalScrollerHeight: styles.horizontalScrollerHeight, verticalScrollBarHeight: styles.verticalScrollBarHeight, horizontalScrollBarWidth: styles.horizontalScrollBarWidth, scrollerArrowSize: styles.scrollerArrowSize, scrollerPadding: styles.scrollerPadding, scrollBarLeft: scrollBarLeft, scrollBarTop: scrollBarTop, onMouseDownScrollBar: this.onMouseDownScrollBar, onClickScrollTrack: this.onClickScrollTrack, onClickScrollArrow: this.onClickScrollArrow }),
-            React.createElement(GridColumnFilter, { isColumnFilter: this.state.isColumnFilter, filterInfo: this.props.store_filterInfo, colGroup: this.state.colGroup, options: options, frozenColumnIndex: options.frozenColumnIndex, scrollLeft: this.state.scrollLeft, styles: styles, list: this.props.store_receivedList, onChangeColumnFilter: this.onChangeColumnFilter })));
+            React.createElement(component_1.GridHeader, { getRootBounding: this.getRootBounding, mounted: mounted, optionsHeader: options.header, styles: styles, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: this.state.headerColGroup, asideHeaderData: this.state.asideHeaderData, leftHeaderData: this.state.leftHeaderData, headerData: this.state.headerData, scrollLeft: this.state.scrollLeft, selectionCols: this.state.selectionCols, focusedCol: this.state.focusedCol, sortInfo: this.props.store_sortInfo, onResizeColumnResizer: this.onResizeColumnResizer, onClickHeader: this.onClickHeader }),
+            React.createElement(component_1.GridBody, { mounted: mounted, columnFormatter: this.columnFormatter, options: options, styles: styles, CTInnerWidth: styles.CTInnerWidth, CTInnerHeight: styles.CTInnerHeight, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: _headerColGroup, bodyTable: this.state.bodyRowTable, asideBodyRowData: this.state.asideBodyRowData, asideBodyGroupingData: this.state.asideBodyGroupingData, leftBodyRowData: this.state.leftBodyRowData, leftBodyGroupingData: this.state.leftBodyGroupingData, bodyRowData: _bodyRowData, bodyGroupingData: _bodyGroupingData, list: this.props.store_list, scrollLeft: this.state.scrollLeft, scrollTop: this.state.scrollTop, selectionRows: this.state.selectionRows, selectionCols: this.state.selectionCols, focusedRow: this.state.focusedRow, focusedCol: this.state.focusedCol, isInlineEditing: this.state.isInlineEditing, inlineEditingCell: this.state.inlineEditingCell, onMouseDownBody: this.onMouseDownBody, onDoubleClickCell: this.onDoubleClickCell, updateEditInput: this.updateEditInput }),
+            React.createElement(component_1.GridPage, { mounted: mounted, styles: styles, pageButtonsContainerWidth: styles.pageButtonsContainerWidth, pageButtons: options.page.buttons, pageButtonHeight: options.page.buttonHeight, onClickPageButton: this.onClickPageButton }),
+            React.createElement(component_1.GridScroll, { mounted: mounted, bodyHeight: styles.bodyHeight, pageHeight: styles.pageHeight, verticalScrollerWidth: styles.verticalScrollerWidth, verticalScrollerHeight: styles.verticalScrollerHeight, horizontalScrollerWidth: styles.horizontalScrollerWidth, horizontalScrollerHeight: styles.horizontalScrollerHeight, verticalScrollBarHeight: styles.verticalScrollBarHeight, horizontalScrollBarWidth: styles.horizontalScrollBarWidth, scrollerArrowSize: styles.scrollerArrowSize, scrollerPadding: styles.scrollerPadding, scrollBarLeft: scrollBarLeft, scrollBarTop: scrollBarTop, onMouseDownScrollBar: this.onMouseDownScrollBar, onClickScrollTrack: this.onClickScrollTrack, onClickScrollArrow: this.onClickScrollArrow }),
+            React.createElement(component_1.GridColumnFilter, { isColumnFilter: this.state.isColumnFilter, filterInfo: this.props.store_filterInfo, colGroup: this.state.colGroup, options: options, frozenColumnIndex: options.frozenColumnIndex, scrollLeft: this.state.scrollLeft, styles: styles, list: this.props.store_receivedList, onChangeColumnFilter: this.onChangeColumnFilter })));
     }
 }
 GridRoot.defaultProps = {
@@ -1131,3 +1136,4 @@ GridRoot.defaultProps = {
     data: [],
     options: {}
 };
+exports.GridRoot = GridRoot;

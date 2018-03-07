@@ -1,4 +1,6 @@
-export const gridOptions = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.gridOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,

@@ -1,9 +1,20 @@
-import * as React from 'react';
-import cx from 'classnames';
-import { E_NAME } from '../_inc/constant';
-import isString from 'lodash-es/isString';
-import isFunction from 'lodash-es/isFunction';
-export class GridBodyCell extends React.Component {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const classnames_1 = __importDefault(require("classnames"));
+const constant_1 = require("../_inc/constant");
+const lodash_1 = require("lodash");
+class GridBodyCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -26,10 +37,10 @@ export class GridBodyCell extends React.Component {
                 value: _item[_col.key]
             };
             let label;
-            if (isString(_col.formatter) && _col.formatter in columnFormatter) {
+            if (lodash_1.isString(_col.formatter) && _col.formatter in columnFormatter) {
                 label = columnFormatter[_col.formatter](formatterData);
             }
-            else if (isFunction(_col.formatter)) {
+            else if (lodash_1.isFunction(_col.formatter)) {
                 label = _col.formatter(formatterData);
             }
             else {
@@ -44,7 +55,7 @@ export class GridBodyCell extends React.Component {
             label = _itemIdx + 1;
         }
         else if (_col.key === '__row_selector__') {
-            label = React.createElement("div", { className: cx('axd-check-box'), style: { maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px' } });
+            label = React.createElement("div", { className: classnames_1.default('axd-check-box'), style: { maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px' } });
         }
         else {
             label = getLabel(_colGroup, _col, _item, _itemIdx);
@@ -82,19 +93,20 @@ export class GridBodyCell extends React.Component {
             }
         }
         if (isInlineEditing && inlineEditingCell.row === li && inlineEditingCell.col === col.colIndex) {
-            return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: cx(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
+            return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: classnames_1.default(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
                 React.createElement("input", { type: 'text', ref: input => {
                         this.editInput = input;
                     }, onBlur: e => {
-                        onEditInput(E_NAME.BLUR, e);
+                        onEditInput(constant_1.E_NAME.BLUR, e);
                     }, onKeyDown: e => {
-                        onEditInput(E_NAME.KEY_DOWN, e);
+                        onEditInput(constant_1.E_NAME.KEY_DOWN, e);
                     }, "data-inline-edit": true, defaultValue: value })));
         }
         else {
-            return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: cx(tdClassNames), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: e => {
+            return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: classnames_1.default(tdClassNames), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: e => {
                     onDoubleClickCell(e, col, li);
                 } }, this.getFieldSpan(colGroup, col, list.get(li), li)));
         }
     }
 }
+exports.GridBodyCell = GridBodyCell;

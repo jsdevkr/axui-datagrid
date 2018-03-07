@@ -1,9 +1,18 @@
-import * as React from 'react';
-import { connect, Provider } from 'react-redux';
-import { store } from './store';
-import { GridRoot } from './GridRoot';
-import * as ACT from './redux/actions';
-export const GridRootConnected = connect((state) => {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const react_redux_1 = require("react-redux");
+const store_1 = require("./store");
+const GridRoot_1 = require("./GridRoot");
+const ACT = __importStar(require("./redux/actions"));
+exports.GridRootConnected = react_redux_1.connect((state) => {
     return {
         store_receivedList: state.get('receivedList'),
         store_deletedList: state.get('deletedList'),
@@ -18,16 +27,17 @@ export const GridRootConnected = connect((state) => {
     sort: (colGroup, options, colIndex) => dispatch(ACT.SORT(colGroup, options, colIndex)),
     filter: (colGroup, options, colIndex, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo)),
     update: (colGroup, options, row, col, value) => dispatch(ACT.UPDATE(colGroup, options, row, col, value))
-}))(GridRoot);
-export class AXDatagrid extends React.Component {
+}))(GridRoot_1.GridRoot);
+class AXDatagrid extends React.Component {
     static setFormatter(_formatter) {
-        return GridRoot.setFormatter(_formatter);
+        return GridRoot_1.GridRoot.setFormatter(_formatter);
     }
     static getFormatter() {
-        return GridRoot.getFormatter();
+        return GridRoot_1.GridRoot.getFormatter();
     }
     render() {
-        return (React.createElement(Provider, { store: store },
-            React.createElement(GridRootConnected, Object.assign({}, this.props))));
+        return (React.createElement(react_redux_1.Provider, { store: store_1.store },
+            React.createElement(exports.GridRootConnected, Object.assign({}, this.props))));
     }
 }
+exports.AXDatagrid = AXDatagrid;

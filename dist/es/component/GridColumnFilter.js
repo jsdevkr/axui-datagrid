@@ -1,9 +1,21 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import { List } from 'immutable';
-import uniqBy from 'lodash-es/uniqBy';
-import { GridColumnFilterOption } from './GridColumnFilterOption';
-export class GridColumnFilter extends React.Component {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const classnames_1 = __importDefault(require("classnames"));
+const immutable_1 = require("immutable");
+const lodash_1 = require("lodash");
+const GridColumnFilterOption_1 = require("./GridColumnFilterOption");
+class GridColumnFilter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -11,7 +23,7 @@ export class GridColumnFilter extends React.Component {
     }
     onChange(colIndex, filterOptions, value, checked, isCheckAll) {
         const { onChangeColumnFilter } = this.props;
-        filterOptions = List(filterOptions);
+        filterOptions = immutable_1.List(filterOptions);
         let filterInfo = this.props.filterInfo.toJS();
         if (isCheckAll) {
             if (checked) {
@@ -64,7 +76,7 @@ export class GridColumnFilter extends React.Component {
         if (isColumnFilter === false)
             return null;
         let columnFilterInfo = filterInfo.get('' + isColumnFilter);
-        let filterOptions = uniqBy(list
+        let filterOptions = lodash_1.uniqBy(list
             .filter(item => (item ? !item[options.columnKeys.deleted] : false))
             .map(item => {
             let value = item[colGroup[Number(isColumnFilter)].key];
@@ -109,9 +121,10 @@ export class GridColumnFilter extends React.Component {
         if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
             filterStyles.left = styles.asidePanelWidth + colGroup[Number(isColumnFilter)]._ex - 2 + scrollLeft - filterWidth;
         }
-        return (React.createElement("div", { "data-column-filter": 'true', className: classNames('axd-column-filter'), style: filterStyles },
-            React.createElement(GridColumnFilterOption, { options: filterOptions, onChange: (value, checked, checkAll) => {
+        return (React.createElement("div", { "data-column-filter": 'true', className: classnames_1.default('axd-column-filter'), style: filterStyles },
+            React.createElement(GridColumnFilterOption_1.GridColumnFilterOption, { options: filterOptions, onChange: (value, checked, checkAll) => {
                     this.onChange(isColumnFilter, filterOptions, value, checked, checkAll);
                 } })));
     }
 }
+exports.GridColumnFilter = GridColumnFilter;

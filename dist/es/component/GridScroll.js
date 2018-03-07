@@ -1,6 +1,18 @@
-import * as React from 'react';
-import cx from 'classnames';
-export class GridScroll extends React.Component {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const classnames_1 = __importDefault(require("classnames"));
+class GridScroll extends React.Component {
     constructor(props) {
         super(props);
         this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
@@ -81,20 +93,21 @@ export class GridScroll extends React.Component {
             width: horizontalScrollBarWidth,
             left: scrollBarLeft
         };
-        return (React.createElement("div", { className: cx('axd-scroller') },
+        return (React.createElement("div", { className: classnames_1.default('axd-scroller') },
             (verticalScrollerWidth) ? (React.createElement("div", { "data-scroll-track": 'vertical', style: verticalStyles },
                 React.createElement("div", { "data-scroll-arrow": 'up', style: verticalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => onClickScrollArrow(e, 'up') })),
                 React.createElement("div", { "data-scroll": 'vertical', onClick: e => this.onClickScrollTrack(e, 'vertical') },
-                    React.createElement("div", { className: cx('axd-scroll-bar'), style: verticalBarStyles, onMouseDown: e => onMouseDownScrollBar(e, 'vertical') })),
+                    React.createElement("div", { className: classnames_1.default('axd-scroll-bar'), style: verticalBarStyles, onMouseDown: e => onMouseDownScrollBar(e, 'vertical') })),
                 React.createElement("div", { "data-scroll-arrow": 'down', style: verticalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => onClickScrollArrow(e, 'down') })))) : null,
             (horizontalScrollerHeight) ? (React.createElement("div", { "data-scroll-track": 'horizontal', style: horizontalStyles },
                 React.createElement("div", { "data-scroll-arrow": 'left', style: horizontalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => onClickScrollArrow(e, 'left') })),
                 React.createElement("div", { "data-scroll": 'horizontal', onClick: e => this.onClickScrollTrack(e, 'horizontal') },
-                    React.createElement("div", { className: cx('axd-scroll-bar'), style: horizontalBarStyles, onMouseDown: (e) => onMouseDownScrollBar(e, 'horizontal') })),
+                    React.createElement("div", { className: classnames_1.default('axd-scroll-bar'), style: horizontalBarStyles, onMouseDown: (e) => onMouseDownScrollBar(e, 'horizontal') })),
                 React.createElement("div", { "data-scroll-arrow": 'right', style: horizontalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => onClickScrollArrow(e, 'right') })))) : null));
     }
 }
+exports.GridScroll = GridScroll;

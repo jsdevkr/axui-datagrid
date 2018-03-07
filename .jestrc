@@ -1,0 +1,32 @@
+{
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json",
+        "useBabelrc": true
+      }
+    },
+    "setupFiles": [
+      "./tests/test-shim.js",
+      "./tests/test-setup.js"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "modulePaths": [
+      "src"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
+  }

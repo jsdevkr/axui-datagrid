@@ -2,24 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const basePath = __dirname;
-
-const babelOptions = {
-  plugins: ['lodash', 'react-hot-loader/babel'],
-  presets: [
-    [
-      'env',
-      {
-        targets: {
-          browsers: ['last 2 versions', '> 1% in KR'],
-        },
-      },
-    ],
-    'react',
-    'stage-0',
-  ],
-};
 
 module.exports = {
   context: path.join(basePath, '.'),
@@ -47,7 +30,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: { ...babelOptions, cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+            },
           },
         ],
       },
@@ -57,7 +42,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: { ...babelOptions, cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+            },
           },
           { loader: 'awesome-typescript-loader' },
         ],
@@ -117,7 +104,6 @@ module.exports = {
   },
   plugins: [
     // shorthands옵션을 주지 않으면 Semantic-UI에서 tree shaking 오류
-    new LodashModuleReplacementPlugin({ shorthands: true }),
     new webpack.NormalModuleReplacementPlugin(/^pages$/, 'pages/index.async'),
     // chunk
     new webpack.optimize.CommonsChunkPlugin({

@@ -1,39 +1,45 @@
-import { Map } from 'immutable';
-import isNumber from 'lodash-es/isNumber';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const immutable_1 = require("immutable");
+const lodash_1 = require("lodash");
 /**
  *
  * @param element
  * @return {number}
  */
-export function getInnerWidth(element) {
+function getInnerWidth(element) {
     const cs = window.getComputedStyle(element);
     return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
 }
+exports.getInnerWidth = getInnerWidth;
 /**
  *
  * @param element
  * @return {number}
  */
-export function getInnerHeight(element) {
+function getInnerHeight(element) {
     const cs = window.getComputedStyle(element);
     return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
 }
+exports.getInnerHeight = getInnerHeight;
 /**
  *
  * @param element
  * @return {number}
  */
-export function getOuterWidth(element) {
+function getOuterWidth(element) {
     return element.offsetWidth;
 }
+exports.getOuterWidth = getOuterWidth;
 /**
  *
  * @param element
  * @return {number}
  */
-export function getOuterHeight(element) {
+function getOuterHeight(element) {
     return element.offsetHeight;
 }
+exports.getOuterHeight = getOuterHeight;
 /**
  * 그리드 colGroup의 width 값을 처리 하는 함수. 왜? '*', '%'로 된 값은 상대적인 값이기 때문에. 컨테이너의 너비에 따라 재계산이 필요합니다.
  * @method
@@ -42,10 +48,10 @@ export function getOuterHeight(element) {
  * @param container
  * @return {any}
  */
-export function setColGroupWidth(_colGroup, container, options) {
+function setColGroupWidth(_colGroup, container, options) {
     let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
     _colGroup.forEach((col, ci) => {
-        if (isNumber(col.width)) {
+        if (lodash_1.isNumber(col.width)) {
             totalWidth += col._width = col.width;
         }
         else if (col.width === '*') {
@@ -76,6 +82,7 @@ export function setColGroupWidth(_colGroup, container, options) {
     }
     return _colGroup;
 }
+exports.setColGroupWidth = setColGroupWidth;
 /**
  *
  * @param containerDOM
@@ -86,7 +93,7 @@ export function setColGroupWidth(_colGroup, container, options) {
  * @param {any} styles
  * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
  */
-export function calculateDimensions(containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = Map(state.styles).toJS()) {
+function calculateDimensions(containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = immutable_1.Map(state.styles).toJS()) {
     let list = storeState.list;
     let footSumColumns = state.footSumColumns;
     let headerTable = state.headerTable;
@@ -163,3 +170,4 @@ export function calculateDimensions(containerDOM, storeState, state, colGroup = 
         headerColGroup: colGroup.slice(options.frozenColumnIndex)
     };
 }
+exports.calculateDimensions = calculateDimensions;

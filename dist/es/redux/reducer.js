@@ -1,38 +1,47 @@
-import * as TYPES from './actionTypes';
-import { List, Map, Record } from 'immutable';
-import isObject from 'lodash-es/isObject';
-const stateRecord = Record({
-    receivedList: List([]),
-    deletedList: List([]),
-    list: List([]),
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const TYPES = __importStar(require("./actionTypes"));
+const immutable_1 = require("immutable");
+const lodash_1 = require("lodash");
+const stateRecord = immutable_1.Record({
+    receivedList: immutable_1.List([]),
+    deletedList: immutable_1.List([]),
+    list: immutable_1.List([]),
     page: {},
     sortInfo: {},
-    filterInfo: Map({})
+    filterInfo: immutable_1.Map({})
 });
 // 초기 상태
 const initialState = new stateRecord();
 // 리듀서 함수 정의
-export const gridReducer = (state = initialState, action) => {
+exports.gridReducer = (state = initialState, action) => {
     const processor = {
         [TYPES.INIT]: () => {
             let list; // 그리드에 표현할 목록
             // 전달받은 리스트 중에 출력할 리스트를 필터링
             list = action.receivedList.filter(item => (item ? !item[action.options.columnKeys.deleted] : false));
             return state
-                .set('receivedList', List(action.receivedList))
-                .set('deletedList', List([]))
-                .set('list', List(list))
-                .set('page', isObject(action.page) ? (action.page) : false)
+                .set('receivedList', immutable_1.List(action.receivedList))
+                .set('deletedList', immutable_1.List([]))
+                .set('list', immutable_1.List(list))
+                .set('page', lodash_1.isObject(action.page) ? (action.page) : false)
                 .set('sortInfo', {})
-                .set('filterInfo', Map({}));
+                .set('filterInfo', immutable_1.Map({}));
         },
         [TYPES.SET_DATA]: () => {
             // 전달받은 리스트 중에 출력할 리스트를 필터링
             let list = action.receivedList.filter(item => (item ? !item[action.options.columnKeys.deleted] : false));
             return state
-                .set('receivedList', List(action.receivedList))
-                .set('list', List(list))
-                .set('page', isObject(action.page) ? (action.page) : false);
+                .set('receivedList', immutable_1.List(action.receivedList))
+                .set('list', immutable_1.List(list))
+                .set('page', lodash_1.isObject(action.page) ? (action.page) : false);
         },
         [TYPES.SORT]: () => {
             let sortInfo = {}, seq = 0;
@@ -113,8 +122,8 @@ export const gridReducer = (state = initialState, action) => {
                 });
             }
             return state
-                .set('list', List(list))
-                .set('filterInfo', Map(action.filterInfo));
+                .set('list', immutable_1.List(list))
+                .set('filterInfo', immutable_1.Map(action.filterInfo));
         },
         [TYPES.UPDATE]: () => {
             let list = state.get('list');
@@ -123,7 +132,7 @@ export const gridReducer = (state = initialState, action) => {
                 return item;
             });
             return state
-                .set('list', List(list));
+                .set('list', immutable_1.List(list));
         }
     };
     if (action.type in processor) {

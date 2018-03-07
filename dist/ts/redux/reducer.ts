@@ -1,6 +1,6 @@
 import * as TYPES from './actionTypes';
 import { List, Map, Record } from 'immutable';
-import isObject from 'lodash-es/isObject';
+import { isObject } from 'lodash';
 
 export interface State {
   receivedList: any;
@@ -11,53 +11,53 @@ export interface State {
   filterInfo: any;
 }
 
-const stateRecord = Record( {
-  receivedList: List( [] ),
-  deletedList: List( [] ),
-  list: List( [] ),
+const stateRecord = Record({
+  receivedList: List([]),
+  deletedList: List([]),
+  list: List([]),
   page: {},
   sortInfo: {},
-  filterInfo: Map( {} )
-} );
+  filterInfo: Map({})
+});
 
 // 초기 상태
 const initialState = new stateRecord();
 
 // 리듀서 함수 정의
-export const gridReducer = ( state = initialState, action ) => {
+export const gridReducer = (state = initialState, action) => {
   const processor = {
-    [TYPES.INIT]: () => { // 그리드 데이터 초기화
+    [ TYPES.INIT ]: () => { // 그리드 데이터 초기화
 
       let list; // 그리드에 표현할 목록
 
       // 전달받은 리스트 중에 출력할 리스트를 필터링
-      list = action.receivedList.filter( item => (item ? !item[ action.options.columnKeys.deleted ] : false) );
+      list = action.receivedList.filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
       return state
-        .set( 'receivedList', List( action.receivedList ) )
-        .set( 'deletedList', List( [] ) )
-        .set( 'list', List( list ) )
-        .set( 'page', isObject( action.page ) ? (action.page) : false )
-        .set( 'sortInfo', {} )
-        .set( 'filterInfo', Map( {} ) );
+        .set('receivedList', List(action.receivedList))
+        .set('deletedList', List([]))
+        .set('list', List(list))
+        .set('page', isObject(action.page) ? (action.page) : false)
+        .set('sortInfo', {})
+        .set('filterInfo', Map({}));
     },
 
-    [TYPES.SET_DATA]: () => {
+    [ TYPES.SET_DATA ]: () => {
       // 전달받은 리스트 중에 출력할 리스트를 필터링
-      let list = action.receivedList.filter( item => (item ? !item[ action.options.columnKeys.deleted ] : false) );
+      let list = action.receivedList.filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
 
       return state
-        .set( 'receivedList', List( action.receivedList ) )
-        .set( 'list', List( list ) )
-        .set( 'page', isObject( action.page ) ? (action.page) : false )
+        .set('receivedList', List(action.receivedList))
+        .set('list', List(list))
+        .set('page', isObject(action.page) ? (action.page) : false)
     },
 
-    [TYPES.SORT]: () => {
+    [ TYPES.SORT ]: () => {
       let sortInfo = {}, seq: number = 0;
       let sortInfoArray = [];
       let colGroup = action.colGroup;
-      const sortInfoState = state.get( 'sortInfo' );
-      const getValueByKey = function ( _item, _key ) {
+      const sortInfoState = state.get('sortInfo');
+      const getValueByKey = function (_item, _key) {
         return _item[ _key ] || '';
       };
 
@@ -82,14 +82,14 @@ export const gridReducer = ( state = initialState, action ) => {
       for ( let k in sortInfo ) {
         sortInfoArray[ sortInfo[ k ].seq ] = { key: k, order: sortInfo[ k ].orderBy };
       }
-      sortInfoArray = sortInfoArray.filter( o => typeof o !== 'undefined' );
+      sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
 
       let i = 0, l = sortInfoArray.length, _a_val, _b_val;
-      let sorted = state.get( 'list' ).sort(
-        ( a, b ) => {
+      let sorted = state.get('list').sort(
+        (a, b) => {
           for ( i = 0; i < l; i++ ) {
-            _a_val = getValueByKey( a, sortInfoArray[ i ].key );
-            _b_val = getValueByKey( b, sortInfoArray[ i ].key );
+            _a_val = getValueByKey(a, sortInfoArray[ i ].key);
+            _b_val = getValueByKey(b, sortInfoArray[ i ].key);
 
             if ( typeof _a_val !== typeof _b_val ) {
               _a_val = '' + _a_val;
@@ -105,19 +105,19 @@ export const gridReducer = ( state = initialState, action ) => {
       );
 
       return state
-        .set( 'sortInfo', sortInfo )
-        .set( 'list', sorted );
+        .set('sortInfo', sortInfo)
+        .set('list', sorted);
     },
 
-    [TYPES.FILTER]: () => {
+    [ TYPES.FILTER ]: () => {
       const checkAll = (action.filterInfo[ action.colIndex ] === false) ? true : action.filterInfo[ action.colIndex ][ '__check_all__' ];
       let list;
 
       if ( checkAll ) {
-        list = state.get( 'receivedList' ).filter( item => (item ? !item[ action.options.columnKeys.deleted ] : false) );
+        list = state.get('receivedList').filter(item => (item ? !item[ action.options.columnKeys.deleted ] : false));
       }
       else {
-        list = state.get( 'receivedList' ).filter( item => {
+        list = state.get('receivedList').filter(item => {
           if ( item ) {
             if ( item[ action.options.columnKeys.deleted ] ) return false;
 
@@ -137,24 +137,24 @@ export const gridReducer = ( state = initialState, action ) => {
             return true;
           }
           return false;
-        } );
+        });
       }
 
       return state
-        .set( 'list', List( list ) )
-        .set( 'filterInfo', Map( action.filterInfo ) );
+        .set('list', List(list))
+        .set('filterInfo', Map(action.filterInfo));
     },
 
-    [TYPES.UPDATE]: () => {
-      let list = state.get( 'list' );
+    [ TYPES.UPDATE ]: () => {
+      let list = state.get('list');
 
-      list.update( action.row, item => {
+      list.update(action.row, item => {
         item[ action.colGroup[ action.col ].key ] = action.value;
         return item;
-      } );
+      });
 
       return state
-        .set( 'list', List( list ) );
+        .set('list', List(list));
     }
   };
 

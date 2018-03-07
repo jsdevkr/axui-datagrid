@@ -1,5 +1,7 @@
-export const INIT = 'INIT';
-export const SET_DATA = 'SET_DATA';
-export const SORT = 'SORT';
-export const FILTER = 'FILTER';
-export const UPDATE = 'UPDATE';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.INIT = 'INIT';
+exports.SET_DATA = 'SET_DATA';
+exports.SORT = 'SORT';
+exports.FILTER = 'FILTER';
+exports.UPDATE = 'UPDATE';

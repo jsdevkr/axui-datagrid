@@ -1,7 +1,16 @@
-import * as TYPES from './actionTypes';
-import { propsConverterForData } from '../util';
-export function INIT(props, options) {
-    let Obj_data = propsConverterForData(props.data);
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const TYPES = __importStar(require("./actionTypes"));
+const util_1 = require("../util");
+function INIT(props, options) {
+    let Obj_data = util_1.propsConverterForData(props.data);
     return {
         type: TYPES.INIT,
         receivedList: Obj_data.receivedList,
@@ -9,8 +18,9 @@ export function INIT(props, options) {
         options
     };
 }
-export function SET_DATA(data, options) {
-    let Obj_data = propsConverterForData(data);
+exports.INIT = INIT;
+function SET_DATA(data, options) {
+    let Obj_data = util_1.propsConverterForData(data);
     return {
         type: TYPES.SET_DATA,
         receivedList: Obj_data.receivedList,
@@ -18,7 +28,8 @@ export function SET_DATA(data, options) {
         options
     };
 }
-export function SORT(colGroup, options, colIndex) {
+exports.SET_DATA = SET_DATA;
+function SORT(colGroup, options, colIndex) {
     return {
         type: TYPES.SORT,
         colGroup,
@@ -26,7 +37,8 @@ export function SORT(colGroup, options, colIndex) {
         colIndex
     };
 }
-export function FILTER(colGroup, options, colIndex, filterInfo) {
+exports.SORT = SORT;
+function FILTER(colGroup, options, colIndex, filterInfo) {
     return {
         type: TYPES.FILTER,
         colGroup,
@@ -35,7 +47,8 @@ export function FILTER(colGroup, options, colIndex, filterInfo) {
         filterInfo
     };
 }
-export function UPDATE(colGroup, options, row, col, value) {
+exports.FILTER = FILTER;
+function UPDATE(colGroup, options, row, col, value) {
     return {
         type: TYPES.UPDATE,
         colGroup,
@@ -45,3 +58,4 @@ export function UPDATE(colGroup, options, row, col, value) {
         value
     };
 }
+exports.UPDATE = UPDATE;

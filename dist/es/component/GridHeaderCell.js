@@ -1,6 +1,18 @@
-import * as React from 'react';
-import cx from 'classnames';
-export class GridHeaderCell extends React.Component {
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const classnames_1 = __importDefault(require("classnames"));
+class GridHeaderCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -31,7 +43,7 @@ export class GridHeaderCell extends React.Component {
             ['focused']: (focusedCol > -1 && col.colIndex === focusedCol && bodyRow.rows.length - 1 === ri + col.rowspan - 1),
             ['selected']: (selectionCols[col.colIndex] && bodyRow.rows.length - 1 === ri + col.rowspan - 1)
         };
-        return (React.createElement("td", { colSpan: col.colspan, rowSpan: col.rowspan, className: cx(tdClassNames), onClick: (e) => onClickHeader(e, col.colIndex, col.columnAttr), style: { height: cellHeight, minHeight: '1px' } },
+        return (React.createElement("td", { colSpan: col.colspan, rowSpan: col.rowspan, className: classnames_1.default(tdClassNames), onClick: (e) => onClickHeader(e, col.colIndex, col.columnAttr), style: { height: cellHeight, minHeight: '1px' } },
             React.createElement("span", { "data-span": true, "data-align": colAlign, style: {
                     height: (optionsHeader.columnHeight - optionsHeader.columnBorderWidth) + 'px',
                     lineHeight: lineHeight + 'px'
@@ -41,3 +53,4 @@ export class GridHeaderCell extends React.Component {
             (optionsHeader.enableFilter && col.key && col.colIndex > -1) ? React.createElement("span", { "data-filter": 'true', "data-filter-index": col.colIndex }) : null));
     }
 }
+exports.GridHeaderCell = GridHeaderCell;

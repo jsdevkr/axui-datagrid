@@ -31,7 +31,7 @@ const fnObj = {
 /**
  * watch
  */
-gulp.task('scss-watch', function() {
+gulp.task('scss-watch', function () {
   gulp.watch(['./dev/scss/**/*.scss'], ['scss-dev']);
   gulp.watch(['./src/scss/**/*.scss'], ['scss-src']);
 });
@@ -39,7 +39,7 @@ gulp.task('scss-watch', function() {
 /**
  * SASS
  */
-gulp.task('scss-dev', function() {
+gulp.task('scss-dev', function () {
   gulp
     .src('./dev/scss/index.scss')
     .pipe(plumber({ errorHandler: errorAlert }))
@@ -47,7 +47,7 @@ gulp.task('scss-dev', function() {
     .pipe(gulp.dest('./dev/scss'));
 });
 
-gulp.task('scss-src', function() {
+gulp.task('scss-src', function () {
   gulp
     .src('./src/scss/index.scss')
     .pipe(plumber({ errorHandler: errorAlert }))
@@ -56,11 +56,11 @@ gulp.task('scss-src', function() {
 });
 
 // 걸프 기본 타스크
-gulp.task('default', ['dev-run'], function() {
+gulp.task('default', ['dev-run'], function () {
   return true;
 });
 
-gulp.task('dist-scss', ['scss-src'], function() {
+gulp.task('dist-scss', ['scss-src'], function () {
   return gulp
     .src([fnObj.paths.src + '/**/*.scss', fnObj.paths.src + '/**/*.css'], {
       base: fnObj.paths.src,
@@ -70,16 +70,16 @@ gulp.task('dist-scss', ['scss-src'], function() {
 });
 
 // task for ES5
-gulp.task('dist-ES', ['dist-scss'], function() {
+gulp.task('dist-ES', ['dist-scss'], function () {
   return gulp
-    .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx'])
+    .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx', '!' + fnObj.paths.src + '/__tests__/**'])
     .pipe(tsProject())
     .pipe(gulp.dest(fnObj.paths.dist + '/es'));
 });
 
-gulp.task('dist-TS', ['dist-scss'], function() {
+gulp.task('dist-TS', ['dist-scss'], function () {
   return gulp
-    .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx'])
+    .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx', '!' + fnObj.paths.src + '/__tests__/**'])
     .pipe(gulp.dest(fnObj.paths.dist + '/ts'));
 });
 

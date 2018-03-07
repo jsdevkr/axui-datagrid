@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *
  * @param scrollLeft
@@ -8,7 +10,7 @@
  * @param clientHeight
  * @return {{scrollLeft: *, scrollTop: *, eventBreak: boolean}}
  */
-export function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHeight, clientWidth, clientHeight }) {
+function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHeight, clientWidth, clientHeight }) {
     let endScroll = false;
     if (clientHeight > scrollHeight) {
         scrollTop = 0;
@@ -38,6 +40,7 @@ export function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHe
         scrollLeft, scrollTop, endScroll
     };
 }
+exports.getScrollPosition = getScrollPosition;
 /**
  *
  * @param {number} scrollBarLeft
@@ -56,7 +59,7 @@ export function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHe
  * @param {any} SH
  * @return {{scrollLeft: number; scrollTop: number}}
  */
-export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight, scrollContentWidth, scrollContentHeight, scrollContentContainerWidth, scrollContentContainerHeight, BW = horizontalScrollerWidth - horizontalScrollBarWidth, BH = verticalScrollerHeight - verticalScrollBarHeight, SW = scrollContentWidth - scrollContentContainerWidth, SH = scrollContentHeight - scrollContentContainerHeight }) {
+function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight, scrollContentWidth, scrollContentHeight, scrollContentContainerWidth, scrollContentContainerHeight, BW = horizontalScrollerWidth - horizontalScrollBarWidth, BH = verticalScrollerHeight - verticalScrollBarHeight, SW = scrollContentWidth - scrollContentContainerWidth, SH = scrollContentHeight - scrollContentContainerHeight }) {
     let { scrollLeft, scrollTop } = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
         scrollWidth: scrollContentWidth,
         scrollHeight: scrollContentHeight,
@@ -68,3 +71,4 @@ export function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { hori
         scrollTop
     };
 }
+exports.getScrollPositionByScrollBar = getScrollPositionByScrollBar;

@@ -1,22 +1,36 @@
 {
-  "env": {
-    "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
+  "presets": [["env", {
+    "targets": {
+      "browsers": ["last 2 versions", "> 1% in KR"]
     }
-  },
-  "presets": [
-    [
-      "env",
-      {
+  }], "react", "stage-0"],
+
+  "sourceMaps": true,
+
+  "env": {
+    "production": {
+      "plugins": [
+        "add-module-exports",
+        ["lodash", {"id": ["lodash", "semantic-ui-react"]}]
+      ]
+    },
+    "development": {
+      "plugins": [
+        "add-module-exports",
+        ["lodash", {"id": ["lodash", "semantic-ui-react"]}],
+        "react-hot-loader/babel"
+      ]
+    },
+    "test": {
+      "presets": [["env", {
         "targets": {
           "node": "current"
         }
-      }
-    ], "react", "stage-0"
-  ],
-  "plugins": [
-    "transform-runtime",
-    "add-module-exports",
-    "lodash"
-  ]
+      }], "react", "stage-0"],
+      "plugins": [
+        "add-module-exports",
+        ["lodash", {"id": ["lodash", "semantic-ui-react"]}]
+      ]
+    }
+  }
 }
