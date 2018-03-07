@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Table } from 'semantic-ui-react';
-import map from 'lodash-es/map';
+import { map } from 'lodash';
 import { PropsTableRow } from './PropsTableRow';
 
-export const PropsTable = ( { props } ) => (
+export const PropsTable = ({ props }) => (
   <Table basic='very'>
     <Table.Header>
       <Table.Row>
@@ -14,7 +14,7 @@ export const PropsTable = ( { props } ) => (
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {map( props, ( { name, ...rest } ) => <PropsTableRow {...rest} key={name} name={name} /> )}
+      {map(props, ({ name, ...rest }) => <PropsTableRow {...rest} key={name} name={name} />)}
     </Table.Body>
   </Table>
 );

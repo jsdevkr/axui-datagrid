@@ -1,25 +1,22 @@
-import isObject from 'lodash-es/isObject';
-import isArray from 'lodash-es/isArray';
-import each from 'lodash-es/each';
-import assignWith from 'lodash-es/assignWith';
+import { assignWith, each, isArray, isObject } from 'lodash';
 import { divideTableByFrozenColumnIndex, makeBodyGroupingTable, makeBodyRowMap, makeBodyRowTable, makeFootSumTable, makeHeaderTable } from './_makeData';
 
-export function propsToState( props, state ) {
+export function propsToState(props, state) {
   let dividedObj;
 
   // state 계산영역 시작
-  state.headerTable = makeHeaderTable( props.columns, state.options );
-  state.bodyRowTable = makeBodyRowTable( props.columns, state.options );
-  state.bodyRowMap = makeBodyRowMap( state.bodyRowTable, state.options );
+  state.headerTable = makeHeaderTable(props.columns, state.options);
+  state.bodyRowTable = makeBodyRowTable(props.columns, state.options);
+  state.bodyRowMap = makeBodyRowMap(state.bodyRowTable, state.options);
 
-  dividedObj = divideTableByFrozenColumnIndex( state.headerTable, state.options.frozenColumnIndex, state.options );
+  dividedObj = divideTableByFrozenColumnIndex(state.headerTable, state.options.frozenColumnIndex, state.options);
   state.asideHeaderData = dividedObj.asideData;
   state.asideColGroup = dividedObj.asideColGroup; // asideColGroup은 header, bodyRow 에서 공통으로 사용 한번만 구하면 그만이지만 편의상 header에서 처리하기로 한다.
   state.leftHeaderData = dividedObj.leftData;
   state.headerData = dividedObj.rightData;
   state.styles.asidePanelWidth = dividedObj.asidePanelWidth;
 
-  dividedObj = divideTableByFrozenColumnIndex( state.bodyRowTable, state.options.frozenColumnIndex, state.options );
+  dividedObj = divideTableByFrozenColumnIndex(state.bodyRowTable, state.options.frozenColumnIndex, state.options);
   state.asideBodyRowData = dividedObj.asideData;
   state.leftBodyRowData = dividedObj.leftData;
   state.bodyRowData = dividedObj.rightData;
@@ -29,28 +26,28 @@ export function propsToState( props, state ) {
 
   state.colGroupMap = {};
 
-  state.headerTable.rows.forEach( ( row, r ) => {
-    row.cols.forEach( ( col, c ) => {
-      state.colGroupMap[ col.colIndex ] = assignWith( {}, col );
-    } );
-  } );
+  state.headerTable.rows.forEach((row, r) => {
+    row.cols.forEach((col, c) => {
+      state.colGroupMap[ col.colIndex ] = assignWith({}, col);
+    });
+  });
 
   state.colGroup = [];
-  each( state.colGroupMap, ( v, k ) => {
-    state.colGroup.push( v );
-  } );
+  each(state.colGroupMap, (v, k) => {
+    state.colGroup.push(v);
+  });
 
-  state.leftHeaderColGroup = state.colGroup.slice( 0, state.options.frozenColumnIndex );
-  state.headerColGroup = state.colGroup.slice( state.options.frozenColumnIndex );
+  state.leftHeaderColGroup = state.colGroup.slice(0, state.options.frozenColumnIndex);
+  state.headerColGroup = state.colGroup.slice(state.options.frozenColumnIndex);
 
   // footSum
   state.footSumColumns = [];
   state.footSumTable = {};
 
-  if ( isArray( state.options.footSum ) ) {
+  if ( isArray(state.options.footSum) ) {
     state.footSumColumns = state.options.footSum;
-    state.footSumTable = makeFootSumTable( state.footSumColumns, state.colGroup, state.options );
-    dividedObj = divideTableByFrozenColumnIndex( state.footSumTable, state.options.frozenColumnIndex, state.options );
+    state.footSumTable = makeFootSumTable(state.footSumColumns, state.colGroup, state.options);
+    dividedObj = divideTableByFrozenColumnIndex(state.footSumTable, state.options.frozenColumnIndex, state.options);
     state.leftFootSumData = dividedObj.leftData;
     state.footSumData = dividedObj.rightData;
   }
@@ -62,7 +59,7 @@ export function propsToState( props, state ) {
         by: state.options.body.grouping.by,
         columns: state.options.body.grouping.columns
       };
-      state.bodyGroupingTable = makeBodyGroupingTable( state.bodyGrouping.columns, state.colGroup, state.options );
+      state.bodyGroupingTable = makeBodyGroupingTable(state.bodyGrouping.columns, state.colGroup, state.options);
       state.sortInfo = (() => {
         let sortInfo = {};
         for ( let k = 0, kl = state.bodyGrouping.by.length; k < kl; k++ ) {
@@ -81,11 +78,11 @@ export function propsToState( props, state ) {
         return sortInfo;
       })();
 
-      dividedObj = divideTableByFrozenColumnIndex( state.bodyGroupingTable, state.options.frozenColumnIndex, state.options );
+      dividedObj = divideTableByFrozenColumnIndex(state.bodyGroupingTable, state.options.frozenColumnIndex, state.options);
       state.asideBodyGroupingData = dividedObj.asideData;
       state.leftBodyGroupingData = dividedObj.leftData;
       state.bodyGroupingData = dividedObj.rightData;
-      state.bodyGroupingMap = makeBodyRowMap( state.bodyGroupingTable, state.options );
+      state.bodyGroupingMap = makeBodyRowMap(state.bodyGroupingTable, state.options);
     } else {
       state.options.body.grouping = false;
     }
@@ -99,16 +96,16 @@ export function propsToState( props, state ) {
  * @param data
  * @return {{receivedList: Array, page: {}}}
  */
-export function propsConverterForData( data ) {
+export function propsConverterForData(data) {
   let Obj_return = {
     receivedList: [],
     page: false
   };
 
-  if ( isArray( data ) ) {
+  if ( isArray(data) ) {
     Obj_return.receivedList = data;
   }
-  else if ( isObject( data ) ) {
+  else if ( isObject(data) ) {
     Obj_return.receivedList = data.list || [];
     Obj_return.page = data.page || {};
   }

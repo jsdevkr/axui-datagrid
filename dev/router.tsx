@@ -5,6 +5,8 @@ import style from 'Style';
 import { withRouter } from 'react-router';
 import { SideNav } from 'components';
 import * as Pages from 'pages';
+import 'scss/index.css';
+import 'datagrid-ts/scss/index.css';
 
 const RedirectToIntro = () => <Redirect to="/introduction" />;
 

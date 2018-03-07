@@ -1,11 +1,11 @@
 import * as React from 'react';
-import assign from 'lodash-es/assign';
+import { assign } from 'lodash';
 import { Button, Container, Divider, Form, Segment, Select } from 'semantic-ui-react';
 import { AXDatagrid } from 'datagrid-ts/index';
 
 export class FrozenColumnRow extends React.Component<any, any> {
-  constructor( props ) {
-    super( props );
+  constructor(props) {
+    super(props);
 
     const gridData = [
       { id: 1, title: '인생은 해파에게조차 아름답고 장엄하다.', writer: '장기영', date: '20171205123000', money: 1289301823 },
@@ -60,26 +60,26 @@ export class FrozenColumnRow extends React.Component<any, any> {
       }
     };
 
-    this.changeConfig = this.changeConfig.bind( this );
+    this.changeConfig = this.changeConfig.bind(this);
   }
 
-  public changeConfig( props, value ) {
+  public changeConfig(props, value) {
 
     const processor = {
       'setHeight': () => {
-        this.setState( {
+        this.setState({
           height: value
-        } );
+        });
       },
       'setOptions': () => {
-        this.setState( { options: assign( {}, this.state.options, value ) } );
+        this.setState({ options: assign({}, this.state.options, value) });
       }
     };
 
     if ( props in processor ) {
-      processor[ props ].call( this );
+      processor[ props ].call(this);
     } else {
-      this.setState( value );
+      this.setState(value);
     }
   }
 
@@ -105,8 +105,8 @@ export class FrozenColumnRow extends React.Component<any, any> {
             <Form.Group>
               <Form.Field id={'row'} label={'Row'}
                           control={() => (<Select defaultValue={this.state.options.frozenRowIndex}
-                                                  onChange={( e, s ) => {
-                                                    this.changeConfig( 'setOptions', { frozenRowIndex: s.value } );
+                                                  onChange={(e, s) => {
+                                                    this.changeConfig('setOptions', { frozenRowIndex: s.value });
                                                   }}
                                                   options={[
                                                     { key: 0, value: 0, text: '0 row' },
@@ -118,8 +118,8 @@ export class FrozenColumnRow extends React.Component<any, any> {
                                                   ]} />)} />
               <Form.Field id={'col'} label={'Column'}
                           control={() => (<Select defaultValue={this.state.options.frozenColumnIndex}
-                                                  onChange={( e, s ) => {
-                                                    this.changeConfig( 'setOptions', { frozenColumnIndex: s.value } );
+                                                  onChange={(e, s) => {
+                                                    this.changeConfig('setOptions', { frozenColumnIndex: s.value });
                                                   }}
                                                   options={[
                                                     { key: 0, value: 0, text: '0 column' },
@@ -134,9 +134,9 @@ export class FrozenColumnRow extends React.Component<any, any> {
 
           <Divider />
           <Button.Group basic size='tiny'>
-            <Button onClick={e => this.changeConfig( 'setHeight', 300 )} content='height : 300' />
-            <Button onClick={e => this.changeConfig( 'setHeight', 400 )} content='height : 400' />
-            <Button onClick={e => this.changeConfig( 'setHeight', 500 )} content='height : 500' />
+            <Button onClick={e => this.changeConfig('setHeight', 300)} content='height : 300' />
+            <Button onClick={e => this.changeConfig('setHeight', 400)} content='height : 400' />
+            <Button onClick={e => this.changeConfig('setHeight', 500)} content='height : 500' />
           </Button.Group>
 
         </Segment>

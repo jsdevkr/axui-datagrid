@@ -1,14 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import assign from 'lodash-es/assign';
-import each from 'lodash-es/each';
-import isEqual from 'lodash-es/isEqual';
-import isFunction from 'lodash-es/isFunction';
-import isObject from 'lodash-es/isObject';
-import last from 'lodash-es/last';
-import range from 'lodash-es/range';
-import throttle from 'lodash-es/throttle';
+import { assign, each, isEqual, isFunction, isObject, last, range, throttle } from 'lodash';
 import { fromJS } from 'immutable';
 import cx from 'classnames';
 
@@ -30,8 +23,8 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     options: {}
   };
 
-  public static setFormatter( _formatter ) {
-    return formatter = assign( formatter, _formatter );
+  public static setFormatter(_formatter) {
+    return formatter = assign(formatter, _formatter);
   }
 
   public static getFormatter() {
@@ -45,8 +38,8 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
   private scrollMovingTimer: any;
   private columnFormatter: any;
 
-  constructor( props: any ) {
-    super( props );
+  constructor(props: any) {
+    super(props);
 
     this.columnFormatter = GridRoot.getFormatter();
     this.componentRefs = {};
@@ -138,56 +131,56 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       },
       options: (() => {
         // todo : 옵션 초기화 함수로 분리
-        let options = assign( {}, gridOptions );
-        each( props.options, function ( v, k ) {
-          options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
-        } );
+        let options = assign({}, gridOptions);
+        each(props.options, function (v, k) {
+          options[ k ] = (isObject(v)) ? assign({}, options[ k ], v) : v;
+        });
         return options;
       })()
     };
 
-    this.state = UTIL.propsToState( props, assign( {}, defaultState ) );
+    this.state = UTIL.propsToState(props, assign({}, defaultState));
 
     // state 계산영역 끝
-    this.props.init( props, this.state.options );
+    this.props.init(props, this.state.options);
 
     // 이벤트 멤버에 바인딩
-    this.getRootBounding = this.getRootBounding.bind( this );
-    this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind( this );
-    this.onClickScrollTrack = this.onClickScrollTrack.bind( this );
-    this.onClickScrollArrow = this.onClickScrollArrow.bind( this );
-    this.onResizeColumnResizer = this.onResizeColumnResizer.bind( this );
-    this.onClickPageButton = this.onClickPageButton.bind( this );
-    this.onMouseDownBody = this.onMouseDownBody.bind( this );
-    this.onWheel = this.onWheel.bind( this );
-    this.onKeyPress = this.onKeyPress.bind( this );
-    this.onClickHeader = this.onClickHeader.bind( this );
-    this.onChangeColumnFilter = this.onChangeColumnFilter.bind( this );
-    this.onDoubleClickCell = this.onDoubleClickCell.bind( this );
-    this.updateEditInput = this.updateEditInput.bind( this );
-    this.onFireEvent = this.onFireEvent.bind( this );
+    this.getRootBounding = this.getRootBounding.bind(this);
+    this.onMouseDownScrollBar = this.onMouseDownScrollBar.bind(this);
+    this.onClickScrollTrack = this.onClickScrollTrack.bind(this);
+    this.onClickScrollArrow = this.onClickScrollArrow.bind(this);
+    this.onResizeColumnResizer = this.onResizeColumnResizer.bind(this);
+    this.onClickPageButton = this.onClickPageButton.bind(this);
+    this.onMouseDownBody = this.onMouseDownBody.bind(this);
+    this.onWheel = this.onWheel.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onClickHeader = this.onClickHeader.bind(this);
+    this.onChangeColumnFilter = this.onChangeColumnFilter.bind(this);
+    this.onDoubleClickCell = this.onDoubleClickCell.bind(this);
+    this.updateEditInput = this.updateEditInput.bind(this);
+    this.onFireEvent = this.onFireEvent.bind(this);
   }
 
   componentDidMount() {
-    this.gridRootNode = ReactDOM.findDOMNode( this.refs.gridRoot );
+    this.gridRootNode = ReactDOM.findDOMNode(this.refs.gridRoot);
 
-    this.throttled_updateDimensions = throttle( this.updateDimensions.bind( this ), 100 );
-    window.addEventListener( 'resize', this.throttled_updateDimensions );
+    this.throttled_updateDimensions = throttle(this.updateDimensions.bind(this), 100);
+    window.addEventListener('resize', this.throttled_updateDimensions);
 
-    this.setState( {
+    this.setState({
       mounted: true
-    } );
+    });
   }
 
   componentWillUnmount() {
-    window.removeEventListener( 'resize', this.throttled_updateDimensions );
+    window.removeEventListener('resize', this.throttled_updateDimensions);
   }
 
-  componentWillReceiveProps( nextProps ) {
+  componentWillReceiveProps(nextProps) {
     // 변경된 props를 받게 되면
     // 데이터 체인지
     if ( this.props.data !== nextProps.data ) {
-      this.props.setData( nextProps.data, this.state.options );
+      this.props.setData(nextProps.data, this.state.options);
     }
 
 
@@ -196,26 +189,26 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       this.data.sColIndex = -1;
       this.data.eColIndex = -1;
 
-      let newState = assign( {}, this.state, {
+      let newState = assign({}, this.state, {
         scrollLeft: 0,
         scrollTop: 0,
         options: (() => {
-          let options = assign( {}, gridOptions );
-          each( nextProps.options, function ( v, k ) {
-            options[ k ] = (isObject( v )) ? assign( {}, options[ k ], v ) : v;
-          } );
+          let options = assign({}, gridOptions);
+          each(nextProps.options, function (v, k) {
+            options[ k ] = (isObject(v)) ? assign({}, options[ k ], v) : v;
+          });
           return options;
         })()
-      } );
+      });
 
-      newState = UTIL.propsToState( nextProps, newState );
+      newState = UTIL.propsToState(nextProps, newState);
 
-      newState.styles = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, newState ).styles;
-      this.setState( newState );
+      newState.styles = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, newState).styles;
+      this.setState(newState);
     }
   }
 
-  shouldComponentUpdate( nextProps, nextState ) {
+  shouldComponentUpdate(nextProps, nextState) {
     if ( this.props.data !== nextProps.data ) {
       return false;
     }
@@ -233,12 +226,12 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       this.props.store_filterInfo !== nextProps.store_filterInfo
     ) {
       // redux store state가 변경되면 렌더를 바로 하지 말고 this.state.styles 변경하여 state에 의해 랜더링 되도록 함. (이중으로 랜더링 하기 싫음)
-      const { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: nextProps.store_list }, this.state );
+      const { styles } = UTIL.calculateDimensions(this.gridRootNode, { list: nextProps.store_list }, this.state);
 
-      this.setState( {
+      this.setState({
         scrollTop: 0,
         styles: styles
-      } );
+      });
 
       return false;
     }
@@ -246,13 +239,13 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     return true;
   }
 
-  componentWillUpdate( nextProps ) {
+  componentWillUpdate(nextProps) {
     // console.log(this.state.sColIndex);
     // shouldComponentUpdate에더 랜더를 방지 하거나. willUpdate에서 this.state.styles값 강제 변경 테스트.
 
   }
 
-  componentDidUpdate( prevProps, prevState ) {
+  componentDidUpdate(prevProps, prevState) {
     // change props and render
     if ( prevProps.height !== this.props.height ) {
       this.updateDimensions();
@@ -263,49 +256,49 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
    * 사용자 함수
    */
   private updateDimensions() {
-    let { styles } = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, this.state );
-    let { scrollLeft, scrollTop } = UTIL.getScrollPosition( this.state.scrollLeft, this.state.scrollTop, {
+    let { styles } = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, this.state);
+    let { scrollLeft, scrollTop } = UTIL.getScrollPosition(this.state.scrollLeft, this.state.scrollTop, {
       scrollWidth: styles.scrollContentWidth,
       scrollHeight: styles.scrollContentHeight,
       clientWidth: styles.scrollContentContainerWidth,
       clientHeight: styles.scrollContentContainerHeight
-    } );
-    this.setState( {
+    });
+    this.setState({
       scrollLeft: scrollLeft,
       scrollTop: scrollTop,
       styles: styles
-    } );
+    });
   }
 
-  private onMouseDownScrollBar( e: any, barName: string ): void {
+  private onMouseDownScrollBar(e: any, barName: string): void {
     e.preventDefault();
     const styles = this.state.styles;
     const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop: number = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
 
-    let startMousePosition = UTIL.getMousePosition( e );
+    let startMousePosition = UTIL.getMousePosition(e);
 
-    const onMouseMove = ( ee ) => {
+    const onMouseMove = (ee) => {
       if ( !this.state.dragging ) {
-        this.setState( { dragging: true } );
+        this.setState({ dragging: true });
       }
-      const { x, y } = UTIL.getMousePosition( ee );
+      const { x, y } = UTIL.getMousePosition(ee);
 
       const processor = {
         vertical: () => {
-          let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles );
-          this.setState( {
+          let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles);
+          this.setState({
             scrollLeft: scrollLeft || 0,
             scrollTop: scrollTop || 0
-          } );
+          });
         },
         horizontal: () => {
-          let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles );
+          let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
 
-          this.setState( {
+          this.setState({
             scrollLeft: scrollLeft || 0,
             scrollTop: scrollTop || 0
-          } );
+          });
         }
       };
 
@@ -314,43 +307,43 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       }
     };
 
-    const offEvent = ( ee ) => {
+    const offEvent = (ee) => {
       ee.preventDefault();
 
-      this.setState( { dragging: false } );
+      this.setState({ dragging: false });
       startMousePosition = null;
       // console.log('offEvent');
-      document.removeEventListener( 'mousemove', onMouseMove );
-      document.removeEventListener( 'mouseup', offEvent );
-      document.removeEventListener( 'mouseleave', offEvent );
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', offEvent);
+      document.removeEventListener('mouseleave', offEvent);
     };
 
-    document.addEventListener( 'mousemove', onMouseMove );
-    document.addEventListener( 'mouseup', offEvent );
-    document.addEventListener( 'mouseleave', offEvent );
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', offEvent);
+    document.addEventListener('mouseleave', offEvent);
   }
 
-  private onClickScrollTrack( e: any, barName: string ) {
+  private onClickScrollTrack(e: any, barName: string) {
     const styles = this.state.styles;
     const currScrollBarLeft: number = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
     const currScrollBarTop: number = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
-    const { x, y } = UTIL.getMousePosition( e );
+    const { x, y } = UTIL.getMousePosition(e);
     const { x: grx, y: gry } = this.gridRootNode.getBoundingClientRect();
 
     const processor = {
       vertical: () => {
-        let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles );
-        this.setState( {
+        let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles);
+        this.setState({
           scrollLeft: scrollLeft || 0,
           scrollTop: scrollTop || 0
-        } );
+        });
       },
       horizontal: () => {
-        let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar( x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles );
-        this.setState( {
+        let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+        this.setState({
           scrollLeft: scrollLeft || 0,
           scrollTop: scrollTop || 0
-        } );
+        });
       }
     };
 
@@ -359,32 +352,32 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  private onClickScrollArrow( e: any, direction: string ) {
+  private onClickScrollArrow(e: any, direction: string) {
     const styles = this.state.styles;
     const processor = {
       up: () => {
         let scrollAmount = styles.scrollContentContainerHeight;
-        this.setState( {
+        this.setState({
           scrollTop: (this.state.scrollTop + scrollAmount < 0) ? this.state.scrollTop + scrollAmount : 0
-        } );
+        });
       },
       down: () => {
         let scrollAmount = styles.scrollContentContainerHeight;
-        this.setState( {
+        this.setState({
           scrollTop: (styles.scrollContentContainerHeight < styles.scrollContentHeight + (this.state.scrollTop - scrollAmount)) ? this.state.scrollTop - scrollAmount : styles.scrollContentContainerHeight - styles.scrollContentHeight
-        } );
+        });
       },
       left: () => {
         let scrollAmount = styles.scrollContentContainerWidth;
-        this.setState( {
+        this.setState({
           scrollLeft: (this.state.scrollLeft + scrollAmount < 0) ? this.state.scrollLeft + scrollAmount : 0
-        } );
+        });
       },
       right: () => {
         let scrollAmount = styles.scrollContentContainerWidth;
-        this.setState( {
+        this.setState({
           scrollLeft: (styles.scrollContentContainerWidth < styles.scrollContentWidth + (this.state.scrollLeft - scrollAmount)) ? this.state.scrollLeft - scrollAmount : styles.scrollContentContainerWidth - styles.scrollContentWidth
-        } );
+        });
       }
     };
     if ( direction in processor ) {
@@ -392,51 +385,51 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  private onResizeColumnResizer( e: any, col, newWidth: number ) {
-    let colGroup = fromJS( this.state.colGroup ).toJS();
+  private onResizeColumnResizer(e: any, col, newWidth: number) {
+    let colGroup = fromJS(this.state.colGroup).toJS();
     let styles, leftHeaderColGroup, headerColGroup;
 
     colGroup[ col.colIndex ]._width = colGroup[ col.colIndex ].width = newWidth;
 
-    ( { styles, leftHeaderColGroup, headerColGroup }
-      = UTIL.calculateDimensions( this.gridRootNode, { list: this.props.store_list }, assign( {}, this.state, { colGroup: colGroup } ) ) )
+    ({ styles, leftHeaderColGroup, headerColGroup }
+      = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, assign({}, this.state, { colGroup: colGroup })))
 
     this.data._headerColGroup = undefined;
-    this.setState( {
+    this.setState({
       colGroup: colGroup,
       leftHeaderColGroup: leftHeaderColGroup,
       headerColGroup: headerColGroup,
       styles: styles
-    } );
+    });
   }
 
   private getRootBounding() {
     return this.gridRootNode.getBoundingClientRect();
   }
 
-  private onClickPageButton( e: any, onClick: Function ) {
+  private onClickPageButton(e: any, onClick: Function) {
     const processor = {
       'PAGE_FIRST': () => {
-        this.onKeyAction( KEY_CODE.HOME );
+        this.onKeyAction(KEY_CODE.HOME);
       },
       'PAGE_PREV': () => {
-        this.onKeyAction( KEY_CODE.PAGE_UP );
+        this.onKeyAction(KEY_CODE.PAGE_UP);
       },
       'PAGE_BACK': () => {
-        this.onKeyAction( KEY_CODE.UP );
+        this.onKeyAction(KEY_CODE.UP);
       },
       'PAGE_PLAY': () => {
-        this.onKeyAction( KEY_CODE.DOWN );
+        this.onKeyAction(KEY_CODE.DOWN);
       },
       'PAGE_NEXT': () => {
-        this.onKeyAction( KEY_CODE.PAGE_DOWN );
+        this.onKeyAction(KEY_CODE.PAGE_DOWN);
       },
       'PAGE_LAST': () => {
-        this.onKeyAction( KEY_CODE.END );
+        this.onKeyAction(KEY_CODE.END);
       }
     };
 
-    if ( isFunction( onClick ) ) {
+    if ( isFunction(onClick) ) {
       onClick();
     }
     else if ( typeof onClick === 'string' && onClick in processor ) {
@@ -444,10 +437,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  private onMouseDownBody( e: any ) {
+  private onMouseDownBody(e: any) {
     const { frozenPanelWidth, frozenPanelHeight } = this.state.styles;
-    const startMousePosition = UTIL.getMousePosition( e );
-    const spanType: string = e.target.getAttribute( 'data-span' );
+    const startMousePosition = UTIL.getMousePosition(e);
+    const spanType: string = e.target.getAttribute('data-span');
     const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
     const { x, y } = this.getRootBounding();
     const leftPadding: number = x; // + styles.asidePanelWidth;
@@ -457,15 +450,15 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     const startScrollTop: number = this.state.scrollTop;
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
-    const getRowIndex: Function = ( y: number, scrollTop: number ): number => {
+    const getRowIndex: Function = (y: number, scrollTop: number): number => {
       if ( y - headerHeight < frozenPanelHeight ) scrollTop = 0;
       let i: number = 0;
-      i = Math.floor( (y - headerHeight - scrollTop) / bodyTrHeight );
+      i = Math.floor((y - headerHeight - scrollTop) / bodyTrHeight);
       if ( i < 0 ) i = 0;
       else if ( i >= this.props.store_list.size - 1 ) i = this.props.store_list.size - 1;
       return i;
     };
-    const getColIndex: Function = ( x: number, scrollLeft: number ): number => {
+    const getColIndex: Function = (x: number, scrollLeft: number): number => {
       if ( x - asidePanelWidth < frozenPanelWidth ) scrollLeft = 0;
       const p: number = x - asidePanelWidth - scrollLeft;
       let cl: number = this.state.colGroup.length;
@@ -482,25 +475,25 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     const proc_bodySelect = () => {
       if ( selectStartedCol < 0 ) return;
 
-      const onMouseMove = ( ee ): void => {
-        const currMousePosition = UTIL.getMousePosition( ee );
+      const onMouseMove = (ee): void => {
+        const currMousePosition = UTIL.getMousePosition(ee);
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
-        const setStateCall = ( currState, _moving?: iAXDataGridRootMoving ): void => {
-          const selectEndedRow: number = getRowIndex( currState.selectionEndOffset.y, this.state.scrollTop );
-          let selectEndedCol: number = getColIndex( currState.selectionEndOffset.x, this.state.scrollLeft );
+        const setStateCall = (currState, _moving?: iAXDataGridRootMoving): void => {
+          const selectEndedRow: number = getRowIndex(currState.selectionEndOffset.y, this.state.scrollTop);
+          let selectEndedCol: number = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
 
           // 컬럼인덱스를 찾지 못했다면
           if ( selectEndedCol === -1 ) {
             const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
-            const lastCol = last( this.state.headerColGroup );
+            const lastCol = last(this.state.headerColGroup);
             selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
           }
 
-          let sRow: number = Math.min( selectStartedRow, selectEndedRow );
-          let eRow: number = Math.max( selectStartedRow, selectEndedRow );
-          let sCol: number = Math.min( selectStartedCol, selectEndedCol );
-          let eCol: number = Math.max( selectStartedCol, selectEndedCol );
+          let sRow: number = Math.min(selectStartedRow, selectEndedRow);
+          let eRow: number = Math.max(selectStartedRow, selectEndedRow);
+          let sCol: number = Math.min(selectStartedCol, selectEndedCol);
+          let eCol: number = Math.max(selectStartedCol, selectEndedCol);
 
           if ( sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1 ) {
             currState.selectionRows = {};
@@ -509,15 +502,15 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
             for ( let i = sCol; i < eCol + 1; i++ ) currState.selectionCols[ i ] = true;
           }
           else {
-            console.error( 'get selection fail', sRow, eRow, sCol, eCol );
+            console.error('get selection fail', sRow, eRow, sCol, eCol);
           }
 
           //currState.focusedRow = selectEndedRow;
           //currState.focusedCol = selectEndedCol;
 
-          this.setState( currState );
+          this.setState(currState);
         };
-        const scrollMoving = ( _moving: iAXDataGridRootMoving ): boolean => {
+        const scrollMoving = (_moving: iAXDataGridRootMoving): boolean => {
           let newScrollTop: number = this.state.scrollTop;
           let newScrollLeft: number = this.state.scrollLeft;
           let scrollLeft, scrollTop, endScroll;
@@ -532,18 +525,18 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
             newScrollLeft = this.state.scrollLeft - 100;
           }
 
-          ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition( newScrollLeft, newScrollTop, {
+          ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(newScrollLeft, newScrollTop, {
             scrollWidth: this.state.styles.scrollContentWidth,
             scrollHeight: this.state.styles.scrollContentHeight,
             clientWidth: this.state.styles.scrollContentContainerWidth,
             clientHeight: this.state.styles.scrollContentContainerHeight
-          } ));
+          }));
 
-          setStateCall( {
+          setStateCall({
             scrollTop: scrollTop,
             scrollLeft: scrollLeft,
             selectionEndOffset: this.state.selectionEndOffset
-          }, _moving );
+          }, _moving);
 
           return !endScroll;
         };
@@ -553,10 +546,10 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
         let x2: number = currMousePosition.x - leftPadding;
         let y2: number = currMousePosition.y - topPadding;
 
-        let p1X: number = Math.min( x1, x2 );
-        let p2X: number = Math.max( x1, x2 );
-        let p1Y: number = Math.min( y1, y2 );
-        let p2Y: number = Math.max( y1, y2 );
+        let p1X: number = Math.min(x1, x2);
+        let p2X: number = Math.max(x1, x2);
+        let p1Y: number = Math.min(y1, y2);
+        let p2Y: number = Math.max(y1, y2);
 
         let moving: iAXDataGridRootMoving = {
           active: false,
@@ -583,7 +576,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
           moving.right = true;
         }
 
-        setStateCall( {
+        setStateCall({
           dragging: true,
 
           scrollTop: this.state.scrollTop,
@@ -604,37 +597,37 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
             x: p2X,
             y: p2Y
           }
-        }, moving );
+        }, moving);
 
         // moving.active 이면 타임 인터벌 시작
-        if ( this.scrollMovingTimer ) clearInterval( this.scrollMovingTimer );
+        if ( this.scrollMovingTimer ) clearInterval(this.scrollMovingTimer);
         if ( moving.active ) {
-          this.scrollMovingTimer = setInterval( () => {
-            if ( !scrollMoving( moving ) ) {
+          this.scrollMovingTimer = setInterval(() => {
+            if ( !scrollMoving(moving) ) {
               // clearInterval(this.scrollMovingTimer);
             }
-          }, 60 );
+          }, 60);
         }
       };
 
-      const offEvent = ( ee ) => {
+      const offEvent = (ee) => {
         ee.preventDefault();
 
-        if ( this.scrollMovingTimer ) clearInterval( this.scrollMovingTimer );
-        this.setState( {
+        if ( this.scrollMovingTimer ) clearInterval(this.scrollMovingTimer);
+        this.setState({
           dragging: false,
 
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
           selectionMaxOffset: null
-        } );
-        document.removeEventListener( 'mousemove', throttled_onMouseMove );
-        document.removeEventListener( 'mouseup', offEvent );
-        document.removeEventListener( 'mouseleave', offEvent );
+        });
+        document.removeEventListener('mousemove', throttled_onMouseMove);
+        document.removeEventListener('mouseup', offEvent);
+        document.removeEventListener('mouseleave', offEvent);
       };
 
-      const throttled_onMouseMove = throttle( onMouseMove, 10 );
+      const throttled_onMouseMove = throttle(onMouseMove, 10);
 
       if ( e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1 ) {
         if ( e.shiftKey ) {
@@ -645,20 +638,20 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
             selectionCols: {}
           };
 
-          let sRow: number = Math.min( this.state.focusedRow, selectStartedRow );
-          let sCol: number = Math.min( this.state.focusedCol, selectStartedCol );
-          let eRow: number = Math.max( this.state.focusedRow, selectStartedRow );
-          let eCol: number = Math.max( this.state.focusedCol, selectStartedCol );
+          let sRow: number = Math.min(this.state.focusedRow, selectStartedRow);
+          let sCol: number = Math.min(this.state.focusedCol, selectStartedCol);
+          let eRow: number = Math.max(this.state.focusedRow, selectStartedRow);
+          let eCol: number = Math.max(this.state.focusedCol, selectStartedCol);
           for ( let i = sRow; i < eRow + 1; i++ ) state.selectionRows[ i ] = true;
           for ( let i = sCol; i < eCol + 1; i++ ) state.selectionCols[ i ] = true;
 
-          this.setState( state );
+          this.setState(state);
 
           selectStartedRow = this.state.focusedRow;
           selectStartedCol = this.state.focusedCol;
-          document.addEventListener( 'mousemove', throttled_onMouseMove );
-          document.addEventListener( 'mouseup', offEvent );
-          document.addEventListener( 'mouseleave', offEvent );
+          document.addEventListener('mousemove', throttled_onMouseMove);
+          document.addEventListener('mouseup', offEvent);
+          document.addEventListener('mouseleave', offEvent);
         }
         else if ( e.metaKey ) {
           /*
@@ -678,22 +671,22 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       else {
         // 셀렉션 저장정보 초기화
 
-        this.setState( {
+        this.setState({
           dragging: false,
 
           selectionStartOffset: null,
           selectionEndOffset: null,
           selectionMinOffset: null,
           selectionMaxOffset: null,
-          selectionRows: { [selectStartedRow]: true },
-          selectionCols: { [selectStartedCol]: true },
+          selectionRows: { [ selectStartedRow ]: true },
+          selectionCols: { [ selectStartedCol ]: true },
           focusedRow: selectStartedRow,
           focusedCol: selectStartedCol
-        } );
+        });
 
-        document.addEventListener( 'mousemove', throttled_onMouseMove );
-        document.addEventListener( 'mouseup', offEvent );
-        document.addEventListener( 'mouseleave', offEvent );
+        document.addEventListener('mousemove', throttled_onMouseMove);
+        document.addEventListener('mouseup', offEvent);
+        document.addEventListener('mouseleave', offEvent);
       }
     };
     const proc_clickLinenumber = () => {
@@ -703,9 +696,9 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
         selectionRows: {},
         selectionCols: (() => {
           let cols = {};
-          this.state.colGroup.forEach( col => {
+          this.state.colGroup.forEach(col => {
             cols[ col.colIndex ] = true;
-          } );
+          });
           return cols;
         })(),
         focusedRow: this.state.focusedRow,
@@ -715,25 +708,25 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       if ( e.shiftKey ) {
         state.selectionRows = (() => {
           let rows = {};
-          range( Math.min( this.state.focusedRow, selectStartedRow ), Math.max( this.state.focusedRow, selectStartedRow ) + 1 ).forEach( i => {
+          range(Math.min(this.state.focusedRow, selectStartedRow), Math.max(this.state.focusedRow, selectStartedRow) + 1).forEach(i => {
             rows[ i ] = true;
-          } );
+          });
           return rows;
         })();
       }
       else {
         state.selectionRows = {
-          [selectStartedRow]: true
+          [ selectStartedRow ]: true
         };
         state.focusedRow = selectStartedRow;
       }
 
-      this.setState( state );
+      this.setState(state);
     };
 
     // 선택이 시작된 row / col
-    let selectStartedRow: number = getRowIndex( startY, startScrollTop );
-    let selectStartedCol: number = getColIndex( startX, startScrollLeft );
+    let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+    let selectStartedCol: number = getColIndex(startX, startScrollLeft);
 
     if ( this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol ) {
       // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
@@ -751,17 +744,17 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     return true;
   }
 
-  private onKeyAction( keyAction: number ) {
+  private onKeyAction(keyAction: number) {
     const options = this.state.options;
     const styles = this.state.styles;
     const headerColGroup = this.state.headerColGroup;
-    const sRowIndex = Math.floor( -this.state.scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex;
-    const eRowIndex = (Math.floor( -this.state.scrollTop / styles.bodyTrHeight ) + options.frozenRowIndex) + Math.floor( styles.bodyHeight / styles.bodyTrHeight );
+    const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
+    const eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
     const sColIndex = this.data.sColIndex;
     const eColIndex = this.data.eColIndex;
-    const pRowSize = Math.floor( styles.bodyHeight / styles.bodyTrHeight );
+    const pRowSize = Math.floor(styles.bodyHeight / styles.bodyTrHeight);
 
-    const getAvailScrollTop = ( rowIndex: number ): number => {
+    const getAvailScrollTop = (rowIndex: number): number => {
       let scrollTop: number;
 
       if ( sRowIndex >= rowIndex ) {
@@ -772,12 +765,12 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       }
 
       if ( typeof scrollTop !== 'undefined' ) {
-        scrollTop = UTIL.getScrollPosition( this.state.scrollLeft, scrollTop, {
+        scrollTop = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
           scrollWidth: styles.scrollContentWidth,
           scrollHeight: styles.scrollContentHeight,
           clientWidth: styles.scrollContentContainerWidth,
           clientHeight: styles.scrollContentContainerHeight
-        } ).scrollTop;
+        }).scrollTop;
       }
       else {
         scrollTop = this.state.scrollTop
@@ -785,7 +778,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
       return scrollTop;
     };
-    const getAvailScrollLeft = ( colIndex: number ): number => {
+    const getAvailScrollLeft = (colIndex: number): number => {
       let scrollLeft: number;
 
       if ( sColIndex >= colIndex ) {
@@ -796,12 +789,12 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       }
 
       if ( typeof scrollLeft !== 'undefined' ) {
-        scrollLeft = UTIL.getScrollPosition( scrollLeft, this.state.scrollTop, {
+        scrollLeft = UTIL.getScrollPosition(scrollLeft, this.state.scrollTop, {
           scrollWidth: styles.scrollContentWidth,
           scrollHeight: styles.scrollContentHeight,
           clientWidth: styles.scrollContentContainerWidth,
           clientHeight: styles.scrollContentContainerHeight
-        } ).scrollLeft;
+        }).scrollLeft;
       } else {
         scrollLeft = this.state.scrollLeft
       }
@@ -810,114 +803,114 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     };
 
     const proc = {
-      [KEY_CODE.ESC]: () => {
+      [ KEY_CODE.ESC ]: () => {
 
       },
-      [KEY_CODE.RETURN]: () => {
+      [ KEY_CODE.RETURN ]: () => {
 
       },
-      [KEY_CODE.HOME]: () => {
+      [ KEY_CODE.HOME ]: () => {
         let focusRow = 0;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow
-        } );
+        });
       },
-      [KEY_CODE.END]: () => {
+      [ KEY_CODE.END ]: () => {
         let focusRow = this.props.store_list.size - 1;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow
-        } );
+        });
       },
-      [KEY_CODE.PAGE_UP]: () => {
+      [ KEY_CODE.PAGE_UP ]: () => {
         let focusRow = (this.state.focusedRow - pRowSize < 1) ? 0 : this.state.focusedRow - pRowSize;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow
-        } );
+        });
       },
-      [KEY_CODE.PAGE_DOWN]: () => {
+      [ KEY_CODE.PAGE_DOWN ]: () => {
         let focusRow = (this.state.focusedRow + pRowSize >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + pRowSize;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow,
-        } );
+        });
       },
-      [KEY_CODE.UP]: () => {
+      [ KEY_CODE.UP ]: () => {
         let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow
-        } );
+        });
       },
-      [KEY_CODE.DOWN]: () => {
+      [ KEY_CODE.DOWN ]: () => {
         let focusRow = (this.state.focusedRow + 1 >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + 1;
-        let scrollTop = getAvailScrollTop( focusRow );
+        let scrollTop = getAvailScrollTop(focusRow);
 
-        this.setState( {
+        this.setState({
           scrollTop: scrollTop,
           selectionRows: {
-            [focusRow]: true
+            [ focusRow ]: true
           },
           focusedRow: focusRow,
-        } );
+        });
       },
-      [KEY_CODE.LEFT]: () => {
+      [ KEY_CODE.LEFT ]: () => {
         let focusCol = (this.state.focusedCol < 1) ? 0 : this.state.focusedCol - 1;
-        let scrollLeft = getAvailScrollLeft( focusCol );
+        let scrollLeft = getAvailScrollLeft(focusCol);
 
-        this.setState( {
+        this.setState({
           scrollLeft: scrollLeft,
           selectionCols: {
-            [focusCol]: true
+            [ focusCol ]: true
           },
           focusedCol: focusCol,
-        } );
+        });
       },
-      [KEY_CODE.RIGHT]: () => {
+      [ KEY_CODE.RIGHT ]: () => {
         let focusCol = (this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : this.state.focusedCol + 1;
-        let scrollLeft = getAvailScrollLeft( focusCol );
+        let scrollLeft = getAvailScrollLeft(focusCol);
 
-        this.setState( {
+        this.setState({
           scrollLeft: scrollLeft,
           selectionCols: {
-            [focusCol]: true
+            [ focusCol ]: true
           },
           focusedCol: focusCol,
-        } );
+        });
       }
     };
 
     if ( keyAction in proc ) proc[ keyAction ]();
   }
 
-  private onWheel( e: any ) {
+  private onWheel(e: any) {
     let scrollLeft, scrollTop, endScroll;
     let delta = { x: 0, y: 0 };
 
@@ -936,17 +929,17 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       }
     }
 
-    ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition( this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
+    ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(this.state.scrollLeft - delta.x, this.state.scrollTop - delta.y, {
       scrollWidth: this.state.styles.scrollContentWidth,
       scrollHeight: this.state.styles.scrollContentHeight,
       clientWidth: this.state.styles.scrollContentContainerWidth,
       clientHeight: this.state.styles.scrollContentContainerHeight
-    } ));
+    }));
 
-    this.setState( {
+    this.setState({
       scrollLeft: scrollLeft || 0,
       scrollTop: scrollTop || 0
-    } );
+    });
 
     if ( !endScroll ) {
       e.preventDefault();
@@ -954,11 +947,11 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  private onKeyPress( e: any ) {
+  private onKeyPress(e: any) {
     const headerColGroup = this.state.headerColGroup;
 
     const metaProc = {
-      [KEY_CODE.C]: () => {
+      [ KEY_CODE.C ]: () => {
 
         e.preventDefault();
         e.stopPropagation();
@@ -967,27 +960,27 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
         let copysuccess: boolean = false;
         let copiedString: string = '';
 
-        each( this.state.selectionRows, ( row, k ) => {
-          const item = this.props.store_list.get( k );
-          each( this.state.selectionCols, ( col, ci ) => {
+        each(this.state.selectionRows, (row, k) => {
+          const item = this.props.store_list.get(k);
+          each(this.state.selectionCols, (col, ci) => {
             copiedString += (item[ headerColGroup[ ci ].key ] || '') + '\t';
-          } );
+          });
           copiedString += '\n';
-        } );
+        });
 
         gridClipboard.value = copiedString;
         gridClipboard.select();
 
         try {
-          copysuccess = document.execCommand( 'copy' );
-        } catch ( e ) {
+          copysuccess = document.execCommand('copy');
+        } catch (e) {
 
         }
 
         this.gridRootNode.focus();
         return copysuccess;
       },
-      [KEY_CODE.A]: () => {
+      [ KEY_CODE.A ]: () => {
 
         e.preventDefault();
         e.stopPropagation();
@@ -1002,20 +995,20 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
         };
         state.selectionRows = (() => {
           let rows = {};
-          this.props.store_list.forEach( ( item, i ) => {
+          this.props.store_list.forEach((item, i) => {
             rows[ i ] = true;
-          } );
+          });
           return rows;
         })();
         state.selectionCols = (() => {
           let cols = {};
-          this.state.colGroup.forEach( col => {
+          this.state.colGroup.forEach(col => {
             cols[ col.colIndex ] = true;
-          } );
+          });
           return cols;
         })();
         state.focusedCol = 0;
-        this.setState( state );
+        this.setState(state);
 
       }
     };
@@ -1025,7 +1018,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       if ( e.which in metaProc ) metaProc[ e.which ]();
     }
     else {
-      this.onKeyAction( e.which );
+      this.onKeyAction(e.which);
 
       if ( !this.state.isInlineEditing ) {
         e.preventDefault();
@@ -1034,59 +1027,59 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
   }
 
-  private onClickHeader( e: any, colIndex: number, key: string ) {
+  private onClickHeader(e: any, colIndex: number, key: string) {
     const styles = this.state.styles;
     const options = this.state.options;
 
-    if ( e.target.getAttribute( 'data-filter' ) ) {
+    if ( e.target.getAttribute('data-filter') ) {
 
-      const downEvent = ( ee ) => {
+      const downEvent = (ee) => {
 
-        if ( ee.target && ee.target.getAttribute && '' + this.state.isColumnFilter === ee.target.getAttribute( 'data-filter-index' ) ) {
+        if ( ee.target && ee.target.getAttribute && '' + this.state.isColumnFilter === ee.target.getAttribute('data-filter-index') ) {
           return false;
         }
 
-        let downedElement = UTIL.findParentNodeByAttr( ee.target, ( element ) => {
-          return (element) ? element.getAttribute( 'data-column-filter' ) === 'true' : false;
-        } );
+        let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
+          return (element) ? element.getAttribute('data-column-filter') === 'true' : false;
+        });
 
         if ( downedElement === false ) {
           ee.preventDefault();
 
-          this.setState( {
+          this.setState({
             isColumnFilter: false
-          } );
+          });
 
-          document.removeEventListener( 'mousedown', downEvent );
-          document.removeEventListener( 'mouseleave', downEvent );
-          document.removeEventListener( 'keydown', keyDown );
+          document.removeEventListener('mousedown', downEvent);
+          document.removeEventListener('mouseleave', downEvent);
+          document.removeEventListener('keydown', keyDown);
         }
       };
-      const keyDown = ( ee ) => {
+      const keyDown = (ee) => {
         if ( ee.which === 27 ) {
-          downEvent( ee );
+          downEvent(ee);
         }
       };
 
       if ( this.state.isColumnFilter === colIndex ) {
-        this.setState( {
+        this.setState({
           isColumnFilter: false
-        } );
+        });
 
-        document.removeEventListener( 'mousedown', downEvent );
-        document.removeEventListener( 'mouseleave', downEvent );
-        document.removeEventListener( 'keydown', keyDown );
+        document.removeEventListener('mousedown', downEvent);
+        document.removeEventListener('mouseleave', downEvent);
+        document.removeEventListener('keydown', keyDown);
       } else {
 
         let columnFilterLeft: number = styles.asidePanelWidth + this.state.colGroup[ colIndex ]._sx - 2 + this.state.scrollLeft;
-        this.setState( {
+        this.setState({
           scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
           isColumnFilter: colIndex
-        } );
+        });
 
-        document.addEventListener( 'mousedown', downEvent );
-        document.addEventListener( 'mouseleave', downEvent );
-        document.addEventListener( 'keydown', keyDown );
+        document.addEventListener('mousedown', downEvent);
+        document.addEventListener('mouseleave', downEvent);
+        document.addEventListener('keydown', keyDown);
       }
 
     }
@@ -1105,20 +1098,20 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
         state.selectionRows = (() => {
           let rows = {};
-          this.props.store_list.forEach( ( item, i ) => {
+          this.props.store_list.forEach((item, i) => {
             rows[ i ] = true;
-          } );
+          });
           return rows;
         })();
         state.selectionCols = (() => {
           let cols = {};
-          this.state.colGroup.forEach( col => {
+          this.state.colGroup.forEach(col => {
             cols[ col.colIndex ] = true;
-          } );
+          });
           return cols;
         })();
         state.focusedCol = 0;
-        this.setState( state );
+        this.setState(state);
 
       }
       else {
@@ -1126,82 +1119,82 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
           state.selectionRows = (() => {
             let rows = {};
-            this.props.store_list.forEach( ( item, i ) => {
+            this.props.store_list.forEach((item, i) => {
               rows[ i ] = true;
-            } );
+            });
             return rows;
           })();
 
           if ( e.shiftKey ) {
             state.selectionCols = (() => {
               let cols = {};
-              range( Math.min( this.state.focusedCol, colIndex ), Math.max( this.state.focusedCol, colIndex ) + 1 ).forEach( i => {
+              range(Math.min(this.state.focusedCol, colIndex), Math.max(this.state.focusedCol, colIndex) + 1).forEach(i => {
                 cols[ i ] = true;
-              } );
+              });
               return cols;
             })();
           }
           else {
             state.selectionCols = {
-              [colIndex]: true
+              [ colIndex ]: true
             };
             state.focusedCol = colIndex;
           }
 
-          this.setState( state );
+          this.setState(state);
         }
         else if ( options.header.clickAction === 'sort' && options.header.sortable ) {
-          this.props.sort( this.state.colGroup, options, colIndex );
+          this.props.sort(this.state.colGroup, options, colIndex);
         }
       }
     }
 
   }
 
-  private onChangeColumnFilter( colIndex, filterInfo ) {
-    this.props.filter( this.state.colGroup, this.state.options, colIndex, filterInfo );
+  private onChangeColumnFilter(colIndex, filterInfo) {
+    this.props.filter(this.state.colGroup, this.state.options, colIndex, filterInfo);
   }
 
-  private onDoubleClickCell( e, col: any, li: number ) {
+  private onDoubleClickCell(e, col: any, li: number) {
     if ( col.editor ) {
-      this.setState( {
+      this.setState({
         isInlineEditing: true,
         inlineEditingCell: {
           row: li,
           col: col.colIndex,
           editor: col.editor
         }
-      } );
+      });
     }
   }
 
-  private updateEditInput( act: string, row?: number, col?: number, value?: string ) {
+  private updateEditInput(act: string, row?: number, col?: number, value?: string) {
     const proc = {
       'cancel': () => {
-        this.setState( {
+        this.setState({
           isInlineEditing: false,
           inlineEditingCell: {}
-        } );
+        });
       },
       'update': () => {
-        this.props.update( this.state.colGroup, this.state.options, row, col, value );
-        this.setState( {
+        this.props.update(this.state.colGroup, this.state.options, row, col, value);
+        this.setState({
           isInlineEditing: false,
           inlineEditingCell: {}
-        } );
+        });
       }
     };
     proc[ act ]();
   }
 
-  private onFireEvent( eventName: string, e ) {
+  private onFireEvent(eventName: string, e) {
     const that = {};
     const processor = {
       'wheel': () => {
-        this.onWheel( e );
+        this.onWheel(e);
       },
       'keydown': () => {
-        this.onKeyPress( e );
+        this.onKeyPress(e);
       },
       'keyup': () => {
 
@@ -1218,7 +1211,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     };
 
     if ( this.props.onBeforeEvent ) {
-      this.props.onBeforeEvent( e, eventName, that );
+      this.props.onBeforeEvent(e, eventName, that);
     }
 
     if ( eventName in processor ) {
@@ -1226,7 +1219,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     }
 
     if ( this.props.onAfterEvent ) {
-      this.props.onAfterEvent( e, eventName, that );
+      this.props.onAfterEvent(e, eventName, that);
     }
 
   }
@@ -1238,8 +1231,8 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
     const headerColGroup = this.state.headerColGroup;
     const bodyPanelWidth: number = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
 
-    let gridRootStyle = assign( { height: this.props.height }, this.props.style );
-    let _scrollLeft: number = Math.abs( this.state.scrollLeft );
+    let gridRootStyle = assign({ height: this.props.height }, this.props.style);
+    let _scrollLeft: number = Math.abs(this.state.scrollLeft);
     let sColIndex: number = 0;
     let eColIndex: number = headerColGroup.length;
     let _headerColGroup = headerColGroup;
@@ -1267,15 +1260,15 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
           break;
         }
       }
-      _headerColGroup = headerColGroup.slice( sColIndex, eColIndex + 1 );
+      _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
 
-      if ( typeof this.data._headerColGroup === 'undefined' || !isEqual( this.data._headerColGroup, _headerColGroup ) ) {
+      if ( typeof this.data._headerColGroup === 'undefined' || !isEqual(this.data._headerColGroup, _headerColGroup) ) {
         this.data.sColIndex = sColIndex;
         this.data.eColIndex = eColIndex;
         this.data._headerColGroup = _headerColGroup;
 
-        _bodyRowData = this.data._bodyRowData = UTIL.getTableByStartEndColumnIndex( this.state.bodyRowData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex );
-        _bodyGroupingData = this.data._bodyGroupingData = UTIL.getTableByStartEndColumnIndex( this.state.bodyGroupingData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex );
+        _bodyRowData = this.data._bodyRowData = UTIL.getTableByStartEndColumnIndex(this.state.bodyRowData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex);
+        _bodyGroupingData = this.data._bodyGroupingData = UTIL.getTableByStartEndColumnIndex(this.state.bodyGroupingData, sColIndex + options.frozenColumnIndex, eColIndex + 1 + options.frozenColumnIndex);
       }
       else {
         _bodyRowData = this.data._bodyRowData;
@@ -1290,7 +1283,7 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
       <GridRootContainer ref='gridRoot'
                          onFireEvent={this.onFireEvent}
                          style={gridRootStyle}>
-        <div className={cx( 'axd-clip-board' )}>
+        <div className={cx('axd-clip-board')}>
           <textarea ref='gridClipboard' />
         </div>
         <GridHeader

@@ -3,11 +3,14 @@ import { Segment, Header } from 'semantic-ui-react';
 import { SourceCodeEditor } from 'components';
 import { Link } from 'react-router-dom';
 
-const eventCompatibility= ( props ) => (
+const eventCompatibility = props => (
   <Segment basic padded>
-    <Header as='h2' dividing>Browser event compatibility</Header>
+    <Header as="h2" dividing>
+      Browser event compatibility
+    </Header>
     <p>
-      onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의 이벤트가 발생될때 callback을 받을 수 있습니다.
+      onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의 이벤트가
+      발생될때 callback을 받을 수 있습니다.
     </p>
 
     <SourceCodeEditor>
@@ -28,7 +31,7 @@ const eventCompatibility= ( props ) => (
       `}
     </SourceCodeEditor>
     <p>
-      <Link to='/sample/EventReceive'>EventReceive 예제보기</Link>
+      <Link to="/sample/EventReceive">EventReceive 예제보기</Link>
     </p>
   </Segment>
 );

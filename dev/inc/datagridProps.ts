@@ -1,9 +1,4 @@
-import each from 'lodash-es/each';
-import isString from 'lodash-es/isString';
-import isNumber from 'lodash-es/isNumber';
-import isObject from 'lodash-es/isObject';
-import isFunction from 'lodash-es/isFunction';
-import isBoolean from 'lodash-es/isBoolean';
+import { each, isBoolean, isFunction, isNumber, isObject, isString } from 'lodash';
 import { gridOptions } from 'datagrid-ts/_inc/defaults';
 import optionDesc from './optionDesc';
 
@@ -90,55 +85,55 @@ let datagridProps: iDatagridProps[] = [
     description: '',
     required: false
   },
-  {name: 'onBeforeEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false},
-  {name: 'onAfterEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false}
+  { name: 'onBeforeEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false },
+  { name: 'onAfterEvent', defaultValue: 'undefined', type: 'Function', description: '', required: false }
 ];
 
 //console.log(gridOptions);
 
-function parseOption( prefix: string, options: any ) {
-  each( options, ( value, key ) => {
-    if ( isString( value ) ) {
-      datagridProps.push( {
+function parseOption(prefix: string, options: any) {
+  each(options, (value, key) => {
+    if ( isString(value) ) {
+      datagridProps.push({
         name: prefix + key,
         defaultValue: value,
         type: 'string',
-        description: optionDesc[prefix + key] || ''
-      } )
-    } else if ( isNumber( value ) ) {
-      datagridProps.push( {
+        description: optionDesc[ prefix + key ] || ''
+      })
+    } else if ( isNumber(value) ) {
+      datagridProps.push({
         name: prefix + key,
         defaultValue: value,
         type: 'number',
-        description: optionDesc[prefix + key] || ''
-      } )
-    } else if ( isBoolean( value ) ) {
-      datagridProps.push( {
+        description: optionDesc[ prefix + key ] || ''
+      })
+    } else if ( isBoolean(value) ) {
+      datagridProps.push({
         name: prefix + key,
         defaultValue: '' + value,
         type: 'boolean',
-        description: optionDesc[prefix + key] || ''
-      } )
-    } else if ( isObject( value ) ) {
-      datagridProps.push( {
+        description: optionDesc[ prefix + key ] || ''
+      })
+    } else if ( isObject(value) ) {
+      datagridProps.push({
         name: prefix + key,
         defaultValue: '',
         type: 'object',
-        description: optionDesc[prefix + key] || ''
-      } );
-      parseOption( prefix + key + '.', value );
-    } else if ( isFunction( value ) ) {
-      datagridProps.push( {
+        description: optionDesc[ prefix + key ] || ''
+      });
+      parseOption(prefix + key + '.', value);
+    } else if ( isFunction(value) ) {
+      datagridProps.push({
         name: prefix + key,
         defaultValue: '',
         type: 'function',
-        description: optionDesc[prefix + key] || ''
-      } )
+        description: optionDesc[ prefix + key ] || ''
+      })
     }
-  } );
+  });
 }
 
-parseOption( 'options.', gridOptions );
+parseOption('options.', gridOptions);
 
 
 export { datagridProps };

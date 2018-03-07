@@ -1,14 +1,14 @@
 import * as React from 'react';
-import get from 'lodash-es/get';
+import { get } from 'lodash-es';
 import * as Examples from '../example';
 import { SourceCodeEditor } from 'components';
-import { Container, Divider, Grid, Segment, Icon, Button } from 'semantic-ui-react';
+import { Container, Divider, Grid, Icon, Segment } from 'semantic-ui-react';
 import pkg from '@root/dist/ts/package.json';
 
-export const ExampleRoot = ( props ) => {
-  const name = get( props, 'match.params.name' );
+export const ExampleRoot = (props) => {
+  const name = get(props, 'match.params.name');
   const Layout = Examples[ name ];
-  const sourceCode = require( '!raw-loader!../example/' + name + '.tsx' );
+  const sourceCode = require('!raw-loader!../example/' + name + '.tsx');
 
   return <div>
     {Layout ? <Layout /> : null}

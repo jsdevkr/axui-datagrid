@@ -2,10 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const basePath = __dirname;
 
 const babelOptions = {
-  plugins: ['react-hot-loader/babel'],
+  plugins: ['lodash', 'react-hot-loader/babel'],
   presets: [
     [
       'env',
@@ -65,28 +66,16 @@ module.exports = {
         test: /\.scss$/,
         use: [
           { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              localIdentName: '[local]-[hash:base64:3]',
-            },
-          },
-          {
-            loader: 'typed-css-modules-loader',
-            options: {
-              camelCase: true,
-            },
-          },
-          { loader: 'sass-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
         ],
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader',
-        }),
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+        ],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -127,6 +116,8 @@ module.exports = {
     },
   },
   plugins: [
+    // shorthands옵션을 주지 않으면 Semantic-UI에서 tree shaking 오류
+    new LodashModuleReplacementPlugin({ shorthands: true }),
     new webpack.NormalModuleReplacementPlugin(/^pages$/, 'pages/index.async'),
     // chunk
     new webpack.optimize.CommonsChunkPlugin({
@@ -143,7 +134,6 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
     }),
-    new ExtractTextPlugin('styles.css'),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ],

@@ -19,7 +19,7 @@ interface iAXDataGridColumns {
 
 interface iAXDataGridOptionHeader{
   display?: boolean;
-  align?: boolean;
+  align?: boolean|string;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -125,8 +125,8 @@ interface iAXDataGridEditingCell {
 }
 
 interface iAXDataGridProps {
-  height: string;
-  style: any;
+  height?: string;
+  style?: any;
   columns: iAXDataGridColumns[];
   data: any;
   options: iAXDataGridOption;

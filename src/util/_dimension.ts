@@ -1,14 +1,14 @@
 import { Map } from 'immutable';
-import isNumber from 'lodash-es/isNumber';
+import { isNumber } from 'lodash';
 
 /**
  *
  * @param element
  * @return {number}
  */
-export function getInnerWidth( element: any ): number {
-  const cs = window.getComputedStyle( element );
-  return element.offsetWidth - (parseFloat( cs.paddingLeft ) + parseFloat( cs.paddingRight ) + parseFloat( cs.borderLeftWidth ) + parseFloat( cs.borderRightWidth ));
+export function getInnerWidth(element: any): number {
+  const cs = window.getComputedStyle(element);
+  return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
 }
 
 /**
@@ -16,9 +16,9 @@ export function getInnerWidth( element: any ): number {
  * @param element
  * @return {number}
  */
-export function getInnerHeight( element: any ): number {
-  const cs = window.getComputedStyle( element );
-  return element.offsetHeight - (parseFloat( cs.paddingTop ) + parseFloat( cs.paddingBottom ) + parseFloat( cs.borderTopWidth ) + parseFloat( cs.borderBottomWidth ));
+export function getInnerHeight(element: any): number {
+  const cs = window.getComputedStyle(element);
+  return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
 }
 
 /**
@@ -26,7 +26,7 @@ export function getInnerHeight( element: any ): number {
  * @param element
  * @return {number}
  */
-export function getOuterWidth( element: any ): number {
+export function getOuterWidth(element: any): number {
   return element.offsetWidth;
 }
 
@@ -35,7 +35,7 @@ export function getOuterWidth( element: any ): number {
  * @param element
  * @return {number}
  */
-export function getOuterHeight( element: any ): number {
+export function getOuterHeight(element: any): number {
   return element.offsetHeight;
 }
 
@@ -48,26 +48,26 @@ export function getOuterHeight( element: any ): number {
  * @param container
  * @return {any}
  */
-export function setColGroupWidth( _colGroup, container, options ) {
+export function setColGroupWidth(_colGroup, container, options) {
   let totalWidth = 0, computedWidth, autoWidthColGroupIndexs = [], i, l;
 
-  _colGroup.forEach( ( col, ci ) => {
-    if ( isNumber( col.width ) ) {
+  _colGroup.forEach((col, ci) => {
+    if ( isNumber(col.width) ) {
       totalWidth += col._width = col.width;
     } else if ( col.width === '*' ) {
-      autoWidthColGroupIndexs.push( ci );
-    } else if ( col.width.substring( col.width.length - 1 ) === '%' ) {
-      totalWidth += col._width = container.width * col.width.substring( 0, col.width.length - 1 ) / 100;
+      autoWidthColGroupIndexs.push(ci);
+    } else if ( col.width.substring(col.width.length - 1) === '%' ) {
+      totalWidth += col._width = container.width * col.width.substring(0, col.width.length - 1) / 100;
     }
-  } );
+  });
 
   if ( autoWidthColGroupIndexs.length > 0 ) {
     computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
     for ( i = 0, l = autoWidthColGroupIndexs.length; i < l; i++ ) {
-      _colGroup.update( autoWidthColGroupIndexs[ i ], O => {
+      _colGroup.update(autoWidthColGroupIndexs[ i ], O => {
         O._width = (computedWidth < options.columnMinWidth) ? options.columnMinWidth : computedWidth;
         return O;
-      } );
+      });
     }
   }
   // 컬럼의 시작위치와 끝위치 계산
@@ -94,29 +94,29 @@ export function setColGroupWidth( _colGroup, container, options ) {
  * @param {any} styles
  * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
  */
-export function calculateDimensions( containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = Map( state.styles ).toJS() ) {
+export function calculateDimensions(containerDOM, storeState, state, colGroup = state.colGroup, options = state.options, styles = Map(state.styles).toJS()) {
   let list = storeState.list;
   let footSumColumns = state.footSumColumns;
   let headerTable = state.headerTable;
 
   styles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
 
-  styles.elWidth = getOuterWidth( containerDOM );
-  styles.elHeight = getOuterHeight( containerDOM );
+  styles.elWidth = getOuterWidth(containerDOM);
+  styles.elHeight = getOuterHeight(containerDOM);
 
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
   styles.rightPanelWidth = 0;
 
-  colGroup = setColGroupWidth( colGroup, { width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size) }, options );
+  colGroup = setColGroupWidth(colGroup, { width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size) }, options);
 
-  styles.frozenPanelWidth = (( colGroup, endIndex ) => {
+  styles.frozenPanelWidth = ((colGroup, endIndex) => {
     let width = 0;
     for ( let i = 0, l = endIndex; i < l; i++ ) {
       width += colGroup[ i ]._width;
     }
     return width;
-  })( colGroup, options.frozenColumnIndex );
+  })(colGroup, options.frozenColumnIndex);
   styles.headerHeight = (options.header.display) ? headerTable.rows.length * options.header.columnHeight : 0;
 
   styles.frozenPanelHeight = options.frozenRowIndex * styles.bodyTrHeight;
@@ -127,18 +127,18 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
 
   styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
   styles.horizontalScrollerHeight = (() => {
-    let totalColGroupWidth = colGroup.reduce( ( prev, curr ) => {
+    let totalColGroupWidth = colGroup.reduce((prev, curr) => {
       return (prev._width || prev) + curr._width
-    } );
+    });
 
     // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
     let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
     return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
   })();
 
-  styles.scrollContentWidth = state.headerColGroup.reduce( ( prev, curr ) => {
+  styles.scrollContentWidth = state.headerColGroup.reduce((prev, curr) => {
     return (prev._width || prev) + curr._width
-  } );
+  });
 
   styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
 
@@ -185,7 +185,7 @@ export function calculateDimensions( containerDOM, storeState, state, colGroup =
   return {
     styles: styles,
     colGroup: colGroup,
-    leftHeaderColGroup: colGroup.slice( 0, options.frozenColumnIndex ),
-    headerColGroup: colGroup.slice( options.frozenColumnIndex )
+    leftHeaderColGroup: colGroup.slice(0, options.frozenColumnIndex),
+    headerColGroup: colGroup.slice(options.frozenColumnIndex)
   }
 }

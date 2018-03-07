@@ -3,14 +3,23 @@
   min-height: 500px;
 }
 
-.SideNav {
-  .ui.vertical.menu {
-    background: transparent;
-    width: auto;
-    box-shadow: none;
+.ui.vertical.menu {
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 0;
-    border: 0 none;
+    background-color: #313131;
   }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: #000;
+  }
+
 }
 
 pre {

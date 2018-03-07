@@ -56,7 +56,7 @@ gulp.task('scss-src', function() {
 });
 
 // 걸프 기본 타스크
-gulp.task('default', ['dev run!'], function() {
+gulp.task('default', ['dev-run'], function() {
   return true;
 });
 
@@ -119,13 +119,13 @@ gulp.task(
 );
 
 gulp.task(
-  'dev run!',
+  'dev-run',
   ['scss-watch'],
   shell.task(['webpack-dev-server --hotOnly']),
 );
 
 gulp.task(
-  'deploy to docs',
+  'deploy-docs',
   shell.task([
     'webpack -p --env=production --progress --profile --colors && sleep 1 && git add -A',
   ]),

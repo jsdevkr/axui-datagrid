@@ -4,12 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CnameWebpackPlugin = require('cname-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const basePath = __dirname;
 
 webpack.logLevel = 'NONE';
 
 const babelOptions = {
-  plugins: ['react-hot-loader/babel'],
+  plugins: ['lodash', 'react-hot-loader/babel'],
   presets: [
     [
       'env',
@@ -121,6 +122,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new LodashModuleReplacementPlugin({ shorthands: true }),
     new webpack.NormalModuleReplacementPlugin(/^pages$/, 'pages/index.async'),
     new ExtractTextPlugin('styles.css'),
     new webpack.LoaderOptionsPlugin({
