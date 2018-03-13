@@ -8,22 +8,6 @@ const basePath = __dirname;
 
 webpack.logLevel = 'NONE';
 
-const babelOptions = {
-  plugins: ['lodash', 'react-hot-loader/babel'],
-  presets: [
-    [
-      'env',
-      {
-        targets: {
-          browsers: ['last 2 versions', '> 1% in KR'],
-        },
-      },
-    ],
-    'react',
-    'stage-0',
-  ],
-};
-
 module.exports = {
   context: path.join(basePath, '.'),
   resolve: {
@@ -51,7 +35,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: { ...babelOptions, cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+            },
           },
         ],
       },
@@ -61,7 +47,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: { ...babelOptions, cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+            },
           },
           { loader: 'awesome-typescript-loader' },
         ],
