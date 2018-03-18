@@ -712,6 +712,14 @@ class GridRoot extends React.Component {
         };
         const proc = {
             [constant_1.KEY_CODE.ESC]: () => {
+                this.setState({
+                    selectionRows: {
+                        [this.state.focusedRow]: true
+                    },
+                    selectionCols: {
+                        [this.state.focusedCol]: true
+                    }
+                });
             },
             [constant_1.KEY_CODE.RETURN]: () => {
             },
