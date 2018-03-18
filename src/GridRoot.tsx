@@ -804,7 +804,14 @@ export class GridRoot extends React.Component<iAXDataGridRootProps, iAXDataGridR
 
     const proc = {
       [ KEY_CODE.ESC ]: () => {
-
+        this.setState({
+          selectionRows: {
+            [ this.state.focusedRow ]: true
+          },
+          selectionCols: {
+            [ this.state.focusedCol ]: true
+          }
+        });
       },
       [ KEY_CODE.RETURN ]: () => {
 
