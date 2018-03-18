@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Container, Segment } from 'semantic-ui-react';
-import { AXDatagrid } from 'datagrid-ts/index';
+import { AXDatagrid } from 'axui-datagrid/index';
 
 // 사용자 formatter 확장하기
 AXDatagrid.setFormatter({

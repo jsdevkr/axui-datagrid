@@ -55,6 +55,12 @@ gulp.task('scss-src', function () {
     .pipe(gulp.dest('./src/scss'));
 });
 
+gulp.task('dist-redame', function () {
+  return gulp
+    .src(['./README.md'])
+    .pipe(gulp.dest(fnObj.paths.dist));
+});
+
 // 걸프 기본 타스크
 gulp.task('default', ['dev-run'], function () {
   return true;
@@ -65,56 +71,33 @@ gulp.task('dist-scss', ['scss-src'], function () {
     .src([fnObj.paths.src + '/**/*.scss', fnObj.paths.src + '/**/*.css'], {
       base: fnObj.paths.src,
     })
-    .pipe(gulp.dest(fnObj.paths.dist + '/ts'))
-    .pipe(gulp.dest(fnObj.paths.dist + '/es'));
+    .pipe(gulp.dest(fnObj.paths.dist));
 });
 
 // task for ES5
-gulp.task('dist-ES', ['dist-scss'], function () {
+gulp.task('dist', ['dist-scss', 'dist-redame'], function () {
   return gulp
     .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx', '!' + fnObj.paths.src + '/__tests__/**'])
     .pipe(tsProject())
-    .pipe(gulp.dest(fnObj.paths.dist + '/es'));
-});
-
-gulp.task('dist-TS', ['dist-scss'], function () {
-  return gulp
-    .src([fnObj.paths.src + '/**/*.ts', fnObj.paths.src + '/**/*.tsx', '!' + fnObj.paths.src + '/__tests__/**'])
-    .pipe(gulp.dest(fnObj.paths.dist + '/ts'));
+    .pipe(gulp.dest(fnObj.paths.dist));
 });
 
 /**
  * npm publish
  */
 gulp.task(
-  'ES npm publish patch',
-  ['dist-ES'],
+  'npm publish patch',
+  ['dist'],
   shell.task([
-    'cd dist/es && npm version patch -m "version patch" && npm publish',
+    'cd dist && npm version patch -m "version patch" && npm publish',
   ]),
 );
 
 gulp.task(
-  'TS npm publish patch',
-  ['dist-TS'],
+  'npm publish minor',
+  ['dist'],
   shell.task([
-    'cd dist/ts && npm version patch -m "version patch" && npm publish',
-  ]),
-);
-
-gulp.task(
-  'ES npm publish minor',
-  ['dist-ES'],
-  shell.task([
-    'cd dist/es && npm version minor -m "version minor" && npm publish',
-  ]),
-);
-
-gulp.task(
-  'TS npm publish minor',
-  ['dist-TS'],
-  shell.task([
-    'cd dist/ts && npm version minor -m "version minor" && npm publish',
+    'cd dist && npm version minor -m "version minor" && npm publish',
   ]),
 );
 

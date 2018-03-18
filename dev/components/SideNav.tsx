@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon, Menu } from 'semantic-ui-react';
-import pkg from '@root/dist/ts/package.json';
+import pkg from '@root/dist/package.json';
 
 export class SideNav extends React.Component<any, any> {
   constructor( props ) {

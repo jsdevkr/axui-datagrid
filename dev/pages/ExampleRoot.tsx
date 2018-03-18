@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import * as Examples from '../example';
 import { SourceCodeEditor } from 'components';
 import { Container, Divider, Grid, Icon, Segment } from 'semantic-ui-react';
-import pkg from '@root/dist/ts/package.json';
+import pkg from '@root/dist/package.json';
 
 export const ExampleRoot = (props) => {
   const name = get(props, 'match.params.name');

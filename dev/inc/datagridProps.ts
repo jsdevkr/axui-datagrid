@@ -1,5 +1,5 @@
 import { each, isBoolean, isFunction, isNumber, isObject, isString } from 'lodash';
-import { gridOptions } from 'datagrid-ts/_inc/defaults';
+import { gridOptions } from 'axui-datagrid/_inc/defaults';
 import optionDesc from './optionDesc';
 
 interface iDatagridProps {

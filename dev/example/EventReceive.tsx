@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Container, Divider, Segment } from 'semantic-ui-react';
-import { AXDatagrid } from 'datagrid-ts/index';
+import { AXDatagrid } from 'axui-datagrid/index';
 
 export class EventReceive extends React.Component<any, any> {
   constructor( props ) {

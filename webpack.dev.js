@@ -10,7 +10,7 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx'],
     modules: ['dev', 'node_modules'],
     alias: {
-      'datagrid-ts': path.resolve(__dirname, 'src/'),
+      'axui-datagrid': path.resolve(__dirname, 'src/'),
       '@root': path.resolve(__dirname, ''),
     },
   },

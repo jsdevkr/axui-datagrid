@@ -11,7 +11,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": "./",
     "paths": {
-      "datagrid-ts/*": ["./src/*"],
+      "axui-datagrid/*": ["./src/*"],
       "@root/*": ["./*"],
       "*": ["./dev/*"]
     },

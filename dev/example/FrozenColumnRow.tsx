@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { assign } from 'lodash';
 import { Button, Container, Divider, Form, Segment, Select } from 'semantic-ui-react';
-import { AXDatagrid } from 'datagrid-ts/index';
+import { AXDatagrid } from 'axui-datagrid/index';
 
 export class FrozenColumnRow extends React.Component<any, any> {
   constructor(props) {

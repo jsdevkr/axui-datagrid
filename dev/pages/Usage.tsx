@@ -11,10 +11,7 @@ const Usage = props => (
         Install
       </Header>
       <Segment>
-        <pre>$ npm install datagrid-es -S</pre>
-      </Segment>
-      <Segment>
-        <pre>$ npm install datagrid-ts -S</pre>
+        <pre>$ npm install axui-datagrid -S</pre>
       </Segment>
 
       <Header as="h3" dividing>
@@ -24,7 +21,7 @@ const Usage = props => (
       <SourceCodeEditor>
         {`
 import * as React from 'react';
-import { AXDatagrid } from 'datagrid-es'; // 또는 datagrid-ts
+import { AXDatagrid } from 'axui-datagrid';
 
 
 export class Datagrid extends React.Component<any, any> {
