@@ -9,10 +9,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
 const react_redux_1 = require("react-redux");
-const store_1 = require("./store");
-const GridRoot_1 = require("./GridRoot");
+const store_1 = require("./redux/store");
+const GridRoot_1 = require("./component/GridRoot");
 const ACT = __importStar(require("./redux/actions"));
-exports.GridRootConnected = react_redux_1.connect((state) => {
+exports.GridConnected = react_redux_1.connect((state) => {
     return {
         store_receivedList: state.get('receivedList'),
         store_deletedList: state.get('deletedList'),
@@ -37,7 +37,7 @@ class AXDatagrid extends React.Component {
     }
     render() {
         return (React.createElement(react_redux_1.Provider, { store: store_1.store },
-            React.createElement(exports.GridRootConnected, Object.assign({}, this.props))));
+            React.createElement(exports.GridConnected, Object.assign({}, this.props))));
     }
 }
 exports.AXDatagrid = AXDatagrid;

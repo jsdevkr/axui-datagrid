@@ -5,11 +5,11 @@ import { assign, each, isEqual, isFunction, isObject, last, range, throttle } fr
 import { fromJS } from 'immutable';
 import cx from 'classnames';
 
-import * as UTIL from './util';
-import { gridOptions } from './_inc/defaults';
-import { GridBody, GridColumnFilter, GridHeader, GridPage, GridRootContainer, GridScroll } from './component';
-import * as GridFormatter from './_inc/formatter';
-import { KEY_CODE } from './_inc/constant';
+import * as UTIL from '../util/index';
+import { gridOptions } from '../_inc/defaults';
+import { GridBody, GridColumnFilter, GridHeader, GridPage, GridRootContainer, GridScroll } from './index';
+import * as GridFormatter from '../_inc/formatter';
+import { KEY_CODE } from '../_inc/constant';
 
 
 let formatter = GridFormatter.getAll();

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect, Provider } from 'react-redux';
-import { store } from './store';
-import { GridRoot } from './GridRoot';
+import { store } from './redux/store';
+import { GridRoot } from './component/GridRoot';
 import * as ACT from './redux/actions';
 
-export const GridRootConnected = connect(
+export const GridConnected = connect(
   ( state: any ) => {
     return {
       store_receivedList: state.get( 'receivedList' ),
@@ -37,7 +37,7 @@ export class AXDatagrid extends React.Component<iAXDataGridProps, any> {
   public render() {
     return (
       <Provider store={store}>
-        <GridRootConnected {...this.props} />
+        <GridConnected {...this.props} />
       </Provider>
     );
   }
