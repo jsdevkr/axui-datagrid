@@ -7,12 +7,12 @@ import AppRouter from 'router';
 const render = Component => {
   ReactDOM.render(
     <AppContainer>
-      <BrowserRouter basename='/'>
+      <BrowserRouter basename="/">
         <Component />
       </BrowserRouter>
     </AppContainer>,
-    document.getElementById( 'root' )
+    document.getElementById('root'),
   );
 };
 
-render( AppRouter );
+render(AppRouter);

@@ -1,10 +1,13 @@
 import * as React from 'react';
-import classNames from 'classnames'
+import classNames from 'classnames';
 import { List } from 'immutable';
 import { uniqBy } from 'lodash';
-import { GridColumnFilterOption } from './GridColumnFilterOption'
+import { GridColumnFilterOption } from './GridColumnFilterOption';
 
-export class GridColumnFilter extends React.Component<iAXDataGridColumnFilterProps, iAXDataGridColumnFilterState> {
+export class GridColumnFilter extends React.Component<
+  iAXDataGridColumnFilterProps,
+  iAXDataGridColumnFilterState
+> {
   constructor(props: iAXDataGridColumnFilterProps) {
     super(props);
 
@@ -14,55 +17,52 @@ export class GridColumnFilter extends React.Component<iAXDataGridColumnFilterPro
   }
 
   private onChange(colIndex, filterOptions, value, checked, isCheckAll) {
-    const {
-            onChangeColumnFilter
-          } = this.props;
-
+    const { onChangeColumnFilter } = this.props;
 
     filterOptions = List(filterOptions);
     let filterInfo = this.props.filterInfo.toJS();
 
-    if ( isCheckAll ) {
-      if ( checked ) {
-        filterInfo[ colIndex ] = false;
+    if (isCheckAll) {
+      if (checked) {
+        filterInfo[colIndex] = false;
       } else {
-        filterInfo[ colIndex ] = {
-          [ '__CHECK_ALL__' ]: false
+        filterInfo[colIndex] = {
+          ['__CHECK_ALL__']: false,
         };
       }
-    }
-    else {
-
+    } else {
       let filter = {};
       let isAllChecked = true;
 
-      if ( colIndex in filterInfo ) {
+      if (colIndex in filterInfo) {
         filterOptions.forEach(O => {
-          if ( O[ 'value' ] !== '__CHECK_ALL__' ) {
-            if ( O[ 'value' ] === value ) {
-              filter[ O[ 'value' ] ] = checked;
+          if (O['value'] !== '__CHECK_ALL__') {
+            if (O['value'] === value) {
+              filter[O['value']] = checked;
             } else {
-              filter[ O[ 'value' ] ] = (filterInfo[ colIndex ] === false) ? true : filterInfo[ colIndex ][ O[ 'value' ] ];
+              filter[O['value']] =
+                filterInfo[colIndex] === false
+                  ? true
+                  : filterInfo[colIndex][O['value']];
             }
-            if ( !filter[ O[ 'value' ] ] ) isAllChecked = false;
+            if (!filter[O['value']]) isAllChecked = false;
           }
         });
-      }
-      else {
+      } else {
         filterOptions.forEach(O => {
-          if ( O[ 'value' ] !== '__CHECK_ALL__' ) {
-            if ( O[ 'value' ] === value ) {
-              filter[ O[ 'value' ] ] = checked;
+          if (O['value'] !== '__CHECK_ALL__') {
+            if (O['value'] === value) {
+              filter[O['value']] = checked;
             } else {
-              filter[ O[ 'value' ] ] = true;
+              filter[O['value']] = true;
             }
-            if ( !filter[ O[ 'value' ] ] ) isAllChecked = false;
+            if (!filter[O['value']]) isAllChecked = false;
           }
         });
       }
 
-      filter[ '__CHECK_ALL__' ] = isAllChecked;
-      filterInfo[ colIndex ] = filter;
+      filter['__CHECK_ALL__'] = isAllChecked;
+      filterInfo[colIndex] = filter;
     }
 
     onChangeColumnFilter(colIndex, filterInfo);
@@ -70,55 +70,66 @@ export class GridColumnFilter extends React.Component<iAXDataGridColumnFilterPro
 
   public render() {
     const {
-            isColumnFilter,
-            colGroup,
-            styles,
-            options,
-            scrollLeft,
-            filterInfo,
-            list
-          } = this.props;
+      isColumnFilter,
+      colGroup,
+      styles,
+      options,
+      scrollLeft,
+      filterInfo,
+      list,
+    } = this.props;
 
-    if ( isColumnFilter === false ) return null;
+    if (isColumnFilter === false) return null;
 
     let columnFilterInfo = filterInfo.get('' + isColumnFilter);
-    let filterOptions = uniqBy(list
-      .filter(item => (item ? !item[ options.columnKeys.deleted ] : false))
-      .map(item => {
-        let value = item[ colGroup[ Number(isColumnFilter) ].key ];
-        let text: string = value;
-        let checked: boolean = false;
+    let filterOptions = uniqBy(
+      list
+        .filter(item => (item ? !item[options.columnKeys.deleted] : false))
+        .map(item => {
+          let value = item[colGroup[Number(isColumnFilter)].key];
+          let text: string = value;
+          let checked: boolean = false;
 
-        if ( typeof value === 'undefined' ) {
-          value = '__UNDEFINED__';
-          text = '값 없음';
-        }
+          if (typeof value === 'undefined') {
+            value = '__UNDEFINED__';
+            text = '값 없음';
+          }
 
-        if ( typeof columnFilterInfo === 'undefined' || columnFilterInfo === false ) {
-          checked = true;
-        }
-        else if ( typeof columnFilterInfo !== 'undefined' && columnFilterInfo !== false && typeof columnFilterInfo[ value ] === 'undefined' ) {
-          checked = columnFilterInfo[ '__CHECK_ALL__' ];
-        }
-        else if ( value in columnFilterInfo ) {
-          checked = columnFilterInfo[ value ];
-        }
-        else {
-          checked = columnFilterInfo[ '__CHECK_ALL__' ];
-        }
+          if (
+            typeof columnFilterInfo === 'undefined' ||
+            columnFilterInfo === false
+          ) {
+            checked = true;
+          } else if (
+            typeof columnFilterInfo !== 'undefined' &&
+            columnFilterInfo !== false &&
+            typeof columnFilterInfo[value] === 'undefined'
+          ) {
+            checked = columnFilterInfo['__CHECK_ALL__'];
+          } else if (value in columnFilterInfo) {
+            checked = columnFilterInfo[value];
+          } else {
+            checked = columnFilterInfo['__CHECK_ALL__'];
+          }
 
-        return {
-          value: value,
-          text: text,
-          checked: checked
-        };
-      }).toJS(), 'value');
+          return {
+            value: value,
+            text: text,
+            checked: checked,
+          };
+        })
+        .toJS(),
+      'value',
+    );
 
     filterOptions.splice(0, 0, {
       value: '__CHECK_ALL__',
       text: '전체선택',
       checkAll: true,
-      checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo[ '__CHECK_ALL__' ])
+      checked:
+        typeof columnFilterInfo === 'undefined' ||
+        columnFilterInfo === false ||
+        columnFilterInfo['__CHECK_ALL__'],
     });
 
     const filterWidth: number = 180;
@@ -127,24 +138,42 @@ export class GridColumnFilter extends React.Component<iAXDataGridColumnFilterPro
       top: styles.headerHeight - 2,
       left: 100,
       width: filterWidth,
-      height: styles.bodyHeight
+      height: styles.bodyHeight,
     };
 
-    filterStyles.left = styles.asidePanelWidth + colGroup[ Number(isColumnFilter) ]._sx - 2 + scrollLeft;
-    if ( filterStyles.left + filterWidth > styles.CTInnerWidth ) {
-      filterStyles.left = styles.asidePanelWidth + colGroup[ Number(isColumnFilter) ]._ex - 2 + scrollLeft - filterWidth;
+    filterStyles.left =
+      styles.asidePanelWidth +
+      colGroup[Number(isColumnFilter)]._sx -
+      2 +
+      scrollLeft;
+    if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
+      filterStyles.left =
+        styles.asidePanelWidth +
+        colGroup[Number(isColumnFilter)]._ex -
+        2 +
+        scrollLeft -
+        filterWidth;
     }
 
     return (
       <div
-        data-column-filter='true'
+        data-column-filter="true"
         className={classNames('axd-column-filter')}
         style={filterStyles}
       >
-        <GridColumnFilterOption options={filterOptions} onChange={(value, checked, checkAll) => {
-          this.onChange(isColumnFilter, filterOptions, value, checked, checkAll);
-        }} />
+        <GridColumnFilterOption
+          options={filterOptions}
+          onChange={(value, checked, checkAll) => {
+            this.onChange(
+              isColumnFilter,
+              filterOptions,
+              value,
+              checked,
+              checkAll,
+            );
+          }}
+        />
       </div>
-    )
+    );
   }
 }

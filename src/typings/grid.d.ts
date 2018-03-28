@@ -17,9 +17,9 @@ interface iAXDataGridColumns {
   columns?: iAXDataGridColumns[];
 }
 
-interface iAXDataGridOptionHeader{
+interface iAXDataGridOptionHeader {
   display?: boolean;
-  align?: boolean|string;
+  align?: boolean | string;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -29,7 +29,7 @@ interface iAXDataGridOptionHeader{
   clickAction?: string;
 }
 
-interface iAXDataGridOptionBody{
+interface iAXDataGridOptionBody {
   align?: string;
   columnHeight?: number;
   columnPadding?: number;
@@ -62,7 +62,7 @@ interface iAXDataGridOption {
     buttons?: iAXDataGridOptionPageButton[];
     buttonHeight?: number;
     height?: number;
-  },
+  };
   scroller?: {
     size?: number;
     arrowSize?: number;

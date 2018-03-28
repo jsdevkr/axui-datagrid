@@ -3,12 +3,12 @@ import { Segment, Header } from 'semantic-ui-react';
 import { SourceCodeEditor } from 'components';
 import { Link } from 'react-router-dom';
 
-const inlineEdit= ( props ) => (
+const inlineEdit = props => (
   <Segment basic padded>
-    <Header as='h2' dividing>Inline edit</Header>
-    <p>
-      column에 editor를 선언해주면 inline edit기능을 사용할 수 있습니다.
-    </p>
+    <Header as="h2" dividing>
+      Inline edit
+    </Header>
+    <p>column에 editor를 선언해주면 inline edit기능을 사용할 수 있습니다.</p>
 
     <SourceCodeEditor>
       {`
@@ -16,7 +16,7 @@ const inlineEdit= ( props ) => (
       `}
     </SourceCodeEditor>
     <p>
-      <Link to='/sample/InlineEdit'>InlineEdit 예제보기</Link>
+      <Link to="/sample/InlineEdit">InlineEdit 예제보기</Link>
     </p>
   </Segment>
 );

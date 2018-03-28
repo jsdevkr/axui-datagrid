@@ -1,4 +1,3 @@
-
 interface iAXDataGridRootProps {
   store_receivedList: any;
   store_deletedList: any;

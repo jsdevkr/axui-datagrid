@@ -1,4 +1,3 @@
-
 interface iAXDataGridBodyProps {
   mounted: boolean;
   columnFormatter: any;
@@ -74,9 +73,7 @@ interface iAXDataGridBodyPanelProps {
   panelPaddingLeft?: number;
 }
 
-interface iAXDataGridBodyPanelState {
-
-}
+interface iAXDataGridBodyPanelState {}
 
 interface iAXDataGridBodyCellProps {
   columnHeight: number;
@@ -102,6 +99,4 @@ interface iAXDataGridBodyCellProps {
   onDoubleClickCell: Function;
 }
 
-interface iAXDataGridBodyCellState {
-
-}
+interface iAXDataGridBodyCellState {}

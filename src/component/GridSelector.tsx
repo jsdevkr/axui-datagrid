@@ -1,13 +1,15 @@
 import * as React from 'react';
-import classNames from 'classnames'
+import classNames from 'classnames';
 
-export class GridSelector extends React.Component<iAXDataGridSelectorProps, iAXDataGridSelectorState> {
-  constructor( props: iAXDataGridSelectorProps ) {
-    super( props );
-
+export class GridSelector extends React.Component<
+  iAXDataGridSelectorProps,
+  iAXDataGridSelectorState
+> {
+  constructor(props: iAXDataGridSelectorProps) {
+    super(props);
   }
 
-  public shouldComponentUpdate( nextProps, nextState ) {
+  public shouldComponentUpdate(nextProps, nextState) {
     let sameProps = false;
 
     if (
@@ -22,26 +24,17 @@ export class GridSelector extends React.Component<iAXDataGridSelectorProps, iAXD
   }
 
   public render() {
-    const {
-            selecting,
-            selectionMinOffset,
-            selectionMaxOffset
-          } = this.props;
+    const { selecting, selectionMinOffset, selectionMaxOffset } = this.props;
 
-    if ( !selecting ) return null;
+    if (!selecting) return null;
 
     let selectorStyles = {
       left: selectionMinOffset.x,
       top: selectionMinOffset.y,
       width: selectionMaxOffset.x - selectionMinOffset.x,
-      height: selectionMaxOffset.y - selectionMinOffset.y
+      height: selectionMaxOffset.y - selectionMinOffset.y,
     };
 
-    return (
-      <div
-        className={classNames( '' )}
-        style={selectorStyles}
-      />
-    )
+    return <div className={classNames('')} style={selectorStyles} />;
   }
 }

@@ -1,4 +1,3 @@
-
 interface iAXDataGridColumnFilterOption {
   value: string;
   text: string;
@@ -18,8 +17,7 @@ interface iAXDataGridColumnFilterProps {
   onChangeColumnFilter: Function;
 }
 
-interface iAXDataGridColumnFilterState {
-}
+interface iAXDataGridColumnFilterState {}
 
 interface iAXDataGridColumnFilterOptionProps {
   options: iAXDataGridColumnFilterOption[];

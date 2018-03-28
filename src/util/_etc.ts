@@ -15,21 +15,21 @@ import { isElement, isFunction } from 'lodash';
  * ```
  */
 export function findParentNodeByAttr(_target, _predicate) {
-  if ( _target ) {
-    while ( (function () {
-      let result = true;
-      if ( typeof _predicate === 'undefined' ) {
-        _target = (_target.parentNode) ? _target.parentNode : false;
-      }
-      else if ( isFunction(_predicate) && isElement(_target) ) {
-        result = _predicate(_target);
-      }
-      return !result;
-    })() ) {
-      if ( _target.parentNode && _target.parentNode.parentNode ) {
+  if (_target) {
+    while (
+      (function() {
+        let result = true;
+        if (typeof _predicate === 'undefined') {
+          _target = _target.parentNode ? _target.parentNode : false;
+        } else if (isFunction(_predicate) && isElement(_target)) {
+          result = _predicate(_target);
+        }
+        return !result;
+      })()
+    ) {
+      if (_target.parentNode && _target.parentNode.parentNode) {
         _target = _target.parentNode;
-      }
-      else {
+      } else {
         _target = false;
         break;
       }
@@ -44,18 +44,19 @@ export function findParentNodeByAttr(_target, _predicate) {
  * @return {{clientX, clientY}}
  */
 export function getMousePosition(e) {
-  let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[ 0 ] : e;
+  let mouseObj =
+    'changedTouches' in e && e.changedTouches ? e.changedTouches[0] : e;
   // clientX, Y 쓰면 스크롤에서 문제 발생
   return {
     x: mouseObj.clientX,
-    y: mouseObj.clientY
-  }
+    y: mouseObj.clientY,
+  };
 }
 
 export function cssNumber(val) {
   const re = /\D?(\d+)([a-zA-Z%]*)/i;
   const found = ('' + val).match(re);
-  const unit = found[ 2 ] || 'px';
+  const unit = found[2] || 'px';
 
-  return found[ 1 ] + unit;
+  return found[1] + unit;
 }

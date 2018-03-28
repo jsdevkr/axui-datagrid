@@ -41,10 +41,7 @@ interface iAXDataGridHeaderPanelProps {
   onMouseDownColumnResizer: Function;
 }
 
-interface iAXDataGridHeaderPanelState {
-
-}
-
+interface iAXDataGridHeaderPanelState {}
 
 interface iAXDataGridHeaderCellProps {
   bodyRow: any;
@@ -57,6 +54,4 @@ interface iAXDataGridHeaderCellProps {
   onClickHeader: Function;
 }
 
-interface iAXDataGridHeaderCellState {
-
-}
+interface iAXDataGridHeaderCellState {}

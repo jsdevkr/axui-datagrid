@@ -1,4 +1,3 @@
-
 interface iAXDataGridSelectorProps {
   selecting: boolean;
   selectionMinOffset: iAXDataGridSelection;

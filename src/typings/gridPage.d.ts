@@ -1,11 +1,10 @@
-
 interface iAXDataGridPageProps {
   mounted: boolean;
   styles: iAXDataGridStyle;
   pageButtonsContainerWidth: number;
   pageButtons: iAXDataGridOptionPageButton[];
   pageButtonHeight: number;
-  onClickPageButton: Function
+  onClickPageButton: Function;
 }
 
 interface iAXDataGridPageState {

@@ -1,4 +1,3 @@
-
 interface iAXDataGridScrollProps {
   mounted: boolean;
   bodyHeight: number;

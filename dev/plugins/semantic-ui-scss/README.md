@@ -1,8 +1,5 @@
 ```
 $ bower install semantic-ui-scss
-```
-
-
-```scss
+``````scss
 @import "semantic-ui";
-```
+```;

@@ -4,7 +4,7 @@ import { map } from 'lodash';
 import { PropsTableRow } from './PropsTableRow';
 
 export const PropsTable = ({ props }) => (
-  <Table basic='very'>
+  <Table basic="very">
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Name</Table.HeaderCell>
@@ -14,7 +14,9 @@ export const PropsTable = ({ props }) => (
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {map(props, ({ name, ...rest }) => <PropsTableRow {...rest} key={name} name={name} />)}
+      {map(props, ({ name, ...rest }) => (
+        <PropsTableRow {...rest} key={name} name={name} />
+      ))}
     </Table.Body>
   </Table>
 );

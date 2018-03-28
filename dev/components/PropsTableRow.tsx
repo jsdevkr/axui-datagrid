@@ -8,13 +8,11 @@ interface iProps {
   required?: boolean;
   type?: string;
 }
-interface iState {
-
-}
+interface iState {}
 
 export class PropsTableRow extends React.Component<iProps, iState> {
-  constructor( props ) {
-    super( props )
+  constructor(props) {
+    super(props);
   }
 
   render() {
@@ -25,16 +23,12 @@ export class PropsTableRow extends React.Component<iProps, iState> {
         <Table.Cell collapsing>
           <code>{name}</code>
         </Table.Cell>
-        <Table.Cell collapsing>
-          {defaultValue}
-        </Table.Cell>
+        <Table.Cell collapsing>{defaultValue}</Table.Cell>
         <Table.Cell collapsing>
           <code>{`{${type}}`}</code>
         </Table.Cell>
-        <Table.Cell>
-          {description}
-        </Table.Cell>
+        <Table.Cell>{description}</Table.Cell>
       </Table.Row>
-    )
+    );
   }
 }

@@ -3,6 +3,4 @@ interface iAXDataGridRootContainerProps {
   style: object;
 }
 
-interface iAXDataGridRootContainerState {
-
-}
+interface iAXDataGridRootContainerState {}

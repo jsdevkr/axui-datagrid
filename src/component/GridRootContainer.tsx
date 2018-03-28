@@ -1,31 +1,31 @@
 import * as React from 'react';
-import cx from 'classnames'
+import cx from 'classnames';
 
-export class GridRootContainer extends React.Component<iAXDataGridRootContainerProps, iAXDataGridRootContainerState> {
-  constructor( props: iAXDataGridRootContainerProps ) {
-    super( props );
+export class GridRootContainer extends React.Component<
+  iAXDataGridRootContainerProps,
+  iAXDataGridRootContainerState
+> {
+  constructor(props: iAXDataGridRootContainerProps) {
+    super(props);
 
     this.state = {};
   }
 
   public render() {
-
     return (
       <div
-        className={cx( 'ax-datagrid' )}
-        tabIndex={(-1)}
+        className={cx('ax-datagrid')}
+        tabIndex={-1}
         style={this.props.style}
         onWheel={e => {
-          this.props.onFireEvent( 'wheel', e );
+          this.props.onFireEvent('wheel', e);
         }}
-
         onKeyDown={e => {
-          this.props.onFireEvent( 'keydown', e );
+          this.props.onFireEvent('keydown', e);
         }}
         onKeyUp={e => {
-          this.props.onFireEvent( 'keyup', e );
+          this.props.onFireEvent('keyup', e);
         }}
-
         onMouseDown={e => {
           this.props.onFireEvent('mousedown', e);
         }}
@@ -33,7 +33,7 @@ export class GridRootContainer extends React.Component<iAXDataGridRootContainerP
           this.props.onFireEvent('mouseup', e);
         }}
         onClick={e => {
-          this.props.onFireEvent( 'click', e );
+          this.props.onFireEvent('click', e);
         }}
       >
         {this.props.children}
