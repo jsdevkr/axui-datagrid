@@ -32,7 +32,6 @@ class AppRouter extends React.Component<any, any> {
   }
 
   public render() {
-    const { visible } = this.state;
     const mainStyle = style.main;
 
     return (

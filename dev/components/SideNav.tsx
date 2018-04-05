@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Icon, Image, Menu } from 'semantic-ui-react';
+import axuiLogo from '../assets/axui-logo.png';
 import pkg from '@root/dist/package.json';
 
 export class SideNav extends React.Component<any, any> {
@@ -36,7 +37,10 @@ export class SideNav extends React.Component<any, any> {
       <Menu vertical fixed="left" inverted style={{ ...style }}>
         <Menu.Item>
           <b>
-            {pkg.name}@{pkg.version}
+            <Image src={axuiLogo} avatar />{' '}
+            <span>
+              {pkg.name}@{pkg.version}
+            </span>
           </b>
         </Menu.Item>
         <Menu.Item>
