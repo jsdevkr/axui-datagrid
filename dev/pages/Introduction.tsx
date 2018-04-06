@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Container, Image, Segment } from 'semantic-ui-react';
-import axuiLogo from '../assets/axui-logo.png';
+import axuiLogo from '../assets/axui-banner.png';
 import { features } from './features';
 
 const Introduction = props => (
   <Container>
     <Segment textAlign={'center'} basic padded>
-      <Image src={axuiLogo} size="small" centered />
-      <h1>axui datagrid</h1>
+      <Image src={axuiLogo} centered />
+      <h1>AXUI DATAGRID</h1>
     </Segment>
 
     <Segment basic padded>
