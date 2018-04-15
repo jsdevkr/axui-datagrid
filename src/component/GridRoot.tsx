@@ -1327,6 +1327,27 @@ export class GridRoot extends React.Component<
     }
   }
 
+  private onTouchStart(e: any) {
+    e.preventDefault();
+
+    const onTouchMove = ee => {
+      ee.preventDefault();
+      console.log(ee);
+    };
+    const offEvent = ee => {};
+
+    window.addEventListener('touchmove', onTouchMove, {
+      capture: true,
+      passive: false,
+    });
+    window.addEventListener('touchend', offEvent, true);
+  }
+
+  private onTouchMove(e: any) {
+    e.preventDefault();
+    console.log(e);
+  }
+
   private updateEditInput(
     act: string,
     row?: number,
@@ -1370,6 +1391,13 @@ export class GridRoot extends React.Component<
       mousedown: () => {},
       mouseup: () => {},
       click: () => {},
+      touchStart: () => {
+        this.onTouchStart(e);
+      },
+      touchMove: () => {
+        this.onTouchMove(e);
+      },
+      touchEnd: () => {},
     };
 
     if (this.props.onBeforeEvent) {
