@@ -32,46 +32,46 @@ class GridScroll extends React.Component {
         let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
         let verticalArrowStyles = {
             width: verticalScrollerWidth,
-            height: scrollerArrowSize / 2 + scrollerPadding
+            height: scrollerArrowSize / 2 + scrollerPadding,
         };
         let verticalTopArrowStyles = {
             left: scrollerPadding,
             top: (verticalArrowStyles.height - arrowWidth) / 2,
             borderTop: '0 none',
             borderRight: 'solid ' + arrowWidth + 'px transparent',
-            borderBottomWidth: (arrowWidth) + 'px',
-            borderLeft: 'solid ' + arrowWidth + 'px transparent'
+            borderBottomWidth: arrowWidth + 'px',
+            borderLeft: 'solid ' + arrowWidth + 'px transparent',
         };
         let verticalBottomArrowStyles = {
             left: scrollerPadding,
             top: (verticalArrowStyles.height - arrowWidth) / 2,
-            borderTopWidth: (arrowWidth) + 'px',
+            borderTopWidth: arrowWidth + 'px',
             borderRight: 'solid ' + arrowWidth + 'px transparent',
             borderBottom: '0 none',
-            borderLeft: 'solid ' + arrowWidth + 'px transparent'
+            borderLeft: 'solid ' + arrowWidth + 'px transparent',
         };
         let verticalStyles = {
             width: verticalScrollerWidth,
             height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize,
             bottom: pageHeight,
             padding: scrollerPadding,
-            paddingTop: scrollerArrowSize / 2 + scrollerPadding
+            paddingTop: scrollerArrowSize / 2 + scrollerPadding,
         };
         let verticalBarStyles = {
             height: verticalScrollBarHeight,
-            top: scrollBarTop
+            top: scrollBarTop,
         };
         let horizontalArrowStyles = {
             width: scrollerArrowSize / 2 + scrollerPadding,
-            height: horizontalScrollerHeight
+            height: horizontalScrollerHeight,
         };
         let horizontalLeftArrowStyles = {
             left: (horizontalArrowStyles.width - arrowWidth) / 2,
             top: scrollerPadding,
             borderTop: 'solid ' + arrowWidth + 'px transparent',
-            borderRightWidth: (arrowWidth) + 'px',
+            borderRightWidth: arrowWidth + 'px',
             borderBottom: 'solid ' + arrowWidth + 'px transparent',
-            borderLeft: '0 none'
+            borderLeft: '0 none',
         };
         let horizontalRightArrowStyles = {
             left: (horizontalArrowStyles.width - arrowWidth) / 2,
@@ -79,7 +79,7 @@ class GridScroll extends React.Component {
             borderTop: 'solid ' + arrowWidth + 'px transparent',
             borderRight: '0 none',
             borderBottom: 'solid ' + arrowWidth + 'px transparent',
-            borderLeftWidth: (arrowWidth) + 'px'
+            borderLeftWidth: arrowWidth + 'px',
         };
         let horizontalStyles = {
             width: horizontalScrollerWidth + scrollerPadding * 2 + scrollerArrowSize,
@@ -87,26 +87,26 @@ class GridScroll extends React.Component {
             bottom: (pageHeight - 1 - horizontalScrollerHeight) / 2,
             right: (pageHeight - 1 - horizontalScrollerHeight) / 2,
             padding: scrollerPadding,
-            paddingLeft: scrollerArrowSize / 2 + scrollerPadding
+            paddingLeft: scrollerArrowSize / 2 + scrollerPadding,
         };
         let horizontalBarStyles = {
             width: horizontalScrollBarWidth,
-            left: scrollBarLeft
+            left: scrollBarLeft,
         };
         return (React.createElement("div", { className: classnames_1.default('axd-scroller') },
-            (verticalScrollerWidth) ? (React.createElement("div", { "data-scroll-track": 'vertical', style: verticalStyles },
-                React.createElement("div", { "data-scroll-arrow": 'up', style: verticalArrowStyles },
+            verticalScrollerWidth ? (React.createElement("div", { "data-scroll-track": "vertical", style: verticalStyles },
+                React.createElement("div", { "data-scroll-arrow": "up", style: verticalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => onClickScrollArrow(e, 'up') })),
-                React.createElement("div", { "data-scroll": 'vertical', onClick: e => this.onClickScrollTrack(e, 'vertical') },
+                React.createElement("div", { "data-scroll": "vertical", onClick: e => this.onClickScrollTrack(e, 'vertical') },
                     React.createElement("div", { className: classnames_1.default('axd-scroll-bar'), style: verticalBarStyles, onMouseDown: e => onMouseDownScrollBar(e, 'vertical') })),
-                React.createElement("div", { "data-scroll-arrow": 'down', style: verticalArrowStyles },
+                React.createElement("div", { "data-scroll-arrow": "down", style: verticalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => onClickScrollArrow(e, 'down') })))) : null,
-            (horizontalScrollerHeight) ? (React.createElement("div", { "data-scroll-track": 'horizontal', style: horizontalStyles },
-                React.createElement("div", { "data-scroll-arrow": 'left', style: horizontalArrowStyles },
+            horizontalScrollerHeight ? (React.createElement("div", { "data-scroll-track": "horizontal", style: horizontalStyles },
+                React.createElement("div", { "data-scroll-arrow": "left", style: horizontalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => onClickScrollArrow(e, 'left') })),
-                React.createElement("div", { "data-scroll": 'horizontal', onClick: e => this.onClickScrollTrack(e, 'horizontal') },
-                    React.createElement("div", { className: classnames_1.default('axd-scroll-bar'), style: horizontalBarStyles, onMouseDown: (e) => onMouseDownScrollBar(e, 'horizontal') })),
-                React.createElement("div", { "data-scroll-arrow": 'right', style: horizontalArrowStyles },
+                React.createElement("div", { "data-scroll": "horizontal", onClick: e => this.onClickScrollTrack(e, 'horizontal') },
+                    React.createElement("div", { className: classnames_1.default('axd-scroll-bar'), style: horizontalBarStyles, onMouseDown: e => onMouseDownScrollBar(e, 'horizontal') })),
+                React.createElement("div", { "data-scroll-arrow": "right", style: horizontalArrowStyles },
                     React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => onClickScrollArrow(e, 'right') })))) : null));
     }
 }

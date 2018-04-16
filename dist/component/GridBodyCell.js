@@ -34,7 +34,7 @@ class GridBodyCell extends React.Component {
                 item: _item,
                 index: _itemIdx,
                 key: _col.key,
-                value: _item[_col.key]
+                value: _item[_col.key],
             };
             let label;
             if (lodash_1.isString(_col.formatter) && _col.formatter in columnFormatter) {
@@ -48,31 +48,36 @@ class GridBodyCell extends React.Component {
             }
             return label;
         };
-        let lineHeight = (this.props.columnHeight - this.props.columnPadding * 2 - this.props.columnBorderWidth);
+        let lineHeight = this.props.columnHeight -
+            this.props.columnPadding * 2 -
+            this.props.columnBorderWidth;
         let colAlign = this.props.bodyAlign || _col.align;
         let label;
         if (_col.key === '__line_number__') {
             label = _itemIdx + 1;
         }
         else if (_col.key === '__row_selector__') {
-            label = React.createElement("div", { className: classnames_1.default('axd-check-box'), style: { maxHeight: (_col.width - 10) + 'px', minHeight: (_col.width - 10) + 'px' } });
+            label = (React.createElement("div", { className: classnames_1.default('axd-check-box'), style: {
+                    maxHeight: _col.width - 10 + 'px',
+                    minHeight: _col.width - 10 + 'px',
+                } }));
         }
         else {
             label = getLabel(_colGroup, _col, _item, _itemIdx);
         }
         let spanStyle = {
-            height: (this.props.columnHeight - this.props.columnBorderWidth) + 'px',
+            height: this.props.columnHeight - this.props.columnBorderWidth + 'px',
             lineHeight: lineHeight + 'px',
-            textAlign: colAlign
+            textAlign: colAlign,
         };
         return (React.createElement("span", { "data-span": _col.columnAttr || '', "data-pos": _col.colIndex + ',' + _col.rowIndex + ',' + _itemIdx, style: spanStyle }, label || ' '));
     }
     render() {
-        const { columnHeight, columnBorderWidth, focusedRow, focusedCol, selectionRows, selectionCols, isInlineEditing, inlineEditingCell, onDoubleClickCell, list, li, colGroup, col, ci, value, onEditInput } = this.props;
+        const { columnHeight, columnBorderWidth, focusedRow, focusedCol, selectionRows, selectionCols, isInlineEditing, inlineEditingCell, onDoubleClickCell, list, li, colGroup, col, ci, value, onEditInput, } = this.props;
         let cellHeight = columnHeight * col.rowspan;
         let tdClassNames = {
-            ['axd-line-number']: (col.columnAttr === 'lineNumber'),
-            ['axd-row-selector']: (col.columnAttr === 'rowSelector')
+            ['axd-line-number']: col.columnAttr === 'lineNumber',
+            ['axd-row-selector']: col.columnAttr === 'rowSelector',
         };
         if (col.columnAttr === 'lineNumber') {
             if (focusedRow === li) {
@@ -92,9 +97,11 @@ class GridBodyCell extends React.Component {
                 tdClassNames['focused'] = true;
             }
         }
-        if (isInlineEditing && inlineEditingCell.row === li && inlineEditingCell.col === col.colIndex) {
+        if (isInlineEditing &&
+            inlineEditingCell.row === li &&
+            inlineEditingCell.col === col.colIndex) {
             return (React.createElement("td", { key: ci, colSpan: col.colspan, rowSpan: col.rowspan, className: classnames_1.default(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
-                React.createElement("input", { type: 'text', ref: input => {
+                React.createElement("input", { type: "text", ref: input => {
                         this.editInput = input;
                     }, onBlur: e => {
                         onEditInput(constant_1.E_NAME.BLUR, e);

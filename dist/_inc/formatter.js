@@ -13,7 +13,9 @@ function money(data) {
         do {
             arrNumber[0] = arrNumber[0].replace(regExpPattern, '$1,$2');
         } while (regExpPattern.test(arrNumber[0]));
-        return (arrNumber.length > 1) ? arrNumber[0] + arrNumber[1].substr(0, 2) : arrNumber[0].split('.')[0];
+        return arrNumber.length > 1
+            ? arrNumber[0] + arrNumber[1].substr(0, 2)
+            : arrNumber[0].split('.')[0];
     }
     else {
         return '';
@@ -43,7 +45,9 @@ exports.datetime = datetime;
  */
 function getAll() {
     return {
-        money, date, datetime
+        money,
+        date,
+        datetime,
     };
 }
 exports.getAll = getAll;

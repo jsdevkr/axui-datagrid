@@ -18,7 +18,7 @@ class GridRootContainer extends React.Component {
         this.state = {};
     }
     render() {
-        return (React.createElement("div", { className: classnames_1.default('ax-datagrid'), tabIndex: (-1), style: this.props.style, onWheel: e => {
+        return (React.createElement("div", { className: classnames_1.default('ax-datagrid'), tabIndex: -1, style: this.props.style, onWheel: e => {
                 this.props.onFireEvent('wheel', e);
             }, onKeyDown: e => {
                 this.props.onFireEvent('keydown', e);
@@ -30,6 +30,8 @@ class GridRootContainer extends React.Component {
                 this.props.onFireEvent('mouseup', e);
             }, onClick: e => {
                 this.props.onFireEvent('click', e);
+            }, onTouchStartCapture: e => {
+                this.props.onFireEvent('touchStart', e);
             } }, this.props.children));
     }
 }

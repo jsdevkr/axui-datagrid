@@ -31,7 +31,7 @@ class GridColumnFilter extends React.Component {
             }
             else {
                 filterInfo[colIndex] = {
-                    ['__CHECK_ALL__']: false
+                    ['__CHECK_ALL__']: false,
                 };
             }
         }
@@ -45,7 +45,10 @@ class GridColumnFilter extends React.Component {
                             filter[O['value']] = checked;
                         }
                         else {
-                            filter[O['value']] = (filterInfo[colIndex] === false) ? true : filterInfo[colIndex][O['value']];
+                            filter[O['value']] =
+                                filterInfo[colIndex] === false
+                                    ? true
+                                    : filterInfo[colIndex][O['value']];
                         }
                         if (!filter[O['value']])
                             isAllChecked = false;
@@ -72,7 +75,7 @@ class GridColumnFilter extends React.Component {
         onChangeColumnFilter(colIndex, filterInfo);
     }
     render() {
-        const { isColumnFilter, colGroup, styles, options, scrollLeft, filterInfo, list } = this.props;
+        const { isColumnFilter, colGroup, styles, options, scrollLeft, filterInfo, list, } = this.props;
         if (isColumnFilter === false)
             return null;
         let columnFilterInfo = filterInfo.get('' + isColumnFilter);
@@ -86,10 +89,13 @@ class GridColumnFilter extends React.Component {
                 value = '__UNDEFINED__';
                 text = '값 없음';
             }
-            if (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false) {
+            if (typeof columnFilterInfo === 'undefined' ||
+                columnFilterInfo === false) {
                 checked = true;
             }
-            else if (typeof columnFilterInfo !== 'undefined' && columnFilterInfo !== false && typeof columnFilterInfo[value] === 'undefined') {
+            else if (typeof columnFilterInfo !== 'undefined' &&
+                columnFilterInfo !== false &&
+                typeof columnFilterInfo[value] === 'undefined') {
                 checked = columnFilterInfo['__CHECK_ALL__'];
             }
             else if (value in columnFilterInfo) {
@@ -101,27 +107,39 @@ class GridColumnFilter extends React.Component {
             return {
                 value: value,
                 text: text,
-                checked: checked
+                checked: checked,
             };
-        }).toJS(), 'value');
+        })
+            .toJS(), 'value');
         filterOptions.splice(0, 0, {
             value: '__CHECK_ALL__',
             text: '전체선택',
             checkAll: true,
-            checked: (typeof columnFilterInfo === 'undefined' || columnFilterInfo === false || columnFilterInfo['__CHECK_ALL__'])
+            checked: typeof columnFilterInfo === 'undefined' ||
+                columnFilterInfo === false ||
+                columnFilterInfo['__CHECK_ALL__'],
         });
         const filterWidth = 180;
         let filterStyles = {
             top: styles.headerHeight - 2,
             left: 100,
             width: filterWidth,
-            height: styles.bodyHeight
+            height: styles.bodyHeight,
         };
-        filterStyles.left = styles.asidePanelWidth + colGroup[Number(isColumnFilter)]._sx - 2 + scrollLeft;
+        filterStyles.left =
+            styles.asidePanelWidth +
+                colGroup[Number(isColumnFilter)]._sx -
+                2 +
+                scrollLeft;
         if (filterStyles.left + filterWidth > styles.CTInnerWidth) {
-            filterStyles.left = styles.asidePanelWidth + colGroup[Number(isColumnFilter)]._ex - 2 + scrollLeft - filterWidth;
+            filterStyles.left =
+                styles.asidePanelWidth +
+                    colGroup[Number(isColumnFilter)]._ex -
+                    2 +
+                    scrollLeft -
+                    filterWidth;
         }
-        return (React.createElement("div", { "data-column-filter": 'true', className: classnames_1.default('axd-column-filter'), style: filterStyles },
+        return (React.createElement("div", { "data-column-filter": "true", className: classnames_1.default('axd-column-filter'), style: filterStyles },
             React.createElement(GridColumnFilterOption_1.GridColumnFilterOption, { options: filterOptions, onChange: (value, checked, checkAll) => {
                     this.onChange(isColumnFilter, filterOptions, value, checked, checkAll);
                 } })));

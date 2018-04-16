@@ -37,7 +37,9 @@ function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHeight, c
         endScroll = true;
     }
     return {
-        scrollLeft, scrollTop, endScroll
+        scrollLeft,
+        scrollTop,
+        endScroll,
     };
 }
 exports.getScrollPosition = getScrollPosition;
@@ -59,16 +61,16 @@ exports.getScrollPosition = getScrollPosition;
  * @param {any} SH
  * @return {{scrollLeft: number; scrollTop: number}}
  */
-function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight, scrollContentWidth, scrollContentHeight, scrollContentContainerWidth, scrollContentContainerHeight, BW = horizontalScrollerWidth - horizontalScrollBarWidth, BH = verticalScrollerHeight - verticalScrollBarHeight, SW = scrollContentWidth - scrollContentContainerWidth, SH = scrollContentHeight - scrollContentContainerHeight }) {
+function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { horizontalScrollerWidth, verticalScrollerHeight, horizontalScrollBarWidth, verticalScrollBarHeight, scrollContentWidth, scrollContentHeight, scrollContentContainerWidth, scrollContentContainerHeight, BW = horizontalScrollerWidth - horizontalScrollBarWidth, BH = verticalScrollerHeight - verticalScrollBarHeight, SW = scrollContentWidth - scrollContentContainerWidth, SH = scrollContentHeight - scrollContentContainerHeight, }) {
     let { scrollLeft, scrollTop } = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
         scrollWidth: scrollContentWidth,
         scrollHeight: scrollContentHeight,
         clientWidth: scrollContentContainerWidth,
-        clientHeight: scrollContentContainerHeight
+        clientHeight: scrollContentContainerHeight,
     });
     return {
         scrollLeft,
-        scrollTop
+        scrollTop,
     };
 }
 exports.getScrollPositionByScrollBar = getScrollPositionByScrollBar;

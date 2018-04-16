@@ -33,9 +33,9 @@ class GridSelector extends React.Component {
             left: selectionMinOffset.x,
             top: selectionMinOffset.y,
             width: selectionMaxOffset.x - selectionMinOffset.x,
-            height: selectionMaxOffset.y - selectionMinOffset.y
+            height: selectionMaxOffset.y - selectionMinOffset.y,
         };
-        return (React.createElement("div", { className: classnames_1.default(''), style: selectorStyles }));
+        return React.createElement("div", { className: classnames_1.default(''), style: selectorStyles });
     }
 }
 exports.GridSelector = GridSelector;

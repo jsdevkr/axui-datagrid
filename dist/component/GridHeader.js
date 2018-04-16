@@ -19,7 +19,7 @@ class GridHeader extends React.Component {
         super(props);
         this.state = {
             columnResizing: false,
-            columnResizerLeft: 0
+            columnResizerLeft: 0,
         };
         this.onMouseDownColumnResizer = this.onMouseDownColumnResizer.bind(this);
     }
@@ -47,7 +47,7 @@ class GridHeader extends React.Component {
         const { x: rootX } = this.props.getRootBounding();
         let newWidth;
         let startMousePosition = UTIL.getMousePosition(e).x;
-        const onMouseMove = (ee) => {
+        const onMouseMove = ee => {
             const { x, y } = UTIL.getMousePosition(ee);
             let newLeft = currLeft + x - startMousePosition;
             if (newLeft < prevLeft) {
@@ -56,17 +56,17 @@ class GridHeader extends React.Component {
             newWidth = newLeft - prevLeft;
             this.setState({
                 columnResizing: true,
-                columnResizerLeft: x - rootX + 1
+                columnResizerLeft: x - rootX + 1,
             });
         };
-        const offEvent = (ee) => {
+        const offEvent = ee => {
             ee.preventDefault();
             startMousePosition = null;
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', offEvent);
             document.removeEventListener('mouseleave', offEvent);
             this.setState({
-                columnResizing: false
+                columnResizing: false,
             });
             if (typeof newWidth !== 'undefined')
                 this.props.onResizeColumnResizer(e, col, newWidth);
@@ -76,34 +76,37 @@ class GridHeader extends React.Component {
         document.addEventListener('mouseleave', offEvent);
     }
     render() {
-        const { mounted, optionsHeader, styles, frozenColumnIndex, colGroup, asideColGroup, leftHeaderColGroup, headerColGroup, asideHeaderData, leftHeaderData, headerData, scrollLeft } = this.props;
+        const { mounted, optionsHeader, styles, frozenColumnIndex, colGroup, asideColGroup, leftHeaderColGroup, headerColGroup, asideHeaderData, leftHeaderData, headerData, scrollLeft, } = this.props;
         if (!mounted)
             return null;
         let asideHeaderPanelStyle = {
             left: 0,
             width: styles.asidePanelWidth,
-            height: styles.headerHeight
+            height: styles.headerHeight,
         };
         let leftHeaderPanelStyle = {
             left: styles.asidePanelWidth,
             width: styles.frozenPanelWidth,
-            height: styles.headerHeight
+            height: styles.headerHeight,
         };
         let headerPanelStyle = {
             left: styles.frozenPanelWidth + styles.asidePanelWidth,
-            width: styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth,
-            height: styles.headerHeight
+            width: styles.CTInnerWidth -
+                styles.asidePanelWidth -
+                styles.frozenPanelWidth -
+                styles.rightPanelWidth,
+            height: styles.headerHeight,
         };
         let headerScrollStyle = {
             height: styles.headerHeight,
-            left: scrollLeft
+            left: scrollLeft,
         };
         return (React.createElement("div", { className: classnames_1.default('axd-header'), style: { height: styles.headerHeight } },
-            (styles.asidePanelWidth > 0) ? React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: 'aside-header', colGroup: asideColGroup, bodyRow: asideHeaderData, style: asideHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer }) : null,
-            (frozenColumnIndex > 0) ? React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: 'left-header', colGroup: leftHeaderColGroup, bodyRow: leftHeaderData, style: leftHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer }) : null,
-            React.createElement("div", { "data-scroll-container": 'header-scroll-container', style: headerPanelStyle },
-                React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: 'header-scroll', colGroup: headerColGroup, bodyRow: headerData, style: headerScrollStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer })),
-            this.state.columnResizing ? React.createElement("div", { "data-column-resizing": true, style: { left: this.state.columnResizerLeft } }) : null));
+            styles.asidePanelWidth > 0 ? (React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: "aside-header", colGroup: asideColGroup, bodyRow: asideHeaderData, style: asideHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer })) : null,
+            frozenColumnIndex > 0 ? (React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: "left-header", colGroup: leftHeaderColGroup, bodyRow: leftHeaderData, style: leftHeaderPanelStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer })) : null,
+            React.createElement("div", { "data-scroll-container": "header-scroll-container", style: headerPanelStyle },
+                React.createElement(GridHeaderPanel_1.GridHeaderPanel, { panelName: "header-scroll", colGroup: headerColGroup, bodyRow: headerData, style: headerScrollStyle, optionsHeader: this.props.optionsHeader, focusedCol: this.props.focusedCol, selectionCols: this.props.selectionCols, onClickHeader: this.props.onClickHeader, sortInfo: this.props.sortInfo, onMouseDownColumnResizer: this.onMouseDownColumnResizer })),
+            this.state.columnResizing ? (React.createElement("div", { "data-column-resizing": true, style: { left: this.state.columnResizerLeft } })) : null));
     }
 }
 exports.GridHeader = GridHeader;

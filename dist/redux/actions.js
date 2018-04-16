@@ -15,7 +15,7 @@ function INIT(props, options) {
         type: TYPES.INIT,
         receivedList: Obj_data.receivedList,
         page: Obj_data.page,
-        options
+        options,
     };
 }
 exports.INIT = INIT;
@@ -25,7 +25,7 @@ function SET_DATA(data, options) {
         type: TYPES.SET_DATA,
         receivedList: Obj_data.receivedList,
         page: Obj_data.page,
-        options
+        options,
     };
 }
 exports.SET_DATA = SET_DATA;
@@ -34,7 +34,7 @@ function SORT(colGroup, options, colIndex) {
         type: TYPES.SORT,
         colGroup,
         options,
-        colIndex
+        colIndex,
     };
 }
 exports.SORT = SORT;
@@ -44,7 +44,7 @@ function FILTER(colGroup, options, colIndex, filterInfo) {
         colGroup,
         options,
         colIndex,
-        filterInfo
+        filterInfo,
     };
 }
 exports.FILTER = FILTER;
@@ -55,7 +55,7 @@ function UPDATE(colGroup, options, row, col, value) {
         options,
         row,
         col,
-        value
+        value,
     };
 }
 exports.UPDATE = UPDATE;

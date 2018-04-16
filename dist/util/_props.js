@@ -19,7 +19,8 @@ function propsToState(props, state) {
     state.leftBodyRowData = dividedObj.leftData;
     state.bodyRowData = dividedObj.rightData;
     // 한줄의 높이 계산 (한줄이 여러줄로 구성되었다면 높이를 늘려야 하니까);
-    state.styles.bodyTrHeight = state.bodyRowTable.rows.length * state.options.body.columnHeight;
+    state.styles.bodyTrHeight =
+        state.bodyRowTable.rows.length * state.options.body.columnHeight;
     state.colGroupMap = {};
     state.headerTable.rows.forEach((row, r) => {
         row.cols.forEach((col, c) => {
@@ -44,10 +45,11 @@ function propsToState(props, state) {
     }
     // grouping info
     if (state.options.body.grouping) {
-        if ('by' in state.options.body.grouping && 'columns' in state.options.body.grouping) {
+        if ('by' in state.options.body.grouping &&
+            'columns' in state.options.body.grouping) {
             state.bodyGrouping = {
                 by: state.options.body.grouping.by,
-                columns: state.options.body.grouping.columns
+                columns: state.options.body.grouping.columns,
             };
             state.bodyGroupingTable = _makeData_1.makeBodyGroupingTable(state.bodyGrouping.columns, state.colGroup, state.options);
             state.sortInfo = (() => {
@@ -56,7 +58,7 @@ function propsToState(props, state) {
                     sortInfo[state.bodyGrouping.by[k]] = {
                         orderBy: 'asc',
                         seq: k,
-                        fixed: true
+                        fixed: true,
                     };
                     for (let c = 0, cl = state.colGroup.length; c < cl; c++) {
                         if (state.colGroup[c].key === state.bodyGrouping.by[k]) {
@@ -88,7 +90,7 @@ exports.propsToState = propsToState;
 function propsConverterForData(data) {
     let Obj_return = {
         receivedList: [],
-        page: false
+        page: false,
     };
     if (lodash_1.isArray(data)) {
         Obj_return.receivedList = data;

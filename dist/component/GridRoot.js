@@ -28,7 +28,7 @@ class GridRoot extends React.Component {
         this.componentRefs = {};
         this.data = {
             sColIndex: -1,
-            eColIndex: -1
+            eColIndex: -1,
         };
         // 내부연산용 데이터 저장소
         let defaultState = {
@@ -107,16 +107,16 @@ class GridRoot extends React.Component {
                 horizontalScrollBarWidth: 0,
                 scrollerPadding: 0,
                 scrollerArrowSize: 0,
-                pageButtonsContainerWidth: 0
+                pageButtonsContainerWidth: 0,
             },
             options: (() => {
                 // todo : 옵션 초기화 함수로 분리
                 let options = lodash_1.assign({}, defaults_1.gridOptions);
                 lodash_1.each(props.options, function (v, k) {
-                    options[k] = (lodash_1.isObject(v)) ? lodash_1.assign({}, options[k], v) : v;
+                    options[k] = lodash_1.isObject(v) ? lodash_1.assign({}, options[k], v) : v;
                 });
                 return options;
-            })()
+            })(),
         };
         this.state = UTIL.propsToState(props, lodash_1.assign({}, defaultState));
         // state 계산영역 끝
@@ -138,7 +138,7 @@ class GridRoot extends React.Component {
         this.onFireEvent = this.onFireEvent.bind(this);
     }
     static setFormatter(_formatter) {
-        return formatter = lodash_1.assign(formatter, _formatter);
+        return (formatter = lodash_1.assign(formatter, _formatter));
     }
     static getFormatter() {
         return formatter;
@@ -148,7 +148,7 @@ class GridRoot extends React.Component {
         this.throttled_updateDimensions = lodash_1.throttle(this.updateDimensions.bind(this), 100);
         window.addEventListener('resize', this.throttled_updateDimensions);
         this.setState({
-            mounted: true
+            mounted: true,
         });
     }
     componentWillUnmount() {
@@ -160,7 +160,8 @@ class GridRoot extends React.Component {
         if (this.props.data !== nextProps.data) {
             this.props.setData(nextProps.data, this.state.options);
         }
-        if (this.props.options !== nextProps.options || this.props.columns !== nextProps.columns) {
+        if (this.props.options !== nextProps.options ||
+            this.props.columns !== nextProps.columns) {
             this.data._headerColGroup = undefined;
             this.data.sColIndex = -1;
             this.data.eColIndex = -1;
@@ -170,10 +171,10 @@ class GridRoot extends React.Component {
                 options: (() => {
                     let options = lodash_1.assign({}, defaults_1.gridOptions);
                     lodash_1.each(nextProps.options, function (v, k) {
-                        options[k] = (lodash_1.isObject(v)) ? lodash_1.assign({}, options[k], v) : v;
+                        options[k] = lodash_1.isObject(v) ? lodash_1.assign({}, options[k], v) : v;
                     });
                     return options;
-                })()
+                })(),
             });
             newState = UTIL.propsToState(nextProps, newState);
             newState.styles = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, newState).styles;
@@ -197,7 +198,7 @@ class GridRoot extends React.Component {
             const { styles } = UTIL.calculateDimensions(this.gridRootNode, { list: nextProps.store_list }, this.state);
             this.setState({
                 scrollTop: 0,
-                styles: styles
+                styles: styles,
             });
             return false;
         }
@@ -222,21 +223,25 @@ class GridRoot extends React.Component {
             scrollWidth: styles.scrollContentWidth,
             scrollHeight: styles.scrollContentHeight,
             clientWidth: styles.scrollContentContainerWidth,
-            clientHeight: styles.scrollContentContainerHeight
+            clientHeight: styles.scrollContentContainerHeight,
         });
         this.setState({
             scrollLeft: scrollLeft,
             scrollTop: scrollTop,
-            styles: styles
+            styles: styles,
         });
     }
     onMouseDownScrollBar(e, barName) {
         e.preventDefault();
         const styles = this.state.styles;
-        const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-        const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+        const currScrollBarLeft = -this.state.scrollLeft *
+            (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) /
+            (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+        const currScrollBarTop = -this.state.scrollTop *
+            (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) /
+            (styles.scrollContentHeight - styles.scrollContentContainerHeight);
         let startMousePosition = UTIL.getMousePosition(e);
-        const onMouseMove = (ee) => {
+        const onMouseMove = ee => {
             if (!this.state.dragging) {
                 this.setState({ dragging: true });
             }
@@ -246,26 +251,26 @@ class GridRoot extends React.Component {
                     let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles);
                     this.setState({
                         scrollLeft: scrollLeft || 0,
-                        scrollTop: scrollTop || 0
+                        scrollTop: scrollTop || 0,
                     });
                 },
                 horizontal: () => {
                     let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
                     this.setState({
                         scrollLeft: scrollLeft || 0,
-                        scrollTop: scrollTop || 0
+                        scrollTop: scrollTop || 0,
                     });
-                }
+                },
             };
             if (barName in processor) {
                 processor[barName]();
             }
         };
-        const offEvent = (ee) => {
+        const offEvent = ee => {
             ee.preventDefault();
             this.setState({ dragging: false });
             startMousePosition = null;
-            // console.log('offEvent');
+            console.log('offEvent');
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', offEvent);
             document.removeEventListener('mouseleave', offEvent);
@@ -276,25 +281,32 @@ class GridRoot extends React.Component {
     }
     onClickScrollTrack(e, barName) {
         const styles = this.state.styles;
-        const currScrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / (styles.scrollContentWidth - styles.scrollContentContainerWidth);
-        const currScrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / (styles.scrollContentHeight - styles.scrollContentContainerHeight);
+        const currScrollBarLeft = -this.state.scrollLeft *
+            (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) /
+            (styles.scrollContentWidth - styles.scrollContentContainerWidth);
+        const currScrollBarTop = -this.state.scrollTop *
+            (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) /
+            (styles.scrollContentHeight - styles.scrollContentContainerHeight);
         const { x, y } = UTIL.getMousePosition(e);
         const { x: grx, y: gry } = this.gridRootNode.getBoundingClientRect();
         const processor = {
             vertical: () => {
-                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - (styles.verticalScrollBarHeight / 2), styles);
+                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(currScrollBarLeft, y - gry - styles.verticalScrollBarHeight / 2, styles);
                 this.setState({
                     scrollLeft: scrollLeft || 0,
-                    scrollTop: scrollTop || 0
+                    scrollTop: scrollTop || 0,
                 });
             },
             horizontal: () => {
-                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(x - grx - styles.pageButtonsContainerWidth - (styles.horizontalScrollBarWidth / 2), currScrollBarTop, styles);
+                let { scrollLeft, scrollTop } = UTIL.getScrollPositionByScrollBar(x -
+                    grx -
+                    styles.pageButtonsContainerWidth -
+                    styles.horizontalScrollBarWidth / 2, currScrollBarTop, styles);
                 this.setState({
                     scrollLeft: scrollLeft || 0,
-                    scrollTop: scrollTop || 0
+                    scrollTop: scrollTop || 0,
                 });
-            }
+            },
         };
         if (barName in processor) {
             processor[barName]();
@@ -306,27 +318,38 @@ class GridRoot extends React.Component {
             up: () => {
                 let scrollAmount = styles.scrollContentContainerHeight;
                 this.setState({
-                    scrollTop: (this.state.scrollTop + scrollAmount < 0) ? this.state.scrollTop + scrollAmount : 0
+                    scrollTop: this.state.scrollTop + scrollAmount < 0
+                        ? this.state.scrollTop + scrollAmount
+                        : 0,
                 });
             },
             down: () => {
                 let scrollAmount = styles.scrollContentContainerHeight;
                 this.setState({
-                    scrollTop: (styles.scrollContentContainerHeight < styles.scrollContentHeight + (this.state.scrollTop - scrollAmount)) ? this.state.scrollTop - scrollAmount : styles.scrollContentContainerHeight - styles.scrollContentHeight
+                    scrollTop: styles.scrollContentContainerHeight <
+                        styles.scrollContentHeight + (this.state.scrollTop - scrollAmount)
+                        ? this.state.scrollTop - scrollAmount
+                        : styles.scrollContentContainerHeight -
+                            styles.scrollContentHeight,
                 });
             },
             left: () => {
                 let scrollAmount = styles.scrollContentContainerWidth;
                 this.setState({
-                    scrollLeft: (this.state.scrollLeft + scrollAmount < 0) ? this.state.scrollLeft + scrollAmount : 0
+                    scrollLeft: this.state.scrollLeft + scrollAmount < 0
+                        ? this.state.scrollLeft + scrollAmount
+                        : 0,
                 });
             },
             right: () => {
                 let scrollAmount = styles.scrollContentContainerWidth;
                 this.setState({
-                    scrollLeft: (styles.scrollContentContainerWidth < styles.scrollContentWidth + (this.state.scrollLeft - scrollAmount)) ? this.state.scrollLeft - scrollAmount : styles.scrollContentContainerWidth - styles.scrollContentWidth
+                    scrollLeft: styles.scrollContentContainerWidth <
+                        styles.scrollContentWidth + (this.state.scrollLeft - scrollAmount)
+                        ? this.state.scrollLeft - scrollAmount
+                        : styles.scrollContentContainerWidth - styles.scrollContentWidth,
                 });
-            }
+            },
         };
         if (direction in processor) {
             processor[direction]();
@@ -336,14 +359,13 @@ class GridRoot extends React.Component {
         let colGroup = immutable_1.fromJS(this.state.colGroup).toJS();
         let styles, leftHeaderColGroup, headerColGroup;
         colGroup[col.colIndex]._width = colGroup[col.colIndex].width = newWidth;
-        ({ styles, leftHeaderColGroup, headerColGroup }
-            = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, lodash_1.assign({}, this.state, { colGroup: colGroup })));
+        ({ styles, leftHeaderColGroup, headerColGroup } = UTIL.calculateDimensions(this.gridRootNode, { list: this.props.store_list }, lodash_1.assign({}, this.state, { colGroup: colGroup })));
         this.data._headerColGroup = undefined;
         this.setState({
             colGroup: colGroup,
             leftHeaderColGroup: leftHeaderColGroup,
             headerColGroup: headerColGroup,
-            styles: styles
+            styles: styles,
         });
     }
     getRootBounding() {
@@ -351,24 +373,24 @@ class GridRoot extends React.Component {
     }
     onClickPageButton(e, onClick) {
         const processor = {
-            'PAGE_FIRST': () => {
+            PAGE_FIRST: () => {
                 this.onKeyAction(constant_1.KEY_CODE.HOME);
             },
-            'PAGE_PREV': () => {
+            PAGE_PREV: () => {
                 this.onKeyAction(constant_1.KEY_CODE.PAGE_UP);
             },
-            'PAGE_BACK': () => {
+            PAGE_BACK: () => {
                 this.onKeyAction(constant_1.KEY_CODE.UP);
             },
-            'PAGE_PLAY': () => {
+            PAGE_PLAY: () => {
                 this.onKeyAction(constant_1.KEY_CODE.DOWN);
             },
-            'PAGE_NEXT': () => {
+            PAGE_NEXT: () => {
                 this.onKeyAction(constant_1.KEY_CODE.PAGE_DOWN);
             },
-            'PAGE_LAST': () => {
+            PAGE_LAST: () => {
                 this.onKeyAction(constant_1.KEY_CODE.END);
-            }
+            },
         };
         if (lodash_1.isFunction(onClick)) {
             onClick();
@@ -381,7 +403,7 @@ class GridRoot extends React.Component {
         const { frozenPanelWidth, frozenPanelHeight } = this.state.styles;
         const startMousePosition = UTIL.getMousePosition(e);
         const spanType = e.target.getAttribute('data-span');
-        const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth } = this.state.styles;
+        const { headerHeight, bodyHeight, CTInnerWidth, verticalScrollerWidth, bodyTrHeight, asidePanelWidth, } = this.state.styles;
         const { x, y } = this.getRootBounding();
         const leftPadding = x; // + styles.asidePanelWidth;
         const topPadding = y; // + styles.headerHeight;
@@ -426,9 +448,12 @@ class GridRoot extends React.Component {
                     let selectEndedCol = getColIndex(currState.selectionEndOffset.x, this.state.scrollLeft);
                     // 컬럼인덱스를 찾지 못했다면
                     if (selectEndedCol === -1) {
-                        const p = currState.selectionEndOffset.x - asidePanelWidth - this.state.scrollLeft;
+                        const p = currState.selectionEndOffset.x -
+                            asidePanelWidth -
+                            this.state.scrollLeft;
                         const lastCol = lodash_1.last(this.state.headerColGroup);
-                        selectEndedCol = (p < 0) ? 0 : (lastCol._ex <= p) ? lastCol.colIndex : 0;
+                        selectEndedCol =
+                            p < 0 ? 0 : lastCol._ex <= p ? lastCol.colIndex : 0;
                     }
                     let sRow = Math.min(selectStartedRow, selectEndedRow);
                     let eRow = Math.max(selectStartedRow, selectEndedRow);
@@ -469,12 +494,12 @@ class GridRoot extends React.Component {
                         scrollWidth: this.state.styles.scrollContentWidth,
                         scrollHeight: this.state.styles.scrollContentHeight,
                         clientWidth: this.state.styles.scrollContentContainerWidth,
-                        clientHeight: this.state.styles.scrollContentContainerHeight
+                        clientHeight: this.state.styles.scrollContentContainerHeight,
                     }));
                     setStateCall({
                         scrollTop: scrollTop,
                         scrollLeft: scrollLeft,
-                        selectionEndOffset: this.state.selectionEndOffset
+                        selectionEndOffset: this.state.selectionEndOffset,
                     }, _moving);
                     return !endScroll;
                 };
@@ -491,7 +516,7 @@ class GridRoot extends React.Component {
                     top: false,
                     left: false,
                     bottom: false,
-                    right: false
+                    right: false,
                 };
                 if (p1Y < headerHeight) {
                     moving.active = true;
@@ -515,20 +540,20 @@ class GridRoot extends React.Component {
                     scrollLeft: this.state.scrollLeft,
                     selectionStartOffset: {
                         x: x1,
-                        y: y1
+                        y: y1,
                     },
                     selectionEndOffset: {
                         x: x2,
-                        y: y2
+                        y: y2,
                     },
                     selectionMinOffset: {
                         x: p1X,
-                        y: p1Y
+                        y: p1Y,
                     },
                     selectionMaxOffset: {
                         x: p2X,
-                        y: p2Y
-                    }
+                        y: p2Y,
+                    },
                 }, moving);
                 // moving.active 이면 타임 인터벌 시작
                 if (this.scrollMovingTimer)
@@ -541,7 +566,7 @@ class GridRoot extends React.Component {
                     }, 60);
                 }
             };
-            const offEvent = (ee) => {
+            const offEvent = ee => {
                 ee.preventDefault();
                 if (this.scrollMovingTimer)
                     clearInterval(this.scrollMovingTimer);
@@ -550,19 +575,20 @@ class GridRoot extends React.Component {
                     selectionStartOffset: null,
                     selectionEndOffset: null,
                     selectionMinOffset: null,
-                    selectionMaxOffset: null
+                    selectionMaxOffset: null,
                 });
                 document.removeEventListener('mousemove', throttled_onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
             };
             const throttled_onMouseMove = lodash_1.throttle(onMouseMove, 10);
-            if (e.metaKey || e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1) {
+            if (e.metaKey ||
+                (e.shiftKey && this.state.focusedRow > -1 && this.state.focusedCol > -1)) {
                 if (e.shiftKey) {
                     let state = {
                         dragging: false,
                         selectionRows: {},
-                        selectionCols: {}
+                        selectionCols: {},
                     };
                     let sRow = Math.min(this.state.focusedRow, selectStartedRow);
                     let sCol = Math.min(this.state.focusedCol, selectStartedCol);
@@ -605,7 +631,7 @@ class GridRoot extends React.Component {
                     selectionRows: { [selectStartedRow]: true },
                     selectionCols: { [selectStartedCol]: true },
                     focusedRow: selectStartedRow,
-                    focusedCol: selectStartedCol
+                    focusedCol: selectStartedCol,
                 });
                 document.addEventListener('mousemove', throttled_onMouseMove);
                 document.addEventListener('mouseup', offEvent);
@@ -624,7 +650,7 @@ class GridRoot extends React.Component {
                     return cols;
                 })(),
                 focusedRow: this.state.focusedRow,
-                focusedCol: 0
+                focusedCol: 0,
             };
             if (e.shiftKey) {
                 state.selectionRows = (() => {
@@ -637,7 +663,7 @@ class GridRoot extends React.Component {
             }
             else {
                 state.selectionRows = {
-                    [selectStartedRow]: true
+                    [selectStartedRow]: true,
                 };
                 state.focusedRow = selectStartedRow;
             }
@@ -646,7 +672,9 @@ class GridRoot extends React.Component {
         // 선택이 시작된 row / col
         let selectStartedRow = getRowIndex(startY, startScrollTop);
         let selectStartedCol = getColIndex(startX, startScrollLeft);
-        if (this.state.isInlineEditing && this.state.inlineEditingCell.row === selectStartedRow && this.state.inlineEditingCell.col === selectStartedCol) {
+        if (this.state.isInlineEditing &&
+            this.state.inlineEditingCell.row === selectStartedRow &&
+            this.state.inlineEditingCell.col === selectStartedCol) {
             // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
             return false;
         }
@@ -663,8 +691,11 @@ class GridRoot extends React.Component {
         const options = this.state.options;
         const styles = this.state.styles;
         const headerColGroup = this.state.headerColGroup;
-        const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex;
-        const eRowIndex = (Math.floor(-this.state.scrollTop / styles.bodyTrHeight) + options.frozenRowIndex) + Math.floor(styles.bodyHeight / styles.bodyTrHeight);
+        const sRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) +
+            options.frozenRowIndex;
+        const eRowIndex = Math.floor(-this.state.scrollTop / styles.bodyTrHeight) +
+            options.frozenRowIndex +
+            Math.floor(styles.bodyHeight / styles.bodyTrHeight);
         const sColIndex = this.data.sColIndex;
         const eColIndex = this.data.eColIndex;
         const pRowSize = Math.floor(styles.bodyHeight / styles.bodyTrHeight);
@@ -674,14 +705,16 @@ class GridRoot extends React.Component {
                 scrollTop = -rowIndex * styles.bodyTrHeight;
             }
             else if (eRowIndex <= rowIndex) {
-                scrollTop = -rowIndex * styles.bodyTrHeight + (pRowSize * styles.bodyTrHeight - styles.bodyTrHeight);
+                scrollTop =
+                    -rowIndex * styles.bodyTrHeight +
+                        (pRowSize * styles.bodyTrHeight - styles.bodyTrHeight);
             }
             if (typeof scrollTop !== 'undefined') {
                 scrollTop = UTIL.getScrollPosition(this.state.scrollLeft, scrollTop, {
                     scrollWidth: styles.scrollContentWidth,
                     scrollHeight: styles.scrollContentHeight,
                     clientWidth: styles.scrollContentContainerWidth,
-                    clientHeight: styles.scrollContentContainerHeight
+                    clientHeight: styles.scrollContentContainerHeight,
                 }).scrollTop;
             }
             else {
@@ -695,14 +728,20 @@ class GridRoot extends React.Component {
                 scrollLeft = -headerColGroup[colIndex]._sx;
             }
             else if (eColIndex <= colIndex) {
-                scrollLeft = -headerColGroup[colIndex]._ex + (styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth);
+                scrollLeft =
+                    -headerColGroup[colIndex]._ex +
+                        (styles.CTInnerWidth -
+                            styles.asidePanelWidth -
+                            styles.frozenPanelWidth -
+                            styles.rightPanelWidth -
+                            styles.verticalScrollerWidth);
             }
             if (typeof scrollLeft !== 'undefined') {
                 scrollLeft = UTIL.getScrollPosition(scrollLeft, this.state.scrollTop, {
                     scrollWidth: styles.scrollContentWidth,
                     scrollHeight: styles.scrollContentHeight,
                     clientWidth: styles.scrollContentContainerWidth,
-                    clientHeight: styles.scrollContentContainerHeight
+                    clientHeight: styles.scrollContentContainerHeight,
                 }).scrollLeft;
             }
             else {
@@ -714,24 +753,23 @@ class GridRoot extends React.Component {
             [constant_1.KEY_CODE.ESC]: () => {
                 this.setState({
                     selectionRows: {
-                        [this.state.focusedRow]: true
+                        [this.state.focusedRow]: true,
                     },
                     selectionCols: {
-                        [this.state.focusedCol]: true
-                    }
+                        [this.state.focusedCol]: true,
+                    },
                 });
             },
-            [constant_1.KEY_CODE.RETURN]: () => {
-            },
+            [constant_1.KEY_CODE.RETURN]: () => { },
             [constant_1.KEY_CODE.HOME]: () => {
                 let focusRow = 0;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
-                    focusedRow: focusRow
+                    focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.END]: () => {
@@ -740,77 +778,85 @@ class GridRoot extends React.Component {
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
-                    focusedRow: focusRow
+                    focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.PAGE_UP]: () => {
-                let focusRow = (this.state.focusedRow - pRowSize < 1) ? 0 : this.state.focusedRow - pRowSize;
+                let focusRow = this.state.focusedRow - pRowSize < 1
+                    ? 0
+                    : this.state.focusedRow - pRowSize;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
-                    focusedRow: focusRow
+                    focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.PAGE_DOWN]: () => {
-                let focusRow = (this.state.focusedRow + pRowSize >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + pRowSize;
+                let focusRow = this.state.focusedRow + pRowSize >= this.props.store_list.size
+                    ? this.props.store_list.size - 1
+                    : this.state.focusedRow + pRowSize;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
                     focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.UP]: () => {
-                let focusRow = (this.state.focusedRow < 1) ? 0 : this.state.focusedRow - 1;
+                let focusRow = this.state.focusedRow < 1 ? 0 : this.state.focusedRow - 1;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
-                    focusedRow: focusRow
+                    focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.DOWN]: () => {
-                let focusRow = (this.state.focusedRow + 1 >= this.props.store_list.size) ? this.props.store_list.size - 1 : this.state.focusedRow + 1;
+                let focusRow = this.state.focusedRow + 1 >= this.props.store_list.size
+                    ? this.props.store_list.size - 1
+                    : this.state.focusedRow + 1;
                 let scrollTop = getAvailScrollTop(focusRow);
                 this.setState({
                     scrollTop: scrollTop,
                     selectionRows: {
-                        [focusRow]: true
+                        [focusRow]: true,
                     },
                     focusedRow: focusRow,
                 });
             },
             [constant_1.KEY_CODE.LEFT]: () => {
-                let focusCol = (this.state.focusedCol < 1) ? 0 : this.state.focusedCol - 1;
+                let focusCol = this.state.focusedCol < 1 ? 0 : this.state.focusedCol - 1;
                 let scrollLeft = getAvailScrollLeft(focusCol);
                 this.setState({
                     scrollLeft: scrollLeft,
                     selectionCols: {
-                        [focusCol]: true
+                        [focusCol]: true,
                     },
                     focusedCol: focusCol,
                 });
             },
             [constant_1.KEY_CODE.RIGHT]: () => {
-                let focusCol = (this.state.focusedCol + 1 >= headerColGroup.length) ? headerColGroup.length - 1 : this.state.focusedCol + 1;
+                let focusCol = this.state.focusedCol + 1 >= headerColGroup.length
+                    ? headerColGroup.length - 1
+                    : this.state.focusedCol + 1;
                 let scrollLeft = getAvailScrollLeft(focusCol);
                 this.setState({
                     scrollLeft: scrollLeft,
                     selectionCols: {
-                        [focusCol]: true
+                        [focusCol]: true,
                     },
                     focusedCol: focusCol,
                 });
-            }
+            },
         };
         if (keyAction in proc)
             proc[keyAction]();
@@ -838,11 +884,11 @@ class GridRoot extends React.Component {
             scrollWidth: this.state.styles.scrollContentWidth,
             scrollHeight: this.state.styles.scrollContentHeight,
             clientWidth: this.state.styles.scrollContentContainerWidth,
-            clientHeight: this.state.styles.scrollContentContainerHeight
+            clientHeight: this.state.styles.scrollContentContainerHeight,
         }));
         this.setState({
             scrollLeft: scrollLeft || 0,
-            scrollTop: scrollTop || 0
+            scrollTop: scrollTop || 0,
         });
         if (!endScroll) {
             e.preventDefault();
@@ -870,8 +916,7 @@ class GridRoot extends React.Component {
                 try {
                     copysuccess = document.execCommand('copy');
                 }
-                catch (e) {
-                }
+                catch (e) { }
                 this.gridRootNode.focus();
                 return copysuccess;
             },
@@ -883,7 +928,7 @@ class GridRoot extends React.Component {
                     selectionRows: {},
                     selectionCols: {},
                     focusedRow: 0,
-                    focusedCol: this.state.focusedCol
+                    focusedCol: this.state.focusedCol,
                 };
                 state.selectionRows = (() => {
                     let rows = {};
@@ -901,7 +946,7 @@ class GridRoot extends React.Component {
                 })();
                 state.focusedCol = 0;
                 this.setState(state);
-            }
+            },
         };
         if (e.metaKey) {
             // console.log('meta', e.which);
@@ -920,41 +965,51 @@ class GridRoot extends React.Component {
         const styles = this.state.styles;
         const options = this.state.options;
         if (e.target.getAttribute('data-filter')) {
-            const downEvent = (ee) => {
-                if (ee.target && ee.target.getAttribute && '' + this.state.isColumnFilter === ee.target.getAttribute('data-filter-index')) {
+            const downEvent = ee => {
+                if (ee.target &&
+                    ee.target.getAttribute &&
+                    '' + this.state.isColumnFilter ===
+                        ee.target.getAttribute('data-filter-index')) {
                     return false;
                 }
-                let downedElement = UTIL.findParentNodeByAttr(ee.target, (element) => {
-                    return (element) ? element.getAttribute('data-column-filter') === 'true' : false;
+                let downedElement = UTIL.findParentNodeByAttr(ee.target, element => {
+                    return element
+                        ? element.getAttribute('data-column-filter') === 'true'
+                        : false;
                 });
                 if (downedElement === false) {
                     ee.preventDefault();
                     this.setState({
-                        isColumnFilter: false
+                        isColumnFilter: false,
                     });
                     document.removeEventListener('mousedown', downEvent);
                     document.removeEventListener('mouseleave', downEvent);
                     document.removeEventListener('keydown', keyDown);
                 }
             };
-            const keyDown = (ee) => {
+            const keyDown = ee => {
                 if (ee.which === 27) {
                     downEvent(ee);
                 }
             };
             if (this.state.isColumnFilter === colIndex) {
                 this.setState({
-                    isColumnFilter: false
+                    isColumnFilter: false,
                 });
                 document.removeEventListener('mousedown', downEvent);
                 document.removeEventListener('mouseleave', downEvent);
                 document.removeEventListener('keydown', keyDown);
             }
             else {
-                let columnFilterLeft = styles.asidePanelWidth + this.state.colGroup[colIndex]._sx - 2 + this.state.scrollLeft;
+                let columnFilterLeft = styles.asidePanelWidth +
+                    this.state.colGroup[colIndex]._sx -
+                    2 +
+                    this.state.scrollLeft;
                 this.setState({
-                    scrollLeft: (columnFilterLeft < 0) ? this.state.scrollLeft - columnFilterLeft : this.state.scrollLeft,
-                    isColumnFilter: colIndex
+                    scrollLeft: columnFilterLeft < 0
+                        ? this.state.scrollLeft - columnFilterLeft
+                        : this.state.scrollLeft,
+                    isColumnFilter: colIndex,
                 });
                 document.addEventListener('mousedown', downEvent);
                 document.addEventListener('mouseleave', downEvent);
@@ -967,7 +1022,7 @@ class GridRoot extends React.Component {
                 selectionRows: {},
                 selectionCols: {},
                 focusedRow: 0,
-                focusedCol: this.state.focusedCol
+                focusedCol: this.state.focusedCol,
             };
             if (key === 'lineNumber') {
                 state.selectionRows = (() => {
@@ -1007,13 +1062,14 @@ class GridRoot extends React.Component {
                     }
                     else {
                         state.selectionCols = {
-                            [colIndex]: true
+                            [colIndex]: true,
                         };
                         state.focusedCol = colIndex;
                     }
                     this.setState(state);
                 }
-                else if (options.header.clickAction === 'sort' && options.header.sortable) {
+                else if (options.header.clickAction === 'sort' &&
+                    options.header.sortable) {
                     this.props.sort(this.state.colGroup, options, colIndex);
                 }
             }
@@ -1029,46 +1085,97 @@ class GridRoot extends React.Component {
                 inlineEditingCell: {
                     row: li,
                     col: col.colIndex,
-                    editor: col.editor
-                }
+                    editor: col.editor,
+                },
             });
         }
     }
+    onTouchStart(e) {
+        //e.preventDefault();
+        let scrollLeft, scrollTop, endScroll;
+        let startMousePosition = UTIL.getMousePosition(e);
+        const startScrollLeft = this.state.scrollLeft;
+        const startScrollTop = this.state.scrollTop;
+        const { scrollContentWidth, scrollContentHeight, scrollContentContainerWidth, scrollContentContainerHeight, } = this.state.styles;
+        const onTouchMove = ee => {
+            ee.preventDefault();
+            const { x, y } = UTIL.getMousePosition(ee);
+            let delta = { x: 0, y: 0 };
+            const dx = startMousePosition.x - x;
+            const dy = startMousePosition.y - y;
+            // 컬럼필터 활성화 상태라면 구문 실행 안함.
+            if (this.state.isColumnFilter !== false)
+                return true;
+            if (Math.abs(dx) > 1) {
+                delta.x = dx;
+            }
+            if (Math.abs(dy) > 1) {
+                delta.y = dy;
+            }
+            ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(startScrollLeft - delta.x, startScrollTop - delta.y, {
+                scrollWidth: scrollContentWidth,
+                scrollHeight: scrollContentHeight,
+                clientWidth: scrollContentContainerWidth,
+                clientHeight: scrollContentContainerHeight,
+            }));
+            this.setState({
+                scrollLeft: scrollLeft || 0,
+                scrollTop: scrollTop || 0,
+            });
+        };
+        const offEvent = ee => {
+            ee.preventDefault();
+            document.removeEventListener('touchmove', onTouchMove, true);
+            document.removeEventListener('touchend', offEvent, true);
+        };
+        document.addEventListener('touchmove', onTouchMove, {
+            capture: true,
+            passive: false,
+        });
+        document.addEventListener('touchend', offEvent, {
+            capture: true,
+            passive: false,
+        });
+        /*
+        (document.addEventListener as any)('touchcancel', offEvent, {
+          cancelable: false,
+        });
+        */
+    }
     updateEditInput(act, row, col, value) {
         const proc = {
-            'cancel': () => {
+            cancel: () => {
                 this.setState({
                     isInlineEditing: false,
-                    inlineEditingCell: {}
+                    inlineEditingCell: {},
                 });
             },
-            'update': () => {
+            update: () => {
                 this.props.update(this.state.colGroup, this.state.options, row, col, value);
                 this.setState({
                     isInlineEditing: false,
-                    inlineEditingCell: {}
+                    inlineEditingCell: {},
                 });
-            }
+            },
         };
         proc[act]();
     }
     onFireEvent(eventName, e) {
         const that = {};
         const processor = {
-            'wheel': () => {
+            wheel: () => {
                 this.onWheel(e);
             },
-            'keydown': () => {
+            keydown: () => {
                 this.onKeyPress(e);
             },
-            'keyup': () => {
+            keyup: () => { },
+            mousedown: () => { },
+            mouseup: () => { },
+            click: () => { },
+            touchStart: () => {
+                this.onTouchStart(e);
             },
-            'mousedown': () => {
-            },
-            'mouseup': () => {
-            },
-            'click': () => {
-            }
         };
         if (this.props.onBeforeEvent) {
             this.props.onBeforeEvent(e, eventName, that);
@@ -1085,7 +1192,10 @@ class GridRoot extends React.Component {
         const options = this.state.options;
         const mounted = this.state.mounted;
         const headerColGroup = this.state.headerColGroup;
-        const bodyPanelWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+        const bodyPanelWidth = styles.CTInnerWidth -
+            styles.asidePanelWidth -
+            styles.frozenPanelWidth -
+            styles.rightPanelWidth;
         let gridRootStyle = lodash_1.assign({ height: this.props.height }, this.props.style);
         let _scrollLeft = Math.abs(this.state.scrollLeft);
         let sColIndex = 0;
@@ -1101,20 +1211,24 @@ class GridRoot extends React.Component {
             gridRootStyle.height = styles.calculatedHeight;
         }
         if (this.state.dragging) {
+            // 드래깅 중이므로 내부 요소 text select 금지
             gridRootStyle['userSelect'] = 'none';
         }
         if (mounted) {
             for (let ci = 0, cl = headerColGroup.length; ci < cl; ci++) {
-                if (headerColGroup[ci]._sx <= viewSX && headerColGroup[ci]._ex >= viewSX) {
+                if (headerColGroup[ci]._sx <= viewSX &&
+                    headerColGroup[ci]._ex >= viewSX) {
                     sColIndex = ci;
                 }
-                if (headerColGroup[ci]._sx <= viewEX && headerColGroup[ci]._ex >= viewEX) {
+                if (headerColGroup[ci]._sx <= viewEX &&
+                    headerColGroup[ci]._ex >= viewEX) {
                     eColIndex = ci;
                     break;
                 }
             }
             _headerColGroup = headerColGroup.slice(sColIndex, eColIndex + 1);
-            if (typeof this.data._headerColGroup === 'undefined' || !lodash_1.isEqual(this.data._headerColGroup, _headerColGroup)) {
+            if (typeof this.data._headerColGroup === 'undefined' ||
+                !lodash_1.isEqual(this.data._headerColGroup, _headerColGroup)) {
                 this.data.sColIndex = sColIndex;
                 this.data.eColIndex = eColIndex;
                 this.data._headerColGroup = _headerColGroup;
@@ -1125,12 +1239,18 @@ class GridRoot extends React.Component {
                 _bodyRowData = this.data._bodyRowData;
                 _bodyGroupingData = this.data._bodyGroupingData;
             }
-            scrollBarLeft = -this.state.scrollLeft * (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) / ((styles.scrollContentWidth - styles.scrollContentContainerWidth) || 1);
-            scrollBarTop = -this.state.scrollTop * (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) / ((styles.scrollContentHeight - styles.scrollContentContainerHeight) || 1);
+            scrollBarLeft =
+                -this.state.scrollLeft *
+                    (styles.horizontalScrollerWidth - styles.horizontalScrollBarWidth) /
+                    (styles.scrollContentWidth - styles.scrollContentContainerWidth || 1);
+            scrollBarTop =
+                -this.state.scrollTop *
+                    (styles.verticalScrollerHeight - styles.verticalScrollBarHeight) /
+                    (styles.scrollContentHeight - styles.scrollContentContainerHeight || 1);
         }
-        return (React.createElement(index_1.GridRootContainer, { ref: 'gridRoot', onFireEvent: this.onFireEvent, style: gridRootStyle },
+        return (React.createElement(index_1.GridRootContainer, { ref: "gridRoot", onFireEvent: this.onFireEvent, style: gridRootStyle },
             React.createElement("div", { className: classnames_1.default('axd-clip-board') },
-                React.createElement("textarea", { ref: 'gridClipboard' })),
+                React.createElement("textarea", { ref: "gridClipboard" })),
             React.createElement(index_1.GridHeader, { getRootBounding: this.getRootBounding, mounted: mounted, optionsHeader: options.header, styles: styles, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: this.state.headerColGroup, asideHeaderData: this.state.asideHeaderData, leftHeaderData: this.state.leftHeaderData, headerData: this.state.headerData, scrollLeft: this.state.scrollLeft, selectionCols: this.state.selectionCols, focusedCol: this.state.focusedCol, sortInfo: this.props.store_sortInfo, onResizeColumnResizer: this.onResizeColumnResizer, onClickHeader: this.onClickHeader }),
             React.createElement(index_1.GridBody, { mounted: mounted, columnFormatter: this.columnFormatter, options: options, styles: styles, CTInnerWidth: styles.CTInnerWidth, CTInnerHeight: styles.CTInnerHeight, frozenColumnIndex: options.frozenColumnIndex, colGroup: this.state.colGroup, asideColGroup: this.state.asideColGroup, leftHeaderColGroup: this.state.leftHeaderColGroup, headerColGroup: _headerColGroup, bodyTable: this.state.bodyRowTable, asideBodyRowData: this.state.asideBodyRowData, asideBodyGroupingData: this.state.asideBodyGroupingData, leftBodyRowData: this.state.leftBodyRowData, leftBodyGroupingData: this.state.leftBodyGroupingData, bodyRowData: _bodyRowData, bodyGroupingData: _bodyGroupingData, list: this.props.store_list, scrollLeft: this.state.scrollLeft, scrollTop: this.state.scrollTop, selectionRows: this.state.selectionRows, selectionCols: this.state.selectionCols, focusedRow: this.state.focusedRow, focusedCol: this.state.focusedCol, isInlineEditing: this.state.isInlineEditing, inlineEditingCell: this.state.inlineEditingCell, onMouseDownBody: this.onMouseDownBody, onDoubleClickCell: this.onDoubleClickCell, updateEditInput: this.updateEditInput }),
             React.createElement(index_1.GridPage, { mounted: mounted, styles: styles, pageButtonsContainerWidth: styles.pageButtonsContainerWidth, pageButtons: options.page.buttons, pageButtonHeight: options.page.buttonHeight, onClickPageButton: this.onClickPageButton }),
@@ -1142,6 +1262,6 @@ GridRoot.defaultProps = {
     height: '300px',
     columns: [],
     data: [],
-    options: {}
+    options: {},
 };
 exports.GridRoot = GridRoot;

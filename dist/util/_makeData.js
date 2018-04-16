@@ -11,7 +11,7 @@ const lodash_1 = require("lodash");
 function makeHeaderTable(_columns, _options) {
     const columns = immutable_1.fromJS(_columns).toJS();
     let table = {
-        rows: []
+        rows: [],
     };
     let colIndex = 0;
     function makeRows(_columns, depth, parentField) {
@@ -39,7 +39,8 @@ function makeHeaderTable(_columns, _options) {
                     colspan = makeRows(field.columns, depth + 1, field);
                 }
                 else {
-                    field.width = ('width' in field) ? field.width : _options.columnMinWidth;
+                    field.width =
+                        'width' in field ? field.width : _options.columnMinWidth;
                 }
                 field.colspan = colspan;
                 row.cols.push(field); // 복제된 필드 삽입
@@ -50,7 +51,7 @@ function makeHeaderTable(_columns, _options) {
                 table.rows[depth] = { cols: [] };
             }
             table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-            return (row.cols.length - 1) + colspan;
+            return row.cols.length - 1 + colspan;
         }
         else {
             return colspan;
@@ -59,7 +60,7 @@ function makeHeaderTable(_columns, _options) {
     makeRows(columns, 0);
     // set rowspan
     table.rows.forEach((row, ri) => {
-        row.cols.forEach((col) => {
+        row.cols.forEach(col => {
             if (!('columns' in col)) {
                 col.rowspan = table.rows.length - ri;
             }
@@ -77,7 +78,7 @@ exports.makeHeaderTable = makeHeaderTable;
 function makeBodyRowTable(_columns, _options) {
     const columns = immutable_1.fromJS(_columns).toJS();
     let table = {
-        rows: []
+        rows: [],
     };
     let colIndex = 0;
     const makeRows = function (_columns, depth, parentField) {
@@ -160,7 +161,7 @@ function makeBodyRowTable(_columns, _options) {
                 table.rows[depth] = { cols: [] };
             }
             table.rows[depth].cols = table.rows[depth].cols.concat(row.cols);
-            return (row.cols.length - 1) + colspan;
+            return row.cols.length - 1 + colspan;
         }
         else {
             return colspan;
@@ -169,7 +170,7 @@ function makeBodyRowTable(_columns, _options) {
     makeRows(columns, 0);
     // set rowspan
     table.rows.forEach((row, ri) => {
-        row.cols.forEach((col) => {
+        row.cols.forEach(col => {
             if (!('columns' in col)) {
                 col.rowspan = table.rows.length - ri;
             }
@@ -203,7 +204,7 @@ exports.makeBodyRowMap = makeBodyRowMap;
  */
 function makeFootSumTable(_footSumColumns, colGroup, options) {
     let table = {
-        rows: []
+        rows: [],
     };
     for (let r = 0, rl = _footSumColumns.length; r < rl; r++) {
         let footSumRow = _footSumColumns[r], addC = 0;
@@ -222,7 +223,7 @@ function makeFootSumTable(_footSumColumns, colGroup, options) {
                     label: footSumRow[c].label,
                     key: footSumRow[c].key,
                     collector: footSumRow[c].collector,
-                    formatter: footSumRow[c].formatter
+                    formatter: footSumRow[c].formatter,
                 });
             }
             else {
@@ -239,7 +240,7 @@ function makeFootSumTable(_footSumColumns, colGroup, options) {
         if (addC < colGroup.length) {
             for (let c = addC; c < colGroup.length; c++) {
                 table.rows[r].cols.push({
-                    colIndex: (c),
+                    colIndex: c,
                     colspan: 1,
                     rowspan: 1,
                     label: '&nbsp;',
@@ -254,7 +255,7 @@ function makeFootSumTable(_footSumColumns, colGroup, options) {
 exports.makeFootSumTable = makeFootSumTable;
 function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
     let table = {
-        rows: []
+        rows: [],
     }, r = 0, addC = 0;
     table.rows[r] = { cols: [] };
     for (let c = 0, cl = _bodyGroupingColumns.length; c < cl; c++) {
@@ -272,7 +273,7 @@ function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
                 label: _bodyGroupingColumns[c].label,
                 key: _bodyGroupingColumns[c].key,
                 collector: _bodyGroupingColumns[c].collector,
-                formatter: _bodyGroupingColumns[c].formatter
+                formatter: _bodyGroupingColumns[c].formatter,
             });
         }
         else {
@@ -281,7 +282,7 @@ function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
                 colIndex: addC,
                 colspan: colspan,
                 rowspan: 1,
-                label: '&nbsp;'
+                label: '&nbsp;',
             });
         }
         addC += colspan;
@@ -290,7 +291,7 @@ function makeBodyGroupingTable(_bodyGroupingColumns, colGroup, options) {
         for (let c = addC; c < colGroup.length; c++) {
             table.rows[r].cols.push({
                 rowIndex: 0,
-                colIndex: (c),
+                colIndex: c,
                 colspan: 1,
                 rowspan: 1,
                 label: '&nbsp;',
@@ -317,7 +318,7 @@ function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
                 colspan: 1,
                 rowspan: _table.rows.length,
                 rowIndex: 0,
-                colIndex: -1
+                colIndex: -1,
             }, _col = {};
             if (options.showLineNumber) {
                 _col = lodash_1.assignWith({}, col, {
@@ -326,7 +327,7 @@ function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
                     align: 'center',
                     columnAttr: 'lineNumber',
                     key: '__line_number__',
-                    label: ''
+                    label: '',
                 });
                 asideColGroup.push(_col);
                 asideTable.rows[i].cols.push(_col);
@@ -338,7 +339,8 @@ function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
                     _width: options.rowSelectorColumnWidth,
                     align: 'center',
                     columnAttr: 'rowSelector',
-                    key: '__row_selector__', label: ''
+                    key: '__row_selector__',
+                    label: '',
                 });
                 asideColGroup.push(_col);
                 asideTable.rows[i].cols.push(_col);
@@ -386,7 +388,7 @@ function divideTableByFrozenColumnIndex(_table, _frozenColumnIndex, options) {
         asideColGroup: asideColGroup,
         asidePanelWidth: asidePanelWidth,
         leftData: tempTable_l,
-        rightData: tempTable_r
+        rightData: tempTable_r,
     };
 }
 exports.divideTableByFrozenColumnIndex = divideTableByFrozenColumnIndex;
@@ -406,17 +408,21 @@ function getTableByStartEndColumnIndex(_table, _startColumnIndex, _endColumnInde
                 let col = lodash_1.assignWith({}, row.cols[c]);
                 let colStartIndex = col.colIndex;
                 let colEndIndex = col.colIndex + col.colspan;
-                if (_startColumnIndex <= colStartIndex || colEndIndex <= _endColumnIndex) {
-                    if (_startColumnIndex <= colStartIndex && colEndIndex <= _endColumnIndex) {
+                if (_startColumnIndex <= colStartIndex ||
+                    colEndIndex <= _endColumnIndex) {
+                    if (_startColumnIndex <= colStartIndex &&
+                        colEndIndex <= _endColumnIndex) {
                         // 변형없이 추가
                         tempTable.rows[r].cols.push(col);
                     }
-                    else if (_startColumnIndex > colStartIndex && colEndIndex > _startColumnIndex) {
+                    else if (_startColumnIndex > colStartIndex &&
+                        colEndIndex > _startColumnIndex) {
                         // 앞에서 걸친경우
                         col.colspan = colEndIndex - _startColumnIndex;
                         tempTable.rows[r].cols.push(col);
                     }
-                    else if (colEndIndex > _endColumnIndex && colStartIndex <= _endColumnIndex) {
+                    else if (colEndIndex > _endColumnIndex &&
+                        colStartIndex <= _endColumnIndex) {
                         tempTable.rows[r].cols.push(col);
                     }
                 }

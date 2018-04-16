@@ -20,7 +20,7 @@ function findParentNodeByAttr(_target, _predicate) {
         while ((function () {
             let result = true;
             if (typeof _predicate === 'undefined') {
-                _target = (_target.parentNode) ? _target.parentNode : false;
+                _target = _target.parentNode ? _target.parentNode : false;
             }
             else if (lodash_1.isFunction(_predicate) && lodash_1.isElement(_target)) {
                 result = _predicate(_target);
@@ -45,11 +45,11 @@ exports.findParentNodeByAttr = findParentNodeByAttr;
  * @return {{clientX, clientY}}
  */
 function getMousePosition(e) {
-    let mouseObj = ('changedTouches' in e && e.changedTouches) ? e.changedTouches[0] : e;
+    let mouseObj = 'changedTouches' in e && e.changedTouches ? e.changedTouches[0] : e;
     // clientX, Y 쓰면 스크롤에서 문제 발생
     return {
         x: mouseObj.clientX,
-        y: mouseObj.clientY
+        y: mouseObj.clientY,
     };
 }
 exports.getMousePosition = getMousePosition;

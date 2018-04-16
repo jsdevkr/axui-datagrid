@@ -26,13 +26,16 @@ class GridPage extends React.Component {
         return sameProps;
     }
     render() {
-        const { mounted, styles, pageButtonsContainerWidth, pageButtons, pageButtonHeight, onClickPageButton } = this.props;
+        const { mounted, styles, pageButtonsContainerWidth, pageButtons, pageButtonHeight, onClickPageButton, } = this.props;
         if (!mounted)
             return null;
         return (React.createElement("div", { className: classnames_1.default('axd-page'), style: { height: styles.pageHeight } },
             React.createElement("div", { className: classnames_1.default('axd-page-buttons'), style: { width: pageButtonsContainerWidth } }, pageButtons.map((button, bi) => {
-                return React.createElement("button", { key: bi, style: { height: pageButtonHeight, width: button.width || pageButtonHeight }, onClick: e => onClickPageButton(e, button.onClick) },
-                    React.createElement("div", { "data-button-svg": true, className: classnames_1.default(button.className) }));
+                return (React.createElement("button", { key: bi, style: {
+                        height: pageButtonHeight,
+                        width: button.width || pageButtonHeight,
+                    }, onClick: e => onClickPageButton(e, button.onClick) },
+                    React.createElement("div", { "data-button-svg": true, className: classnames_1.default(button.className) })));
             }))));
     }
 }

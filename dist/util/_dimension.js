@@ -9,7 +9,11 @@ const lodash_1 = require("lodash");
  */
 function getInnerWidth(element) {
     const cs = window.getComputedStyle(element);
-    return element.offsetWidth - (parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth));
+    return (element.offsetWidth -
+        (parseFloat(cs.paddingLeft) +
+            parseFloat(cs.paddingRight) +
+            parseFloat(cs.borderLeftWidth) +
+            parseFloat(cs.borderRightWidth)));
 }
 exports.getInnerWidth = getInnerWidth;
 /**
@@ -19,7 +23,11 @@ exports.getInnerWidth = getInnerWidth;
  */
 function getInnerHeight(element) {
     const cs = window.getComputedStyle(element);
-    return element.offsetHeight - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
+    return (element.offsetHeight -
+        (parseFloat(cs.paddingTop) +
+            parseFloat(cs.paddingBottom) +
+            parseFloat(cs.borderTopWidth) +
+            parseFloat(cs.borderBottomWidth)));
 }
 exports.getInnerHeight = getInnerHeight;
 /**
@@ -58,14 +66,19 @@ function setColGroupWidth(_colGroup, container, options) {
             autoWidthColGroupIndexs.push(ci);
         }
         else if (col.width.substring(col.width.length - 1) === '%') {
-            totalWidth += col._width = container.width * col.width.substring(0, col.width.length - 1) / 100;
+            totalWidth += col._width =
+                container.width * col.width.substring(0, col.width.length - 1) / 100;
         }
     });
     if (autoWidthColGroupIndexs.length > 0) {
-        computedWidth = (container.width - totalWidth) / autoWidthColGroupIndexs.length;
+        computedWidth =
+            (container.width - totalWidth) / autoWidthColGroupIndexs.length;
         for (i = 0, l = autoWidthColGroupIndexs.length; i < l; i++) {
             _colGroup.update(autoWidthColGroupIndexs[i], O => {
-                O._width = (computedWidth < options.columnMinWidth) ? options.columnMinWidth : computedWidth;
+                O._width =
+                    computedWidth < options.columnMinWidth
+                        ? options.columnMinWidth
+                        : computedWidth;
                 return O;
             });
         }
@@ -103,7 +116,9 @@ function calculateDimensions(containerDOM, storeState, state, colGroup = state.c
     styles.CTInnerWidth = styles.elWidth;
     styles.CTInnerHeight = styles.elHeight;
     styles.rightPanelWidth = 0;
-    colGroup = setColGroupWidth(colGroup, { width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size) }, options);
+    colGroup = setColGroupWidth(colGroup, {
+        width: styles.elWidth - (styles.asidePanelWidth + options.scroller.size),
+    }, options);
     styles.frozenPanelWidth = ((colGroup, endIndex) => {
         let width = 0;
         for (let i = 0, l = endIndex; i < l; i++) {
@@ -111,26 +126,48 @@ function calculateDimensions(containerDOM, storeState, state, colGroup = state.c
         }
         return width;
     })(colGroup, options.frozenColumnIndex);
-    styles.headerHeight = (options.header.display) ? headerTable.rows.length * options.header.columnHeight : 0;
+    styles.headerHeight = options.header.display
+        ? headerTable.rows.length * options.header.columnHeight
+        : 0;
     styles.frozenPanelHeight = options.frozenRowIndex * styles.bodyTrHeight;
     styles.footSumHeight = footSumColumns.length * styles.bodyTrHeight;
     styles.pageHeight = options.page.height;
     styles.pageButtonsContainerWidth = options.page.buttonsContainerWidth;
-    styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+    styles.verticalScrollerWidth =
+        styles.elHeight -
+            styles.headerHeight -
+            styles.pageHeight -
+            styles.footSumHeight <
+            list.size * styles.bodyTrHeight
+            ? options.scroller.size
+            : 0;
     styles.horizontalScrollerHeight = (() => {
         let totalColGroupWidth = colGroup.reduce((prev, curr) => {
             return (prev._width || prev) + curr._width;
         });
         // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
         let bodyWidth = styles.elWidth - styles.asidePanelWidth - styles.verticalScrollerWidth;
-        return (totalColGroupWidth > bodyWidth) ? options.scroller.size : 0;
+        return totalColGroupWidth > bodyWidth ? options.scroller.size : 0;
     })();
     styles.scrollContentWidth = state.headerColGroup.reduce((prev, curr) => {
         return (prev._width || prev) + curr._width;
     });
-    styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth - styles.verticalScrollerWidth;
+    styles.scrollContentContainerWidth =
+        styles.CTInnerWidth -
+            styles.asidePanelWidth -
+            styles.frozenPanelWidth -
+            styles.rightPanelWidth -
+            styles.verticalScrollerWidth;
     if (styles.horizontalScrollerHeight > 0) {
-        styles.verticalScrollerWidth = ((styles.elHeight - styles.headerHeight - styles.pageHeight - styles.footSumHeight - styles.horizontalScrollerHeight) < list.size * styles.bodyTrHeight) ? options.scroller.size : 0;
+        styles.verticalScrollerWidth =
+            styles.elHeight -
+                styles.headerHeight -
+                styles.pageHeight -
+                styles.footSumHeight -
+                styles.horizontalScrollerHeight <
+                list.size * styles.bodyTrHeight
+                ? options.scroller.size
+                : 0;
     }
     // 수평 너비 결정
     styles.CTInnerWidth = styles.elWidth;
@@ -139,27 +176,55 @@ function calculateDimensions(containerDOM, storeState, state, colGroup = state.c
     // get bodyHeight
     styles.bodyHeight = styles.CTInnerHeight - styles.headerHeight;
     // 스크롤컨텐츠의 컨테이너 높이.
-    styles.scrollContentContainerHeight = styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight;
-    styles.scrollContentHeight = styles.bodyTrHeight * (list.size > options.frozenRowIndex ? list.size - options.frozenRowIndex : 0);
+    styles.scrollContentContainerHeight =
+        styles.bodyHeight - styles.frozenPanelHeight - styles.footSumHeight;
+    styles.scrollContentHeight =
+        styles.bodyTrHeight *
+            (list.size > options.frozenRowIndex
+                ? list.size - options.frozenRowIndex
+                : 0);
     if (options.scroller.disabledVerticalScroll) {
-        styles.calculatedHeight = list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight;
-        styles.bodyHeight = styles.calculatedHeight - styles.headerHeight - styles.pageHeight;
+        styles.calculatedHeight =
+            list.size * styles.bodyTrHeight + styles.headerHeight + styles.pageHeight;
+        styles.bodyHeight =
+            styles.calculatedHeight - styles.headerHeight - styles.pageHeight;
         styles.verticalScrollerWidth = 0;
         styles.CTInnerWidth = styles.elWidth;
-        styles.scrollContentContainerWidth = styles.CTInnerWidth - styles.asidePanelWidth - styles.frozenPanelWidth - styles.rightPanelWidth;
+        styles.scrollContentContainerWidth =
+            styles.CTInnerWidth -
+                styles.asidePanelWidth -
+                styles.frozenPanelWidth -
+                styles.rightPanelWidth;
         styles.scrollContentContainerHeight = styles.scrollContentHeight;
     }
     else {
     }
-    styles.verticalScrollerHeight = styles.elHeight - styles.pageHeight - options.scroller.padding * 2 - options.scroller.arrowSize;
-    styles.horizontalScrollerWidth = styles.elWidth - styles.verticalScrollerWidth - styles.pageButtonsContainerWidth - options.scroller.padding * 2 - options.scroller.arrowSize;
+    styles.verticalScrollerHeight =
+        styles.elHeight -
+            styles.pageHeight -
+            options.scroller.padding * 2 -
+            options.scroller.arrowSize;
+    styles.horizontalScrollerWidth =
+        styles.elWidth -
+            styles.verticalScrollerWidth -
+            styles.pageButtonsContainerWidth -
+            options.scroller.padding * 2 -
+            options.scroller.arrowSize;
     styles.scrollerPadding = options.scroller.padding;
     styles.scrollerArrowSize = options.scroller.arrowSize;
-    styles.verticalScrollBarHeight = (styles.scrollContentHeight) ? styles.scrollContentContainerHeight * styles.verticalScrollerHeight / styles.scrollContentHeight : 0;
+    styles.verticalScrollBarHeight = styles.scrollContentHeight
+        ? styles.scrollContentContainerHeight *
+            styles.verticalScrollerHeight /
+            styles.scrollContentHeight
+        : 0;
     if (options.scroller.barMinSize > styles.verticalScrollBarHeight) {
         styles.verticalScrollBarHeight = options.scroller.barMinSize;
     }
-    styles.horizontalScrollBarWidth = (styles.scrollContentWidth) ? styles.scrollContentContainerWidth * styles.horizontalScrollerWidth / styles.scrollContentWidth : 0;
+    styles.horizontalScrollBarWidth = styles.scrollContentWidth
+        ? styles.scrollContentContainerWidth *
+            styles.horizontalScrollerWidth /
+            styles.scrollContentWidth
+        : 0;
     if (options.scroller.barMinSize > styles.horizontalScrollBarWidth) {
         styles.horizontalScrollBarWidth = options.scroller.barMinSize;
     }
@@ -167,7 +232,7 @@ function calculateDimensions(containerDOM, storeState, state, colGroup = state.c
         styles: styles,
         colGroup: colGroup,
         leftHeaderColGroup: colGroup.slice(0, options.frozenColumnIndex),
-        headerColGroup: colGroup.slice(options.frozenColumnIndex)
+        headerColGroup: colGroup.slice(options.frozenColumnIndex),
     };
 }
 exports.calculateDimensions = calculateDimensions;

@@ -19,14 +19,14 @@ exports.GridConnected = react_redux_1.connect((state) => {
         store_list: state.get('list'),
         store_page: state.get('page'),
         store_sortInfo: state.get('sortInfo'),
-        store_filterInfo: state.get('filterInfo')
+        store_filterInfo: state.get('filterInfo'),
     };
 }, (dispatch) => ({
     init: (props, options) => dispatch(ACT.INIT(props, options)),
     setData: (data, options) => dispatch(ACT.SET_DATA(data, options)),
     sort: (colGroup, options, colIndex) => dispatch(ACT.SORT(colGroup, options, colIndex)),
     filter: (colGroup, options, colIndex, filterInfo) => dispatch(ACT.FILTER(colGroup, options, colIndex, filterInfo)),
-    update: (colGroup, options, row, col, value) => dispatch(ACT.UPDATE(colGroup, options, row, col, value))
+    update: (colGroup, options, row, col, value) => dispatch(ACT.UPDATE(colGroup, options, row, col, value)),
 }))(GridRoot_1.GridRoot);
 class AXDatagrid extends React.Component {
     static setFormatter(_formatter) {
