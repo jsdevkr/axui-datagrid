@@ -1332,6 +1332,8 @@ export class GridRoot extends React.Component<
     //e.preventDefault();
     let scrollLeft, scrollTop, endScroll;
     let startMousePosition = UTIL.getMousePosition(e);
+    const startScrollLeft = this.state.scrollLeft;
+    const startScrollTop = this.state.scrollTop;
     const {
       scrollContentWidth,
       scrollContentHeight,
@@ -1341,6 +1343,7 @@ export class GridRoot extends React.Component<
 
     const onTouchMove = ee => {
       ee.preventDefault();
+
       const { x, y } = UTIL.getMousePosition(ee);
       let delta = { x: 0, y: 0 };
       const dx = startMousePosition.x - x;
@@ -1356,11 +1359,9 @@ export class GridRoot extends React.Component<
         delta.y = dy;
       }
 
-      console.log(delta.y);
-
       ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(
-        this.state.scrollLeft - delta.x,
-        this.state.scrollTop - delta.y,
+        startScrollLeft - delta.x,
+        startScrollTop - delta.y,
         {
           scrollWidth: scrollContentWidth,
           scrollHeight: scrollContentHeight,
@@ -1379,7 +1380,6 @@ export class GridRoot extends React.Component<
 
       document.removeEventListener('touchmove', onTouchMove, true);
       document.removeEventListener('touchend', offEvent, true);
-      //document.removeEventListener('touchcancel', offEvent, false);
     };
 
     document.addEventListener('touchmove', onTouchMove, {
