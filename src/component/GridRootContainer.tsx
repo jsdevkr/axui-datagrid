@@ -35,7 +35,7 @@ export class GridRootContainer extends React.Component<
         onClick={e => {
           this.props.onFireEvent('click', e);
         }}
-        onTouchStart={e => {
+        onTouchStartCapture={e => {
           this.props.onFireEvent('touchStart', e);
         }}
       >

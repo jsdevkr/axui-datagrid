@@ -363,7 +363,8 @@ export class GridRoot extends React.Component<
 
       this.setState({ dragging: false });
       startMousePosition = null;
-      // console.log('offEvent');
+
+      console.log('offEvent');
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
@@ -1328,24 +1329,73 @@ export class GridRoot extends React.Component<
   }
 
   private onTouchStart(e: any) {
-    e.preventDefault();
+    //e.preventDefault();
+    let scrollLeft, scrollTop, endScroll;
+    let startMousePosition = UTIL.getMousePosition(e);
+    const {
+      scrollContentWidth,
+      scrollContentHeight,
+      scrollContentContainerWidth,
+      scrollContentContainerHeight,
+    } = this.state.styles;
 
     const onTouchMove = ee => {
       ee.preventDefault();
-      console.log(ee);
-    };
-    const offEvent = ee => {};
+      const { x, y } = UTIL.getMousePosition(ee);
+      let delta = { x: 0, y: 0 };
+      const dx = startMousePosition.x - x;
+      const dy = startMousePosition.y - y;
 
-    window.addEventListener('touchmove', onTouchMove, {
+      // 컬럼필터 활성화 상태라면 구문 실행 안함.
+      if (this.state.isColumnFilter !== false) return true;
+
+      if (Math.abs(dx) > 1) {
+        delta.x = dx;
+      }
+      if (Math.abs(dy) > 1) {
+        delta.y = dy;
+      }
+
+      console.log(delta.y);
+
+      ({ scrollLeft, scrollTop, endScroll } = UTIL.getScrollPosition(
+        this.state.scrollLeft - delta.x,
+        this.state.scrollTop - delta.y,
+        {
+          scrollWidth: scrollContentWidth,
+          scrollHeight: scrollContentHeight,
+          clientWidth: scrollContentContainerWidth,
+          clientHeight: scrollContentContainerHeight,
+        },
+      ));
+
+      this.setState({
+        scrollLeft: scrollLeft || 0,
+        scrollTop: scrollTop || 0,
+      });
+    };
+    const offEvent = ee => {
+      ee.preventDefault();
+
+      document.removeEventListener('touchmove', onTouchMove, true);
+      document.removeEventListener('touchend', offEvent, true);
+      //document.removeEventListener('touchcancel', offEvent, false);
+    };
+
+    document.addEventListener('touchmove', onTouchMove, {
       capture: true,
       passive: false,
     });
-    window.addEventListener('touchend', offEvent, true);
-  }
+    document.addEventListener('touchend', offEvent, {
+      capture: true,
+      passive: false,
+    });
 
-  private onTouchMove(e: any) {
-    e.preventDefault();
-    console.log(e);
+    /*
+    (document.addEventListener as any)('touchcancel', offEvent, {
+      cancelable: false,
+    });
+    */
   }
 
   private updateEditInput(
@@ -1394,10 +1444,6 @@ export class GridRoot extends React.Component<
       touchStart: () => {
         this.onTouchStart(e);
       },
-      touchMove: () => {
-        this.onTouchMove(e);
-      },
-      touchEnd: () => {},
     };
 
     if (this.props.onBeforeEvent) {
