@@ -82,6 +82,9 @@ export class GridHeaderCell extends React.Component<
         className={cx(tdClassNames)}
         onClick={e => onClickHeader(e, col.colIndex, col.columnAttr)}
         style={{ height: cellHeight, minHeight: '1px' }}
+        data-axui-tooltip={
+          col.key === '__line_number__' ? 'SELECT ALL' : 'false'
+        }
       >
         <span
           data-span
