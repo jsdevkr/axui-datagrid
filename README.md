@@ -10,6 +10,7 @@ npm install axui-datagrid -S
 ```
 
 # Usage
+
 ```js
 import * as React from 'react';
 import { AXDatagrid } from 'axui-datagrid';
@@ -34,7 +35,7 @@ export class Datagrid extends React.Component<any, any> {
   }
 
   public render() {
-    
+
     return (
       <div>
           <AXDatagrid
