@@ -51,10 +51,10 @@
   },
   "betterScripts": {
     "build:common":
-      "cp ./src/react-multi-email/style.css ./dist/style.css && cp ./README.md ./dist/README.md",
+      "cp ./src/axui-datagrid/style.css ./dist/style.css && cp ./README.md ./dist/README.md",
     "build:es5":
-      "rm -rf ./dist/commonjs && tsc src/react-multi-email/*.tsx --declaration --outDir dist/commonjs --jsx react --module commonjs --target es5 --moduleResolution node",
+      "rm -rf ./dist/commonjs && tsc src/axui-datagrid/*.tsx --declaration --outDir dist/commonjs --jsx react --module commonjs --target es5 --moduleResolution node",
     "build:es6":
-      "rm -rf ./dist/es6 && tsc src/react-multi-email/*.tsx --declaration --outDir dist/es6 --jsx react --module es6 --target es6 --moduleResolution node"
+      "rm -rf ./dist/es6 && tsc src/axui-datagrid/*.tsx --declaration --outDir dist/es6 --jsx react --module es6 --target es6 --moduleResolution node"
   }
 }
