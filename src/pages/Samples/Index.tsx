@@ -13,7 +13,8 @@ import { CodeViewer } from 'components';
 
 const basicRaw = require('!raw-loader!./Examples/components/Basic.tsx');
 const customizeStyleRaw = require('!raw-loader!./Examples/components/CustomizeStyle.tsx');
-import * as axuiLogo from 'assets/axui-logo.png';
+const axuiLogo = require('assets/axui-logo.png');
+
 const GitHubButton = require('react-github-button');
 
 interface IProps {}
@@ -62,7 +63,7 @@ class Index extends React.Component<IProps, IState> {
                 <CodeViewer
                   code={`
 import 'axui-datagrid/style.css';
-import { AXDataGrid } from 'axui-datagrid';
+import { AXUIDataGrid } from 'axui-datagrid';
 `}
                 />
               </Grid.Column>
@@ -80,23 +81,6 @@ import { AXDataGrid } from 'axui-datagrid';
                   }}
                 />
                 {viewBasicRaw ? <CodeViewer code={basicRaw} /> : null}
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
-                <Header as="h2">customize style</Header>
-                <CustomizeStyle />
-
-                <Checkbox
-                  label="Show Code"
-                  checked={viewCustomizeStyleRaw}
-                  onChange={(e: any, data: any) => {
-                    this.setState({ viewCustomizeStyleRaw: data.checked });
-                  }}
-                />
-                {viewCustomizeStyleRaw ? (
-                  <CodeViewer code={customizeStyleRaw} />
-                ) : null}
               </Grid.Column>
             </Grid.Row>
           </Grid>

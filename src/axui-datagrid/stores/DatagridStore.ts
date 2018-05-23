@@ -1,7 +1,7 @@
 export type AXUIDatagridSelection = {
   x?: number;
   y?: number;
-}
+};
 
 export type AXUIDatagridColumns = {
   key?: string;
@@ -15,8 +15,7 @@ export type AXUIDatagridColumns = {
   colIndex?: number;
   hidden?: boolean;
   columns?: AXUIDatagridColumns[];
-}
-
+};
 
 export type AXUIDatagridOptionHeader = {
   display?: boolean;
@@ -28,7 +27,7 @@ export type AXUIDatagridOptionHeader = {
   sortable?: boolean;
   enableFilter?: boolean;
   clickAction?: string;
-}
+};
 
 export type AXUIDatagridOptionBody = {
   align?: string;
@@ -37,13 +36,13 @@ export type AXUIDatagridOptionBody = {
   columnBorderWidth?: number;
   grouping?: boolean;
   mergeCells?: boolean;
-}
+};
 
 export type AXUIDatagridOptionPageButton = {
   className: string;
   onClick: string | Function;
   width?: number;
-}
+};
 
 export type AXUIDatagridOption = {
   frozenColumnIndex?: number;
@@ -78,7 +77,7 @@ export type AXUIDatagridOption = {
     disableSelection?: string;
   };
   footSum?: boolean;
-}
+};
 
 export type AXUIDatagridStyle = {
   calculatedHeight: number;
@@ -108,7 +107,7 @@ export type AXUIDatagridStyle = {
   scrollerPadding: number;
   scrollerArrowSize: number;
   pageButtonsContainerWidth: number;
-}
+};
 
 export type AXUIDatagridFormatterData = {
   list: any;
@@ -117,13 +116,13 @@ export type AXUIDatagridFormatterData = {
   key: string;
   value: any;
   options: AXUIDatagridOption;
-}
+};
 
 export type AXUIDatagridEditingCell = {
   row?: number;
   col?: number;
   editor?: any;
-}
+};
 
 export type AXUIDatagrid = {
   height?: number;
@@ -133,4 +132,4 @@ export type AXUIDatagrid = {
   options?: AXUIDatagridOption;
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void;
-}
+};

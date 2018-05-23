@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Segment, Form, Label, Icon } from 'semantic-ui-react';
+import { AXUIDatagrid } from 'axui-datagrid';
 
 interface IProps {}
 interface IState {
@@ -16,7 +17,9 @@ class Basic extends React.Component<IProps, IState> {
     return (
       <>
         <Segment>
-<h1>Basic</h1>
+          <h1>Basic</h1>
+
+          <AXUIDatagrid />
         </Segment>
       </>
     );
