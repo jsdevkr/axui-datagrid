@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { dataStore } from '../index';
 
-class Datagrid extends React.Component<dataStore.AXUIDatagrid, any> {
+interface IProps {}
+interface IState {}
+
+class Datagrid extends React.Component<
+  IProps & dataStore.AXUIDatagrid,
+  IState
+> {
   public render() {
     return <div>DATAGRID</div>;
   }

@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/axui-datagrid/containers/index.js"],"names":[],"mappings":"AAAA,YAAY,CAAC;AACb,MAAM,CAAC,cAAc,CAAC,OAAO,EAAE,YAAY,EAAE,EAAE,KAAK,EAAE,IAAI,EAAE,CAAC,CAAC;AAC9D,IAAI,eAAe,GAAG,OAAO,CAAC,iBAAiB,CAAC,CAAC;AACjD,OAAO,CAAC,SAAS,GAAG,eAAe,CAAC,OAAO,CAAC"}
