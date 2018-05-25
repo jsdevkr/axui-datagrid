@@ -125,6 +125,7 @@ export type AXUIDatagridEditingCell = {
 };
 
 export type AXUIDatagrid = {
+  style?: any;
   height?: number;
   autoHeight?: boolean;
   columns?: AXUIDatagridColumns[];

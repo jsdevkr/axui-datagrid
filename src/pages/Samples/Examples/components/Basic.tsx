@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Segment, Form, Label, Icon } from 'semantic-ui-react';
+
+import 'axui-datagrid/style.scss';
 import { AXUIDatagrid } from 'axui-datagrid';
 
 interface IProps {}
@@ -14,12 +16,14 @@ class Basic extends React.Component<IProps, IState> {
   render() {
     const { emails } = this.state;
 
+    const list = [{ no: 1, title: '제목' }];
+
     return (
       <>
         <Segment>
           <h1>Basic</h1>
 
-          <AXUIDatagrid />
+          <AXUIDatagrid data={list} />
         </Segment>
       </>
     );

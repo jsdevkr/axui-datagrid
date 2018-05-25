@@ -1,0 +1,65 @@
+.app-left-menu {
+  color: #fff;
+
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 100%;
+  padding-bottom: 1em;
+  background: rgb(19, 59, 93);
+  overflow-y: scroll;
+  z-index: 101;
+  margin: 0em;
+  color: rgba(255, 255, 255, 0.9);
+
+  .item {
+    padding: 1em;
+  }
+
+  .logo-img {
+    width: 80px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
+  h1 {
+    @extend .font-display;
+    font-size: 24px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    margin-top: 10px;
+  }
+
+  .github-btn {
+    .gh-btn {
+      margin-bottom: 0.5em;
+    }
+    .gh-count {
+      margin-right: 1em;
+      margin-bottom: 0.5em;
+    }
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 0;
+    background-color: #133b5d;
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: #1c6091;
+  }
+}
