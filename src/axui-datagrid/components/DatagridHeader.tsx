@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { dataStore } from '../stores';
+import { typeStore } from '../stores';
+import { connectStore } from '../hoc';
 
 interface IProps {}
 interface IState {}
@@ -10,8 +11,8 @@ class DatagridHeader extends React.Component<IProps, IState> {
   }
 
   render() {
-    return <div />;
+    return <div>i'm header</div>;
   }
 }
 
-export default DatagridHeader;
+export default connectStore(DatagridHeader);

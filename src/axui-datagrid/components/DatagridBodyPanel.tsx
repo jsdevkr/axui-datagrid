@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { dataStore } from '../stores';
+import { typeStore } from '../stores';
 
 interface IProps {}
 interface IState {}

@@ -1,4 +1,4 @@
-import { AXUIDatagrid } from './containers';
-import { dataStore } from './stores';
+import { DataGrid } from './containers';
+import { typeStore } from './stores';
 
-export { dataStore, AXUIDatagrid };
+export { typeStore, DataGrid };

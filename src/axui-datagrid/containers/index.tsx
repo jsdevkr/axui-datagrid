@@ -1,1 +1,1 @@
-export { default as AXUIDatagrid } from './Datagrid';
+export { default as DataGrid } from './DataGrid';

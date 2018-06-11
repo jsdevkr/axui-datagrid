@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Segment, Form, Label, Icon } from 'semantic-ui-react';
 
 import 'axui-datagrid/style.scss';
-import { AXUIDatagrid } from 'axui-datagrid';
+import { DataGrid } from 'axui-datagrid';
 
 interface IProps {}
 interface IState {
@@ -23,7 +23,7 @@ class Basic extends React.Component<IProps, IState> {
         <Segment>
           <h1>Basic</h1>
 
-          <AXUIDatagrid data={list} />
+          <DataGrid data={list} />
         </Segment>
       </>
     );

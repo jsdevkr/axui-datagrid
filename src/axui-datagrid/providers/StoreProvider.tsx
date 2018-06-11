@@ -1,25 +1,45 @@
 import * as React from 'react';
-import { dataStore } from '../index';
+import { typeStore } from '../stores';
 
-export interface IGlobalState {
+export interface IDataGrid {
+  style?: any;
+  height?: number;
+  autoHeight?: boolean;
+  columns?: typeStore.DataGridColumns[];
+  data?: any[];
+  options?: typeStore.DataGridOption;
+  onBeforeEvent?: () => void;
+  onAfterEvent?: () => void;
+}
+
+export interface IDataGridState {
   data: any[];
 }
 
-export interface IGlobalStore extends IGlobalState {
-  dispatch: (store: IGlobalState) => void;
+export interface IDataGridStore extends IDataGridState {
+  dispatch: (store: IDataGridState) => void;
 }
 
-const store: IGlobalStore = {
+const store: IDataGridStore = {
   data: [],
   dispatch: () => {},
 };
 
 const { Provider, Consumer } = React.createContext(store);
 
-class StoreProvider extends React.Component<{}, IGlobalState> {
+class StoreProvider extends React.Component<{}, IDataGridState> {
   state = {
     data: [],
   };
+
+  static getDerivedStateFromProps(
+    nextProps: IDataGrid,
+    prevState: IDataGridState,
+  ) {
+    return {
+      data: [],
+    };
+  }
 
   render() {
     return (

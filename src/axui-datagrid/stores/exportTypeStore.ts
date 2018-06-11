@@ -1,9 +1,9 @@
-export type AXUIDatagridSelection = {
+export type DataGridSelection = {
   x?: number;
   y?: number;
 };
 
-export type AXUIDatagridColumns = {
+export type DataGridColumns = {
   key?: string;
   width?: number;
   label?: string;
@@ -14,10 +14,10 @@ export type AXUIDatagridColumns = {
   rowIndex?: number;
   colIndex?: number;
   hidden?: boolean;
-  columns?: AXUIDatagridColumns[];
+  columns?: DataGridColumns[];
 };
 
-export type AXUIDatagridOptionHeader = {
+export type DataGridOptionHeader = {
   display?: boolean;
   align?: boolean | string;
   columnHeight?: number;
@@ -29,7 +29,7 @@ export type AXUIDatagridOptionHeader = {
   clickAction?: string;
 };
 
-export type AXUIDatagridOptionBody = {
+export type DataGridOptionBody = {
   align?: string;
   columnHeight?: number;
   columnPadding?: number;
@@ -38,13 +38,13 @@ export type AXUIDatagridOptionBody = {
   mergeCells?: boolean;
 };
 
-export type AXUIDatagridOptionPageButton = {
+export type DataGridOptionPageButton = {
   className: string;
   onClick: string | Function;
   width?: number;
 };
 
-export type AXUIDatagridOption = {
+export type DataGridOption = {
   frozenColumnIndex?: number;
   frozenRowIndex?: number;
   showLineNumber?: boolean;
@@ -55,11 +55,11 @@ export type AXUIDatagridOption = {
   rowSelectorColumnWidth?: number;
   remoteSort?: boolean;
   asidePanelWidth?: number;
-  header?: AXUIDatagridOptionHeader;
-  body?: AXUIDatagridOptionBody;
+  header?: DataGridOptionHeader;
+  body?: DataGridOptionBody;
   page?: {
     buttonsContainerWidth?: number;
-    buttons?: AXUIDatagridOptionPageButton[];
+    buttons?: DataGridOptionPageButton[];
     buttonHeight?: number;
     height?: number;
   };
@@ -79,7 +79,7 @@ export type AXUIDatagridOption = {
   footSum?: boolean;
 };
 
-export type AXUIDatagridStyle = {
+export type DataGridStyle = {
   calculatedHeight: number;
   asidePanelWidth: number;
   frozenPanelWidth: number;
@@ -109,28 +109,18 @@ export type AXUIDatagridStyle = {
   pageButtonsContainerWidth: number;
 };
 
-export type AXUIDatagridFormatterData = {
+export type DataGridFormatterData = {
   list: any;
   item: any;
   index: number;
   key: string;
   value: any;
-  options: AXUIDatagridOption;
+  options: DataGridOption;
 };
 
-export type AXUIDatagridEditingCell = {
+export type DataGridEditingCell = {
   row?: number;
   col?: number;
   editor?: any;
 };
 
-export type AXUIDatagrid = {
-  style?: any;
-  height?: number;
-  autoHeight?: boolean;
-  columns?: AXUIDatagridColumns[];
-  data?: any[];
-  options?: AXUIDatagridOption;
-  onBeforeEvent?: () => void;
-  onAfterEvent?: () => void;
-};
