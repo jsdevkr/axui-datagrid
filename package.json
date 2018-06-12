@@ -15,6 +15,8 @@
     "@types/react-syntax-highlighter": "0.0.5",
     "axios": "^0.18.0",
     "better-npm-run": "^0.1.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "file-loader": "^1.1.11",
     "node-sass": "^4.8.3",
     "raw-loader": "^0.5.1",
@@ -44,8 +46,7 @@
       "react-app-rewired build --scripts-version react-scripts-ts && rm -rf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME",
     "dist-module":
       "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
-    "test":
-      "react-app-rewired test --scripts-version react-scripts-ts --env=jsdom",
+    "test": "NODE_ENV=test jest",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "publish": "cd dist && npm publish"
   },
@@ -56,5 +57,21 @@
       "rm -rf ./dist/commonjs && tsc src/axui-datagrid/*.tsx --declaration --outDir dist/commonjs --jsx react --module commonjs --target es5 --moduleResolution node",
     "build:es6":
       "rm -rf ./dist/es6 && tsc src/axui-datagrid/*.tsx --declaration --outDir dist/es6 --jsx react --module es6 --target es6 --moduleResolution node"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json",
+        "useBabelrc": true
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "modulePaths": ["src"],
+    "moduleDirectories": ["node_modules", "src"]
   }
 }
