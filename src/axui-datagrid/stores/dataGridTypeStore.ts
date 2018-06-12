@@ -3,7 +3,14 @@ export type DataGridSelection = {
   y?: number;
 };
 
-export type DataGridColumns = {
+export type DataGridColumnKeys = {
+  selected: string;
+  modified: string;
+  deleted: string;
+  disableSelection: string;
+};
+
+export type DataGridColumn = {
   key?: string;
   width?: number;
   label?: string;
@@ -14,7 +21,16 @@ export type DataGridColumns = {
   rowIndex?: number;
   colIndex?: number;
   hidden?: boolean;
-  columns?: DataGridColumns[];
+  columns?: DataGridColumn[];
+  depth?: number;
+};
+
+export type DataGridColumnTableMapRow = {
+  cols: DataGridColumn[];
+};
+
+export type DataGridColumnTableMap = {
+  rows: DataGridColumnTableMapRow[];
 };
 
 export type DataGridOptionHeader = {
@@ -44,7 +60,22 @@ export type DataGridOptionPageButton = {
   width?: number;
 };
 
-export type DataGridOption = {
+export type DataGridOptionPage = {
+  buttonsContainerWidth?: number;
+  buttons?: DataGridOptionPageButton[];
+  buttonHeight?: number;
+  height?: number;
+};
+
+export type DataGridOptionScroller = {
+  size?: number;
+  arrowSize?: number;
+  barMinSize?: number;
+  padding?: number;
+  disabledVerticalScroll?: boolean;
+};
+
+export type DataGridOptions = {
   frozenColumnIndex?: number;
   frozenRowIndex?: number;
   showLineNumber?: boolean;
@@ -57,25 +88,9 @@ export type DataGridOption = {
   asidePanelWidth?: number;
   header?: DataGridOptionHeader;
   body?: DataGridOptionBody;
-  page?: {
-    buttonsContainerWidth?: number;
-    buttons?: DataGridOptionPageButton[];
-    buttonHeight?: number;
-    height?: number;
-  };
-  scroller?: {
-    size?: number;
-    arrowSize?: number;
-    barMinSize?: number;
-    padding?: number;
-    disabledVerticalScroll?: boolean;
-  };
-  columnKeys?: {
-    selected?: string;
-    modified?: string;
-    deleted?: string;
-    disableSelection?: string;
-  };
+  page?: DataGridOptionPage;
+  scroller?: DataGridOptionScroller;
+  columnKeys: DataGridColumnKeys;
   footSum?: boolean;
 };
 
@@ -115,7 +130,7 @@ export type DataGridFormatterData = {
   index: number;
   key: string;
   value: any;
-  options: DataGridOption;
+  options: DataGridOptions;
 };
 
 export type DataGridEditingCell = {
@@ -123,4 +138,3 @@ export type DataGridEditingCell = {
   col?: number;
   editor?: any;
 };
-

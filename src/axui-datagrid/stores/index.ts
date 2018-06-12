@@ -1,2 +1,2 @@
-import * as typeStore from './exportTypeStore';
+import * as typeStore from './dataGridTypeStore';
 export { typeStore };

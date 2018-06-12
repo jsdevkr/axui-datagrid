@@ -5,7 +5,7 @@ import { typeStore } from '../stores';
 interface IProps {}
 interface IState {}
 
-class DatagridRoot extends React.Component<IProps, IState> {
+class DataGridEvents extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
   }
@@ -17,4 +17,4 @@ class DatagridRoot extends React.Component<IProps, IState> {
   }
 }
 
-export default DatagridRoot;
+export default DataGridEvents;
