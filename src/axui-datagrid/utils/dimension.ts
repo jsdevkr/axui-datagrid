@@ -1,5 +1,5 @@
 import { typeStore } from '../stores';
-
+import { isNumber } from './etc';
 /**
  *
  * @param element
@@ -59,26 +59,30 @@ export function getOuterHeight(element: HTMLElement): number {
  * @return {any}
  */
 
-/*
 export function setColGroupWidth(
   colGroup: typeStore.DataGridCol[],
   container: typeStore.DataGridRect,
   options: typeStore.DataGridOptions,
 ) {
+  const columnMinWidth = options.columnMinWidth || 0;
   let totalWidth = 0;
   let computedWidth: number;
   let autoWidthColGroupIndexes: number[] = [];
-  let i;
-  let l;
+  let i: number;
+  let l: number;
 
   colGroup.forEach((col, ci) => {
     if (isNumber(col.width)) {
-      totalWidth += col._width = col.width;
+      totalWidth += col._width = Number(col.width);
     } else if (col.width === '*') {
-      autoWidthColGroupIndexs.push(ci);
-    } else if (col.width.substring(col.width.length - 1) === '%') {
+      autoWidthColGroupIndexes.push(ci);
+    } else if (
+      ('' + col.width).substring(('' + col.width).length - 1) === '%'
+    ) {
       totalWidth += col._width =
-        container.width * col.width.substring(0, col.width.length - 1) / 100;
+        container.width *
+        Number(('' + col.width).substring(0, ('' + col.width).length - 1)) /
+        100;
     }
   });
 
@@ -86,29 +90,23 @@ export function setColGroupWidth(
     computedWidth =
       (container.width - totalWidth) / autoWidthColGroupIndexes.length;
     for (i = 0, l = autoWidthColGroupIndexes.length; i < l; i++) {
-      _colGroup.update(autoWidthColGroupIndexes[i], O => {
-        O._width =
-          computedWidth < options.columnMinWidth
-            ? options.columnMinWidth
-            : computedWidth;
-        return O;
-      });
+      colGroup[autoWidthColGroupIndexes[i]]._width =
+        computedWidth < columnMinWidth ? columnMinWidth : computedWidth;
     }
   }
   // 컬럼의 시작위치와 끝위치 계산
 
-  for (i = 0; i < _colGroup.length; i++) {
+  for (i = 0; i < colGroup.length; i++) {
     if (i === 0) {
-      _colGroup[i]._sx = 0;
+      colGroup[i]._sx = 0;
     } else {
-      _colGroup[i]._sx = _colGroup[i - 1]._ex;
+      colGroup[i]._sx = colGroup[i - 1]._ex;
     }
-    _colGroup[i]._ex = _colGroup[i]._sx + _colGroup[i]._width;
+    colGroup[i]._ex = (colGroup[i]._sx || 0) + (colGroup[i]._width || 0);
   }
 
-  return _colGroup;
+  return colGroup;
 }
-*/
 
 /**
  *
@@ -121,7 +119,6 @@ export function setColGroupWidth(
  * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
  */
 
-/*
 export function calculateDimensions(
   containerDOM,
   storeState,
@@ -279,4 +276,3 @@ export function calculateDimensions(
     headerColGroup: colGroup.slice(options.frozenColumnIndex),
   };
 }
-*/

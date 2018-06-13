@@ -31,6 +31,11 @@ function baseGetTag(value: any) {
   return result;
 }
 
+// https://github.com/lodash/lodash/blob/master/isObjectLike.js
+export function isObjectLike(value: any) {
+  return typeof value === 'object' && value !== null;
+}
+
 // https://github.com/lodash/lodash/blob/master/isObject.js
 export function isObject(value: any) {
   const type = typeof value;
@@ -50,6 +55,14 @@ export function isFunction(value: any) {
     tag === '[object AsyncFunction]' ||
     tag === '[object GeneratorFunction]' ||
     tag === '[object Proxy]'
+  );
+}
+
+// https://github.com/lodash/lodash/blob/master/isNumber.js
+export function isNumber(value: any) {
+  return (
+    typeof value === 'number' ||
+    (isObjectLike(value) && baseGetTag(value) === '[object Number]')
   );
 }
 
