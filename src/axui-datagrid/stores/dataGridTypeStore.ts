@@ -3,6 +3,13 @@ export type DataGridSelection = {
   y?: number;
 };
 
+export type DataGridRect = {
+  x?: number;
+  y?: number;
+  width: number;
+  height?: number;
+};
+
 export type DataGridColumnKeys = {
   selected: string;
   modified: string;
@@ -14,7 +21,7 @@ export type DataGridColumn = {
   key?: string;
   width?: number;
   label?: string;
-  align?: string;
+  align?: string | ColTextAlign;
   formatter?: () => void | string;
   colSpan?: number;
   rowSpan?: number;
@@ -33,9 +40,24 @@ export type DataGridColumnTableMap = {
   rows: DataGridColumnTableMapRow[];
 };
 
+export type DataGridCol = {
+  key?: string;
+  label?: string;
+  width?: number | string;
+  align?: string | ColTextAlign;
+  colIndex?: number;
+  rowIndex?: number;
+  colSpan?: number;
+  rowSpan?: number;
+  formatter?: string | Function;
+  _ex?: number;
+  _sx?: number;
+  _width?: number;
+};
+
 export type DataGridOptionHeader = {
   display?: boolean;
-  align?: boolean | string;
+  align?: string | ColTextAlign;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -46,7 +68,7 @@ export type DataGridOptionHeader = {
 };
 
 export type DataGridOptionBody = {
-  align?: string;
+  align?: string | ColTextAlign;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -138,3 +160,10 @@ export type DataGridEditingCell = {
   col?: number;
   editor?: any;
 };
+
+// todo : enum으로 키 타입 정의가 왜 안되는지 확인 필요.
+export enum ColTextAlign {
+  'Left' = 'left',
+  'Center' = 'center',
+  'Right' = 'right',
+}

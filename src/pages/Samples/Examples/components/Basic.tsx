@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Segment, Form, Label, Icon } from 'semantic-ui-react';
 
 import 'axui-datagrid/style.scss';
-import { DataGrid } from 'axui-datagrid';
+import { DataGrid, DataGridTypes } from 'axui-datagrid';
 
 interface IProps {}
 interface IState {
@@ -17,13 +17,20 @@ class Basic extends React.Component<IProps, IState> {
     const { emails } = this.state;
 
     const list = [{ no: 1, title: '제목' }];
-
+    const columns = [
+      {
+        key: 'id',
+        width: 60,
+        label: 'ID',
+        align: 'left',
+      },
+    ];
     return (
       <>
         <Segment>
           <h1>Basic</h1>
 
-          <DataGrid data={list} />
+          <DataGrid data={list} columns={columns} />
         </Segment>
       </>
     );

@@ -1,4 +1,4 @@
 import { DataGrid } from './containers';
-import { typeStore } from './stores';
+import { typeStore as DataGridTypes } from './stores';
 
-export { typeStore, DataGrid };
+export { DataGridTypes, DataGrid };
