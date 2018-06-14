@@ -8,6 +8,7 @@ import {
   makeBodyRowMap,
   divideTableByFrozenColumnIndex,
   getPathValue,
+  mergeAll,
 } from '../utils';
 
 interface IProps extends types.DataGrid {}
@@ -161,7 +162,7 @@ class DataGrid extends React.Component<IProps, IState> {
       changeState = true;
       newState.data = props.data || [];
       newState.filteredList = newState.data.filter(n => {
-        return !n[optionColumnKeys.deleted];
+        return !n[optionColumnKeys.deleted || '__deleted__'];
       });
     }
 
@@ -171,11 +172,19 @@ class DataGrid extends React.Component<IProps, IState> {
     }
 
     if (JSON.stringify(props.options) !== state.optionsString) {
-      // convert options
-      currentOptions = { ...(props.options || DataGrid.defaultOptions) };
+      changeState = true;
+      currentOptions = mergeAll(
+        true,
+        { ...DataGrid.defaultOptions },
+        props.options,
+      );
+
+      console.log(currentOptions);
     }
 
     if (JSON.stringify(props.columns) !== state.columnsString) {
+      changeState = true;
+
       const frozenColumnIndex: number = getPathValue(
         currentOptions,
         ['frozenColumnIndex'],
@@ -219,18 +228,32 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.leftBodyRowData = bodyDividedObj.leftData;
       newState.bodyRowData = bodyDividedObj.rightData;
 
-      newState.leftHeaderColGroup = [];
-      newState.headerColGroup = [];
+      // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
       newState.colGroup = [];
       newState.colGroupMap = {};
+      newState.headerTable.rows.forEach((row, ridx) => {
+        row.cols.forEach((col, cidx) => {
+          if (newState.colGroupMap && col.colIndex && newState.colGroup) {
+            newState.colGroupMap[col.colIndex] = { ...col };
+            newState.colGroup.push({ ...col });
+          }
+        });
+      });
+      newState.leftHeaderColGroup = newState.colGroup.slice(
+        0,
+        frozenColumnIndex,
+      );
+      newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
 
+      // grouping과 footsum 나중에 구현.
+      /*
       newState.bodyGrouping = [];
-
-      // newState.bodyGroupingTable = {};
+      newState.bodyGroupingTable = {};
       newState.asideBodyGroupingData = {};
       newState.leftBodyGroupingData = {};
       newState.bodyGroupingData = {};
       newState.bodyGroupingMap = {};
+      */
 
       /*
       newState.footSumColumns = [];

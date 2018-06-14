@@ -28,7 +28,11 @@ class Basic extends React.Component<IProps, IState> {
         <Segment>
           <h1>Basic</h1>
 
-          <DataGrid data={list} columns={columns} />
+          <DataGrid
+            data={list}
+            columns={columns}
+            options={{ asidePanelWidth: 900, columnKeys: {deleted: 'D'} }}
+          />
         </Segment>
       </>
     );

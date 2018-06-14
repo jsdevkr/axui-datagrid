@@ -53,8 +53,9 @@ export interface IDataGridColumn extends ICol {
 }
 
 export interface IDataGridColumnKeys {
-  selected: string;
-  modified: string;
-  deleted: string;
-  disableSelection: string;
+  selected?: string;
+  modified?: string;
+  deleted?: string;
+  disableSelection?: string;
 }
+

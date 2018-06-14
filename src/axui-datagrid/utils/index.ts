@@ -6,4 +6,4 @@ export {
   getTableByStartEndColumnIndex,
 } from './columns';
 
-export { getPathValue } from './etc';
+export { getPathValue, mergeAll } from './etc';
