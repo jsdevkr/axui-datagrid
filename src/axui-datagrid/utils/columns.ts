@@ -215,12 +215,12 @@ export function makeBodyRowTable(
  *
  * @param {DataGridColumnTableMap} rowTable
  * @param {DataGridOptions} options
- * @return {{}}
+ * @return {{[p: string]: any}}
  */
 export function makeBodyRowMap(
   rowTable: types.DataGridColumnTableMap,
   options: types.DataGridOptions,
-) {
+): { [key: string]: any } {
   let map = {};
 
   rowTable.rows.forEach(row => {
@@ -238,13 +238,13 @@ export function makeBodyRowMap(
  * @param {DataGridColumnTableMap} rowTable
  * @param {number} frozenColumnIndex
  * @param {DataGridOptions} options
- * @return {{asideData: DataGridColumnTableMap; asideColGroup: any[]; asidePanelWidth: number; leftData: DataGridColumnTableMap; rightData: DataGridColumnTableMap}}
+ * @return {DataGridColumnDivideTable}
  */
 export function divideTableByFrozenColumnIndex(
   rowTable: types.DataGridColumnTableMap,
   frozenColumnIndex: number,
   options: types.DataGridOptions,
-) {
+): types.DataGridColumnDivideTable {
   let asideTable: types.DataGridColumnTableMap = { rows: [] };
   let asideColGroup: any[] = [];
   let asidePanelWidth = 0;

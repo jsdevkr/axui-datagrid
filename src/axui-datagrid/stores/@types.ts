@@ -1,6 +1,6 @@
 import * as intfs from './@interfaces';
 
-export type ColTextAlign = 'left' | 'center' | 'right';
+export type ColTextAlign = string | 'left' | 'center' | 'right';
 
 export type DataGridSelection = intfs.IPosition;
 
@@ -22,6 +22,14 @@ export type DataGridColumnTableMapRow = {
 
 export type DataGridColumnTableMap = {
   rows: DataGridColumnTableMapRow[];
+};
+
+export type DataGridColumnDivideTable = {
+  asideData: DataGridColumnTableMap;
+  asideColGroup: any[];
+  asidePanelWidth: number;
+  leftData: DataGridColumnTableMap;
+  rightData: DataGridColumnTableMap;
 };
 
 export type DataGridOptionHeader = {
@@ -81,7 +89,7 @@ export type DataGridOptions = {
   body?: DataGridOptionBody;
   page?: DataGridOptionPage;
   scroller?: DataGridOptionScroller;
-  columnKeys: DataGridColumnKeys;
+  columnKeys?: DataGridColumnKeys;
   footSum?: boolean;
 };
 
@@ -113,4 +121,15 @@ export type DataGridStyles = {
   scrollerPadding: number;
   scrollerArrowSize: number;
   pageButtonsContainerWidth: number;
+};
+
+export type DataGrid = {
+  data?: any[];
+  columns: DataGridColumn[];
+  height?: number;
+  style?: any;
+  options?: DataGridOptions;
+
+  onBeforeEvent?: () => void;
+  onAfterEvent?: () => void;
 };

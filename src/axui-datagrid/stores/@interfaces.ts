@@ -14,8 +14,7 @@ export interface ICol {
   key?: string;
   label?: string;
   width?: number | string;
-  // todo : 원인 파익필요.
-  align?: string | types.ColTextAlign;
+  align?: types.ColTextAlign;
   colSpan?: number;
   rowSpan?: number;
 }

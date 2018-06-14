@@ -99,3 +99,19 @@ export function getMousePosition(e: any) {
     y: mouseObj.clientY,
   };
 }
+
+export function getPathValue(
+  targetObject: any,
+  paths: any[],
+  defaultValue?: any,
+): any {
+  let idx = 0;
+  while (idx < paths.length) {
+    if (targetObject == null) {
+      return;
+    }
+    targetObject = targetObject[paths[idx]];
+    idx += 1;
+  }
+  return typeof targetObject === 'undefined' ? defaultValue : targetObject;
+}

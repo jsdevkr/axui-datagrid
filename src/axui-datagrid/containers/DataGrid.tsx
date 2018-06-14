@@ -1,9 +1,16 @@
 import * as React from 'react';
-import { DataGridStore, IDataGridState, IDataGrid } from '../providers';
+import { DataGridStore, IDataGridState } from '../providers';
 import { DataGridHeader } from '../components';
 import { types } from '../stores';
+import {
+  makeHeaderTable,
+  makeBodyRowTable,
+  makeBodyRowMap,
+  divideTableByFrozenColumnIndex,
+  getPathValue,
+} from '../utils';
 
-interface IProps extends IDataGrid {}
+interface IProps extends types.DataGrid {}
 interface IState extends IDataGridState {}
 
 class DataGrid extends React.Component<IProps, IState> {
@@ -13,10 +20,46 @@ class DataGrid extends React.Component<IProps, IState> {
     deleted: '__deleted__',
     disableSelection: '__disable_selection__',
   };
-  static defaultHeader: types.DataGridOptionHeader = {};
-  static defaultBody: types.DataGridOptionBody = {};
-  static defaultPage: types.DataGridOptionPage = {};
-  static defaultScroller: types.DataGridOptionScroller = {};
+  static defaultHeader: types.DataGridOptionHeader = {
+    display: true,
+    align: 'left',
+    columnHeight: 24,
+    columnPadding: 3,
+    columnBorderWidth: 1,
+    selector: true,
+    sortable: true,
+    enableFilter: true,
+    clickAction: 'sort',
+  };
+  static defaultBody: types.DataGridOptionBody = {
+    align: 'left',
+    columnHeight: 24,
+    columnPadding: 3,
+    columnBorderWidth: 1,
+    grouping: false,
+    mergeCells: false,
+  };
+  static defaultPageButtons: types.DataGridOptionPageButton[] = [
+    { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+    { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+    { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+    { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+    { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+    { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
+  ];
+  static defaultPage: types.DataGridOptionPage = {
+    buttonsContainerWidth: 150,
+    buttons: DataGrid.defaultPageButtons,
+    buttonHeight: 16,
+    height: 20,
+  };
+  static defaultScroller: types.DataGridOptionScroller = {
+    size: 14,
+    arrowSize: 14,
+    barMinSize: 12,
+    padding: 3,
+    disabledVerticalScroll: false,
+  };
   static defaultOptions: types.DataGridOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
@@ -79,16 +122,13 @@ class DataGrid extends React.Component<IProps, IState> {
     asideColGroup: [],
     leftHeaderColGroup: [],
     headerColGroup: [],
-    headerTable: {},
     asideHeaderData: {},
     leftHeaderData: {},
     headerData: {},
-    bodyRowTable: {},
     asideBodyRowData: {},
     leftBodyRowData: {},
     bodyRowData: {},
     bodyRowMap: {},
-    bodyGroupingTable: {},
     asideBodyGroupingData: {},
     leftBodyGroupingData: {},
     bodyGroupingData: {},
@@ -98,7 +138,13 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   static getDerivedStateFromProps(props: IProps, state: IState) {
-    const { options } = state;
+    const { options, styles } = state;
+    let currentOptions: types.DataGridOptions = {
+      ...(options || DataGrid.defaultOptions),
+    };
+    let currentStyles: types.DataGridStyles = {
+      ...(styles || DataGrid.defaultStyles),
+    };
 
     const optionHeader = (options && options.header) || DataGrid.defaultHeader;
     const optionBody = (options && options.body) || DataGrid.defaultBody;
@@ -119,18 +165,86 @@ class DataGrid extends React.Component<IProps, IState> {
       });
     }
 
-    if (JSON.stringify(props.columns) !== state.columnsString) {
-    }
-
     if (props.height !== state.height) {
       changeState = true;
       newState.height = props.height;
     }
 
-    if (JSON.stringify(props.style) !== state.styleString) {
+    if (JSON.stringify(props.options) !== state.optionsString) {
+      // convert options
+      currentOptions = { ...(props.options || DataGrid.defaultOptions) };
     }
 
-    if (JSON.stringify(props.options) !== state.optionsString) {
+    if (JSON.stringify(props.columns) !== state.columnsString) {
+      const frozenColumnIndex: number = getPathValue(
+        currentOptions,
+        ['frozenColumnIndex'],
+        DataGrid.defaultOptions.frozenColumnIndex,
+      );
+      const columnHeight: number = getPathValue(
+        currentOptions,
+        ['body', 'columnHeight'],
+        DataGrid.defaultBody.columnHeight,
+      );
+
+      let headerDividedObj, bodyDividedObj;
+
+      // convert colGroup
+      newState.headerTable = makeHeaderTable(props.columns, currentOptions);
+      newState.bodyRowTable = makeBodyRowTable(props.columns, currentOptions);
+      newState.bodyRowMap = makeBodyRowMap(
+        newState.bodyRowTable,
+        currentOptions,
+      );
+
+      // header를 위한 divide
+      headerDividedObj = divideTableByFrozenColumnIndex(
+        newState.headerTable,
+        frozenColumnIndex || 0,
+        currentOptions,
+      );
+      // body를 위한 divide
+      bodyDividedObj = divideTableByFrozenColumnIndex(
+        newState.bodyRowTable,
+        frozenColumnIndex || 0,
+        currentOptions,
+      );
+
+      newState.asideHeaderData = headerDividedObj.asideData;
+      newState.leftHeaderData = headerDividedObj.leftData;
+      newState.headerData = headerDividedObj.rightData;
+      newState.asideColGroup = headerDividedObj.asideColGroup;
+
+      newState.asideBodyRowData = bodyDividedObj.asideData;
+      newState.leftBodyRowData = bodyDividedObj.leftData;
+      newState.bodyRowData = bodyDividedObj.rightData;
+
+      newState.leftHeaderColGroup = [];
+      newState.headerColGroup = [];
+      newState.colGroup = [];
+      newState.colGroupMap = {};
+
+      newState.bodyGrouping = [];
+
+      // newState.bodyGroupingTable = {};
+      newState.asideBodyGroupingData = {};
+      newState.leftBodyGroupingData = {};
+      newState.bodyGroupingData = {};
+      newState.bodyGroupingMap = {};
+
+      /*
+      newState.footSumColumns = [];
+      newState.footSumTable = {};
+      newState.leftFootSumData = {};
+      newState.footSumData = {};
+      */
+
+      // styles
+      currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
+      currentStyles.bodyTrHeight =
+        newState.bodyRowTable.rows.length * columnHeight;
+
+      newState.columnsString = JSON.stringify(props.columns);
     }
 
     return changeState ? newState : null;

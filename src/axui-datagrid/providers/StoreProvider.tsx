@@ -1,17 +1,6 @@
 import * as React from 'react';
 import { types } from '../stores';
 
-export interface IDataGrid {
-  data?: any[];
-  columns?: types.DataGridColumn[];
-  height?: number;
-  style?: any;
-  options?: types.DataGridOptions;
-
-  onBeforeEvent?: () => void;
-  onAfterEvent?: () => void;
-}
-
 export interface IDataGridState {
   data?: any[];
   filteredList?: any[];
@@ -33,16 +22,16 @@ export interface IDataGridState {
   leftHeaderColGroup?: types.DataGridColumn[];
   headerColGroup?: types.DataGridColumn[];
   bodyGrouping?: types.DataGridColumn[];
-  headerTable?: {};
+  headerTable?: types.DataGridColumnTableMap;
   asideHeaderData?: {};
   leftHeaderData?: {};
   headerData?: {};
-  bodyRowTable?: {};
+  bodyRowTable?: types.DataGridColumnTableMap;
   asideBodyRowData?: {};
   leftBodyRowData?: {};
   bodyRowData?: {};
   bodyRowMap?: {};
-  bodyGroupingTable?: {};
+  bodyGroupingTable?: types.DataGridColumnTableMap;
   asideBodyGroupingData?: {};
   leftBodyGroupingData?: {};
   bodyGroupingData?: {};
@@ -71,7 +60,10 @@ class StoreProvider extends React.Component<{}, IDataGridState> {
     data: [],
   };
 
-  static getDerivedStateFromProps(props: IDataGrid, state: IDataGridState) {
+  static getDerivedStateFromProps(
+    props: IDataGridStore,
+    state: IDataGridState,
+  ) {
     if (props.data !== state.data) {
       return {
         data: props.data,
