@@ -1,5 +1,6 @@
-import { typeStore } from '../stores';
 import { isNumber } from './etc';
+import { types } from '../stores';
+
 /**
  *
  * @param element
@@ -60,9 +61,9 @@ export function getOuterHeight(element: HTMLElement): number {
  */
 
 export function setColGroupWidth(
-  colGroup: typeStore.DataGridCol[],
-  container: typeStore.DataGridRect,
-  options: typeStore.DataGridOptions,
+  colGroup: types.DataGridCol[],
+  container: types.DataGridRect,
+  options: types.DataGridOptions,
 ) {
   const columnMinWidth = options.columnMinWidth || 0;
   let totalWidth = 0;
@@ -119,13 +120,12 @@ export function setColGroupWidth(
  * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
  */
 
+/*
 export function calculateDimensions(
-  containerDOM,
-  storeState,
-  state,
-  colGroup = state.colGroup,
-  options = state.options,
-  styles = Map(state.styles).toJS(),
+  containerDOM: HTMLElement,
+  state: types.DataGridOptions,
+  options: types.DataGridOptions,
+  styles: types.DataGridStyles,
 ) {
   let list = storeState.list;
   let footSumColumns = state.footSumColumns;
@@ -276,3 +276,4 @@ export function calculateDimensions(
     headerColGroup: colGroup.slice(options.frozenColumnIndex),
   };
 }
+*/

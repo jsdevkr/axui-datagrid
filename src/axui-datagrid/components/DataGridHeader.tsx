@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { typeStore } from '../stores';
+import { types } from '../stores';
 import { connectStore } from '../hoc';
 
 interface IProps {}

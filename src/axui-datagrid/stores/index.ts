@@ -1,2 +1,3 @@
-import * as typeStore from './dataGridTypeStore';
-export { typeStore };
+import * as types from './@types';
+import * as intfs from './@interfaces';
+export { types, intfs };

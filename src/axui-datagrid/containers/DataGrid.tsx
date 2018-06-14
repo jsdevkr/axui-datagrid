@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { DataGridStore, IDataGridState, IDataGrid } from '../providers';
 import { DataGridHeader } from '../components';
-import { typeStore } from '../stores';
+import { types } from '../stores';
 
 interface IProps extends IDataGrid {}
 interface IState extends IDataGridState {}
 
 class DataGrid extends React.Component<IProps, IState> {
-  static defaultColumnKeys: typeStore.DataGridColumnKeys = {
+  static defaultColumnKeys: types.DataGridColumnKeys = {
     selected: '__selected__',
     modified: '__modified__',
     deleted: '__deleted__',
     disableSelection: '__disable_selection__',
   };
-  static defaultHeader: typeStore.DataGridOptionHeader = {};
-  static defaultBody: typeStore.DataGridOptionBody = {};
-  static defaultPage: typeStore.DataGridOptionPage = {};
-  static defaultScroller: typeStore.DataGridOptionScroller = {};
-  static defaultOptions: typeStore.DataGridOptions = {
+  static defaultHeader: types.DataGridOptionHeader = {};
+  static defaultBody: types.DataGridOptionBody = {};
+  static defaultPage: types.DataGridOptionPage = {};
+  static defaultScroller: types.DataGridOptionScroller = {};
+  static defaultOptions: types.DataGridOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,
@@ -34,7 +34,7 @@ class DataGrid extends React.Component<IProps, IState> {
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
   };
-  static defaultStyles: typeStore.DataGridStyle = {
+  static defaultStyles: types.DataGridStyles = {
     calculatedHeight: -1,
     asidePanelWidth: 0,
     frozenPanelWidth: 0,

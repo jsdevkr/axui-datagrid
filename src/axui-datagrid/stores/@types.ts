@@ -1,36 +1,20 @@
-export type DataGridSelection = {
-  x?: number;
-  y?: number;
-};
+import * as intfs from './@interfaces';
 
-export type DataGridRect = {
-  x?: number;
-  y?: number;
-  width: number;
-  height?: number;
-};
+export type ColTextAlign = 'left' | 'center' | 'right';
 
-export type DataGridColumnKeys = {
-  selected: string;
-  modified: string;
-  deleted: string;
-  disableSelection: string;
-};
+export type DataGridSelection = intfs.IPosition;
 
-export type DataGridColumn = {
-  key?: string;
-  width?: number;
-  label?: string;
-  align?: string | ColTextAlign;
-  formatter?: () => void | string;
-  colSpan?: number;
-  rowSpan?: number;
-  rowIndex?: number;
-  colIndex?: number;
-  hidden?: boolean;
-  columns?: DataGridColumn[];
-  depth?: number;
-};
+export type DataGridRect = intfs.IRect;
+
+export type DataGridEditingCell = intfs.IDataGridEditingCell;
+
+export type DataGridFormatterData = intfs.IDataGridFormatterData;
+
+export type DataGridCol = intfs.IDataGridCol;
+
+export type DataGridColumn = intfs.IDataGridColumn;
+
+export type DataGridColumnKeys = intfs.IDataGridColumnKeys;
 
 export type DataGridColumnTableMapRow = {
   cols: DataGridColumn[];
@@ -40,24 +24,9 @@ export type DataGridColumnTableMap = {
   rows: DataGridColumnTableMapRow[];
 };
 
-export type DataGridCol = {
-  key?: string;
-  label?: string;
-  width?: number | string;
-  align?: string | ColTextAlign;
-  colIndex?: number;
-  rowIndex?: number;
-  colSpan?: number;
-  rowSpan?: number;
-  formatter?: string | Function;
-  _ex?: number;
-  _sx?: number;
-  _width?: number;
-};
-
 export type DataGridOptionHeader = {
   display?: boolean;
-  align?: string | ColTextAlign;
+  align?: ColTextAlign;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -68,7 +37,7 @@ export type DataGridOptionHeader = {
 };
 
 export type DataGridOptionBody = {
-  align?: string | ColTextAlign;
+  align?: ColTextAlign;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -116,7 +85,7 @@ export type DataGridOptions = {
   footSum?: boolean;
 };
 
-export type DataGridStyle = {
+export type DataGridStyles = {
   calculatedHeight: number;
   asidePanelWidth: number;
   frozenPanelWidth: number;
@@ -145,25 +114,3 @@ export type DataGridStyle = {
   scrollerArrowSize: number;
   pageButtonsContainerWidth: number;
 };
-
-export type DataGridFormatterData = {
-  list: any;
-  item: any;
-  index: number;
-  key: string;
-  value: any;
-  options: DataGridOptions;
-};
-
-export type DataGridEditingCell = {
-  row?: number;
-  col?: number;
-  editor?: any;
-};
-
-// todo : enum으로 키 타입 정의가 왜 안되는지 확인 필요.
-export enum ColTextAlign {
-  'Left' = 'left',
-  'Center' = 'center',
-  'Right' = 'right',
-}

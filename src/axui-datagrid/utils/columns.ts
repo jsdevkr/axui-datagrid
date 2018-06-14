@@ -1,4 +1,4 @@
-import { typeStore } from '../stores';
+import { types } from '../stores';
 
 /**
  *
@@ -7,21 +7,21 @@ import { typeStore } from '../stores';
  * @return {DataGridColumnTableMap}
  */
 export function makeHeaderTable(
-  headerColumns: typeStore.DataGridColumn[],
-  options: typeStore.DataGridOptions,
-): typeStore.DataGridColumnTableMap {
-  const columns: typeStore.DataGridColumn[] = [...headerColumns];
-  let table: typeStore.DataGridColumnTableMap = {
+  headerColumns: types.DataGridColumn[],
+  options: types.DataGridOptions,
+): types.DataGridColumnTableMap {
+  const columns: types.DataGridColumn[] = [...headerColumns];
+  let table: types.DataGridColumnTableMap = {
     rows: [],
   };
   let colIndex = 0;
 
   function makeRows(
-    rowsColumns: typeStore.DataGridColumn[],
+    rowsColumns: types.DataGridColumn[],
     depth: number,
     parentField?: any,
   ): number {
-    let row: typeStore.DataGridColumnTableMapRow = { cols: [] };
+    let row: types.DataGridColumnTableMapRow = { cols: [] };
     let i: number = 0;
     let l: number = rowsColumns.length;
     let colSpan: number = 1;
@@ -89,27 +89,27 @@ export function makeHeaderTable(
  * @return {DataGridColumnTableMap}
  */
 export function makeBodyRowTable(
-  bodyColumns: typeStore.DataGridColumn[],
-  options: typeStore.DataGridOptions,
-): typeStore.DataGridColumnTableMap {
-  const columns: typeStore.DataGridColumn[] = [...bodyColumns];
-  let table: typeStore.DataGridColumnTableMap = {
+  bodyColumns: types.DataGridColumn[],
+  options: types.DataGridOptions,
+): types.DataGridColumnTableMap {
+  const columns: types.DataGridColumn[] = [...bodyColumns];
+  let table: types.DataGridColumnTableMap = {
     rows: [],
   };
   let colIndex = 0;
 
   const makeRows = function(
-    rowsColumns: typeStore.DataGridColumn[],
+    rowsColumns: types.DataGridColumn[],
     depth: number,
     parentField?: any,
   ): number {
-    let row: typeStore.DataGridColumnTableMapRow = { cols: [] };
+    let row: types.DataGridColumnTableMapRow = { cols: [] };
     let i = 0;
     let l = rowsColumns.length;
     let colSpan = 1;
 
     const selfMakeRow = function(
-      selfRowsColumns: typeStore.DataGridColumn[],
+      selfRowsColumns: types.DataGridColumn[],
       selfRowsDepth: number,
     ): void {
       let si = 0;
@@ -218,8 +218,8 @@ export function makeBodyRowTable(
  * @return {{}}
  */
 export function makeBodyRowMap(
-  rowTable: typeStore.DataGridColumnTableMap,
-  options: typeStore.DataGridOptions,
+  rowTable: types.DataGridColumnTableMap,
+  options: types.DataGridOptions,
 ) {
   let map = {};
 
@@ -241,15 +241,15 @@ export function makeBodyRowMap(
  * @return {{asideData: DataGridColumnTableMap; asideColGroup: any[]; asidePanelWidth: number; leftData: DataGridColumnTableMap; rightData: DataGridColumnTableMap}}
  */
 export function divideTableByFrozenColumnIndex(
-  rowTable: typeStore.DataGridColumnTableMap,
+  rowTable: types.DataGridColumnTableMap,
   frozenColumnIndex: number,
-  options: typeStore.DataGridOptions,
+  options: types.DataGridOptions,
 ) {
-  let asideTable: typeStore.DataGridColumnTableMap = { rows: [] };
+  let asideTable: types.DataGridColumnTableMap = { rows: [] };
   let asideColGroup: any[] = [];
   let asidePanelWidth = 0;
-  let tempTableLeft: typeStore.DataGridColumnTableMap = { rows: [] };
-  let tempTableRight: typeStore.DataGridColumnTableMap = { rows: [] };
+  let tempTableLeft: types.DataGridColumnTableMap = { rows: [] };
+  let tempTableRight: types.DataGridColumnTableMap = { rows: [] };
 
   // make asideTable
   for (let i = 0, l = rowTable.rows.length; i < l; i++) {
@@ -356,11 +356,11 @@ export function divideTableByFrozenColumnIndex(
  * @return {DataGridColumnTableMap}
  */
 export function getTableByStartEndColumnIndex(
-  rowTable: typeStore.DataGridColumnTableMap,
+  rowTable: types.DataGridColumnTableMap,
   startColumnIndex: number,
   endColumnIndex: number,
-): typeStore.DataGridColumnTableMap {
-  let tempTable: typeStore.DataGridColumnTableMap = { rows: [] };
+): types.DataGridColumnTableMap {
+  let tempTable: types.DataGridColumnTableMap = { rows: [] };
 
   if ('rows' in rowTable) {
     rowTable.rows.forEach((row, r) => {

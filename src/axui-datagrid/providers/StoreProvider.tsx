@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { typeStore } from '../stores';
+import { types } from '../stores';
 
 export interface IDataGrid {
   data?: any[];
-  columns?: typeStore.DataGridColumn[];
+  columns?: types.DataGridColumn[];
   height?: number;
   style?: any;
-  options?: typeStore.DataGridOptions;
+  options?: types.DataGridOptions;
 
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void;
@@ -27,12 +27,12 @@ export interface IDataGridState {
   scrollTop?: number;
   focusedRow?: number;
   focusedCol?: number;
-  colGroup?: typeStore.DataGridColumn[];
+  colGroup?: types.DataGridColumn[];
   colGroupMap?: {};
-  asideColGroup?: typeStore.DataGridColumn[];
-  leftHeaderColGroup?: typeStore.DataGridColumn[];
-  headerColGroup?: typeStore.DataGridColumn[];
-  bodyGrouping?: typeStore.DataGridColumn[];
+  asideColGroup?: types.DataGridColumn[];
+  leftHeaderColGroup?: types.DataGridColumn[];
+  headerColGroup?: types.DataGridColumn[];
+  bodyGrouping?: types.DataGridColumn[];
   headerTable?: {};
   asideHeaderData?: {};
   leftHeaderData?: {};
@@ -47,12 +47,12 @@ export interface IDataGridState {
   leftBodyGroupingData?: {};
   bodyGroupingData?: {};
   bodyGroupingMap?: {};
-  footSumColumns?: typeStore.DataGridColumn[];
+  footSumColumns?: types.DataGridColumn[];
   footSumTable?: {}; // footSum의 출력레이아웃
   leftFootSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
   footSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-  styles?: typeStore.DataGridStyle;
-  options?: typeStore.DataGridOptions;
+  styles?: types.DataGridStyles;
+  options?: types.DataGridOptions;
 }
 
 export interface IDataGridStore extends IDataGridState {

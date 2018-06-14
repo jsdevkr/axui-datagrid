@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { typeStore } from '../stores';
+import { types } from '../stores';
 
 interface IProps {}
 interface IState {}

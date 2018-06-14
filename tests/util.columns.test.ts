@@ -1,4 +1,4 @@
-import { typeStore } from 'axui-datagrid/stores';
+import { types } from 'axui-datagrid/stores';
 import { makeHeaderTable } from 'axui-datagrid/utils/columns';
 
 test('test : makeHeaderTable', () => {
