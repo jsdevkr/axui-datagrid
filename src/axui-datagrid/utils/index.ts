@@ -6,4 +6,6 @@ export {
   getTableByStartEndColumnIndex,
 } from './columns';
 
-export { getPathValue, mergeAll } from './etc';
+export { calculateDimensions } from './dimension';
+
+export { debounce, throttle, getPathValue, mergeAll } from './etc';

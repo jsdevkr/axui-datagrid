@@ -1,5 +1,1 @@
-export {
-  default as DataGridStore,
-  IDataGridState,
-  IDataGridStore,
-} from './StoreProvider';
+export { default as DataGridStore, IDataGridStore } from './StoreProvider';

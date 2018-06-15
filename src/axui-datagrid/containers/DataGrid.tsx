@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { DataGridStore, IDataGridState } from '../providers';
+import * as ReactDOM from 'react-dom';
+
+import { DataGridStore } from '../providers';
 import { DataGridHeader } from '../components';
 import { types } from '../stores';
 import {
@@ -7,12 +9,16 @@ import {
   makeBodyRowTable,
   makeBodyRowMap,
   divideTableByFrozenColumnIndex,
+  calculateDimensions,
   getPathValue,
   mergeAll,
+  throttle,
 } from '../utils';
 
 interface IProps extends types.DataGrid {}
-interface IState extends IDataGridState {}
+interface IState extends types.DataGridState {
+  rootNode?: HTMLDivElement;
+}
 
 class DataGrid extends React.Component<IProps, IState> {
   static defaultColumnKeys: types.DataGridColumnKeys = {
@@ -79,7 +85,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnKeys: DataGrid.defaultColumnKeys,
   };
   static defaultStyles: types.DataGridStyles = {
-    calculatedHeight: -1,
+    calculatedHeight: null,
     asidePanelWidth: 0,
     frozenPanelWidth: 0,
     bodyTrHeight: 0,
@@ -107,8 +113,13 @@ class DataGrid extends React.Component<IProps, IState> {
     scrollerArrowSize: 0,
     pageButtonsContainerWidth: 0,
   };
+  static defaultThrottleWait = 100;
+
+  throttledUpdateDimensions: any;
 
   state = {
+    mounted: false, // 루트 엘리먼트 준비여부
+    calculatedStyles: false, // 루트 엘리먼트 준비가 되면 다음 렌더링전에 getDerivedStateFromProps에서 styles계산이 필요하진 판단하고 calculatedStyles=false이면 기본 스타일 계산
     data: [],
     filteredList: [],
     scrollLeft: 0,
@@ -139,24 +150,19 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   static getDerivedStateFromProps(props: IProps, state: IState) {
-    const { options, styles } = state;
+    const { options, styles, mounted, calculatedStyles } = state;
+
+    const optionColumnKeys =
+      (options && options.columnKeys) || DataGrid.defaultColumnKeys;
+
     let currentOptions: types.DataGridOptions = {
       ...(options || DataGrid.defaultOptions),
     };
     let currentStyles: types.DataGridStyles = {
       ...(styles || DataGrid.defaultStyles),
     };
-
-    const optionHeader = (options && options.header) || DataGrid.defaultHeader;
-    const optionBody = (options && options.body) || DataGrid.defaultBody;
-    const optionPage = (options && options.page) || DataGrid.defaultPage;
-    const optionScroll =
-      (options && options.scroller) || DataGrid.defaultScroller;
-    const optionColumnKeys =
-      (options && options.columnKeys) || DataGrid.defaultColumnKeys;
-
-    let changeState = false;
-    let newState: IState = { ...state };
+    let changeState = false; // 상태 변경이 필요한지 여부
+    let newState: IState = { ...state }; // 새 상태 변수 상태값을 복제해 가지로 변경된 상태를 담고 있음.
 
     if (props.data !== state.data) {
       changeState = true;
@@ -173,13 +179,12 @@ class DataGrid extends React.Component<IProps, IState> {
 
     if (JSON.stringify(props.options) !== state.optionsString) {
       changeState = true;
-      currentOptions = mergeAll(
+      newState.options = currentOptions = mergeAll(
         true,
         { ...DataGrid.defaultOptions },
         props.options,
       );
-
-      console.log(currentOptions);
+      newState.optionsString = JSON.stringify(props.options);
     }
 
     if (JSON.stringify(props.columns) !== state.columnsString) {
@@ -270,19 +275,60 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.columnsString = JSON.stringify(props.columns);
     }
 
+    if (mounted && !calculatedStyles) {
+      // 스타일 계산이 필요한 상황
+      changeState = true;
+      if (state.rootNode) {
+        let myStyles = calculateDimensions(state.rootNode, newState);
+      }
+    }
+
     return changeState ? newState : null;
+  }
+
+  componentDidMount() {
+    const rootNode = ReactDOM.findDOMNode(
+      this.refs['data-grid-ref'],
+    ) as HTMLDivElement;
+    this.throttledUpdateDimensions = throttle(
+      this.updateDimensions.bind(this),
+      DataGrid.defaultThrottleWait,
+    );
+    window.addEventListener('resize', this.throttledUpdateDimensions);
+
+    this.setState({
+      mounted: true,
+      rootNode,
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.throttledUpdateDimensions);
+
+    this.setState({
+      mounted: false,
+    });
+  }
+
+  updateDimensions() {
+    console.log('updateDimensions call');
   }
 
   public render() {
     // const { data: receiveData, options, columns, style, height } = this.props;
-    const param = {
-      data: this.state.data,
-    };
+    const { mounted } = this.state;
+    const param = { ...this.state };
 
     return (
       <DataGridStore.Provider {...param}>
-        <DataGridHeader />
-        <div>DATAGRID</div>
+        <div ref="data-grid-ref">
+          {mounted ? (
+            <>
+              <DataGridHeader />
+              <div>DATAGRID</div>
+            </>
+          ) : null}
+        </div>
       </DataGridStore.Provider>
     );
   }

@@ -31,7 +31,7 @@ class Basic extends React.Component<IProps, IState> {
           <DataGrid
             data={list}
             columns={columns}
-            options={{ asidePanelWidth: 900, columnKeys: {deleted: 'D'} }}
+            options={{ asidePanelWidth: 900, columnKeys: { deleted: 'D' } }}
           />
         </Segment>
       </>

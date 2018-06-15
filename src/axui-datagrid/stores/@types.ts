@@ -1,6 +1,6 @@
 import * as intfs from './@interfaces';
 
-export type ColTextAlign = string | 'left' | 'center' | 'right';
+export type ColTextAlign = string;
 
 export type DataGridSelection = intfs.IPosition;
 
@@ -94,33 +94,78 @@ export type DataGridOptions = {
 };
 
 export type DataGridStyles = {
-  calculatedHeight: number;
-  asidePanelWidth: number;
-  frozenPanelWidth: number;
-  bodyTrHeight: number;
-  elWidth: number;
-  elHeight: number;
-  CTInnerWidth: number;
-  CTInnerHeight: number;
-  rightPanelWidth: number;
-  headerHeight: number;
-  bodyHeight: number;
-  frozenPanelHeight: number;
-  footSumHeight: number;
-  pageHeight: number;
-  verticalScrollerWidth: number;
-  horizontalScrollerHeight: number;
-  scrollContentContainerHeight: number;
-  scrollContentHeight: number;
-  scrollContentContainerWidth: number;
-  scrollContentWidth: number;
-  verticalScrollerHeight: number;
-  verticalScrollBarHeight: number;
-  horizontalScrollerWidth: number;
-  horizontalScrollBarWidth: number;
-  scrollerPadding: number;
-  scrollerArrowSize: number;
-  pageButtonsContainerWidth: number;
+  calculatedHeight?: number | null;
+  asidePanelWidth?: number;
+  frozenPanelWidth?: number;
+  bodyTrHeight?: number;
+  elWidth?: number;
+  elHeight?: number;
+  CTInnerWidth?: number;
+  CTInnerHeight?: number;
+  rightPanelWidth?: number;
+  headerHeight?: number;
+  bodyHeight?: number;
+  frozenPanelHeight?: number;
+  footSumHeight?: number;
+  pageHeight?: number;
+  verticalScrollerWidth?: number;
+  horizontalScrollerHeight?: number;
+  scrollContentContainerHeight?: number;
+  scrollContentHeight?: number;
+  scrollContentContainerWidth?: number;
+  scrollContentWidth?: number;
+  verticalScrollerHeight?: number;
+  verticalScrollBarHeight?: number;
+  horizontalScrollerWidth?: number;
+  horizontalScrollBarWidth?: number;
+  scrollerPadding?: number;
+  scrollerArrowSize?: number;
+  pageButtonsContainerWidth?: number;
+};
+
+export type DataGridState = {
+  mounted?: boolean;
+  calculatedStyles?: boolean;
+  data?: any[];
+  filteredList?: any[];
+  height?: number;
+
+  columnsString?: string; // 원본과 비교를 위한 JSON.stringify 값
+  styleString?: string;
+  optionsString?: string;
+  onBeforeEvent?: () => void;
+  onAfterEvent?: () => void;
+
+  scrollLeft?: number;
+  scrollTop?: number;
+  focusedRow?: number;
+  focusedCol?: number;
+  colGroup?: DataGridColumn[];
+  colGroupMap?: {};
+  asideColGroup?: DataGridColumn[];
+  leftHeaderColGroup?: DataGridColumn[];
+  headerColGroup?: DataGridColumn[];
+  bodyGrouping?: DataGridColumn[];
+  headerTable?: DataGridColumnTableMap;
+  asideHeaderData?: {};
+  leftHeaderData?: {};
+  headerData?: {};
+  bodyRowTable?: DataGridColumnTableMap;
+  asideBodyRowData?: {};
+  leftBodyRowData?: {};
+  bodyRowData?: {};
+  bodyRowMap?: {};
+  bodyGroupingTable?: DataGridColumnTableMap;
+  asideBodyGroupingData?: {};
+  leftBodyGroupingData?: {};
+  bodyGroupingData?: {};
+  bodyGroupingMap?: {};
+  footSumColumns?: DataGridColumn[];
+  footSumTable?: {}; // footSum의 출력레이아웃
+  leftFootSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
+  footSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+  styles?: DataGridStyles;
+  options?: DataGridOptions;
 };
 
 export type DataGrid = {

@@ -1,51 +1,8 @@
 import * as React from 'react';
 import { types } from '../stores';
 
-export interface IDataGridState {
-  data?: any[];
-  filteredList?: any[];
-  height?: number;
-
-  columnsString?: string; // 원본과 비교를 위한 JSON.stringify 값
-  styleString?: string;
-  optionsString?: string;
-  onBeforeEvent?: () => void;
-  onAfterEvent?: () => void;
-
-  scrollLeft?: number;
-  scrollTop?: number;
-  focusedRow?: number;
-  focusedCol?: number;
-  colGroup?: types.DataGridColumn[];
-  colGroupMap?: {};
-  asideColGroup?: types.DataGridColumn[];
-  leftHeaderColGroup?: types.DataGridColumn[];
-  headerColGroup?: types.DataGridColumn[];
-  bodyGrouping?: types.DataGridColumn[];
-  headerTable?: types.DataGridColumnTableMap;
-  asideHeaderData?: {};
-  leftHeaderData?: {};
-  headerData?: {};
-  bodyRowTable?: types.DataGridColumnTableMap;
-  asideBodyRowData?: {};
-  leftBodyRowData?: {};
-  bodyRowData?: {};
-  bodyRowMap?: {};
-  bodyGroupingTable?: types.DataGridColumnTableMap;
-  asideBodyGroupingData?: {};
-  leftBodyGroupingData?: {};
-  bodyGroupingData?: {};
-  bodyGroupingMap?: {};
-  footSumColumns?: types.DataGridColumn[];
-  footSumTable?: {}; // footSum의 출력레이아웃
-  leftFootSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
-  footSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
-  styles?: types.DataGridStyles;
-  options?: types.DataGridOptions;
-}
-
-export interface IDataGridStore extends IDataGridState {
-  dispatch: (store: IDataGridState) => void;
+export interface IDataGridStore extends types.DataGridState {
+  dispatch: (store: types.DataGridState) => void;
 }
 
 const store: IDataGridStore = {
@@ -55,14 +12,14 @@ const store: IDataGridStore = {
 
 const { Provider, Consumer } = React.createContext(store);
 
-class StoreProvider extends React.Component<{}, IDataGridState> {
+class StoreProvider extends React.Component<{}, types.DataGridState> {
   state = {
     data: [],
   };
 
   static getDerivedStateFromProps(
     props: IDataGridStore,
-    state: IDataGridState,
+    state: types.DataGridState,
   ) {
     if (props.data !== state.data) {
       return {
@@ -74,8 +31,6 @@ class StoreProvider extends React.Component<{}, IDataGridState> {
   }
 
   render() {
-    // console.log(this.props, this.state.data);
-
     return (
       <Provider
         value={{

@@ -21,6 +21,8 @@ test('mergeAll', () => {
   );
   expect(mData2.b.sol).toBe('la');
 
+
+
   const mData3: any = mergeAll(
     true,
     { id: 'X', values: [1, 2, 3], styles: { width: 100 } },

@@ -58,4 +58,3 @@ export interface IDataGridColumnKeys {
   deleted?: string;
   disableSelection?: string;
 }
-

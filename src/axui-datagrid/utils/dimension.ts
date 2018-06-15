@@ -107,33 +107,19 @@ export function setColGroupWidth(
   return colGroup;
 }
 
-/**
- *
- * @param containerDOM
- * @param storeState
- * @param state
- * @param {any} colGroup
- * @param {any} options
- * @param {any} styles
- * @return {{styles: any; colGroup: any; leftHeaderColGroup; headerColGroup}}
- */
-
-/*
 export function calculateDimensions(
-  containerDOM: HTMLElement,
-  state: types.DataGridOptions,
-  options: types.DataGridOptions,
-  styles: types.DataGridStyles,
+  containerDOM: HTMLDivElement,
+  state: types.DataGridState,
 ) {
-  let list = storeState.list;
-  let footSumColumns = state.footSumColumns;
-  let headerTable = state.headerTable;
+  const { data, headerTable, footSumColumns, options, styles } = state;
 
-  styles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
+  let currentStyle: types.DataGridStyles = { ...styles };
 
-  styles.elWidth = getOuterWidth(containerDOM);
-  styles.elHeight = getOuterHeight(containerDOM);
+  currentStyle.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
+  currentStyle.elWidth = getOuterWidth(containerDOM);
+  currentStyle.elHeight = getOuterHeight(containerDOM);
 
+  /*
   styles.CTInnerWidth = styles.elWidth;
   styles.CTInnerHeight = styles.elHeight;
   styles.rightPanelWidth = 0;
@@ -273,5 +259,5 @@ export function calculateDimensions(
     leftHeaderColGroup: colGroup.slice(0, options.frozenColumnIndex),
     headerColGroup: colGroup.slice(options.frozenColumnIndex),
   };
+  */
 }
-*/
