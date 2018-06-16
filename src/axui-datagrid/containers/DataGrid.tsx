@@ -239,8 +239,19 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.headerTable.rows.forEach((row, ridx) => {
         row.cols.forEach((col, cidx) => {
           if (newState.colGroupMap && col.colIndex && newState.colGroup) {
-            newState.colGroupMap[col.colIndex] = { ...col };
-            newState.colGroup.push({ ...col });
+            const currentCol: types.DataGridCol = {
+              key: col.key,
+              label: col.label,
+              width: col.width,
+              align: col.align,
+              colSpan: col.colSpan,
+              rowSpan: col.rowSpan,
+              colIndex: col.colIndex,
+              rowIndex: col.rowIndex,
+              formatter: col.formatter,
+            };
+            newState.colGroupMap[col.colIndex] = currentCol;
+            newState.colGroup.push(currentCol);
           }
         });
       });

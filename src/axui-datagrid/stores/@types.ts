@@ -140,12 +140,12 @@ export type DataGridState = {
   scrollTop?: number;
   focusedRow?: number;
   focusedCol?: number;
-  colGroup?: DataGridColumn[];
+  colGroup?: DataGridCol[];
   colGroupMap?: {};
-  asideColGroup?: DataGridColumn[];
-  leftHeaderColGroup?: DataGridColumn[];
-  headerColGroup?: DataGridColumn[];
-  bodyGrouping?: DataGridColumn[];
+  asideColGroup?: DataGridCol[];
+  leftHeaderColGroup?: DataGridCol[];
+  headerColGroup?: DataGridCol[];
+  bodyGrouping?: DataGridCol[];
   headerTable?: DataGridColumnTableMap;
   asideHeaderData?: {};
   leftHeaderData?: {};
