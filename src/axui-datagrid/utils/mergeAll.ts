@@ -14,7 +14,8 @@ function mergeAll(deep: boolean, target: any, options: any) {
   let clone;
   let copyIsArray;
 
-  if (Array.isArray(target) && Array.isArray(options)) {
+  if (!options) {
+  } else if (Array.isArray(target) && Array.isArray(options)) {
     return [...target, ...options];
   } else {
     for (name of Object.keys(options)) {

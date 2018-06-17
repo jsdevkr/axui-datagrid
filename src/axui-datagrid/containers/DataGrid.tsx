@@ -21,6 +21,7 @@ interface IState extends types.DataGridState {
 }
 
 class DataGrid extends React.Component<IProps, IState> {
+  static defaultHeight: number = 400;
   static defaultColumnKeys: types.DataGridColumnKeys = {
     selected: '__selected__',
     modified: '__modified__',
@@ -238,7 +239,7 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.colGroupMap = {};
       newState.headerTable.rows.forEach((row, ridx) => {
         row.cols.forEach((col, cidx) => {
-          if (newState.colGroupMap && col.colIndex && newState.colGroup) {
+          if (newState.colGroupMap && newState.colGroup) {
             const currentCol: types.DataGridCol = {
               key: col.key,
               label: col.label,
@@ -250,7 +251,7 @@ class DataGrid extends React.Component<IProps, IState> {
               rowIndex: col.rowIndex,
               formatter: col.formatter,
             };
-            newState.colGroupMap[col.colIndex] = currentCol;
+            newState.colGroupMap[col.colIndex || 0] = currentCol;
             newState.colGroup.push(currentCol);
           }
         });
@@ -291,6 +292,7 @@ class DataGrid extends React.Component<IProps, IState> {
       changeState = true;
       if (state.rootNode) {
         let myStyles = calculateDimensions(state.rootNode, newState);
+        console.log(myStyles);
       }
     }
 
@@ -327,12 +329,20 @@ class DataGrid extends React.Component<IProps, IState> {
 
   public render() {
     // const { data: receiveData, options, columns, style, height } = this.props;
-    const { mounted } = this.state;
+    const { mounted, styles } = this.state;
     const param = { ...this.state };
+    let gridRootStyle = mergeAll(
+      true,
+      { height: this.props.height || DataGrid.defaultHeight },
+      this.props.style,
+    );
+    if (styles.calculatedHeight !== null) {
+      gridRootStyle.height = styles.calculatedHeight;
+    }
 
     return (
       <DataGridStore.Provider {...param}>
-        <div ref="data-grid-ref">
+        <div ref="data-grid-ref" style={gridRootStyle}>
           {mounted ? (
             <>
               <DataGridHeader />

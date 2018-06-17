@@ -59,6 +59,7 @@ function calculateDimensions(
   currentStyle.CTInnerHeight = currentStyle.elHeight = getOuterHeight(
     containerDOM,
   );
+
   currentStyle.rightPanelWidth = 0;
   currentStyle.pageHeight = 0;
 
@@ -110,10 +111,11 @@ function calculateDimensions(
   currentStyle.horizontalScrollerHeight = (() => {
     if (currentColGroup) {
       let totalColGroupWidth: number = currentColGroup.reduce(
-        (prev: any, curr) => {
-          return (prev._width || prev) + (curr._width || 0);
+        (prev: number, curr) => {
+          return prev + (curr._width || 0);
         },
-      ) as number;
+        0,
+      );
 
       // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
       let bodyWidth =
@@ -127,10 +129,11 @@ function calculateDimensions(
   })();
 
   currentStyle.scrollContentWidth = currentHeaderColGroup.reduce(
-    (prev: any, curr) => {
-      return (prev._width || prev) + curr._width;
+    (prev: number, curr) => {
+      return prev + (curr._width || 0);
     },
-  ) as number;
+    0,
+  );
 
   currentStyle.scrollContentContainerWidth =
     currentStyle.CTInnerWidth -
@@ -229,7 +232,7 @@ function calculateDimensions(
   }
 
   return {
-    styles: styles,
+    styles: currentStyle,
     colGroup: currentColGroup,
     leftHeaderColGroup: currentColGroup.slice(0, frozenColumnIndex),
     headerColGroup: currentHeaderColGroup,
