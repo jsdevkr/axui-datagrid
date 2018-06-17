@@ -1,5 +1,5 @@
 import { types } from 'axui-datagrid/stores';
-import { makeHeaderTable } from 'axui-datagrid/utils/columns';
+import { makeHeaderTable } from 'axui-datagrid/utils';
 
 test('test : makeHeaderTable', () => {
   const options: any = { columnMinWidth: 100 };
