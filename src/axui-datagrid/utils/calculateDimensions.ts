@@ -8,7 +8,7 @@ function calculateDimensions(
   state: types.DataGridState,
 ) {
   const {
-    data,
+    filteredList,
     colGroup,
     headerTable,
     footSumColumns,
@@ -46,7 +46,7 @@ function calculateDimensions(
   );
 
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
-  const dataLength = data ? data.length : 0;
+  const dataLength = filteredList ? filteredList.length : 0;
 
   let currentStyle: types.DataGridStyles = { ...styles };
   let currentColGroup: types.DataGridCol[] = [];

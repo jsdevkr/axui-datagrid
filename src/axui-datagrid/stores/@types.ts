@@ -138,6 +138,8 @@ export type DataGridState = {
 
   scrollLeft?: number;
   scrollTop?: number;
+  selectionRows?: {};
+  selectionCols?: {};
   focusedRow?: number;
   focusedCol?: number;
   colGroup?: DataGridCol[];

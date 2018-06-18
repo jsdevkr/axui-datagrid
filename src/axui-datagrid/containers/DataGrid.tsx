@@ -252,6 +252,7 @@ class DataGrid extends React.Component<IProps, IState> {
               formatter: col.formatter,
             };
             newState.colGroupMap[col.colIndex || 0] = currentCol;
+            // todo : colGroupMap에 colGroup의 참조가 있는데. 문제가 없는지 확인 필요.
             newState.colGroup.push(currentCol);
           }
         });
@@ -291,8 +292,12 @@ class DataGrid extends React.Component<IProps, IState> {
       // 스타일 계산이 필요한 상황
       changeState = true;
       if (state.rootNode) {
-        let myStyles = calculateDimensions(state.rootNode, newState);
-        console.log(myStyles);
+        const calculatedObject = calculateDimensions(state.rootNode, newState);
+        newState.styles = calculatedObject.styles;
+        newState.colGroup = calculatedObject.colGroup;
+        newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
+        newState.headerColGroup = calculatedObject.headerColGroup;
+        // 새롭게 계산된 _width 값은 위 3개의 오브젝트에만 저장.
       }
     }
 
@@ -332,7 +337,6 @@ class DataGrid extends React.Component<IProps, IState> {
     const { mounted, styles } = this.state;
     const param = { ...this.state };
     let gridRootStyle = mergeAll(
-      true,
       { height: this.props.height || DataGrid.defaultHeight },
       this.props.style,
     );
@@ -342,11 +346,14 @@ class DataGrid extends React.Component<IProps, IState> {
 
     return (
       <DataGridStore.Provider {...param}>
-        <div ref="data-grid-ref" style={gridRootStyle}>
+        <div
+          ref="data-grid-ref"
+          className={'axui-datagrid'}
+          style={gridRootStyle}
+        >
           {mounted ? (
             <>
               <DataGridHeader />
-              <div>DATAGRID</div>
             </>
           ) : null}
         </div>

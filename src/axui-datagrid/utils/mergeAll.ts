@@ -7,7 +7,12 @@ import { isPlainObject } from './common';
  * @param options
  * @return {any}
  */
-function mergeAll(deep: boolean, target: any, options: any) {
+function mergeAll(deep: any, target: any, options?: any) {
+  if (arguments.length === 2) {
+    target = arguments[0];
+    options = arguments[1];
+  }
+
   let name;
   let src;
   let copy;

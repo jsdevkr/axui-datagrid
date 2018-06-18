@@ -11,17 +11,14 @@ test('getPathValue', () => {
 });
 
 test('mergeAll', () => {
-  const mData1: any = mergeAll(true, { a: 1 }, { b: 2 });
+  const mData1: any = mergeAll({ a: 1 }, { b: 2 });
   expect(mData1.b).toBe(2);
 
   const mData2: any = mergeAll(
-    true,
     { a: 1, b: { tom: '99' } },
     { b: { sol: 'la' } },
   );
   expect(mData2.b.sol).toBe('la');
-
-
 
   const mData3: any = mergeAll(
     true,
