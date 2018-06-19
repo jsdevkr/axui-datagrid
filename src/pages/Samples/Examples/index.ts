@@ -1,2 +1,2 @@
-export { default as Basic } from './components/Basic';
-export { default as CustomizeStyle } from './components/CustomizeStyle';
+export { default as Basic } from './Basic';
+export { default as CustomizeStyle } from './CustomizeStyle';

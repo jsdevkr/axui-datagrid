@@ -48,35 +48,35 @@ function calculateDimensions(
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = filteredList ? filteredList.length : 0;
 
-  let currentStyle: types.DataGridStyles = { ...styles };
+  let currentStyles: types.DataGridStyles = { ...styles };
   let currentColGroup: types.DataGridCol[] = [];
   let currentHeaderColGroup: types.DataGridCol[] = [];
 
-  currentStyle.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
-  currentStyle.CTInnerWidth = currentStyle.elWidth = getOuterWidth(
+  currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
+  currentStyles.CTInnerWidth = currentStyles.elWidth = getOuterWidth(
     containerDOM,
   );
-  currentStyle.CTInnerHeight = currentStyle.elHeight = getOuterHeight(
+  currentStyles.CTInnerHeight = currentStyles.elHeight = getOuterHeight(
     containerDOM,
   );
 
-  currentStyle.rightPanelWidth = 0;
-  currentStyle.pageHeight = 0;
+  currentStyles.rightPanelWidth = 0;
+  currentStyles.pageHeight = 0;
 
   if (colGroup && options) {
     currentColGroup = setColGroupWidth(
       colGroup,
       {
         width:
-          currentStyle.elWidth -
-          (currentStyle.asidePanelWidth || 0 + optionsScrollerSize),
+          currentStyles.elWidth -
+          (currentStyles.asidePanelWidth || 0 + optionsScrollerSize),
       },
       options,
     );
     currentHeaderColGroup = currentColGroup.slice(frozenColumnIndex);
   }
 
-  currentStyle.frozenPanelWidth = ((_colGroup, endIndex) => {
+  currentStyles.frozenPanelWidth = ((_colGroup, endIndex) => {
     let width = 0;
     for (let i = 0, l = endIndex; i < l; i++) {
       if (_colGroup[i]) {
@@ -86,29 +86,30 @@ function calculateDimensions(
     return width;
   })(currentColGroup || [], frozenColumnIndex);
 
-  currentStyle.headerHeight = optionsHeaderDisplay
+  currentStyles.headerHeight = optionsHeaderDisplay
     ? headerTableRowsLength * optionsHeaderColumnHeight
     : 0;
 
-  currentStyle.frozenPanelHeight =
-    frozenRowIndex * (currentStyle.bodyTrHeight || 0);
+  currentStyles.frozenPanelHeight =
+    frozenRowIndex * (currentStyles.bodyTrHeight || 0);
 
-  currentStyle.footSumHeight =
+  currentStyles.footSumHeight =
     (footSumColumns ? footSumColumns.length : 0) *
-    (currentStyle.bodyTrHeight || 0);
+    (currentStyles.bodyTrHeight || 0);
 
-  currentStyle.pageHeight = optionsPageHeight;
-  currentStyle.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
+  currentStyles.pageHeight = optionsPageHeight;
+  currentStyles.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
 
-  currentStyle.verticalScrollerWidth =
-    currentStyle.elHeight -
-    currentStyle.headerHeight -
+  currentStyles.verticalScrollerWidth =
+    currentStyles.elHeight -
+    currentStyles.headerHeight -
     optionsPageHeight -
-    (currentStyle.footSumHeight < dataLength * (currentStyle.bodyTrHeight || 0)
+    (currentStyles.footSumHeight <
+    dataLength * (currentStyles.bodyTrHeight || 0)
       ? optionsScrollerSize
       : 0);
 
-  currentStyle.horizontalScrollerHeight = (() => {
+  currentStyles.horizontalScrollerHeight = (() => {
     if (currentColGroup) {
       let totalColGroupWidth: number = currentColGroup.reduce(
         (prev: number, curr) => {
@@ -119,120 +120,120 @@ function calculateDimensions(
 
       // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
       let bodyWidth =
-        currentStyle.elWidth -
-        (currentStyle.asidePanelWidth || 0) -
-        currentStyle.verticalScrollerWidth;
+        currentStyles.elWidth -
+        (currentStyles.asidePanelWidth || 0) -
+        currentStyles.verticalScrollerWidth;
       return totalColGroupWidth > bodyWidth ? optionsScrollerSize : 0;
     } else {
       return 0;
     }
   })();
 
-  currentStyle.scrollContentWidth = currentHeaderColGroup.reduce(
+  currentStyles.scrollContentWidth = currentHeaderColGroup.reduce(
     (prev: number, curr) => {
       return prev + (curr._width || 0);
     },
     0,
   );
 
-  currentStyle.scrollContentContainerWidth =
-    currentStyle.CTInnerWidth -
-    (currentStyle.asidePanelWidth || 0) -
-    currentStyle.frozenPanelWidth -
-    currentStyle.rightPanelWidth -
-    currentStyle.verticalScrollerWidth;
+  currentStyles.scrollContentContainerWidth =
+    currentStyles.CTInnerWidth -
+    (currentStyles.asidePanelWidth || 0) -
+    currentStyles.frozenPanelWidth -
+    currentStyles.rightPanelWidth -
+    currentStyles.verticalScrollerWidth;
 
-  if (Number(currentStyle.horizontalScrollerHeight) > 0) {
-    currentStyle.verticalScrollerWidth =
-      currentStyle.elHeight -
-      currentStyle.headerHeight -
-      (currentStyle.pageHeight || 0) -
-      currentStyle.footSumHeight -
-      ((currentStyle.horizontalScrollerHeight || 0) <
-      dataLength * (currentStyle.bodyTrHeight || 0)
+  if (Number(currentStyles.horizontalScrollerHeight) > 0) {
+    currentStyles.verticalScrollerWidth =
+      currentStyles.elHeight -
+      currentStyles.headerHeight -
+      (currentStyles.pageHeight || 0) -
+      currentStyles.footSumHeight -
+      ((currentStyles.horizontalScrollerHeight || 0) <
+      dataLength * (currentStyles.bodyTrHeight || 0)
         ? optionsScrollerSize
         : 0);
   }
 
-  currentStyle.CTInnerHeight =
-    currentStyle.elHeight - (currentStyle.pageHeight || 0);
+  currentStyles.CTInnerHeight =
+    currentStyles.elHeight - (currentStyles.pageHeight || 0);
 
   // get bodyHeight
-  currentStyle.bodyHeight =
-    currentStyle.CTInnerHeight - currentStyle.headerHeight;
+  currentStyles.bodyHeight =
+    currentStyles.CTInnerHeight - currentStyles.headerHeight;
 
   // 스크롤컨텐츠의 컨테이너 높이.
-  currentStyle.scrollContentContainerHeight =
-    currentStyle.bodyHeight -
-    currentStyle.frozenPanelHeight -
-    currentStyle.footSumHeight;
+  currentStyles.scrollContentContainerHeight =
+    currentStyles.bodyHeight -
+    currentStyles.frozenPanelHeight -
+    currentStyles.footSumHeight;
 
-  currentStyle.scrollContentHeight =
-    (currentStyle.bodyTrHeight || 0) *
+  currentStyles.scrollContentHeight =
+    (currentStyles.bodyTrHeight || 0) *
     (dataLength > frozenRowIndex ? dataLength - frozenRowIndex : 0);
 
   if (optionsScrollerDisabledVerticalScroll) {
-    currentStyle.calculatedHeight =
-      dataLength * (currentStyle.bodyTrHeight || 0) +
-      currentStyle.headerHeight +
-      (currentStyle.pageHeight || 0);
+    currentStyles.calculatedHeight =
+      dataLength * (currentStyles.bodyTrHeight || 0) +
+      currentStyles.headerHeight +
+      (currentStyles.pageHeight || 0);
 
-    currentStyle.bodyHeight =
-      currentStyle.calculatedHeight -
-      currentStyle.headerHeight -
-      (currentStyle.pageHeight || 0);
+    currentStyles.bodyHeight =
+      currentStyles.calculatedHeight -
+      currentStyles.headerHeight -
+      (currentStyles.pageHeight || 0);
 
-    currentStyle.verticalScrollerWidth = 0;
+    currentStyles.verticalScrollerWidth = 0;
 
-    currentStyle.CTInnerWidth = currentStyle.elWidth;
+    currentStyles.CTInnerWidth = currentStyles.elWidth;
 
-    currentStyle.scrollContentContainerWidth =
-      currentStyle.CTInnerWidth -
-      (currentStyle.asidePanelWidth || 0) -
-      currentStyle.frozenPanelWidth -
-      currentStyle.rightPanelWidth;
+    currentStyles.scrollContentContainerWidth =
+      currentStyles.CTInnerWidth -
+      (currentStyles.asidePanelWidth || 0) -
+      currentStyles.frozenPanelWidth -
+      currentStyles.rightPanelWidth;
 
-    currentStyle.scrollContentContainerHeight =
-      currentStyle.scrollContentHeight;
+    currentStyles.scrollContentContainerHeight =
+      currentStyles.scrollContentHeight;
   }
 
-  currentStyle.verticalScrollerHeight =
-    currentStyle.elHeight -
-    (currentStyle.pageHeight || 0) -
+  currentStyles.verticalScrollerHeight =
+    currentStyles.elHeight -
+    (currentStyles.pageHeight || 0) -
     optionsScrollerPadding * 2 -
     optionsScrollerArrowSize;
 
-  currentStyle.horizontalScrollerWidth =
-    currentStyle.elWidth -
-    currentStyle.verticalScrollerWidth -
-    (currentStyle.pageButtonsContainerWidth || 0) -
+  currentStyles.horizontalScrollerWidth =
+    currentStyles.elWidth -
+    currentStyles.verticalScrollerWidth -
+    (currentStyles.pageButtonsContainerWidth || 0) -
     optionsScrollerPadding * 2 -
     optionsScrollerArrowSize;
 
-  currentStyle.scrollerPadding = optionsScrollerPadding;
-  currentStyle.scrollerArrowSize = optionsScrollerArrowSize;
-  currentStyle.verticalScrollBarHeight = currentStyle.scrollContentHeight
-    ? currentStyle.scrollContentContainerHeight *
-      currentStyle.verticalScrollerHeight /
-      currentStyle.scrollContentHeight
+  currentStyles.scrollerPadding = optionsScrollerPadding;
+  currentStyles.scrollerArrowSize = optionsScrollerArrowSize;
+  currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
+    ? currentStyles.scrollContentContainerHeight *
+      currentStyles.verticalScrollerHeight /
+      currentStyles.scrollContentHeight
     : 0;
 
-  if (optionsScrollerBarMinSize > currentStyle.verticalScrollBarHeight) {
-    currentStyle.verticalScrollBarHeight = optionsScrollerBarMinSize;
+  if (optionsScrollerBarMinSize > currentStyles.verticalScrollBarHeight) {
+    currentStyles.verticalScrollBarHeight = optionsScrollerBarMinSize;
   }
 
-  currentStyle.horizontalScrollBarWidth = currentStyle.scrollContentWidth
-    ? currentStyle.scrollContentContainerWidth *
-      currentStyle.horizontalScrollerWidth /
-      currentStyle.scrollContentWidth
+  currentStyles.horizontalScrollBarWidth = currentStyles.scrollContentWidth
+    ? currentStyles.scrollContentContainerWidth *
+      currentStyles.horizontalScrollerWidth /
+      currentStyles.scrollContentWidth
     : 0;
 
-  if (optionsScrollerBarMinSize > currentStyle.horizontalScrollBarWidth) {
-    currentStyle.horizontalScrollBarWidth = optionsScrollerBarMinSize;
+  if (optionsScrollerBarMinSize > currentStyles.horizontalScrollBarWidth) {
+    currentStyles.horizontalScrollBarWidth = optionsScrollerBarMinSize;
   }
 
   return {
-    styles: currentStyle,
+    styles: currentStyles,
     colGroup: currentColGroup,
     leftHeaderColGroup: currentColGroup.slice(0, frozenColumnIndex),
     headerColGroup: currentHeaderColGroup,

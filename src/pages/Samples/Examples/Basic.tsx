@@ -17,10 +17,26 @@ class Basic extends React.Component<IProps, IState> {
     const list = [{ no: 1, title: '제목' }];
     const columns = [
       {
-        key: 'id',
+        key: 'no',
         width: 60,
         label: 'ID',
         align: 'left',
+      },
+      {
+        key: 'title',
+        width: 200,
+        label: '타이틀',
+      },
+      {
+        key: 'no',
+        width: 60,
+        label: 'ID',
+        align: 'left',
+      },
+      {
+        key: 'title',
+        width: 200,
+        label: '타이틀',
       },
     ];
     return (
@@ -31,7 +47,11 @@ class Basic extends React.Component<IProps, IState> {
           <DataGrid
             data={list}
             columns={columns}
-            options={{ asidePanelWidth: 900, columnKeys: { deleted: 'D' } }}
+            options={{
+              showLineNumber: true,
+              asidePanelWidth: 900,
+              columnKeys: { deleted: 'D' },
+            }}
           />
         </Segment>
       </>

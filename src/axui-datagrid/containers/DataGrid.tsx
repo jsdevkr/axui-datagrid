@@ -185,7 +185,10 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.optionsString = JSON.stringify(props.options);
     }
 
-    if (JSON.stringify(props.columns) !== state.columnsString) {
+    if (
+      JSON.stringify(props.columns) !== state.columnsString ||
+      JSON.stringify(props.options) !== state.optionsString
+    ) {
       changeState = true;
 
       const frozenColumnIndex: number = getPathValue(
@@ -279,10 +282,12 @@ class DataGrid extends React.Component<IProps, IState> {
 
       // styles
       currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
+
       currentStyles.bodyTrHeight =
         newState.bodyRowTable.rows.length * columnHeight;
 
       newState.columnsString = JSON.stringify(props.columns);
+      newState.styles = currentStyles;
     }
 
     if (mounted && !calculatedStyles) {

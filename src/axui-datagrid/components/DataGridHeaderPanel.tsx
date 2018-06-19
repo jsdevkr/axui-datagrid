@@ -27,7 +27,26 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       headerColGroup,
       headerData,
       options,
+      styles,
     } = this.props;
+
+    // aside-header가 필요하지 않은지 확인
+    if (
+      panelName === 'aside-header' &&
+      styles &&
+      styles.asidePanelWidth === 0
+    ) {
+      return null;
+    }
+
+    // left-header가 필요하지 않은지 확인
+    if (
+      panelName === 'left-header' &&
+      options &&
+      options.frozenColumnIndex === 0
+    ) {
+      return null;
+    }
 
     const optionsHeader = getPathValue(options, ['header']);
 

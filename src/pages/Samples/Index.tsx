@@ -13,7 +13,7 @@ import {
 } from 'semantic-ui-react';
 import { CodeViewer } from 'components';
 
-const basicRaw = require('!raw-loader!./Examples/components/Basic.tsx');
+const basicRaw = require('!raw-loader!./Examples/Basic.tsx');
 
 interface IProps {}
 interface IState {}
