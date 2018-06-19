@@ -41,6 +41,7 @@ export interface IDataGridCol extends ICol {
   _ex?: number;
   _sx?: number;
   _width?: number;
+  columnAttr? : string;
 }
 
 export interface IDataGridColumn extends ICol {

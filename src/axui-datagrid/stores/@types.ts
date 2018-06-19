@@ -128,6 +128,7 @@ export type DataGridState = {
   calculatedStyles?: boolean;
   data?: any[];
   filteredList?: any[];
+  sortInfo?: {};
   height?: number;
 
   columnsString?: string; // 원본과 비교를 위한 JSON.stringify 값
@@ -149,9 +150,9 @@ export type DataGridState = {
   headerColGroup?: DataGridCol[];
   bodyGrouping?: DataGridCol[];
   headerTable?: DataGridColumnTableMap;
-  asideHeaderData?: {};
-  leftHeaderData?: {};
-  headerData?: {};
+  asideHeaderData?: DataGridColumnTableMap;
+  leftHeaderData?: DataGridColumnTableMap;
+  headerData?: DataGridColumnTableMap;
   bodyRowTable?: DataGridColumnTableMap;
   asideBodyRowData?: {};
   leftBodyRowData?: {};

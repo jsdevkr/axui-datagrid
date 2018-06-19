@@ -8,6 +8,9 @@ export {
 export { default as DataGridHeader } from './DataGridHeader';
 export { default as DataGridHeaderCell } from './DataGridHeaderCell';
 export { default as DataGridHeaderPanel } from './DataGridHeaderPanel';
+export {
+  default as DataGridHeaderColumnResizer,
+} from './DataGridHeaderColumnResizer';
 export { default as DataGridPage } from './DataGridPage';
 export { default as DataGridEvents } from './DataGridEvents';
 export { default as DataGridScroll } from './DataGridScroll';
