@@ -1,5 +1,5 @@
 import { types } from 'axui-datagrid/stores';
-import { getPathValue, mergeAll } from 'axui-datagrid/utils';
+import { getPathValue, mergeAll, arrayFromRange } from 'axui-datagrid/utils';
 
 test('getPathValue', () => {
   const tgObj = { a: 1, b: { c: 2 }, arr: [1, 2, 3, 4] };
@@ -18,7 +18,7 @@ test('mergeAll', () => {
     { a: 1, b: { tom: '99' } },
     { b: { sol: 'la' } },
   );
-  expect(mData2.b.sol).toBe('la');
+  expect(mData2.b).toEqual({ tom: '99', sol: 'la' });
 
   const mData3: any = mergeAll(
     true,
@@ -28,4 +28,8 @@ test('mergeAll', () => {
 
   expect(mData3.styles.width * mData3.styles.height).toBe(200 * 100);
   expect(mData3.values.length).toBe(5);
+});
+
+test('arrayFromRange', () => {
+  expect(arrayFromRange(3, 5)).toEqual([3, 4, 5]);
 });

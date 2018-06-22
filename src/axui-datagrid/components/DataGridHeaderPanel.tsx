@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { getPathValue } from '../utils';
 import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
@@ -20,14 +19,14 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       panelName,
       style,
       onMouseDownColumnResizer,
-      asideColGroup,
-      asideHeaderData,
-      leftHeaderColGroup,
-      leftHeaderData,
-      headerColGroup,
-      headerData,
-      options,
-      styles,
+      asideColGroup = [],
+      asideHeaderData = { rows: [{ cols: [] }] },
+      leftHeaderColGroup = [],
+      leftHeaderData = { rows: [{ cols: [] }] },
+      headerColGroup = [],
+      headerData = { rows: [{ cols: [] }] },
+      options = {},
+      styles = {},
     } = this.props;
 
     // aside-header가 필요하지 않은지 확인
@@ -48,26 +47,29 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       return null;
     }
 
-    const optionsHeader = getPathValue(options, ['header']);
-
+    const { header: optionsHeader = {} } = options;
+    const {
+      columnHeight: optionsHeaderColumnHeight = 0,
+      columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
+    } = optionsHeader;
     const colGroup: types.DataGridCol[] = (() => {
       switch (panelName) {
         case 'aside-header':
-          return asideColGroup || [];
+          return asideColGroup;
         case 'left-header':
-          return leftHeaderColGroup || [];
+          return leftHeaderColGroup;
         default:
-          return headerColGroup || [];
+          return headerColGroup;
       }
     })();
     const bodyRow: types.DataGridColumnTableMap = (() => {
       switch (panelName) {
         case 'aside-header':
-          return asideHeaderData || { rows: [{ cols: [] }] };
+          return asideHeaderData;
         case 'left-header':
-          return leftHeaderData || { rows: [{ cols: [] }] };
+          return leftHeaderData;
         default:
-          return headerData || { rows: [{ cols: [] }] };
+          return headerData;
       }
     })();
 
@@ -102,8 +104,8 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
             return null;
           }
           let resizerHeight =
-            optionsHeader.columnHeight * bodyRow.rows.length -
-            optionsHeader.columnBorderWidth;
+            optionsHeaderColumnHeight * bodyRow.rows.length -
+            optionsHeaderColumnBorderWidth;
 
           let resizer: any,
             resizerLeft = 0,

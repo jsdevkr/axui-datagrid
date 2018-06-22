@@ -12,5 +12,16 @@ export { default as findParentNode } from './findParentNode';
 export { default as getPathValue } from './getPathValue';
 export { default as mergeAll } from './mergeAll';
 export { default as classNames } from './classNames';
+export { default as arrayFromRange } from './arrayFromRange';
+export { PrintDate, printDate } from './PrintDate';
 
-export { debounce, throttle, getMousePosition } from './common';
+export {
+  debounce,
+  throttle,
+  getMousePosition,
+  padLeft,
+  padRight,
+  isDate,
+  isFunction,
+  isNumber,
+} from './common';

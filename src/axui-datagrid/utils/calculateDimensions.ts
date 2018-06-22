@@ -1,4 +1,3 @@
-import getPathValue from './getPathValue';
 import { getOuterWidth, getOuterHeight } from './getWidthHeight';
 import { types } from '../stores';
 import setColGroupWidth from './setColGroupWidth';
@@ -8,42 +7,36 @@ function calculateDimensions(
   state: types.DataGridState,
 ) {
   const {
-    filteredList,
-    colGroup,
+    filteredList = [],
+    colGroup = [],
     headerTable,
     footSumColumns,
-    options,
-    styles,
+    options = {},
+    styles = {},
   } = state;
 
-  const optionsHeader = options ? options.header : {};
-  const optionsScroller = options ? options.scroller : {};
-  const optionsPage = options ? options.page : {};
-  const frozenColumnIndex = getPathValue(options, ['frozenColumnIndex'], 0);
-  const frozenRowIndex = getPathValue(options, ['frozenRowIndex'], 0);
-  const optionsHeaderDisplay = getPathValue(optionsHeader, ['display'], true);
-  const optionsHeaderColumnHeight = getPathValue(optionsHeader, [
-    'columnHeight',
-  ]);
-  const optionsPageHeight = getPathValue(optionsPage, ['height'], 0);
-  const optionsPageButtonsContainerWidth = getPathValue(optionsPage, [
-    'buttonsContainerWidth',
-  ]);
-  const optionsScrollerSize = getPathValue(optionsScroller, ['size'], 0);
-  const optionsScrollerDisabledVerticalScroll = getPathValue(optionsScroller, [
-    'disabledVerticalScroll',
-  ]);
-  const optionsScrollerPadding = getPathValue(optionsScroller, ['padding'], 0);
-  const optionsScrollerArrowSize = getPathValue(
-    optionsScroller,
-    ['arrowSize'],
-    0,
-  );
-  const optionsScrollerBarMinSize = getPathValue(
-    optionsScroller,
-    ['barMinSize'],
-    0,
-  );
+  const {
+    header: optionsHeader = {},
+    scroller: optionsScroller = {},
+    page: optionsPage = {},
+  } = options;
+
+  const { frozenColumnIndex = 0, frozenRowIndex = 0 } = options || {};
+  const {
+    display: optionsHeaderDisplay = true,
+    columnHeight: optionsHeaderColumnHeight = 0,
+  } = optionsHeader;
+  const {
+    height: optionsPageHeight = 0,
+    buttonsContainerWidth: optionsPageButtonsContainerWidth = 0,
+  } = optionsPage;
+  const {
+    size: optionsScrollerSize = 0,
+    disabledVerticalScroll: optionsScrollerDisabledVerticalScroll,
+    padding: optionsScrollerPadding = 0,
+    arrowSize: optionsScrollerArrowSize = 0,
+    barMinSize: optionsScrollerBarMinSize = 0,
+  } = optionsScroller;
 
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = filteredList ? filteredList.length : 0;
@@ -62,19 +55,24 @@ function calculateDimensions(
 
   currentStyles.rightPanelWidth = 0;
   currentStyles.pageHeight = 0;
+  currentStyles.asidePanelWidth = currentStyles.asidePanelWidth || 0;
+  currentStyles.bodyTrHeight = currentStyles.bodyTrHeight || 0;
+  currentStyles.horizontalScrollerHeight =
+    currentStyles.horizontalScrollerHeight || 0;
+  currentStyles.pageButtonsContainerWidth =
+    currentStyles.pageButtonsContainerWidth || 0;
 
-  if (colGroup && options) {
-    currentColGroup = setColGroupWidth(
-      colGroup,
-      {
-        width:
-          currentStyles.elWidth -
-          (currentStyles.asidePanelWidth || 0 + optionsScrollerSize),
-      },
-      options,
-    );
-    currentHeaderColGroup = currentColGroup.slice(frozenColumnIndex);
-  }
+  currentColGroup = setColGroupWidth(
+    colGroup,
+    {
+      width:
+        currentStyles.elWidth -
+        currentStyles.asidePanelWidth +
+        optionsScrollerSize,
+    },
+    options,
+  );
+  currentHeaderColGroup = currentColGroup.slice(frozenColumnIndex);
 
   currentStyles.frozenPanelWidth = ((_colGroup, endIndex) => {
     let width = 0;
@@ -84,18 +82,16 @@ function calculateDimensions(
       }
     }
     return width;
-  })(currentColGroup || [], frozenColumnIndex);
+  })(currentColGroup, frozenColumnIndex);
 
   currentStyles.headerHeight = optionsHeaderDisplay
     ? headerTableRowsLength * optionsHeaderColumnHeight
     : 0;
 
-  currentStyles.frozenPanelHeight =
-    frozenRowIndex * (currentStyles.bodyTrHeight || 0);
+  currentStyles.frozenPanelHeight = frozenRowIndex * currentStyles.bodyTrHeight;
 
   currentStyles.footSumHeight =
-    (footSumColumns ? footSumColumns.length : 0) *
-    (currentStyles.bodyTrHeight || 0);
+    (footSumColumns ? footSumColumns.length : 0) * currentStyles.bodyTrHeight;
 
   currentStyles.pageHeight = optionsPageHeight;
   currentStyles.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
@@ -104,8 +100,7 @@ function calculateDimensions(
     currentStyles.elHeight -
     currentStyles.headerHeight -
     optionsPageHeight -
-    (currentStyles.footSumHeight <
-    dataLength * (currentStyles.bodyTrHeight || 0)
+    (currentStyles.footSumHeight < dataLength * currentStyles.bodyTrHeight
       ? optionsScrollerSize
       : 0);
 
@@ -121,7 +116,7 @@ function calculateDimensions(
       // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
       let bodyWidth =
         currentStyles.elWidth -
-        (currentStyles.asidePanelWidth || 0) -
+        currentStyles.asidePanelWidth -
         currentStyles.verticalScrollerWidth;
       return totalColGroupWidth > bodyWidth ? optionsScrollerSize : 0;
     } else {
@@ -138,25 +133,25 @@ function calculateDimensions(
 
   currentStyles.scrollContentContainerWidth =
     currentStyles.CTInnerWidth -
-    (currentStyles.asidePanelWidth || 0) -
+    currentStyles.asidePanelWidth -
     currentStyles.frozenPanelWidth -
     currentStyles.rightPanelWidth -
     currentStyles.verticalScrollerWidth;
 
-  if (Number(currentStyles.horizontalScrollerHeight) > 0) {
+  if (currentStyles.horizontalScrollerHeight > 0) {
     currentStyles.verticalScrollerWidth =
       currentStyles.elHeight -
       currentStyles.headerHeight -
-      (currentStyles.pageHeight || 0) -
+      currentStyles.pageHeight -
       currentStyles.footSumHeight -
-      ((currentStyles.horizontalScrollerHeight || 0) <
-      dataLength * (currentStyles.bodyTrHeight || 0)
+      (currentStyles.horizontalScrollerHeight <
+      dataLength * currentStyles.bodyTrHeight
         ? optionsScrollerSize
         : 0);
   }
 
   currentStyles.CTInnerHeight =
-    currentStyles.elHeight - (currentStyles.pageHeight || 0);
+    currentStyles.elHeight - currentStyles.pageHeight;
 
   // get bodyHeight
   currentStyles.bodyHeight =
@@ -169,19 +164,19 @@ function calculateDimensions(
     currentStyles.footSumHeight;
 
   currentStyles.scrollContentHeight =
-    (currentStyles.bodyTrHeight || 0) *
+    currentStyles.bodyTrHeight *
     (dataLength > frozenRowIndex ? dataLength - frozenRowIndex : 0);
 
   if (optionsScrollerDisabledVerticalScroll) {
     currentStyles.calculatedHeight =
-      dataLength * (currentStyles.bodyTrHeight || 0) +
+      dataLength * currentStyles.bodyTrHeight +
       currentStyles.headerHeight +
-      (currentStyles.pageHeight || 0);
+      currentStyles.pageHeight;
 
     currentStyles.bodyHeight =
       currentStyles.calculatedHeight -
       currentStyles.headerHeight -
-      (currentStyles.pageHeight || 0);
+      currentStyles.pageHeight;
 
     currentStyles.verticalScrollerWidth = 0;
 
@@ -189,7 +184,7 @@ function calculateDimensions(
 
     currentStyles.scrollContentContainerWidth =
       currentStyles.CTInnerWidth -
-      (currentStyles.asidePanelWidth || 0) -
+      currentStyles.asidePanelWidth -
       currentStyles.frozenPanelWidth -
       currentStyles.rightPanelWidth;
 
@@ -199,14 +194,14 @@ function calculateDimensions(
 
   currentStyles.verticalScrollerHeight =
     currentStyles.elHeight -
-    (currentStyles.pageHeight || 0) -
+    currentStyles.pageHeight -
     optionsScrollerPadding * 2 -
     optionsScrollerArrowSize;
 
   currentStyles.horizontalScrollerWidth =
     currentStyles.elWidth -
     currentStyles.verticalScrollerWidth -
-    (currentStyles.pageButtonsContainerWidth || 0) -
+    currentStyles.pageButtonsContainerWidth -
     optionsScrollerPadding * 2 -
     optionsScrollerArrowSize;
 

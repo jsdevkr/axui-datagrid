@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { types } from '../stores';
-import { DataGrid } from '../containers';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import DataGridHeaderPanel from './DataGridHeaderPanel';
@@ -66,32 +65,34 @@ class DataGridHeader extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { scrollLeft } = this.props;
-    const styles = this.props.styles || DataGrid.defaultStyles;
-    const headerHeight = (styles && styles.headerHeight) || 0;
+    const { scrollLeft = 0, styles = {} } = this.props;
+    const {
+      CTInnerWidth = 0,
+      headerHeight = 0,
+      asidePanelWidth = 0,
+      frozenPanelWidth = 0,
+      rightPanelWidth = 0,
+    } = styles;
     const { columnResizing, columnResizerLeft } = this.state;
 
     let asideHeaderPanelStyle = {
       left: 0,
-      width: styles.asidePanelWidth,
-      height: styles.headerHeight,
+      width: asidePanelWidth,
+      height: headerHeight,
     };
     let leftHeaderPanelStyle = {
-      left: styles.asidePanelWidth,
-      width: styles.frozenPanelWidth,
-      height: styles.headerHeight,
+      left: asidePanelWidth,
+      width: frozenPanelWidth,
+      height: headerHeight,
     };
     let headerPanelStyle = {
-      left: (styles.frozenPanelWidth || 0) + (styles.asidePanelWidth || 0),
+      left: frozenPanelWidth + asidePanelWidth,
       width:
-        (styles.CTInnerWidth || 0) -
-        (styles.asidePanelWidth || 0) -
-        (styles.frozenPanelWidth || 0) -
-        (styles.rightPanelWidth || 0),
-      height: styles.headerHeight,
+        CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+      height: headerHeight,
     };
     let headerScrollStyle = {
-      height: styles.headerHeight,
+      height: headerHeight,
       left: scrollLeft,
     };
 

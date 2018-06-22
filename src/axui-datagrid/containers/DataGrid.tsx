@@ -2,7 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { DataGridStore } from '../providers';
-import { DataGridHeader } from '../components';
+import {
+  DataGridHeader,
+  DataGridBody,
+  DataGridColumnFilter,
+  DataGridScroll,
+  DataGridPage,
+} from '../components';
 import { types } from '../stores';
 import {
   makeHeaderTable,
@@ -18,6 +24,7 @@ import {
 interface IProps extends types.DataGrid {}
 interface IState extends types.DataGridState {
   rootNode?: HTMLDivElement;
+  clipBoardNode?: HTMLTextAreaElement;
 }
 
 class DataGrid extends React.Component<IProps, IState> {
@@ -121,28 +128,10 @@ class DataGrid extends React.Component<IProps, IState> {
   state = {
     mounted: false, // 루트 엘리먼트 준비여부
     calculatedStyles: false, // 루트 엘리먼트 준비가 되면 다음 렌더링전에 getDerivedStateFromProps에서 styles계산이 필요하진 판단하고 calculatedStyles=false이면 기본 스타일 계산
-    data: [],
-    filteredList: [],
     scrollLeft: 0,
     scrollTop: 0,
-    selectionRows: {},
-    selectionCols: {},
     focusedRow: -1,
     focusedCol: -1,
-
-    colGroup: [],
-    colGroupMap: {},
-    asideColGroup: [],
-    leftHeaderColGroup: [],
-    headerColGroup: [],
-    asideBodyRowData: {},
-    leftBodyRowData: {},
-    bodyRowData: {},
-    bodyRowMap: {},
-    asideBodyGroupingData: {},
-    leftBodyGroupingData: {},
-    bodyGroupingData: {},
-    bodyGroupingMap: {},
     options: DataGrid.defaultOptions,
     styles: DataGrid.defaultStyles,
   };
@@ -308,8 +297,12 @@ class DataGrid extends React.Component<IProps, IState> {
 
   componentDidMount() {
     const rootNode = ReactDOM.findDOMNode(
-      this.refs['data-grid-ref'],
+      this.refs['datagrid-ref'],
     ) as HTMLDivElement;
+    const clipBoardNode = ReactDOM.findDOMNode(
+      this.refs['datagrid-clipboard'],
+    ) as HTMLTextAreaElement;
+
     this.throttledUpdateDimensions = throttle(
       this.updateDimensions.bind(this),
       DataGrid.defaultThrottleWait,
@@ -319,6 +312,7 @@ class DataGrid extends React.Component<IProps, IState> {
     this.setState({
       mounted: true,
       rootNode,
+      clipBoardNode,
     });
   }
 
@@ -349,13 +343,17 @@ class DataGrid extends React.Component<IProps, IState> {
     return (
       <DataGridStore.Provider {...param}>
         <div
-          ref="data-grid-ref"
+          ref="datagrid-ref"
           className={'axui-datagrid'}
           style={gridRootStyle}
         >
+          <div className={'axui-datagrid-clip-board'}>
+            <textarea ref="datagrid-clipboard" />
+          </div>
           {mounted ? (
             <>
               <DataGridHeader />
+              <DataGridBody />
             </>
           ) : null}
         </div>

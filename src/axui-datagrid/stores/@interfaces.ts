@@ -26,28 +26,34 @@ export interface IDataGridEditingCell {
 }
 
 export interface IDataGridFormatterData {
-  list: any;
-  item: any;
-  index: number;
-  key: string;
-  value: any;
-  options: any;
+  data?: any;
+  item?: any;
+  index?: number;
+  key?: string;
+  value?: any;
+  options?: any;
+}
+
+export type formatterFunction = (formatterData: types.DataGridFormatterData) => any;
+
+export interface IDataGridFormatter {
+  [key: string]: formatterFunction;
 }
 
 export interface IDataGridCol extends ICol {
   colIndex?: number;
   rowIndex?: number;
-  formatter?: string | Function;
+  formatter?: formatterFunction | string;
   _ex?: number;
   _sx?: number;
   _width?: number;
-  columnAttr? : string;
+  columnAttr?: string;
 }
 
 export interface IDataGridColumn extends ICol {
   colIndex?: number;
   rowIndex?: number;
-  formatter?: () => void | string;
+  formatter?: formatterFunction | string;
   hidden?: boolean;
   columns?: IDataGridColumn[];
   depth?: number;

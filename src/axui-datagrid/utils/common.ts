@@ -278,6 +278,9 @@ export function throttle(func: any, wait: any, options?: any) {
   });
 }
 
+export const isDate = (value: any) =>
+  isObjectLike(value) && baseGetTag(value) === '[object Date]';
+
 /**
  *
  * @param e
@@ -291,4 +294,17 @@ export function getMousePosition(e: any) {
     x: mouseObj.clientX,
     y: mouseObj.clientY,
   };
+}
+
+function times(s: any, count: number) {
+  return count < 1 ? '' : new Array(count + 1).join(s);
+}
+
+export function padLeft(s: any, l: number = 2, padder: string = '0'): string {
+  s = s.toString();
+  return times(padder || '0', l - s.length) + s;
+}
+
+export function padRight(s: any, l: number = 2, padder: string = '0'): string {
+  return s.toString() + times(padder || '0', l - s.length);
 }

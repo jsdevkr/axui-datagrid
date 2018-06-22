@@ -2,7 +2,7 @@ import * as React from 'react';
 import { types } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
-import { getPathValue, classNames as cx } from '../utils';
+import { classNames as CX } from '../utils';
 
 interface IProps extends IDataGridStore {
   bodyRow: types.DataGridColumnTableMap;
@@ -16,15 +16,21 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
   col,
   focusedCol,
   selectionCols,
-  options,
+  options = {},
   sortInfo,
 }) => {
-  const optionsHeader = getPathValue(options, ['header']);
+  const { header: optionsHeader = {} } = options;
+  const {
+    columnHeight: optionsHeaderColumnHeight = 0,
+    columnPadding: optionsHeaderColumnPadding = 0,
+    columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
+    align: colAlign = col.align,
+  } = optionsHeader;
+
   let lineHeight =
-    optionsHeader.columnHeight -
-    optionsHeader.columnPadding * 2 -
-    optionsHeader.columnBorderWidth;
-  let colAlign = optionsHeader.align || col.align;
+    optionsHeaderColumnHeight -
+    optionsHeaderColumnPadding * 2 -
+    optionsHeaderColumnBorderWidth;
   let label, sorter, filter;
 
   if (col.key === '__checkbox_header__') {
@@ -59,8 +65,8 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
   }
 
   let cellHeight =
-    optionsHeader.columnHeight * (col.rowSpan || 1) -
-    optionsHeader.columnBorderWidth;
+    optionsHeaderColumnHeight * (col.rowSpan || 1) -
+    optionsHeaderColumnBorderWidth;
   let tdClassNames = {
     ['axui-datagrid-header-column']: true,
     ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
@@ -80,7 +86,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     <td
       colSpan={col.colSpan}
       rowSpan={col.rowSpan}
-      className={cx(tdClassNames)}
+      className={CX(tdClassNames)}
       style={{ height: cellHeight, minHeight: '1px' }}
       data-axui-tooltip={col.key === '__line_number__' ? 'SELECT ALL' : 'false'}
     >
@@ -89,7 +95,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
         data-align={colAlign}
         style={{
           height:
-            optionsHeader.columnHeight - optionsHeader.columnBorderWidth + 'px',
+            optionsHeaderColumnHeight - optionsHeaderColumnBorderWidth + 'px',
           lineHeight: lineHeight + 'px',
         }}
       >

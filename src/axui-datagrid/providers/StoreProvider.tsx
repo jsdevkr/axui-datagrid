@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { types } from '../stores';
+import dataGridFormatter from '../functions/formatter';
 
 export interface IDataGridStore extends types.DataGridState {
   dispatch: (store: types.DataGridState) => void;
+  predefinedFormatter: types.DataGridFormatter;
 }
 
 const store: IDataGridStore = {
@@ -15,25 +17,30 @@ const store: IDataGridStore = {
   selectionCols: {},
   focusedRow: -1,
   focusedCol: -1,
+
   colGroup: [],
-  colGroupMap: {},
   asideColGroup: [],
   leftHeaderColGroup: [],
   headerColGroup: [],
+
   asideHeaderData: { rows: [{ cols: [] }] },
   leftHeaderData: { rows: [{ cols: [] }] },
   headerData: { rows: [{ cols: [] }] },
-  asideBodyRowData: {},
-  leftBodyRowData: {},
-  bodyRowData: {},
+  asideBodyRowData: { rows: [{ cols: [] }] },
+  leftBodyRowData: { rows: [{ cols: [] }] },
+  bodyRowData: { rows: [{ cols: [] }] },
+  asideBodyGroupingData: { rows: [{ cols: [] }] },
+  leftBodyGroupingData: { rows: [{ cols: [] }] },
+  bodyGroupingData: { rows: [{ cols: [] }] },
+
+  colGroupMap: {},
   bodyRowMap: {},
-  asideBodyGroupingData: {},
-  leftBodyGroupingData: {},
-  bodyGroupingData: {},
   bodyGroupingMap: {},
+
   options: {},
   styles: {},
   dispatch: () => {},
+  predefinedFormatter: {},
 };
 
 const { Provider, Consumer } = React.createContext(store);
@@ -86,6 +93,7 @@ class StoreProvider extends React.Component<{}, types.DataGridState> {
           ...this.state,
           ...{
             dispatch: state => this.setState(state),
+            predefinedFormatter: { ...dataGridFormatter }
           },
         }}
       >

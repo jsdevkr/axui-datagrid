@@ -13,7 +13,7 @@ function setColGroupWidth(
   container: types.DataGridRect,
   options: types.DataGridOptions,
 ) {
-  const columnMinWidth = options.columnMinWidth || 0;
+  const { columnMinWidth = 0 } = options;
   let totalWidth = 0;
   let computedWidth: number;
   let autoWidthColGroupIndexes: number[] = [];

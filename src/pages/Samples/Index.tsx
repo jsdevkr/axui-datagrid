@@ -36,8 +36,8 @@ class Index extends React.Component<IProps, IState> {
 
             <CodeViewer
               code={`
-import 'axui-datagrid/style.css';
-import { AXUIDataGrid } from 'axui-datagrid';
+import 'axui-datagrid/style.scss';
+import { DataGrid } from 'axui-datagrid';
 `}
             />
           </Segment>

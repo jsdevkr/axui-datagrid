@@ -10,6 +10,10 @@ export type DataGridEditingCell = intfs.IDataGridEditingCell;
 
 export type DataGridFormatterData = intfs.IDataGridFormatterData;
 
+export type DataGridFormatter = intfs.IDataGridFormatter;
+
+export type formatterFunction = intfs.formatterFunction;
+
 export type DataGridCol = intfs.IDataGridCol;
 
 export type DataGridColumn = intfs.IDataGridColumn;
@@ -137,6 +141,8 @@ export type DataGridState = {
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void;
 
+  isInlineEditing?: boolean;
+  inlineEditingCell?: intfs.IDataGridEditingCell;
   scrollLeft?: number;
   scrollTop?: number;
   selectionRows?: {};
@@ -154,14 +160,14 @@ export type DataGridState = {
   leftHeaderData?: DataGridColumnTableMap;
   headerData?: DataGridColumnTableMap;
   bodyRowTable?: DataGridColumnTableMap;
-  asideBodyRowData?: {};
-  leftBodyRowData?: {};
-  bodyRowData?: {};
+  asideBodyRowData?: DataGridColumnTableMap;
+  leftBodyRowData?: DataGridColumnTableMap;
+  bodyRowData?: DataGridColumnTableMap;
   bodyRowMap?: {};
   bodyGroupingTable?: DataGridColumnTableMap;
-  asideBodyGroupingData?: {};
-  leftBodyGroupingData?: {};
-  bodyGroupingData?: {};
+  asideBodyGroupingData?: DataGridColumnTableMap;
+  leftBodyGroupingData?: DataGridColumnTableMap;
+  bodyGroupingData?: DataGridColumnTableMap;
   bodyGroupingMap?: {};
   footSumColumns?: DataGridColumn[];
   footSumTable?: {}; // footSum의 출력레이아웃
@@ -169,6 +175,7 @@ export type DataGridState = {
   footSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
   styles?: DataGridStyles;
   options?: DataGridOptions;
+  predefinedFormatter?: DataGridFormatter;
 };
 
 export type DataGrid = {

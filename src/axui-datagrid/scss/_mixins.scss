@@ -73,7 +73,7 @@
         box-shadow: none;
       }
       &[data-column-attr='rowSelector'] {
-        .axd-check-box {
+        .axui-datagrid-check-box {
           &:after {
             opacity: 1;
           }
@@ -85,7 +85,7 @@
     // background: $axui-datagrid-row-selected;
     td {
       &[data-column-attr='rowSelector'] {
-        .axd-check-box {
+        .axui-datagrid-check-box {
           cursor: not-allowed;
           //@include axui-background(to top, $axui-datagrid-cell-disable-checkbox-bg-colors);
           &:after {
@@ -111,7 +111,7 @@
   border-right: $axui-datagrid-column-border;
   border-bottom: $axui-datagrid-column-border;
 
-  &.axd-header-column {
+  &.axui-datagrid-header-column {
     cursor: default;
     &:hover {
       background: $axui-datagrid-row-hover-bg;
@@ -174,7 +174,7 @@
       }
     }
   }
-  &.axd-header-corner {
+  &.axui-datagrid-header-corner {
     [data-span] {
       cursor: se-resize;
       &:before {
@@ -196,7 +196,7 @@
     }
   }
 
-  &.axd-line-number {
+  &.axui-datagrid-line-number {
     [data-span] {
       cursor: e-resize;
     }
@@ -226,7 +226,7 @@
       }
     }
   }
-  &.axd-row-selector {
+  &.axui-datagrid-row-selector {
     [data-span] {
     }
     &.focused {
@@ -394,7 +394,7 @@
       display: inline-block;
     }
 
-    .axd-check-box {
+    .axui-datagrid-check-box {
       box-sizing: border-box;
       display: inline-block;
       position: relative;

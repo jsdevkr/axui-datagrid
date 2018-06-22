@@ -49,6 +49,7 @@ class Basic extends React.Component<IProps, IState> {
             columns={columns}
             options={{
               showLineNumber: true,
+              showRowSelector: true,
               asidePanelWidth: 900,
               columnKeys: { deleted: 'D' },
             }}
