@@ -1,8 +1,12 @@
-function classNames(classNameObject: { [key: string]: boolean }) {
+function classNames(classNameObject: { [key: string]: boolean } | string) {
   let cx = [];
-  for (let key in classNameObject) {
-    if (classNameObject[key]) {
-      cx.push(key);
+  if (typeof classNameObject === 'string') {
+    cx.push(classNameObject);
+  } else {
+    for (let key in classNameObject) {
+      if (classNameObject[key]) {
+        cx.push(key);
+      }
     }
   }
 

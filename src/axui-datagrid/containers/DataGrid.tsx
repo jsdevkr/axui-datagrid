@@ -354,6 +354,9 @@ class DataGrid extends React.Component<IProps, IState> {
             <>
               <DataGridHeader />
               <DataGridBody />
+              <DataGridPage />
+              <DataGridScroll />
+              <DataGridColumnFilter />
             </>
           ) : null}
         </div>
