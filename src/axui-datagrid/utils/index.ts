@@ -13,7 +13,7 @@ export { default as getPathValue } from './getPathValue';
 export { default as mergeAll } from './mergeAll';
 export { default as classNames } from './classNames';
 export { default as arrayFromRange } from './arrayFromRange';
-export { PrintDate, printDate } from './PrintDate';
+export { PrintDate, printDate } from './printDate';
 
 export {
   debounce,

@@ -28,10 +28,6 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       asideBodyRowData = { rows: [{ cols: [] }] },
       leftBodyRowData = { rows: [{ cols: [] }] },
       bodyRowData = { rows: [{ cols: [] }] },
-      selectionRows,
-      selectionCols,
-      focusedRow,
-      focusedCol,
 
       panelName,
       containerStyle = {},
@@ -43,6 +39,19 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       styles = {},
       options = {},
     } = this.props;
+
+    // aside-header가 필요하지 않은지 확인
+    if (
+      (panelName === 'top-aside-body-scroll' &&
+        (styles.asidePanelWidth === 0 || styles.frozenPanelHeight === 0)) ||
+      (panelName === 'top-left-body-scroll' &&
+        (styles.frozenPanelWidth === 0 || styles.frozenPanelHeight === 0)) ||
+      (panelName === 'top-body-scroll' && styles.frozenPanelHeight === 0) ||
+      (panelName === 'aside-body-scroll' && styles.asidePanelWidth === 0) ||
+      (panelName === 'left-body-scroll' && styles.frozenPanelWidth === 0)
+    ) {
+      return null;
+    }
 
     const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
     const { bodyTrHeight = 0 } = styles;
@@ -56,12 +65,12 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
     const panelColGroup: types.DataGridCol[] = (() => {
       switch (panelName) {
         case 'top-aside-body-scroll':
-        case 'aside-body-scroll-container':
+        case 'aside-body-scroll':
           return asideColGroup;
-        case 'top-left-body-scroll-container':
-        case 'left-body-scroll-container':
+        case 'top-left-body-scroll':
+        case 'left-body-scroll':
           return leftHeaderColGroup;
-        case 'top-body-scroll-container':
+        case 'top-body-scroll':
         case 'body-scroll':
         default:
           return headerColGroup;
@@ -71,17 +80,21 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
     const panelBodyRow = (() => {
       switch (panelName) {
         case 'top-aside-body-scroll':
-        case 'aside-body-scroll-container':
+        case 'aside-body-scroll':
           return asideBodyRowData;
-        case 'top-left-body-scroll-container':
-        case 'left-body-scroll-container':
+        case 'top-left-body-scroll':
+        case 'left-body-scroll':
           return leftBodyRowData;
-        case 'top-body-scroll-container':
+        case 'top-body-scroll':
         case 'body-scroll':
         default:
           return bodyRowData;
       }
     })();
+
+    if (panelName === 'aside-body-scroll-container') {
+      console.log(panelName);
+    }
 
     return (
       <div
