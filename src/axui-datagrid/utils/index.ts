@@ -14,6 +14,10 @@ export { default as mergeAll } from './mergeAll';
 export { default as classNames } from './classNames';
 export { default as arrayFromRange } from './arrayFromRange';
 export { PrintDate, printDate } from './printDate';
+export { default as getScrollPosition } from './getScrollPosition';
+export {
+  default as getScrollPositionByScrollBar,
+} from './getScrollPositionByScrollBar';
 
 export {
   debounce,

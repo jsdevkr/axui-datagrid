@@ -96,13 +96,16 @@ function calculateDimensions(
   currentStyles.pageHeight = optionsPageHeight;
   currentStyles.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
 
-  currentStyles.verticalScrollerWidth =
+  currentStyles.verticalScrollerWidth = 0;
+  if (
     currentStyles.elHeight -
-    currentStyles.headerHeight -
-    optionsPageHeight -
-    (currentStyles.footSumHeight < dataLength * currentStyles.bodyTrHeight
-      ? optionsScrollerSize
-      : 0);
+      currentStyles.headerHeight -
+      optionsPageHeight -
+      currentStyles.footSumHeight <
+    dataLength * currentStyles.bodyTrHeight
+  ) {
+    currentStyles.verticalScrollerWidth = optionsScrollerSize;
+  }
 
   currentStyles.horizontalScrollerHeight = (() => {
     if (currentColGroup) {
@@ -138,16 +141,16 @@ function calculateDimensions(
     currentStyles.rightPanelWidth -
     currentStyles.verticalScrollerWidth;
 
-  if (currentStyles.horizontalScrollerHeight > 0) {
-    currentStyles.verticalScrollerWidth =
-      currentStyles.elHeight -
+  if (
+    currentStyles.horizontalScrollerHeight > 0 &&
+    currentStyles.elHeight -
       currentStyles.headerHeight -
       currentStyles.pageHeight -
       currentStyles.footSumHeight -
-      (currentStyles.horizontalScrollerHeight <
+      currentStyles.horizontalScrollerHeight <
       dataLength * currentStyles.bodyTrHeight
-        ? optionsScrollerSize
-        : 0);
+  ) {
+    currentStyles.verticalScrollerWidth = optionsScrollerSize;
   }
 
   currentStyles.CTInnerHeight =

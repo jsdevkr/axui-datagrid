@@ -19,6 +19,7 @@ import {
   getPathValue,
   mergeAll,
   throttle,
+  getScrollPosition,
 } from '../utils';
 
 interface IProps extends types.DataGrid {}
@@ -126,6 +127,7 @@ class DataGrid extends React.Component<IProps, IState> {
   throttledUpdateDimensions: any;
 
   state = {
+    rootNode: undefined,
     mounted: false, // 루트 엘리먼트 준비여부
     calculatedStyles: false, // 루트 엘리먼트 준비가 되면 다음 렌더링전에 getDerivedStateFromProps에서 styles계산이 필요하진 판단하고 calculatedStyles=false이면 기본 스타일 계산
     scrollLeft: 0,
@@ -325,7 +327,26 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   updateDimensions() {
-    console.log('updateDimensions call');
+    const { rootNode, scrollLeft = 0, scrollTop = 0 } = this.state;
+
+    if (rootNode) {
+      const { styles: newStyles } = calculateDimensions(rootNode, this.state);
+      const {
+        scrollLeft: newScrollLeft,
+        scrollTop: newScrollTop,
+      } = getScrollPosition(scrollLeft, scrollTop, {
+        scrollWidth: newStyles.scrollContentWidth,
+        scrollHeight: newStyles.scrollContentHeight,
+        clientWidth: newStyles.scrollContentContainerWidth,
+        clientHeight: newStyles.scrollContentContainerHeight,
+      });
+
+      this.setState({
+        scrollLeft: newScrollLeft,
+        scrollTop: newScrollTop,
+        styles: newStyles,
+      });
+    }
   }
 
   public render() {
