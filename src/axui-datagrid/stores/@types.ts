@@ -130,6 +130,7 @@ export type DataGridStyles = {
 export type DataGridState = {
   mounted?: boolean;
   calculatedStyles?: boolean;
+  dragging?: boolean;
   data?: any[];
   filteredList?: any[];
   sortInfo?: {};

@@ -2,17 +2,113 @@ import * as React from 'react';
 import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { classNames as CX } from '../utils';
+import {
+  classNames as CX,
+  getMousePosition,
+  getScrollPositionByScrollBar,
+} from '../utils';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
+
+type scrollTypes = 'horizontal' | 'vertical';
 
 class DatagridScroll extends React.Component<IProps, IState> {
   state = {};
 
   onClickScrollArrow = (e: any, d: any) => {};
   onClickScrollTrack = (e: any, d: any) => {};
-  onMouseDownScrollBar = (e: any, d: any) => {};
+  onMouseDownScrollBar = (e: any, barName: scrollTypes) => {
+    const {
+      dragging = false,
+      scrollLeft = 0,
+      scrollTop = 0,
+      options = {},
+      styles = {},
+      dispatch,
+    } = this.props;
+
+    const {
+      horizontalScrollerWidth = 0,
+      horizontalScrollBarWidth = 0,
+      scrollContentWidth = 0,
+      scrollContentContainerWidth = 0,
+      verticalScrollerHeight = 0,
+      verticalScrollBarHeight = 0,
+      scrollContentHeight = 0,
+      scrollContentContainerHeight = 0,
+    } = styles;
+
+    e.preventDefault();
+
+    const currScrollBarLeft: number =
+      -scrollLeft *
+      (horizontalScrollerWidth - horizontalScrollBarWidth) /
+      (scrollContentWidth - scrollContentContainerWidth);
+    const currScrollBarTop: number =
+      -scrollTop *
+      (verticalScrollerHeight - verticalScrollBarHeight) /
+      (scrollContentHeight - scrollContentContainerHeight);
+
+    let startMousePosition = getMousePosition(e);
+
+    const onMouseMove = (ee: any) => {
+      if (!dragging) {
+        dispatch({ dragging: true });
+      }
+      const { x, y } = getMousePosition(ee);
+
+      const processor = {
+        vertical: () => {
+          let {
+            scrollLeft: currScrollLeft = 0,
+            scrollTop: currScrollTop = 0,
+          } = getScrollPositionByScrollBar(
+            currScrollBarLeft,
+            currScrollBarTop + (y - startMousePosition.y),
+            styles,
+          );
+
+          dispatch({
+            scrollLeft: currScrollLeft,
+            scrollTop: currScrollTop,
+          });
+        },
+        horizontal: () => {
+          let {
+            scrollLeft: currScrollLeft = 0,
+            scrollTop: currScrollTop = 0,
+          } = getScrollPositionByScrollBar(
+            currScrollBarLeft + (x - startMousePosition.x),
+            currScrollBarTop,
+            styles,
+          );
+
+          dispatch({
+            scrollLeft: currScrollLeft,
+            scrollTop: currScrollTop,
+          });
+        },
+      };
+
+      if (barName in processor) {
+        processor[barName]();
+      }
+    };
+
+    const offEvent = (ee: any) => {
+      ee.preventDefault();
+
+      dispatch({ dragging: false });
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', offEvent);
+      document.removeEventListener('mouseleave', offEvent);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', offEvent);
+    document.addEventListener('mouseleave', offEvent);
+  };
 
   render() {
     const {

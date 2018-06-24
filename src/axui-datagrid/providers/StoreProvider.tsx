@@ -8,6 +8,7 @@ export interface IDataGridStore extends types.DataGridState {
 }
 
 const store: IDataGridStore = {
+  dragging: false,
   data: [],
   filteredList: [],
   sortInfo: {},
@@ -58,12 +59,6 @@ class StoreProvider extends React.Component<{}, types.DataGridState> {
       ...{
         data: props.data,
         filteredList: props.filteredList,
-        scrollLeft: props.scrollLeft,
-        scrollTop: props.scrollTop,
-        selectionRows: props.selectionRows,
-        selectionCols: props.selectionCols,
-        focusedRow: props.focusedRow,
-        focusedCol: props.focusedCol,
         colGroup: props.colGroup,
         colGroupMap: props.colGroupMap,
         asideColGroup: props.asideColGroup,
@@ -93,7 +88,7 @@ class StoreProvider extends React.Component<{}, types.DataGridState> {
           ...this.state,
           ...{
             dispatch: state => this.setState(state),
-            predefinedFormatter: { ...dataGridFormatter }
+            predefinedFormatter: { ...dataGridFormatter },
           },
         }}
       >
