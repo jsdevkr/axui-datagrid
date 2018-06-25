@@ -1,29 +1,146 @@
 import * as React from 'react';
-import { types } from '../stores';
+import { ScrollTypes, DirectionTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import {
-  classNames as CX,
-  getMousePosition,
-  getScrollPositionByScrollBar,
-} from '../utils';
+import { getMousePosition, getScrollPositionByScrollBar } from '../utils';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
 
-type scrollTypes = 'horizontal' | 'vertical';
-
 class DatagridScroll extends React.Component<IProps, IState> {
   state = {};
 
-  onClickScrollArrow = (e: any, d: any) => {};
-  onClickScrollTrack = (e: any, d: any) => {};
-  onMouseDownScrollBar = (e: any, barName: scrollTypes) => {
+  onClickScrollArrow = (e: any, direction: DirectionTypes) => {
+    const { scrollLeft = 0, scrollTop = 0, styles = {}, dispatch } = this.props;
+
+    const {
+      scrollContentWidth = 0,
+      scrollContentContainerWidth = 0,
+      scrollContentHeight = 0,
+      scrollContentContainerHeight = 0,
+    } = styles;
+
+    const processor = {
+      [DirectionTypes.UP]: () => {
+        let scrollAmount = scrollContentContainerHeight;
+        dispatch({
+          scrollTop:
+            scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
+        });
+      },
+      [DirectionTypes.DOWN]: () => {
+        let scrollAmount = scrollContentContainerHeight;
+        dispatch({
+          scrollTop:
+            scrollContentContainerHeight <
+            scrollContentHeight + (scrollTop - scrollAmount)
+              ? scrollTop - scrollAmount
+              : scrollContentContainerHeight - scrollContentHeight,
+        });
+      },
+      [DirectionTypes.LEFT]: () => {
+        let scrollAmount = scrollContentContainerWidth;
+        dispatch({
+          scrollLeft:
+            scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
+        });
+      },
+      [DirectionTypes.RIGHT]: () => {
+        let scrollAmount = scrollContentContainerWidth;
+        dispatch({
+          scrollLeft:
+            scrollContentContainerWidth <
+            scrollContentWidth + (scrollLeft - scrollAmount)
+              ? scrollLeft - scrollAmount
+              : scrollContentContainerWidth - scrollContentWidth,
+        });
+      },
+    };
+
+    processor[direction]();
+  };
+
+  onClickScrollTrack = (e: any, barName: ScrollTypes) => {
+    const {
+      rootNode,
+      scrollLeft = 0,
+      scrollTop = 0,
+      styles = {},
+      dispatch,
+    } = this.props;
+
+    e.preventDefault();
+
+    const {
+      horizontalScrollerWidth = 0,
+      horizontalScrollBarWidth = 0,
+      scrollContentWidth = 0,
+      scrollContentContainerWidth = 0,
+      verticalScrollerHeight = 0,
+      verticalScrollBarHeight = 0,
+      scrollContentHeight = 0,
+      scrollContentContainerHeight = 0,
+      pageButtonsContainerWidth = 0,
+    } = styles;
+
+    const currScrollBarLeft: number =
+      -scrollLeft *
+      (horizontalScrollerWidth - horizontalScrollBarWidth) /
+      (scrollContentWidth - scrollContentContainerWidth);
+    const currScrollBarTop: number =
+      -scrollTop *
+      (verticalScrollerHeight - verticalScrollBarHeight) /
+      (scrollContentHeight - scrollContentContainerHeight);
+
+    const { x: mouseX, y: mouseY } = getMousePosition(e);
+    const { x: grx = 0, y: gry = 0 } = rootNode
+      ? (rootNode.getBoundingClientRect() as { x: number; y: number })
+      : {};
+
+    const processor = {
+      [ScrollTypes.VERTICAL]: () => {
+        let {
+          scrollLeft: currScrollLeft = 0,
+          scrollTop: currScrollTop = 0,
+        } = getScrollPositionByScrollBar(
+          currScrollBarLeft,
+          mouseY - gry - verticalScrollBarHeight / 2,
+          styles,
+        );
+        dispatch({
+          scrollLeft: currScrollLeft,
+          scrollTop: currScrollTop,
+        });
+      },
+      [ScrollTypes.HORIZONTAL]: () => {
+        let {
+          scrollLeft: currScrollLeft = 0,
+          scrollTop: currScrollTop = 0,
+        } = getScrollPositionByScrollBar(
+          mouseX -
+            grx -
+            pageButtonsContainerWidth -
+            horizontalScrollBarWidth / 2,
+          currScrollBarTop,
+          styles,
+        );
+        dispatch({
+          scrollLeft: currScrollLeft,
+          scrollTop: currScrollTop,
+        });
+      },
+    };
+
+    if (e.target.getAttribute('data-scroll')) {
+      processor[barName]();
+    }
+  };
+
+  onMouseDownScrollBar = (e: any, barName: ScrollTypes) => {
     const {
       dragging = false,
       scrollLeft = 0,
       scrollTop = 0,
-      options = {},
       styles = {},
       dispatch,
     } = this.props;
@@ -59,7 +176,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
       const { x, y } = getMousePosition(ee);
 
       const processor = {
-        vertical: () => {
+        [ScrollTypes.VERTICAL]: () => {
           let {
             scrollLeft: currScrollLeft = 0,
             scrollTop: currScrollTop = 0,
@@ -74,7 +191,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
             scrollTop: currScrollTop,
           });
         },
-        horizontal: () => {
+        [ScrollTypes.HORIZONTAL]: () => {
           let {
             scrollLeft: currScrollLeft = 0,
             scrollTop: currScrollTop = 0,
@@ -90,10 +207,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
           });
         },
       };
-
-      if (barName in processor) {
-        processor[barName]();
-      }
+      processor[barName]();
     };
 
     const offEvent = (ee: any) => {
@@ -111,12 +225,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
   };
 
   render() {
-    const {
-      scrollLeft = 0,
-      scrollTop = 0,
-      options = {},
-      styles = {},
-    } = this.props;
+    const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
 
     const {
       pageHeight = 0,
@@ -158,7 +267,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
     let verticalTopArrowStyles = {
       left: scrollerPadding,
-      top: (verticalArrowStyles.height - arrowWidth) / 2,
+      top: (verticalArrowStyles.height - arrowWidth) / 2 + 1,
       borderTop: '0 none',
       borderRight: 'solid ' + arrowWidth + 'px transparent',
       borderBottomWidth: arrowWidth + 'px',
@@ -224,24 +333,26 @@ class DatagridScroll extends React.Component<IProps, IState> {
               <div
                 data-arrow
                 style={verticalTopArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, 'up')}
+                onClick={e => this.onClickScrollArrow(e, DirectionTypes.UP)}
               />
             </div>
             <div
               data-scroll="vertical"
-              onClick={e => this.onClickScrollTrack(e, 'vertical')}
+              onClick={e => this.onClickScrollTrack(e, ScrollTypes.VERTICAL)}
             >
               <div
                 className="axui-datagrid-scroll-bar"
                 style={verticalBarStyles}
-                onMouseDown={e => this.onMouseDownScrollBar(e, 'vertical')}
+                onMouseDown={e =>
+                  this.onMouseDownScrollBar(e, ScrollTypes.VERTICAL)
+                }
               />
             </div>
             <div data-scroll-arrow="down" style={verticalArrowStyles}>
               <div
                 data-arrow
                 style={verticalBottomArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, 'down')}
+                onClick={e => this.onClickScrollArrow(e, DirectionTypes.DOWN)}
               />
             </div>
           </div>
@@ -252,24 +363,26 @@ class DatagridScroll extends React.Component<IProps, IState> {
               <div
                 data-arrow
                 style={horizontalLeftArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, 'left')}
+                onClick={e => this.onClickScrollArrow(e, DirectionTypes.LEFT)}
               />
             </div>
             <div
               data-scroll="horizontal"
-              onClick={e => this.onClickScrollTrack(e, 'horizontal')}
+              onClick={e => this.onClickScrollTrack(e, ScrollTypes.HORIZONTAL)}
             >
               <div
                 className="axui-datagrid-scroll-bar"
                 style={horizontalBarStyles}
-                onMouseDown={e => this.onMouseDownScrollBar(e, 'horizontal')}
+                onMouseDown={e =>
+                  this.onMouseDownScrollBar(e, ScrollTypes.HORIZONTAL)
+                }
               />
             </div>
             <div data-scroll-arrow="right" style={horizontalArrowStyles}>
               <div
                 data-arrow
                 style={horizontalRightArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, 'right')}
+                onClick={e => this.onClickScrollArrow(e, DirectionTypes.RIGHT)}
               />
             </div>
           </div>

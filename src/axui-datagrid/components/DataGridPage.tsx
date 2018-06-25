@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { classNames as CX } from '../utils';
@@ -8,9 +7,9 @@ interface IProps extends IDataGridStore {}
 interface IState {}
 
 class DataGridPage extends React.Component<IProps, IState> {
-  constructor(props: any) {
-    super(props);
-  }
+  state = {};
+
+  onClickPageButton = (e:any) => {};
 
   render() {
     const { options = {}, styles = {} } = this.props;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Segment, Form, Label, Icon } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import 'axui-datagrid/style.scss';
 import { DataGrid } from 'axui-datagrid';
@@ -14,52 +14,69 @@ class Basic extends React.Component<IProps, IState> {
   };
 
   render() {
-    const list = [
-      { no: 1, title: '제목' },
-      { no: 2, title: '제목' },
-      { no: 3, title: '제목' },
-      { no: 4, title: '제목' },
-      { no: 5, title: '제목' },
-      { no: 6, title: '제목' },
-      { no: 7, title: '제목' },
-      { no: 8, title: '제목' },
-      { no: 9, title: '제목' },
-      { no: 10, title: '제목' },
-      { no: 11, title: '제목' },
-      { no: 12, title: '제목' },
-      { no: 13, title: '제목' },
-      { no: 14, title: '제목' },
-      { no: 15, title: '제목' },
-      { no: 16, title: '제목' },
-      { no: 17, title: '제목' },
-      { no: 18, title: '제목' },
-      { no: 19, title: '제목' },
-      { no: 20, title: '제목' },
-    ];
+    let gridData = [];
+
+    const typeGroup = {
+      aTypes: ['A', 'B', 'C', 'D'],
+      bTypes: ['A01', 'A02', 'B01', 'B02', 'C01', 'C02'],
+      cTypes: ['Thomas', 'Brant', 'Ben', 'Woo'],
+      priceTypes: [500, 1000, 1500, 2000],
+      amountTypes: [1, 2, 4, 5, 10, 20],
+      saleTypes: ['T', 'B', 'H', 'W'],
+      saleDtTypes: [
+        '2018-01-20',
+        '2018-01-21',
+        '2018-02-01',
+        '2018-02-02',
+        '2018-02-03',
+      ],
+      customerTypes: [
+        '장기영',
+        '황인서',
+        '양용성',
+        '이하종',
+        '김혜미',
+        '홍시아',
+      ],
+    };
+
+    const getTypes = (typeName: string) => {
+      const types = typeGroup[typeName];
+      return types[Math.floor(Math.random() * types.length)];
+    };
+
+    for (let i = 1; i < 30; i++) {
+      const price = getTypes('priceTypes');
+      const amount = getTypes('amountTypes');
+
+      gridData.push({
+        a: getTypes('aTypes'),
+        b: getTypes('bTypes'),
+        c: getTypes('cTypes'),
+        saleDt: getTypes('saleDtTypes'),
+        customer: getTypes('customerTypes'),
+        saleType: getTypes('saleTypes'),
+        price: price,
+        amount: amount,
+        cost: price * amount,
+      });
+    }
 
     const columns = [
       {
-        key: 'no',
-        width: 60,
-        label: 'ID',
-        align: 'left',
+        key: 'a',
+        label: '필드A',
+        width: 80,
+        align: 'center',
       },
-      {
-        key: 'title',
-        width: 200,
-        label: '타이틀',
-      },
-      {
-        key: 'no',
-        width: 60,
-        label: 'ID',
-        align: 'left',
-      },
-      {
-        key: 'title',
-        width: 200,
-        label: '타이틀',
-      },
+      { key: 'b', label: '필드B', align: 'center' },
+      { key: 'c', label: '필드C', align: 'center' },
+      { key: 'price', label: '단가', formatter: 'money', align: 'right' },
+      { key: 'amount', label: '수량', formatter: 'money', align: 'right' },
+      { key: 'cost', label: '금액', align: 'right', formatter: 'money' },
+      { key: 'saleDt', label: '판매일자', align: 'center' },
+      { key: 'customer', label: '고객명', align: 'center' },
+      { key: 'saleType', label: '판매타입', align: 'center' },
     ];
     return (
       <>
@@ -67,7 +84,7 @@ class Basic extends React.Component<IProps, IState> {
           <h1>Basic</h1>
 
           <DataGrid
-            data={list}
+            data={gridData}
             columns={columns}
             options={{
               showLineNumber: true,
@@ -75,6 +92,7 @@ class Basic extends React.Component<IProps, IState> {
               asidePanelWidth: 900,
               columnKeys: { deleted: 'D' },
             }}
+            style={{ fontSize: '12px' }}
           />
         </Segment>
       </>

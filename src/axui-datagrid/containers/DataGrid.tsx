@@ -3,13 +3,14 @@ import * as ReactDOM from 'react-dom';
 
 import { DataGridStore } from '../providers';
 import {
+  DataGridEvents,
   DataGridHeader,
   DataGridBody,
   DataGridColumnFilter,
   DataGridScroll,
   DataGridPage,
 } from '../components';
-import { types } from '../stores';
+import { types, EventNames } from '../stores';
 import {
   makeHeaderTable,
   makeBodyRowTable,
@@ -20,13 +21,12 @@ import {
   mergeAll,
   throttle,
   getScrollPosition,
+  getMousePosition,
+  arrayFromRange,
 } from '../utils';
 
 interface IProps extends types.DataGrid {}
-interface IState extends types.DataGridState {
-  rootNode?: HTMLDivElement;
-  clipBoardNode?: HTMLTextAreaElement;
-}
+interface IState extends types.DataGridState {}
 
 class DataGrid extends React.Component<IProps, IState> {
   static defaultHeight: number = 400;
@@ -83,7 +83,7 @@ class DataGrid extends React.Component<IProps, IState> {
     showRowSelector: false,
     multipleSelect: true,
     columnMinWidth: 100,
-    lineNumberColumnWidth: 40,
+    lineNumberColumnWidth: 60,
     rowSelectorColumnWidth: 28,
     remoteSort: false,
     asidePanelWidth: 0,
@@ -126,15 +126,34 @@ class DataGrid extends React.Component<IProps, IState> {
 
   throttledUpdateDimensions: any;
 
+  rootNodeRefs: any = null;
+  clipBoardNodeRefs: any = null;
+
   state = {
     rootNode: undefined,
+    clipBoardNode: undefined,
     mounted: false, // 루트 엘리먼트 준비여부
     calculatedStyles: false, // 루트 엘리먼트 준비가 되면 다음 렌더링전에 getDerivedStateFromProps에서 styles계산이 필요하진 판단하고 calculatedStyles=false이면 기본 스타일 계산
-    dragging: false,
-    scrollLeft: 0,
-    scrollTop: 0,
-    focusedRow: -1,
-    focusedCol: -1,
+    filteredList: [],
+    colGroup: [],
+    asideColGroup: [],
+    leftHeaderColGroup: [],
+    headerColGroup: [],
+
+    asideHeaderData: { rows: [{ cols: [] }] },
+    leftHeaderData: { rows: [{ cols: [] }] },
+    headerData: { rows: [{ cols: [] }] },
+    asideBodyRowData: { rows: [{ cols: [] }] },
+    leftBodyRowData: { rows: [{ cols: [] }] },
+    bodyRowData: { rows: [{ cols: [] }] },
+    asideBodyGroupingData: { rows: [{ cols: [] }] },
+    leftBodyGroupingData: { rows: [{ cols: [] }] },
+    bodyGroupingData: { rows: [{ cols: [] }] },
+
+    colGroupMap: {},
+    bodyRowMap: {},
+    bodyGroupingMap: {},
+
     options: DataGrid.defaultOptions,
     styles: DataGrid.defaultStyles,
   };
@@ -298,14 +317,15 @@ class DataGrid extends React.Component<IProps, IState> {
     return changeState ? newState : null;
   }
 
-  componentDidMount() {
-    const rootNode = ReactDOM.findDOMNode(
-      this.refs['datagrid-ref'],
-    ) as HTMLDivElement;
-    const clipBoardNode = ReactDOM.findDOMNode(
-      this.refs['datagrid-clipboard'],
-    ) as HTMLTextAreaElement;
+  setRootNode = (element: any) => {
+    this.rootNodeRefs = ReactDOM.findDOMNode(element);
+  };
 
+  setClipBoardNode = (element: any) => {
+    this.clipBoardNodeRefs = ReactDOM.findDOMNode(element);
+  };
+
+  componentDidMount() {
     this.throttledUpdateDimensions = throttle(
       this.updateDimensions.bind(this),
       DataGrid.defaultThrottleWait,
@@ -314,8 +334,8 @@ class DataGrid extends React.Component<IProps, IState> {
 
     this.setState({
       mounted: true,
-      rootNode,
-      clipBoardNode,
+      rootNode: this.rootNodeRefs,
+      clipBoardNode: this.clipBoardNodeRefs,
     });
   }
 
@@ -328,32 +348,77 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   updateDimensions() {
-    const { rootNode, scrollLeft = 0, scrollTop = 0 } = this.state;
+    const { rootNode } = this.state;
 
     if (rootNode) {
       const { styles: newStyles } = calculateDimensions(rootNode, this.state);
-      const {
-        scrollLeft: newScrollLeft,
-        scrollTop: newScrollTop,
-      } = getScrollPosition(scrollLeft, scrollTop, {
-        scrollWidth: newStyles.scrollContentWidth,
-        scrollHeight: newStyles.scrollContentHeight,
-        clientWidth: newStyles.scrollContentContainerWidth,
-        clientHeight: newStyles.scrollContentContainerHeight,
-      });
-
       this.setState({
-        scrollLeft: newScrollLeft,
-        scrollTop: newScrollTop,
         styles: newStyles,
       });
     }
   }
 
+  dispatch = (a: any) => {
+    // console.log(a);
+    // 이곳에서 루트의 state를 변경 할 수 있다.
+    /*
+    this.setState({
+      
+    });
+    */
+  };
+
   public render() {
-    // const { data: receiveData, options, columns, style, height } = this.props;
-    const { mounted, styles } = this.state;
-    const param = { ...this.state };
+    const {
+      mounted,
+      filteredList,
+      colGroup,
+      asideColGroup,
+      leftHeaderColGroup,
+      headerColGroup,
+      asideHeaderData,
+      leftHeaderData,
+      headerData,
+      asideBodyRowData,
+      leftBodyRowData,
+      bodyRowData,
+      asideBodyGroupingData,
+      leftBodyGroupingData,
+      bodyGroupingData,
+      colGroupMap,
+      bodyRowMap,
+      bodyGroupingMap,
+      options,
+      styles,
+      rootNode,
+      clipBoardNode,
+    } = this.state;
+
+    const param = {
+      filteredList,
+      colGroup,
+      asideColGroup,
+      leftHeaderColGroup,
+      headerColGroup,
+      asideHeaderData,
+      leftHeaderData,
+      headerData,
+      asideBodyRowData,
+      leftBodyRowData,
+      bodyRowData,
+      asideBodyGroupingData,
+      leftBodyGroupingData,
+      bodyGroupingData,
+      colGroupMap,
+      bodyRowMap,
+      bodyGroupingMap,
+      options,
+      styles,
+      rootNode,
+      clipBoardNode,
+      rootDispatch: this.dispatch,
+    };
+
     let gridRootStyle = mergeAll(
       { height: this.props.height || DataGrid.defaultHeight },
       this.props.style,
@@ -364,13 +429,13 @@ class DataGrid extends React.Component<IProps, IState> {
 
     return (
       <DataGridStore.Provider {...param}>
-        <div
-          ref="datagrid-ref"
-          className={'axui-datagrid'}
+        <DataGridEvents
+          ref={this.setRootNode}
+          onFireEvent={(eventName: EventNames, e: any) => {}}
           style={gridRootStyle}
         >
           <div className={'axui-datagrid-clip-board'}>
-            <textarea ref="datagrid-clipboard" />
+            <textarea ref={this.setClipBoardNode} />
           </div>
           {mounted ? (
             <>
@@ -381,7 +446,7 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridColumnFilter />
             </>
           ) : null}
-        </div>
+        </DataGridEvents>
       </DataGridStore.Provider>
     );
   }

@@ -1,4 +1,3 @@
-import { types } from 'axui-datagrid/stores';
 import { classNames } from 'axui-datagrid/utils';
 
 test('test : classNames', () => {

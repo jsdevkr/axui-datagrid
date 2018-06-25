@@ -1,7 +1,17 @@
 export function getScrollPosition(
   scrollLeft: number,
   scrollTop: number,
-  { scrollWidth, scrollHeight, clientWidth, clientHeight }: any,
+  {
+    scrollWidth,
+    scrollHeight,
+    clientWidth,
+    clientHeight,
+  }: {
+    scrollWidth: number;
+    scrollHeight: number;
+    clientWidth: number;
+    clientHeight: number;
+  },
 ) {
   let endScroll = false;
 

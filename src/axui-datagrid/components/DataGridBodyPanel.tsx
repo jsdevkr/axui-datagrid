@@ -37,7 +37,6 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       panelPaddingLeft = 0,
 
       styles = {},
-      options = {},
     } = this.props;
 
     // aside-header가 필요하지 않은지 확인

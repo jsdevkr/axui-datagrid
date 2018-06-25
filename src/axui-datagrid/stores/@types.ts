@@ -1,6 +1,6 @@
 import * as intfs from './@interfaces';
 
-export type ColTextAlign = string;
+export type ColTextAlign = 'left' | 'center' | 'right' | string;
 
 export type DataGridSelection = intfs.IPosition;
 
@@ -19,6 +19,8 @@ export type DataGridCol = intfs.IDataGridCol;
 export type DataGridColumn = intfs.IDataGridColumn;
 
 export type DataGridColumnKeys = intfs.IDataGridColumnKeys;
+
+export type DataGridMoving = intfs.IDataGridMoving;
 
 export type DataGridColumnTableMapRow = {
   cols: DataGridColumn[];
@@ -128,6 +130,8 @@ export type DataGridStyles = {
 };
 
 export type DataGridState = {
+  rootNode?: any;
+  clipBoardNode?: any;
   mounted?: boolean;
   calculatedStyles?: boolean;
   dragging?: boolean;
@@ -135,21 +139,26 @@ export type DataGridState = {
   filteredList?: any[];
   sortInfo?: {};
   height?: number;
-
-  columnsString?: string; // 원본과 비교를 위한 JSON.stringify 값
+  columnsString?: string;
   styleString?: string;
   optionsString?: string;
   onBeforeEvent?: () => void;
-  onAfterEvent?: () => void;
-
+  onAfterEvent?: () => void; // 원본과 비교를 위한 JSON.stringify 값
   isInlineEditing?: boolean;
   inlineEditingCell?: intfs.IDataGridEditingCell;
+  isColumnFilter?: boolean;
   scrollLeft?: number;
   scrollTop?: number;
   selectionRows?: {};
   selectionCols?: {};
   focusedRow?: number;
   focusedCol?: number;
+
+  selectionStartOffset?: intfs.IPosition;
+  selectionEndOffset?: intfs.IPosition;
+  selectionMinOffset?: intfs.IPosition;
+  selectionMaxOffset?: intfs.IPosition;
+
   colGroup?: DataGridCol[];
   colGroupMap?: {};
   asideColGroup?: DataGridCol[];
@@ -171,13 +180,13 @@ export type DataGridState = {
   bodyGroupingData?: DataGridColumnTableMap;
   bodyGroupingMap?: {};
   footSumColumns?: DataGridColumn[];
-  footSumTable?: {}; // footSum의 출력레이아웃
-  leftFootSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽
-  footSumData?: {}; // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
+  footSumTable?: {};
+  leftFootSumData?: {};
+  footSumData?: {};
   styles?: DataGridStyles;
   options?: DataGridOptions;
   predefinedFormatter?: DataGridFormatter;
-};
+}; // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
 export type DataGrid = {
   data?: any[];

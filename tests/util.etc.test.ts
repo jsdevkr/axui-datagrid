@@ -1,4 +1,3 @@
-import { types } from 'axui-datagrid/stores';
 import { getPathValue, mergeAll, arrayFromRange } from 'axui-datagrid/utils';
 
 test('getPathValue', () => {

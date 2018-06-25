@@ -1,4 +1,3 @@
-import { types } from 'axui-datagrid/stores';
 import { printDate } from 'axui-datagrid/utils';
 
 test('test : printDate by Date', () => {

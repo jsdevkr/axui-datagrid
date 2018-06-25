@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Segment, Form, Label, Icon } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 interface IProps {}
 interface IState {
@@ -11,8 +11,6 @@ class CustomizeStyle extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { emails } = this.state;
-
     return (
       <>
         <Segment>

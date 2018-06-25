@@ -35,7 +35,7 @@
     "no-trailing-whitespace": false,
     "no-unused-expression": false,
     "no-unused-variable": false,
-    "no-use-before-declare": true,
+    "no-use-before-declare": false,
     "radix": true,
     "semicolon": false,
     "switch-default": true,

@@ -34,7 +34,9 @@ export interface IDataGridFormatterData {
   options?: any;
 }
 
-export type formatterFunction = (formatterData: types.DataGridFormatterData) => any;
+export type formatterFunction = (
+  formatterData: types.DataGridFormatterData,
+) => any;
 
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;
@@ -64,4 +66,12 @@ export interface IDataGridColumnKeys {
   modified?: string;
   deleted?: string;
   disableSelection?: string;
+}
+
+export interface IDataGridMoving {
+  active?: boolean;
+  top?: boolean;
+  bottom?: boolean;
+  left?: boolean;
+  right?: boolean;
 }

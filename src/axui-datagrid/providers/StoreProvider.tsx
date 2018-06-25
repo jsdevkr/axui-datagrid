@@ -3,14 +3,15 @@ import { types } from '../stores';
 import dataGridFormatter from '../functions/formatter';
 
 export interface IDataGridStore extends types.DataGridState {
+  rootDispatch?: any;
   dispatch: (store: types.DataGridState) => void;
   predefinedFormatter: types.DataGridFormatter;
 }
 
 const store: IDataGridStore = {
   dragging: false,
-  data: [],
   filteredList: [],
+
   sortInfo: {},
   scrollLeft: 0,
   scrollTop: 0,
@@ -40,8 +41,9 @@ const store: IDataGridStore = {
 
   options: {},
   styles: {},
-  dispatch: () => {},
   predefinedFormatter: {},
+
+  dispatch: () => {},
 };
 
 const { Provider, Consumer } = React.createContext(store);
@@ -54,10 +56,13 @@ class StoreProvider extends React.Component<{}, types.DataGridState> {
     prevState: types.DataGridState,
   ) {
     // 만일 속성별 컨트롤을 하겠다면 여기에서.
+
     return {
       ...prevState,
       ...{
-        data: props.data,
+        rootDispatch: props.rootDispatch,
+        rootNode: props.rootNode,
+        clipBoardNode: props.clipBoardNode,
         filteredList: props.filteredList,
         colGroup: props.colGroup,
         colGroupMap: props.colGroupMap,

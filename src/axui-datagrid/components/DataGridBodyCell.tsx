@@ -24,12 +24,10 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       selectionRows = [],
       selectionCols = [],
       li,
-      colGroup,
       col = {},
       ci,
       value,
       options = {},
-      styles = {},
       isInlineEditing = false,
       inlineEditingCell = {},
       predefinedFormatter = {},
@@ -42,16 +40,12 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       columnBorderWidth = 0,
       align: bodyAlign = 'left',
     } = optionsBody;
-    const {
-      rowSpan: colRowSpan = 0,
-      colSpan: colColSpan = 0,
-      colIndex: colColIndex = 0,
-    } = col;
+    const { rowSpan: colRowSpan = 0, colIndex: colColIndex = 0 } = col;
 
     let cellHeight = columnHeight * colRowSpan;
     let tdClassNames: { [key: string]: any } = {
-      ['axd-line-number']: col.columnAttr === 'lineNumber',
-      ['axd-row-selector']: col.columnAttr === 'rowSelector',
+      ['axui-datagrid-line-number']: col.columnAttr === 'lineNumber',
+      ['axui-datagrid-row-selector']: col.columnAttr === 'rowSelector',
     };
 
     if (col.columnAttr === 'lineNumber') {
@@ -95,9 +89,10 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
         </td>
       );
     } else {
-      let lineHeight: number =
+      const lineHeight: number =
         columnHeight - columnPadding * 2 - columnBorderWidth;
-      let colAlign = bodyAlign || col.align || '';
+      const colAlign = col.align || bodyAlign || '';
+
       let label: any;
 
       const getLabel = function(_item: any, _itemIdx: number) {
@@ -131,7 +126,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       } else if (col.key === '__row_selector__') {
         label = (
           <div
-            className={'axd-check-box'}
+            className="axui-datagrid-check-box"
             style={{
               maxHeight: (col.width as number) - 10 + 'px',
               minHeight: (col.width as number) - 10 + 'px',

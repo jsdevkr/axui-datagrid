@@ -2,6 +2,12 @@ import * as React from 'react';
 import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
+import {
+  getMousePosition,
+  getScrollPosition,
+  arrayFromRange,
+  throttle,
+} from '../utils';
 import DataGridBodyPanel from './DataGridBodyPanel';
 
 interface IProps extends IDataGridStore {}
@@ -9,6 +15,13 @@ interface IState {}
 
 class DataGridBody extends React.Component<IProps, IState> {
   state = {};
+  scrollMovingTimer: any;
+
+
+
+  onDoubleClickCell = (e: any) => {};
+
+  updateEditInput = (e: any) => {};
 
   render() {
     const {

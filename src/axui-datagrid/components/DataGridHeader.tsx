@@ -64,6 +64,8 @@ class DataGridHeader extends React.Component<IProps, IState> {
     */
   };
 
+  onClickHeader = (e: any) => {};
+
   render() {
     const { scrollLeft = 0, styles = {} } = this.props;
     const {

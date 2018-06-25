@@ -24,23 +24,24 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     columnHeight: optionsHeaderColumnHeight = 0,
     columnPadding: optionsHeaderColumnPadding = 0,
     columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
-    align: colAlign = col.align,
+    align: headerAlign = '',
   } = optionsHeader;
+  const colAlign = col.align || headerAlign || '';
 
   let lineHeight =
     optionsHeaderColumnHeight -
     optionsHeaderColumnPadding * 2 -
     optionsHeaderColumnBorderWidth;
-  let label, sorter, filter;
+  let label, sorter;
 
-  if (col.key === '__checkbox_header__') {
+  if (col.key === '__row_selector__') {
     if (optionsHeader.selector) {
       label = (
         <div
-          data-checkbox
+          className="axui-datagrid-check-box"
           style={{
-            maxHeight: (col.width as number) - 10 + 'px',
-            minHeight: (col.width as number) - 10 + 'px',
+            maxHeight: lineHeight + 'px',
+            minHeight: lineHeight + 'px',
           }}
         />
       );

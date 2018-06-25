@@ -1,14 +1,11 @@
 import * as React from 'react';
 import 'styles/globals';
-import { Basic, CustomizeStyle } from './Examples';
+import { Basic } from './Examples';
 import {
   Container,
   Header,
   Segment,
-  Grid,
   Checkbox,
-  Button,
-  Icon,
   Divider,
 } from 'semantic-ui-react';
 import { CodeViewer } from 'components';
@@ -24,7 +21,7 @@ class Index extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { viewBasicRaw, viewCustomizeStyleRaw } = this.state;
+    const { viewBasicRaw } = this.state;
 
     return (
       <>
