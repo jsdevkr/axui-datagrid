@@ -11,7 +11,12 @@ class DatagridScroll extends React.Component<IProps, IState> {
   state = {};
 
   onClickScrollArrow = (e: any, direction: DirectionTypes) => {
-    const { scrollLeft = 0, scrollTop = 0, styles = {}, dispatch } = this.props;
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      styles = {},
+      setStoreState,
+    } = this.props;
 
     const {
       scrollContentWidth = 0,
@@ -23,14 +28,14 @@ class DatagridScroll extends React.Component<IProps, IState> {
     const processor = {
       [DirectionTypes.UP]: () => {
         let scrollAmount = scrollContentContainerHeight;
-        dispatch({
+        setStoreState({
           scrollTop:
             scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
         });
       },
       [DirectionTypes.DOWN]: () => {
         let scrollAmount = scrollContentContainerHeight;
-        dispatch({
+        setStoreState({
           scrollTop:
             scrollContentContainerHeight <
             scrollContentHeight + (scrollTop - scrollAmount)
@@ -40,14 +45,14 @@ class DatagridScroll extends React.Component<IProps, IState> {
       },
       [DirectionTypes.LEFT]: () => {
         let scrollAmount = scrollContentContainerWidth;
-        dispatch({
+        setStoreState({
           scrollLeft:
             scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
         });
       },
       [DirectionTypes.RIGHT]: () => {
         let scrollAmount = scrollContentContainerWidth;
-        dispatch({
+        setStoreState({
           scrollLeft:
             scrollContentContainerWidth <
             scrollContentWidth + (scrollLeft - scrollAmount)
@@ -66,7 +71,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
       scrollLeft = 0,
       scrollTop = 0,
       styles = {},
-      dispatch,
+      setStoreState,
     } = this.props;
 
     e.preventDefault();
@@ -107,7 +112,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
           mouseY - gry - verticalScrollBarHeight / 2,
           styles,
         );
-        dispatch({
+        setStoreState({
           scrollLeft: currScrollLeft,
           scrollTop: currScrollTop,
         });
@@ -124,7 +129,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
           currScrollBarTop,
           styles,
         );
-        dispatch({
+        setStoreState({
           scrollLeft: currScrollLeft,
           scrollTop: currScrollTop,
         });
@@ -142,7 +147,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
       scrollLeft = 0,
       scrollTop = 0,
       styles = {},
-      dispatch,
+      setStoreState,
     } = this.props;
 
     const {
@@ -171,7 +176,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
     const onMouseMove = (ee: any) => {
       if (!dragging) {
-        dispatch({ dragging: true });
+        setStoreState({ dragging: true });
       }
       const { x, y } = getMousePosition(ee);
 
@@ -186,7 +191,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
             styles,
           );
 
-          dispatch({
+          setStoreState({
             scrollLeft: currScrollLeft,
             scrollTop: currScrollTop,
           });
@@ -201,7 +206,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
             styles,
           );
 
-          dispatch({
+          setStoreState({
             scrollLeft: currScrollLeft,
             scrollTop: currScrollTop,
           });
@@ -213,7 +218,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
     const offEvent = (ee: any) => {
       ee.preventDefault();
 
-      dispatch({ dragging: false });
+      setStoreState({ dragging: false });
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);

@@ -18,7 +18,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       scrollLeft = 0,
       scrollTop = 0,
       styles = {},
-      dispatch,
+      setStoreState,
       isColumnFilter = false,
     } = this.props;
 
@@ -58,7 +58,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       clientHeight: scrollContentContainerHeight,
     });
 
-    dispatch({
+    setStoreState({
       scrollLeft: currScrollLeft,
       scrollTop: currScrollTop,
     });

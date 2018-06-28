@@ -3,7 +3,7 @@ import { types } from '../stores';
 import setColGroupWidth from './setColGroupWidth';
 
 function calculateDimensions(
-  containerDOM: HTMLDivElement,
+  containerDOM: HTMLDivElement | undefined,
   state: types.DataGridState,
 ) {
   const {
@@ -37,6 +37,8 @@ function calculateDimensions(
     arrowSize: optionsScrollerArrowSize = 0,
     barMinSize: optionsScrollerBarMinSize = 0,
   } = optionsScroller;
+
+  console.log(headerTable);
 
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = filteredList ? filteredList.length : 0;
@@ -83,6 +85,12 @@ function calculateDimensions(
     }
     return width;
   })(currentColGroup, frozenColumnIndex);
+
+  console.log(
+    optionsHeaderDisplay,
+    headerTableRowsLength,
+    optionsHeaderColumnHeight,
+  );
 
   currentStyles.headerHeight = optionsHeaderDisplay
     ? headerTableRowsLength * optionsHeaderColumnHeight

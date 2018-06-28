@@ -129,10 +129,15 @@ export type DataGridStyles = {
   pageButtonsContainerWidth?: number;
 };
 
-export type DataGridState = {
-  rootNode?: any;
-  clipBoardNode?: any;
+export type DataGridRootState = {
   mounted?: boolean;
+  calculatedHeight?: number;
+  dimensionsRootNode?: { width?: number; height?: number };
+};
+
+export type DataGridState = {
+  mounted?: boolean;
+  rootNode?: any;
   calculatedStyles?: boolean;
   dragging?: boolean;
   data?: any[];
@@ -186,6 +191,10 @@ export type DataGridState = {
   styles?: DataGridStyles;
   options?: DataGridOptions;
   predefinedFormatter?: DataGridFormatter;
+  rootObject?: any;
+  setRootState?: (state: DataGridRootState) => void;
+  getRootState?: () => any;
+  getRootNode?: () => HTMLDivElement | undefined;
 }; // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
 export type DataGrid = {

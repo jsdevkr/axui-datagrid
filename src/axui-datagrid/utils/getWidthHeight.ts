@@ -1,4 +1,3 @@
-
 /**
  *
  * @param element
@@ -36,8 +35,8 @@ export function getInnerHeight(element: any): number {
  * @param element
  * @return {number}
  */
-export function getOuterWidth(element: HTMLElement): number {
-  return element.offsetWidth;
+export function getOuterWidth(element?: HTMLElement): number {
+  return element ? element.offsetWidth : 0;
 }
 
 /**
@@ -45,6 +44,6 @@ export function getOuterWidth(element: HTMLElement): number {
  * @param element
  * @return {number}
  */
-export function getOuterHeight(element: HTMLElement): number {
-  return element.offsetHeight;
+export function getOuterHeight(element?: HTMLElement): number {
+  return element ? element.offsetHeight : 0;
 }

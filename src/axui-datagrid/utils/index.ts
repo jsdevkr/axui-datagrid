@@ -18,7 +18,12 @@ export { default as getScrollPosition } from './getScrollPosition';
 export {
   default as getScrollPositionByScrollBar,
 } from './getScrollPositionByScrollBar';
-
+export {
+  getInnerHeight,
+  getInnerWidth,
+  getOuterHeight,
+  getOuterWidth,
+} from './getWidthHeight';
 export {
   debounce,
   throttle,
