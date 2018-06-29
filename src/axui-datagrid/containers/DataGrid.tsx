@@ -220,6 +220,10 @@ class DataGrid extends React.Component<IProps, IState> {
           {mounted ? (
             <>
               <DataGridHeader />
+              <DataGridBody />
+              <DataGridPage />
+              <DataGridScroll />
+              <DataGridColumnFilter />
             </>
           ) : null}
         </DataGridEvents>

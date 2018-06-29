@@ -38,8 +38,6 @@ function calculateDimensions(
     barMinSize: optionsScrollerBarMinSize = 0,
   } = optionsScroller;
 
-  console.log(headerTable);
-
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = filteredList ? filteredList.length : 0;
 
@@ -85,12 +83,6 @@ function calculateDimensions(
     }
     return width;
   })(currentColGroup, frozenColumnIndex);
-
-  console.log(
-    optionsHeaderDisplay,
-    headerTableRowsLength,
-    optionsHeaderColumnHeight,
-  );
 
   currentStyles.headerHeight = optionsHeaderDisplay
     ? headerTableRowsLength * optionsHeaderColumnHeight

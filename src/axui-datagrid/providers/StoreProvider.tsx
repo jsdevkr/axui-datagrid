@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
 import { types, EventNames } from '../stores';
 import { DataGrid } from '../containers';
 import {
@@ -85,7 +87,10 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   state = {
     calculatedStyles: false,
     rootObject: undefined,
+    getRootNode: () => undefined,
   };
+
+  throttledUpdateDimensions: any;
 
   static getDerivedStateFromProps(props: any, prevState: types.DataGridState) {
     // 만일 속성별 컨트롤을 하겠다면 여기에서.
@@ -266,8 +271,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       changeState = true;
       newState.calculatedStyles = true;
 
-      console.log(newState);
-
       const calculatedObject = calculateDimensions(
         newState.getRootNode && newState.getRootNode(),
         newState,
@@ -283,6 +286,27 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     }
 
     return changeState ? newState : null;
+  }
+
+  componentDidMount() {
+    this.throttledUpdateDimensions = throttle(
+      this.updateDimensions.bind(this),
+      100,
+    );
+    window.addEventListener('resize', this.throttledUpdateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.throttledUpdateDimensions);
+  }
+
+  updateDimensions() {
+    const styles = calculateDimensions(
+      this.state.getRootNode && this.state.getRootNode(),
+      this.state,
+    ).styles;
+
+    this.setState({ styles });
   }
 
   render() {
