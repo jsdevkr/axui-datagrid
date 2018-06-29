@@ -480,6 +480,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       <div
         className={'axui-datagrid-body'}
         style={{ height: styles.bodyHeight }}
+        onMouseDown={this.onMouseDownBody}
       >
         <DataGridBodyPanel
           panelName="top-aside-body-scroll"
