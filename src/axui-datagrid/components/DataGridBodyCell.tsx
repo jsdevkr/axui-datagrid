@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types } from '../stores';
+import { types, EventNames, KeyCodes } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction } from '../utils';
@@ -15,6 +15,44 @@ interface IState {}
 class DataGridBodyCell extends React.Component<IProps, IState> {
   editInput: HTMLInputElement;
   state = {};
+
+  onDoubleClickCell = (e: any, col: types.DataGridColumn, li: number) => {
+    const { setStoreState } = this.props;
+
+    if (col.editor) {
+      setStoreState({
+        isInlineEditing: true,
+        inlineEditingCell: {
+          row: li,
+          col: col.colIndex,
+          editor: col.editor,
+        },
+      });
+    }
+  };
+
+  onEventInput = (eventName: EventNames, e: any) => {
+    const proc = {
+      [EventNames.BLUR]: () => {
+        // updateEditInput('cancel');
+      },
+      [EventNames.KEYDOWN]: () => {
+        if (e.which === KeyCodes.ESC) {
+          // updateEditInput('cancel');
+        } else if (e.which === KeyCodes.ENTER) {
+          /*
+          updateEditInput(
+            'update',
+            inlineEditingCell.row,
+            inlineEditingCell.col,
+            e.target.value,
+          );
+          */
+        }
+      },
+    };
+    proc[eventName]();
+  };
 
   render() {
     const {
@@ -144,6 +182,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           rowSpan={col.rowSpan}
           className={CX(tdClassNames)}
           style={{ height: cellHeight, minHeight: '1px' }}
+          onDoubleClick={(e: any) => {}}
         >
           <span
             data-span={col.columnAttr || ''}

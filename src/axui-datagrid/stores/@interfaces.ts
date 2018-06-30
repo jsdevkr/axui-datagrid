@@ -38,6 +38,10 @@ export type formatterFunction = (
   formatterData: types.DataGridFormatterData,
 ) => any;
 
+export type editorFunction = (
+  editorData: types.DataGridFormatterData,
+) => void;
+
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;
 }
@@ -46,6 +50,7 @@ export interface IDataGridCol extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
+  editor?: editorFunction | string;
   _ex?: number;
   _sx?: number;
   _width?: number;
@@ -56,6 +61,7 @@ export interface IDataGridColumn extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
+  editor?: editorFunction | string;
   hidden?: boolean;
   columns?: IDataGridColumn[];
   depth?: number;

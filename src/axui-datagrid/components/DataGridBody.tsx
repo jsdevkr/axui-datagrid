@@ -16,10 +16,6 @@ interface IState {}
 class DataGridBody extends React.Component<IProps, IState> {
   state = {};
 
-  onDoubleClickCell = (e: any) => {};
-
-  updateEditInput = (e: any) => {};
-
   onMouseDownBody = (e: any) => {
     const {
       filteredList = [],
@@ -53,6 +49,7 @@ class DataGridBody extends React.Component<IProps, IState> {
     } = styles;
 
     const startMousePosition = getMousePosition(e);
+
     const spanType: string = e.target.getAttribute('data-span');
     const rootNode = getRootNode ? getRootNode() : undefined;
     const { x: leftPadding = 0, y: topPadding = 0 } =
@@ -311,7 +308,7 @@ class DataGridBody extends React.Component<IProps, IState> {
             state.selectionCols[i] = true;
           }
 
-          this.setState(state);
+          setStoreState(state);
 
           selectStartedRow = focusedRow;
           selectStartedCol = focusedCol;
@@ -372,7 +369,7 @@ class DataGridBody extends React.Component<IProps, IState> {
         state.focusedRow = selectStartedRow;
       }
 
-      this.setState(state);
+      setStoreState(state);
     };
 
     // 선택이 시작된 row / col
