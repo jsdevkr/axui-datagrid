@@ -38,3 +38,10 @@ export enum DirectionTypes {
   'UP',
   'DOWN',
 }
+
+export enum DispatchTypes {
+  'SET_DATA',
+  'SORT',
+  'FILTER',
+  'UPDATE',
+}

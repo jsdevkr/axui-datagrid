@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { types, EventNames } from '../stores';
+import { types, EventNames, DispatchTypes } from '../stores';
 import { DataGrid } from '../containers';
 import {
   makeHeaderTable,
@@ -20,6 +20,10 @@ import dataGridFormatter from '../functions/formatter';
 
 export interface IDataGridStore extends types.DataGridState {
   setStoreState: (store: types.DataGridState) => void;
+  dispatch: (
+    dispatchType: DispatchTypes,
+    param: types.DataGridDispatchParam,
+  ) => void;
 }
 
 function getValueNotUndefined(value1: any, value2: any, value3: any) {
@@ -74,6 +78,7 @@ const store: IDataGridStore = {
   predefinedFormatter: {},
 
   setStoreState: () => {},
+  dispatch: () => {},
   setRootState: () => {},
   getRootState: () => {},
   getRootNode: () => {
@@ -84,16 +89,32 @@ const store: IDataGridStore = {
 const { Provider, Consumer } = React.createContext(store);
 
 class StoreProvider extends React.Component<any, types.DataGridState> {
-  state = {
-    calculatedStyles: false,
-    rootObject: undefined,
-    getRootNode: () => undefined,
-  };
+  state = store;
 
   throttledUpdateDimensions: any;
 
   static getDerivedStateFromProps(props: any, prevState: types.DataGridState) {
     // 만일 속성별 컨트롤을 하겠다면 여기에서.
+
+    if (
+      props.mounted === prevState.mounted &&
+      props.setRootState === prevState.setRootState &&
+      props.getRootState === prevState.getRootState &&
+      props.getRootNode === prevState.getRootNode &&
+      props.rootObject === prevState.rootObject &&
+      props.data === prevState.data &&
+      props.height === prevState.height &&
+      props.columns === prevState.propColumns &&
+      props.options === prevState.propOptions &&
+      props.onBeforeEvent === prevState.onBeforeEvent &&
+      props.onAfterEvent === prevState.onAfterEvent &&
+      prevState.calculatedStyles === true
+    ) {
+      return null;
+    }
+    // 불필요한 렌더를 막으려면 렌더링이 필요한 상활을 잘 파악 해서 처리 헤야합니다.
+    // console.log('run getDerivedStateFromProps');
+
     const {
       options = DataGrid.defaultOptions,
       styles = DataGrid.defaultStyles,
@@ -104,22 +125,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
     let changeState = false;
     let newState: types.DataGridState = { ...prevState };
-
-    /*
-      mounted: props.mounted,
-      calculatedStyles: getValueNotUndefined(
-        props.calculatedStyles,
-        prevState.calculatedStyles,
-        false,
-      ),
-      options: options,
-      styles: styles,
-      setRootState: props.setRootState,
-      getRootState: props.getRootState,
-      getRootNode: props.getRootNode,
-    
-     */
-
     let currentOptions: types.DataGridOptions = {
       ...options,
     };
@@ -127,13 +132,15 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       ...styles,
     };
 
-    if (props.setRootState) {
+    newState.mounted = true;
+
+    if (props.setRootState && props.setRootState !== prevState.setRootState) {
       newState.setRootState = props.setRootState;
     }
-    if (props.getRootState) {
+    if (props.getRootState && props.getRootState !== prevState.getRootState) {
       newState.getRootState = props.getRootState;
     }
-    if (props.getRootNode) {
+    if (props.getRootNode && props.getRootNode !== prevState.getRootNode) {
       newState.getRootNode = props.getRootNode;
     }
 
@@ -152,14 +159,14 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.height = props.height;
     }
 
-    if (JSON.stringify(props.options) !== prevState.optionsString) {
+    if (props.options !== prevState.propOptions) {
       changeState = true;
+      newState.propOptions = props.options;
       newState.options = currentOptions = mergeAll(
         true,
         { ...DataGrid.defaultOptions },
         props.options,
       );
-      newState.optionsString = JSON.stringify(props.options);
     }
 
     if (props.rootObject !== prevState.rootObject) {
@@ -168,8 +175,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     }
 
     if (
-      JSON.stringify(props.columns) !== prevState.columnsString ||
-      JSON.stringify(props.options) !== prevState.optionsString
+      props.columns !== prevState.propColumns ||
+      props.options !== prevState.propOptions
     ) {
       changeState = true;
 
@@ -263,7 +270,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       currentStyles.bodyTrHeight =
         newState.bodyRowTable.rows.length * columnHeight;
 
-      newState.columnsString = JSON.stringify(props.columns);
+      newState.propColumns = props.columns;
       newState.styles = currentStyles;
     }
 
@@ -279,10 +286,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.colGroup = calculatedObject.colGroup;
       newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
       newState.headerColGroup = calculatedObject.headerColGroup;
-    }
-
-    if (changeState) {
-      // console.table(newState);
     }
 
     return changeState ? newState : null;
@@ -309,9 +312,23 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     this.setState({ styles });
   }
 
-  render() {
-    const { rootObject } = this.state;
+  dispatch = (
+    dispatchType: DispatchTypes,
+    param: types.DataGridDispatchParam,
+  ) => {
+    const { filteredList } = this.state;
 
+    const proc = {
+      [DispatchTypes.SET_DATA]: () => {},
+      [DispatchTypes.FILTER]: () => {},
+      [DispatchTypes.SORT]: () => {},
+      [DispatchTypes.UPDATE]: () => {},
+    };
+
+    proc[dispatchType]();
+  };
+
+  render() {
     return (
       <Provider
         value={{
@@ -319,6 +336,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           ...{
             predefinedFormatter: { ...dataGridFormatter },
             setStoreState: state => this.setState(state),
+            dispatch: this.dispatch,
           },
         }}
       >

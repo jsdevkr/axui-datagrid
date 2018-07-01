@@ -144,9 +144,7 @@ export type DataGridState = {
   filteredList?: any[];
   sortInfo?: {};
   height?: number;
-  columnsString?: string;
-  styleString?: string;
-  optionsString?: string;
+
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void; // 원본과 비교를 위한 JSON.stringify 값
   isInlineEditing?: boolean;
@@ -190,6 +188,10 @@ export type DataGridState = {
   footSumData?: {};
   styles?: DataGridStyles;
   options?: DataGridOptions;
+
+  propColumns?: any;
+  propOptions?: DataGridOptions;
+
   predefinedFormatter?: DataGridFormatter;
   rootObject?: any;
   setRootState?: (state: DataGridRootState) => void;
@@ -207,3 +209,5 @@ export type DataGrid = {
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void;
 };
+
+export type DataGridDispatchParam = { [key: string]: any };

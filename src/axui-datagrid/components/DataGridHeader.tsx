@@ -17,55 +17,6 @@ class DataGridHeader extends React.Component<IProps, IState> {
     columnResizerLeft: 0,
   };
 
-  onMouseDownColumnResizer = (e: any, col: types.DataGridCol) => {
-    /*
-    e.preventDefault();
-
-    const resizer = e.target;
-    const prevLeft = Number(resizer.getAttribute('data-prev-left'));
-    const currLeft = Number(resizer.getAttribute('data-left'));
-    const { x: rootX } = this.props.getRootBounding();
-
-    let newWidth;
-    let startMousePosition = UTIL.getMousePosition(e).x;
-
-    const onMouseMove = ee => {
-      const { x, y } = UTIL.getMousePosition(ee);
-      let newLeft = currLeft + x - startMousePosition;
-      if (newLeft < prevLeft) {
-        newLeft = prevLeft;
-      }
-      newWidth = newLeft - prevLeft;
-
-      this.setState({
-        columnResizing: true,
-        columnResizerLeft: x - rootX + 1,
-      });
-    };
-
-    const offEvent = ee => {
-      ee.preventDefault();
-      startMousePosition = null;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', offEvent);
-      document.removeEventListener('mouseleave', offEvent);
-
-      this.setState({
-        columnResizing: false,
-      });
-
-      if (typeof newWidth !== 'undefined')
-        this.props.onResizeColumnResizer(e, col, newWidth);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', offEvent);
-    document.addEventListener('mouseleave', offEvent);
-    */
-  };
-
-  onClickHeader = (e: any) => {};
-
   render() {
     const { scrollLeft = 0, styles = {} } = this.props;
     const {
@@ -103,12 +54,10 @@ class DataGridHeader extends React.Component<IProps, IState> {
         <DataGridHeaderPanel
           panelName="aside-header"
           style={asideHeaderPanelStyle}
-          onMouseDownColumnResizer={this.onMouseDownColumnResizer}
         />
         <DataGridHeaderPanel
           panelName="left-header"
           style={leftHeaderPanelStyle}
-          onMouseDownColumnResizer={this.onMouseDownColumnResizer}
         />
         <div
           data-scroll-container="header-scroll-container"
@@ -117,7 +66,6 @@ class DataGridHeader extends React.Component<IProps, IState> {
           <DataGridHeaderPanel
             panelName="header-scroll"
             style={headerScrollStyle}
-            onMouseDownColumnResizer={this.onMouseDownColumnResizer}
           />
         </div>
 

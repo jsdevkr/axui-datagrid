@@ -32,14 +32,31 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
   };
 
   onEventInput = (eventName: EventNames, e: any) => {
+    const { setStoreState } = this.props;
+
     const proc = {
       [EventNames.BLUR]: () => {
-        // updateEditInput('cancel');
+
+        setStoreState({
+          isInlineEditing: false,
+          inlineEditingCell: {},
+        });
       },
       [EventNames.KEYDOWN]: () => {
         if (e.which === KeyCodes.ESC) {
-          // updateEditInput('cancel');
+
+          setStoreState({
+            isInlineEditing: false,
+            inlineEditingCell: {},
+          });
+
         } else if (e.which === KeyCodes.ENTER) {
+
+          setStoreState({
+            isInlineEditing: false,
+            inlineEditingCell: {},
+          });
+
           /*
           updateEditInput(
             'update',

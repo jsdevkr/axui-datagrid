@@ -8,16 +8,18 @@ interface IProps extends IDataGridStore {
   bodyRow: types.DataGridColumnTableMap;
   ri: number;
   col: types.DataGridCol;
+  onClick: (e: any) => void;
 }
 
 const DatagridHeaderCell: React.SFC<IProps> = ({
+  options = {},
+  focusedCol,
+  selectionCols,
+  sortInfo,
   bodyRow,
   ri,
   col,
-  focusedCol,
-  selectionCols,
-  options = {},
-  sortInfo,
+  onClick,
 }) => {
   const { header: optionsHeader = {} } = options;
   const {
@@ -90,6 +92,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
       className={CX(tdClassNames)}
       style={{ height: cellHeight, minHeight: '1px' }}
       data-axui-tooltip={col.key === '__line_number__' ? 'SELECT ALL' : 'false'}
+      onClick={onClick}
     >
       <span
         data-span
