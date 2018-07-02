@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { types } from '../stores';
+import { types, DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
+import { getMousePosition, arrayFromRange, findParentNode } from '../utils';
 import DataGridHeaderCell from './DataGridHeaderCell';
 
 interface IProps extends IDataGridStore {
@@ -13,53 +14,197 @@ interface IState {}
 class DataGridHeaderPanel extends React.Component<IProps, IState> {
   state = {};
 
-  onClick = (e: any) => {};
+  onClick = (e: any, col: types.DataGridCol) => {
+    const {
+      filteredList = [],
+      colGroup = [],
+      scrollLeft = 0,
+      scrollTop = 0,
+      focusedCol = 0,
+      isColumnFilter = false,
+      options = {},
+      styles = {},
+      setStoreState,
+      dispatch,
+    } = this.props;
+    const { header: optionsHeader = {} } = options;
+    const { key, colIndex = 0 } = col;
+    const { asidePanelWidth = 0 } = styles;
+
+    if (e.target.getAttribute('data-filter')) {
+      const downEvent = (ee: any) => {
+        if (
+          ee.target &&
+          ee.target.getAttribute &&
+          '' + isColumnFilter === ee.target.getAttribute('data-filter-index')
+        ) {
+          return false;
+        }
+
+        let downedElement = findParentNode(ee.target, element => {
+          return element
+            ? element.getAttribute('data-column-filter') === 'true'
+            : false;
+        });
+
+        if (downedElement === false) {
+          ee.preventDefault();
+
+          setStoreState({
+            isColumnFilter: false,
+          });
+
+          document.removeEventListener('mousedown', downEvent);
+          document.removeEventListener('mouseleave', downEvent);
+          document.removeEventListener('keydown', keyDown);
+        }
+
+        return;
+      };
+      const keyDown = (ee: any) => {
+        if (ee.which === 27) {
+          downEvent(ee);
+        }
+      };
+
+      if (isColumnFilter === colIndex) {
+        setStoreState({
+          isColumnFilter: false,
+        });
+
+        document.removeEventListener('mousedown', downEvent);
+        document.removeEventListener('mouseleave', downEvent);
+        document.removeEventListener('keydown', keyDown);
+      } else {
+        let columnFilterLeft: number =
+          asidePanelWidth + (colGroup[colIndex]._sx || 0) - 2 + scrollLeft;
+
+        setStoreState({
+          scrollLeft:
+            columnFilterLeft < 0 ? scrollLeft - columnFilterLeft : scrollLeft,
+          isColumnFilter: colIndex,
+        });
+
+        document.addEventListener('mousedown', downEvent);
+        document.addEventListener('mouseleave', downEvent);
+        document.addEventListener('keydown', keyDown);
+      }
+    } else {
+      let state = {
+        dragging: false,
+        selectionRows: {},
+        selectionCols: {},
+        focusedRow: 0,
+        focusedCol: focusedCol,
+      };
+
+      if (key === 'lineNumber') {
+        state.selectionRows = (() => {
+          let rows = {};
+          filteredList.forEach((item, i) => {
+            rows[i] = true;
+          });
+          return rows;
+        })();
+
+        state.selectionCols = (() => {
+          let cols = {};
+          colGroup.forEach(_col => {
+            cols[_col.colIndex || 0] = true;
+          });
+          return cols;
+        })();
+        state.focusedCol = 0;
+        setStoreState(state);
+      } else {
+        if (optionsHeader.clickAction === 'select') {
+          state.selectionRows = (() => {
+            let rows = {};
+            filteredList.forEach((item, i) => {
+              rows[i] = true;
+            });
+            return rows;
+          })();
+
+          if (e.shiftKey) {
+            state.selectionCols = (() => {
+              let cols = {};
+              arrayFromRange(
+                Math.min(focusedCol, colIndex),
+                Math.max(focusedCol, colIndex) + 1,
+              ).forEach(i => {
+                cols[i] = true;
+              });
+              return cols;
+            })();
+          } else {
+            state.selectionCols = {
+              [colIndex]: true,
+            };
+            state.focusedCol = colIndex;
+          }
+          setStoreState(state);
+        } else if (
+          optionsHeader.clickAction === 'sort' &&
+          optionsHeader.sortable
+        ) {
+          dispatch(DispatchTypes.SORT, { options, colIndex });
+        }
+      }
+    }
+  };
 
   onMouseDownColumnResizer = (e: any, col: types.DataGridCol) => {
-    /*
     e.preventDefault();
 
+    const { setStoreState, getRootNode, dispatch } = this.props;
+
+    const rootNode = getRootNode ? getRootNode() : undefined;
+    const { x: rootX = 0 } =
+      rootNode && (rootNode.getBoundingClientRect() as any);
     const resizer = e.target;
     const prevLeft = Number(resizer.getAttribute('data-prev-left'));
     const currLeft = Number(resizer.getAttribute('data-left'));
-    const { x: rootX } = this.props.getRootBounding();
 
-    let newWidth;
-    let startMousePosition = UTIL.getMousePosition(e).x;
+    let newWidth: number = 0;
+    let startMousePosition = getMousePosition(e).x;
 
-    const onMouseMove = ee => {
-      const { x, y } = UTIL.getMousePosition(ee);
+    const onMouseMove = (ee: any) => {
+      const { x } = getMousePosition(ee);
       let newLeft = currLeft + x - startMousePosition;
       if (newLeft < prevLeft) {
         newLeft = prevLeft;
       }
       newWidth = newLeft - prevLeft;
 
-      this.setState({
+      setStoreState({
         columnResizing: true,
         columnResizerLeft: x - rootX + 1,
       });
     };
 
-    const offEvent = ee => {
+    const offEvent = (ee: any) => {
       ee.preventDefault();
       startMousePosition = null;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
 
-      this.setState({
-        columnResizing: false,
-      });
-
-      if (typeof newWidth !== 'undefined')
-        this.props.onResizeColumnResizer(e, col, newWidth);
+      if (typeof newWidth !== 'undefined') {
+        dispatch(DispatchTypes.RESIZE_COL, {
+          col,
+          newWidth,
+        });
+      } else {
+        setStoreState({
+          columnResizing: false,
+        });
+      }
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
-    */
   };
 
   render() {

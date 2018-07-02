@@ -53,6 +53,8 @@ const store: IDataGridStore = {
   selectionEndOffset: {},
   selectionMinOffset: {},
   selectionMaxOffset: {},
+  columnResizing: false,
+  columnResizerLeft: 0,
 
   colGroup: [],
   asideColGroup: [],
@@ -272,6 +274,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
       newState.propColumns = props.columns;
       newState.styles = currentStyles;
+
+      newState.calculatedStyles = false;
     }
 
     if (props.mounted && !newState.calculatedStyles) {
@@ -323,6 +327,33 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       [DispatchTypes.FILTER]: () => {},
       [DispatchTypes.SORT]: () => {},
       [DispatchTypes.UPDATE]: () => {},
+      [DispatchTypes.RESIZE_COL]: () => {
+        console.log(param);
+        const { col, newWidth } = param;
+        const { colGroup = [], getRootNode } = this.state;
+        const rootNode = getRootNode ? getRootNode() : undefined;
+
+        let newState: IDataGridStore = { ...this.state };
+        if (newState.colGroup) {
+          newState.colGroup[col.colIndex]._width = newState.colGroup[
+            col.colIndex
+          ].width = newWidth;
+        }
+
+        const {
+          styles,
+          leftHeaderColGroup,
+          headerColGroup,
+        } = calculateDimensions(rootNode, newState);
+
+        this.setState({
+          colGroup: colGroup,
+          leftHeaderColGroup: leftHeaderColGroup,
+          headerColGroup: headerColGroup,
+          styles: styles,
+          columnResizing: false,
+        });
+      },
     };
 
     proc[dispatchType]();

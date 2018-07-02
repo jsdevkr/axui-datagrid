@@ -44,4 +44,5 @@ export enum DispatchTypes {
   'SORT',
   'FILTER',
   'UPDATE',
+  'RESIZE_COL'
 }

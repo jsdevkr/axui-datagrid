@@ -1,4 +1,3 @@
-
 .axui-datagrid {
   position: relative;
   background: $axui-datagrid-bg;
@@ -90,11 +89,19 @@
       top: 0;
       cursor: ew-resize;
     }
+
+    [data-column-resizer-track] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
     [data-column-resizing] {
       position: absolute;
       top: 0;
       left: 0;
-      width: 1px;
+      width: 3px;
       height: 100%;
       cursor: default;
       background: rgba(255, 0, 0, 0.3);
@@ -285,7 +292,10 @@
         position: relative;
         border: $axui-datagrid-cell-checkbox-border;
         border-radius: $axui-datagrid-cell-checkbox-border-radius;
-        @include axui-background(to bottom, $axui-datagrid-cell-checkbox-bg-colors);
+        @include axui-background(
+          to bottom,
+          $axui-datagrid-cell-checkbox-bg-colors
+        );
         height: 16px;
         width: 16px;
 

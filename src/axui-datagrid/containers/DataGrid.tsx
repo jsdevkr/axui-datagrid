@@ -127,7 +127,6 @@ class DataGrid extends React.Component<IProps, IState> {
   };
   static defaultThrottleWait = 100;
 
-  throttledUpdateDimensions: any;
   rootObject: any = {};
   rootNode: any = null;
   clipBoardNode: any = null;

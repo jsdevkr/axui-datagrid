@@ -147,9 +147,14 @@ export type DataGridState = {
 
   onBeforeEvent?: () => void;
   onAfterEvent?: () => void; // 원본과 비교를 위한 JSON.stringify 값
+
   isInlineEditing?: boolean;
   inlineEditingCell?: intfs.IDataGridEditingCell;
-  isColumnFilter?: boolean;
+
+  columnResizing?: boolean;
+  columnResizerLeft?: number;
+
+  isColumnFilter?: boolean | number;
   scrollLeft?: number;
   scrollTop?: number;
   selectionRows?: {};

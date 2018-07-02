@@ -6,10 +6,7 @@ import DataGridHeaderPanel from './DataGridHeaderPanel';
 import DataGridHeaderColumnResizer from './DataGridHeaderColumnResizer';
 
 interface IProps extends IDataGridStore {}
-interface IState {
-  columnResizing: boolean;
-  columnResizerLeft: number;
-}
+interface IState {}
 
 class DataGridHeader extends React.Component<IProps, IState> {
   state = {
@@ -18,7 +15,12 @@ class DataGridHeader extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { scrollLeft = 0, styles = {} } = this.props;
+    const {
+      scrollLeft = 0,
+      columnResizing,
+      columnResizerLeft,
+      styles = {},
+    } = this.props;
     const {
       CTInnerWidth = 0,
       headerHeight = 0,
@@ -26,7 +28,6 @@ class DataGridHeader extends React.Component<IProps, IState> {
       frozenPanelWidth = 0,
       rightPanelWidth = 0,
     } = styles;
-    const { columnResizing, columnResizerLeft } = this.state;
 
     let asideHeaderPanelStyle = {
       left: 0,
