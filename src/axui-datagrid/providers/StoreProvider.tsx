@@ -326,12 +326,35 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   }
 
   updateDimensions() {
+    const { scrollLeft = 0, scrollTop = 0 } = this.state;
+
     const styles = calculateDimensions(
       this.state.getRootNode && this.state.getRootNode(),
       this.state,
     ).styles;
 
-    this.setStoreState({ styles });
+    const {
+      scrollContentWidth = 0,
+      scrollContentHeight = 0,
+      scrollContentContainerWidth = 0,
+      scrollContentContainerHeight = 0,
+    } = styles;
+
+    let {
+      scrollLeft: newScrollLeft = 0,
+      scrollTop: newScrollTop = 0,
+    } = getScrollPosition(scrollLeft, scrollTop, {
+      scrollWidth: scrollContentWidth,
+      scrollHeight: scrollContentHeight,
+      clientWidth: scrollContentContainerWidth,
+      clientHeight: scrollContentContainerHeight,
+    });
+
+    this.setStoreState({
+      styles,
+      scrollLeft: newScrollLeft,
+      scrollTop: newScrollTop,
+    });
   }
 
   setStoreState = (newState: types.DataGridState) => {
