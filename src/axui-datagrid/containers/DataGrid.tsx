@@ -162,6 +162,12 @@ class DataGrid extends React.Component<IProps, IState> {
     return this.rootNode;
   };
 
+  getClipBoardNode = () => {
+    return this.clipBoardNode;
+  };
+
+  onFireEvent = () => {};
+
   componentDidMount() {
     this.setState({
       mounted: true,
@@ -190,6 +196,7 @@ class DataGrid extends React.Component<IProps, IState> {
       setRootState: this.setRootState,
       getRootState: this.getRootState,
       getRootNode: this.getRootNode,
+      getClipBoardNode: this.getClipBoardNode,
       rootObject: this.rootObject,
       data,
       columns,
@@ -210,7 +217,7 @@ class DataGrid extends React.Component<IProps, IState> {
       <DataGridStore.Provider {...providerProps}>
         <DataGridEvents
           ref={this.setRootNode}
-          onFireEvent={(eventName: EventNames, e: any) => {}}
+          onFireEvent={this.onFireEvent}
           style={gridRootStyle}
         >
           <div className={'axui-datagrid-clip-board'}>

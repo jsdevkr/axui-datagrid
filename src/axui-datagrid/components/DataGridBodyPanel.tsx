@@ -12,7 +12,6 @@ interface IProps extends IDataGridStore {
   panelScrollConfig?: any;
   panelLeft?: number;
   panelTop?: number;
-  panelPaddingLeft?: number;
 }
 interface IState {}
 
@@ -34,26 +33,63 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       panelScrollConfig = {},
       panelLeft = 0,
       panelTop = 0,
-      panelPaddingLeft = 0,
 
+      printStartColIndex = 0,
+      printEndColIndex = 0,
       styles = {},
     } = this.props;
+
+    const {
+      frozenPanelWidth = 0,
+      asidePanelWidth = 0,
+      frozenPanelHeight = 0,
+      bodyTrHeight = 0,
+    } = styles;
+
+    const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
 
     // aside-header가 필요하지 않은지 확인
     if (
       (panelName === 'top-aside-body-scroll' &&
-        (styles.asidePanelWidth === 0 || styles.frozenPanelHeight === 0)) ||
+        (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||
       (panelName === 'top-left-body-scroll' &&
-        (styles.frozenPanelWidth === 0 || styles.frozenPanelHeight === 0)) ||
-      (panelName === 'top-body-scroll' && styles.frozenPanelHeight === 0) ||
-      (panelName === 'aside-body-scroll' && styles.asidePanelWidth === 0) ||
-      (panelName === 'left-body-scroll' && styles.frozenPanelWidth === 0)
+        (frozenPanelWidth === 0 || frozenPanelHeight === 0)) ||
+      (panelName === 'top-body-scroll' && frozenPanelHeight === 0) ||
+      (panelName === 'aside-body-scroll' && asidePanelWidth === 0) ||
+      (panelName === 'left-body-scroll' && frozenPanelWidth === 0)
     ) {
       return null;
     }
 
-    const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
-    const { bodyTrHeight = 0 } = styles;
+    let panelColGroup: types.DataGridCol[] = [];
+    let panelBodyRow: types.DataGridColumnTableMap = { rows: [{ cols: [] }] };
+    let panelPaddingLeft: number = 0;
+
+    switch (panelName) {
+      case 'top-aside-body-scroll':
+      case 'aside-body-scroll':
+        panelColGroup = asideColGroup;
+        panelBodyRow = asideBodyRowData;
+        break;
+      case 'top-left-body-scroll':
+      case 'left-body-scroll':
+        panelColGroup = leftHeaderColGroup;
+        panelBodyRow = leftBodyRowData;
+        break;
+      case 'top-body-scroll':
+      case 'body-scroll':
+      default:
+        panelColGroup = headerColGroup.slice(
+          printStartColIndex,
+          printEndColIndex + 1,
+        );
+        // headerColGroup;
+        panelBodyRow = bodyRowData;
+        panelPaddingLeft = panelColGroup[0]
+          ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
+          : 0;
+    }
+
     const panelStyle = {
       left: panelLeft,
       top: panelTop,
@@ -61,38 +97,8 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       paddingLeft: panelPaddingLeft,
     };
 
-    const panelColGroup: types.DataGridCol[] = (() => {
-      switch (panelName) {
-        case 'top-aside-body-scroll':
-        case 'aside-body-scroll':
-          return asideColGroup;
-        case 'top-left-body-scroll':
-        case 'left-body-scroll':
-          return leftHeaderColGroup;
-        case 'top-body-scroll':
-        case 'body-scroll':
-        default:
-          return headerColGroup;
-      }
-    })();
-
-    const panelBodyRow = (() => {
-      switch (panelName) {
-        case 'top-aside-body-scroll':
-        case 'aside-body-scroll':
-          return asideBodyRowData;
-        case 'top-left-body-scroll':
-        case 'left-body-scroll':
-          return leftBodyRowData;
-        case 'top-body-scroll':
-        case 'body-scroll':
-        default:
-          return bodyRowData;
-      }
-    })();
-
     if (panelName === 'aside-body-scroll-container') {
-      console.log(panelName);
+      // console.log(panelName);
     }
 
     return (

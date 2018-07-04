@@ -19,7 +19,6 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       filteredList = [],
       colGroup = [],
       scrollLeft = 0,
-      scrollTop = 0,
       focusedCol = 0,
       isColumnFilter = false,
       options = {},
@@ -98,7 +97,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
         focusedCol: focusedCol,
       };
 
-      if (key === 'lineNumber') {
+      if (key === '__line_number__') {
         state.selectionRows = (() => {
           let rows = {};
           filteredList.forEach((item, i) => {
@@ -117,6 +116,8 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
         state.focusedCol = 0;
         setStoreState(state);
       } else {
+        console.log(optionsHeader.clickAction);
+
         if (optionsHeader.clickAction === 'select') {
           state.selectionRows = (() => {
             let rows = {};

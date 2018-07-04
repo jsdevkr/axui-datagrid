@@ -419,9 +419,6 @@ class DataGridBody extends React.Component<IProps, IState> {
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
 
-    let scrollPaddingLeft = headerColGroup[0]
-      ? (headerColGroup[0]._sx || 0) - (frozenPanelWidth || 0)
-      : 0;
     let topBodyScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,
@@ -494,7 +491,6 @@ class DataGridBody extends React.Component<IProps, IState> {
           containerStyle={topBodyPanelStyle}
           panelScrollConfig={topBodyScrollConfig}
           panelLeft={scrollLeft}
-          panelPaddingLeft={scrollPaddingLeft}
         />
         <DataGridBodyPanel
           panelName="aside-body-scroll"
@@ -514,7 +510,6 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelScrollConfig={bodyScrollConfig}
           panelLeft={scrollLeft}
           panelTop={scrollTop}
-          panelPaddingLeft={scrollPaddingLeft}
         />
       </div>
     );

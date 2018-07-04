@@ -26,6 +26,9 @@ export enum KeyCodes {
   'UP_ARROW' = 38,
   'RIGHT_ARROW' = 39,
   'DOWN_ARROW' = 40,
+  'A' = 65,
+  'B' = 66,
+  'C' = 67,
 }
 
 export enum ScrollTypes {
@@ -44,5 +47,5 @@ export enum DispatchTypes {
   'SORT',
   'FILTER',
   'UPDATE',
-  'RESIZE_COL'
+  'RESIZE_COL',
 }

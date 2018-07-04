@@ -1,7 +1,5 @@
 import * as intfs from './@interfaces';
 
-export type ColTextAlign = 'left' | 'center' | 'right' | string;
-
 export type DataGridSelection = intfs.IPosition;
 
 export type DataGridRect = intfs.IRect;
@@ -40,18 +38,18 @@ export type DataGridColumnDivideTable = {
 
 export type DataGridOptionHeader = {
   display?: boolean;
-  align?: ColTextAlign;
+  align?: 'left' | 'center' | 'right' | undefined;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
   selector?: boolean;
   sortable?: boolean;
   enableFilter?: boolean;
-  clickAction?: string;
+  clickAction?: 'select' | 'sort' | undefined;
 };
 
 export type DataGridOptionBody = {
-  align?: ColTextAlign;
+  align?: 'left' | 'center' | 'right' | undefined;
   columnHeight?: number;
   columnPadding?: number;
   columnBorderWidth?: number;
@@ -137,7 +135,6 @@ export type DataGridRootState = {
 
 export type DataGridState = {
   mounted?: boolean;
-  rootNode?: any;
   calculatedStyles?: boolean;
   dragging?: boolean;
   data?: any[];
@@ -166,6 +163,9 @@ export type DataGridState = {
   selectionEndOffset?: intfs.IPosition;
   selectionMinOffset?: intfs.IPosition;
   selectionMaxOffset?: intfs.IPosition;
+
+  printStartColIndex?: number;
+  printEndColIndex?: number;
 
   colGroup?: DataGridCol[];
   colGroupMap?: {};
@@ -201,7 +201,8 @@ export type DataGridState = {
   rootObject?: any;
   setRootState?: (state: DataGridRootState) => void;
   getRootState?: () => any;
-  getRootNode?: () => HTMLDivElement | undefined;
+  getRootNode?: () => HTMLDivElement;
+  getClipBoardNode?: () => HTMLTextAreaElement;
 }; // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
 export type DataGrid = {

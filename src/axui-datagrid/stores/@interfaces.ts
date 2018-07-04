@@ -14,7 +14,7 @@ export interface ICol {
   key?: string;
   label?: string;
   width?: number | string;
-  align?: types.ColTextAlign;
+  align?: 'left' | 'center' | 'right' | string;
   colSpan?: number;
   rowSpan?: number;
 }
@@ -38,9 +38,7 @@ export type formatterFunction = (
   formatterData: types.DataGridFormatterData,
 ) => any;
 
-export type editorFunction = (
-  editorData: types.DataGridFormatterData,
-) => void;
+export type editorFunction = (editorData: types.DataGridFormatterData) => void;
 
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;

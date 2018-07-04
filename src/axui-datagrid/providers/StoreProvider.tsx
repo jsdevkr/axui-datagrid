@@ -15,6 +15,7 @@ import {
   getScrollPosition,
   getMousePosition,
   arrayFromRange,
+  getPositionPrintColGroup,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -81,11 +82,6 @@ const store: IDataGridStore = {
 
   setStoreState: () => {},
   dispatch: () => {},
-  setRootState: () => {},
-  getRootState: () => {},
-  getRootNode: () => {
-    return undefined;
-  },
 };
 
 const { Provider, Consumer } = React.createContext(store);
@@ -290,6 +286,28 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.colGroup = calculatedObject.colGroup;
       newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
       newState.headerColGroup = calculatedObject.headerColGroup;
+
+      // newState.scrollLeft = 0;
+
+      const {
+        CTInnerWidth: _CTInnerWidth = 0,
+        frozenPanelWidth: _frozenPanelWidth = 0,
+        asidePanelWidth: _asidePanelWidth = 0,
+        rightPanelWidth: _rightPanelWidth = 0,
+      } = newState.styles;
+      const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
+        newState.headerColGroup,
+        Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth,
+        Math.abs(newState.scrollLeft || 0) +
+          _frozenPanelWidth +
+          (_CTInnerWidth -
+            _asidePanelWidth -
+            _frozenPanelWidth -
+            _rightPanelWidth),
+      );
+
+      newState.printStartColIndex = printStartColIndex;
+      newState.printEndColIndex = printEndColIndex;
     }
 
     return changeState ? newState : null;
@@ -313,8 +331,45 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       this.state,
     ).styles;
 
-    this.setState({ styles });
+    this.setStoreState({ styles });
   }
+
+  setStoreState = (newState: types.DataGridState) => {
+    // state 가 업데이트 되기 전.
+    const { scrollLeft = 0, styles = {}, headerColGroup = [] } = this.state;
+    const { CTInnerWidth } = styles;
+    const { scrollLeft: _scrollLeft, styles: _styles = {} } = newState;
+
+    if (typeof _scrollLeft !== 'undefined') {
+      const {
+        CTInnerWidth: _CTInnerWidth = 0,
+        frozenPanelWidth: _frozenPanelWidth = 0,
+        asidePanelWidth: _asidePanelWidth = 0,
+        rightPanelWidth: _rightPanelWidth = 0,
+      } = { ...styles, ..._styles };
+
+      if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+        const {
+          printStartColIndex,
+          printEndColIndex,
+        } = getPositionPrintColGroup(
+          headerColGroup,
+          Math.abs(_scrollLeft) + _frozenPanelWidth,
+          Math.abs(_scrollLeft) +
+            _frozenPanelWidth +
+            (_CTInnerWidth -
+              _asidePanelWidth -
+              _frozenPanelWidth -
+              _rightPanelWidth),
+        );
+
+        newState.printStartColIndex = printStartColIndex;
+        newState.printEndColIndex = printEndColIndex;
+      }
+    }
+
+    this.setState(newState);
+  };
 
   dispatch = (
     dispatchType: DispatchTypes,
@@ -346,7 +401,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           headerColGroup,
         } = calculateDimensions(rootNode, newState);
 
-        this.setState({
+        this.setStoreState({
           colGroup: colGroup,
           leftHeaderColGroup: leftHeaderColGroup,
           headerColGroup: headerColGroup,
@@ -366,7 +421,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           ...this.state,
           ...{
             predefinedFormatter: { ...dataGridFormatter },
-            setStoreState: state => this.setState(state),
+            setStoreState: this.setStoreState,
             dispatch: this.dispatch,
           },
         }}

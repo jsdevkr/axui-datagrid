@@ -67,7 +67,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
   onClickScrollTrack = (e: any, barName: ScrollTypes) => {
     const {
-      rootNode,
+      getRootNode,
       scrollLeft = 0,
       scrollTop = 0,
       styles = {},
@@ -98,8 +98,9 @@ class DatagridScroll extends React.Component<IProps, IState> {
       (scrollContentHeight - scrollContentContainerHeight);
 
     const { x: mouseX, y: mouseY } = getMousePosition(e);
+    const rootNode = getRootNode && getRootNode();
     const { x: grx = 0, y: gry = 0 } = rootNode
-      ? (rootNode.getBoundingClientRect() as { x: number; y: number })
+      ? (rootNode.getBoundingClientRect() as any)
       : {};
 
     const processor = {

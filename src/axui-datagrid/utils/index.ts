@@ -19,6 +19,9 @@ export {
   default as getScrollPositionByScrollBar,
 } from './getScrollPositionByScrollBar';
 export {
+  default as getPositionPrintColGroup,
+} from './getPositionPrintColGroup';
+export {
   getInnerHeight,
   getInnerWidth,
   getOuterHeight,

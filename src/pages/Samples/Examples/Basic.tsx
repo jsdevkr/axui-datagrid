@@ -97,6 +97,9 @@ class Basic extends React.Component<IProps, IState> {
               showRowSelector: true,
               asidePanelWidth: 900,
               columnKeys: { deleted: 'D' },
+              header: {
+                clickAction: 'sort',
+              },
             }}
             style={{ fontSize: '12px' }}
           />
