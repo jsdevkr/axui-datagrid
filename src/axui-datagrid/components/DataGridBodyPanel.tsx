@@ -129,8 +129,8 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
                             <DataGridBodyCell
                               key={ci}
                               li={li}
-                              col={col}
                               ci={ci}
+                              col={col}
                               value={filteredList[li][col.key || '']}
                             />
                           );

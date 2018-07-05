@@ -28,6 +28,7 @@ function makeHeaderTable(
 
     for (; i < l; i++) {
       let field = rowsColumns[i];
+
       colSpan = 1;
 
       if (!field.hidden) {

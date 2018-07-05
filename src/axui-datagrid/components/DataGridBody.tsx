@@ -32,7 +32,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       getRootNode,
       rootObject = {},
     } = this.props;
-
     const {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,
@@ -47,9 +46,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       scrollContentContainerWidth = 0,
       scrollContentContainerHeight = 0,
     } = styles;
-
     const startMousePosition = getMousePosition(e);
-
     const spanType: string = e.target.getAttribute('data-span');
     const rootNode = getRootNode ? getRootNode() : undefined;
     const { x: leftPadding = 0, y: topPadding = 0 } =
@@ -59,22 +56,22 @@ class DataGridBody extends React.Component<IProps, IState> {
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
     const getRowIndex: Function = (y: number, _scrollTop: number): number => {
-      if (y - headerHeight < frozenPanelHeight) {
-        _scrollTop = 0;
-      }
-      let i = Math.floor((y - headerHeight - _scrollTop) / bodyTrHeight);
-      if (i < 0) {
-        i = 0;
-      } else if (i >= filteredList.length - 1) {
-        i = filteredList.length - 1;
-      }
-      return i;
+      const i = Math.floor(
+        (y -
+          headerHeight -
+          (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
+          bodyTrHeight,
+      );
+      return i < 0
+        ? 0
+        : i >= filteredList.length - 1 ? filteredList.length - 1 : i;
     };
     const getColIndex: Function = (x: number, _scrollLeft: number): number => {
-      if (x - asidePanelWidth < frozenPanelWidth) {
-        _scrollLeft = 0;
-      }
-      const p: number = x - asidePanelWidth - _scrollLeft;
+      const p: number =
+        x -
+        asidePanelWidth -
+        (x - asidePanelWidth < frozenPanelWidth ? 0 : _scrollLeft);
+
       let cl: number = colGroup.length;
       let i: number = -1;
       while (cl--) {
@@ -379,7 +376,7 @@ class DataGridBody extends React.Component<IProps, IState> {
     if (
       isInlineEditing &&
       inlineEditingCell.row === selectStartedRow &&
-      inlineEditingCell.col === selectStartedCol
+      inlineEditingCell.colIndex === selectStartedCol
     ) {
       // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
       return false;
@@ -397,13 +394,11 @@ class DataGridBody extends React.Component<IProps, IState> {
 
   render() {
     const {
-      headerColGroup = [],
       scrollLeft = 0,
       scrollTop = 0,
       options = {},
       styles = {},
     } = this.props;
-
     const { frozenRowIndex = 0 } = options;
     const {
       CTInnerWidth = 0,
@@ -415,7 +410,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       rightPanelWidth = 0,
       footSumHeight = 0,
     } = styles;
-
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
 
@@ -467,8 +461,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       top: frozenPanelHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
-
-    // onMouseDown={e => onMouseDownBody(e)}
 
     return (
       <div

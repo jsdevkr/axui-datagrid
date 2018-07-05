@@ -1,12 +1,5 @@
 import { types } from '../stores';
 
-/**
- *
- * @param {DataGridColumnTableMap} rowTable
- * @param {number} startColumnIndex
- * @param {number} endColumnIndex
- * @return {DataGridColumnTableMap}
- */
 function getTableByStartEndColumnIndex(
   rowTable: types.DataGridColumnTableMap,
   startColumnIndex: number,

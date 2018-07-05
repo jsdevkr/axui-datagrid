@@ -1,4 +1,4 @@
-function arrayFromRange(start: number, end: number, step?: number) {
+function arrayFromRange(start: number, end: number, step?: number): number[] {
   let range = [];
   if (typeof step === 'undefined') {
     step = 1;

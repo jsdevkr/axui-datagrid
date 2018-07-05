@@ -9,24 +9,9 @@ import {
   DataGridColumnFilter,
   DataGridScroll,
   DataGridPage,
-  TestComponent,
 } from '../components';
-import { types, EventNames } from '../stores';
-import {
-  makeHeaderTable,
-  makeBodyRowTable,
-  makeBodyRowMap,
-  divideTableByFrozenColumnIndex,
-  calculateDimensions,
-  getPathValue,
-  mergeAll,
-  throttle,
-  getScrollPosition,
-  getMousePosition,
-  arrayFromRange,
-  getInnerWidth,
-  getInnerHeight,
-} from '../utils';
+import { types } from '../stores';
+import { mergeAll, getInnerWidth, getInnerHeight } from '../utils';
 
 interface IProps extends types.DataGrid {}
 interface IState extends types.DataGridRootState {}

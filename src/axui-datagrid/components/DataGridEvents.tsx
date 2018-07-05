@@ -75,7 +75,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     return true;
   };
 
-  onKeyAction = (keyAction: KeyCodes) => {
+  onKeyDown = (keyAction: KeyCodes, e: any) => {
     const {
       filteredList = [],
       headerColGroup = [],
@@ -87,6 +87,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
       styles = {},
       setStoreState,
       colGroup = [],
+      isInlineEditing = false,
+      inlineEditingCell = {},
     } = this.props;
 
     const {
@@ -182,7 +184,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
           },
         });
       },
-      [KeyCodes.ENTER]: () => {},
       [KeyCodes.HOME]: () => {
         const focusRow = 0;
 
@@ -257,6 +258,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       },
       [KeyCodes.LEFT_ARROW]: () => {
         let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
+
         setStoreState({
           scrollLeft: getAvailScrollLeft(focusCol),
           selectionCols: {
@@ -281,7 +283,40 @@ class DataGridEvents extends React.Component<IProps, IState> {
       },
     };
 
-    proc[keyAction] && proc[keyAction]();
+    if (!isInlineEditing) {
+      proc[keyAction] && proc[keyAction]();
+    }
+  };
+
+  onKeyUp = (e: any) => {
+    const {
+      colGroup = [],
+      focusedRow = 0,
+      focusedCol = 0,
+      setStoreState,
+      isInlineEditing,
+    } = this.props;
+
+    const proc = {
+      [KeyCodes.ENTER]: () => {
+        const col = colGroup[focusedCol];
+
+        if (col.editor) {
+          setStoreState({
+            isInlineEditing: true,
+            inlineEditingCell: {
+              row: focusedRow,
+              colIndex: col.colIndex,
+              editor: col.editor,
+            },
+          });
+        }
+      },
+    };
+
+    if (!isInlineEditing && e.which in proc) {
+      proc[e.which]();
+    }
   };
 
   onKeyPress = (e: any) => {
@@ -295,7 +330,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       selectionCols = {},
       focusedCol = 0,
       setStoreState,
-      isInlineEditing = false,
     } = this.props;
     const rootNode = getRootNode && getRootNode();
     const clipBoardNode = getClipBoardNode && getClipBoardNode();
@@ -370,12 +404,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
         metaProc[e.which]();
       }
     } else {
-      this.onKeyAction(e.which);
-
-      if (!isInlineEditing) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
+      this.onKeyDown(e.which, e);
     }
   };
 
@@ -393,6 +422,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           this.props.onFireEvent(EventNames.KEYDOWN, e);
         }}
         onKeyUp={e => {
+          this.onKeyUp(e);
           this.props.onFireEvent(EventNames.KEYUP, e);
         }}
         onMouseDown={e => {

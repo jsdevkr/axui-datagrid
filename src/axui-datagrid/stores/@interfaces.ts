@@ -21,7 +21,7 @@ export interface ICol {
 
 export interface IDataGridEditingCell {
   row?: number;
-  col?: number;
+  colIndex?: number;
   editor?: any;
 }
 
@@ -48,7 +48,7 @@ export interface IDataGridCol extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
-  editor?: editorFunction | string;
+  editor?: editorFunction | string | { type?: string };
   _ex?: number;
   _sx?: number;
   _width?: number;
@@ -59,7 +59,7 @@ export interface IDataGridColumn extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
-  editor?: editorFunction | string;
+  editor?: editorFunction | string | { type?: string };
   hidden?: boolean;
   columns?: IDataGridColumn[];
   depth?: number;

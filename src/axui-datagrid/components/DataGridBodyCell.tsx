@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, EventNames, KeyCodes } from '../stores';
+import { types, DispatchTypes, EventNames, KeyCodes } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction } from '../utils';
@@ -7,14 +7,24 @@ import { classNames as CX, isFunction } from '../utils';
 interface IProps extends IDataGridStore {
   li: number;
   ci: number;
-  col: types.DataGridCol;
-  value: any;
+  col?: types.DataGridCol;
+  value?: any;
 }
 interface IState {}
 
 class DataGridBodyCell extends React.Component<IProps, IState> {
   editInput: HTMLInputElement;
   state = {};
+
+  setEditInputNode = (element: any) => {
+    this.editInput = element;
+  };
+
+  componentDidUpdate(prevProps: IProps, prevState: IState) {
+    if (this.editInput) {
+      this.editInput.select();
+    }
+  }
 
   onDoubleClickCell = (e: any, col: types.DataGridColumn, li: number) => {
     const { setStoreState } = this.props;
@@ -24,51 +34,85 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
         isInlineEditing: true,
         inlineEditingCell: {
           row: li,
-          col: col.colIndex,
+          colIndex: col.colIndex,
           editor: col.editor,
         },
       });
     }
   };
 
-  onEventInput = (eventName: EventNames, e: any) => {
+  onKeyUp = (e: any, col: types.DataGridColumn, li: number) => {
     const { setStoreState } = this.props;
 
     const proc = {
-      [EventNames.BLUR]: () => {
+      [KeyCodes.ENTER]: () => {
+        if (col.editor) {
+          setStoreState({
+            isInlineEditing: true,
+            inlineEditingCell: {
+              row: li,
+              colIndex: col.colIndex,
+              editor: col.editor,
+            },
+          });
+        }
+      },
+    };
 
+    proc[e.which] && proc[e.which]();
+  };
+
+  onEventInput = (eventName: EventNames, e: any) => {
+    const {
+      getRootNode,
+      setStoreState,
+      dispatch,
+      inlineEditingCell = {},
+    } = this.props;
+
+    const rootNode = getRootNode && getRootNode();
+
+    const proc = {
+      [EventNames.BLUR]: () => {
         setStoreState({
           isInlineEditing: false,
           inlineEditingCell: {},
         });
+
+        if (rootNode) {
+          rootNode.focus();
+        }
       },
-      [EventNames.KEYDOWN]: () => {
-        if (e.which === KeyCodes.ESC) {
+      [EventNames.KEYUP]: () => {
+        switch (e.which) {
+          case KeyCodes.ESC:
+            setStoreState({
+              isInlineEditing: false,
+              inlineEditingCell: {},
+            });
 
-          setStoreState({
-            isInlineEditing: false,
-            inlineEditingCell: {},
-          });
+            if (rootNode) {
+              rootNode.focus();
+            }
+            break;
+          case KeyCodes.UP_ARROW:
+          case KeyCodes.DOWN_ARROW:
+          case KeyCodes.ENTER:
+            dispatch(DispatchTypes.UPDATE, {
+              row: inlineEditingCell.row,
+              colIndex: inlineEditingCell.colIndex,
+              value: e.target.value,
+              eventWhichKey: e.which
+            });
 
-        } else if (e.which === KeyCodes.ENTER) {
-
-          setStoreState({
-            isInlineEditing: false,
-            inlineEditingCell: {},
-          });
-
-          /*
-          updateEditInput(
-            'update',
-            inlineEditingCell.row,
-            inlineEditingCell.col,
-            e.target.value,
-          );
-          */
+            break;
+          default:
+            break;
         }
       },
     };
-    proc[eventName]();
+
+    proc[eventName] && proc[eventName]();
   };
 
   render() {
@@ -123,7 +167,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
     if (
       isInlineEditing &&
       inlineEditingCell.row === li &&
-      inlineEditingCell.col === col.colIndex
+      inlineEditingCell.colIndex === col.colIndex
     ) {
       return (
         <td
@@ -135,8 +179,12 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
         >
           <input
             type="text"
-            ref={input => {
-              this.editInput = input as HTMLInputElement;
+            ref={this.setEditInputNode}
+            onBlur={(e: any) => {
+              this.onEventInput(EventNames.BLUR, e);
+            }}
+            onKeyUp={(e: any) => {
+              this.onEventInput(EventNames.KEYUP, e);
             }}
             data-inline-edit
             defaultValue={value}
@@ -199,7 +247,9 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           rowSpan={col.rowSpan}
           className={CX(tdClassNames)}
           style={{ height: cellHeight, minHeight: '1px' }}
-          onDoubleClick={(e: any) => {}}
+          onDoubleClick={(e: any) => {
+            this.onDoubleClickCell(e, col, li);
+          }}
         >
           <span
             data-span={col.columnAttr || ''}

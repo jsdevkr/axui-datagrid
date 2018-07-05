@@ -1,7 +1,6 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
-import { types, EventNames, DispatchTypes } from '../stores';
+import { types, KeyCodes, DispatchTypes } from '../stores';
 import { DataGrid } from '../containers';
 import {
   makeHeaderTable,
@@ -9,12 +8,9 @@ import {
   makeBodyRowMap,
   divideTableByFrozenColumnIndex,
   calculateDimensions,
-  getPathValue,
   mergeAll,
   throttle,
   getScrollPosition,
-  getMousePosition,
-  arrayFromRange,
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
 } from '../utils';
@@ -26,16 +22,6 @@ export interface IDataGridStore extends types.DataGridState {
     dispatchType: DispatchTypes,
     param: types.DataGridDispatchParam,
   ) => void;
-}
-
-function getValueNotUndefined(value1: any, value2: any, value3: any) {
-  if (typeof value1 !== 'undefined' && value1 !== null) {
-    return value1;
-  } else if (typeof value2 !== 'undefined' && value2 !== null) {
-    return value2;
-  } else {
-    return value3;
-  }
 }
 
 const store: IDataGridStore = {
@@ -233,6 +219,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
               colIndex: col.colIndex,
               rowIndex: col.rowIndex,
               formatter: col.formatter,
+              editor: col.editor,
             };
             newState.colGroupMap[col.colIndex || 0] = currentCol;
             // todo : colGroupMap에 colGroup의 참조가 있는데. 문제가 없는지 확인 필요.
@@ -254,9 +241,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.leftBodyGroupingData = {};
       newState.bodyGroupingData = {};
       newState.bodyGroupingMap = {};
-      */
 
-      /*
       newState.footSumColumns = [];
       newState.footSumTable = {};
       newState.leftFootSumData = {};
@@ -287,8 +272,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.colGroup = calculatedObject.colGroup;
       newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
       newState.headerColGroup = calculatedObject.headerColGroup;
-
-      // newState.scrollLeft = 0;
 
       const {
         CTInnerWidth: _CTInnerWidth = 0,
@@ -375,8 +358,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     });
   }
 
+  // state 가 업데이트 되기 전.
   setStoreState = (newState: types.DataGridState) => {
-    // state 가 업데이트 되기 전.
     const {
       scrollLeft = 0,
       options = {},
@@ -439,18 +422,56 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     dispatchType: DispatchTypes,
     param: types.DataGridDispatchParam,
   ) => {
-    const { filteredList } = this.state;
+    const { colGroup = [], getRootNode, focusedRow = 0 } = this.state;
+    const rootNode = getRootNode ? getRootNode() : undefined;
+    let { filteredList = [] } = this.state;
 
     const proc = {
       [DispatchTypes.SET_DATA]: () => {},
       [DispatchTypes.FILTER]: () => {},
       [DispatchTypes.SORT]: () => {},
-      [DispatchTypes.UPDATE]: () => {},
+      [DispatchTypes.UPDATE]: () => {
+        const { row, colIndex, value, eventWhichKey } = param;
+        const key = colGroup[colIndex].key;
+
+        let focusRow: number = focusedRow;
+
+        if (key) {
+          filteredList[row][key] = value;
+          // update filteredList
+        }
+
+        if (eventWhichKey) {
+          switch (eventWhichKey) {
+            case KeyCodes.UP_ARROW:
+              focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+              break;
+            case KeyCodes.DOWN_ARROW:
+              focusRow =
+                focusedRow + 1 >= filteredList.length
+                  ? filteredList.length - 1
+                  : focusedRow + 1;
+              break;
+            default:
+              break;
+          }
+        }
+
+        this.setStoreState({
+          isInlineEditing: false,
+          inlineEditingCell: {},
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+
+        if (rootNode) {
+          rootNode.focus();
+        }
+      },
       [DispatchTypes.RESIZE_COL]: () => {
-        console.log(param);
         const { col, newWidth } = param;
-        const { colGroup = [], getRootNode } = this.state;
-        const rootNode = getRootNode ? getRootNode() : undefined;
 
         let newState: IDataGridStore = { ...this.state };
         if (newState.colGroup) {

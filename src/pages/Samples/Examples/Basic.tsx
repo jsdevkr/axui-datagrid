@@ -69,8 +69,8 @@ class Basic extends React.Component<IProps, IState> {
         width: 50,
         align: 'center',
       },
-      { key: 'b', label: '필드B', align: 'center' },
-      { key: 'c', label: '필드C', align: 'center' },
+      { key: 'b', label: '필드B', align: 'center', editor: { type: 'text' } },
+      { key: 'c', label: '필드C', align: 'center', editor: { type: 'text' } },
       { key: 'price', label: '단가', formatter: 'money', align: 'right' },
       {
         key: 'amount',
@@ -81,7 +81,12 @@ class Basic extends React.Component<IProps, IState> {
       },
       { key: 'cost', label: '금액', align: 'right', formatter: 'money' },
       { key: 'saleDt', label: '판매일자', align: 'center' },
-      { key: 'customer', label: '고객명', align: 'center' },
+      {
+        key: 'customer',
+        label: '고객명',
+        align: 'center',
+        editor: { type: 'text' },
+      },
       { key: 'saleType', label: '판매타입', align: 'center' },
     ];
     return (

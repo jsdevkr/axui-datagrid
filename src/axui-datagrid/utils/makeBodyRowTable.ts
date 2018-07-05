@@ -106,6 +106,7 @@ function makeBodyRowTable(
       if (!table.rows[depth]) {
         table.rows[depth] = { cols: [] };
       }
+
       table.rows[depth].cols = [...table.rows[depth].cols, ...row.cols];
       return row.cols.length - 1 + colSpan;
     } else {
