@@ -194,6 +194,10 @@ export type DataGridState = {
   styles?: DataGridStyles;
   options?: DataGridOptions;
 
+  visibleHeaderColGroup?: DataGridCol[];
+  visibleBodyRowData?: DataGridColumnTableMap;
+  visibleBodyGroupingData?: DataGridColumnTableMap;
+
   propColumns?: any;
   propOptions?: DataGridOptions;
 

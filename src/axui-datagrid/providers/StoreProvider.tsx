@@ -16,6 +16,7 @@ import {
   getMousePosition,
   arrayFromRange,
   getPositionPrintColGroup,
+  getTableByStartEndColumnIndex,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -305,9 +306,26 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
             _frozenPanelWidth -
             _rightPanelWidth),
       );
+      const { frozenColumnIndex = 0 } = newState.options || {};
 
       newState.printStartColIndex = printStartColIndex;
       newState.printEndColIndex = printEndColIndex;
+
+      newState.visibleHeaderColGroup = newState.headerColGroup.slice(
+        printStartColIndex,
+        printEndColIndex + 1,
+      );
+
+      newState.visibleBodyRowData = getTableByStartEndColumnIndex(
+        newState.bodyRowData || { rows: [{ cols: [] }] },
+        printStartColIndex + frozenColumnIndex,
+        printEndColIndex + frozenColumnIndex,
+      );
+      newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
+        newState.bodyGroupingData || { rows: [{ cols: [] }] },
+        printStartColIndex + frozenColumnIndex,
+        printEndColIndex + frozenColumnIndex,
+      );
     }
 
     return changeState ? newState : null;
@@ -359,7 +377,15 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
   setStoreState = (newState: types.DataGridState) => {
     // state 가 업데이트 되기 전.
-    const { scrollLeft = 0, styles = {}, headerColGroup = [] } = this.state;
+    const {
+      scrollLeft = 0,
+      options = {},
+      styles = {},
+      headerColGroup = [],
+      bodyRowData = { rows: [{ cols: [] }] },
+      bodyGroupingData = { rows: [{ cols: [] }] },
+    } = this.state;
+    const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
     const { scrollLeft: _scrollLeft, styles: _styles = {} } = newState;
 
@@ -388,6 +414,21 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
         newState.printStartColIndex = printStartColIndex;
         newState.printEndColIndex = printEndColIndex;
+
+        newState.visibleHeaderColGroup = headerColGroup.slice(
+          printStartColIndex,
+          printEndColIndex + 1,
+        );
+        newState.visibleBodyRowData = getTableByStartEndColumnIndex(
+          bodyRowData,
+          printStartColIndex + frozenColumnIndex,
+          printEndColIndex + frozenColumnIndex,
+        );
+        newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
+          bodyGroupingData,
+          printStartColIndex + frozenColumnIndex,
+          printEndColIndex + frozenColumnIndex,
+        );
       }
     }
 

@@ -115,7 +115,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       frozenRowIndex +
       Math.floor(bodyHeight / bodyTrHeight);
 
-    // todo : printStartColIndex, printEndColIndex 화면의 크기에 따라 구하기.
     const sColIndex = printStartColIndex;
     const eColIndex = printEndColIndex;
     const pRowSize = Math.floor(bodyHeight / bodyTrHeight);

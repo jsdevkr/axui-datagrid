@@ -24,10 +24,13 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       asideColGroup = [],
       leftHeaderColGroup = [],
       headerColGroup = [],
+      visibleHeaderColGroup = [],
+
       asideBodyRowData = { rows: [{ cols: [] }] },
       leftBodyRowData = { rows: [{ cols: [] }] },
       bodyRowData = { rows: [{ cols: [] }] },
-
+      visibleBodyRowData = { rows: [{ cols: [] }] },
+      visibleBodyGroupingData = { rows: [{ cols: [] }] },
       panelName,
       containerStyle = {},
       panelScrollConfig = {},
@@ -79,12 +82,9 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       case 'top-body-scroll':
       case 'body-scroll':
       default:
-        panelColGroup = headerColGroup.slice(
-          printStartColIndex,
-          printEndColIndex + 1,
-        );
+        panelColGroup = visibleHeaderColGroup;
         // headerColGroup;
-        panelBodyRow = bodyRowData;
+        panelBodyRow = visibleBodyRowData;
         panelPaddingLeft = panelColGroup[0]
           ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
           : 0;
