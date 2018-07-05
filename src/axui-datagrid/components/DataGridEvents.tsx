@@ -157,7 +157,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
             verticalScrollerWidth);
       }
 
-      if (typeof scrollLeft !== 'undefined') {
+      if (typeof _scrollLeft !== 'undefined') {
         _scrollLeft = getScrollPosition(_scrollLeft as number, scrollTop, {
           scrollWidth: scrollContentWidth,
           scrollHeight: scrollContentHeight,
@@ -257,7 +257,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       },
       [KeyCodes.LEFT_ARROW]: () => {
         let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
-
         setStoreState({
           scrollLeft: getAvailScrollLeft(focusCol),
           selectionCols: {
