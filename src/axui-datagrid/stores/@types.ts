@@ -140,6 +140,7 @@ export type DataGridState = {
   data?: any[];
   filteredList?: any[];
   sortInfo?: {};
+  filterInfo?: {};
   height?: number;
 
   onBeforeEvent?: () => void;

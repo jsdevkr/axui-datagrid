@@ -13,6 +13,7 @@ import {
   getScrollPosition,
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
+  getNode,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -265,7 +266,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.calculatedStyles = true;
 
       const calculatedObject = calculateDimensions(
-        newState.getRootNode && newState.getRootNode(),
+        getNode(newState.getRootNode),
         newState,
       );
       newState.styles = calculatedObject.styles;
@@ -330,7 +331,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     const { scrollLeft = 0, scrollTop = 0 } = this.state;
 
     const styles = calculateDimensions(
-      this.state.getRootNode && this.state.getRootNode(),
+      getNode(this.state.getRootNode),
       this.state,
     ).styles;
 
@@ -422,14 +423,90 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     dispatchType: DispatchTypes,
     param: types.DataGridDispatchParam,
   ) => {
-    const { colGroup = [], getRootNode, focusedRow = 0 } = this.state;
-    const rootNode = getRootNode ? getRootNode() : undefined;
+    const {
+      scrollLeft = 0,
+      colGroup = [],
+      getRootNode,
+      focusedRow = 0,
+      sortInfo = {},
+    } = this.state;
+    const rootNode = getNode(getRootNode);
     let { filteredList = [] } = this.state;
 
     const proc = {
       [DispatchTypes.SET_DATA]: () => {},
       [DispatchTypes.FILTER]: () => {},
-      [DispatchTypes.SORT]: () => {},
+      [DispatchTypes.SORT]: () => {
+        const { colIndex } = param;
+        const { key: colKey = '' } = colGroup[colIndex];
+
+        let currentSortInfo: { [key: string]: any } = {};
+        let seq: number = 0;
+        let sortInfoArray: any[] = [];
+
+        const getValueByKey = function(_item: any, _key: string) {
+          return _item[_key] || '';
+        };
+
+        for (let k in sortInfo) {
+          if (sortInfo[k]) {
+            currentSortInfo[k] = sortInfo[k];
+            seq++;
+          }
+        }
+
+        if (currentSortInfo[colKey]) {
+          if (currentSortInfo[colKey].orderBy === 'desc') {
+            currentSortInfo[colKey].orderBy = 'asc';
+          } else if (currentSortInfo[colKey].orderBy === 'asc') {
+            delete currentSortInfo[colKey];
+          }
+        } else {
+          currentSortInfo[colKey] = {
+            seq: seq++,
+            orderBy: 'desc',
+          };
+        }
+
+        for (let k in currentSortInfo) {
+          if (currentSortInfo[k]) {
+            sortInfoArray[currentSortInfo[k].seq] = {
+              key: k,
+              order: currentSortInfo[k].orderBy,
+            };
+          }
+        }
+        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+
+        let i = 0,
+          l = sortInfoArray.length,
+          aValue: any,
+          bValue: any;
+
+        const sortedList = filteredList.sort((a: any, b: any): any => {
+          for (i = 0; i < l; i++) {
+            aValue = getValueByKey(a, sortInfoArray[i].key);
+            bValue = getValueByKey(b, sortInfoArray[i].key);
+
+            if (typeof aValue !== typeof bValue) {
+              aValue = '' + aValue;
+              bValue = '' + bValue;
+            }
+            if (aValue < bValue) {
+              return sortInfoArray[i].order === 'asc' ? -1 : 1;
+            } else if (aValue > bValue) {
+              return sortInfoArray[i].order === 'asc' ? 1 : -1;
+            }
+          }
+        });
+
+        this.setStoreState({
+          sortInfo: currentSortInfo,
+          filteredList: sortedList,
+          isInlineEditing: false,
+          inlineEditingCell: {},
+        });
+      },
       [DispatchTypes.UPDATE]: () => {
         const { row, colIndex, value, eventWhichKey } = param;
         const key = colGroup[colIndex].key;
@@ -487,6 +564,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         } = calculateDimensions(rootNode, newState);
 
         this.setStoreState({
+          scrollLeft,
           colGroup: colGroup,
           leftHeaderColGroup: leftHeaderColGroup,
           headerColGroup: headerColGroup,

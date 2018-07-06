@@ -20,7 +20,7 @@ export interface ICol {
 }
 
 export interface IDataGridEditingCell {
-  row?: number;
+  rowIndex?: number;
   colIndex?: number;
   editor?: any;
 }

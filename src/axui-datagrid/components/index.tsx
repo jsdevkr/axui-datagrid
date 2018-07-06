@@ -5,4 +5,3 @@ export { default as DataGridHeader } from './DataGridHeader';
 export { default as DataGridPage } from './DataGridPage';
 export { default as DataGridScroll } from './DataGridScroll';
 export { default as DataGridSelector } from './DataGridSelector';
-export { default as TestComponent } from './TestComponent';

@@ -2,7 +2,12 @@ import * as React from 'react';
 import { types, DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getMousePosition, arrayFromRange, findParentNode } from '../utils';
+import {
+  getMousePosition,
+  arrayFromRange,
+  findParentNode,
+  getNode,
+} from '../utils';
 import DataGridHeaderCell from './DataGridHeaderCell';
 
 interface IProps extends IDataGridStore {
@@ -116,8 +121,6 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
         state.focusedCol = 0;
         setStoreState(state);
       } else {
-        console.log(optionsHeader.clickAction);
-
         if (optionsHeader.clickAction === 'select') {
           state.selectionRows = (() => {
             let rows = {};
@@ -149,7 +152,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
           optionsHeader.clickAction === 'sort' &&
           optionsHeader.sortable
         ) {
-          dispatch(DispatchTypes.SORT, { options, colIndex });
+          dispatch(DispatchTypes.SORT, { colIndex });
         }
       }
     }
@@ -160,7 +163,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
 
     const { setStoreState, getRootNode, dispatch } = this.props;
 
-    const rootNode = getRootNode ? getRootNode() : undefined;
+    const rootNode = getNode(getRootNode);
     const { x: rootX = 0 } =
       rootNode && (rootNode.getBoundingClientRect() as any);
     const resizer = e.target;

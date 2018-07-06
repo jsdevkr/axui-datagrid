@@ -21,6 +21,8 @@ export {
 export {
   default as getPositionPrintColGroup,
 } from './getPositionPrintColGroup';
+export { default as getNode } from './getNode';
+export { default as uniqBy } from './uniqBy';
 export {
   getInnerHeight,
   getInnerWidth,

@@ -83,15 +83,12 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
       bodyRow.rows.length - 1 === ri + (col.rowSpan || 1) - 1,
   };
 
-  // td : onClick={e => onClickHeader(e, col.colIndex, col.columnAttr)}
-
   return (
     <td
       colSpan={col.colSpan}
       rowSpan={col.rowSpan}
       className={CX(tdClassNames)}
       style={{ height: cellHeight, minHeight: '1px' }}
-      data-axui-tooltip={col.key === '__line_number__' ? 'SELECT ALL' : 'false'}
       onClick={(e: any) => {
         onClick(e, col);
       }}

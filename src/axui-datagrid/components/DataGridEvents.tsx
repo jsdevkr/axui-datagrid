@@ -2,7 +2,7 @@ import * as React from 'react';
 import { EventNames, KeyCodes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition } from '../utils';
+import { getScrollPosition, getNode } from '../utils';
 
 interface IProps extends IDataGridStore {
   style?: any;
@@ -305,7 +305,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           setStoreState({
             isInlineEditing: true,
             inlineEditingCell: {
-              row: focusedRow,
+              rowIndex: focusedRow,
               colIndex: col.colIndex,
               editor: col.editor,
             },
@@ -331,8 +331,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
       focusedCol = 0,
       setStoreState,
     } = this.props;
-    const rootNode = getRootNode && getRootNode();
-    const clipBoardNode = getClipBoardNode && getClipBoardNode();
+    const rootNode = getNode(getRootNode);
+    const clipBoardNode = getNode(getClipBoardNode);
 
     const metaProc = {
       [KeyCodes.C]: () => {
@@ -399,7 +399,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
     };
 
     if (e.metaKey) {
-      // console.log('meta', e.which);
       if (e.which in metaProc) {
         metaProc[e.which]();
       }

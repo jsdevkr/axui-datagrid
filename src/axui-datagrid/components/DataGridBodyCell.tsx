@@ -2,7 +2,7 @@ import * as React from 'react';
 import { types, DispatchTypes, EventNames, KeyCodes } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
-import { classNames as CX, isFunction } from '../utils';
+import { classNames as CX, isFunction, getNode } from '../utils';
 
 interface IProps extends IDataGridStore {
   li: number;
@@ -33,7 +33,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       setStoreState({
         isInlineEditing: true,
         inlineEditingCell: {
-          row: li,
+          rowIndex: li,
           colIndex: col.colIndex,
           editor: col.editor,
         },
@@ -50,7 +50,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           setStoreState({
             isInlineEditing: true,
             inlineEditingCell: {
-              row: li,
+              rowIndex: li,
               colIndex: col.colIndex,
               editor: col.editor,
             },
@@ -70,7 +70,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       inlineEditingCell = {},
     } = this.props;
 
-    const rootNode = getRootNode && getRootNode();
+    const rootNode = getNode(getRootNode);
 
     const proc = {
       [EventNames.BLUR]: () => {
@@ -99,10 +99,10 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           case KeyCodes.DOWN_ARROW:
           case KeyCodes.ENTER:
             dispatch(DispatchTypes.UPDATE, {
-              row: inlineEditingCell.row,
+              row: inlineEditingCell.rowIndex,
               colIndex: inlineEditingCell.colIndex,
               value: e.target.value,
-              eventWhichKey: e.which
+              eventWhichKey: e.which,
             });
 
             break;
@@ -166,7 +166,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
 
     if (
       isInlineEditing &&
-      inlineEditingCell.row === li &&
+      inlineEditingCell.rowIndex === li &&
       inlineEditingCell.colIndex === col.colIndex
     ) {
       return (

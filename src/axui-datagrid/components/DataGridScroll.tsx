@@ -2,7 +2,11 @@ import * as React from 'react';
 import { ScrollTypes, DirectionTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getMousePosition, getScrollPositionByScrollBar } from '../utils';
+import {
+  getMousePosition,
+  getScrollPositionByScrollBar,
+  getNode,
+} from '../utils';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -98,7 +102,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
       (scrollContentHeight - scrollContentContainerHeight);
 
     const { x: mouseX, y: mouseY } = getMousePosition(e);
-    const rootNode = getRootNode && getRootNode();
+    const rootNode = getNode(getRootNode);
     const { x: grx = 0, y: gry = 0 } = rootNode
       ? (rootNode.getBoundingClientRect() as any)
       : {};

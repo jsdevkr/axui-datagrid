@@ -7,6 +7,7 @@ import {
   getScrollPosition,
   arrayFromRange,
   throttle,
+  getNode,
 } from '../utils';
 import DataGridBodyPanel from './DataGridBodyPanel';
 
@@ -48,7 +49,7 @@ class DataGridBody extends React.Component<IProps, IState> {
     } = styles;
     const startMousePosition = getMousePosition(e);
     const spanType: string = e.target.getAttribute('data-span');
-    const rootNode = getRootNode ? getRootNode() : undefined;
+    const rootNode = getNode(getRootNode);
     const { x: leftPadding = 0, y: topPadding = 0 } =
       rootNode && (rootNode.getBoundingClientRect() as any);
     const startScrollLeft = scrollLeft;
@@ -375,7 +376,7 @@ class DataGridBody extends React.Component<IProps, IState> {
 
     if (
       isInlineEditing &&
-      inlineEditingCell.row === selectStartedRow &&
+      inlineEditingCell.rowIndex === selectStartedRow &&
       inlineEditingCell.colIndex === selectStartedCol
     ) {
       // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
