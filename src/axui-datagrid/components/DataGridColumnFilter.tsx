@@ -83,13 +83,13 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
       isColumnFilter = false,
       colGroup = [],
       styles = {},
-      options = {},
       scrollLeft = 0,
       filterInfo = {},
       filteredList = [],
     } = this.props;
+    const { bodyHeight = 0 } = styles;
     const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;
-
+    const optionItemHeight = 20;
     if (isColumnFilter === false || !isNumber(isColumnFilter)) {
       return null;
     }
@@ -148,7 +148,10 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
       top: headerHeight - 2,
       left: 100,
       width: filterWidth,
-      height: styles.bodyHeight,
+      height: Math.min(
+        bodyHeight,
+        (filterOptions.length + 1) * optionItemHeight,
+      ),
     };
 
     filterStyles.left =
@@ -174,6 +177,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
       >
         <DataGridColumnFilterOption
           filterOptions={filterOptions}
+          optionItemHeight={optionItemHeight}
           onChange={(value, checked, checkAll) => {
             this.onChange(filterOptions, value, checked, checkAll);
           }}

@@ -32,6 +32,7 @@ const store: IDataGridStore = {
   filteredList: [],
 
   sortInfo: {},
+  isColumnFilter: false,
   scrollLeft: 0,
   scrollTop: 0,
   selectionRows: {},

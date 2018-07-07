@@ -31,25 +31,32 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       setStoreState,
       dispatch,
     } = this.props;
+
     const { header: optionsHeader = {} } = options;
     const { key, colIndex = 0 } = col;
     const { asidePanelWidth = 0 } = styles;
 
     if (e.target.getAttribute('data-filter')) {
-      const downEvent = (ee: any) => {
+      const closeEvent = (ee: any) => {
+        const { isColumnFilter: _isColumnFilter } = this.props;
         if (
           ee.target &&
           ee.target.getAttribute &&
-          '' + isColumnFilter === ee.target.getAttribute('data-filter-index')
+          '' + _isColumnFilter === ee.target.getAttribute('data-filter-index')
         ) {
           return false;
         }
 
-        let downedElement = findParentNode(ee.target, element => {
-          return element
-            ? element.getAttribute('data-column-filter') === 'true'
-            : false;
-        });
+        let downedElement: any = false;
+
+        if (ee.target) {
+          downedElement = findParentNode(ee.target, element => {
+            return element && element.getAttribute
+              ? element.getAttribute('data-filter-index') ===
+                  '' + _isColumnFilter
+              : false;
+          });
+        }
 
         if (downedElement === false) {
           ee.preventDefault();
@@ -58,8 +65,8 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
             isColumnFilter: false,
           });
 
-          document.removeEventListener('mousedown', downEvent);
-          document.removeEventListener('mouseleave', downEvent);
+          document.removeEventListener('mouseup', closeEvent);
+          document.removeEventListener('mouseleave', closeEvent);
           document.removeEventListener('keydown', keyDown);
         }
 
@@ -67,7 +74,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       };
       const keyDown = (ee: any) => {
         if (ee.which === 27) {
-          downEvent(ee);
+          closeEvent(ee);
         }
       };
 
@@ -76,8 +83,8 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
           isColumnFilter: false,
         });
 
-        document.removeEventListener('mousedown', downEvent);
-        document.removeEventListener('mouseleave', downEvent);
+        document.removeEventListener('mouseup', closeEvent);
+        document.removeEventListener('mouseleave', closeEvent);
         document.removeEventListener('keydown', keyDown);
       } else {
         let columnFilterLeft: number =
@@ -89,8 +96,12 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
           isColumnFilter: colIndex,
         });
 
-        document.addEventListener('mousedown', downEvent);
-        document.addEventListener('mouseleave', downEvent);
+        document.removeEventListener('mouseup', closeEvent);
+        document.removeEventListener('mouseleave', closeEvent);
+        document.removeEventListener('keydown', keyDown);
+
+        document.addEventListener('mouseup', closeEvent);
+        document.addEventListener('mouseleave', closeEvent);
         document.addEventListener('keydown', keyDown);
       }
     } else {
