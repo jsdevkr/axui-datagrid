@@ -5,6 +5,7 @@ import setColGroupWidth from './setColGroupWidth';
 function calculateDimensions(
   containerDOM: HTMLDivElement | undefined,
   state: types.DataGridState,
+  toBeFilteredList?: any[],
 ): {
   styles: types.DataGridStyles;
   colGroup: types.DataGridCol[];
@@ -19,6 +20,8 @@ function calculateDimensions(
     options = {},
     styles = {},
   } = state;
+
+  let list: any[] = toBeFilteredList || filteredList;
 
   const {
     header: optionsHeader = {},
@@ -44,7 +47,7 @@ function calculateDimensions(
   } = optionsScroller;
 
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
-  const dataLength = filteredList ? filteredList.length : 0;
+  const dataLength = list ? list.length : 0;
 
   let currentStyles: types.DataGridStyles = { ...styles };
   let currentColGroup: types.DataGridCol[] = [];

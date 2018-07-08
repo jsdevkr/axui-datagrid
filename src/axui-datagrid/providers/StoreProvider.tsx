@@ -106,9 +106,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       options = DataGrid.defaultOptions,
       styles = DataGrid.defaultStyles,
     } = prevState;
-    const {
-      columnKeys: optionColumnKeys = DataGrid.defaultColumnKeys,
-    } = options;
+    const { columnKeys: optionColumnKeys = {} } = options;
 
     let changeState = false;
     let newState: types.DataGridState = { ...prevState };
@@ -363,6 +361,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   // state 가 업데이트 되기 전.
   setStoreState = (newState: types.DataGridState) => {
     const {
+      filteredList = [],
       scrollLeft = 0,
       options = {},
       styles = {},
@@ -372,7 +371,11 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
-    const { scrollLeft: _scrollLeft, styles: _styles = {} } = newState;
+    const {
+      scrollLeft: _scrollLeft,
+      styles: _styles = {},
+      filteredList: _filteredList,
+    } = newState;
 
     if (typeof _scrollLeft !== 'undefined') {
       const {
@@ -417,6 +420,14 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       }
     }
 
+    if (_filteredList && filteredList.length !== _filteredList.length) {
+      newState.styles = calculateDimensions(
+        getNode(this.state.getRootNode),
+        this.state,
+        _filteredList,
+      ).styles;
+    }
+
     this.setState(newState);
   };
 
@@ -425,18 +436,62 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     param: types.DataGridDispatchParam,
   ) => {
     const {
+      data = [],
       scrollLeft = 0,
       colGroup = [],
       getRootNode,
       focusedRow = 0,
       sortInfo = {},
+      options = {},
     } = this.state;
+    const { columnKeys: optionColumnKeys = {} } = options;
     const rootNode = getNode(getRootNode);
     let { filteredList = [] } = this.state;
 
     const proc = {
-      [DispatchTypes.SET_DATA]: () => {},
-      [DispatchTypes.FILTER]: () => {},
+      [DispatchTypes.FILTER]: () => {
+        const { colIndex, filterInfo } = param;
+        const checkAll =
+          filterInfo[colIndex] === false
+            ? true
+            : filterInfo[colIndex].__check_all__;
+
+        if (checkAll) {
+          filteredList =
+            data &&
+            data.filter((n: any) => {
+              return !n[optionColumnKeys.deleted || '__deleted__'];
+            });
+        } else {
+          filteredList = data.filter((n: any) => {
+            if (n) {
+              const value = n[colGroup[colIndex].key || ''];
+
+              if (n[optionColumnKeys.deleted || '__deleted__']) {
+                return false;
+              }
+
+              if (typeof value === 'undefined') {
+                if (!filterInfo[colIndex].__UNDEFINED__) {
+                  return false;
+                }
+              } else {
+                if (!filterInfo[colIndex][value]) {
+                  return false;
+                }
+              }
+
+              return true;
+            }
+            return false;
+          });
+        }
+
+        this.setStoreState({
+          filteredList,
+          filterInfo,
+        });
+      },
       [DispatchTypes.SORT]: () => {
         const { colIndex } = param;
         const { key: colKey = '' } = colGroup[colIndex];

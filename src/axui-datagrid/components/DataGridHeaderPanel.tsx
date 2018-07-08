@@ -52,8 +52,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
         if (ee.target) {
           downedElement = findParentNode(ee.target, element => {
             return element && element.getAttribute
-              ? element.getAttribute('data-filter-index') ===
-                  '' + _isColumnFilter
+              ? element.getAttribute('data-column-filter') === 'true'
               : false;
           });
         }

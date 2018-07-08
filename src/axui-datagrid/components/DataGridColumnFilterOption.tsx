@@ -30,7 +30,7 @@ class DatagridColumnFilterOption extends React.Component<IProps, IState> {
     scrollHeight: 0,
   };
 
-  throttledOnScroll: () => void;
+  containerNode: any;
 
   getOption() {
     const { filterOptions, optionItemHeight, onChange } = this.props;
@@ -89,14 +89,16 @@ class DatagridColumnFilterOption extends React.Component<IProps, IState> {
     });
   };
 
+  setContainerNode = (element: any) => {
+    this.containerNode = ReactDOM.findDOMNode(element);
+  };
+
   componentDidMount() {
     const { filterOptions, optionItemHeight } = this.props;
 
     this.setState({
       mounted: true,
-      clientHeight: getInnerHeight(
-        ReactDOM.findDOMNode(this.refs['options-container']),
-      ),
+      clientHeight: getInnerHeight(ReactDOM.findDOMNode(this.containerNode)),
       scrollHeight: filterOptions.length * optionItemHeight,
     });
   }
@@ -106,7 +108,7 @@ class DatagridColumnFilterOption extends React.Component<IProps, IState> {
     return (
       <div
         data-options=""
-        ref="options-container"
+        ref={this.setContainerNode}
         onScroll={throttle(this.onScroll, 10)}
       >
         {mounted ? this.getOption() : null}

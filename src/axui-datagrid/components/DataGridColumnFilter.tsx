@@ -82,53 +82,62 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
     const {
       isColumnFilter = false,
       colGroup = [],
+      options = {},
       styles = {},
       scrollLeft = 0,
       filterInfo = {},
       filteredList = [],
+      data = [],
     } = this.props;
+    const { columnKeys: optionColumnKeys = {} } = options;
     const { bodyHeight = 0 } = styles;
     const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;
     const optionItemHeight = 20;
+    const filterWidth: number = 180;
+
     if (isColumnFilter === false || !isNumber(isColumnFilter)) {
       return null;
     }
 
     let columnFilterInfo = filterInfo[isColumnFilter as number];
     let filterOptions = uniqBy(
-      filteredList.map(item => {
-        let value = item[colGroup[isColumnFilter as number].key || ''];
-        let text: string = value;
-        let checked: boolean = false;
+      data
+        .filter((n: any) => {
+          return !n[optionColumnKeys.deleted || '__deleted__'];
+        })
+        .map(item => {
+          let value = item[colGroup[isColumnFilter as number].key || ''];
+          let text: string = value;
+          let checked: boolean = false;
 
-        if (typeof value === 'undefined') {
-          value = '__UNDEFINED__';
-          text = '값 없음';
-        }
+          if (typeof value === 'undefined') {
+            value = '__UNDEFINED__';
+            text = '값 없음';
+          }
 
-        if (
-          typeof columnFilterInfo === 'undefined' ||
-          columnFilterInfo === false
-        ) {
-          checked = true;
-        } else if (
-          typeof columnFilterInfo !== 'undefined' &&
-          columnFilterInfo !== false &&
-          typeof columnFilterInfo[value] === 'undefined'
-        ) {
-          checked = columnFilterInfo.__CHECK_ALL__;
-        } else if (value in columnFilterInfo) {
-          checked = columnFilterInfo[value];
-        } else {
-          checked = columnFilterInfo.__CHECK_ALL__;
-        }
+          if (
+            typeof columnFilterInfo === 'undefined' ||
+            columnFilterInfo === false
+          ) {
+            checked = true;
+          } else if (
+            typeof columnFilterInfo !== 'undefined' &&
+            columnFilterInfo !== false &&
+            typeof columnFilterInfo[value] === 'undefined'
+          ) {
+            checked = columnFilterInfo.__CHECK_ALL__;
+          } else if (value in columnFilterInfo) {
+            checked = columnFilterInfo[value];
+          } else {
+            checked = columnFilterInfo.__CHECK_ALL__;
+          }
 
-        return {
-          value: value,
-          text: text,
-          checked: checked,
-        };
-      }),
+          return {
+            value: value,
+            text: text,
+            checked: checked,
+          };
+        }),
       'value',
     );
 
@@ -141,8 +150,6 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
         columnFilterInfo === false ||
         columnFilterInfo.__CHECK_ALL__,
     });
-
-    const filterWidth: number = 180;
 
     let filterStyles = {
       top: headerHeight - 2,
