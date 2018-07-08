@@ -49,3 +49,12 @@ export enum DispatchTypes {
   'UPDATE',
   'RESIZE_COL',
 }
+
+export enum PageButtonActions {
+  'PAGE_FIRST' = 'PAGE_FIRST',
+  'PAGE_PREV' = 'PAGE_PREV',
+  'PAGE_BACK' = 'PAGE_BACK',
+  'PAGE_PLAY' = 'PAGE_PLAY',
+  'PAGE_NEXT' = 'PAGE_NEXT',
+  'PAGE_LAST' = 'PAGE_LAST',
+}

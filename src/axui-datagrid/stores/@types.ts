@@ -12,6 +12,8 @@ export type DataGridFormatter = intfs.IDataGridFormatter;
 
 export type formatterFunction = intfs.formatterFunction;
 
+export type userCallBackFunction = intfs.userCallBackFunction;
+
 export type DataGridCol = intfs.IDataGridCol;
 
 export type DataGridColumn = intfs.IDataGridColumn;
@@ -59,7 +61,7 @@ export type DataGridOptionBody = {
 
 export type DataGridOptionPageButton = {
   className: string;
-  onClick: string | Function;
+  onClick: string | userCallBackFunction;
   width?: number;
 };
 

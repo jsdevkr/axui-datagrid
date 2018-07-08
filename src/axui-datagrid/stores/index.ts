@@ -7,5 +7,6 @@ export {
   DirectionTypes,
   KeyCodes,
   DispatchTypes,
+  PageButtonActions,
 } from './@enums';
 export { types, intfs };

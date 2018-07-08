@@ -40,6 +40,8 @@ export type formatterFunction = (
 
 export type editorFunction = (editorData: types.DataGridFormatterData) => void;
 
+export type userCallBackFunction = (param?: any) => void;
+
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;
 }
