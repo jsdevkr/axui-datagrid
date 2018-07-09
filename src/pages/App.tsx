@@ -1,14 +1,10 @@
 import * as React from 'react';
-import 'styles/globals';
-
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
-import { NoMatch, ErrorBoundary } from 'components';
+import { NoMatch, ErrorBoundary, SideNav } from 'components';
 
-const axuiLogo = require('assets/axui-logo.png');
-const GitHubButton = require('react-github-button');
-
-import Index from './Samples/Index';
+import 'styles/globals';
+import Index from './samples/Index';
 
 class App extends React.Component {
   state = {
@@ -17,9 +13,7 @@ class App extends React.Component {
 
   render() {
     const { leftMenuWidth } = this.state;
-    const leftMenuStyles = {
-      width: leftMenuWidth,
-    };
+
     const contentStyles = {
       marginLeft: leftMenuWidth,
       minWidth: '550px',
@@ -28,18 +22,7 @@ class App extends React.Component {
 
     return (
       <ErrorBoundary>
-        <div className={'app-left-menu'} style={leftMenuStyles}>
-          <div className={'item'}>
-            <div className={'logo-img'}>
-              <img src={axuiLogo} />
-            </div>
-            <h1>axui-datagrid</h1>
-          </div>
-          <div className={'item'}>
-            <GitHubButton type="stargazers" namespace="axui" repo="datagrid" />{' '}
-            <GitHubButton type="forks" namespace="axui" repo="datagrid" />
-          </div>
-        </div>
+        <SideNav leftMenuWidth={leftMenuWidth} />
 
         <div style={contentStyles}>
           <BrowserRouter>
