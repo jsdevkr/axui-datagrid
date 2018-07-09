@@ -5,46 +5,86 @@
 
 # Install
 
-```
+```bash
 npm install axui-datagrid -S
 ```
 
 # Usage
 
-```js
+```typescript jsx
 import * as React from 'react';
-import { AXDatagrid } from 'axui-datagrid';
+import { Segment } from 'semantic-ui-react';
 
+import 'axui-datagrid/style.scss';
+import { DataGrid } from 'axui-datagrid';
 
-export class Datagrid extends React.Component<any, any> {
-  constructor( props ) {
-    super( props );
+interface IProps {}
+interface IState {}
+class Basic extends React.Component<IProps, IState> {
+  state = {};
 
-    this.state = {
-      columns: [
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title', formatter: 'MY_FORMATTER'},
-        { key: 'writer', label: 'Writer', align: 'center'},
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date'},
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money'}
-      ],
-      data: [
-        {id: 1, title: '인생은 해파에게조차 아름답고 장엄하다.', writer: '장기영', date: '20171205123000', money: 1289301823}
-      ]
+  render() {
+    let gridData = [];
+
+    for (let i = 1; i < 30; i++) {
+      gridData.push({
+        a: 'a',
+        b: 'b',
+        c: 'c',
+        saleDt: 'saleDt',
+        customer: 'customer',
+        saleType: 'saleType',
+        price: 100 * i,
+        amount: i,
+        cost: 100 * i * i,
+      });
     }
-  }
 
-  public render() {
-
+    const columns = [
+      {
+        key: 'a',
+        label: '필드A',
+        width: 50,
+        align: 'center',
+      },
+      { key: 'b', label: '필드B', align: 'center', editor: { type: 'text' } },
+      { key: 'c', label: '필드C', align: 'center', editor: { type: 'text' } },
+      { key: 'price', label: '단가', formatter: 'money', align: 'right' },
+      {
+        key: 'amount',
+        width: 50,
+        label: '수량',
+        formatter: 'money',
+        align: 'right',
+      },
+      { key: 'cost', label: '금액', align: 'right', formatter: 'money' },
+      { key: 'saleDt', label: '판매일자', align: 'center' },
+      {
+        key: 'customer',
+        label: '고객명',
+        align: 'center',
+        editor: { type: 'text' },
+      },
+      { key: 'saleType', label: '판매타입', align: 'center' },
+    ];
     return (
-      <div>
-          <AXDatagrid
-            height={this.state.height}
-            columns={this.state.columns}
-            data={this.state.data}
+      <>
+        <Segment>
+          <h1>Basic</h1>
+
+          <DataGrid
+            data={gridData}
+            columns={columns}
+            options={{
+              showLineNumber: true,
+            }}
+            style={{ fontSize: '12px' }}
           />
-      </div>
-    )
+        </Segment>
+      </>
+    );
   }
 }
+
+export default Basic;
 ```

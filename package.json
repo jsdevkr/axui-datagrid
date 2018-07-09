@@ -49,7 +49,8 @@
     "test": "NODE_ENV=test jest",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prepublish": "npm run test",
-    "publish-by-patch": "cd dist && npm version patch && npm publish"
+    "publish-by-patch": "cd dist && npm version patch && npm publish",
+    "publish-by-minor": "cd dist && npm version minor && npm publish"
   },
   "betterScripts": {
     "build:common":
