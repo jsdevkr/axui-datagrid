@@ -22,16 +22,17 @@ class App extends React.Component {
 
     return (
       <ErrorBoundary>
-        <SideNav leftMenuWidth={leftMenuWidth} />
-
-        <div style={contentStyles}>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/" component={Index} />
-              <Route component={NoMatch} />
-            </Switch>
-          </BrowserRouter>
-        </div>
+        <BrowserRouter>
+          <>
+            <SideNav leftMenuWidth={leftMenuWidth} />
+            <div style={contentStyles}>
+              <Switch>
+                <Route path="/" component={Index} />
+                <Route component={NoMatch} />
+              </Switch>
+            </div>
+          </>
+        </BrowserRouter>
       </ErrorBoundary>
     );
   }

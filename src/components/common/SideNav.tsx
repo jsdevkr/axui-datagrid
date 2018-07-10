@@ -29,24 +29,45 @@ class SideNav extends React.Component<IProps, IState> {
 
   render() {
     const { leftMenuWidth } = this.props;
-
     const leftMenuStyles = {
       width: leftMenuWidth,
     };
 
     return (
-      <div className={'app-left-menu'} style={leftMenuStyles}>
-        <div className={'item'}>
+      <Menu
+        vertical
+        fixed="left"
+        inverted
+        className="app-left-menu"
+        style={leftMenuStyles}
+      >
+        <Menu.Item>
           <div className={'logo-img'}>
             <img src={axuiLogo} />
           </div>
           <h1>axui-datagrid</h1>
-        </div>
-        <div className={'item'}>
-          <GitHubButton type="stargazers" namespace="axui" repo="datagrid" />{' '}
-          <GitHubButton type="forks" namespace="axui" repo="datagrid" />
-        </div>
-      </div>
+
+          <div className='github-btn-container'>
+            <GitHubButton type="stargazers" namespace="axui" repo="datagrid" />{' '}
+            <GitHubButton type="forks" namespace="axui" repo="datagrid" />
+          </div>
+        </Menu.Item>
+
+        <Menu.Item>
+          <Menu.Header>Start</Menu.Header>
+          <Menu.Menu>
+            <Menu.Item as={NavLink} to="/introduction" activeClassName="active">
+              Introduction
+            </Menu.Item>
+            <Menu.Item as={NavLink} to="/usage" activeClassName="active">
+              Usage
+            </Menu.Item>
+            <Menu.Item as="a" href="https://github.com/axui/datagrid">
+              <Icon name="github" /> GitHub
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu.Item>
+      </Menu>
     );
   }
 }

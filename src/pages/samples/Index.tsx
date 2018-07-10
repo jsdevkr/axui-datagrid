@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'styles/globals';
-import { Basic } from './examples';
+import { Basic } from 'examples';
 import {
   Container,
   Header,
@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import { CodeViewer } from 'components';
 
-const basicRaw = require('!raw-loader!./examples/Basic.tsx');
+const basicRaw = require('!raw-loader!examples/Basic.tsx');
 
 interface IProps {}
 interface IState {}

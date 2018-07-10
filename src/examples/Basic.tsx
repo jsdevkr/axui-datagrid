@@ -5,14 +5,14 @@ import 'axui-datagrid/style.scss';
 import { DataGrid } from 'axui-datagrid';
 
 interface IProps {}
-interface IState {}
+interface IState {
+  gridData: any[];
+}
 class Basic extends React.Component<IProps, IState> {
-  state = {
+  constructor(props: IProps) {
+    super(props);
 
-  };
-
-  render() {
-    let gridData = [];
+    let gridData: any[] = [];
 
     const typeGroup = {
       aTypes: ['A', 'B', 'C', 'D'],
@@ -60,6 +60,12 @@ class Basic extends React.Component<IProps, IState> {
       });
     }
 
+    this.state = {
+      gridData: gridData,
+    };
+  }
+
+  render() {
     const columns = [
       {
         key: 'a',
@@ -87,6 +93,7 @@ class Basic extends React.Component<IProps, IState> {
       },
       { key: 'saleType', label: '판매타입', align: 'center' },
     ];
+    const { gridData } = this.state;
     return (
       <>
         <Segment>
