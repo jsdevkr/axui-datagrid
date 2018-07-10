@@ -18,7 +18,11 @@ module.exports = function override(config, env) {
   config = rewireCssModules(config, env);
 
   // less-loader
-  config = rewireLess(config, env);
+  config = rewireLess.withLoaderOptions({
+    javascriptEnabled: true,
+    // less 구문중에 inline javascript로 처리 되는 구문이 있어 옵션 추가
+    // 그렇지 않으면 https://github.com/ant-design/ant-motion/issues/44 이와 같은 오류가 발생됨.
+  })(config, env);
 
   return config;
 };

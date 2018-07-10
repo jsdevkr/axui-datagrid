@@ -1,16 +1,22 @@
-.ui.menu.fixed.app-left-menu {
-  color: #fff;
-  background: rgb(19, 59, 93);
-  z-index: 101;
-  color: rgba(255, 255, 255, 0.9);
-
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  .item {
-    padding: 1em;
+.app-left-menu {
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 0;
+    background-color: #133b5d;
   }
 
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: #1c6091;
+  }
+}
+
+.sider-header {
+  padding: 5px 0 20px 15px;
   .logo-img {
     width: 80px;
     overflow: hidden;
@@ -37,20 +43,5 @@
       margin-right: 1em;
       margin-bottom: 0.5em;
     }
-  }
-
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 0;
-    background-color: #133b5d;
-  }
-
-  &::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 0;
-    background-color: #1c6091;
   }
 }

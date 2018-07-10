@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import { NoMatch, ErrorBoundary, SideNav } from 'components';
+import { Layout, Menu, Icon } from 'antd';
 
 import 'styles/globals';
-import Index from './samples/Index';
+
+import Introduction from './start/Introduction';
+import Usage from './start/Usage';
 
 class App extends React.Component {
   state = {
@@ -23,15 +26,25 @@ class App extends React.Component {
     return (
       <ErrorBoundary>
         <BrowserRouter>
-          <>
+          <Layout>
             <SideNav leftMenuWidth={leftMenuWidth} />
-            <div style={contentStyles}>
-              <Switch>
-                <Route path="/" component={Index} />
-                <Route component={NoMatch} />
-              </Switch>
-            </div>
-          </>
+
+            <Layout style={contentStyles}>
+              <Layout.Content>
+                <Switch>
+                  <Route
+                    exact
+                    path="/"
+                    render={() => <Redirect to="/introduction" />}
+                  />
+                  <Route path="/introduction" component={Introduction} />
+                  <Route path="/usage" component={Usage} />
+                  <Route component={NoMatch} />
+                </Switch>
+              </Layout.Content>
+              <Layout.Footer>AXUI</Layout.Footer>
+            </Layout>
+          </Layout>
         </BrowserRouter>
       </ErrorBoundary>
     );
