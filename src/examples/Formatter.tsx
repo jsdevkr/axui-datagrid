@@ -4,15 +4,6 @@ import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
-// 사용자 formatter 확장하기
-/*
-DataGrid.setFormatter({
-  MY_FORMATTER: function(data) {
-    return 'MY_FORMATTER';
-  },
-});
-*/
-
 class Formatter extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -21,13 +12,7 @@ class Formatter extends React.Component<any, any> {
 
     this.state = {
       height: 400,
-      columns: [
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title', formatter: 'MY_FORMATTER' },
-        { key: 'writer', label: 'Writer', align: 'center' },
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
-      ],
+      columns: [{ key: 'id', width: 60, label: 'ID', align: 'center' }],
       data: gridData,
     };
   }

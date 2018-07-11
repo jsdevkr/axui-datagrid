@@ -166,10 +166,10 @@ class DataGrid extends React.Component<IProps, IState> {
   public render() {
     const { mounted, dimensionsRootNode } = this.state;
     const {
-      data,
-      columns,
-      options = DataGrid.defaultOptions,
-      style,
+      data = [],
+      columns = [],
+      options = {},
+      style = {},
       onBeforeEvent,
       onAfterEvent,
       height = DataGrid.defaultHeight,

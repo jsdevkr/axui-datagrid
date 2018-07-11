@@ -81,37 +81,16 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
   throttledUpdateDimensions: any;
 
-  static getDerivedStateFromProps(props: any, prevState: types.DataGridState) {
-    // 만일 속성별 컨트롤을 하겠다면 여기에서.
-    if (
-      props.mounted === prevState.mounted &&
-      props.setRootState === prevState.setRootState &&
-      props.getRootState === prevState.getRootState &&
-      props.getRootNode === prevState.getRootNode &&
-      props.getClipBoardNode === prevState.getClipBoardNode &&
-      props.rootObject === prevState.rootObject &&
-      props.data === prevState.data &&
-      props.height === prevState.height &&
-      props.columns === prevState.propColumns &&
-      props.options === prevState.propOptions &&
-      props.onBeforeEvent === prevState.onBeforeEvent &&
-      props.onAfterEvent === prevState.onAfterEvent &&
-      prevState.calculatedStyles === true
-    ) {
-      return null;
-    }
-    // 불필요한 렌더를 막으려면 렌더링이 필요한 상활을 잘 파악 해서 처리 헤야합니다.
-    // console.log('run getDerivedStateFromProps');
-
+  UNSAFE_componentWillReceiveProps(props: any) {
     const {
       options = DataGrid.defaultOptions,
       styles = DataGrid.defaultStyles,
-    } = prevState;
+    } = this.state;
     const { columnKeys: optionColumnKeys = {} } = options;
 
     let changeState = false;
     let changeDimensions = false;
-    let newState: types.DataGridState = { ...prevState };
+    let newState: types.DataGridState = { ...(this.state as any) };
     let currentOptions: types.DataGridOptions = {
       ...options,
     };
@@ -121,23 +100,23 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
     newState.mounted = true;
 
-    if (props.setRootState && props.setRootState !== prevState.setRootState) {
+    if (props.setRootState && props.setRootState !== newState.setRootState) {
       newState.setRootState = props.setRootState;
     }
-    if (props.getRootState && props.getRootState !== prevState.getRootState) {
+    if (props.getRootState && props.getRootState !== newState.getRootState) {
       newState.getRootState = props.getRootState;
     }
-    if (props.getRootNode && props.getRootNode !== prevState.getRootNode) {
+    if (props.getRootNode && props.getRootNode !== newState.getRootNode) {
       newState.getRootNode = props.getRootNode;
     }
     if (
       props.getClipBoardNode &&
-      props.getClipBoardNode !== prevState.getClipBoardNode
+      props.getClipBoardNode !== newState.getClipBoardNode
     ) {
       newState.getClipBoardNode = props.getClipBoardNode;
     }
 
-    if (props.data !== prevState.data) {
+    if (props.data !== newState.data) {
       changeState = true;
       newState.data = props.data || [];
       newState.filteredList =
@@ -147,15 +126,16 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         });
     }
 
-    if (props.height !== prevState.height) {
+    if (props.height !== newState.height) {
       changeState = true;
       changeDimensions = true;
       newState.height = props.height;
     }
 
-    if (props.options !== prevState.propOptions) {
+    if (props.options !== newState.propOptions) {
       changeState = true;
-      newState.propOptions = props.options;
+      newState.propOptions = JSON.stringify(props.options);
+
       newState.options = currentOptions = mergeAll(
         true,
         { ...DataGrid.defaultOptions },
@@ -163,18 +143,16 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       );
     }
 
-    if (props.rootObject !== prevState.rootObject) {
+    if (props.rootObject !== newState.rootObject) {
       changeState = true;
       newState.rootObject = props.rootObject;
     }
 
     if (
-      props.columns !== prevState.propColumns ||
-      props.options !== prevState.propOptions
+      props.columns !== newState.propColumns ||
+      props.options !== newState.propOptions
     ) {
       changeState = true;
-
-      console.log(props.options.frozenColumnIndex);
 
       const {
         frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex,
@@ -233,7 +211,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
               editor: col.editor,
             };
             newState.colGroupMap[col.colIndex || 0] = currentCol;
-            // todo : colGroupMap에 colGroup의 참조가 있는데. 문제가 없는지 확인 필요.
             newState.colGroup.push(currentCol);
           }
         });
@@ -265,7 +242,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       currentStyles.bodyTrHeight =
         newState.bodyRowTable.rows.length * columnHeight;
 
-      newState.propColumns = props.columns;
+      // newState.propColumns = JSON.stringify(props.columns);
       newState.styles = currentStyles;
 
       newState.calculatedStyles = false;
@@ -347,7 +324,9 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newState.scrollTop = newScrollTop;
     }
 
-    return changeState ? newState : null;
+    if (changeState) {
+      this.setState(newState);
+    }
   }
 
   componentDidMount() {

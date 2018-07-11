@@ -201,8 +201,8 @@ export type DataGridState = {
   visibleBodyRowData?: DataGridColumnTableMap;
   visibleBodyGroupingData?: DataGridColumnTableMap;
 
-  propColumns?: any;
-  propOptions?: DataGridOptions;
+  propColumns?: string;
+  propOptions?: string;
 
   predefinedFormatter?: DataGridFormatter;
   rootObject?: any;

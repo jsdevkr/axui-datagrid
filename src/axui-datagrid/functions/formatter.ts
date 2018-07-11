@@ -22,10 +22,18 @@ function money(formatterData: types.DataGridFormatterData) {
 }
 
 function date(formatterData: types.DataGridFormatterData) {
-  return printDate(formatterData.value, 'yyyy-MM-dd');
+  if (typeof formatterData.value !== 'undefined') {
+    return printDate(formatterData.value, 'yyyy-MM-dd');
+  } else {
+    return '';
+  }
 }
 function datetime(formatterData: types.DataGridFormatterData) {
-  return printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
+  if (typeof formatterData.value !== 'undefined') {
+    return printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
+  } else {
+    return '';
+  }
 }
 
 export default { money, date, datetime };

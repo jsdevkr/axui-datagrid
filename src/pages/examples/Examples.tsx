@@ -28,14 +28,17 @@ export const ExampleRoot = (props: any) => {
     <div>
       {Example ? <Example /> : null}
       <Divider />
-      <Wrapper>
+    </div>
+  );
+
+  /*
+  <Wrapper>
         <Segment padded>
           <h4>Source Code </h4>
           <CodeViewer code={sourceCode} />
         </Segment>
       </Wrapper>
-    </div>
-  );
+   */
 };
 
 export default ExampleRoot;
