@@ -32,7 +32,6 @@ var DataGrid = /** @class */ (function (_super) {
         _this.clipBoardNode = null;
         _this.state = {
             mounted: false,
-            dimensionsRootNode: {},
             calculatedHeight: undefined,
         };
         _this.setRootNode = function (element) {
@@ -64,18 +63,13 @@ var DataGrid = /** @class */ (function (_super) {
     DataGrid.prototype.componentDidMount = function () {
         this.setState({
             mounted: true,
-            dimensionsRootNode: {
-                width: utils_1.getInnerWidth(this.rootNode),
-                height: utils_1.getInnerHeight(this.rootNode),
-            },
         });
     };
     DataGrid.prototype.render = function () {
-        var _a = this.state, mounted = _a.mounted, dimensionsRootNode = _a.dimensionsRootNode;
-        var _b = this.props, data = _b.data, columns = _b.columns, height = _b.height, options = _b.options, style = _b.style, onBeforeEvent = _b.onBeforeEvent, onAfterEvent = _b.onAfterEvent;
+        var mounted = this.state.mounted;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.columns, columns = _c === void 0 ? [] : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, _f = _a.height, height = _f === void 0 ? DataGrid.defaultHeight : _f;
         var providerProps = {
             mounted: mounted,
-            dimensionsRootNode: dimensionsRootNode,
             setRootState: this.setRootState,
             getRootState: this.getRootState,
             getRootNode: this.getRootNode,
@@ -89,10 +83,10 @@ var DataGrid = /** @class */ (function (_super) {
             onAfterEvent: onAfterEvent,
         };
         var gridRootStyle = utils_1.mergeAll({
-            height: this.state.calculatedHeight || height || DataGrid.defaultHeight,
+            height: this.state.calculatedHeight || height,
         }, style);
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, onFireEvent: this.onFireEvent, style: gridRootStyle },
+            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle, onFireEvent: this.onFireEvent },
                 React.createElement("div", { className: 'axui-datagrid-clip-board' },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,

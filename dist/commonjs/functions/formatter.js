@@ -17,10 +17,20 @@ function money(formatterData) {
     }
 }
 function date(formatterData) {
-    return utils_1.printDate(formatterData.value, 'yyyy-MM-dd');
+    if (typeof formatterData.value !== 'undefined') {
+        return utils_1.printDate(formatterData.value, 'yyyy-MM-dd');
+    }
+    else {
+        return '';
+    }
 }
 function datetime(formatterData) {
-    return utils_1.printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
+    if (typeof formatterData.value !== 'undefined') {
+        return utils_1.printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
+    }
+    else {
+        return '';
+    }
 }
 exports.default = { money: money, date: date, datetime: datetime };
 //# sourceMappingURL=formatter.js.map

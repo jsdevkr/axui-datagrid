@@ -262,41 +262,29 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         return _this;
     }
-    StoreProvider.getDerivedStateFromProps = function (props, prevState) {
-        // 만일 속성별 컨트롤을 하겠다면 여기에서.
-        if (props.mounted === prevState.mounted &&
-            props.setRootState === prevState.setRootState &&
-            props.getRootState === prevState.getRootState &&
-            props.getRootNode === prevState.getRootNode &&
-            props.rootObject === prevState.rootObject &&
-            props.data === prevState.data &&
-            props.height === prevState.height &&
-            props.columns === prevState.propColumns &&
-            props.options === prevState.propOptions &&
-            props.onBeforeEvent === prevState.onBeforeEvent &&
-            props.onAfterEvent === prevState.onAfterEvent &&
-            prevState.calculatedStyles === true) {
-            return null;
-        }
-        // 불필요한 렌더를 막으려면 렌더링이 필요한 상활을 잘 파악 해서 처리 헤야합니다.
-        // console.log('run getDerivedStateFromProps');
-        var _a = prevState.options, options = _a === void 0 ? containers_1.DataGrid.defaultOptions : _a, _b = prevState.styles, styles = _b === void 0 ? containers_1.DataGrid.defaultStyles : _b;
-        var _c = options.columnKeys, optionColumnKeys = _c === void 0 ? {} : _c;
+    StoreProvider.prototype.UNSAFE_componentWillReceiveProps = function (props) {
+        var _a = this.state, _b = _a.options, options = _b === void 0 ? containers_1.DataGrid.defaultOptions : _b, _c = _a.styles, styles = _c === void 0 ? containers_1.DataGrid.defaultStyles : _c;
+        var _d = options.columnKeys, optionColumnKeys = _d === void 0 ? {} : _d;
         var changeState = false;
-        var newState = __assign({}, prevState);
+        var changeDimensions = false;
+        var newState = __assign({}, this.state);
         var currentOptions = __assign({}, options);
         var currentStyles = __assign({}, styles);
         newState.mounted = true;
-        if (props.setRootState && props.setRootState !== prevState.setRootState) {
+        if (props.setRootState && props.setRootState !== newState.setRootState) {
             newState.setRootState = props.setRootState;
         }
-        if (props.getRootState && props.getRootState !== prevState.getRootState) {
+        if (props.getRootState && props.getRootState !== newState.getRootState) {
             newState.getRootState = props.getRootState;
         }
-        if (props.getRootNode && props.getRootNode !== prevState.getRootNode) {
+        if (props.getRootNode && props.getRootNode !== newState.getRootNode) {
             newState.getRootNode = props.getRootNode;
         }
-        if (props.data !== prevState.data) {
+        if (props.getClipBoardNode &&
+            props.getClipBoardNode !== newState.getClipBoardNode) {
+            newState.getClipBoardNode = props.getClipBoardNode;
+        }
+        if (props.data !== newState.data) {
             changeState = true;
             newState.data = props.data || [];
             newState.filteredList =
@@ -305,24 +293,25 @@ var StoreProvider = /** @class */ (function (_super) {
                         return !n[optionColumnKeys.deleted || '__deleted__'];
                     });
         }
-        if (props.height !== prevState.height) {
+        if (props.height !== newState.height) {
             changeState = true;
+            changeDimensions = true;
             newState.height = props.height;
         }
-        if (props.options !== prevState.propOptions) {
+        if (props.options !== newState.propOptions) {
             changeState = true;
-            newState.propOptions = props.options;
+            newState.propOptions = JSON.stringify(props.options);
             newState.options = currentOptions = utils_1.mergeAll(true, __assign({}, containers_1.DataGrid.defaultOptions), props.options);
         }
-        if (props.rootObject !== prevState.rootObject) {
+        if (props.rootObject !== newState.rootObject) {
             changeState = true;
             newState.rootObject = props.rootObject;
         }
-        if (props.columns !== prevState.propColumns ||
-            props.options !== prevState.propOptions) {
+        if (props.columns !== newState.propColumns ||
+            props.options !== newState.propOptions) {
             changeState = true;
-            var _d = currentOptions.frozenColumnIndex, frozenColumnIndex = _d === void 0 ? containers_1.DataGrid.defaultOptions.frozenColumnIndex : _d, _e = currentOptions.body, optionsBody = _e === void 0 ? containers_1.DataGrid.defaultBody : _e;
-            var _f = optionsBody.columnHeight, columnHeight = _f === void 0 ? 0 : _f;
+            var _e = currentOptions.frozenColumnIndex, frozenColumnIndex = _e === void 0 ? containers_1.DataGrid.defaultOptions.frozenColumnIndex : _e, _f = currentOptions.body, optionsBody = _f === void 0 ? containers_1.DataGrid.defaultBody : _f;
+            var _g = optionsBody.columnHeight, columnHeight = _g === void 0 ? 0 : _g;
             var headerDividedObj = void 0, bodyDividedObj = void 0;
             // convert colGroup
             newState.headerTable = utils_1.makeHeaderTable(props.columns, currentOptions);
@@ -358,7 +347,6 @@ var StoreProvider = /** @class */ (function (_super) {
                             editor: col.editor,
                         };
                         newState.colGroupMap[col.colIndex || 0] = currentCol;
-                        // todo : colGroupMap에 colGroup의 참조가 있는데. 문제가 없는지 확인 필요.
                         newState.colGroup.push(currentCol);
                     }
                 });
@@ -383,7 +371,7 @@ var StoreProvider = /** @class */ (function (_super) {
             currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
             currentStyles.bodyTrHeight =
                 newState.bodyRowTable.rows.length * columnHeight;
-            newState.propColumns = props.columns;
+            // newState.propColumns = JSON.stringify(props.columns);
             newState.styles = currentStyles;
             newState.calculatedStyles = false;
         }
@@ -395,21 +383,35 @@ var StoreProvider = /** @class */ (function (_super) {
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
             newState.headerColGroup = calculatedObject.headerColGroup;
-            var _g = newState.styles, _h = _g.CTInnerWidth, _CTInnerWidth = _h === void 0 ? 0 : _h, _j = _g.frozenPanelWidth, _frozenPanelWidth = _j === void 0 ? 0 : _j, _k = _g.asidePanelWidth, _asidePanelWidth = _k === void 0 ? 0 : _k, _l = _g.rightPanelWidth, _rightPanelWidth = _l === void 0 ? 0 : _l;
-            var _m = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
+            var _h = newState.styles, _j = _h.CTInnerWidth, _CTInnerWidth = _j === void 0 ? 0 : _j, _k = _h.frozenPanelWidth, _frozenPanelWidth = _k === void 0 ? 0 : _k, _l = _h.asidePanelWidth, _asidePanelWidth = _l === void 0 ? 0 : _l, _m = _h.rightPanelWidth, _rightPanelWidth = _m === void 0 ? 0 : _m;
+            var _o = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
                 _frozenPanelWidth +
                 (_CTInnerWidth -
                     _asidePanelWidth -
                     _frozenPanelWidth -
-                    _rightPanelWidth)), printStartColIndex = _m.printStartColIndex, printEndColIndex = _m.printEndColIndex;
-            var _o = (newState.options || {}).frozenColumnIndex, frozenColumnIndex = _o === void 0 ? 0 : _o;
+                    _rightPanelWidth)), printStartColIndex = _o.printStartColIndex, printEndColIndex = _o.printEndColIndex;
+            var _p = (newState.options || {}).frozenColumnIndex, frozenColumnIndex = _p === void 0 ? 0 : _p;
             newState.printStartColIndex = printStartColIndex;
             newState.printEndColIndex = printEndColIndex;
             newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
             newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
             newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         }
-        return changeState ? newState : null;
+        else if (changeDimensions) {
+            newState.styles = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState).styles;
+            var _q = styles.scrollContentWidth, scrollContentWidth = _q === void 0 ? 0 : _q, _r = styles.scrollContentHeight, scrollContentHeight = _r === void 0 ? 0 : _r, _s = styles.scrollContentContainerWidth, scrollContentContainerWidth = _s === void 0 ? 0 : _s, _t = styles.scrollContentContainerHeight, scrollContentContainerHeight = _t === void 0 ? 0 : _t;
+            var _u = utils_1.getScrollPosition(newState.scrollLeft || 0, newState.scrollTop || 0, {
+                scrollWidth: scrollContentWidth,
+                scrollHeight: scrollContentHeight,
+                clientWidth: scrollContentContainerWidth,
+                clientHeight: scrollContentContainerHeight,
+            }), _v = _u.scrollLeft, newScrollLeft = _v === void 0 ? 0 : _v, _w = _u.scrollTop, newScrollTop = _w === void 0 ? 0 : _w;
+            newState.scrollLeft = newScrollLeft;
+            newState.scrollTop = newScrollTop;
+        }
+        if (changeState) {
+            this.setState(newState);
+        }
     };
     StoreProvider.prototype.componentDidMount = function () {
         this.throttledUpdateDimensions = utils_1.throttle(this.updateDimensions.bind(this), 100);

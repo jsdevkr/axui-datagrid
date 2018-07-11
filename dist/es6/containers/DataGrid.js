@@ -13,7 +13,6 @@ class DataGrid extends React.Component {
         this.clipBoardNode = null;
         this.state = {
             mounted: false,
-            dimensionsRootNode: {},
             calculatedHeight: undefined,
         };
         this.setRootNode = (element) => {
@@ -44,18 +43,13 @@ class DataGrid extends React.Component {
     componentDidMount() {
         this.setState({
             mounted: true,
-            dimensionsRootNode: {
-                width: utils_1.getInnerWidth(this.rootNode),
-                height: utils_1.getInnerHeight(this.rootNode),
-            },
         });
     }
     render() {
-        const { mounted, dimensionsRootNode } = this.state;
-        const { data, columns, height, options, style, onBeforeEvent, onAfterEvent, } = this.props;
+        const { mounted } = this.state;
+        const { data = [], columns = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, } = this.props;
         const providerProps = {
             mounted,
-            dimensionsRootNode,
             setRootState: this.setRootState,
             getRootState: this.getRootState,
             getRootNode: this.getRootNode,
@@ -69,10 +63,10 @@ class DataGrid extends React.Component {
             onAfterEvent,
         };
         let gridRootStyle = utils_1.mergeAll({
-            height: this.state.calculatedHeight || height || DataGrid.defaultHeight,
+            height: this.state.calculatedHeight || height,
         }, style);
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, onFireEvent: this.onFireEvent, style: gridRootStyle },
+            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle, onFireEvent: this.onFireEvent },
                 React.createElement("div", { className: 'axui-datagrid-clip-board' },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,

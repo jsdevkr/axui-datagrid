@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const getWidthHeight_1 = require("./getWidthHeight");
 const setColGroupWidth_1 = require("./setColGroupWidth");
 function calculateDimensions(containerDOM, state, toBeFilteredList) {
-    const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, } = state;
+    const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, height = 0, } = state;
     let list = toBeFilteredList || filteredList;
     const { header: optionsHeader = {}, scroller: optionsScroller = {}, page: optionsPage = {}, } = options;
     const { frozenColumnIndex = 0, frozenRowIndex = 0 } = options || {};
@@ -17,7 +17,7 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     let currentHeaderColGroup = [];
     currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
     currentStyles.CTInnerWidth = currentStyles.elWidth = getWidthHeight_1.getOuterWidth(containerDOM);
-    currentStyles.CTInnerHeight = currentStyles.elHeight = getWidthHeight_1.getOuterHeight(containerDOM);
+    currentStyles.CTInnerHeight = currentStyles.elHeight = height;
     currentStyles.rightPanelWidth = 0;
     currentStyles.pageHeight = 0;
     currentStyles.asidePanelWidth = currentStyles.asidePanelWidth || 0;

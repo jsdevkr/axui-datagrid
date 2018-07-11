@@ -240,41 +240,29 @@ class StoreProvider extends React.Component {
             proc[dispatchType]();
         };
     }
-    static getDerivedStateFromProps(props, prevState) {
-        // 만일 속성별 컨트롤을 하겠다면 여기에서.
-        if (props.mounted === prevState.mounted &&
-            props.setRootState === prevState.setRootState &&
-            props.getRootState === prevState.getRootState &&
-            props.getRootNode === prevState.getRootNode &&
-            props.rootObject === prevState.rootObject &&
-            props.data === prevState.data &&
-            props.height === prevState.height &&
-            props.columns === prevState.propColumns &&
-            props.options === prevState.propOptions &&
-            props.onBeforeEvent === prevState.onBeforeEvent &&
-            props.onAfterEvent === prevState.onAfterEvent &&
-            prevState.calculatedStyles === true) {
-            return null;
-        }
-        // 불필요한 렌더를 막으려면 렌더링이 필요한 상활을 잘 파악 해서 처리 헤야합니다.
-        // console.log('run getDerivedStateFromProps');
-        const { options = containers_1.DataGrid.defaultOptions, styles = containers_1.DataGrid.defaultStyles, } = prevState;
+    UNSAFE_componentWillReceiveProps(props) {
+        const { options = containers_1.DataGrid.defaultOptions, styles = containers_1.DataGrid.defaultStyles, } = this.state;
         const { columnKeys: optionColumnKeys = {} } = options;
         let changeState = false;
-        let newState = Object.assign({}, prevState);
+        let changeDimensions = false;
+        let newState = Object.assign({}, this.state);
         let currentOptions = Object.assign({}, options);
         let currentStyles = Object.assign({}, styles);
         newState.mounted = true;
-        if (props.setRootState && props.setRootState !== prevState.setRootState) {
+        if (props.setRootState && props.setRootState !== newState.setRootState) {
             newState.setRootState = props.setRootState;
         }
-        if (props.getRootState && props.getRootState !== prevState.getRootState) {
+        if (props.getRootState && props.getRootState !== newState.getRootState) {
             newState.getRootState = props.getRootState;
         }
-        if (props.getRootNode && props.getRootNode !== prevState.getRootNode) {
+        if (props.getRootNode && props.getRootNode !== newState.getRootNode) {
             newState.getRootNode = props.getRootNode;
         }
-        if (props.data !== prevState.data) {
+        if (props.getClipBoardNode &&
+            props.getClipBoardNode !== newState.getClipBoardNode) {
+            newState.getClipBoardNode = props.getClipBoardNode;
+        }
+        if (props.data !== newState.data) {
             changeState = true;
             newState.data = props.data || [];
             newState.filteredList =
@@ -283,21 +271,22 @@ class StoreProvider extends React.Component {
                         return !n[optionColumnKeys.deleted || '__deleted__'];
                     });
         }
-        if (props.height !== prevState.height) {
+        if (props.height !== newState.height) {
             changeState = true;
+            changeDimensions = true;
             newState.height = props.height;
         }
-        if (props.options !== prevState.propOptions) {
+        if (props.options !== newState.propOptions) {
             changeState = true;
-            newState.propOptions = props.options;
+            newState.propOptions = JSON.stringify(props.options);
             newState.options = currentOptions = utils_1.mergeAll(true, Object.assign({}, containers_1.DataGrid.defaultOptions), props.options);
         }
-        if (props.rootObject !== prevState.rootObject) {
+        if (props.rootObject !== newState.rootObject) {
             changeState = true;
             newState.rootObject = props.rootObject;
         }
-        if (props.columns !== prevState.propColumns ||
-            props.options !== prevState.propOptions) {
+        if (props.columns !== newState.propColumns ||
+            props.options !== newState.propOptions) {
             changeState = true;
             const { frozenColumnIndex = containers_1.DataGrid.defaultOptions.frozenColumnIndex, body: optionsBody = containers_1.DataGrid.defaultBody, } = currentOptions;
             const { columnHeight = 0 } = optionsBody;
@@ -336,7 +325,6 @@ class StoreProvider extends React.Component {
                             editor: col.editor,
                         };
                         newState.colGroupMap[col.colIndex || 0] = currentCol;
-                        // todo : colGroupMap에 colGroup의 참조가 있는데. 문제가 없는지 확인 필요.
                         newState.colGroup.push(currentCol);
                     }
                 });
@@ -361,7 +349,7 @@ class StoreProvider extends React.Component {
             currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
             currentStyles.bodyTrHeight =
                 newState.bodyRowTable.rows.length * columnHeight;
-            newState.propColumns = props.columns;
+            // newState.propColumns = JSON.stringify(props.columns);
             newState.styles = currentStyles;
             newState.calculatedStyles = false;
         }
@@ -387,7 +375,21 @@ class StoreProvider extends React.Component {
             newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
             newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         }
-        return changeState ? newState : null;
+        else if (changeDimensions) {
+            newState.styles = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState).styles;
+            const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+            let { scrollLeft: newScrollLeft = 0, scrollTop: newScrollTop = 0, } = utils_1.getScrollPosition(newState.scrollLeft || 0, newState.scrollTop || 0, {
+                scrollWidth: scrollContentWidth,
+                scrollHeight: scrollContentHeight,
+                clientWidth: scrollContentContainerWidth,
+                clientHeight: scrollContentContainerHeight,
+            });
+            newState.scrollLeft = newScrollLeft;
+            newState.scrollTop = newScrollTop;
+        }
+        if (changeState) {
+            this.setState(newState);
+        }
     }
     componentDidMount() {
         this.throttledUpdateDimensions = utils_1.throttle(this.updateDimensions.bind(this), 100);

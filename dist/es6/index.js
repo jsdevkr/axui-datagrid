@@ -5,4 +5,6 @@ exports.DataGrid = containers_1.DataGrid;
 const stores_1 = require("./stores");
 exports.types = stores_1.types;
 exports.intfs = stores_1.intfs;
+const utils = require("./utils");
+exports.utils = utils;
 //# sourceMappingURL=index.js.map
