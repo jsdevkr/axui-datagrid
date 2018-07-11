@@ -4,7 +4,7 @@
 @ant-prefix : ant;
 
 // -------- Colors -----------
-@primary-color : @blue-6;
+@primary-color : #cc7832; //@blue-6;
 @info-color : @blue-6;
 @success-color : @green-6;
 @processing-color : @blue-6;
@@ -38,7 +38,7 @@
 // ---
 
 // Background color for `<body>`
-@body-background : #fff;
+@body-background : #f0f2f5;
 // Base background color for most components
 @component-background : #fff;
 @font-family-no-number : "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -47,7 +47,7 @@
 @heading-color : fade(#000, 85%);
 @text-color : fade(#000, 65%);
 @text-color-secondary : fade(#000, 45%);
-@heading-color-dark : fade(#fff, 100%);
+@heading-color-dark : fade(#000, 100%);
 @text-color-dark : fade(#fff, 85%);
 @text-color-secondary-dark: fade(#fff, 65%);
 @font-size-base : 14px;
@@ -212,8 +212,8 @@
 @grid-gutter-width : 0;
 
 // Layout
-@layout-body-background : #fff;
-@layout-header-background : #133b5d;
+@layout-body-background : #f0f2f5; // @body-background;
+@layout-header-background : #333333;
 @layout-footer-background : @layout-body-background;
 @layout-header-height : 64px;
 @layout-header-padding : 0 50px;
@@ -329,11 +329,11 @@
 @menu-item-group-title-color: @text-color-secondary;
 // dark theme
 @menu-dark-color: @text-color-secondary-dark;
-@menu-dark-bg: @layout-header-background;
+@menu-dark-bg: #111; //@layout-header-background;
 @menu-dark-arrow-color: #fff;
-@menu-dark-submenu-bg: #132841;
+@menu-dark-submenu-bg: @menu-dark-bg; //#132841;
 @menu-dark-highlight-color: #fff;
-@menu-dark-item-active-bg: @primary-color;
+@menu-dark-item-active-bg: #f9d95c; //@primary-color;
 
 // Spin
 // ---

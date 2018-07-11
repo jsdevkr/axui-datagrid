@@ -5,9 +5,10 @@ import { NoMatch, ErrorBoundary, SideNav } from 'components';
 import { Layout } from 'antd';
 
 import 'styles/globals';
+import 'axui-datagrid/style.scss'; // or style.css
 
-import Introduction from './start/Introduction';
-import Usage from './start/Usage';
+import { Introduction, Usage } from 'pages/start';
+import { Examples } from 'pages/examples';
 
 class App extends React.Component {
   state = {
@@ -28,7 +29,6 @@ class App extends React.Component {
         <BrowserRouter>
           <Layout>
             <SideNav leftMenuWidth={leftMenuWidth} />
-
             <Layout style={contentStyles}>
               <Layout.Content>
                 <Switch>
@@ -39,10 +39,13 @@ class App extends React.Component {
                   />
                   <Route path="/introduction" component={Introduction} />
                   <Route path="/usage" component={Usage} />
+                  <Route
+                    path="/examples/:name"
+                    render={p => <Examples {...p} />}
+                  />
                   <Route component={NoMatch} />
                 </Switch>
               </Layout.Content>
-              <Layout.Footer>AXUI</Layout.Footer>
             </Layout>
           </Layout>
         </BrowserRouter>

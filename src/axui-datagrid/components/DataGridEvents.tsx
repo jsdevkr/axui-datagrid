@@ -75,18 +75,55 @@ class DataGridEvents extends React.Component<IProps, IState> {
     return true;
   };
 
-  onKeyDown = (keyAction: KeyCodes, e: any) => {
+  onKeyDown = (keyAction: KeyCodes, e: any) => {};
+
+  onKeyUp = (e: any) => {
+    const {
+      colGroup = [],
+      focusedRow = 0,
+      focusedCol = 0,
+      setStoreState,
+      isInlineEditing,
+    } = this.props;
+
+    const proc = {
+      [KeyCodes.ENTER]: () => {
+        const col = colGroup[focusedCol];
+
+        if (col.editor) {
+          setStoreState({
+            isInlineEditing: true,
+            inlineEditingCell: {
+              rowIndex: focusedRow,
+              colIndex: col.colIndex,
+              editor: col.editor,
+            },
+          });
+        }
+      },
+    };
+
+    if (!isInlineEditing && e.which in proc) {
+      proc[e.which]();
+    }
+  };
+
+  onKeyPress = (e: any) => {
     const {
       filteredList = [],
+      getRootNode,
+      getClipBoardNode,
+      colGroup = [],
       headerColGroup = [],
+      selectionRows = {},
+      selectionCols = {},
+      focusedCol = 0,
+      setStoreState,
       scrollLeft = 0,
       scrollTop = 0,
       focusedRow = 0,
-      focusedCol = 0,
       options = {},
       styles = {},
-      setStoreState,
-      colGroup = [],
       isInlineEditing = false,
       inlineEditingCell = {},
     } = this.props;
@@ -110,6 +147,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
       rightPanelWidth = 0,
       verticalScrollerWidth = 0,
     } = styles;
+
+    const rootNode = getNode(getRootNode);
+    const clipBoardNode = getNode(getClipBoardNode);
 
     const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
     const eRowIndex =
@@ -172,167 +212,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
       return _scrollLeft;
     };
-
-    const proc = {
-      [KeyCodes.ESC]: () => {
-        setStoreState({
-          selectionRows: {
-            [focusedRow]: true,
-          },
-          selectionCols: {
-            [focusedCol]: true,
-          },
-        });
-      },
-      [KeyCodes.HOME]: () => {
-        const focusRow = 0;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.END]: () => {
-        const focusRow = filteredList.length - 1;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.PAGE_UP]: () => {
-        const focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.PAGE_DOWN]: () => {
-        let focusRow =
-          focusedRow + pRowSize >= filteredList.length
-            ? filteredList.length - 1
-            : focusedRow + pRowSize;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.UP_ARROW]: () => {
-        let focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.DOWN_ARROW]: () => {
-        let focusRow =
-          focusedRow + 1 >= filteredList.length
-            ? filteredList.length - 1
-            : focusedRow + 1;
-
-        setStoreState({
-          scrollTop: getAvailScrollTop(focusRow),
-          selectionRows: {
-            [focusRow]: true,
-          },
-          focusedRow: focusRow,
-        });
-      },
-      [KeyCodes.LEFT_ARROW]: () => {
-        let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
-
-        setStoreState({
-          scrollLeft: getAvailScrollLeft(focusCol),
-          selectionCols: {
-            [focusCol]: true,
-          },
-          focusedCol: focusCol,
-        });
-      },
-      [KeyCodes.RIGHT_ARROW]: () => {
-        let focusCol =
-          focusedCol + 1 >= headerColGroup.length
-            ? headerColGroup.length - 1
-            : focusedCol + 1;
-
-        setStoreState({
-          scrollLeft: getAvailScrollLeft(focusCol),
-          selectionCols: {
-            [focusCol]: true,
-          },
-          focusedCol: focusCol,
-        });
-      },
-    };
-
-    if (!isInlineEditing) {
-      proc[keyAction] && proc[keyAction]();
-    }
-  };
-
-  onKeyUp = (e: any) => {
-    const {
-      colGroup = [],
-      focusedRow = 0,
-      focusedCol = 0,
-      setStoreState,
-      isInlineEditing,
-    } = this.props;
-
-    const proc = {
-      [KeyCodes.ENTER]: () => {
-        const col = colGroup[focusedCol];
-
-        if (col.editor) {
-          setStoreState({
-            isInlineEditing: true,
-            inlineEditingCell: {
-              rowIndex: focusedRow,
-              colIndex: col.colIndex,
-              editor: col.editor,
-            },
-          });
-        }
-      },
-    };
-
-    if (!isInlineEditing && e.which in proc) {
-      proc[e.which]();
-    }
-  };
-
-  onKeyPress = (e: any) => {
-    const {
-      filteredList = [],
-      getRootNode,
-      getClipBoardNode,
-      colGroup = [],
-      headerColGroup = [],
-      selectionRows = {},
-      selectionCols = {},
-      focusedCol = 0,
-      setStoreState,
-    } = this.props;
-    const rootNode = getNode(getRootNode);
-    const clipBoardNode = getNode(getClipBoardNode);
 
     const metaProc = {
       [KeyCodes.C]: () => {
@@ -398,19 +277,155 @@ class DataGridEvents extends React.Component<IProps, IState> {
       },
     };
 
+    const proc = {
+      [KeyCodes.ESC]: () => {
+        setStoreState({
+          selectionRows: {
+            [focusedRow]: true,
+          },
+          selectionCols: {
+            [focusedCol]: true,
+          },
+        });
+      },
+      [KeyCodes.HOME]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const focusRow = 0;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.END]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const focusRow = filteredList.length - 1;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.PAGE_UP]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.PAGE_DOWN]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let focusRow =
+          focusedRow + pRowSize >= filteredList.length
+            ? filteredList.length - 1
+            : focusedRow + pRowSize;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.UP_ARROW]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.DOWN_ARROW]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let focusRow =
+          focusedRow + 1 >= filteredList.length
+            ? filteredList.length - 1
+            : focusedRow + 1;
+
+        setStoreState({
+          scrollTop: getAvailScrollTop(focusRow),
+          selectionRows: {
+            [focusRow]: true,
+          },
+          focusedRow: focusRow,
+        });
+      },
+      [KeyCodes.LEFT_ARROW]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
+
+        setStoreState({
+          scrollLeft: getAvailScrollLeft(focusCol),
+          selectionCols: {
+            [focusCol]: true,
+          },
+          focusedCol: focusCol,
+        });
+      },
+      [KeyCodes.RIGHT_ARROW]: () => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let focusCol =
+          focusedCol + 1 >= headerColGroup.length
+            ? headerColGroup.length - 1
+            : focusedCol + 1;
+
+        setStoreState({
+          scrollLeft: getAvailScrollLeft(focusCol),
+          selectionCols: {
+            [focusCol]: true,
+          },
+          focusedCol: focusCol,
+        });
+      },
+    };
+
     if (e.metaKey) {
       if (e.which in metaProc) {
         metaProc[e.which]();
       }
     } else {
-      this.onKeyDown(e.which, e);
+      if (!isInlineEditing) {
+        proc[e.which] && proc[e.which]();
+      }
     }
   };
 
   render() {
     return (
       <div
-        className={'axui-datagrid'}
+        className="axui-datagrid"
         tabIndex={-1}
         style={this.props.style}
         onWheel={e => {

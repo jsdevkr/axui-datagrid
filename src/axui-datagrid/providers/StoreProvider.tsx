@@ -14,6 +14,7 @@ import {
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
   getNode,
+  getOuterHeight,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -82,12 +83,12 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
   static getDerivedStateFromProps(props: any, prevState: types.DataGridState) {
     // 만일 속성별 컨트롤을 하겠다면 여기에서.
-
     if (
       props.mounted === prevState.mounted &&
       props.setRootState === prevState.setRootState &&
       props.getRootState === prevState.getRootState &&
       props.getRootNode === prevState.getRootNode &&
+      props.getClipBoardNode === prevState.getClipBoardNode &&
       props.rootObject === prevState.rootObject &&
       props.data === prevState.data &&
       props.height === prevState.height &&
@@ -109,6 +110,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     const { columnKeys: optionColumnKeys = {} } = options;
 
     let changeState = false;
+    let changeDimensions = false;
     let newState: types.DataGridState = { ...prevState };
     let currentOptions: types.DataGridOptions = {
       ...options,
@@ -128,6 +130,12 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     if (props.getRootNode && props.getRootNode !== prevState.getRootNode) {
       newState.getRootNode = props.getRootNode;
     }
+    if (
+      props.getClipBoardNode &&
+      props.getClipBoardNode !== prevState.getClipBoardNode
+    ) {
+      newState.getClipBoardNode = props.getClipBoardNode;
+    }
 
     if (props.data !== prevState.data) {
       changeState = true;
@@ -141,6 +149,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
     if (props.height !== prevState.height) {
       changeState = true;
+      changeDimensions = true;
       newState.height = props.height;
     }
 
@@ -164,6 +173,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       props.options !== prevState.propOptions
     ) {
       changeState = true;
+
+      console.log(props.options.frozenColumnIndex);
 
       const {
         frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex,
@@ -309,6 +320,31 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         printStartColIndex + frozenColumnIndex,
         printEndColIndex + frozenColumnIndex,
       );
+    } else if (changeDimensions) {
+      newState.styles = calculateDimensions(
+        getNode(newState.getRootNode),
+        newState,
+      ).styles;
+
+      const {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+      } = styles;
+
+      let {
+        scrollLeft: newScrollLeft = 0,
+        scrollTop: newScrollTop = 0,
+      } = getScrollPosition(newState.scrollLeft || 0, newState.scrollTop || 0, {
+        scrollWidth: scrollContentWidth,
+        scrollHeight: scrollContentHeight,
+        clientWidth: scrollContentContainerWidth,
+        clientHeight: scrollContentContainerHeight,
+      });
+
+      newState.scrollLeft = newScrollLeft;
+      newState.scrollTop = newScrollTop;
     }
 
     return changeState ? newState : null;

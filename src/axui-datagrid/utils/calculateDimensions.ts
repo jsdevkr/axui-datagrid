@@ -19,6 +19,7 @@ function calculateDimensions(
     footSumColumns,
     options = {},
     styles = {},
+    height = 0,
   } = state;
 
   let list: any[] = toBeFilteredList || filteredList;
@@ -57,9 +58,7 @@ function calculateDimensions(
   currentStyles.CTInnerWidth = currentStyles.elWidth = getOuterWidth(
     containerDOM,
   );
-  currentStyles.CTInnerHeight = currentStyles.elHeight = getOuterHeight(
-    containerDOM,
-  );
+  currentStyles.CTInnerHeight = currentStyles.elHeight = height;
 
   currentStyles.rightPanelWidth = 0;
   currentStyles.pageHeight = 0;

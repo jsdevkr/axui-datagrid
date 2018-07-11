@@ -32,19 +32,15 @@ class SideNav extends React.Component<IProps, IState> {
         menus: [
           { to: '/introduction', label: 'Introduction' },
           { to: '/usage', label: 'Usage' },
-          {
-            key: 'link-to-github',
-            href: 'https://github.com/axui/datagrid',
-            label: (
-              <>
-                <Icon type="github" /> GitHub
-              </>
-            ),
-          },
         ],
       },
       examples: {
-        label: 'Examples',
+        label: (
+          <>
+            <Icon type="solution" />
+            Examples
+          </>
+        ),
         menus: [
           { to: '/examples/LargeData', label: 'LargeData' },
           { to: '/examples/Formatter', label: 'Formatting of data' },
@@ -52,10 +48,6 @@ class SideNav extends React.Component<IProps, IState> {
           { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
           { to: '/examples/InlineEdit', label: 'Inline edit' },
           { to: '/examples/EventReceive', label: 'Event' },
-          {
-            to: '/examples/DisabledVerticalScroll',
-            label: 'DisabledVerticalScroll',
-          },
           { to: '/examples/AlignHeader', label: 'AlignHeader' },
         ],
       },
@@ -144,7 +136,9 @@ class SideNav extends React.Component<IProps, IState> {
                       {menu.to ? (
                         <NavLink to={menu.to}>{menu.label}</NavLink>
                       ) : (
-                        <a href={menu.href}>{menu.label}</a>
+                        <a href={menu.href} target="_blank">
+                          {menu.label}
+                        </a>
                       )}
                     </Menu.Item>
                   );

@@ -42,6 +42,7 @@ module.exports = (config, env, babelPlugins = []) => {
       loader: require.resolve('babel-loader'),
       options: {
         cacheDirectory: true,
+        babelrc: false,
         plugins: ['react-hot-loader/babel', ...babelPlugins],
       },
     },

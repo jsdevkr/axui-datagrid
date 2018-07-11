@@ -168,11 +168,11 @@ class DataGrid extends React.Component<IProps, IState> {
     const {
       data,
       columns,
-      height,
-      options,
+      options = DataGrid.defaultOptions,
       style,
       onBeforeEvent,
       onAfterEvent,
+      height = DataGrid.defaultHeight,
     } = this.props;
 
     const providerProps = {
@@ -193,7 +193,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
     let gridRootStyle = mergeAll(
       {
-        height: this.state.calculatedHeight || height || DataGrid.defaultHeight,
+        height: this.state.calculatedHeight || height,
       },
       style,
     );
@@ -202,8 +202,8 @@ class DataGrid extends React.Component<IProps, IState> {
       <DataGridStore.Provider {...providerProps}>
         <DataGridEvents
           ref={this.setRootNode}
-          onFireEvent={this.onFireEvent}
           style={gridRootStyle}
+          onFireEvent={this.onFireEvent}
         >
           <div className={'axui-datagrid-clip-board'}>
             <textarea ref={this.setClipBoardNode} />

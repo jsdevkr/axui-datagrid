@@ -1,2 +1,28 @@
 @import './scss/inc/index';
 @import './scss/container/index';
+
+body {
+  word-break: keep-all;
+}
+
+.ant-layout-content {
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.ant-menu-dark {
+  .ant-menu-inline.ant-menu-sub {
+  }
+
+  .ant-menu-item-selected {
+    > a,
+    > a:hover {
+      color: #000;
+    }
+  }
+}
+
+.ant-btn {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
