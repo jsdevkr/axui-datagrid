@@ -118,7 +118,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   state = {
     mounted: false, // 루트 엘리먼트 준비여부
-    dimensionsRootNode: {},
     calculatedHeight: undefined,
   };
 
@@ -156,15 +155,11 @@ class DataGrid extends React.Component<IProps, IState> {
   componentDidMount() {
     this.setState({
       mounted: true,
-      dimensionsRootNode: {
-        width: getInnerWidth(this.rootNode),
-        height: getInnerHeight(this.rootNode),
-      },
     });
   }
 
   public render() {
-    const { mounted, dimensionsRootNode } = this.state;
+    const { mounted } = this.state;
     const {
       data = [],
       columns = [],
@@ -177,7 +172,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
     const providerProps = {
       mounted,
-      dimensionsRootNode,
       setRootState: this.setRootState,
       getRootState: this.getRootState,
       getRootNode: this.getRootNode,

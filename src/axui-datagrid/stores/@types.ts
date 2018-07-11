@@ -132,7 +132,6 @@ export type DataGridStyles = {
 export type DataGridRootState = {
   mounted?: boolean;
   calculatedHeight?: number;
-  dimensionsRootNode?: { width?: number; height?: number };
 };
 
 export type DataGridState = {

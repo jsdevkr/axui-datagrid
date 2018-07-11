@@ -12,7 +12,13 @@ class Formatter extends React.Component<any, any> {
 
     this.state = {
       height: 400,
-      columns: [{ key: 'id', width: 60, label: 'ID', align: 'center' }],
+      columns: [
+        { key: 'id', width: 60, label: 'ID', align: 'center' },
+        { key: 'title', width: 200, label: 'Title' },
+        { key: 'writer', label: 'Writer', align: 'center' },
+        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
+        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+      ],
       data: gridData,
     };
   }
