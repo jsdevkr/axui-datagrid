@@ -9,10 +9,18 @@ const GitHubButton = require('react-github-button');
 interface IProps extends RouteComponentProps<any> {
   leftMenuWidth: number;
 }
-interface IState {}
+interface IState {
+  mounted: boolean;
+  defaultOpenKeys: any[];
+  defaultSelectedKeys: any[];
+  menus: { [key: string]: any };
+}
 
 class SideNav extends React.Component<IProps, IState> {
   state = {
+    mounted: false,
+    defaultOpenKeys: [],
+    defaultSelectedKeys: [],
     menus: {
       start: {
         label: (
@@ -54,24 +62,48 @@ class SideNav extends React.Component<IProps, IState> {
     },
   };
 
+  static getDerivedStateFromProps(props: any, prevState: IState) {
+    const { location } = props;
+    const { menus, mounted } = prevState;
+
+    if (!mounted) {
+      let defaultOpenKeys: any[] = [];
+      let defaultSelectedKeys: any[] = [];
+
+      Object.keys(menus).forEach((k: string) => {
+        menus[k].menus.forEach((menu: any) => {
+          if (menu.to === location.pathname) {
+            defaultOpenKeys.push(k);
+            defaultSelectedKeys.push(menu.to);
+          }
+        });
+      });
+
+      if (defaultOpenKeys.length === 0) {
+        defaultOpenKeys.push('start');
+      }
+
+      if (defaultSelectedKeys.length) {
+        return {
+          menus,
+          defaultOpenKeys,
+          defaultSelectedKeys,
+          mounted: true,
+        };
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const { leftMenuWidth, location } = this.props;
-    const { menus } = this.state;
+    const { menus, mounted, defaultOpenKeys, defaultSelectedKeys } = this.state;
 
-    let defaultOpenKeys: any[] = [];
-    let defaultSelectedKeys: any[] = [];
-
-    Object.keys(menus).forEach((k: string) => {
-      menus[k].menus.forEach((menu: any) => {
-        if (menu.to === location.pathname) {
-          defaultOpenKeys.push(k);
-          defaultSelectedKeys.push(menu.to);
-        }
-      });
-    });
-
-    if (defaultOpenKeys.length === 0) {
-      defaultOpenKeys.push('start');
+    if (!mounted) {
+      return null;
     }
 
     return (

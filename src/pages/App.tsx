@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import { NoMatch, ErrorBoundary, SideNav } from 'components';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout } from 'antd';
 
 import 'styles/globals';
 
