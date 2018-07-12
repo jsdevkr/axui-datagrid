@@ -58,6 +58,7 @@ function calculateDimensions(
   currentStyles.CTInnerWidth = currentStyles.elWidth = getOuterWidth(
     containerDOM,
   );
+
   currentStyles.CTInnerHeight = currentStyles.elHeight = height;
 
   currentStyles.rightPanelWidth = 0;

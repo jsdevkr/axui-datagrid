@@ -27,11 +27,7 @@ export interface IDataGridStore extends types.DataGridState {
 }
 
 const store: IDataGridStore = {
-  mounted: false,
   dragging: false,
-  data: [],
-  filteredList: [],
-
   sortInfo: {},
   isColumnFilter: false,
   scrollLeft: 0,
@@ -47,11 +43,13 @@ const store: IDataGridStore = {
   columnResizing: false,
   columnResizerLeft: 0,
 
+  mounted: false,
+  data: [],
+  filteredList: [],
   colGroup: [],
   asideColGroup: [],
   leftHeaderColGroup: [],
   headerColGroup: [],
-
   asideHeaderData: { rows: [{ cols: [] }] },
   leftHeaderData: { rows: [{ cols: [] }] },
   headerData: { rows: [{ cols: [] }] },
@@ -61,15 +59,13 @@ const store: IDataGridStore = {
   asideBodyGroupingData: { rows: [{ cols: [] }] },
   leftBodyGroupingData: { rows: [{ cols: [] }] },
   bodyGroupingData: { rows: [{ cols: [] }] },
-
   colGroupMap: {},
   bodyRowMap: {},
   bodyGroupingMap: {},
-
   options: {},
   styles: {},
-  predefinedFormatter: {},
 
+  predefinedFormatter: {},
   setStoreState: () => {},
   dispatch: () => {},
 };
@@ -81,251 +77,83 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
   throttledUpdateDimensions: any;
 
-  UNSAFE_componentWillReceiveProps(props: any) {
-    const {
-      options = DataGrid.defaultOptions,
-      styles = DataGrid.defaultStyles,
-    } = this.state;
-    const { columnKeys: optionColumnKeys = {} } = options;
-
-    let changeState = false;
-    let changeDimensions = false;
-    let newState: types.DataGridState = { ...(this.state as any) };
-    let currentOptions: types.DataGridOptions = {
-      ...options,
-    };
-    let currentStyles: types.DataGridStyles = {
-      ...styles,
-    };
-
-    newState.mounted = true;
-
-    if (props.setRootState && props.setRootState !== newState.setRootState) {
-      newState.setRootState = props.setRootState;
-    }
-    if (props.getRootState && props.getRootState !== newState.getRootState) {
-      newState.getRootState = props.getRootState;
-    }
-    if (props.getRootNode && props.getRootNode !== newState.getRootNode) {
-      newState.getRootNode = props.getRootNode;
-    }
+  static getDerivedStateFromProps(
+    newProps: any,
+    prevState: types.DataGridState,
+  ) {
     if (
-      props.getClipBoardNode &&
-      props.getClipBoardNode !== newState.getClipBoardNode
+      newProps.mounted === prevState.mounted &&
+      newProps.setRootState === prevState.setRootState &&
+      newProps.getRootState === prevState.getRootState &&
+      newProps.getRootNode === prevState.getRootNode &&
+      newProps.getClipBoardNode === prevState.getClipBoardNode &&
+      newProps.rootObject === prevState.rootObject &&
+      newProps.data === prevState.data &&
+      newProps.filteredList === prevState.filteredList &&
+      newProps.options === prevState.options &&
+      newProps.height === prevState.height &&
+      newProps.onBeforeEvent === prevState.onBeforeEvent &&
+      newProps.onAfterEvent === prevState.onAfterEvent &&
+      newProps.headerTable === prevState.headerTable &&
+      newProps.bodyRowTable === prevState.bodyRowTable &&
+      newProps.bodyRowMap === prevState.bodyRowMap &&
+      newProps.asideHeaderData === prevState.asideHeaderData &&
+      newProps.leftHeaderData === prevState.leftHeaderData &&
+      newProps.headerData === prevState.headerData &&
+      newProps.asideColGroup === prevState.asideColGroup &&
+      newProps.asideBodyRowData === prevState.asideBodyRowData &&
+      newProps.leftBodyRowData === prevState.leftBodyRowData &&
+      newProps.bodyRowData === prevState.bodyRowData &&
+      newProps.colGroup === prevState.colGroup &&
+      newProps.colGroupMap === prevState.colGroupMap &&
+      newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
+      newProps.headerColGroup === prevState.headerColGroup &&
+      newProps.styles === prevState.styles &&
+      newProps.printStartColIndex === prevState.printStartColIndex &&
+      newProps.printEndColIndex === prevState.printEndColIndex &&
+      newProps.visibleHeaderColGroup === prevState.visibleHeaderColGroup &&
+      newProps.visibleBodyRowData === prevState.visibleBodyRowData &&
+      newProps.visibleBodyGroupingData === prevState.visibleBodyGroupingData
     ) {
-      newState.getClipBoardNode = props.getClipBoardNode;
-    }
-
-    if (props.data !== newState.data) {
-      changeState = true;
-      newState.data = props.data || [];
-      newState.filteredList =
-        newState.data &&
-        newState.data.filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '__deleted__'];
-        });
-    }
-
-    if (props.height !== newState.height) {
-      changeState = true;
-      changeDimensions = true;
-      newState.height = props.height;
-    }
-
-    if (props.options !== newState.propOptions) {
-      changeState = true;
-      newState.propOptions = JSON.stringify(props.options);
-
-      newState.options = currentOptions = mergeAll(
-        true,
-        { ...DataGrid.defaultOptions },
-        props.options,
-      );
-    }
-
-    if (props.rootObject !== newState.rootObject) {
-      changeState = true;
-      newState.rootObject = props.rootObject;
-    }
-
-    if (
-      props.columns !== newState.propColumns ||
-      props.options !== newState.propOptions
-    ) {
-      changeState = true;
-
-      const {
-        frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex,
-        body: optionsBody = DataGrid.defaultBody,
-      } = currentOptions;
-      const { columnHeight = 0 } = optionsBody;
-
-      let headerDividedObj, bodyDividedObj;
-
-      // convert colGroup
-      newState.headerTable = makeHeaderTable(props.columns, currentOptions);
-      newState.bodyRowTable = makeBodyRowTable(props.columns, currentOptions);
-      newState.bodyRowMap = makeBodyRowMap(
-        newState.bodyRowTable,
-        currentOptions,
-      );
-
-      // header를 위한 divide
-      headerDividedObj = divideTableByFrozenColumnIndex(
-        newState.headerTable,
-        frozenColumnIndex || 0,
-        currentOptions,
-      );
-      // body를 위한 divide
-      bodyDividedObj = divideTableByFrozenColumnIndex(
-        newState.bodyRowTable,
-        frozenColumnIndex || 0,
-        currentOptions,
-      );
-
-      newState.asideHeaderData = headerDividedObj.asideData;
-      newState.leftHeaderData = headerDividedObj.leftData;
-      newState.headerData = headerDividedObj.rightData;
-      newState.asideColGroup = headerDividedObj.asideColGroup;
-
-      newState.asideBodyRowData = bodyDividedObj.asideData;
-      newState.leftBodyRowData = bodyDividedObj.leftData;
-      newState.bodyRowData = bodyDividedObj.rightData;
-
-      // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-      newState.colGroup = [];
-      newState.colGroupMap = {};
-      newState.headerTable.rows.forEach((row, ridx) => {
-        row.cols.forEach((col, cidx) => {
-          if (newState.colGroupMap && newState.colGroup) {
-            const currentCol: types.DataGridCol = {
-              key: col.key,
-              label: col.label,
-              width: col.width,
-              align: col.align,
-              colSpan: col.colSpan,
-              rowSpan: col.rowSpan,
-              colIndex: col.colIndex,
-              rowIndex: col.rowIndex,
-              formatter: col.formatter,
-              editor: col.editor,
-            };
-            newState.colGroupMap[col.colIndex || 0] = currentCol;
-            newState.colGroup.push(currentCol);
-          }
-        });
-      });
-      newState.leftHeaderColGroup = newState.colGroup.slice(
-        0,
-        frozenColumnIndex,
-      );
-      newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
-
-      // grouping과 footsum 나중에 구현.
-      /*
-      newState.bodyGrouping = [];
-      newState.bodyGroupingTable = {};
-      newState.asideBodyGroupingData = {};
-      newState.leftBodyGroupingData = {};
-      newState.bodyGroupingData = {};
-      newState.bodyGroupingMap = {};
-
-      newState.footSumColumns = [];
-      newState.footSumTable = {};
-      newState.leftFootSumData = {};
-      newState.footSumData = {};
-      */
-
-      // styles
-      currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
-
-      currentStyles.bodyTrHeight =
-        newState.bodyRowTable.rows.length * columnHeight;
-
-      // newState.propColumns = JSON.stringify(props.columns);
-      newState.styles = currentStyles;
-
-      newState.calculatedStyles = false;
-    }
-
-    if (props.mounted && !newState.calculatedStyles) {
-      changeState = true;
-      newState.calculatedStyles = true;
-
-      const calculatedObject = calculateDimensions(
-        getNode(newState.getRootNode),
-        newState,
-      );
-      newState.styles = calculatedObject.styles;
-      newState.colGroup = calculatedObject.colGroup;
-      newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
-      newState.headerColGroup = calculatedObject.headerColGroup;
-
-      const {
-        CTInnerWidth: _CTInnerWidth = 0,
-        frozenPanelWidth: _frozenPanelWidth = 0,
-        asidePanelWidth: _asidePanelWidth = 0,
-        rightPanelWidth: _rightPanelWidth = 0,
-      } = newState.styles;
-      const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
-        newState.headerColGroup,
-        Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth,
-        Math.abs(newState.scrollLeft || 0) +
-          _frozenPanelWidth +
-          (_CTInnerWidth -
-            _asidePanelWidth -
-            _frozenPanelWidth -
-            _rightPanelWidth),
-      );
-      const { frozenColumnIndex = 0 } = newState.options || {};
-
-      newState.printStartColIndex = printStartColIndex;
-      newState.printEndColIndex = printEndColIndex;
-
-      newState.visibleHeaderColGroup = newState.headerColGroup.slice(
-        printStartColIndex,
-        printEndColIndex + 1,
-      );
-
-      newState.visibleBodyRowData = getTableByStartEndColumnIndex(
-        newState.bodyRowData || { rows: [{ cols: [] }] },
-        printStartColIndex + frozenColumnIndex,
-        printEndColIndex + frozenColumnIndex,
-      );
-      newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
-        newState.bodyGroupingData || { rows: [{ cols: [] }] },
-        printStartColIndex + frozenColumnIndex,
-        printEndColIndex + frozenColumnIndex,
-      );
-    } else if (changeDimensions) {
-      newState.styles = calculateDimensions(
-        getNode(newState.getRootNode),
-        newState,
-      ).styles;
-
-      const {
-        scrollContentWidth = 0,
-        scrollContentHeight = 0,
-        scrollContentContainerWidth = 0,
-        scrollContentContainerHeight = 0,
-      } = styles;
-
-      let {
-        scrollLeft: newScrollLeft = 0,
-        scrollTop: newScrollTop = 0,
-      } = getScrollPosition(newState.scrollLeft || 0, newState.scrollTop || 0, {
-        scrollWidth: scrollContentWidth,
-        scrollHeight: scrollContentHeight,
-        clientWidth: scrollContentContainerWidth,
-        clientHeight: scrollContentContainerHeight,
-      });
-
-      newState.scrollLeft = newScrollLeft;
-      newState.scrollTop = newScrollTop;
-    }
-
-    if (changeState) {
-      this.setState(newState);
+      return null;
+    } else {
+      return {
+        ...prevState,
+        ...{
+          mounted: newProps.mounted,
+          setRootState: newProps.setRootState,
+          getRootState: newProps.getRootState,
+          getRootNode: newProps.getRootNode,
+          getClipBoardNode: newProps.getClipBoardNode,
+          rootObject: newProps.rootObject,
+          data: newProps.data,
+          filteredList: newProps.filteredList,
+          options: newProps.options,
+          height: newProps.height,
+          onBeforeEvent: newProps.onBeforeEvent,
+          onAfterEvent: newProps.onAfterEvent,
+          headerTable: newProps.headerTable,
+          bodyRowTable: newProps.bodyRowTable,
+          bodyRowMap: newProps.bodyRowMap,
+          asideHeaderData: newProps.asideHeaderData,
+          leftHeaderData: newProps.leftHeaderData,
+          headerData: newProps.headerData,
+          asideColGroup: newProps.asideColGroup,
+          asideBodyRowData: newProps.asideBodyRowData,
+          leftBodyRowData: newProps.leftBodyRowData,
+          bodyRowData: newProps.bodyRowData,
+          colGroup: newProps.colGroup,
+          colGroupMap: newProps.colGroupMap,
+          leftHeaderColGroup: newProps.leftHeaderColGroup,
+          headerColGroup: newProps.headerColGroup,
+          styles: newProps.styles,
+          printStartColIndex: newProps.printStartColIndex,
+          printEndColIndex: newProps.printEndColIndex,
+          visibleHeaderColGroup: newProps.visibleHeaderColGroup,
+          visibleBodyRowData: newProps.visibleBodyRowData,
+          visibleBodyGroupingData: newProps.visibleBodyGroupingData,
+        },
+      };
     }
   }
 
@@ -367,7 +195,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     });
 
     this.setStoreState({
-      styles,
+      styles: styles,
       scrollLeft: newScrollLeft,
       scrollTop: newScrollTop,
     });

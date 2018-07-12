@@ -20,14 +20,10 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var stores_1 = require("../stores");
-var containers_1 = require("../containers");
 var utils_1 = require("../utils");
 var formatter_1 = require("../functions/formatter");
 var store = {
-    mounted: false,
     dragging: false,
-    data: [],
-    filteredList: [],
     sortInfo: {},
     isColumnFilter: false,
     scrollLeft: 0,
@@ -42,6 +38,9 @@ var store = {
     selectionMaxOffset: {},
     columnResizing: false,
     columnResizerLeft: 0,
+    mounted: false,
+    data: [],
+    filteredList: [],
     colGroup: [],
     asideColGroup: [],
     leftHeaderColGroup: [],
@@ -262,155 +261,76 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         return _this;
     }
-    StoreProvider.prototype.UNSAFE_componentWillReceiveProps = function (props) {
-        var _a = this.state, _b = _a.options, options = _b === void 0 ? containers_1.DataGrid.defaultOptions : _b, _c = _a.styles, styles = _c === void 0 ? containers_1.DataGrid.defaultStyles : _c;
-        var _d = options.columnKeys, optionColumnKeys = _d === void 0 ? {} : _d;
-        var changeState = false;
-        var changeDimensions = false;
-        var newState = __assign({}, this.state);
-        var currentOptions = __assign({}, options);
-        var currentStyles = __assign({}, styles);
-        newState.mounted = true;
-        if (props.setRootState && props.setRootState !== newState.setRootState) {
-            newState.setRootState = props.setRootState;
+    StoreProvider.getDerivedStateFromProps = function (newProps, prevState) {
+        if (newProps.mounted === prevState.mounted &&
+            newProps.setRootState === prevState.setRootState &&
+            newProps.getRootState === prevState.getRootState &&
+            newProps.getRootNode === prevState.getRootNode &&
+            newProps.getClipBoardNode === prevState.getClipBoardNode &&
+            newProps.rootObject === prevState.rootObject &&
+            newProps.data === prevState.data &&
+            newProps.filteredList === prevState.filteredList &&
+            newProps.options === prevState.options &&
+            newProps.height === prevState.height &&
+            newProps.onBeforeEvent === prevState.onBeforeEvent &&
+            newProps.onAfterEvent === prevState.onAfterEvent &&
+            newProps.headerTable === prevState.headerTable &&
+            newProps.bodyRowTable === prevState.bodyRowTable &&
+            newProps.bodyRowMap === prevState.bodyRowMap &&
+            newProps.asideHeaderData === prevState.asideHeaderData &&
+            newProps.leftHeaderData === prevState.leftHeaderData &&
+            newProps.headerData === prevState.headerData &&
+            newProps.asideColGroup === prevState.asideColGroup &&
+            newProps.asideBodyRowData === prevState.asideBodyRowData &&
+            newProps.leftBodyRowData === prevState.leftBodyRowData &&
+            newProps.bodyRowData === prevState.bodyRowData &&
+            newProps.colGroup === prevState.colGroup &&
+            newProps.colGroupMap === prevState.colGroupMap &&
+            newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
+            newProps.headerColGroup === prevState.headerColGroup &&
+            newProps.styles === prevState.styles &&
+            newProps.printStartColIndex === prevState.printStartColIndex &&
+            newProps.printEndColIndex === prevState.printEndColIndex &&
+            newProps.visibleHeaderColGroup === prevState.visibleHeaderColGroup &&
+            newProps.visibleBodyRowData === prevState.visibleBodyRowData &&
+            newProps.visibleBodyGroupingData === prevState.visibleBodyGroupingData) {
+            return null;
         }
-        if (props.getRootState && props.getRootState !== newState.getRootState) {
-            newState.getRootState = props.getRootState;
-        }
-        if (props.getRootNode && props.getRootNode !== newState.getRootNode) {
-            newState.getRootNode = props.getRootNode;
-        }
-        if (props.getClipBoardNode &&
-            props.getClipBoardNode !== newState.getClipBoardNode) {
-            newState.getClipBoardNode = props.getClipBoardNode;
-        }
-        if (props.data !== newState.data) {
-            changeState = true;
-            newState.data = props.data || [];
-            newState.filteredList =
-                newState.data &&
-                    newState.data.filter(function (n) {
-                        return !n[optionColumnKeys.deleted || '__deleted__'];
-                    });
-        }
-        if (props.height !== newState.height) {
-            changeState = true;
-            changeDimensions = true;
-            newState.height = props.height;
-        }
-        if (props.options !== newState.propOptions) {
-            changeState = true;
-            newState.propOptions = JSON.stringify(props.options);
-            newState.options = currentOptions = utils_1.mergeAll(true, __assign({}, containers_1.DataGrid.defaultOptions), props.options);
-        }
-        if (props.rootObject !== newState.rootObject) {
-            changeState = true;
-            newState.rootObject = props.rootObject;
-        }
-        if (props.columns !== newState.propColumns ||
-            props.options !== newState.propOptions) {
-            changeState = true;
-            var _e = currentOptions.frozenColumnIndex, frozenColumnIndex = _e === void 0 ? containers_1.DataGrid.defaultOptions.frozenColumnIndex : _e, _f = currentOptions.body, optionsBody = _f === void 0 ? containers_1.DataGrid.defaultBody : _f;
-            var _g = optionsBody.columnHeight, columnHeight = _g === void 0 ? 0 : _g;
-            var headerDividedObj = void 0, bodyDividedObj = void 0;
-            // convert colGroup
-            newState.headerTable = utils_1.makeHeaderTable(props.columns, currentOptions);
-            newState.bodyRowTable = utils_1.makeBodyRowTable(props.columns, currentOptions);
-            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, currentOptions);
-            // header를 위한 divide
-            headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex || 0, currentOptions);
-            // body를 위한 divide
-            bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex || 0, currentOptions);
-            newState.asideHeaderData = headerDividedObj.asideData;
-            newState.leftHeaderData = headerDividedObj.leftData;
-            newState.headerData = headerDividedObj.rightData;
-            newState.asideColGroup = headerDividedObj.asideColGroup;
-            newState.asideBodyRowData = bodyDividedObj.asideData;
-            newState.leftBodyRowData = bodyDividedObj.leftData;
-            newState.bodyRowData = bodyDividedObj.rightData;
-            // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-            newState.colGroup = [];
-            newState.colGroupMap = {};
-            newState.headerTable.rows.forEach(function (row, ridx) {
-                row.cols.forEach(function (col, cidx) {
-                    if (newState.colGroupMap && newState.colGroup) {
-                        var currentCol = {
-                            key: col.key,
-                            label: col.label,
-                            width: col.width,
-                            align: col.align,
-                            colSpan: col.colSpan,
-                            rowSpan: col.rowSpan,
-                            colIndex: col.colIndex,
-                            rowIndex: col.rowIndex,
-                            formatter: col.formatter,
-                            editor: col.editor,
-                        };
-                        newState.colGroupMap[col.colIndex || 0] = currentCol;
-                        newState.colGroup.push(currentCol);
-                    }
-                });
+        else {
+            return __assign({}, prevState, {
+                mounted: newProps.mounted,
+                setRootState: newProps.setRootState,
+                getRootState: newProps.getRootState,
+                getRootNode: newProps.getRootNode,
+                getClipBoardNode: newProps.getClipBoardNode,
+                rootObject: newProps.rootObject,
+                data: newProps.data,
+                filteredList: newProps.filteredList,
+                options: newProps.options,
+                height: newProps.height,
+                onBeforeEvent: newProps.onBeforeEvent,
+                onAfterEvent: newProps.onAfterEvent,
+                headerTable: newProps.headerTable,
+                bodyRowTable: newProps.bodyRowTable,
+                bodyRowMap: newProps.bodyRowMap,
+                asideHeaderData: newProps.asideHeaderData,
+                leftHeaderData: newProps.leftHeaderData,
+                headerData: newProps.headerData,
+                asideColGroup: newProps.asideColGroup,
+                asideBodyRowData: newProps.asideBodyRowData,
+                leftBodyRowData: newProps.leftBodyRowData,
+                bodyRowData: newProps.bodyRowData,
+                colGroup: newProps.colGroup,
+                colGroupMap: newProps.colGroupMap,
+                leftHeaderColGroup: newProps.leftHeaderColGroup,
+                headerColGroup: newProps.headerColGroup,
+                styles: newProps.styles,
+                printStartColIndex: newProps.printStartColIndex,
+                printEndColIndex: newProps.printEndColIndex,
+                visibleHeaderColGroup: newProps.visibleHeaderColGroup,
+                visibleBodyRowData: newProps.visibleBodyRowData,
+                visibleBodyGroupingData: newProps.visibleBodyGroupingData,
             });
-            newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
-            newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
-            // grouping과 footsum 나중에 구현.
-            /*
-            newState.bodyGrouping = [];
-            newState.bodyGroupingTable = {};
-            newState.asideBodyGroupingData = {};
-            newState.leftBodyGroupingData = {};
-            newState.bodyGroupingData = {};
-            newState.bodyGroupingMap = {};
-      
-            newState.footSumColumns = [];
-            newState.footSumTable = {};
-            newState.leftFootSumData = {};
-            newState.footSumData = {};
-            */
-            // styles
-            currentStyles.asidePanelWidth = headerDividedObj.asidePanelWidth;
-            currentStyles.bodyTrHeight =
-                newState.bodyRowTable.rows.length * columnHeight;
-            // newState.propColumns = JSON.stringify(props.columns);
-            newState.styles = currentStyles;
-            newState.calculatedStyles = false;
-        }
-        if (props.mounted && !newState.calculatedStyles) {
-            changeState = true;
-            newState.calculatedStyles = true;
-            var calculatedObject = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState);
-            newState.styles = calculatedObject.styles;
-            newState.colGroup = calculatedObject.colGroup;
-            newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
-            newState.headerColGroup = calculatedObject.headerColGroup;
-            var _h = newState.styles, _j = _h.CTInnerWidth, _CTInnerWidth = _j === void 0 ? 0 : _j, _k = _h.frozenPanelWidth, _frozenPanelWidth = _k === void 0 ? 0 : _k, _l = _h.asidePanelWidth, _asidePanelWidth = _l === void 0 ? 0 : _l, _m = _h.rightPanelWidth, _rightPanelWidth = _m === void 0 ? 0 : _m;
-            var _o = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
-                _frozenPanelWidth +
-                (_CTInnerWidth -
-                    _asidePanelWidth -
-                    _frozenPanelWidth -
-                    _rightPanelWidth)), printStartColIndex = _o.printStartColIndex, printEndColIndex = _o.printEndColIndex;
-            var _p = (newState.options || {}).frozenColumnIndex, frozenColumnIndex = _p === void 0 ? 0 : _p;
-            newState.printStartColIndex = printStartColIndex;
-            newState.printEndColIndex = printEndColIndex;
-            newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
-            newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-            newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-        }
-        else if (changeDimensions) {
-            newState.styles = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState).styles;
-            var _q = styles.scrollContentWidth, scrollContentWidth = _q === void 0 ? 0 : _q, _r = styles.scrollContentHeight, scrollContentHeight = _r === void 0 ? 0 : _r, _s = styles.scrollContentContainerWidth, scrollContentContainerWidth = _s === void 0 ? 0 : _s, _t = styles.scrollContentContainerHeight, scrollContentContainerHeight = _t === void 0 ? 0 : _t;
-            var _u = utils_1.getScrollPosition(newState.scrollLeft || 0, newState.scrollTop || 0, {
-                scrollWidth: scrollContentWidth,
-                scrollHeight: scrollContentHeight,
-                clientWidth: scrollContentContainerWidth,
-                clientHeight: scrollContentContainerHeight,
-            }), _v = _u.scrollLeft, newScrollLeft = _v === void 0 ? 0 : _v, _w = _u.scrollTop, newScrollTop = _w === void 0 ? 0 : _w;
-            newState.scrollLeft = newScrollLeft;
-            newState.scrollTop = newScrollTop;
-        }
-        if (changeState) {
-            this.setState(newState);
         }
     };
     StoreProvider.prototype.componentDidMount = function () {

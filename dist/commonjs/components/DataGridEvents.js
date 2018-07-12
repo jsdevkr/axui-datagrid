@@ -61,9 +61,9 @@ var DataGridEvents = /** @class */ (function (_super) {
         };
         _this.onKeyDown = function (keyAction, e) { };
         _this.onKeyUp = function (e) {
-            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing;
-            var proc = (_e = {},
-                _e[stores_1.KeyCodes.ENTER] = function () {
+            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing, _e = _a.scrollTop, scrollTop = _e === void 0 ? 0 : _e;
+            var proc = (_f = {},
+                _f[stores_1.KeyCodes.ENTER] = function () {
                     var col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -76,11 +76,11 @@ var DataGridEvents = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _e);
+                _f);
             if (!isInlineEditing && e.which in proc) {
                 proc[e.which]();
             }
-            var _e;
+            var _f;
         };
         _this.onKeyPress = function (e) {
             var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m, _o = _a.isInlineEditing, isInlineEditing = _o === void 0 ? false : _o, _p = _a.inlineEditingCell, inlineEditingCell = _p === void 0 ? {} : _p;

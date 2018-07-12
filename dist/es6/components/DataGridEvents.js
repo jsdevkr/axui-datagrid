@@ -50,7 +50,7 @@ class DataGridEvents extends React.Component {
         };
         this.onKeyDown = (keyAction, e) => { };
         this.onKeyUp = (e) => {
-            const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, } = this.props;
+            const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, scrollTop = 0, } = this.props;
             const proc = {
                 [stores_1.KeyCodes.ENTER]: () => {
                     const col = colGroup[focusedCol];

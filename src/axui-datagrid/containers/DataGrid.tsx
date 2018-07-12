@@ -11,7 +11,17 @@ import {
   DataGridPage,
 } from '../components';
 import { types } from '../stores';
-import { mergeAll, getInnerWidth, getInnerHeight } from '../utils';
+import {
+  mergeAll,
+  makeHeaderTable,
+  makeBodyRowTable,
+  makeBodyRowMap,
+  divideTableByFrozenColumnIndex,
+  calculateDimensions,
+  getNode,
+  getTableByStartEndColumnIndex,
+  getPositionPrintColGroup,
+} from '../utils';
 
 interface IProps extends types.DataGrid {}
 interface IState extends types.DataGridRootState {}
@@ -152,6 +162,141 @@ class DataGrid extends React.Component<IProps, IState> {
 
   onFireEvent = () => {};
 
+  getFilteredList = (data: any[]): any[] => {
+    const { options = DataGrid.defaultOptions } = this.props;
+    const { columnKeys: optionColumnKeys = {} } = options;
+
+    return data.filter((n: any) => {
+      return !n[optionColumnKeys.deleted || '__deleted__'];
+    });
+  };
+
+  makeupOptions = (options: types.DataGridOptions): types.DataGridOptions => {
+    return mergeAll(true, { ...DataGrid.defaultOptions }, options);
+  };
+
+  makeupProviderState = (prevState: types.DataGridState) => {
+    const { columns = [] } = this.props;
+    const { options = {} } = prevState;
+    const {
+      frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0,
+      body: optionsBody = DataGrid.defaultBody,
+    } = options;
+    const { columnHeight = 0 } = optionsBody;
+
+    let newState: types.DataGridState = { ...prevState };
+    let newStyle: types.DataGridStyles = {};
+
+    // convert colGroup
+    newState.headerTable = makeHeaderTable(columns, options);
+    newState.bodyRowTable = makeBodyRowTable(columns, options);
+    newState.bodyRowMap = makeBodyRowMap(newState.bodyRowTable, options);
+
+    // header를 위한 divide
+    const headerDividedObj = divideTableByFrozenColumnIndex(
+      newState.headerTable,
+      frozenColumnIndex || 0,
+      options,
+    );
+    // body를 위한 divide
+    const bodyDividedObj = divideTableByFrozenColumnIndex(
+      newState.bodyRowTable,
+      frozenColumnIndex || 0,
+      options,
+    );
+
+    newState.asideHeaderData = headerDividedObj.asideData;
+    newState.leftHeaderData = headerDividedObj.leftData;
+    newState.headerData = headerDividedObj.rightData;
+    newState.asideColGroup = headerDividedObj.asideColGroup;
+
+    newState.asideBodyRowData = bodyDividedObj.asideData;
+    newState.leftBodyRowData = bodyDividedObj.leftData;
+    newState.bodyRowData = bodyDividedObj.rightData;
+
+    // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
+    newState.colGroup = [];
+    newState.colGroupMap = {};
+    newState.headerTable.rows.forEach((row, ridx) => {
+      row.cols.forEach((col, cidx) => {
+        if (newState.colGroupMap && newState.colGroup) {
+          const currentCol: types.DataGridCol = {
+            key: col.key,
+            label: col.label,
+            width: col.width,
+            align: col.align,
+            colSpan: col.colSpan,
+            rowSpan: col.rowSpan,
+            colIndex: col.colIndex,
+            rowIndex: col.rowIndex,
+            formatter: col.formatter,
+            editor: col.editor,
+          };
+          newState.colGroupMap[col.colIndex || 0] = currentCol;
+          newState.colGroup.push(currentCol);
+        }
+      });
+    });
+    newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
+    newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+
+    // styles
+    newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
+
+    newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
+
+    newState.styles = newStyle;
+
+    // 초기 스타일 생성.
+    const calculatedObject = calculateDimensions(
+      getNode(newState.getRootNode),
+      newState,
+    );
+
+    newState.styles = calculatedObject.styles;
+    newState.colGroup = calculatedObject.colGroup;
+    newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
+    newState.headerColGroup = calculatedObject.headerColGroup;
+
+    const {
+      CTInnerWidth: _CTInnerWidth = 0,
+      frozenPanelWidth: _frozenPanelWidth = 0,
+      asidePanelWidth: _asidePanelWidth = 0,
+      rightPanelWidth: _rightPanelWidth = 0,
+    } = newState.styles;
+    const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
+      newState.headerColGroup,
+      Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth,
+      Math.abs(newState.scrollLeft || 0) +
+        _frozenPanelWidth +
+        (_CTInnerWidth -
+          _asidePanelWidth -
+          _frozenPanelWidth -
+          _rightPanelWidth),
+    );
+
+    newState.printStartColIndex = printStartColIndex;
+    newState.printEndColIndex = printEndColIndex;
+
+    newState.visibleHeaderColGroup = newState.headerColGroup.slice(
+      printStartColIndex,
+      printEndColIndex + 1,
+    );
+
+    newState.visibleBodyRowData = getTableByStartEndColumnIndex(
+      newState.bodyRowData || { rows: [{ cols: [] }] },
+      printStartColIndex + frozenColumnIndex,
+      printEndColIndex + frozenColumnIndex,
+    );
+    newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
+      newState.bodyGroupingData || { rows: [{ cols: [] }] },
+      printStartColIndex + frozenColumnIndex,
+      printEndColIndex + frozenColumnIndex,
+    );
+
+    return newState;
+  };
+
   componentDidMount() {
     this.setState({
       mounted: true,
@@ -160,9 +305,9 @@ class DataGrid extends React.Component<IProps, IState> {
 
   public render() {
     const { mounted } = this.state;
+
     const {
       data = [],
-      columns = [],
       options = {},
       style = {},
       onBeforeEvent,
@@ -170,27 +315,30 @@ class DataGrid extends React.Component<IProps, IState> {
       height = DataGrid.defaultHeight,
     } = this.props;
 
-    const providerProps = {
-      mounted,
-      setRootState: this.setRootState,
-      getRootState: this.getRootState,
-      getRootNode: this.getRootNode,
-      getClipBoardNode: this.getClipBoardNode,
-      rootObject: this.rootObject,
-      data,
-      columns,
-      height,
-      options,
-      onBeforeEvent,
-      onAfterEvent,
-    };
-
+    let providerProps: types.DataGridState = {};
     let gridRootStyle = mergeAll(
       {
         height: this.state.calculatedHeight || height,
       },
       style,
     );
+
+    if (mounted) {
+      providerProps = this.makeupProviderState({
+        mounted,
+        setRootState: this.setRootState,
+        getRootState: this.getRootState,
+        getRootNode: this.getRootNode,
+        getClipBoardNode: this.getClipBoardNode,
+        rootObject: this.rootObject,
+        data,
+        filteredList: this.getFilteredList(data),
+        height,
+        onBeforeEvent,
+        onAfterEvent,
+        options: this.makeupOptions(options),
+      });
+    }
 
     return (
       <DataGridStore.Provider {...providerProps}>

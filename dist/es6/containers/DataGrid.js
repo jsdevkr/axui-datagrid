@@ -39,6 +39,87 @@ class DataGrid extends React.Component {
             return this.clipBoardNode;
         };
         this.onFireEvent = () => { };
+        this.getFilteredList = (data) => {
+            const { options = DataGrid.defaultOptions } = this.props;
+            const { columnKeys: optionColumnKeys = {} } = options;
+            return data.filter((n) => {
+                return !n[optionColumnKeys.deleted || '__deleted__'];
+            });
+        };
+        this.makeupOptions = (options) => {
+            return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
+        };
+        this.makeupProviderState = (prevState) => {
+            const { columns = [] } = this.props;
+            const { options = {} } = prevState;
+            const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
+            const { columnHeight = 0 } = optionsBody;
+            let newState = Object.assign({}, prevState);
+            let newStyle = {};
+            // convert colGroup
+            newState.headerTable = utils_1.makeHeaderTable(columns, options);
+            newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
+            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, options);
+            // header를 위한 divide
+            const headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex || 0, options);
+            // body를 위한 divide
+            const bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex || 0, options);
+            newState.asideHeaderData = headerDividedObj.asideData;
+            newState.leftHeaderData = headerDividedObj.leftData;
+            newState.headerData = headerDividedObj.rightData;
+            newState.asideColGroup = headerDividedObj.asideColGroup;
+            newState.asideBodyRowData = bodyDividedObj.asideData;
+            newState.leftBodyRowData = bodyDividedObj.leftData;
+            newState.bodyRowData = bodyDividedObj.rightData;
+            // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
+            newState.colGroup = [];
+            newState.colGroupMap = {};
+            newState.headerTable.rows.forEach((row, ridx) => {
+                row.cols.forEach((col, cidx) => {
+                    if (newState.colGroupMap && newState.colGroup) {
+                        const currentCol = {
+                            key: col.key,
+                            label: col.label,
+                            width: col.width,
+                            align: col.align,
+                            colSpan: col.colSpan,
+                            rowSpan: col.rowSpan,
+                            colIndex: col.colIndex,
+                            rowIndex: col.rowIndex,
+                            formatter: col.formatter,
+                            editor: col.editor,
+                        };
+                        newState.colGroupMap[col.colIndex || 0] = currentCol;
+                        newState.colGroup.push(currentCol);
+                    }
+                });
+            });
+            newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
+            newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+            // styles
+            newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
+            newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
+            newState.styles = newStyle;
+            // 초기 스타일 생성.
+            const calculatedObject = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState);
+            newState.styles = calculatedObject.styles;
+            newState.colGroup = calculatedObject.colGroup;
+            newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
+            newState.headerColGroup = calculatedObject.headerColGroup;
+            const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, } = newState.styles;
+            const { printStartColIndex, printEndColIndex } = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
+                _frozenPanelWidth +
+                (_CTInnerWidth -
+                    _asidePanelWidth -
+                    _frozenPanelWidth -
+                    _rightPanelWidth));
+            newState.printStartColIndex = printStartColIndex;
+            newState.printEndColIndex = printEndColIndex;
+            newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
+            newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            return newState;
+        };
     }
     componentDidMount() {
         this.setState({
@@ -47,24 +128,27 @@ class DataGrid extends React.Component {
     }
     render() {
         const { mounted } = this.state;
-        const { data = [], columns = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, } = this.props;
-        const providerProps = {
-            mounted,
-            setRootState: this.setRootState,
-            getRootState: this.getRootState,
-            getRootNode: this.getRootNode,
-            getClipBoardNode: this.getClipBoardNode,
-            rootObject: this.rootObject,
-            data,
-            columns,
-            height,
-            options,
-            onBeforeEvent,
-            onAfterEvent,
-        };
+        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, } = this.props;
+        let providerProps = {};
         let gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
         }, style);
+        if (mounted) {
+            providerProps = this.makeupProviderState({
+                mounted,
+                setRootState: this.setRootState,
+                getRootState: this.getRootState,
+                getRootNode: this.getRootNode,
+                getClipBoardNode: this.getClipBoardNode,
+                rootObject: this.rootObject,
+                data,
+                filteredList: this.getFilteredList(data),
+                height,
+                onBeforeEvent,
+                onAfterEvent,
+                options: this.makeupOptions(options),
+            });
+        }
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
             React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle, onFireEvent: this.onFireEvent },
                 React.createElement("div", { className: 'axui-datagrid-clip-board' },
