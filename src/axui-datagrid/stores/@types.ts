@@ -144,8 +144,8 @@ export type DataGridState = {
   filterInfo?: {};
   height?: number;
 
-  onBeforeEvent?: () => void;
-  onAfterEvent?: () => void; // 원본과 비교를 위한 JSON.stringify 값
+  onBeforeEvent?: (e: any, eventName: string) => void;
+  onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
 
   isInlineEditing?: boolean;
   inlineEditingCell?: intfs.IDataGridEditingCell;
@@ -218,8 +218,8 @@ export type DataGrid = {
   style?: any;
   options?: DataGridOptions;
 
-  onBeforeEvent?: () => void;
-  onAfterEvent?: () => void;
+  onBeforeEvent?: (e: any, eventName: string) => void;
+  onAfterEvent?: (e: any, eventName: string) => void;
 };
 
 export type DataGridDispatchParam = { [key: string]: any };

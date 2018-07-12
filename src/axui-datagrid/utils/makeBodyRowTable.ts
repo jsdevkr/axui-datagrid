@@ -10,13 +10,12 @@ function makeBodyRowTable(
   bodyColumns: types.DataGridColumn[],
   options: types.DataGridOptions,
 ): types.DataGridColumnTableMap {
-  const columns: types.DataGridColumn[] = [...bodyColumns];
-  let table: types.DataGridColumnTableMap = {
+  let bodyTable: types.DataGridColumnTableMap = {
     rows: [],
   };
   let colIndex = 0;
 
-  const makeRows = function(
+  const makeBodyRows = function(
     rowsColumns: types.DataGridColumn[],
     depth: number,
     parentField?: any,
@@ -26,7 +25,7 @@ function makeBodyRowTable(
     let l = rowsColumns.length;
     let colSpan = 1;
 
-    const selfMakeRow = function(
+    const selfMakeBodyRow = function(
       selfRowsColumns: types.DataGridColumn[],
       selfRowsDepth: number,
     ): void {
@@ -34,7 +33,7 @@ function makeBodyRowTable(
       let sl = selfRowsColumns.length;
 
       for (; si < sl; si++) {
-        let field = selfRowsColumns[si];
+        let field = { ...selfRowsColumns[si] };
         let selfColSpan = 1;
 
         if (!field.hidden) {
@@ -56,12 +55,16 @@ function makeBodyRowTable(
             row.cols.push(field);
 
             if ('columns' in field && field.columns) {
-              selfColSpan = makeRows(field.columns, selfRowsDepth + 1, field);
+              selfColSpan = makeBodyRows(
+                field.columns,
+                selfRowsDepth + 1,
+                field,
+              );
             }
             field.colSpan = selfColSpan;
           } else {
             if ('columns' in field && field.columns) {
-              selfMakeRow(field.columns, selfRowsDepth);
+              selfMakeBodyRow(field.columns, selfRowsDepth);
             }
           }
         }
@@ -69,13 +72,13 @@ function makeBodyRowTable(
     };
 
     for (; i < l; i++) {
-      let field = rowsColumns[i];
+      let field = { ...rowsColumns[i] };
       colSpan = 1;
 
       if (!field.hidden) {
         if ('key' in field) {
           field.colSpan = 1;
-          field.rowSpan = 1;
+          // field.rowSpan = 1;
           field.depth = depth;
 
           field.rowIndex = depth;
@@ -91,43 +94,45 @@ function makeBodyRowTable(
           row.cols.push(field);
 
           if ('columns' in field && field.columns) {
-            colSpan = makeRows(field.columns, depth + 1, field);
+            colSpan = makeBodyRows(field.columns, depth + 1, field);
           }
           field.colSpan = colSpan;
         } else {
           if ('columns' in field && field.columns) {
-            selfMakeRow(field.columns, depth);
+            selfMakeBodyRow(field.columns, depth);
           }
         }
       }
     }
 
     if (row.cols && row.cols.length > 0) {
-      if (!table.rows[depth]) {
-        table.rows[depth] = { cols: [] };
+      if (!bodyTable.rows[depth]) {
+        bodyTable.rows[depth] = { cols: [] };
       }
 
-      table.rows[depth].cols = [...table.rows[depth].cols, ...row.cols];
+      bodyTable.rows[depth].cols = [...bodyTable.rows[depth].cols, ...row.cols];
       return row.cols.length - 1 + colSpan;
     } else {
       return colSpan;
     }
   };
 
-  makeRows(columns, 0);
+  makeBodyRows(bodyColumns, 0);
 
   // set rowspan
-  table.rows.forEach((row, ri) => {
+  bodyTable.rows.forEach((row, ri) => {
     if (row.cols) {
       row.cols.forEach(col => {
-        if (!('columns' in col)) {
-          col.rowSpan = table.rows.length - ri;
+        if ('columns' in col) {
+          // col.rowSpan = 1;
+        } else {
+          col.rowSpan = bodyTable.rows.length - ri;
         }
       });
     }
   });
 
-  return table;
+  return bodyTable;
 }
 
 export default makeBodyRowTable;

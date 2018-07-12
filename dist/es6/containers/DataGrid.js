@@ -46,10 +46,10 @@ class DataGrid extends React.Component {
                 return !n[optionColumnKeys.deleted || '__deleted__'];
             });
         };
-        this.makeupOptions = (options) => {
+        this.getOptions = (options) => {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
-        this.makeupProviderState = (prevState) => {
+        this.getProviderProps = (prevState) => {
             const { columns = [] } = this.props;
             const { options = {} } = prevState;
             const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
@@ -72,11 +72,10 @@ class DataGrid extends React.Component {
             newState.leftBodyRowData = bodyDividedObj.leftData;
             newState.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-            newState.colGroup = [];
             newState.colGroupMap = {};
             newState.headerTable.rows.forEach((row, ridx) => {
                 row.cols.forEach((col, cidx) => {
-                    if (newState.colGroupMap && newState.colGroup) {
+                    if (newState.colGroupMap) {
                         const currentCol = {
                             key: col.key,
                             label: col.label,
@@ -90,10 +89,10 @@ class DataGrid extends React.Component {
                             editor: col.editor,
                         };
                         newState.colGroupMap[col.colIndex || 0] = currentCol;
-                        newState.colGroup.push(currentCol);
                     }
                 });
             });
+            newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
             // styles
@@ -134,7 +133,7 @@ class DataGrid extends React.Component {
             height: this.state.calculatedHeight || height,
         }, style);
         if (mounted) {
-            providerProps = this.makeupProviderState({
+            providerProps = this.getProviderProps({
                 mounted,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
@@ -146,11 +145,11 @@ class DataGrid extends React.Component {
                 height,
                 onBeforeEvent,
                 onAfterEvent,
-                options: this.makeupOptions(options),
+                options: this.getOptions(options),
             });
         }
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle, onFireEvent: this.onFireEvent },
+            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
                 React.createElement("div", { className: 'axui-datagrid-clip-board' },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,

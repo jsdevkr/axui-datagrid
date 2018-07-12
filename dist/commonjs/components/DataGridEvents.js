@@ -59,7 +59,6 @@ var DataGridEvents = /** @class */ (function (_super) {
             */
             return true;
         };
-        _this.onKeyDown = function (keyAction, e) { };
         _this.onKeyUp = function (e) {
             var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing, _e = _a.scrollTop, scrollTop = _e === void 0 ? 0 : _e;
             var proc = (_f = {},
@@ -82,7 +81,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             }
             var _f;
         };
-        _this.onKeyPress = function (e) {
+        _this.onKeyDown = function (e) {
             var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m, _o = _a.isInlineEditing, isInlineEditing = _o === void 0 ? false : _o, _p = _a.inlineEditingCell, inlineEditingCell = _p === void 0 ? {} : _p;
             var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t;
@@ -336,26 +335,50 @@ var DataGridEvents = /** @class */ (function (_super) {
             }
             var _5, _6;
         };
+        _this.onFireEvent = function (e, eventName) {
+            var proc = (_a = {},
+                _a[stores_1.EventNames.WHEEL] = function () {
+                    _this.onWheel(e);
+                },
+                _a[stores_1.EventNames.KEYDOWN] = function () {
+                    _this.onKeyDown(e);
+                },
+                _a[stores_1.EventNames.KEYUP] = function () {
+                    _this.onKeyUp(e);
+                },
+                _a[stores_1.EventNames.MOUSEDOWN] = function () { },
+                _a[stores_1.EventNames.MOUSEUP] = function () { },
+                _a[stores_1.EventNames.CLICK] = function () { },
+                _a);
+            if (eventName in proc) {
+                if (_this.props.onBeforeEvent) {
+                    _this.props.onBeforeEvent(e, eventName);
+                }
+                proc[eventName]();
+                if (_this.props.onAfterEvent) {
+                    _this.props.onAfterEvent(e, eventName);
+                }
+            }
+            var _a;
+        };
         return _this;
     }
     DataGridEvents.prototype.render = function () {
         var _this = this;
         return (React.createElement("div", { className: "axui-datagrid", tabIndex: -1, style: this.props.style, onWheel: function (e) {
-                _this.onWheel(e);
+                _this.onFireEvent(e, stores_1.EventNames.WHEEL);
             }, onKeyDown: function (e) {
-                _this.onKeyPress(e);
-                _this.props.onFireEvent(stores_1.EventNames.KEYDOWN, e);
+                _this.onFireEvent(e, stores_1.EventNames.KEYDOWN);
             }, onKeyUp: function (e) {
-                _this.onKeyUp(e);
-                _this.props.onFireEvent(stores_1.EventNames.KEYUP, e);
+                _this.onFireEvent(e, stores_1.EventNames.KEYUP);
             }, onMouseDown: function (e) {
-                _this.props.onFireEvent(stores_1.EventNames.MOUSEDOWN, e);
+                _this.onFireEvent(e, stores_1.EventNames.MOUSEDOWN);
             }, onMouseUp: function (e) {
-                _this.props.onFireEvent(stores_1.EventNames.MOUSEUP, e);
+                _this.onFireEvent(e, stores_1.EventNames.MOUSEUP);
             }, onClick: function (e) {
-                _this.props.onFireEvent(stores_1.EventNames.CLICK, e);
+                _this.onFireEvent(e, stores_1.EventNames.CLICK);
             }, onTouchStartCapture: function (e) {
-                _this.props.onFireEvent(stores_1.EventNames.TOUCHSTART, e);
+                // this.onFireEvent(e, EventNames.TOUCHSTART);
             } }, this.props.children));
     };
     return DataGridEvents;

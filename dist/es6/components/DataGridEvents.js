@@ -48,7 +48,6 @@ class DataGridEvents extends React.Component {
             */
             return true;
         };
-        this.onKeyDown = (keyAction, e) => { };
         this.onKeyUp = (e) => {
             const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, scrollTop = 0, } = this.props;
             const proc = {
@@ -70,7 +69,7 @@ class DataGridEvents extends React.Component {
                 proc[e.which]();
             }
         };
-        this.onKeyPress = (e) => {
+        this.onKeyDown = (e) => {
             const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, isInlineEditing = false, inlineEditingCell = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0 } = options;
@@ -314,24 +313,47 @@ class DataGridEvents extends React.Component {
                 }
             }
         };
+        this.onFireEvent = (e, eventName) => {
+            const proc = {
+                [stores_1.EventNames.WHEEL]: () => {
+                    this.onWheel(e);
+                },
+                [stores_1.EventNames.KEYDOWN]: () => {
+                    this.onKeyDown(e);
+                },
+                [stores_1.EventNames.KEYUP]: () => {
+                    this.onKeyUp(e);
+                },
+                [stores_1.EventNames.MOUSEDOWN]: () => { },
+                [stores_1.EventNames.MOUSEUP]: () => { },
+                [stores_1.EventNames.CLICK]: () => { },
+            };
+            if (eventName in proc) {
+                if (this.props.onBeforeEvent) {
+                    this.props.onBeforeEvent(e, eventName);
+                }
+                proc[eventName]();
+                if (this.props.onAfterEvent) {
+                    this.props.onAfterEvent(e, eventName);
+                }
+            }
+        };
     }
     render() {
         return (React.createElement("div", { className: "axui-datagrid", tabIndex: -1, style: this.props.style, onWheel: e => {
-                this.onWheel(e);
+                this.onFireEvent(e, stores_1.EventNames.WHEEL);
             }, onKeyDown: e => {
-                this.onKeyPress(e);
-                this.props.onFireEvent(stores_1.EventNames.KEYDOWN, e);
+                this.onFireEvent(e, stores_1.EventNames.KEYDOWN);
             }, onKeyUp: e => {
-                this.onKeyUp(e);
-                this.props.onFireEvent(stores_1.EventNames.KEYUP, e);
+                this.onFireEvent(e, stores_1.EventNames.KEYUP);
             }, onMouseDown: e => {
-                this.props.onFireEvent(stores_1.EventNames.MOUSEDOWN, e);
+                this.onFireEvent(e, stores_1.EventNames.MOUSEDOWN);
             }, onMouseUp: e => {
-                this.props.onFireEvent(stores_1.EventNames.MOUSEUP, e);
+                this.onFireEvent(e, stores_1.EventNames.MOUSEUP);
             }, onClick: e => {
-                this.props.onFireEvent(stores_1.EventNames.CLICK, e);
+                this.onFireEvent(e, stores_1.EventNames.CLICK);
             }, onTouchStartCapture: e => {
-                this.props.onFireEvent(stores_1.EventNames.TOUCHSTART, e);
+                // this.onFireEvent(e, EventNames.TOUCHSTART);
             } }, this.props.children));
     }
 }

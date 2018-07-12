@@ -6,7 +6,6 @@ import { getScrollPosition, getNode } from '../utils';
 
 interface IProps extends IDataGridStore {
   style?: any;
-  onFireEvent: (eventName: EventNames, e: any) => void;
 }
 interface IState {}
 
@@ -75,8 +74,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
     return true;
   };
 
-  onKeyDown = (keyAction: KeyCodes, e: any) => {};
-
   onKeyUp = (e: any) => {
     const {
       colGroup = [],
@@ -109,7 +106,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onKeyPress = (e: any) => {
+  onKeyDown = (e: any) => {
     const {
       filteredList = [],
       getRootNode,
@@ -423,6 +420,35 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
+  onFireEvent = (e: any, eventName: EventNames) => {
+    const proc = {
+      [EventNames.WHEEL]: () => {
+        this.onWheel(e);
+      },
+      [EventNames.KEYDOWN]: () => {
+        this.onKeyDown(e);
+      },
+      [EventNames.KEYUP]: () => {
+        this.onKeyUp(e);
+      },
+      [EventNames.MOUSEDOWN]: () => {},
+      [EventNames.MOUSEUP]: () => {},
+      [EventNames.CLICK]: () => {},
+    };
+
+    if (eventName in proc) {
+      if (this.props.onBeforeEvent) {
+        this.props.onBeforeEvent(e, eventName);
+      }
+
+      proc[eventName]();
+
+      if (this.props.onAfterEvent) {
+        this.props.onAfterEvent(e, eventName);
+      }
+    }
+  };
+
   render() {
     return (
       <div
@@ -430,27 +456,25 @@ class DataGridEvents extends React.Component<IProps, IState> {
         tabIndex={-1}
         style={this.props.style}
         onWheel={e => {
-          this.onWheel(e);
+          this.onFireEvent(e, EventNames.WHEEL);
         }}
         onKeyDown={e => {
-          this.onKeyPress(e);
-          this.props.onFireEvent(EventNames.KEYDOWN, e);
+          this.onFireEvent(e, EventNames.KEYDOWN);
         }}
         onKeyUp={e => {
-          this.onKeyUp(e);
-          this.props.onFireEvent(EventNames.KEYUP, e);
+          this.onFireEvent(e, EventNames.KEYUP);
         }}
         onMouseDown={e => {
-          this.props.onFireEvent(EventNames.MOUSEDOWN, e);
+          this.onFireEvent(e, EventNames.MOUSEDOWN);
         }}
         onMouseUp={e => {
-          this.props.onFireEvent(EventNames.MOUSEUP, e);
+          this.onFireEvent(e, EventNames.MOUSEUP);
         }}
         onClick={e => {
-          this.props.onFireEvent(EventNames.CLICK, e);
+          this.onFireEvent(e, EventNames.CLICK);
         }}
         onTouchStartCapture={e => {
-          this.props.onFireEvent(EventNames.TOUCHSTART, e);
+          // this.onFireEvent(e, EventNames.TOUCHSTART);
         }}
       >
         {this.props.children}

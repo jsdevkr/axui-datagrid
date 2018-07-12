@@ -37,7 +37,10 @@ class MultiColumnHeader extends React.Component<any, any> {
       <Wrapper>
         <Segment padded>
           <h1>Multi Column Header</h1>
-          <p />
+          <p>
+            You can set up multiple-line headers by adding columns inside
+            'columns> col'.
+          </p>
           <DataGrid
             height={this.state.height}
             style={{ fontSize: '12px' }}

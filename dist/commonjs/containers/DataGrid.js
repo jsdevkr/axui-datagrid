@@ -65,10 +65,10 @@ var DataGrid = /** @class */ (function (_super) {
                 return !n[optionColumnKeys.deleted || '__deleted__'];
             });
         };
-        _this.makeupOptions = function (options) {
+        _this.getOptions = function (options) {
             return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
         };
-        _this.makeupProviderState = function (prevState) {
+        _this.getProviderProps = function (prevState) {
             var _a = _this.props.columns, columns = _a === void 0 ? [] : _a;
             var _b = prevState.options, options = _b === void 0 ? {} : _b;
             var _c = options.frozenColumnIndex, frozenColumnIndex = _c === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _c, _d = options.body, optionsBody = _d === void 0 ? DataGrid.defaultBody : _d;
@@ -91,11 +91,10 @@ var DataGrid = /** @class */ (function (_super) {
             newState.leftBodyRowData = bodyDividedObj.leftData;
             newState.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-            newState.colGroup = [];
             newState.colGroupMap = {};
             newState.headerTable.rows.forEach(function (row, ridx) {
                 row.cols.forEach(function (col, cidx) {
-                    if (newState.colGroupMap && newState.colGroup) {
+                    if (newState.colGroupMap) {
                         var currentCol = {
                             key: col.key,
                             label: col.label,
@@ -109,10 +108,10 @@ var DataGrid = /** @class */ (function (_super) {
                             editor: col.editor,
                         };
                         newState.colGroupMap[col.colIndex || 0] = currentCol;
-                        newState.colGroup.push(currentCol);
                     }
                 });
             });
+            newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
             // styles
@@ -154,7 +153,7 @@ var DataGrid = /** @class */ (function (_super) {
             height: this.state.calculatedHeight || height,
         }, style);
         if (mounted) {
-            providerProps = this.makeupProviderState({
+            providerProps = this.getProviderProps({
                 mounted: mounted,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
@@ -166,11 +165,11 @@ var DataGrid = /** @class */ (function (_super) {
                 height: height,
                 onBeforeEvent: onBeforeEvent,
                 onAfterEvent: onAfterEvent,
-                options: this.makeupOptions(options),
+                options: this.getOptions(options),
             });
         }
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle, onFireEvent: this.onFireEvent },
+            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
                 React.createElement("div", { className: 'axui-datagrid-clip-board' },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,

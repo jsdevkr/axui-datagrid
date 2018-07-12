@@ -43,6 +43,11 @@ class InlineEdit extends React.Component<any, any> {
       <Wrapper>
         <Segment padded>
           <h1>Inline Edit</h1>
+          <p>
+            If you define the editor attribute in 'columns> col', you can use
+            the editor mode of that column. You can activate editor mode using
+            double-click or return key.
+          </p>
           <DataGrid
             height={this.state.height}
             style={{ fontSize: '12px' }}

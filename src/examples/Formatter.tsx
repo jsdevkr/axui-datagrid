@@ -14,7 +14,15 @@ class Formatter extends React.Component<any, any> {
       height: 400,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title' },
+        {
+          key: 'title',
+          width: 200,
+          label: 'Title',
+          formatter: function(args: any) {
+            // console.log(args);
+            return ' * ' + args.value;
+          },
+        },
         { key: 'writer', label: 'Writer', align: 'center' },
         { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
         { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
@@ -29,8 +37,9 @@ class Formatter extends React.Component<any, any> {
         <Segment padded>
           <h1>Formatter</h1>
           <p>
-            내장된 'date', 'money' formatter 외에도 datagrid의 static 함수인
-            setFormatter 함수를 이용하여 사용자 formatter를 만들 수 있습니다.
+            You can use 'date', 'money' predefined in 'columns> col.formatter',
+            or you can change the values as desired using a user-defined
+            function.
           </p>
           <DataGrid
             height={this.state.height}

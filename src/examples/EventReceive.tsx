@@ -49,6 +49,9 @@ class EventReceive extends React.Component<any, any> {
             columns={this.state.columns}
             data={this.state.data}
             options={this.state.options}
+            onBeforeEvent={(e, eventName) => {
+              this.receiveEvent(eventName);
+            }}
           />
           <Divider />
           <textarea

@@ -10,7 +10,6 @@ function makeHeaderTable(
   headerColumns: types.DataGridColumn[],
   options: types.DataGridOptions,
 ): types.DataGridColumnTableMap {
-  const columns: types.DataGridColumn[] = [...headerColumns];
   let table: types.DataGridColumnTableMap = {
     rows: [],
   };
@@ -27,7 +26,7 @@ function makeHeaderTable(
     let colSpan: number = 1;
 
     for (; i < l; i++) {
-      let field = rowsColumns[i];
+      let field = { ...rowsColumns[i] };
 
       colSpan = 1;
 
@@ -67,14 +66,16 @@ function makeHeaderTable(
     }
   }
 
-  makeRows(columns, 0);
+  makeRows(headerColumns, 0);
 
   // set rowspan
   table.rows.forEach((row, ri) => {
     if (row.cols) {
-      row.cols.forEach(col => {
-        if (!('columns' in col)) {
-          col.rowSpan = table.rows.length - ri;
+      row.cols.forEach((col, ci) => {
+        if ('columns' in col) {
+          // col.rowSpan = 1;
+        } else {
+          table.rows[ri].cols[ci].rowSpan = table.rows.length - ri;
         }
       });
     }

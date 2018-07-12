@@ -12,11 +12,11 @@ class AlignHeader extends React.Component<any, any> {
 
     this.state = {
       columns: [
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
+        { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },
-        { key: 'writer', label: 'Writer', align: 'center' },
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+        { key: 'writer', label: 'Writer' },
+        { key: 'date', label: 'Date', formatter: 'date' },
+        { key: 'money', label: 'Money', formatter: 'money' },
       ],
       data: gridData,
       options: {},
@@ -66,6 +66,8 @@ class AlignHeader extends React.Component<any, any> {
       <Wrapper>
         <Segment padded>
           <h1>Align Header</h1>
+          <p>This example changes the 'options.header.align' property.</p>
+
           <DataGrid
             height={this.state.height}
             style={{ fontSize: '12px' }}

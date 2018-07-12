@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @return {DataGridColumnTableMap}
  */
 function makeHeaderTable(headerColumns, options) {
-    const columns = [...headerColumns];
     let table = {
         rows: [],
     };
@@ -18,7 +17,7 @@ function makeHeaderTable(headerColumns, options) {
         let l = rowsColumns.length;
         let colSpan = 1;
         for (; i < l; i++) {
-            let field = rowsColumns[i];
+            let field = Object.assign({}, rowsColumns[i]);
             colSpan = 1;
             if (!field.hidden) {
                 field.colSpan = 1;
@@ -54,13 +53,16 @@ function makeHeaderTable(headerColumns, options) {
             return colSpan;
         }
     }
-    makeRows(columns, 0);
+    makeRows(headerColumns, 0);
     // set rowspan
     table.rows.forEach((row, ri) => {
         if (row.cols) {
-            row.cols.forEach(col => {
-                if (!('columns' in col)) {
-                    col.rowSpan = table.rows.length - ri;
+            row.cols.forEach((col, ci) => {
+                if ('columns' in col) {
+                    // col.rowSpan = 1;
+                }
+                else {
+                    table.rows[ri].cols[ci].rowSpan = table.rows.length - ri;
                 }
             });
         }

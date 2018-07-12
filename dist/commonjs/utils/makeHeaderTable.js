@@ -1,4 +1,12 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -27,7 +35,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @return {DataGridColumnTableMap}
  */
 function makeHeaderTable(headerColumns, options) {
-    var columns = __spread(headerColumns);
     var table = {
         rows: [],
     };
@@ -38,7 +45,7 @@ function makeHeaderTable(headerColumns, options) {
         var l = rowsColumns.length;
         var colSpan = 1;
         for (; i < l; i++) {
-            var field = rowsColumns[i];
+            var field = __assign({}, rowsColumns[i]);
             colSpan = 1;
             if (!field.hidden) {
                 field.colSpan = 1;
@@ -74,13 +81,16 @@ function makeHeaderTable(headerColumns, options) {
             return colSpan;
         }
     }
-    makeRows(columns, 0);
+    makeRows(headerColumns, 0);
     // set rowspan
     table.rows.forEach(function (row, ri) {
         if (row.cols) {
-            row.cols.forEach(function (col) {
-                if (!('columns' in col)) {
-                    col.rowSpan = table.rows.length - ri;
+            row.cols.forEach(function (col, ci) {
+                if ('columns' in col) {
+                    // col.rowSpan = 1;
+                }
+                else {
+                    table.rows[ri].cols[ci].rowSpan = table.rows.length - ri;
                 }
             });
         }

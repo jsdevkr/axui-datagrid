@@ -60,8 +60,8 @@ class FrozenColumnRow extends React.Component<any, any> {
         <Segment padded>
           <h1>Frozen Column {'&'} Row</h1>
           <p>
-            options.frozenColumnIndex, options.frozenRowIndex를 정하면 그리드에
-            틀고정영역을 설정 할 수 있습니다.
+            If options.frozenColumnIndex and options.frozenRowIndex are
+            specified, then 'DataGrid' You can set the frame fixed area.
           </p>
           <DataGrid
             height={height}

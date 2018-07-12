@@ -171,11 +171,11 @@ class DataGrid extends React.Component<IProps, IState> {
     });
   };
 
-  makeupOptions = (options: types.DataGridOptions): types.DataGridOptions => {
+  getOptions = (options: types.DataGridOptions): types.DataGridOptions => {
     return mergeAll(true, { ...DataGrid.defaultOptions }, options);
   };
 
-  makeupProviderState = (prevState: types.DataGridState) => {
+  getProviderProps = (prevState: types.DataGridState) => {
     const { columns = [] } = this.props;
     const { options = {} } = prevState;
     const {
@@ -198,6 +198,7 @@ class DataGrid extends React.Component<IProps, IState> {
       frozenColumnIndex || 0,
       options,
     );
+
     // body를 위한 divide
     const bodyDividedObj = divideTableByFrozenColumnIndex(
       newState.bodyRowTable,
@@ -215,11 +216,11 @@ class DataGrid extends React.Component<IProps, IState> {
     newState.bodyRowData = bodyDividedObj.rightData;
 
     // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-    newState.colGroup = [];
+
     newState.colGroupMap = {};
     newState.headerTable.rows.forEach((row, ridx) => {
       row.cols.forEach((col, cidx) => {
-        if (newState.colGroupMap && newState.colGroup) {
+        if (newState.colGroupMap) {
           const currentCol: types.DataGridCol = {
             key: col.key,
             label: col.label,
@@ -233,10 +234,12 @@ class DataGrid extends React.Component<IProps, IState> {
             editor: col.editor,
           };
           newState.colGroupMap[col.colIndex || 0] = currentCol;
-          newState.colGroup.push(currentCol);
         }
       });
     });
+
+    newState.colGroup = Object.values(newState.colGroupMap);
+
     newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
     newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
 
@@ -305,7 +308,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   public render() {
     const { mounted } = this.state;
-
     const {
       data = [],
       options = {},
@@ -324,7 +326,7 @@ class DataGrid extends React.Component<IProps, IState> {
     );
 
     if (mounted) {
-      providerProps = this.makeupProviderState({
+      providerProps = this.getProviderProps({
         mounted,
         setRootState: this.setRootState,
         getRootState: this.getRootState,
@@ -336,17 +338,13 @@ class DataGrid extends React.Component<IProps, IState> {
         height,
         onBeforeEvent,
         onAfterEvent,
-        options: this.makeupOptions(options),
+        options: this.getOptions(options),
       });
     }
 
     return (
       <DataGridStore.Provider {...providerProps}>
-        <DataGridEvents
-          ref={this.setRootNode}
-          style={gridRootStyle}
-          onFireEvent={this.onFireEvent}
-        >
+        <DataGridEvents ref={this.setRootNode} style={gridRootStyle}>
           <div className={'axui-datagrid-clip-board'}>
             <textarea ref={this.setClipBoardNode} />
           </div>

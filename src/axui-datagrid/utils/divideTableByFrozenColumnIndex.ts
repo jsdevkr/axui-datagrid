@@ -18,6 +18,8 @@ function divideTableByFrozenColumnIndex(
   let tempTableLeft: types.DataGridColumnTableMap = { rows: [] };
   let tempTableRight: types.DataGridColumnTableMap = { rows: [] };
 
+
+
   // make asideTable
   for (let i = 0, l = rowTable.rows.length; i < l; i++) {
     asideTable.rows[i] = { cols: [] };
