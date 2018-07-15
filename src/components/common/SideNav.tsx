@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { PROJECT_ROUTES } from 'routes';
+import { Menus } from 'routes';
 
 import { Layout, Menu, Icon } from 'antd';
 const axuiLogo = require('assets/axui-logo.png');
@@ -22,7 +22,7 @@ class SideNav extends React.Component<IProps, IState> {
     mounted: false,
     defaultOpenKeys: [],
     defaultSelectedKeys: [],
-    menus: PROJECT_ROUTES,
+    menus: Menus,
   };
 
   static getDerivedStateFromProps(props: any, prevState: IState) {

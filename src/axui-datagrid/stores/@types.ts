@@ -223,6 +223,7 @@ export type DataGrid = {
   onAfterEvent?: (e: any, eventName: string) => void;
   onScrollEnd?: () => void;
   loading?: boolean;
+  loadingData?: boolean;
 };
 
 export type DataGridDispatchParam = { [key: string]: any };
