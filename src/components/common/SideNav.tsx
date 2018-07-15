@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { PROJECT_ROUTES } from 'routes';
 
 import { Layout, Menu, Icon } from 'antd';
 const axuiLogo = require('assets/axui-logo.png');
@@ -21,37 +22,7 @@ class SideNav extends React.Component<IProps, IState> {
     mounted: false,
     defaultOpenKeys: [],
     defaultSelectedKeys: [],
-    menus: {
-      start: {
-        label: (
-          <>
-            <Icon type="home" />
-            Start
-          </>
-        ),
-        menus: [
-          { to: '/introduction', label: 'Introduction' },
-          { to: '/usage', label: 'Usage' },
-        ],
-      },
-      examples: {
-        label: (
-          <>
-            <Icon type="solution" />
-            Examples
-          </>
-        ),
-        menus: [
-          { to: '/examples/LargeData', label: 'LargeData' },
-          { to: '/examples/Formatter', label: 'Formatting of data' },
-          { to: '/examples/FrozenColumnRow', label: 'Frozen column and row' },
-          { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
-          { to: '/examples/InlineEdit', label: 'Inline edit' },
-          { to: '/examples/EventReceive', label: 'Event' },
-          { to: '/examples/AlignHeader', label: 'AlignHeader' },
-        ],
-      },
-    },
+    menus: PROJECT_ROUTES,
   };
 
   static getDerivedStateFromProps(props: any, prevState: IState) {

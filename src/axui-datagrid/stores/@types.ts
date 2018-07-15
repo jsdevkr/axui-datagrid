@@ -97,6 +97,7 @@ export type DataGridOptions = {
   scroller?: DataGridOptionScroller;
   columnKeys?: DataGridColumnKeys;
   footSum?: boolean;
+  loadingElement?: JSX.Element | string;
 };
 
 export type DataGridStyles = {
@@ -220,6 +221,8 @@ export type DataGrid = {
 
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void;
+  onScrollEnd?: () => void;
+  loading?: boolean;
 };
 
 export type DataGridDispatchParam = { [key: string]: any };
