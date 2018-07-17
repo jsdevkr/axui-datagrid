@@ -124,6 +124,7 @@
       );
     }
     &.focused {
+      box-shadow: none;
       &:before {
         content: '';
         display: block;
