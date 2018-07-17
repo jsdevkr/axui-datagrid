@@ -336,21 +336,22 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _5, _6;
         };
         _this.onFireEvent = function (e, eventName) {
-            var proc = (_a = {},
-                _a[stores_1.EventNames.WHEEL] = function () {
+            var _a = _this.props, loading = _a.loading, loadingData = _a.loadingData;
+            var proc = (_b = {},
+                _b[stores_1.EventNames.WHEEL] = function () {
                     _this.onWheel(e);
                 },
-                _a[stores_1.EventNames.KEYDOWN] = function () {
+                _b[stores_1.EventNames.KEYDOWN] = function () {
                     _this.onKeyDown(e);
                 },
-                _a[stores_1.EventNames.KEYUP] = function () {
+                _b[stores_1.EventNames.KEYUP] = function () {
                     _this.onKeyUp(e);
                 },
-                _a[stores_1.EventNames.MOUSEDOWN] = function () { },
-                _a[stores_1.EventNames.MOUSEUP] = function () { },
-                _a[stores_1.EventNames.CLICK] = function () { },
-                _a);
-            if (eventName in proc) {
+                _b[stores_1.EventNames.MOUSEDOWN] = function () { },
+                _b[stores_1.EventNames.MOUSEUP] = function () { },
+                _b[stores_1.EventNames.CLICK] = function () { },
+                _b);
+            if (eventName in proc && !loading && !loadingData) {
                 if (_this.props.onBeforeEvent) {
                     _this.props.onBeforeEvent(e, eventName);
                 }
@@ -359,7 +360,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     _this.props.onAfterEvent(e, eventName);
                 }
             }
-            var _a;
+            var _b;
         };
         return _this;
     }

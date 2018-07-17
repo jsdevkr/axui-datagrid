@@ -27,6 +27,7 @@
   }
   [data-scroll-container] {
     @include axui-transition(top 0.3s ease);
+    z-index: 2;
   }
   [data-scroll-container='top-aside-body-scroll-container'],
   [data-scroll-container='top-left-body-scroll-container'],

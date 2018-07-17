@@ -10,14 +10,19 @@ class DataGridBodyLoader extends React.Component<IProps, IState> {
   state = {};
 
   render() {
-    const { loadingData } = this.props;
+    const { loadingData, options = {} } = this.props;
+    const { bodyLoaderHeight = 0 } = options;
 
     if (!loadingData) {
       return null;
     }
 
+    const loaderStyle = {
+      height: bodyLoaderHeight,
+    };
+
     return (
-      <div className="axui-datagrid-body-loader">
+      <div className="axui-datagrid-body-loader" style={loaderStyle}>
         <div data-loader-spinner="" />
         <div data-loader-text="">Loading</div>
       </div>

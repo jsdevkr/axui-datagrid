@@ -147,7 +147,7 @@ var DataGrid = /** @class */ (function (_super) {
     };
     DataGrid.prototype.render = function () {
         var mounted = this.state.mounted;
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g;
         var providerProps = {};
         var gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -155,6 +155,8 @@ var DataGrid = /** @class */ (function (_super) {
         if (mounted) {
             providerProps = this.getProviderProps({
                 mounted: mounted,
+                loading: loading,
+                loadingData: loadingData,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
                 getRootNode: this.getRootNode,
@@ -170,14 +172,15 @@ var DataGrid = /** @class */ (function (_super) {
         }
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
             React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
-                React.createElement("div", { className: 'axui-datagrid-clip-board' },
+                React.createElement("div", { className: "axui-datagrid-clip-board" },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
-                    React.createElement(components_1.DataGridColumnFilter, null))) : null)));
+                    React.createElement(components_1.DataGridColumnFilter, null),
+                    React.createElement(components_1.DataGridLoader, null))) : null)));
     };
     DataGrid.defaultHeight = 400;
     DataGrid.defaultColumnKeys = {
@@ -242,6 +245,7 @@ var DataGrid = /** @class */ (function (_super) {
         page: DataGrid.defaultPage,
         scroller: DataGrid.defaultScroller,
         columnKeys: DataGrid.defaultColumnKeys,
+        bodyLoaderHeight: 100,
     };
     DataGrid.defaultStyles = {
         calculatedHeight: null,

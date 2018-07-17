@@ -97,7 +97,7 @@ export type DataGridOptions = {
   scroller?: DataGridOptionScroller;
   columnKeys?: DataGridColumnKeys;
   footSum?: boolean;
-  loadingElement?: JSX.Element | string;
+  bodyLoaderHeight?: number;
 };
 
 export type DataGridStyles = {

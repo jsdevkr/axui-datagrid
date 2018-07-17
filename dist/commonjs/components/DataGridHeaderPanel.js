@@ -229,7 +229,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                     React.createElement("col", null)),
                 React.createElement("tbody", null, bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri, className: "" },
                     row.cols.map(function (col, ci) { return (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: _this.onClick })); }),
-                    React.createElement("td", null, "\u00A0"))); }))),
+                    React.createElement("td", null))); }))),
             (function () {
                 if (panelName === 'aside-header') {
                     return null;

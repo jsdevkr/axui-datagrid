@@ -127,7 +127,7 @@ class DataGrid extends React.Component {
     }
     render() {
         const { mounted } = this.state;
-        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, } = this.props;
+        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, loading = false, loadingData = false, } = this.props;
         let providerProps = {};
         let gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -135,6 +135,8 @@ class DataGrid extends React.Component {
         if (mounted) {
             providerProps = this.getProviderProps({
                 mounted,
+                loading,
+                loadingData,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
                 getRootNode: this.getRootNode,
@@ -150,14 +152,15 @@ class DataGrid extends React.Component {
         }
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
             React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
-                React.createElement("div", { className: 'axui-datagrid-clip-board' },
+                React.createElement("div", { className: "axui-datagrid-clip-board" },
                     React.createElement("textarea", { ref: this.setClipBoardNode })),
                 mounted ? (React.createElement(React.Fragment, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
-                    React.createElement(components_1.DataGridColumnFilter, null))) : null)));
+                    React.createElement(components_1.DataGridColumnFilter, null),
+                    React.createElement(components_1.DataGridLoader, null))) : null)));
     }
 }
 DataGrid.defaultHeight = 400;
@@ -223,6 +226,7 @@ DataGrid.defaultOptions = {
     page: DataGrid.defaultPage,
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
+    bodyLoaderHeight: 100,
 };
 DataGrid.defaultStyles = {
     calculatedHeight: null,

@@ -39,6 +39,8 @@ var store = {
     columnResizing: false,
     columnResizerLeft: 0,
     mounted: false,
+    loading: false,
+    loadingData: false,
     data: [],
     filteredList: [],
     colGroup: [],
@@ -263,6 +265,8 @@ var StoreProvider = /** @class */ (function (_super) {
     }
     StoreProvider.getDerivedStateFromProps = function (newProps, prevState) {
         if (newProps.mounted === prevState.mounted &&
+            newProps.loading === prevState.loading &&
+            newProps.loadingData === prevState.loadingData &&
             newProps.setRootState === prevState.setRootState &&
             newProps.getRootState === prevState.getRootState &&
             newProps.getRootNode === prevState.getRootNode &&
@@ -297,8 +301,24 @@ var StoreProvider = /** @class */ (function (_super) {
             return null;
         }
         else {
+            var scrollTop = prevState.scrollTop;
+            if (newProps.loadingData &&
+                newProps.loadingData !== prevState.loadingData) {
+                var filteredList = newProps.filteredList, _a = newProps.styles, styles = _a === void 0 ? {} : _a;
+                var focusRow = filteredList.length - 1;
+                var _b = styles.bodyTrHeight, bodyTrHeight = _b === void 0 ? 0 : _b, _c = styles.scrollContentWidth, scrollContentWidth = _c === void 0 ? 0 : _c, _d = styles.scrollContentHeight, scrollContentHeight = _d === void 0 ? 0 : _d, _e = styles.scrollContentContainerWidth, scrollContentContainerWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerHeight, scrollContentContainerHeight = _f === void 0 ? 0 : _f;
+                scrollTop = utils_1.getScrollPosition(0, -focusRow * bodyTrHeight, {
+                    scrollWidth: scrollContentWidth,
+                    scrollHeight: scrollContentHeight,
+                    clientWidth: scrollContentContainerWidth,
+                    clientHeight: scrollContentContainerHeight,
+                }).scrollTop;
+            }
             return __assign({}, prevState, {
+                scrollTop: scrollTop,
                 mounted: newProps.mounted,
+                loading: newProps.loading,
+                loadingData: newProps.loadingData,
                 setRootState: newProps.setRootState,
                 getRootState: newProps.getRootState,
                 getRootNode: newProps.getRootNode,

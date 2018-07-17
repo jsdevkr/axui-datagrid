@@ -21,6 +21,8 @@ const store = {
     columnResizing: false,
     columnResizerLeft: 0,
     mounted: false,
+    loading: false,
+    loadingData: false,
     data: [],
     filteredList: [],
     colGroup: [],
@@ -241,6 +243,8 @@ class StoreProvider extends React.Component {
     }
     static getDerivedStateFromProps(newProps, prevState) {
         if (newProps.mounted === prevState.mounted &&
+            newProps.loading === prevState.loading &&
+            newProps.loadingData === prevState.loadingData &&
             newProps.setRootState === prevState.setRootState &&
             newProps.getRootState === prevState.getRootState &&
             newProps.getRootNode === prevState.getRootNode &&
@@ -275,8 +279,24 @@ class StoreProvider extends React.Component {
             return null;
         }
         else {
+            let scrollTop = prevState.scrollTop;
+            if (newProps.loadingData &&
+                newProps.loadingData !== prevState.loadingData) {
+                const { filteredList, styles = {} } = newProps;
+                const focusRow = filteredList.length - 1;
+                const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+                scrollTop = utils_1.getScrollPosition(0, -focusRow * bodyTrHeight, {
+                    scrollWidth: scrollContentWidth,
+                    scrollHeight: scrollContentHeight,
+                    clientWidth: scrollContentContainerWidth,
+                    clientHeight: scrollContentContainerHeight,
+                }).scrollTop;
+            }
             return Object.assign({}, prevState, {
+                scrollTop: scrollTop,
                 mounted: newProps.mounted,
+                loading: newProps.loading,
+                loadingData: newProps.loadingData,
                 setRootState: newProps.setRootState,
                 getRootState: newProps.getRootState,
                 getRootNode: newProps.getRootNode,

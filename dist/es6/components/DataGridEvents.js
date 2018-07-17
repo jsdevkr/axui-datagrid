@@ -314,6 +314,7 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onFireEvent = (e, eventName) => {
+            const { loading, loadingData } = this.props;
             const proc = {
                 [stores_1.EventNames.WHEEL]: () => {
                     this.onWheel(e);
@@ -328,7 +329,7 @@ class DataGridEvents extends React.Component {
                 [stores_1.EventNames.MOUSEUP]: () => { },
                 [stores_1.EventNames.CLICK]: () => { },
             };
-            if (eventName in proc) {
+            if (eventName in proc && !loading && !loadingData) {
                 if (this.props.onBeforeEvent) {
                     this.props.onBeforeEvent(e, eventName);
                 }

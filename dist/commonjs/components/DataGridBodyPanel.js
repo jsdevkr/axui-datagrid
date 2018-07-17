@@ -85,7 +85,7 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
                                     row.cols.map(function (col, ci) {
                                         return (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, value: filteredList[li][col.key || ''] }));
                                     }),
-                                    React.createElement("td", null, "\u00A0")));
+                                    React.createElement("td", null)));
                             });
                         }
                         return null;

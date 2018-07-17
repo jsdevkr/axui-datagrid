@@ -73,7 +73,7 @@ class DataGridBodyPanel extends React.Component {
                                     row.cols.map((col, ci) => {
                                         return (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, value: filteredList[li][col.key || ''] }));
                                     }),
-                                    React.createElement("td", null, "\u00A0")));
+                                    React.createElement("td", null)));
                             });
                         }
                         return null;

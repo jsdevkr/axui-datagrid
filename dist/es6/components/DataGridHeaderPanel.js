@@ -215,7 +215,7 @@ class DataGridHeaderPanel extends React.Component {
                     React.createElement("col", null)),
                 React.createElement("tbody", null, bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri, className: "" },
                     row.cols.map((col, ci) => (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: this.onClick }))),
-                    React.createElement("td", null, "\u00A0")))))),
+                    React.createElement("td", null)))))),
             (() => {
                 if (panelName === 'aside-header') {
                     return null;

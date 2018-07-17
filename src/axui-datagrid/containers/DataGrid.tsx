@@ -91,6 +91,7 @@ class DataGrid extends React.Component<IProps, IState> {
     page: DataGrid.defaultPage,
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
+    bodyLoaderHeight: 100,
   };
   static defaultStyles: types.DataGridStyles = {
     calculatedHeight: null,
@@ -350,7 +351,7 @@ class DataGrid extends React.Component<IProps, IState> {
     return (
       <DataGridStore.Provider {...providerProps}>
         <DataGridEvents ref={this.setRootNode} style={gridRootStyle}>
-          <div className='axui-datagrid-clip-board'>
+          <div className="axui-datagrid-clip-board">
             <textarea ref={this.setClipBoardNode} />
           </div>
           {mounted ? (

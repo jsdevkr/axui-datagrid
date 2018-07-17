@@ -1,4 +1,15 @@
-@import './scss/vars';
-@import './scss/mixins';
-// @import './scss/axui-tooltip/index';
-@import './scss/datagrid';
+@import './scss/common/vars';
+@import './scss/common/mixins';
+@import './scss/common/keyframes';
+@import './scss/common/axui-datagrid';
+
+@import './scss/components/axui-datagrid-header';
+@import './scss/components/axui-datagrid-body';
+@import './scss/components/axui-datagrid-page';
+@import './scss/components/axui-datagrid-page-buttons';
+@import './scss/components/axui-datagrid-scroller';
+@import './scss/components/axui-datagrid-scroll-bar';
+@import './scss/components/axui-datagrid-clip-board';
+@import './scss/components/axui-datagrid-loader';
+@import './scss/components/axui-datagrid-body-loader';
+@import './scss/components/axui-datagrid-column-filter';
