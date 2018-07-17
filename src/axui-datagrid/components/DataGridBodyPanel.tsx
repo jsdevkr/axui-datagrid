@@ -135,7 +135,7 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
                             />
                           );
                         })}
-                        <td>&nbsp;</td>
+                        <td />
                       </tr>
                     );
                   });

@@ -300,7 +300,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
                     onClick={this.onClick}
                   />
                 ))}
-                <td>&nbsp;</td>
+                <td />
               </tr>
             ))}
           </tbody>

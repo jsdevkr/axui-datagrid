@@ -1,0 +1,13 @@
+.axui-datagrid-page {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  user-select: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  @include axui-background(to bottom, $axui-datagrid-page-bg-colors);
+  border: 0 none;
+  border-top: $axui-datagrid-page-border;
+}

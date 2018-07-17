@@ -28,6 +28,7 @@ export const Menus = {
       { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
       { to: '/examples/InlineEdit', label: 'Inline edit' },
       { to: '/examples/EventReceive', label: 'Event' },
+      { to: '/examples/LoadingState', label: 'Loading' },
     ],
   },
 };

@@ -10,6 +10,7 @@ import {
   getNode,
 } from '../utils';
 import DataGridBodyPanel from './DataGridBodyPanel';
+import DataGridBodyLoader from './DataGridBodyLoader';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -399,6 +400,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       scrollTop = 0,
       options = {},
       styles = {},
+      loadingData = false,
     } = this.props;
     const { frozenRowIndex = 0 } = options;
     const {
@@ -413,6 +415,8 @@ class DataGridBody extends React.Component<IProps, IState> {
     } = styles;
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
+
+    const loadingDataHeight = loadingData ? 100 : 0;
 
     let topBodyScrollConfig = {
       frozenRowIndex: 0,
@@ -446,20 +450,20 @@ class DataGridBody extends React.Component<IProps, IState> {
     let asideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
-      top: frozenPanelHeight,
+      top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
     let leftBodyPanelStyle = {
       left: asidePanelWidth,
       width: frozenPanelWidth,
-      top: frozenPanelHeight,
+      top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
     let bodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
         CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
-      top: frozenPanelHeight,
+      top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
 
@@ -504,6 +508,7 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelLeft={scrollLeft}
           panelTop={scrollTop}
         />
+        <DataGridBodyLoader />
       </div>
     );
   }

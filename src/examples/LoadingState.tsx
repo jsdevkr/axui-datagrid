@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Divider } from 'antd';
+import { Button, Divider, Checkbox } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -11,7 +11,9 @@ class LoadingState extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
+      test: '111',
       loading: false,
+      loadingData: false,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },
@@ -24,24 +26,9 @@ class LoadingState extends React.Component<any, any> {
     };
   }
 
-  public changeConfig(props: any) {
-    const processor = {
-      'loading-true': () => {
-        this.setState({ loading: true });
-      },
-      'loading-false': () => {
-        this.setState({ loading: false });
-      },
-    };
-
-    if (props in processor) {
-      processor[props]();
-    } else {
-      this.setState(props);
-    }
-  }
-
   render() {
+    const { loading, loadingData, height, columns, data, options } = this.state;
+
     return (
       <Wrapper>
         <Segment padded>
@@ -49,22 +36,35 @@ class LoadingState extends React.Component<any, any> {
           <p>You can express the loading status with loading props</p>
 
           <DataGrid
-            loading={this.state.loading}
-            height={this.state.height}
+            loading={loading}
+            loadingData={loadingData}
+            height={height}
             style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
+            columns={columns}
+            data={data}
+            options={options}
           />
-
           <Divider />
-
-          <Button onClick={() => this.changeConfig('loading-true')}>
-            Set Loading(True)
-          </Button>
-          <Button onClick={() => this.changeConfig('loading-false')}>
-            Set Loading(False)
-          </Button>
+          <h3>Set Loading state</h3>
+          <Checkbox
+            onChange={e => {
+              this.setState({
+                test: '2222222',
+                loading: e.target.checked,
+              });
+            }}
+          >
+            loading
+          </Checkbox>
+          <Checkbox
+            onChange={e => {
+              this.setState({
+                loadingData: e.target.checked,
+              });
+            }}
+          >
+            loadingData
+          </Checkbox>
         </Segment>
       </Wrapper>
     );

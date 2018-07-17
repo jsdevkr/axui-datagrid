@@ -1,38 +1,4 @@
-@mixin axui-background($pos, $g1: null, $g2: null) {
-  $pos-type: type-of(nth($pos, 1));
-
-  // If $pos is missing from mixin, reassign vars and add default position
-  @if ($pos-type == color) or (nth($pos, 1) == 'transparent') {
-    $g2: $g1;
-    $g1: $pos;
-    $pos: to top;
-  } @else if ($g1 == null) {
-    $g1: $pos;
-    $pos: to top;
-  }
-
-  // @debug($g1);
-  @if (length($g1) == 2) {
-    $g2: nth($g1, 2);
-    $g1: nth($g1, 1);
-  } @else if (length($g1) == 3) {
-    $pos: nth($g1, 1);
-    $g1: nth($g1, 2);
-    $g2: nth($g1, 3);
-  } @else {
-    @if (type_of(nth($g2, 1)) == color) {
-      $g2: nth($g2, 1);
-    }
-  }
-
-  background-color: $g1;
-  background-image: linear-gradient($pos, $g1, $g2);
-}
-
-@mixin transform() {
-}
-
-@mixin sort-arrow(
+@mixin axui-datagrid-sort-arrow(
   $arrow-size,
   $ratio-0,
   $ratio-1,
@@ -56,7 +22,7 @@
   opacity: $opacity;
 }
 
-@mixin gridRowBackground() {
+@mixin axui-datagrid-row-background() {
   &.hover {
     background: $axui-datagrid-row-hover-bg;
   }
@@ -102,7 +68,7 @@
   }
 }
 
-@mixin gridCell() {
+@mixin axui-datagrid-cell() {
   box-sizing: border-box;
   //overflow: hidden;
   position: relative;
@@ -132,7 +98,7 @@
         opacity: 0.5;
 
         &:before {
-          @include sort-arrow(
+          @include axui-datagrid-sort-arrow(
             $axui-datagrid-header-sorter-size,
             2.8,
             2.2,
@@ -289,7 +255,7 @@
         &:before {
           top: 2px;
           left: 0;
-          @include sort-arrow(
+          @include axui-datagrid-sort-arrow(
             $axui-datagrid-header-sorter-size,
             2.5,
             2,
@@ -309,7 +275,7 @@
         &:after {
           bottom: 2px;
           left: 0;
-          @include sort-arrow(
+          @include axui-datagrid-sort-arrow(
             $axui-datagrid-header-sorter-size,
             2.5,
             2,
@@ -431,7 +397,7 @@
   }
 }
 
-@mixin data-arrow() {
+@mixin axui-datagrid-data-arrow() {
   [data-arrow] {
     content: ' ';
     display: block;
@@ -456,7 +422,7 @@
   }
 }
 
-@mixin frozen-border($type: 'vertical') {
+@mixin axui-datagrid-frozen-border($type: 'vertical') {
   &:after {
     content: ' ';
     display: block;
@@ -475,5 +441,57 @@
     }
 
     @content;
+  }
+}
+
+.axui-datagrid {
+  position: relative;
+  background: $axui-datagrid-bg;
+  border: $axui-datagrid-border;
+  overflow: hidden;
+
+  &:focus {
+    outline: $axui-datagrid-outline;
+  }
+
+  table {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0 none;
+    width: 100%;
+    tr {
+      border-bottom: 0 none;
+      @include axui-datagrid-row-background();
+      td {
+        @include axui-datagrid-cell();
+      }
+    }
+
+    /*
+    tr:last-child {
+      td {
+        border-bottom: $axui-datagrid-last-row-border;
+      }
+    }
+    */
+  }
+
+  /*
+  [data-axui-tooltip] {
+    @include data-axui-tooltip;
+  }
+  */
+
+  [data-panel] {
+    position: absolute;
+    box-sizing: border-box;
+  }
+  [data-scroll-container] {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    [data-panel] {
+    }
   }
 }

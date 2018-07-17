@@ -137,6 +137,8 @@ export type DataGridRootState = {
 
 export type DataGridState = {
   mounted?: boolean;
+  loading?: boolean;
+  loadingData?: boolean;
   calculatedStyles?: boolean;
   dragging?: boolean;
   data?: any[];

@@ -9,6 +9,7 @@ import {
   DataGridColumnFilter,
   DataGridScroll,
   DataGridPage,
+  DataGridLoader,
 } from '../components';
 import { types } from '../stores';
 import {
@@ -315,6 +316,8 @@ class DataGrid extends React.Component<IProps, IState> {
       onBeforeEvent,
       onAfterEvent,
       height = DataGrid.defaultHeight,
+      loading = false,
+      loadingData = false,
     } = this.props;
 
     let providerProps: types.DataGridState = {};
@@ -328,6 +331,8 @@ class DataGrid extends React.Component<IProps, IState> {
     if (mounted) {
       providerProps = this.getProviderProps({
         mounted,
+        loading,
+        loadingData,
         setRootState: this.setRootState,
         getRootState: this.getRootState,
         getRootNode: this.getRootNode,
@@ -345,7 +350,7 @@ class DataGrid extends React.Component<IProps, IState> {
     return (
       <DataGridStore.Provider {...providerProps}>
         <DataGridEvents ref={this.setRootNode} style={gridRootStyle}>
-          <div className={'axui-datagrid-clip-board'}>
+          <div className='axui-datagrid-clip-board'>
             <textarea ref={this.setClipBoardNode} />
           </div>
           {mounted ? (
@@ -355,6 +360,7 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridPage />
               <DataGridScroll />
               <DataGridColumnFilter />
+              <DataGridLoader />
             </>
           ) : null}
         </DataGridEvents>
