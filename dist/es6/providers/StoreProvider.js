@@ -242,6 +242,15 @@ class StoreProvider extends React.Component {
         };
     }
     static getDerivedStateFromProps(newProps, prevState) {
+        /*
+          초기에만 값을 수신하여 랜더링 하고, 그 후엔 setState로 제어 되는 항목.
+          newProps.styles === prevState.styles &&
+          newProps.printStartColIndex === prevState.printStartColIndex &&
+          newProps.printEndColIndex === prevState.printEndColIndex &&
+          newProps.visibleHeaderColGroup === prevState.visibleHeaderColGroup &&
+          newProps.visibleBodyRowData === prevState.visibleBodyRowData &&
+          newProps.visibleBodyGroupingData === prevState.visibleBodyGroupingData
+         */
         if (newProps.mounted === prevState.mounted &&
             newProps.loading === prevState.loading &&
             newProps.loadingData === prevState.loadingData &&
@@ -269,13 +278,7 @@ class StoreProvider extends React.Component {
             newProps.colGroup === prevState.colGroup &&
             newProps.colGroupMap === prevState.colGroupMap &&
             newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
-            newProps.headerColGroup === prevState.headerColGroup &&
-            newProps.styles === prevState.styles &&
-            newProps.printStartColIndex === prevState.printStartColIndex &&
-            newProps.printEndColIndex === prevState.printEndColIndex &&
-            newProps.visibleHeaderColGroup === prevState.visibleHeaderColGroup &&
-            newProps.visibleBodyRowData === prevState.visibleBodyRowData &&
-            newProps.visibleBodyGroupingData === prevState.visibleBodyGroupingData) {
+            newProps.headerColGroup === prevState.headerColGroup) {
             return null;
         }
         else {
