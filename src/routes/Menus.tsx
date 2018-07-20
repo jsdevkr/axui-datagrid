@@ -29,6 +29,7 @@ export const Menus = {
       { to: '/examples/InlineEdit', label: 'Inline edit' },
       { to: '/examples/EventReceive', label: 'Event' },
       { to: '/examples/LoadingState', label: 'Loading' },
+      { to: '/examples/RowSelector', label: 'RowSelector' },
     ],
   },
 };
