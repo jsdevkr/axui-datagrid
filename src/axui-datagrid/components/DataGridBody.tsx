@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types } from '../stores';
+import { types, DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import {
@@ -31,6 +31,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       inlineEditingCell = {},
       styles = {},
       setStoreState,
+      dispatch,
       getRootNode,
       rootObject = {},
     } = this.props;
@@ -48,6 +49,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       scrollContentContainerWidth = 0,
       scrollContentContainerHeight = 0,
     } = styles;
+
     const startMousePosition = getMousePosition(e);
     const spanType: string = e.target.getAttribute('data-span');
     const rootNode = getNode(getRootNode);
@@ -370,6 +372,11 @@ class DataGridBody extends React.Component<IProps, IState> {
 
       setStoreState(state);
     };
+    const procClickRowSelector = () => {
+      dispatch(DispatchTypes.SELECT, {
+        rowIndex: selectStartedRow
+      });
+    };
 
     // 선택이 시작된 row / col
     let selectStartedRow: number = getRowIndex(startY, startScrollTop);
@@ -384,11 +391,16 @@ class DataGridBody extends React.Component<IProps, IState> {
       return false;
     }
 
-    if (spanType === 'lineNumber') {
-      // click lineNumber
-      procClickLinenumber();
-    } else {
-      procBodySelect();
+    switch (spanType) {
+      case 'lineNumber':
+        procClickLinenumber();
+        break;
+      case 'rowSelector':
+        procClickRowSelector();
+        break;
+      default:
+        procBodySelect();
+        break;
     }
 
     return true;

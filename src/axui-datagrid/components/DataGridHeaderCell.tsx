@@ -12,6 +12,7 @@ interface IProps extends IDataGridStore {
 }
 
 const DatagridHeaderCell: React.SFC<IProps> = ({
+  listSelectedAll = false,
   options = {},
   focusedCol,
   selectionCols,
@@ -41,6 +42,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
       label = (
         <div
           className="axui-datagrid-check-box"
+          data-checked={listSelectedAll}
           style={{
             maxHeight: lineHeight + 'px',
             minHeight: lineHeight + 'px',

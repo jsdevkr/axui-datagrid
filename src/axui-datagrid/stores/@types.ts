@@ -143,6 +143,9 @@ export type DataGridState = {
   dragging?: boolean;
   data?: any[];
   filteredList?: any[];
+  listSelectedAll?: boolean;
+  selectedRowIndex?: number;
+  selectedRowIndexSelected?: boolean;
   sortInfo?: {};
   filterInfo?: {};
   height?: number;

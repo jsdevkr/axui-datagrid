@@ -46,8 +46,10 @@ const store: IDataGridStore = {
   mounted: false,
   loading: false,
   loadingData: false,
+
   data: [],
   filteredList: [],
+  listSelectedAll: false,
   colGroup: [],
   asideColGroup: [],
   leftHeaderColGroup: [],
@@ -315,6 +317,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   ) => {
     const {
       data = [],
+      listSelectedAll = false,
       scrollLeft = 0,
       colGroup = [],
       getRootNode,
@@ -372,74 +375,76 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       },
       [DispatchTypes.SORT]: () => {
         const { colIndex } = param;
-        const { key: colKey = '' } = colGroup[colIndex];
+        if (typeof colIndex !== 'undefined') {
+          const { key: colKey = '' } = colGroup[colIndex];
 
-        let currentSortInfo: { [key: string]: any } = {};
-        let seq: number = 0;
-        let sortInfoArray: any[] = [];
+          let currentSortInfo: { [key: string]: any } = {};
+          let seq: number = 0;
+          let sortInfoArray: any[] = [];
 
-        const getValueByKey = function(_item: any, _key: string) {
-          return _item[_key] || '';
-        };
-
-        for (let k in sortInfo) {
-          if (sortInfo[k]) {
-            currentSortInfo[k] = sortInfo[k];
-            seq++;
-          }
-        }
-
-        if (currentSortInfo[colKey]) {
-          if (currentSortInfo[colKey].orderBy === 'desc') {
-            currentSortInfo[colKey].orderBy = 'asc';
-          } else if (currentSortInfo[colKey].orderBy === 'asc') {
-            delete currentSortInfo[colKey];
-          }
-        } else {
-          currentSortInfo[colKey] = {
-            seq: seq++,
-            orderBy: 'desc',
+          const getValueByKey = function(_item: any, _key: string) {
+            return _item[_key] || '';
           };
-        }
 
-        for (let k in currentSortInfo) {
-          if (currentSortInfo[k]) {
-            sortInfoArray[currentSortInfo[k].seq] = {
-              key: k,
-              order: currentSortInfo[k].orderBy,
+          for (let k in sortInfo) {
+            if (sortInfo[k]) {
+              currentSortInfo[k] = sortInfo[k];
+              seq++;
+            }
+          }
+
+          if (currentSortInfo[colKey]) {
+            if (currentSortInfo[colKey].orderBy === 'desc') {
+              currentSortInfo[colKey].orderBy = 'asc';
+            } else if (currentSortInfo[colKey].orderBy === 'asc') {
+              delete currentSortInfo[colKey];
+            }
+          } else {
+            currentSortInfo[colKey] = {
+              seq: seq++,
+              orderBy: 'desc',
             };
           }
-        }
-        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
 
-        let i = 0,
-          l = sortInfoArray.length,
-          aValue: any,
-          bValue: any;
-
-        const sortedList = filteredList.sort((a: any, b: any): any => {
-          for (i = 0; i < l; i++) {
-            aValue = getValueByKey(a, sortInfoArray[i].key);
-            bValue = getValueByKey(b, sortInfoArray[i].key);
-
-            if (typeof aValue !== typeof bValue) {
-              aValue = '' + aValue;
-              bValue = '' + bValue;
-            }
-            if (aValue < bValue) {
-              return sortInfoArray[i].order === 'asc' ? -1 : 1;
-            } else if (aValue > bValue) {
-              return sortInfoArray[i].order === 'asc' ? 1 : -1;
+          for (let k in currentSortInfo) {
+            if (currentSortInfo[k]) {
+              sortInfoArray[currentSortInfo[k].seq] = {
+                key: k,
+                order: currentSortInfo[k].orderBy,
+              };
             }
           }
-        });
+          sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
 
-        this.setStoreState({
-          sortInfo: currentSortInfo,
-          filteredList: sortedList,
-          isInlineEditing: false,
-          inlineEditingCell: {},
-        });
+          let i = 0,
+            l = sortInfoArray.length,
+            aValue: any,
+            bValue: any;
+
+          const sortedList = filteredList.sort((a: any, b: any): any => {
+            for (i = 0; i < l; i++) {
+              aValue = getValueByKey(a, sortInfoArray[i].key);
+              bValue = getValueByKey(b, sortInfoArray[i].key);
+
+              if (typeof aValue !== typeof bValue) {
+                aValue = '' + aValue;
+                bValue = '' + bValue;
+              }
+              if (aValue < bValue) {
+                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+              } else if (aValue > bValue) {
+                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+              }
+            }
+          });
+
+          this.setStoreState({
+            sortInfo: currentSortInfo,
+            filteredList: sortedList,
+            isInlineEditing: false,
+            inlineEditingCell: {},
+          });
+        }
       },
       [DispatchTypes.UPDATE]: () => {
         const { row, colIndex, value, eventWhichKey } = param;
@@ -504,6 +509,44 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           headerColGroup: headerColGroup,
           styles: styles,
           columnResizing: false,
+        });
+      },
+      [DispatchTypes.SELECT]: () => {
+        const { rowIndex, checked } = param;
+
+        let rowSelected: boolean = false;
+        if (checked === true) {
+          rowSelected = true;
+        } else if (checked === false) {
+          rowSelected = false;
+        } else {
+          rowSelected = !filteredList[rowIndex].__selected__;
+        }
+
+        filteredList[rowIndex].__selected__ = rowSelected;
+
+        this.setStoreState({
+          selectedRowIndex: rowIndex,
+          selectedRowIndexSelected: rowSelected,
+        });
+      },
+      [DispatchTypes.SELECT_ALL]: () => {
+        const { checked } = param;
+        let selectedAll: boolean = listSelectedAll;
+        if (checked === true) {
+          selectedAll = true;
+        } else if (checked === false) {
+          selectedAll = false;
+        } else {
+          selectedAll = !selectedAll;
+        }
+
+        for (let i = 0, l = filteredList.length; i < l; i++) {
+          filteredList[i].__selected__ = selectedAll;
+        }
+
+        this.setStoreState({
+          listSelectedAll: selectedAll,
         });
       },
     };

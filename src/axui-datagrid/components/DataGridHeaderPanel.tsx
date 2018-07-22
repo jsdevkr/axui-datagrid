@@ -112,58 +112,72 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
         focusedCol: focusedCol,
       };
 
-      if (key === '__line_number__') {
-        state.selectionRows = (() => {
-          let rows = {};
-          filteredList.forEach((item, i) => {
-            rows[i] = true;
-          });
-          return rows;
-        })();
+      switch (key) {
+        case '__line_number__':
+          {
+            state.selectionRows = (() => {
+              let rows = {};
+              filteredList.forEach((item, i) => {
+                rows[i] = true;
+              });
+              return rows;
+            })();
 
-        state.selectionCols = (() => {
-          let cols = {};
-          colGroup.forEach(_col => {
-            cols[_col.colIndex || 0] = true;
-          });
-          return cols;
-        })();
-        state.focusedCol = 0;
-        setStoreState(state);
-      } else {
-        if (optionsHeader.clickAction === 'select') {
-          state.selectionRows = (() => {
-            let rows = {};
-            filteredList.forEach((item, i) => {
-              rows[i] = true;
-            });
-            return rows;
-          })();
-
-          if (e.shiftKey) {
             state.selectionCols = (() => {
               let cols = {};
-              arrayFromRange(
-                Math.min(focusedCol, colIndex),
-                Math.max(focusedCol, colIndex) + 1,
-              ).forEach(i => {
-                cols[i] = true;
+              colGroup.forEach(_col => {
+                cols[_col.colIndex || 0] = true;
               });
               return cols;
             })();
-          } else {
-            state.selectionCols = {
-              [colIndex]: true,
-            };
-            state.focusedCol = colIndex;
+            state.focusedCol = 0;
+            setStoreState(state);
           }
-          setStoreState(state);
-        } else if (
-          optionsHeader.clickAction === 'sort' &&
-          optionsHeader.sortable
-        ) {
-          dispatch(DispatchTypes.SORT, { colIndex });
-        }
+          break;
+        case '__row_selector__':
+          dispatch(DispatchTypes.SELECT_ALL, {});
+          break;
+        default:
+          {
+            if (optionsHeader.clickAction === 'select') {
+              state.selectionRows = (() => {
+                let rows = {};
+                filteredList.forEach((item, i) => {
+                  rows[i] = true;
+                });
+                return rows;
+              })();
+
+              if (e.shiftKey) {
+                state.selectionCols = (() => {
+                  let cols = {};
+                  arrayFromRange(
+                    Math.min(focusedCol, colIndex),
+                    Math.max(focusedCol, colIndex) + 1,
+                  ).forEach(i => {
+                    cols[i] = true;
+                  });
+                  return cols;
+                })();
+              } else {
+                state.selectionCols = {
+                  [colIndex]: true,
+                };
+                state.focusedCol = colIndex;
+              }
+              setStoreState(state);
+            } else if (
+              optionsHeader.clickAction === 'sort' &&
+              optionsHeader.sortable
+            ) {
+              dispatch(DispatchTypes.SORT, { colIndex });
+            }
+          }
+          break;
+      }
+
+      if (key === '__line_number__') {
+      } else {
       }
     }
   };

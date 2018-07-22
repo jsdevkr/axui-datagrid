@@ -48,6 +48,8 @@ export enum DispatchTypes {
   'FILTER',
   'UPDATE',
   'RESIZE_COL',
+  'SELECT',
+  'SELECT_ALL',
 }
 
 export enum PageButtonActions {

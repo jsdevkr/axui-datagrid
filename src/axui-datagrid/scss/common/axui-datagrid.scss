@@ -332,7 +332,7 @@
         border-right: none;
         background: transparent;
         opacity: 0;
-        // @include transform(rotate(-50deg));
+        transform: rotate(-50deg);
       }
       &[data-checked='true'] {
         &:after {
@@ -386,6 +386,12 @@
         background: transparent;
         opacity: 0;
         transform: rotate(-50deg);
+      }
+
+      &[data-checked='true'] {
+        &:after {
+          opacity: 1;
+        }
       }
     }
   }
@@ -468,21 +474,7 @@
         @include axui-datagrid-cell();
       }
     }
-
-    /*
-    tr:last-child {
-      td {
-        border-bottom: $axui-datagrid-last-row-border;
-      }
-    }
-    */
   }
-
-  /*
-  [data-axui-tooltip] {
-    @include data-axui-tooltip;
-  }
-  */
 
   [data-panel] {
     position: absolute;

@@ -11,7 +11,6 @@ class LoadingState extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
-      test: '111',
       loading: false,
       loadingData: false,
       columns: [
@@ -46,27 +45,6 @@ class LoadingState extends React.Component<any, any> {
             data={data}
             options={options}
           />
-          <Divider />
-          <h3>Set Loading state</h3>
-          <Checkbox
-            onChange={e => {
-              this.setState({
-                test: '2222222',
-                loading: e.target.checked,
-              });
-            }}
-          >
-            loading
-          </Checkbox>
-          <Checkbox
-            onChange={e => {
-              this.setState({
-                loadingData: e.target.checked,
-              });
-            }}
-          >
-            loadingData
-          </Checkbox>
         </Segment>
       </Wrapper>
     );
