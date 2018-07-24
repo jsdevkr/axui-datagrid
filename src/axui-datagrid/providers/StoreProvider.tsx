@@ -27,7 +27,6 @@ export interface IDataGridStore extends types.DataGridState {
 }
 
 const store: IDataGridStore = {
-  dragging: false,
   sortInfo: {},
   isColumnFilter: false,
   scrollLeft: 0,
@@ -169,6 +168,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           height: newProps.height,
           onBeforeEvent: newProps.onBeforeEvent,
           onAfterEvent: newProps.onAfterEvent,
+          onScrollEnd: newProps.onScrollEnd,
           headerTable: newProps.headerTable,
           bodyRowTable: newProps.bodyRowTable,
           bodyRowMap: newProps.bodyRowMap,
@@ -248,55 +248,89 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       headerColGroup = [],
       bodyRowData = { rows: [{ cols: [] }] },
       bodyGroupingData = { rows: [{ cols: [] }] },
+      onScrollEnd,
     } = this.state;
+    const { styles: propStyles } = this.props;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
     const {
       scrollLeft: _scrollLeft,
+      scrollTop: _scrollTop,
       styles: _styles = {},
       filteredList: _filteredList,
     } = newState;
 
-    if (typeof _scrollLeft !== 'undefined') {
+    if (
+      typeof _scrollLeft !== 'undefined' ||
+      typeof _scrollTop !== 'undefined'
+    ) {
       const {
         CTInnerWidth: _CTInnerWidth = 0,
         frozenPanelWidth: _frozenPanelWidth = 0,
         asidePanelWidth: _asidePanelWidth = 0,
         rightPanelWidth: _rightPanelWidth = 0,
+        scrollContentWidth: scrollWidth = 0,
+        scrollContentHeight: scrollHeight = 0,
+        scrollContentContainerWidth: clientWidth = 0,
+        scrollContentContainerHeight: clientHeight = 0,
       } = { ...styles, ..._styles };
 
-      if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
-        const {
-          printStartColIndex,
-          printEndColIndex,
-        } = getPositionPrintColGroup(
-          headerColGroup,
-          Math.abs(_scrollLeft) + _frozenPanelWidth,
-          Math.abs(_scrollLeft) +
-            _frozenPanelWidth +
-            (_CTInnerWidth -
-              _asidePanelWidth -
-              _frozenPanelWidth -
-              _rightPanelWidth),
-        );
+      let endOfScrollTop: boolean = false;
+      let endOfScrollLeft: boolean = false;
 
-        newState.printStartColIndex = printStartColIndex;
-        newState.printEndColIndex = printEndColIndex;
+      if (typeof _scrollLeft !== 'undefined') {
+        if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+          const {
+            printStartColIndex,
+            printEndColIndex,
+          } = getPositionPrintColGroup(
+            headerColGroup,
+            Math.abs(_scrollLeft) + _frozenPanelWidth,
+            Math.abs(_scrollLeft) +
+              _frozenPanelWidth +
+              (_CTInnerWidth -
+                _asidePanelWidth -
+                _frozenPanelWidth -
+                _rightPanelWidth),
+          );
 
-        newState.visibleHeaderColGroup = headerColGroup.slice(
-          printStartColIndex,
-          printEndColIndex + 1,
-        );
-        newState.visibleBodyRowData = getTableByStartEndColumnIndex(
-          bodyRowData,
-          printStartColIndex + frozenColumnIndex,
-          printEndColIndex + frozenColumnIndex,
-        );
-        newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
-          bodyGroupingData,
-          printStartColIndex + frozenColumnIndex,
-          printEndColIndex + frozenColumnIndex,
-        );
+          newState.printStartColIndex = printStartColIndex;
+          newState.printEndColIndex = printEndColIndex;
+
+          newState.visibleHeaderColGroup = headerColGroup.slice(
+            printStartColIndex,
+            printEndColIndex + 1,
+          );
+          newState.visibleBodyRowData = getTableByStartEndColumnIndex(
+            bodyRowData,
+            printStartColIndex + frozenColumnIndex,
+            printEndColIndex + frozenColumnIndex,
+          );
+          newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
+            bodyGroupingData,
+            printStartColIndex + frozenColumnIndex,
+            printEndColIndex + frozenColumnIndex,
+          );
+        }
+      }
+
+      if (typeof _scrollTop !== 'undefined') {
+        if (clientHeight >= scrollHeight + _scrollTop) {
+          endOfScrollTop = true;
+        }
+      }
+
+      if (typeof _scrollLeft !== 'undefined') {
+        if (clientWidth >= scrollWidth + _scrollLeft) {
+          endOfScrollLeft = true;
+        }
+      }
+
+      if ((endOfScrollTop || endOfScrollLeft) && onScrollEnd) {
+        onScrollEnd({
+          endOfScrollTop,
+          endOfScrollLeft,
+        });
       }
     }
 
@@ -515,6 +549,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         const { rowIndex, checked } = param;
 
         let rowSelected: boolean = false;
+        let selectedAll: boolean = listSelectedAll;
+
         if (checked === true) {
           rowSelected = true;
         } else if (checked === false) {
@@ -523,9 +559,13 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           rowSelected = !filteredList[rowIndex].__selected__;
         }
 
+        if (!rowSelected) {
+          selectedAll = false;
+        }
         filteredList[rowIndex].__selected__ = rowSelected;
 
         this.setStoreState({
+          listSelectedAll: selectedAll,
           selectedRowIndex: rowIndex,
           selectedRowIndexSelected: rowSelected,
         });

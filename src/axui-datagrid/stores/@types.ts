@@ -14,6 +14,8 @@ export type formatterFunction = intfs.formatterFunction;
 
 export type userCallBackFunction = intfs.userCallBackFunction;
 
+export type onScrollEndFunctionParam = intfs.IonScrollEndFunctionParam;
+
 export type DataGridCol = intfs.IDataGridCol;
 
 export type DataGridColumn = intfs.IDataGridColumn;
@@ -140,7 +142,7 @@ export type DataGridState = {
   loading?: boolean;
   loadingData?: boolean;
   calculatedStyles?: boolean;
-  dragging?: boolean;
+
   data?: any[];
   filteredList?: any[];
   listSelectedAll?: boolean;
@@ -152,7 +154,7 @@ export type DataGridState = {
 
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
-
+  onScrollEnd?: (param: onScrollEndFunctionParam) => void;
   isInlineEditing?: boolean;
   inlineEditingCell?: intfs.IDataGridEditingCell;
 
@@ -162,6 +164,8 @@ export type DataGridState = {
   isColumnFilter?: boolean | number;
   scrollLeft?: number;
   scrollTop?: number;
+  endOfScrollTop?: boolean;
+  endOfScrollLeft?: boolean;
   selectionRows?: {};
   selectionCols?: {};
   focusedRow?: number;
@@ -226,7 +230,8 @@ export type DataGrid = {
 
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void;
-  onScrollEnd?: () => void;
+  onScrollEnd?: (param: onScrollEndFunctionParam) => void;
+  onChangeSelected?: () => void;
   loading?: boolean;
   loadingData?: boolean;
 };

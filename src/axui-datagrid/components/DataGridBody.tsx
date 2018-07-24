@@ -178,7 +178,8 @@ class DataGridBody extends React.Component<IProps, IState> {
           const {
             scrollLeft: newScrollLeft,
             scrollTop: newScrollTop,
-            endScroll,
+            endOfScrollTop,
+            endOfScrollLeft,
           } = getScrollPosition(_scrollLeft, _scrollTop, {
             scrollWidth: scrollContentWidth,
             scrollHeight: scrollContentHeight,
@@ -195,7 +196,7 @@ class DataGridBody extends React.Component<IProps, IState> {
             _moving,
           );
 
-          return !endScroll;
+          return !endOfScrollTop && !endOfScrollLeft;
         };
 
         let x1: number = startMousePosition.x - leftPadding;
@@ -244,7 +245,6 @@ class DataGridBody extends React.Component<IProps, IState> {
         } else {
           setStateCall(
             {
-              dragging: true,
               scrollTop: scrollTop,
               scrollLeft: scrollLeft,
               selectionStartOffset: {
@@ -276,7 +276,6 @@ class DataGridBody extends React.Component<IProps, IState> {
           clearInterval(rootObject.timer);
         }
         setStoreState({
-          dragging: false,
           selectionStartOffset: undefined,
           selectionEndOffset: undefined,
           selectionMinOffset: undefined,
@@ -321,7 +320,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       } else {
         // 셀렉션 저장정보 초기화
         setStoreState({
-          dragging: false,
           selectionStartOffset: undefined,
           selectionEndOffset: undefined,
           selectionMinOffset: undefined,
@@ -374,7 +372,7 @@ class DataGridBody extends React.Component<IProps, IState> {
     };
     const procClickRowSelector = () => {
       dispatch(DispatchTypes.SELECT, {
-        rowIndex: selectStartedRow
+        rowIndex: selectStartedRow,
       });
     };
 

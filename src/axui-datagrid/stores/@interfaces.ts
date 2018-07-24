@@ -42,6 +42,11 @@ export type editorFunction = (editorData: types.DataGridFormatterData) => void;
 
 export type userCallBackFunction = (param?: any) => void;
 
+export interface IonScrollEndFunctionParam {
+  endOfScrollTop?: boolean;
+  endOfScrollLeft?: boolean;
+}
+
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;
 }

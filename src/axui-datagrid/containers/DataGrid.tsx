@@ -316,6 +316,7 @@ class DataGrid extends React.Component<IProps, IState> {
       style = {},
       onBeforeEvent,
       onAfterEvent,
+      onScrollEnd,
       height = DataGrid.defaultHeight,
       loading = false,
       loadingData = false,
@@ -344,6 +345,7 @@ class DataGrid extends React.Component<IProps, IState> {
         height,
         onBeforeEvent,
         onAfterEvent,
+        onScrollEnd,
         options: this.getOptions(options),
       });
     }

@@ -148,7 +148,6 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
   onMouseDownScrollBar = (e: any, barName: ScrollTypes) => {
     const {
-      dragging = false,
       scrollLeft = 0,
       scrollTop = 0,
       styles = {},
@@ -180,9 +179,6 @@ class DatagridScroll extends React.Component<IProps, IState> {
     let startMousePosition = getMousePosition(e);
 
     const onMouseMove = (ee: any) => {
-      if (!dragging) {
-        setStoreState({ dragging: true });
-      }
       const { x, y } = getMousePosition(ee);
 
       const processor = {
@@ -222,8 +218,7 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
     const offEvent = (ee: any) => {
       ee.preventDefault();
-
-      setStoreState({ dragging: false });
+      // console.log('off');
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);

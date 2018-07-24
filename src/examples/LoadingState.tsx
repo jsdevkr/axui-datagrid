@@ -43,6 +43,9 @@ class LoadingState extends React.Component<any, any> {
             columns={columns}
             data={data}
             options={options}
+            onScrollEnd={(param: any) => {
+              console.log('scroll end' + param);
+            }}
           />
           <Divider />
           <h3>Set Loading state</h3>

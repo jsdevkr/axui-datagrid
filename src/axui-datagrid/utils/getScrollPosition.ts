@@ -13,34 +13,36 @@ export function getScrollPosition(
     clientHeight: number;
   },
 ) {
-  let endScroll = false;
+  let endOfScrollTop = false;
+  let endOfScrollLeft = false;
 
   if (clientHeight > scrollHeight) {
     scrollTop = 0;
   } else if (scrollTop > 0) {
     scrollTop = 0;
-    endScroll = true;
+    endOfScrollTop = true;
   } else if (clientHeight > scrollHeight + scrollTop) {
     // scrollHeight
     scrollTop = clientHeight - scrollHeight;
-    endScroll = true;
+    endOfScrollTop = true;
   }
 
   if (clientWidth > scrollWidth) {
     scrollLeft = 0;
   } else if (scrollLeft > 0) {
     scrollLeft = 0;
-    endScroll = true;
+    endOfScrollLeft = true;
   } else if (clientWidth > scrollWidth + scrollLeft) {
     // scrollHeight
     scrollLeft = clientWidth - scrollWidth;
-    endScroll = true;
+    endOfScrollLeft = true;
   }
 
   return {
     scrollLeft,
     scrollTop,
-    endScroll,
+    endOfScrollTop,
+    endOfScrollLeft,
   };
 }
 

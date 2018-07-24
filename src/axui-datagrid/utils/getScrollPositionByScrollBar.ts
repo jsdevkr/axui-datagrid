@@ -18,20 +18,23 @@ export function getScrollPositionByScrollBar(
     SH = scrollContentHeight - scrollContentContainerHeight,
   }: any,
 ) {
-  let { scrollLeft, scrollTop } = getScrollPosition(
-    -scrollBarLeft * SW / BW,
-    -scrollBarTop * SH / BH,
-    {
-      scrollWidth: scrollContentWidth,
-      scrollHeight: scrollContentHeight,
-      clientWidth: scrollContentContainerWidth,
-      clientHeight: scrollContentContainerHeight,
-    },
-  );
+  let {
+    scrollLeft,
+    scrollTop,
+    endOfScrollLeft,
+    endOfScrollTop,
+  } = getScrollPosition(-scrollBarLeft * SW / BW, -scrollBarTop * SH / BH, {
+    scrollWidth: scrollContentWidth,
+    scrollHeight: scrollContentHeight,
+    clientWidth: scrollContentContainerWidth,
+    clientHeight: scrollContentContainerHeight,
+  });
 
   return {
     scrollLeft,
     scrollTop,
+    endOfScrollLeft,
+    endOfScrollTop,
   };
 }
 
