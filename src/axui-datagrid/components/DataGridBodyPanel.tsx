@@ -23,22 +23,16 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       filteredList = [],
       asideColGroup = [],
       leftHeaderColGroup = [],
-      headerColGroup = [],
       visibleHeaderColGroup = [],
 
       asideBodyRowData = { rows: [{ cols: [] }] },
       leftBodyRowData = { rows: [{ cols: [] }] },
-      bodyRowData = { rows: [{ cols: [] }] },
       visibleBodyRowData = { rows: [{ cols: [] }] },
-      visibleBodyGroupingData = { rows: [{ cols: [] }] },
       panelName,
       containerStyle = {},
       panelScrollConfig = {},
       panelLeft = 0,
       panelTop = 0,
-
-      printStartColIndex = 0,
-      printEndColIndex = 0,
       styles = {},
     } = this.props;
 

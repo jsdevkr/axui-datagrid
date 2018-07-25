@@ -1,20 +1,13 @@
 import * as React from 'react';
 
 import { types, KeyCodes, DispatchTypes } from '../stores';
-import { DataGrid } from '../containers';
 import {
-  makeHeaderTable,
-  makeBodyRowTable,
-  makeBodyRowMap,
-  divideTableByFrozenColumnIndex,
   calculateDimensions,
-  mergeAll,
   throttle,
   getScrollPosition,
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
   getNode,
-  getOuterHeight,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -251,7 +244,6 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       bodyGroupingData = { rows: [{ cols: [] }] },
       onScrollEnd,
     } = this.state;
-    const { styles: propStyles } = this.props;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
     const {

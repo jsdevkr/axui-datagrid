@@ -22,12 +22,6 @@ class DataGridPage extends React.Component<IProps, IState> {
       options = {},
       styles = {},
       setStoreState,
-      colGroup = [],
-    } = this.props;
-
-    const {
-      printStartColIndex = 0,
-      printEndColIndex = colGroup.length,
     } = this.props;
 
     const { frozenRowIndex = 0 } = options;

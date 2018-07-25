@@ -1,4 +1,4 @@
-import { getOuterWidth, getOuterHeight } from './getWidthHeight';
+import { getOuterWidth } from './getWidthHeight';
 import { types } from '../stores';
 import setColGroupWidth from './setColGroupWidth';
 

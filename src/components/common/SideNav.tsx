@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Menus } from 'routes';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu } from 'antd';
 const axuiLogo = require('assets/axui-logo.png');
 const GitHubButton = require('react-github-button');
 
@@ -62,7 +62,7 @@ class SideNav extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { leftMenuWidth, location } = this.props;
+    const { leftMenuWidth } = this.props;
     const { menus, mounted, defaultOpenKeys, defaultSelectedKeys } = this.state;
 
     if (!mounted) {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Divider } from 'antd';
+import { Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 

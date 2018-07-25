@@ -1,7 +1,6 @@
 import * as React from 'react';
 import 'styles/globals';
-import { Button, Divider } from 'antd';
-import { CodeViewer, Wrapper, Segment } from 'components';
+import { Wrapper, Segment } from 'components';
 
 interface IProps {}
 interface IState {}

@@ -81,7 +81,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       focusedCol = 0,
       setStoreState,
       isInlineEditing,
-      scrollTop = 0,
     } = this.props;
 
     const proc = {
@@ -123,7 +122,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       options = {},
       styles = {},
       isInlineEditing = false,
-      inlineEditingCell = {},
     } = this.props;
 
     const {

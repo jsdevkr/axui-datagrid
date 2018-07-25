@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, DispatchTypes } from '../stores';
+import { DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { isNumber, uniqBy } from '../utils';
@@ -86,7 +86,6 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
       styles = {},
       scrollLeft = 0,
       filterInfo = {},
-      filteredList = [],
       data = [],
     } = this.props;
     const { columnKeys: optionColumnKeys = {} } = options;

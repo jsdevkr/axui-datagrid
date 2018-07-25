@@ -1,14 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { types } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
-import {
-  classNames as CX,
-  throttle,
-  getInnerHeight,
-  arrayFromRange,
-} from '../utils';
+import { throttle, getInnerHeight, arrayFromRange } from '../utils';
 
 interface IProps extends IDataGridStore {
   filterOptions: any[];

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import DataGridHeaderPanel from './DataGridHeaderPanel';

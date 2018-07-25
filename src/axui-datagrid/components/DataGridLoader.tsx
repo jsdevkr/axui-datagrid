@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { classNames as CX, isFunction, getScrollPosition } from '../utils';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
