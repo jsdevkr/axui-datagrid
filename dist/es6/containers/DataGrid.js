@@ -127,7 +127,7 @@ class DataGrid extends React.Component {
     }
     render() {
         const { mounted } = this.state;
-        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, height = DataGrid.defaultHeight, loading = false, loadingData = false, } = this.props;
+        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, height = DataGrid.defaultHeight, loading = false, loadingData = false, } = this.props;
         let providerProps = {};
         let gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -147,6 +147,7 @@ class DataGrid extends React.Component {
                 height,
                 onBeforeEvent,
                 onAfterEvent,
+                onScrollEnd,
                 options: this.getOptions(options),
             });
         }

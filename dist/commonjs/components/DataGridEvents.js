@@ -339,24 +339,34 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _a = _this.props, loading = _a.loading, loadingData = _a.loadingData;
             var proc = (_b = {},
                 _b[stores_1.EventNames.WHEEL] = function () {
-                    _this.onWheel(e);
+                    if (!loadingData) {
+                        _this.onWheel(e);
+                    }
+                    else {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 },
                 _b[stores_1.EventNames.KEYDOWN] = function () {
-                    _this.onKeyDown(e);
+                    if (!loadingData) {
+                        _this.onKeyDown(e);
+                    }
                 },
                 _b[stores_1.EventNames.KEYUP] = function () {
-                    _this.onKeyUp(e);
+                    if (!loadingData) {
+                        _this.onKeyUp(e);
+                    }
                 },
                 _b[stores_1.EventNames.MOUSEDOWN] = function () { },
                 _b[stores_1.EventNames.MOUSEUP] = function () { },
                 _b[stores_1.EventNames.CLICK] = function () { },
                 _b);
-            if (eventName in proc && !loading && !loadingData) {
-                if (_this.props.onBeforeEvent) {
+            if (eventName in proc && !loading) {
+                if (_this.props.onBeforeEvent && !loadingData) {
                     _this.props.onBeforeEvent(e, eventName);
                 }
                 proc[eventName]();
-                if (_this.props.onAfterEvent) {
+                if (_this.props.onAfterEvent && !loadingData) {
                     _this.props.onAfterEvent(e, eventName);
                 }
             }

@@ -26,6 +26,18 @@ class LoadingState extends React.Component<any, any> {
     };
   }
 
+  onScrollEnd = () => {
+    this.setState({
+      loadingData: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        loadingData: false,
+      });
+    }, 1000);
+  };
+
   render() {
     const { loading, loadingData, height, columns, data, options } = this.state;
 
@@ -44,15 +56,16 @@ class LoadingState extends React.Component<any, any> {
             data={data}
             options={options}
             onScrollEnd={(param: any) => {
-              console.log('scroll end' + param);
+              // console.log('scroll end' + param);
+              this.onScrollEnd();
             }}
           />
           <Divider />
           <h3>Set Loading state</h3>
           <Checkbox
+            checked={this.state.loading}
             onChange={e => {
               this.setState({
-                test: '2222222',
                 loading: e.target.checked,
               });
             }}
@@ -60,6 +73,7 @@ class LoadingState extends React.Component<any, any> {
             loading
           </Checkbox>
           <Checkbox
+            checked={this.state.loadingData}
             onChange={e => {
               this.setState({
                 loadingData: e.target.checked,

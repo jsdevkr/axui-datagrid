@@ -243,6 +243,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     const {
       filteredList = [],
       scrollLeft = 0,
+      scrollTop = 0,
       options = {},
       styles = {},
       headerColGroup = [],
@@ -278,7 +279,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       let endOfScrollTop: boolean = false;
       let endOfScrollLeft: boolean = false;
 
-      if (typeof _scrollLeft !== 'undefined') {
+      if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
         if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
           const {
             printStartColIndex,
@@ -312,17 +313,14 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
             printEndColIndex + frozenColumnIndex,
           );
         }
-      }
-
-      if (typeof _scrollTop !== 'undefined') {
-        if (clientHeight >= scrollHeight + _scrollTop) {
-          endOfScrollTop = true;
+        if (clientWidth >= scrollWidth + _scrollLeft) {
+          endOfScrollLeft = true;
         }
       }
 
-      if (typeof _scrollLeft !== 'undefined') {
-        if (clientWidth >= scrollWidth + _scrollLeft) {
-          endOfScrollLeft = true;
+      if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+        if (clientHeight >= scrollHeight + _scrollTop) {
+          endOfScrollTop = true;
         }
       }
 

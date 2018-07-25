@@ -317,24 +317,34 @@ class DataGridEvents extends React.Component {
             const { loading, loadingData } = this.props;
             const proc = {
                 [stores_1.EventNames.WHEEL]: () => {
-                    this.onWheel(e);
+                    if (!loadingData) {
+                        this.onWheel(e);
+                    }
+                    else {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 },
                 [stores_1.EventNames.KEYDOWN]: () => {
-                    this.onKeyDown(e);
+                    if (!loadingData) {
+                        this.onKeyDown(e);
+                    }
                 },
                 [stores_1.EventNames.KEYUP]: () => {
-                    this.onKeyUp(e);
+                    if (!loadingData) {
+                        this.onKeyUp(e);
+                    }
                 },
                 [stores_1.EventNames.MOUSEDOWN]: () => { },
                 [stores_1.EventNames.MOUSEUP]: () => { },
                 [stores_1.EventNames.CLICK]: () => { },
             };
-            if (eventName in proc && !loading && !loadingData) {
-                if (this.props.onBeforeEvent) {
+            if (eventName in proc && !loading) {
+                if (this.props.onBeforeEvent && !loadingData) {
                     this.props.onBeforeEvent(e, eventName);
                 }
                 proc[eventName]();
-                if (this.props.onAfterEvent) {
+                if (this.props.onAfterEvent && !loadingData) {
                     this.props.onAfterEvent(e, eventName);
                 }
             }

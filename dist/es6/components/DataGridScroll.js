@@ -9,7 +9,10 @@ class DatagridScroll extends React.Component {
         super(...arguments);
         this.state = {};
         this.onClickScrollArrow = (e, direction) => {
-            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
+            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, loading, loadingData, } = this.props;
+            if (loading || loadingData) {
+                return false;
+            }
             const { scrollContentWidth = 0, scrollContentContainerWidth = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             const processor = {
                 [stores_1.DirectionTypes.UP]: () => {
@@ -44,9 +47,13 @@ class DatagridScroll extends React.Component {
                 },
             };
             processor[direction]();
+            return true;
         };
         this.onClickScrollTrack = (e, barName) => {
-            const { getRootNode, scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
+            const { getRootNode, scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, loading, loadingData, } = this.props;
+            if (loading || loadingData) {
+                return false;
+            }
             e.preventDefault();
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, pageButtonsContainerWidth = 0, } = styles;
             const currScrollBarLeft = -scrollLeft *
@@ -82,9 +89,13 @@ class DatagridScroll extends React.Component {
             if (e.target.getAttribute('data-scroll')) {
                 processor[barName]();
             }
+            return true;
         };
         this.onMouseDownScrollBar = (e, barName) => {
-            const { dragging = false, scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
+            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, loading, loadingData, } = this.props;
+            if (loading || loadingData) {
+                return false;
+            }
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             e.preventDefault();
             const currScrollBarLeft = -scrollLeft *
@@ -95,9 +106,6 @@ class DatagridScroll extends React.Component {
                 (scrollContentHeight - scrollContentContainerHeight);
             let startMousePosition = utils_1.getMousePosition(e);
             const onMouseMove = (ee) => {
-                if (!dragging) {
-                    setStoreState({ dragging: true });
-                }
                 const { x, y } = utils_1.getMousePosition(ee);
                 const processor = {
                     [stores_1.ScrollTypes.VERTICAL]: () => {
@@ -119,7 +127,7 @@ class DatagridScroll extends React.Component {
             };
             const offEvent = (ee) => {
                 ee.preventDefault();
-                setStoreState({ dragging: false });
+                // console.log('off');
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
@@ -127,6 +135,7 @@ class DatagridScroll extends React.Component {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', offEvent);
             document.addEventListener('mouseleave', offEvent);
+            return true;
         };
     }
     render() {

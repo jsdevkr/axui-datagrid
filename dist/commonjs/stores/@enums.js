@@ -52,6 +52,8 @@ var DispatchTypes;
     DispatchTypes[DispatchTypes["FILTER"] = 2] = "FILTER";
     DispatchTypes[DispatchTypes["UPDATE"] = 3] = "UPDATE";
     DispatchTypes[DispatchTypes["RESIZE_COL"] = 4] = "RESIZE_COL";
+    DispatchTypes[DispatchTypes["SELECT"] = 5] = "SELECT";
+    DispatchTypes[DispatchTypes["SELECT_ALL"] = 6] = "SELECT_ALL";
 })(DispatchTypes = exports.DispatchTypes || (exports.DispatchTypes = {}));
 var PageButtonActions;
 (function (PageButtonActions) {

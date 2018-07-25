@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
+var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridBodyPanel_1 = require("./DataGridBodyPanel");
@@ -21,7 +22,10 @@ var DataGridBody = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onMouseDownBody = function (e) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _a.scrollTop, scrollTop = _f === void 0 ? 0 : _f, _g = _a.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _a.focusedCol, focusedCol = _h === void 0 ? 0 : _h, isInlineEditing = _a.isInlineEditing, _j = _a.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _a.styles, styles = _k === void 0 ? {} : _k, setStoreState = _a.setStoreState, getRootNode = _a.getRootNode, _l = _a.rootObject, rootObject = _l === void 0 ? {} : _l;
+            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _a.scrollTop, scrollTop = _f === void 0 ? 0 : _f, _g = _a.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _a.focusedCol, focusedCol = _h === void 0 ? 0 : _h, isInlineEditing = _a.isInlineEditing, _j = _a.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _a.styles, styles = _k === void 0 ? {} : _k, setStoreState = _a.setStoreState, dispatch = _a.dispatch, getRootNode = _a.getRootNode, _l = _a.rootObject, rootObject = _l === void 0 ? {} : _l, loading = _a.loading, loadingData = _a.loadingData;
+            if (loading || loadingData) {
+                return false;
+            }
             var _m = styles.frozenPanelWidth, frozenPanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelHeight, frozenPanelHeight = _o === void 0 ? 0 : _o, _p = styles.headerHeight, headerHeight = _p === void 0 ? 0 : _p, _q = styles.bodyHeight, bodyHeight = _q === void 0 ? 0 : _q, _r = styles.CTInnerWidth, CTInnerWidth = _r === void 0 ? 0 : _r, _s = styles.verticalScrollerWidth, verticalScrollerWidth = _s === void 0 ? 0 : _s, _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.asidePanelWidth, asidePanelWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y;
             var startMousePosition = utils_1.getMousePosition(e);
             var spanType = e.target.getAttribute('data-span');
@@ -121,13 +125,13 @@ var DataGridBody = /** @class */ (function (_super) {
                             scrollHeight: scrollContentHeight,
                             clientWidth: scrollContentContainerWidth,
                             clientHeight: scrollContentContainerHeight,
-                        }), newScrollLeft = _d.scrollLeft, newScrollTop = _d.scrollTop, endScroll = _d.endScroll;
+                        }), newScrollLeft = _d.scrollLeft, newScrollTop = _d.scrollTop, endOfScrollTop = _d.endOfScrollTop, endOfScrollLeft = _d.endOfScrollLeft;
                         setStateCall({
                             scrollTop: newScrollTop,
                             scrollLeft: newScrollLeft,
                             selectionEndOffset: propsSelectionEndOffset,
                         }, _moving);
-                        return !endScroll;
+                        return !endOfScrollTop && !endOfScrollLeft;
                     };
                     var x1 = startMousePosition.x - leftPadding;
                     var y1 = startMousePosition.y - topPadding;
@@ -173,7 +177,6 @@ var DataGridBody = /** @class */ (function (_super) {
                     }
                     else {
                         setStateCall({
-                            dragging: true,
                             scrollTop: scrollTop,
                             scrollLeft: scrollLeft,
                             selectionStartOffset: {
@@ -201,7 +204,6 @@ var DataGridBody = /** @class */ (function (_super) {
                         clearInterval(rootObject.timer);
                     }
                     setStoreState({
-                        dragging: false,
                         selectionStartOffset: undefined,
                         selectionEndOffset: undefined,
                         selectionMinOffset: undefined,
@@ -240,7 +242,6 @@ var DataGridBody = /** @class */ (function (_super) {
                 else {
                     // 셀렉션 저장정보 초기화
                     setStoreState({
-                        dragging: false,
                         selectionStartOffset: undefined,
                         selectionEndOffset: undefined,
                         selectionMinOffset: undefined,
@@ -288,6 +289,11 @@ var DataGridBody = /** @class */ (function (_super) {
                 setStoreState(state);
                 var _a;
             };
+            var procClickRowSelector = function () {
+                dispatch(stores_1.DispatchTypes.SELECT, {
+                    rowIndex: selectStartedRow,
+                });
+            };
             // 선택이 시작된 row / col
             var selectStartedRow = getRowIndex(startY, startScrollTop);
             var selectStartedCol = getColIndex(startX, startScrollLeft);
@@ -297,12 +303,16 @@ var DataGridBody = /** @class */ (function (_super) {
                 // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
                 return false;
             }
-            if (spanType === 'lineNumber') {
-                // click lineNumber
-                procClickLinenumber();
-            }
-            else {
-                procBodySelect();
+            switch (spanType) {
+                case 'lineNumber':
+                    procClickLinenumber();
+                    break;
+                case 'rowSelector':
+                    procClickRowSelector();
+                    break;
+                default:
+                    procBodySelect();
+                    break;
             }
             return true;
         };

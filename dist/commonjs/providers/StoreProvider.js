@@ -23,7 +23,6 @@ var stores_1 = require("../stores");
 var utils_1 = require("../utils");
 var formatter_1 = require("../functions/formatter");
 var store = {
-    dragging: false,
     sortInfo: {},
     isColumnFilter: false,
     scrollLeft: 0,
@@ -43,6 +42,7 @@ var store = {
     loadingData: false,
     data: [],
     filteredList: [],
+    listSelectedAll: false,
     colGroup: [],
     asideColGroup: [],
     leftHeaderColGroup: [],
@@ -73,24 +73,44 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _a.bodyRowData, bodyRowData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.bodyGroupingData, bodyGroupingData = _h === void 0 ? { rows: [{ cols: [] }] } : _h;
-            var _j = options.frozenColumnIndex, frozenColumnIndex = _j === void 0 ? 0 : _j;
+            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
+            var propStyles = _this.props.styles;
+            var _k = options.frozenColumnIndex, frozenColumnIndex = _k === void 0 ? 0 : _k;
             var CTInnerWidth = styles.CTInnerWidth;
-            var _scrollLeft = newState.scrollLeft, _k = newState.styles, _styles = _k === void 0 ? {} : _k, _filteredList = newState.filteredList;
-            if (typeof _scrollLeft !== 'undefined') {
-                var _l = __assign({}, styles, _styles), _m = _l.CTInnerWidth, _CTInnerWidth = _m === void 0 ? 0 : _m, _o = _l.frozenPanelWidth, _frozenPanelWidth = _o === void 0 ? 0 : _o, _p = _l.asidePanelWidth, _asidePanelWidth = _p === void 0 ? 0 : _p, _q = _l.rightPanelWidth, _rightPanelWidth = _q === void 0 ? 0 : _q;
-                if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
-                    var _r = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
-                        _frozenPanelWidth +
-                        (_CTInnerWidth -
-                            _asidePanelWidth -
-                            _frozenPanelWidth -
-                            _rightPanelWidth)), printStartColIndex = _r.printStartColIndex, printEndColIndex = _r.printEndColIndex;
-                    newState.printStartColIndex = printStartColIndex;
-                    newState.printEndColIndex = printEndColIndex;
-                    newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
-                    newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-                    newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _l = newState.styles, _styles = _l === void 0 ? {} : _l, _filteredList = newState.filteredList;
+            if (typeof _scrollLeft !== 'undefined' ||
+                typeof _scrollTop !== 'undefined') {
+                var _m = __assign({}, styles, _styles), _o = _m.CTInnerWidth, _CTInnerWidth = _o === void 0 ? 0 : _o, _p = _m.frozenPanelWidth, _frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _m.asidePanelWidth, _asidePanelWidth = _q === void 0 ? 0 : _q, _r = _m.rightPanelWidth, _rightPanelWidth = _r === void 0 ? 0 : _r, _s = _m.scrollContentWidth, scrollWidth = _s === void 0 ? 0 : _s, _t = _m.scrollContentHeight, scrollHeight = _t === void 0 ? 0 : _t, _u = _m.scrollContentContainerWidth, clientWidth = _u === void 0 ? 0 : _u, _v = _m.scrollContentContainerHeight, clientHeight = _v === void 0 ? 0 : _v;
+                var endOfScrollTop = false;
+                var endOfScrollLeft = false;
+                if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
+                    if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+                        var _w = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
+                            _frozenPanelWidth +
+                            (_CTInnerWidth -
+                                _asidePanelWidth -
+                                _frozenPanelWidth -
+                                _rightPanelWidth)), printStartColIndex = _w.printStartColIndex, printEndColIndex = _w.printEndColIndex;
+                        newState.printStartColIndex = printStartColIndex;
+                        newState.printEndColIndex = printEndColIndex;
+                        newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
+                        newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                        newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                    }
+                    if (clientWidth >= scrollWidth + _scrollLeft) {
+                        endOfScrollLeft = true;
+                    }
+                }
+                if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (clientHeight >= scrollHeight + _scrollTop) {
+                        endOfScrollTop = true;
+                    }
+                }
+                if ((endOfScrollTop || endOfScrollLeft) && onScrollEnd) {
+                    onScrollEnd({
+                        endOfScrollTop: endOfScrollTop,
+                        endOfScrollLeft: endOfScrollLeft,
+                    });
                 }
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
@@ -99,12 +119,12 @@ var StoreProvider = /** @class */ (function (_super) {
             _this.setState(newState);
         };
         _this.dispatch = function (dispatchType, param) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.colGroup, colGroup = _d === void 0 ? [] : _d, getRootNode = _a.getRootNode, _e = _a.focusedRow, focusedRow = _e === void 0 ? 0 : _e, _f = _a.sortInfo, sortInfo = _f === void 0 ? {} : _f, _g = _a.options, options = _g === void 0 ? {} : _g;
-            var _h = options.columnKeys, optionColumnKeys = _h === void 0 ? {} : _h;
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.listSelectedAll, listSelectedAll = _c === void 0 ? false : _c, _d = _a.scrollLeft, scrollLeft = _d === void 0 ? 0 : _d, _e = _a.colGroup, colGroup = _e === void 0 ? [] : _e, getRootNode = _a.getRootNode, _f = _a.focusedRow, focusedRow = _f === void 0 ? 0 : _f, _g = _a.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _a.options, options = _h === void 0 ? {} : _h;
+            var _j = options.columnKeys, optionColumnKeys = _j === void 0 ? {} : _j;
             var rootNode = utils_1.getNode(getRootNode);
-            var _j = _this.state.filteredList, filteredList = _j === void 0 ? [] : _j;
-            var proc = (_k = {},
-                _k[stores_1.DispatchTypes.FILTER] = function () {
+            var _k = _this.state.filteredList, filteredList = _k === void 0 ? [] : _k;
+            var proc = (_l = {},
+                _l[stores_1.DispatchTypes.FILTER] = function () {
                     var colIndex = param.colIndex, filterInfo = param.filterInfo;
                     var checkAll = filterInfo[colIndex] === false
                         ? true
@@ -143,69 +163,71 @@ var StoreProvider = /** @class */ (function (_super) {
                         filterInfo: filterInfo,
                     });
                 },
-                _k[stores_1.DispatchTypes.SORT] = function () {
+                _l[stores_1.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
-                    var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
-                    var currentSortInfo = {};
-                    var seq = 0;
-                    var sortInfoArray = [];
-                    var getValueByKey = function (_item, _key) {
-                        return _item[_key] || '';
-                    };
-                    for (var k in sortInfo) {
-                        if (sortInfo[k]) {
-                            currentSortInfo[k] = sortInfo[k];
-                            seq++;
-                        }
-                    }
-                    if (currentSortInfo[colKey]) {
-                        if (currentSortInfo[colKey].orderBy === 'desc') {
-                            currentSortInfo[colKey].orderBy = 'asc';
-                        }
-                        else if (currentSortInfo[colKey].orderBy === 'asc') {
-                            delete currentSortInfo[colKey];
-                        }
-                    }
-                    else {
-                        currentSortInfo[colKey] = {
-                            seq: seq++,
-                            orderBy: 'desc',
+                    if (typeof colIndex !== 'undefined') {
+                        var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
+                        var currentSortInfo = {};
+                        var seq = 0;
+                        var sortInfoArray_1 = [];
+                        var getValueByKey_1 = function (_item, _key) {
+                            return _item[_key] || '';
                         };
-                    }
-                    for (var k in currentSortInfo) {
-                        if (currentSortInfo[k]) {
-                            sortInfoArray[currentSortInfo[k].seq] = {
-                                key: k,
-                                order: currentSortInfo[k].orderBy,
+                        for (var k in sortInfo) {
+                            if (sortInfo[k]) {
+                                currentSortInfo[k] = sortInfo[k];
+                                seq++;
+                            }
+                        }
+                        if (currentSortInfo[colKey]) {
+                            if (currentSortInfo[colKey].orderBy === 'desc') {
+                                currentSortInfo[colKey].orderBy = 'asc';
+                            }
+                            else if (currentSortInfo[colKey].orderBy === 'asc') {
+                                delete currentSortInfo[colKey];
+                            }
+                        }
+                        else {
+                            currentSortInfo[colKey] = {
+                                seq: seq++,
+                                orderBy: 'desc',
                             };
                         }
-                    }
-                    sortInfoArray = sortInfoArray.filter(function (o) { return typeof o !== 'undefined'; });
-                    var i = 0, l = sortInfoArray.length, aValue, bValue;
-                    var sortedList = filteredList.sort(function (a, b) {
-                        for (i = 0; i < l; i++) {
-                            aValue = getValueByKey(a, sortInfoArray[i].key);
-                            bValue = getValueByKey(b, sortInfoArray[i].key);
-                            if (typeof aValue !== typeof bValue) {
-                                aValue = '' + aValue;
-                                bValue = '' + bValue;
-                            }
-                            if (aValue < bValue) {
-                                return sortInfoArray[i].order === 'asc' ? -1 : 1;
-                            }
-                            else if (aValue > bValue) {
-                                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                        for (var k in currentSortInfo) {
+                            if (currentSortInfo[k]) {
+                                sortInfoArray_1[currentSortInfo[k].seq] = {
+                                    key: k,
+                                    order: currentSortInfo[k].orderBy,
+                                };
                             }
                         }
-                    });
-                    _this.setStoreState({
-                        sortInfo: currentSortInfo,
-                        filteredList: sortedList,
-                        isInlineEditing: false,
-                        inlineEditingCell: {},
-                    });
+                        sortInfoArray_1 = sortInfoArray_1.filter(function (o) { return typeof o !== 'undefined'; });
+                        var i_1 = 0, l_1 = sortInfoArray_1.length, aValue_1, bValue_1;
+                        var sortedList = filteredList.sort(function (a, b) {
+                            for (i_1 = 0; i_1 < l_1; i_1++) {
+                                aValue_1 = getValueByKey_1(a, sortInfoArray_1[i_1].key);
+                                bValue_1 = getValueByKey_1(b, sortInfoArray_1[i_1].key);
+                                if (typeof aValue_1 !== typeof bValue_1) {
+                                    aValue_1 = '' + aValue_1;
+                                    bValue_1 = '' + bValue_1;
+                                }
+                                if (aValue_1 < bValue_1) {
+                                    return sortInfoArray_1[i_1].order === 'asc' ? -1 : 1;
+                                }
+                                else if (aValue_1 > bValue_1) {
+                                    return sortInfoArray_1[i_1].order === 'asc' ? 1 : -1;
+                                }
+                            }
+                        });
+                        _this.setStoreState({
+                            sortInfo: currentSortInfo,
+                            filteredList: sortedList,
+                            isInlineEditing: false,
+                            inlineEditingCell: {},
+                        });
+                    }
                 },
-                _k[stores_1.DispatchTypes.UPDATE] = function () {
+                _l[stores_1.DispatchTypes.UPDATE] = function () {
                     var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
                     var key = colGroup[colIndex].key;
                     var focusRow = focusedRow;
@@ -241,7 +263,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     }
                     var _a;
                 },
-                _k[stores_1.DispatchTypes.RESIZE_COL] = function () {
+                _l[stores_1.DispatchTypes.RESIZE_COL] = function () {
                     var col = param.col, newWidth = param.newWidth;
                     var newState = __assign({}, _this.state);
                     if (newState.colGroup) {
@@ -257,9 +279,51 @@ var StoreProvider = /** @class */ (function (_super) {
                         columnResizing: false,
                     });
                 },
-                _k);
+                _l[stores_1.DispatchTypes.SELECT] = function () {
+                    var rowIndex = param.rowIndex, checked = param.checked;
+                    var rowSelected = false;
+                    var selectedAll = listSelectedAll;
+                    if (checked === true) {
+                        rowSelected = true;
+                    }
+                    else if (checked === false) {
+                        rowSelected = false;
+                    }
+                    else {
+                        rowSelected = !filteredList[rowIndex].__selected__;
+                    }
+                    if (!rowSelected) {
+                        selectedAll = false;
+                    }
+                    filteredList[rowIndex].__selected__ = rowSelected;
+                    _this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        selectedRowIndex: rowIndex,
+                        selectedRowIndexSelected: rowSelected,
+                    });
+                },
+                _l[stores_1.DispatchTypes.SELECT_ALL] = function () {
+                    var checked = param.checked;
+                    var selectedAll = listSelectedAll;
+                    if (checked === true) {
+                        selectedAll = true;
+                    }
+                    else if (checked === false) {
+                        selectedAll = false;
+                    }
+                    else {
+                        selectedAll = !selectedAll;
+                    }
+                    for (var i = 0, l = filteredList.length; i < l; i++) {
+                        filteredList[i].__selected__ = selectedAll;
+                    }
+                    _this.setStoreState({
+                        listSelectedAll: selectedAll,
+                    });
+                },
+                _l);
             proc[dispatchType]();
-            var _k;
+            var _l;
         };
         return _this;
     }
@@ -333,6 +397,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 height: newProps.height,
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
+                onScrollEnd: newProps.onScrollEnd,
                 headerTable: newProps.headerTable,
                 bodyRowTable: newProps.bodyRowTable,
                 bodyRowMap: newProps.bodyRowMap,

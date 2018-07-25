@@ -34,7 +34,14 @@ class DataGridBody extends React.Component<IProps, IState> {
       dispatch,
       getRootNode,
       rootObject = {},
+      loading,
+      loadingData,
     } = this.props;
+
+    if (loading || loadingData) {
+      return false;
+    }
+
     const {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,

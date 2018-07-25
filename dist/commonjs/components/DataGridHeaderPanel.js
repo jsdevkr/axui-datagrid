@@ -87,54 +87,67 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                     focusedRow: 0,
                     focusedCol: focusedCol,
                 };
-                if (key === '__line_number__') {
-                    state.selectionRows = (function () {
-                        var rows = {};
-                        filteredList.forEach(function (item, i) {
-                            rows[i] = true;
-                        });
-                        return rows;
-                    })();
-                    state.selectionCols = (function () {
-                        var cols = {};
-                        colGroup.forEach(function (_col) {
-                            cols[_col.colIndex || 0] = true;
-                        });
-                        return cols;
-                    })();
-                    state.focusedCol = 0;
-                    setStoreState(state);
-                }
-                else {
-                    if (optionsHeader.clickAction === 'select') {
-                        state.selectionRows = (function () {
-                            var rows = {};
-                            filteredList.forEach(function (item, i) {
-                                rows[i] = true;
-                            });
-                            return rows;
-                        })();
-                        if (e.shiftKey) {
+                switch (key) {
+                    case '__line_number__':
+                        {
+                            state.selectionRows = (function () {
+                                var rows = {};
+                                filteredList.forEach(function (item, i) {
+                                    rows[i] = true;
+                                });
+                                return rows;
+                            })();
                             state.selectionCols = (function () {
                                 var cols = {};
-                                utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(function (i) {
-                                    cols[i] = true;
+                                colGroup.forEach(function (_col) {
+                                    cols[_col.colIndex || 0] = true;
                                 });
                                 return cols;
                             })();
+                            state.focusedCol = 0;
+                            setStoreState(state);
                         }
-                        else {
-                            state.selectionCols = (_m = {},
-                                _m[colIndex] = true,
-                                _m);
-                            state.focusedCol = colIndex;
+                        break;
+                    case '__row_selector__':
+                        dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
+                        break;
+                    default:
+                        {
+                            if (optionsHeader.clickAction === 'select') {
+                                state.selectionRows = (function () {
+                                    var rows = {};
+                                    filteredList.forEach(function (item, i) {
+                                        rows[i] = true;
+                                    });
+                                    return rows;
+                                })();
+                                if (e.shiftKey) {
+                                    state.selectionCols = (function () {
+                                        var cols = {};
+                                        utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(function (i) {
+                                            cols[i] = true;
+                                        });
+                                        return cols;
+                                    })();
+                                }
+                                else {
+                                    state.selectionCols = (_m = {},
+                                        _m[colIndex] = true,
+                                        _m);
+                                    state.focusedCol = colIndex;
+                                }
+                                setStoreState(state);
+                            }
+                            else if (optionsHeader.clickAction === 'sort' &&
+                                optionsHeader.sortable) {
+                                dispatch(stores_1.DispatchTypes.SORT, { colIndex: colIndex });
+                            }
                         }
-                        setStoreState(state);
-                    }
-                    else if (optionsHeader.clickAction === 'sort' &&
-                        optionsHeader.sortable) {
-                        dispatch(stores_1.DispatchTypes.SORT, { colIndex: colIndex });
-                    }
+                        break;
+                }
+                if (key === '__line_number__') {
+                }
+                else {
                 }
             }
             var _m;

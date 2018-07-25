@@ -88,3 +88,7 @@ class Basic extends React.Component<IProps, IState> {
 
 export default Basic;
 ```
+
+# Version history
+
+* v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.

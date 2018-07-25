@@ -76,54 +76,67 @@ class DataGridHeaderPanel extends React.Component {
                     focusedRow: 0,
                     focusedCol: focusedCol,
                 };
-                if (key === '__line_number__') {
-                    state.selectionRows = (() => {
-                        let rows = {};
-                        filteredList.forEach((item, i) => {
-                            rows[i] = true;
-                        });
-                        return rows;
-                    })();
-                    state.selectionCols = (() => {
-                        let cols = {};
-                        colGroup.forEach(_col => {
-                            cols[_col.colIndex || 0] = true;
-                        });
-                        return cols;
-                    })();
-                    state.focusedCol = 0;
-                    setStoreState(state);
-                }
-                else {
-                    if (optionsHeader.clickAction === 'select') {
-                        state.selectionRows = (() => {
-                            let rows = {};
-                            filteredList.forEach((item, i) => {
-                                rows[i] = true;
-                            });
-                            return rows;
-                        })();
-                        if (e.shiftKey) {
+                switch (key) {
+                    case '__line_number__':
+                        {
+                            state.selectionRows = (() => {
+                                let rows = {};
+                                filteredList.forEach((item, i) => {
+                                    rows[i] = true;
+                                });
+                                return rows;
+                            })();
                             state.selectionCols = (() => {
                                 let cols = {};
-                                utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(i => {
-                                    cols[i] = true;
+                                colGroup.forEach(_col => {
+                                    cols[_col.colIndex || 0] = true;
                                 });
                                 return cols;
                             })();
+                            state.focusedCol = 0;
+                            setStoreState(state);
                         }
-                        else {
-                            state.selectionCols = {
-                                [colIndex]: true,
-                            };
-                            state.focusedCol = colIndex;
+                        break;
+                    case '__row_selector__':
+                        dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
+                        break;
+                    default:
+                        {
+                            if (optionsHeader.clickAction === 'select') {
+                                state.selectionRows = (() => {
+                                    let rows = {};
+                                    filteredList.forEach((item, i) => {
+                                        rows[i] = true;
+                                    });
+                                    return rows;
+                                })();
+                                if (e.shiftKey) {
+                                    state.selectionCols = (() => {
+                                        let cols = {};
+                                        utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(i => {
+                                            cols[i] = true;
+                                        });
+                                        return cols;
+                                    })();
+                                }
+                                else {
+                                    state.selectionCols = {
+                                        [colIndex]: true,
+                                    };
+                                    state.focusedCol = colIndex;
+                                }
+                                setStoreState(state);
+                            }
+                            else if (optionsHeader.clickAction === 'sort' &&
+                                optionsHeader.sortable) {
+                                dispatch(stores_1.DispatchTypes.SORT, { colIndex });
+                            }
                         }
-                        setStoreState(state);
-                    }
-                    else if (optionsHeader.clickAction === 'sort' &&
-                        optionsHeader.sortable) {
-                        dispatch(stores_1.DispatchTypes.SORT, { colIndex });
-                    }
+                        break;
+                }
+                if (key === '__line_number__') {
+                }
+                else {
                 }
             }
         };

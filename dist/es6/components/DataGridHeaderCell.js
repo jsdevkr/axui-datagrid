@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
-const DatagridHeaderCell = ({ options = {}, focusedCol, selectionCols, sortInfo, bodyRow, ri, col, onClick, }) => {
+const DatagridHeaderCell = ({ listSelectedAll = false, options = {}, focusedCol, selectionCols, sortInfo, bodyRow, ri, col, onClick, }) => {
     const { header: optionsHeader = {} } = options;
     const { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = '', } = optionsHeader;
     const colAlign = col.align || headerAlign || '';
@@ -13,7 +13,7 @@ const DatagridHeaderCell = ({ options = {}, focusedCol, selectionCols, sortInfo,
     let label, sorter;
     if (col.key === '__row_selector__') {
         if (optionsHeader.selector) {
-            label = (React.createElement("div", { className: "axui-datagrid-check-box", style: {
+            label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
                     maxHeight: lineHeight + 'px',
                     minHeight: lineHeight + 'px',
                 } }));

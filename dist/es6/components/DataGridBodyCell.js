@@ -156,7 +156,7 @@ class DataGridBodyCell extends React.Component {
                 label = li + 1;
             }
             else if (col.key === '__row_selector__') {
-                label = (React.createElement("div", { className: "axui-datagrid-check-box", style: {
+                label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": col.columnAttr || '', "data-checked": filteredList[li].__selected__, style: {
                         maxHeight: col.width - 10 + 'px',
                         minHeight: col.width - 10 + 'px',
                     } }));

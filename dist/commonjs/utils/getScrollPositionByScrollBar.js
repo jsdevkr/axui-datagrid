@@ -8,10 +8,12 @@ function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, _a) {
         scrollHeight: scrollContentHeight,
         clientWidth: scrollContentContainerWidth,
         clientHeight: scrollContentContainerHeight,
-    }), scrollLeft = _f.scrollLeft, scrollTop = _f.scrollTop;
+    }), scrollLeft = _f.scrollLeft, scrollTop = _f.scrollTop, endOfScrollLeft = _f.endOfScrollLeft, endOfScrollTop = _f.endOfScrollTop;
     return {
         scrollLeft: scrollLeft,
         scrollTop: scrollTop,
+        endOfScrollLeft: endOfScrollLeft,
+        endOfScrollTop: endOfScrollTop,
     };
 }
 exports.getScrollPositionByScrollBar = getScrollPositionByScrollBar;

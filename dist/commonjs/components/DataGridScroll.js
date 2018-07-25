@@ -20,7 +20,10 @@ var DatagridScroll = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onClickScrollArrow = function (e, direction) {
-            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
+            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
+            if (loading || loadingData) {
+                return false;
+            }
             var _e = styles.scrollContentWidth, scrollContentWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h;
             var processor = (_j = {},
                 _j[stores_1.DirectionTypes.UP] = function () {
@@ -55,10 +58,14 @@ var DatagridScroll = /** @class */ (function (_super) {
                 },
                 _j);
             processor[direction]();
+            return true;
             var _j;
         };
         _this.onClickScrollTrack = function (e, barName) {
-            var _a = _this.props, getRootNode = _a.getRootNode, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
+            var _a = _this.props, getRootNode = _a.getRootNode, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
+            if (loading || loadingData) {
+                return false;
+            }
             e.preventDefault();
             var _e = styles.horizontalScrollerWidth, horizontalScrollerWidth = _e === void 0 ? 0 : _e, _f = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentWidth, scrollContentWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.verticalScrollerHeight, verticalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m, _o = styles.pageButtonsContainerWidth, pageButtonsContainerWidth = _o === void 0 ? 0 : _o;
             var currScrollBarLeft = -scrollLeft *
@@ -94,11 +101,15 @@ var DatagridScroll = /** @class */ (function (_super) {
             if (e.target.getAttribute('data-scroll')) {
                 processor[barName]();
             }
+            return true;
             var _t;
         };
         _this.onMouseDownScrollBar = function (e, barName) {
-            var _a = _this.props, _b = _a.dragging, dragging = _b === void 0 ? false : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, setStoreState = _a.setStoreState;
-            var _f = styles.horizontalScrollerWidth, horizontalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerWidth, scrollContentContainerWidth = _j === void 0 ? 0 : _j, _k = styles.verticalScrollerHeight, verticalScrollerHeight = _k === void 0 ? 0 : _k, _l = styles.verticalScrollBarHeight, verticalScrollBarHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o;
+            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
+            if (loading || loadingData) {
+                return false;
+            }
+            var _e = styles.horizontalScrollerWidth, horizontalScrollerWidth = _e === void 0 ? 0 : _e, _f = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentWidth, scrollContentWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.verticalScrollerHeight, verticalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m;
             e.preventDefault();
             var currScrollBarLeft = -scrollLeft *
                 (horizontalScrollerWidth - horizontalScrollBarWidth) /
@@ -108,9 +119,6 @@ var DatagridScroll = /** @class */ (function (_super) {
                 (scrollContentHeight - scrollContentContainerHeight);
             var startMousePosition = utils_1.getMousePosition(e);
             var onMouseMove = function (ee) {
-                if (!dragging) {
-                    setStoreState({ dragging: true });
-                }
                 var _a = utils_1.getMousePosition(ee), x = _a.x, y = _a.y;
                 var processor = (_b = {},
                     _b[stores_1.ScrollTypes.VERTICAL] = function () {
@@ -133,7 +141,7 @@ var DatagridScroll = /** @class */ (function (_super) {
             };
             var offEvent = function (ee) {
                 ee.preventDefault();
-                setStoreState({ dragging: false });
+                // console.log('off');
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
@@ -141,6 +149,7 @@ var DatagridScroll = /** @class */ (function (_super) {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', offEvent);
             document.addEventListener('mouseleave', offEvent);
+            return true;
         };
         return _this;
     }

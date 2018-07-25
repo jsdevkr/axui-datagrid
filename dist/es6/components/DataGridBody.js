@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
+const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const DataGridBodyPanel_1 = require("./DataGridBodyPanel");
@@ -10,7 +11,10 @@ class DataGridBody extends React.Component {
         super(...arguments);
         this.state = {};
         this.onMouseDownBody = (e) => {
-            const { filteredList = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, getRootNode, rootObject = {}, } = this.props;
+            const { filteredList = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, getRootNode, rootObject = {}, loading, loadingData, } = this.props;
+            if (loading || loadingData) {
+                return false;
+            }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
@@ -105,7 +109,7 @@ class DataGridBody extends React.Component {
                         else if (_moving.right) {
                             _scrollLeft = propsScrollLeft - 100;
                         }
-                        const { scrollLeft: newScrollLeft, scrollTop: newScrollTop, endScroll, } = utils_1.getScrollPosition(_scrollLeft, _scrollTop, {
+                        const { scrollLeft: newScrollLeft, scrollTop: newScrollTop, endOfScrollTop, endOfScrollLeft, } = utils_1.getScrollPosition(_scrollLeft, _scrollTop, {
                             scrollWidth: scrollContentWidth,
                             scrollHeight: scrollContentHeight,
                             clientWidth: scrollContentContainerWidth,
@@ -116,7 +120,7 @@ class DataGridBody extends React.Component {
                             scrollLeft: newScrollLeft,
                             selectionEndOffset: propsSelectionEndOffset,
                         }, _moving);
-                        return !endScroll;
+                        return !endOfScrollTop && !endOfScrollLeft;
                     };
                     let x1 = startMousePosition.x - leftPadding;
                     let y1 = startMousePosition.y - topPadding;
@@ -162,7 +166,6 @@ class DataGridBody extends React.Component {
                     }
                     else {
                         setStateCall({
-                            dragging: true,
                             scrollTop: scrollTop,
                             scrollLeft: scrollLeft,
                             selectionStartOffset: {
@@ -190,7 +193,6 @@ class DataGridBody extends React.Component {
                         clearInterval(rootObject.timer);
                     }
                     setStoreState({
-                        dragging: false,
                         selectionStartOffset: undefined,
                         selectionEndOffset: undefined,
                         selectionMinOffset: undefined,
@@ -229,7 +231,6 @@ class DataGridBody extends React.Component {
                 else {
                     // 셀렉션 저장정보 초기화
                     setStoreState({
-                        dragging: false,
                         selectionStartOffset: undefined,
                         selectionEndOffset: undefined,
                         selectionMinOffset: undefined,
@@ -275,6 +276,11 @@ class DataGridBody extends React.Component {
                 }
                 setStoreState(state);
             };
+            const procClickRowSelector = () => {
+                dispatch(stores_1.DispatchTypes.SELECT, {
+                    rowIndex: selectStartedRow,
+                });
+            };
             // 선택이 시작된 row / col
             let selectStartedRow = getRowIndex(startY, startScrollTop);
             let selectStartedCol = getColIndex(startX, startScrollLeft);
@@ -284,12 +290,16 @@ class DataGridBody extends React.Component {
                 // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
                 return false;
             }
-            if (spanType === 'lineNumber') {
-                // click lineNumber
-                procClickLinenumber();
-            }
-            else {
-                procBodySelect();
+            switch (spanType) {
+                case 'lineNumber':
+                    procClickLinenumber();
+                    break;
+                case 'rowSelector':
+                    procClickRowSelector();
+                    break;
+                default:
+                    procBodySelect();
+                    break;
             }
             return true;
         };

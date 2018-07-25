@@ -20,7 +20,13 @@ class DatagridScroll extends React.Component<IProps, IState> {
       scrollTop = 0,
       styles = {},
       setStoreState,
+      loading,
+      loadingData,
     } = this.props;
+
+    if (loading || loadingData) {
+      return false;
+    }
 
     const {
       scrollContentWidth = 0,
@@ -67,6 +73,8 @@ class DatagridScroll extends React.Component<IProps, IState> {
     };
 
     processor[direction]();
+
+    return true;
   };
 
   onClickScrollTrack = (e: any, barName: ScrollTypes) => {
@@ -76,7 +84,13 @@ class DatagridScroll extends React.Component<IProps, IState> {
       scrollTop = 0,
       styles = {},
       setStoreState,
+      loading,
+      loadingData,
     } = this.props;
+
+    if (loading || loadingData) {
+      return false;
+    }
 
     e.preventDefault();
 
@@ -144,6 +158,8 @@ class DatagridScroll extends React.Component<IProps, IState> {
     if (e.target.getAttribute('data-scroll')) {
       processor[barName]();
     }
+
+    return true;
   };
 
   onMouseDownScrollBar = (e: any, barName: ScrollTypes) => {
@@ -152,7 +168,13 @@ class DatagridScroll extends React.Component<IProps, IState> {
       scrollTop = 0,
       styles = {},
       setStoreState,
+      loading,
+      loadingData,
     } = this.props;
+
+    if (loading || loadingData) {
+      return false;
+    }
 
     const {
       horizontalScrollerWidth = 0,
@@ -227,6 +249,8 @@ class DatagridScroll extends React.Component<IProps, IState> {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
+
+    return true;
   };
 
   render() {

@@ -147,7 +147,7 @@ var DataGrid = /** @class */ (function (_super) {
     };
     DataGrid.prototype.render = function () {
         var mounted = this.state.mounted;
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g;
         var providerProps = {};
         var gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -167,6 +167,7 @@ var DataGrid = /** @class */ (function (_super) {
                 height: height,
                 onBeforeEvent: onBeforeEvent,
                 onAfterEvent: onAfterEvent,
+                onScrollEnd: onScrollEnd,
                 options: this.getOptions(options),
             });
         }

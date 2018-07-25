@@ -5,7 +5,6 @@ const stores_1 = require("../stores");
 const utils_1 = require("../utils");
 const formatter_1 = require("../functions/formatter");
 const store = {
-    dragging: false,
     sortInfo: {},
     isColumnFilter: false,
     scrollLeft: 0,
@@ -25,6 +24,7 @@ const store = {
     loadingData: false,
     data: [],
     filteredList: [],
+    listSelectedAll: false,
     colGroup: [],
     asideColGroup: [],
     leftHeaderColGroup: [],
@@ -54,24 +54,44 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, } = this.state;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
+            const { styles: propStyles } = this.props;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
-            const { scrollLeft: _scrollLeft, styles: _styles = {}, filteredList: _filteredList, } = newState;
-            if (typeof _scrollLeft !== 'undefined') {
-                const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, } = Object.assign({}, styles, _styles);
-                if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
-                    const { printStartColIndex, printEndColIndex, } = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
-                        _frozenPanelWidth +
-                        (_CTInnerWidth -
-                            _asidePanelWidth -
-                            _frozenPanelWidth -
-                            _rightPanelWidth));
-                    newState.printStartColIndex = printStartColIndex;
-                    newState.printEndColIndex = printEndColIndex;
-                    newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
-                    newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-                    newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, } = newState;
+            if (typeof _scrollLeft !== 'undefined' ||
+                typeof _scrollTop !== 'undefined') {
+                const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, scrollContentWidth: scrollWidth = 0, scrollContentHeight: scrollHeight = 0, scrollContentContainerWidth: clientWidth = 0, scrollContentContainerHeight: clientHeight = 0, } = Object.assign({}, styles, _styles);
+                let endOfScrollTop = false;
+                let endOfScrollLeft = false;
+                if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
+                    if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+                        const { printStartColIndex, printEndColIndex, } = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
+                            _frozenPanelWidth +
+                            (_CTInnerWidth -
+                                _asidePanelWidth -
+                                _frozenPanelWidth -
+                                _rightPanelWidth));
+                        newState.printStartColIndex = printStartColIndex;
+                        newState.printEndColIndex = printEndColIndex;
+                        newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
+                        newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                        newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                    }
+                    if (clientWidth >= scrollWidth + _scrollLeft) {
+                        endOfScrollLeft = true;
+                    }
+                }
+                if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (clientHeight >= scrollHeight + _scrollTop) {
+                        endOfScrollTop = true;
+                    }
+                }
+                if ((endOfScrollTop || endOfScrollLeft) && onScrollEnd) {
+                    onScrollEnd({
+                        endOfScrollTop,
+                        endOfScrollLeft,
+                    });
                 }
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
@@ -80,7 +100,7 @@ class StoreProvider extends React.Component {
             this.setState(newState);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], scrollLeft = 0, colGroup = [], getRootNode, focusedRow = 0, sortInfo = {}, options = {}, } = this.state;
+            const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], getRootNode, focusedRow = 0, sortInfo = {}, options = {}, } = this.state;
             const { columnKeys: optionColumnKeys = {} } = options;
             const rootNode = utils_1.getNode(getRootNode);
             let { filteredList = [] } = this.state;
@@ -126,65 +146,67 @@ class StoreProvider extends React.Component {
                 },
                 [stores_1.DispatchTypes.SORT]: () => {
                     const { colIndex } = param;
-                    const { key: colKey = '' } = colGroup[colIndex];
-                    let currentSortInfo = {};
-                    let seq = 0;
-                    let sortInfoArray = [];
-                    const getValueByKey = function (_item, _key) {
-                        return _item[_key] || '';
-                    };
-                    for (let k in sortInfo) {
-                        if (sortInfo[k]) {
-                            currentSortInfo[k] = sortInfo[k];
-                            seq++;
-                        }
-                    }
-                    if (currentSortInfo[colKey]) {
-                        if (currentSortInfo[colKey].orderBy === 'desc') {
-                            currentSortInfo[colKey].orderBy = 'asc';
-                        }
-                        else if (currentSortInfo[colKey].orderBy === 'asc') {
-                            delete currentSortInfo[colKey];
-                        }
-                    }
-                    else {
-                        currentSortInfo[colKey] = {
-                            seq: seq++,
-                            orderBy: 'desc',
+                    if (typeof colIndex !== 'undefined') {
+                        const { key: colKey = '' } = colGroup[colIndex];
+                        let currentSortInfo = {};
+                        let seq = 0;
+                        let sortInfoArray = [];
+                        const getValueByKey = function (_item, _key) {
+                            return _item[_key] || '';
                         };
-                    }
-                    for (let k in currentSortInfo) {
-                        if (currentSortInfo[k]) {
-                            sortInfoArray[currentSortInfo[k].seq] = {
-                                key: k,
-                                order: currentSortInfo[k].orderBy,
+                        for (let k in sortInfo) {
+                            if (sortInfo[k]) {
+                                currentSortInfo[k] = sortInfo[k];
+                                seq++;
+                            }
+                        }
+                        if (currentSortInfo[colKey]) {
+                            if (currentSortInfo[colKey].orderBy === 'desc') {
+                                currentSortInfo[colKey].orderBy = 'asc';
+                            }
+                            else if (currentSortInfo[colKey].orderBy === 'asc') {
+                                delete currentSortInfo[colKey];
+                            }
+                        }
+                        else {
+                            currentSortInfo[colKey] = {
+                                seq: seq++,
+                                orderBy: 'desc',
                             };
                         }
-                    }
-                    sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
-                    let i = 0, l = sortInfoArray.length, aValue, bValue;
-                    const sortedList = filteredList.sort((a, b) => {
-                        for (i = 0; i < l; i++) {
-                            aValue = getValueByKey(a, sortInfoArray[i].key);
-                            bValue = getValueByKey(b, sortInfoArray[i].key);
-                            if (typeof aValue !== typeof bValue) {
-                                aValue = '' + aValue;
-                                bValue = '' + bValue;
-                            }
-                            if (aValue < bValue) {
-                                return sortInfoArray[i].order === 'asc' ? -1 : 1;
-                            }
-                            else if (aValue > bValue) {
-                                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                        for (let k in currentSortInfo) {
+                            if (currentSortInfo[k]) {
+                                sortInfoArray[currentSortInfo[k].seq] = {
+                                    key: k,
+                                    order: currentSortInfo[k].orderBy,
+                                };
                             }
                         }
-                    });
-                    this.setStoreState({
-                        sortInfo: currentSortInfo,
-                        filteredList: sortedList,
-                        isInlineEditing: false,
-                        inlineEditingCell: {},
-                    });
+                        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+                        let i = 0, l = sortInfoArray.length, aValue, bValue;
+                        const sortedList = filteredList.sort((a, b) => {
+                            for (i = 0; i < l; i++) {
+                                aValue = getValueByKey(a, sortInfoArray[i].key);
+                                bValue = getValueByKey(b, sortInfoArray[i].key);
+                                if (typeof aValue !== typeof bValue) {
+                                    aValue = '' + aValue;
+                                    bValue = '' + bValue;
+                                }
+                                if (aValue < bValue) {
+                                    return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                                }
+                                else if (aValue > bValue) {
+                                    return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                                }
+                            }
+                        });
+                        this.setStoreState({
+                            sortInfo: currentSortInfo,
+                            filteredList: sortedList,
+                            isInlineEditing: false,
+                            inlineEditingCell: {},
+                        });
+                    }
                 },
                 [stores_1.DispatchTypes.UPDATE]: () => {
                     const { row, colIndex, value, eventWhichKey } = param;
@@ -235,6 +257,48 @@ class StoreProvider extends React.Component {
                         headerColGroup: headerColGroup,
                         styles: styles,
                         columnResizing: false,
+                    });
+                },
+                [stores_1.DispatchTypes.SELECT]: () => {
+                    const { rowIndex, checked } = param;
+                    let rowSelected = false;
+                    let selectedAll = listSelectedAll;
+                    if (checked === true) {
+                        rowSelected = true;
+                    }
+                    else if (checked === false) {
+                        rowSelected = false;
+                    }
+                    else {
+                        rowSelected = !filteredList[rowIndex].__selected__;
+                    }
+                    if (!rowSelected) {
+                        selectedAll = false;
+                    }
+                    filteredList[rowIndex].__selected__ = rowSelected;
+                    this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        selectedRowIndex: rowIndex,
+                        selectedRowIndexSelected: rowSelected,
+                    });
+                },
+                [stores_1.DispatchTypes.SELECT_ALL]: () => {
+                    const { checked } = param;
+                    let selectedAll = listSelectedAll;
+                    if (checked === true) {
+                        selectedAll = true;
+                    }
+                    else if (checked === false) {
+                        selectedAll = false;
+                    }
+                    else {
+                        selectedAll = !selectedAll;
+                    }
+                    for (let i = 0, l = filteredList.length; i < l; i++) {
+                        filteredList[i].__selected__ = selectedAll;
+                    }
+                    this.setStoreState({
+                        listSelectedAll: selectedAll,
                     });
                 },
             };
@@ -311,6 +375,7 @@ class StoreProvider extends React.Component {
                 height: newProps.height,
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
+                onScrollEnd: newProps.onScrollEnd,
                 headerTable: newProps.headerTable,
                 bodyRowTable: newProps.bodyRowTable,
                 bodyRowMap: newProps.bodyRowMap,
