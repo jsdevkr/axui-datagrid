@@ -56,7 +56,7 @@
     "build":
       "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
     "docs":
-      "react-app-rewired build --scripts-version react-scripts-ts && rm -rf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME && git add -A",
+      "react-app-rewired build --scripts-version react-scripts-ts && rm -rf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME && cp ./src/404.html ./docs/404.html  && git add -A",
     "test": "NODE_ENV=test jest",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prepublish": "npm run test",
