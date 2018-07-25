@@ -22,6 +22,7 @@
     "@types/react-router": "^4.0.25",
     "@types/react-router-dom": "^4.2.6",
     "@types/react-syntax-highlighter": "0.0.5",
+    "@types/react-test-renderer": "^16.0.1",
     "axios": "^0.18.0",
     "better-npm-run": "^0.1.0",
     "enzyme": "^3.3.0",
@@ -42,6 +43,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.15.1",
     "react-syntax-highlighter": "^7.0.4",
+    "react-test-renderer": "^16.4.1",
     "sass-loader": "^7.0.1",
     "semantic-ui-react": "^0.79.1",
     "semantic-ui-scss": "^1.0.0",
@@ -77,7 +79,7 @@
       }
     },
     "collectCoverageFrom": [
-      "test/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/test/**/*.{js,jsx,ts,tsx}",
       "!<rootDir>/.tsOutput/"
     ],
     "setupFiles": ["./tests/test-shim.js", "./tests/test-setup.js"],
@@ -86,6 +88,7 @@
       "^.+\\.jsx?$": "babel-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": ["/.tsOutput/"],
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "modulePaths": ["src"],
     "moduleDirectories": ["node_modules", "src"]
