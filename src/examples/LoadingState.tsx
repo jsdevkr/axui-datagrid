@@ -11,7 +11,6 @@ class LoadingState extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
-      test: '111',
       loading: false,
       loadingData: false,
       columns: [
