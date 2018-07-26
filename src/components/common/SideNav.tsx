@@ -3,9 +3,10 @@ import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Menus } from 'routes';
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Row, Col } from 'antd';
 const axuiLogo = require('assets/axui-logo.png');
 const GitHubButton = require('react-github-button');
+const pkg = require('package.json');
 
 interface IProps extends RouteComponentProps<any> {
   leftMenuWidth: number;
@@ -85,6 +86,13 @@ class SideNav extends React.Component<IProps, IState> {
             <img src={axuiLogo} />
           </div>
           <h1>axui-datagrid</h1>
+
+          <Row gutter={1} className='pkg-infos'>
+            <Col span={12}>version : {pkg.version}</Col>
+            <Col span={12} style={{ textAlign: 'right' }}>
+              {pkg.license}
+            </Col>
+          </Row>
 
           <div className="github-btn-container">
             <GitHubButton type="stargazers" namespace="axui" repo="datagrid" />{' '}
