@@ -10,7 +10,7 @@ class DataGridBodyPanel extends React.Component {
         this.state = {};
     }
     render() {
-        const { filteredList = [], asideColGroup = [], leftHeaderColGroup = [], headerColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, bodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, visibleBodyGroupingData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig = {}, panelLeft = 0, panelTop = 0, printStartColIndex = 0, printEndColIndex = 0, styles = {}, } = this.props;
+        const { filteredList = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig = {}, panelLeft = 0, panelTop = 0, styles = {}, } = this.props;
         const { frozenPanelWidth = 0, asidePanelWidth = 0, frozenPanelHeight = 0, bodyTrHeight = 0, } = styles;
         const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
         // aside-header가 필요하지 않은지 확인

@@ -5,8 +5,7 @@ const setColGroupWidth_1 = require("./setColGroupWidth");
 function calculateDimensions(containerDOM, state, toBeFilteredList) {
     const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, height = 0, } = state;
     let list = toBeFilteredList || filteredList;
-    const { header: optionsHeader = {}, scroller: optionsScroller = {}, page: optionsPage = {}, } = options;
-    const { frozenColumnIndex = 0, frozenRowIndex = 0 } = options || {};
+    const { header: optionsHeader = {}, scroller: optionsScroller = {}, page: optionsPage = {}, frozenColumnIndex = 0, frozenRowIndex = 0, } = options;
     const { display: optionsHeaderDisplay = true, columnHeight: optionsHeaderColumnHeight = 0, } = optionsHeader;
     const { height: optionsPageHeight = 0, buttonsContainerWidth: optionsPageButtonsContainerWidth = 0, } = optionsPage;
     const { size: optionsScrollerSize = 0, disabledVerticalScroll: optionsScrollerDisabledVerticalScroll, padding: optionsScrollerPadding = 0, arrowSize: optionsScrollerArrowSize = 0, barMinSize: optionsScrollerBarMinSize = 0, } = optionsScroller;

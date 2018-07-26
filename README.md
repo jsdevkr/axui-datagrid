@@ -92,3 +92,4 @@ export default Basic;
 # Version history
 
 * v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.
+* v0.3.2 - Add a new props onChangeSelected, refactoring StoreProvider

@@ -8,6 +8,7 @@ import {
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
   getNode,
+  getStylesAboutFilteredList,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 
@@ -97,11 +98,12 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       newProps.getClipBoardNode === prevState.getClipBoardNode &&
       newProps.rootObject === prevState.rootObject &&
       newProps.data === prevState.data &&
-      newProps.filteredList === prevState.filteredList &&
       newProps.options === prevState.options &&
       newProps.height === prevState.height &&
       newProps.onBeforeEvent === prevState.onBeforeEvent &&
       newProps.onAfterEvent === prevState.onAfterEvent &&
+      newProps.onScrollEnd === prevState.onScrollEnd &&
+      newProps.onChangeSelected === prevState.onChangeSelected &&
       newProps.headerTable === prevState.headerTable &&
       newProps.bodyRowTable === prevState.bodyRowTable &&
       newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -120,12 +122,38 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       return null;
     } else {
       let scrollTop = prevState.scrollTop;
+      let filteredList = prevState.filteredList || [];
+      let styles: types.DataGridStyles = prevState.styles || {};
+      const { data, styles: _styles = {}, options: _options = {} } = newProps;
 
+      // 데이터를 정리하는 과정. data > filteredList
+      if (data && newProps.data !== prevState.data) {
+        // sort 되었다고 판단됨. filteredList를 sort 해주어야 함.
+        const { options = {} } = prevState;
+        const { columnKeys: optionColumnKeys = {} } = options;
+
+        filteredList = data.filter((n: any) => {
+          return !n[optionColumnKeys.deleted || '__deleted__'];
+        });
+
+        // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
+        if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+        }
+      }
+
+      // 데이터 길이에 따라 스타일이 조정되어야 하므로
+      // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
+      styles = {
+        ..._styles,
+        ...getStylesAboutFilteredList(filteredList, _options, _styles),
+      };
+
+      // loadingData 상태값이 true 이면
+      // 컨텐츠 스크롤 위치를 맨 끝으로 보내도록 함.
       if (
         newProps.loadingData &&
         newProps.loadingData !== prevState.loadingData
       ) {
-        const { filteredList, styles = {} } = newProps;
         const focusRow = filteredList.length - 1;
         const {
           bodyTrHeight = 0,
@@ -156,12 +184,13 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           getClipBoardNode: newProps.getClipBoardNode,
           rootObject: newProps.rootObject,
           data: newProps.data,
-          filteredList: newProps.filteredList,
+          filteredList,
           options: newProps.options,
           height: newProps.height,
           onBeforeEvent: newProps.onBeforeEvent,
           onAfterEvent: newProps.onAfterEvent,
           onScrollEnd: newProps.onScrollEnd,
+          onChangeSelected: newProps.onChangeSelected,
           headerTable: newProps.headerTable,
           bodyRowTable: newProps.bodyRowTable,
           bodyRowMap: newProps.bodyRowMap,
@@ -176,7 +205,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           colGroupMap: newProps.colGroupMap,
           leftHeaderColGroup: newProps.leftHeaderColGroup,
           headerColGroup: newProps.headerColGroup,
-          styles: newProps.styles,
+          styles: styles,
           printStartColIndex: newProps.printStartColIndex,
           printEndColIndex: newProps.printEndColIndex,
           visibleHeaderColGroup: newProps.visibleHeaderColGroup,
@@ -243,6 +272,8 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       bodyRowData = { rows: [{ cols: [] }] },
       bodyGroupingData = { rows: [{ cols: [] }] },
       onScrollEnd,
+      onChangeSelected,
+      sortInfo,
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
@@ -251,6 +282,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       scrollTop: _scrollTop,
       styles: _styles = {},
       filteredList: _filteredList,
+      sortInfo: _sortInfo,
     } = newState;
 
     if (
@@ -330,6 +362,18 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         this.state,
         _filteredList,
       ).styles;
+    }
+
+    if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
+      onChangeSelected({
+        data: _filteredList,
+      });
+    }
+
+    if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
+      onChangeSelected({
+        data: filteredList,
+      });
     }
 
     this.setState(newState);
@@ -463,7 +507,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           });
 
           this.setStoreState({
-            sortInfo: currentSortInfo,
+            sortInfo: { ...currentSortInfo },
             filteredList: sortedList,
             isInlineEditing: false,
             inlineEditingCell: {},
@@ -498,6 +542,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         }
 
         this.setStoreState({
+          filteredList: [...filteredList],
           isInlineEditing: false,
           inlineEditingCell: {},
           selectionRows: {
@@ -558,6 +603,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           listSelectedAll: selectedAll,
           selectedRowIndex: rowIndex,
           selectedRowIndexSelected: rowSelected,
+          filteredList: [...filteredList],
         });
       },
       [DispatchTypes.SELECT_ALL]: () => {
@@ -577,6 +623,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
         this.setStoreState({
           listSelectedAll: selectedAll,
+          filteredList: [...filteredList],
         });
       },
     };

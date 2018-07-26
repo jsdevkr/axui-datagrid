@@ -47,6 +47,10 @@ export interface IonScrollEndFunctionParam {
   endOfScrollLeft?: boolean;
 }
 
+export interface IonChangeSelectedParam {
+  data?: any[];
+}
+
 export interface IDataGridFormatter {
   [key: string]: formatterFunction;
 }

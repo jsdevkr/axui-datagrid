@@ -13,11 +13,10 @@ var setColGroupWidth_1 = require("./setColGroupWidth");
 function calculateDimensions(containerDOM, state, toBeFilteredList) {
     var _a = state.filteredList, filteredList = _a === void 0 ? [] : _a, _b = state.colGroup, colGroup = _b === void 0 ? [] : _b, headerTable = state.headerTable, footSumColumns = state.footSumColumns, _c = state.options, options = _c === void 0 ? {} : _c, _d = state.styles, styles = _d === void 0 ? {} : _d, _e = state.height, height = _e === void 0 ? 0 : _e;
     var list = toBeFilteredList || filteredList;
-    var _f = options.header, optionsHeader = _f === void 0 ? {} : _f, _g = options.scroller, optionsScroller = _g === void 0 ? {} : _g, _h = options.page, optionsPage = _h === void 0 ? {} : _h;
-    var _j = options || {}, _k = _j.frozenColumnIndex, frozenColumnIndex = _k === void 0 ? 0 : _k, _l = _j.frozenRowIndex, frozenRowIndex = _l === void 0 ? 0 : _l;
-    var _m = optionsHeader.display, optionsHeaderDisplay = _m === void 0 ? true : _m, _o = optionsHeader.columnHeight, optionsHeaderColumnHeight = _o === void 0 ? 0 : _o;
-    var _p = optionsPage.height, optionsPageHeight = _p === void 0 ? 0 : _p, _q = optionsPage.buttonsContainerWidth, optionsPageButtonsContainerWidth = _q === void 0 ? 0 : _q;
-    var _r = optionsScroller.size, optionsScrollerSize = _r === void 0 ? 0 : _r, optionsScrollerDisabledVerticalScroll = optionsScroller.disabledVerticalScroll, _s = optionsScroller.padding, optionsScrollerPadding = _s === void 0 ? 0 : _s, _t = optionsScroller.arrowSize, optionsScrollerArrowSize = _t === void 0 ? 0 : _t, _u = optionsScroller.barMinSize, optionsScrollerBarMinSize = _u === void 0 ? 0 : _u;
+    var _f = options.header, optionsHeader = _f === void 0 ? {} : _f, _g = options.scroller, optionsScroller = _g === void 0 ? {} : _g, _h = options.page, optionsPage = _h === void 0 ? {} : _h, _j = options.frozenColumnIndex, frozenColumnIndex = _j === void 0 ? 0 : _j, _k = options.frozenRowIndex, frozenRowIndex = _k === void 0 ? 0 : _k;
+    var _l = optionsHeader.display, optionsHeaderDisplay = _l === void 0 ? true : _l, _m = optionsHeader.columnHeight, optionsHeaderColumnHeight = _m === void 0 ? 0 : _m;
+    var _o = optionsPage.height, optionsPageHeight = _o === void 0 ? 0 : _o, _p = optionsPage.buttonsContainerWidth, optionsPageButtonsContainerWidth = _p === void 0 ? 0 : _p;
+    var _q = optionsScroller.size, optionsScrollerSize = _q === void 0 ? 0 : _q, optionsScrollerDisabledVerticalScroll = optionsScroller.disabledVerticalScroll, _r = optionsScroller.padding, optionsScrollerPadding = _r === void 0 ? 0 : _r, _s = optionsScroller.arrowSize, optionsScrollerArrowSize = _s === void 0 ? 0 : _s, _t = optionsScroller.barMinSize, optionsScrollerBarMinSize = _t === void 0 ? 0 : _t;
     var headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
     var dataLength = list ? list.length : 0;
     var currentStyles = __assign({}, styles);

@@ -233,8 +233,8 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
             data-span={col.columnAttr || ''}
             data-checked={filteredList[li].__selected__}
             style={{
-              maxHeight: (col.width as number) - 10 + 'px',
-              minHeight: (col.width as number) - 10 + 'px',
+              maxHeight: lineHeight + 'px',
+              minHeight: lineHeight + 'px',
             }}
           />
         );

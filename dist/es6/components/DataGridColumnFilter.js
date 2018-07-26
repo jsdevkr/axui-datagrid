@@ -71,7 +71,7 @@ class DatagridColumnFilter extends React.Component {
         };
     }
     render() {
-        const { isColumnFilter = false, colGroup = [], options = {}, styles = {}, scrollLeft = 0, filterInfo = {}, filteredList = [], data = [], } = this.props;
+        const { isColumnFilter = false, colGroup = [], options = {}, styles = {}, scrollLeft = 0, filterInfo = {}, data = [], } = this.props;
         const { columnKeys: optionColumnKeys = {} } = options;
         const { bodyHeight = 0 } = styles;
         const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;

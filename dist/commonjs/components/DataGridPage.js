@@ -20,10 +20,9 @@ var DataGridPage = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onClickPageButton = function (e, userFunction) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.focusedRow, focusedRow = _e === void 0 ? 0 : _e, _f = _a.options, options = _f === void 0 ? {} : _f, _g = _a.styles, styles = _g === void 0 ? {} : _g, setStoreState = _a.setStoreState, _h = _a.colGroup, colGroup = _h === void 0 ? [] : _h;
-            var _j = _this.props, _k = _j.printStartColIndex, printStartColIndex = _k === void 0 ? 0 : _k, _l = _j.printEndColIndex, printEndColIndex = _l === void 0 ? colGroup.length : _l;
-            var _m = options.frozenRowIndex, frozenRowIndex = _m === void 0 ? 0 : _m;
-            var _o = styles.bodyTrHeight, bodyTrHeight = _o === void 0 ? 0 : _o, _p = styles.bodyHeight, bodyHeight = _p === void 0 ? 0 : _p, _q = styles.scrollContentWidth, scrollContentWidth = _q === void 0 ? 0 : _q, _r = styles.scrollContentHeight, scrollContentHeight = _r === void 0 ? 0 : _r, _s = styles.scrollContentContainerWidth, scrollContentContainerWidth = _s === void 0 ? 0 : _s, _t = styles.scrollContentContainerHeight, scrollContentContainerHeight = _t === void 0 ? 0 : _t;
+            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.focusedRow, focusedRow = _e === void 0 ? 0 : _e, _f = _a.options, options = _f === void 0 ? {} : _f, _g = _a.styles, styles = _g === void 0 ? {} : _g, setStoreState = _a.setStoreState;
+            var _h = options.frozenRowIndex, frozenRowIndex = _h === void 0 ? 0 : _h;
+            var _j = styles.bodyTrHeight, bodyTrHeight = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerWidth, scrollContentContainerWidth = _o === void 0 ? 0 : _o, _p = styles.scrollContentContainerHeight, scrollContentContainerHeight = _p === void 0 ? 0 : _p;
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 frozenRowIndex +
@@ -51,8 +50,8 @@ var DataGridPage = /** @class */ (function (_super) {
                 }
                 return _scrollTop;
             };
-            var proc = (_u = {},
-                _u[stores_1.PageButtonActions.PAGE_FIRST] = function () {
+            var proc = (_q = {},
+                _q[stores_1.PageButtonActions.PAGE_FIRST] = function () {
                     var focusRow = 0;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -63,7 +62,7 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u[stores_1.PageButtonActions.PAGE_PREV] = function () {
+                _q[stores_1.PageButtonActions.PAGE_PREV] = function () {
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -74,7 +73,7 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u[stores_1.PageButtonActions.PAGE_BACK] = function () {
+                _q[stores_1.PageButtonActions.PAGE_BACK] = function () {
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -85,7 +84,7 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u[stores_1.PageButtonActions.PAGE_PLAY] = function () {
+                _q[stores_1.PageButtonActions.PAGE_PLAY] = function () {
                     var focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + 1;
@@ -98,7 +97,7 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u[stores_1.PageButtonActions.PAGE_NEXT] = function () {
+                _q[stores_1.PageButtonActions.PAGE_NEXT] = function () {
                     var focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + pRowSize;
@@ -111,7 +110,7 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u[stores_1.PageButtonActions.PAGE_LAST] = function () {
+                _q[stores_1.PageButtonActions.PAGE_LAST] = function () {
                     var focusRow = filteredList.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -122,14 +121,14 @@ var DataGridPage = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _u);
+                _q);
             if (utils_1.isFunction(userFunction)) {
                 userFunction();
             }
             else if (typeof userFunction === 'string' && userFunction in proc) {
                 proc[userFunction]();
             }
-            var _u;
+            var _q;
         };
         return _this;
     }

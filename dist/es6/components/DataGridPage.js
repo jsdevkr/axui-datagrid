@@ -9,8 +9,7 @@ class DataGridPage extends React.Component {
         super(...arguments);
         this.state = {};
         this.onClickPageButton = (e, userFunction) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, setStoreState, colGroup = [], } = this.props;
-            const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, setStoreState, } = this.props;
             const { frozenRowIndex = 0 } = options;
             const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;

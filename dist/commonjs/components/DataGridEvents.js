@@ -60,9 +60,9 @@ var DataGridEvents = /** @class */ (function (_super) {
             return true;
         };
         _this.onKeyUp = function (e) {
-            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing, _e = _a.scrollTop, scrollTop = _e === void 0 ? 0 : _e;
-            var proc = (_f = {},
-                _f[stores_1.KeyCodes.ENTER] = function () {
+            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing;
+            var proc = (_e = {},
+                _e[stores_1.KeyCodes.ENTER] = function () {
                     var col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -75,17 +75,17 @@ var DataGridEvents = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _f);
+                _e);
             if (!isInlineEditing && e.which in proc) {
                 proc[e.which]();
             }
-            var _f;
+            var _e;
         };
         _this.onKeyDown = function (e) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m, _o = _a.isInlineEditing, isInlineEditing = _o === void 0 ? false : _o, _p = _a.inlineEditingCell, inlineEditingCell = _p === void 0 ? {} : _p;
-            var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
-            var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t;
-            var _u = styles.bodyTrHeight, bodyTrHeight = _u === void 0 ? 0 : _u, _v = styles.bodyHeight, bodyHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.CTInnerWidth, CTInnerWidth = _0 === void 0 ? 0 : _0, _1 = styles.asidePanelWidth, asidePanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.frozenPanelWidth, frozenPanelWidth = _2 === void 0 ? 0 : _2, _3 = styles.rightPanelWidth, rightPanelWidth = _3 === void 0 ? 0 : _3, _4 = styles.verticalScrollerWidth, verticalScrollerWidth = _4 === void 0 ? 0 : _4;
+            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m, _o = _a.isInlineEditing, isInlineEditing = _o === void 0 ? false : _o;
+            var _p = _this.props, _q = _p.printStartColIndex, printStartColIndex = _q === void 0 ? 0 : _q, _r = _p.printEndColIndex, printEndColIndex = _r === void 0 ? colGroup.length : _r;
+            var _s = options.frozenRowIndex, frozenRowIndex = _s === void 0 ? 0 : _s;
+            var _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.bodyHeight, bodyHeight = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y, _z = styles.CTInnerWidth, CTInnerWidth = _z === void 0 ? 0 : _z, _0 = styles.asidePanelWidth, asidePanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.frozenPanelWidth, frozenPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.rightPanelWidth, rightPanelWidth = _2 === void 0 ? 0 : _2, _3 = styles.verticalScrollerWidth, verticalScrollerWidth = _3 === void 0 ? 0 : _3;
             var rootNode = utils_1.getNode(getRootNode);
             var clipBoardNode = utils_1.getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
@@ -144,8 +144,8 @@ var DataGridEvents = /** @class */ (function (_super) {
                 }
                 return _scrollLeft;
             };
-            var metaProc = (_5 = {},
-                _5[stores_1.KeyCodes.C] = function () {
+            var metaProc = (_4 = {},
+                _4[stores_1.KeyCodes.C] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var copySuccess = false;
@@ -172,7 +172,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     rootNode && rootNode.focus();
                     return copySuccess;
                 },
-                _5[stores_1.KeyCodes.A] = function () {
+                _4[stores_1.KeyCodes.A] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var state = {
@@ -199,9 +199,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                     state.focusedCol = 0;
                     setStoreState(state);
                 },
-                _5);
-            var proc = (_6 = {},
-                _6[stores_1.KeyCodes.ESC] = function () {
+                _4);
+            var proc = (_5 = {},
+                _5[stores_1.KeyCodes.ESC] = function () {
                     setStoreState({
                         selectionRows: (_a = {},
                             _a[focusedRow] = true,
@@ -212,7 +212,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a, _b;
                 },
-                _6[stores_1.KeyCodes.HOME] = function () {
+                _5[stores_1.KeyCodes.HOME] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = 0;
@@ -225,7 +225,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.END] = function () {
+                _5[stores_1.KeyCodes.END] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = filteredList.length - 1;
@@ -238,7 +238,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.PAGE_UP] = function () {
+                _5[stores_1.KeyCodes.PAGE_UP] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
@@ -251,7 +251,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.PAGE_DOWN] = function () {
+                _5[stores_1.KeyCodes.PAGE_DOWN] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + pRowSize >= filteredList.length
@@ -266,7 +266,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.UP_ARROW] = function () {
+                _5[stores_1.KeyCodes.UP_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
@@ -279,7 +279,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.DOWN_ARROW] = function () {
+                _5[stores_1.KeyCodes.DOWN_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + 1 >= filteredList.length
@@ -294,7 +294,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.LEFT_ARROW] = function () {
+                _5[stores_1.KeyCodes.LEFT_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
@@ -307,7 +307,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6[stores_1.KeyCodes.RIGHT_ARROW] = function () {
+                _5[stores_1.KeyCodes.RIGHT_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusCol = focusedCol + 1 >= headerColGroup.length
@@ -322,7 +322,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _6);
+                _5);
             if (e.metaKey) {
                 if (e.which in metaProc) {
                     metaProc[e.which]();
@@ -333,7 +333,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     proc[e.which] && proc[e.which]();
                 }
             }
-            var _5, _6;
+            var _4, _5;
         };
         _this.onFireEvent = function (e, eventName) {
             var _a = _this.props, loading = _a.loading, loadingData = _a.loadingData;

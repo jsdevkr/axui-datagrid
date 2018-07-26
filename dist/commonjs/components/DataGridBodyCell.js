@@ -172,8 +172,8 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             }
             else if (col.key === '__row_selector__') {
                 label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": col.columnAttr || '', "data-checked": filteredList[li].__selected__, style: {
-                        maxHeight: col.width - 10 + 'px',
-                        minHeight: col.width - 10 + 'px',
+                        maxHeight: lineHeight + 'px',
+                        minHeight: lineHeight + 'px',
                     } }));
             }
             else {

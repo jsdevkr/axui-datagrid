@@ -16,6 +16,8 @@ export type userCallBackFunction = intfs.userCallBackFunction;
 
 export type onScrollEndFunctionParam = intfs.IonScrollEndFunctionParam;
 
+export type onChangeSelectedParam = intfs.IonChangeSelectedParam;
+
 export type DataGridCol = intfs.IDataGridCol;
 
 export type DataGridColumn = intfs.IDataGridColumn;
@@ -155,6 +157,7 @@ export type DataGridState = {
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
   onScrollEnd?: (param: onScrollEndFunctionParam) => void;
+  onChangeSelected?: (param: onChangeSelectedParam) => void;
   isInlineEditing?: boolean;
   inlineEditingCell?: intfs.IDataGridEditingCell;
 
@@ -227,11 +230,10 @@ export type DataGrid = {
   height?: number;
   style?: any;
   options?: DataGridOptions;
-
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void;
   onScrollEnd?: (param: onScrollEndFunctionParam) => void;
-  onChangeSelected?: () => void;
+  onChangeSelected?: (param: onChangeSelectedParam) => void;
   loading?: boolean;
   loadingData?: boolean;
 };

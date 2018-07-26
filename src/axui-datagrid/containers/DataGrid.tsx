@@ -164,15 +164,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   onFireEvent = () => {};
 
-  getFilteredList = (data: any[]): any[] => {
-    const { options = DataGrid.defaultOptions } = this.props;
-    const { columnKeys: optionColumnKeys = {} } = options;
-
-    return data.filter((n: any) => {
-      return !n[optionColumnKeys.deleted || '__deleted__'];
-    });
-  };
-
   getOptions = (options: types.DataGridOptions): types.DataGridOptions => {
     return mergeAll(true, { ...DataGrid.defaultOptions }, options);
   };
@@ -317,6 +308,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onBeforeEvent,
       onAfterEvent,
       onScrollEnd,
+      onChangeSelected,
       height = DataGrid.defaultHeight,
       loading = false,
       loadingData = false,
@@ -341,11 +333,11 @@ class DataGrid extends React.Component<IProps, IState> {
         getClipBoardNode: this.getClipBoardNode,
         rootObject: this.rootObject,
         data,
-        filteredList: this.getFilteredList(data),
         height,
         onBeforeEvent,
         onAfterEvent,
         onScrollEnd,
+        onChangeSelected,
         options: this.getOptions(options),
       });
     }

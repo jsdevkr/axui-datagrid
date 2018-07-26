@@ -54,11 +54,10 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
-            const { styles: propStyles } = this.props;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, onScrollEnd, onChangeSelected, sortInfo, } = this.state;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
-            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, } = newState;
+            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, sortInfo: _sortInfo, } = newState;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, scrollContentWidth: scrollWidth = 0, scrollContentHeight: scrollHeight = 0, scrollContentContainerWidth: clientWidth = 0, scrollContentContainerHeight: clientHeight = 0, } = Object.assign({}, styles, _styles);
@@ -96,6 +95,16 @@ class StoreProvider extends React.Component {
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state, _filteredList).styles;
+            }
+            if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
+                onChangeSelected({
+                    data: _filteredList,
+                });
+            }
+            if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
+                onChangeSelected({
+                    data: filteredList,
+                });
             }
             this.setState(newState);
         };
@@ -201,7 +210,7 @@ class StoreProvider extends React.Component {
                             }
                         });
                         this.setStoreState({
-                            sortInfo: currentSortInfo,
+                            sortInfo: Object.assign({}, currentSortInfo),
                             filteredList: sortedList,
                             isInlineEditing: false,
                             inlineEditingCell: {},
@@ -232,6 +241,7 @@ class StoreProvider extends React.Component {
                         }
                     }
                     this.setStoreState({
+                        filteredList: [...filteredList],
                         isInlineEditing: false,
                         inlineEditingCell: {},
                         selectionRows: {
@@ -280,6 +290,7 @@ class StoreProvider extends React.Component {
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
                         selectedRowIndexSelected: rowSelected,
+                        filteredList: [...filteredList],
                     });
                 },
                 [stores_1.DispatchTypes.SELECT_ALL]: () => {
@@ -299,6 +310,7 @@ class StoreProvider extends React.Component {
                     }
                     this.setStoreState({
                         listSelectedAll: selectedAll,
+                        filteredList: [...filteredList],
                     });
                 },
             };
@@ -324,11 +336,12 @@ class StoreProvider extends React.Component {
             newProps.getClipBoardNode === prevState.getClipBoardNode &&
             newProps.rootObject === prevState.rootObject &&
             newProps.data === prevState.data &&
-            newProps.filteredList === prevState.filteredList &&
             newProps.options === prevState.options &&
             newProps.height === prevState.height &&
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
+            newProps.onScrollEnd === prevState.onScrollEnd &&
+            newProps.onChangeSelected === prevState.onChangeSelected &&
             newProps.headerTable === prevState.headerTable &&
             newProps.bodyRowTable === prevState.bodyRowTable &&
             newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -347,9 +360,28 @@ class StoreProvider extends React.Component {
         }
         else {
             let scrollTop = prevState.scrollTop;
+            let filteredList = prevState.filteredList || [];
+            let styles = prevState.styles || {};
+            const { data, styles: _styles = {}, options: _options = {} } = newProps;
+            // 데이터를 정리하는 과정. data > filteredList
+            if (data && newProps.data !== prevState.data) {
+                // sort 되었다고 판단됨. filteredList를 sort 해주어야 함.
+                const { options = {} } = prevState;
+                const { columnKeys: optionColumnKeys = {} } = options;
+                filteredList = data.filter((n) => {
+                    return !n[optionColumnKeys.deleted || '__deleted__'];
+                });
+                // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
+                if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+                }
+            }
+            // 데이터 길이에 따라 스타일이 조정되어야 하므로
+            // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
+            styles = Object.assign({}, _styles, utils_1.getStylesAboutFilteredList(filteredList, _options, _styles));
+            // loadingData 상태값이 true 이면
+            // 컨텐츠 스크롤 위치를 맨 끝으로 보내도록 함.
             if (newProps.loadingData &&
                 newProps.loadingData !== prevState.loadingData) {
-                const { filteredList, styles = {} } = newProps;
                 const focusRow = filteredList.length - 1;
                 const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
                 scrollTop = utils_1.getScrollPosition(0, -focusRow * bodyTrHeight, {
@@ -370,12 +402,13 @@ class StoreProvider extends React.Component {
                 getClipBoardNode: newProps.getClipBoardNode,
                 rootObject: newProps.rootObject,
                 data: newProps.data,
-                filteredList: newProps.filteredList,
+                filteredList,
                 options: newProps.options,
                 height: newProps.height,
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
+                onChangeSelected: newProps.onChangeSelected,
                 headerTable: newProps.headerTable,
                 bodyRowTable: newProps.bodyRowTable,
                 bodyRowMap: newProps.bodyRowMap,
@@ -390,7 +423,7 @@ class StoreProvider extends React.Component {
                 colGroupMap: newProps.colGroupMap,
                 leftHeaderColGroup: newProps.leftHeaderColGroup,
                 headerColGroup: newProps.headerColGroup,
-                styles: newProps.styles,
+                styles: styles,
                 printStartColIndex: newProps.printStartColIndex,
                 printEndColIndex: newProps.printEndColIndex,
                 visibleHeaderColGroup: newProps.visibleHeaderColGroup,

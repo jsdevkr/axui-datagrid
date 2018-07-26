@@ -93,10 +93,10 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
     }
     DatagridColumnFilter.prototype.render = function () {
         var _this = this;
-        var _a = this.props, _b = _a.isColumnFilter, isColumnFilter = _b === void 0 ? false : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.scrollLeft, scrollLeft = _f === void 0 ? 0 : _f, _g = _a.filterInfo, filterInfo = _g === void 0 ? {} : _g, _h = _a.filteredList, filteredList = _h === void 0 ? [] : _h, _j = _a.data, data = _j === void 0 ? [] : _j;
-        var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
-        var _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l;
-        var _m = styles.CTInnerWidth, CTInnerWidth = _m === void 0 ? 0 : _m, _o = styles.headerHeight, headerHeight = _o === void 0 ? 0 : _o, _p = styles.asidePanelWidth, asidePanelWidth = _p === void 0 ? 0 : _p;
+        var _a = this.props, _b = _a.isColumnFilter, isColumnFilter = _b === void 0 ? false : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.scrollLeft, scrollLeft = _f === void 0 ? 0 : _f, _g = _a.filterInfo, filterInfo = _g === void 0 ? {} : _g, _h = _a.data, data = _h === void 0 ? [] : _h;
+        var _j = options.columnKeys, optionColumnKeys = _j === void 0 ? {} : _j;
+        var _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k;
+        var _l = styles.CTInnerWidth, CTInnerWidth = _l === void 0 ? 0 : _l, _m = styles.headerHeight, headerHeight = _m === void 0 ? 0 : _m, _o = styles.asidePanelWidth, asidePanelWidth = _o === void 0 ? 0 : _o;
         var optionItemHeight = 20;
         var filterWidth = 180;
         if (isColumnFilter === false || !utils_1.isNumber(isColumnFilter)) {

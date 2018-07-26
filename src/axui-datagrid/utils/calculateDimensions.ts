@@ -28,9 +28,10 @@ function calculateDimensions(
     header: optionsHeader = {},
     scroller: optionsScroller = {},
     page: optionsPage = {},
+    frozenColumnIndex = 0,
+    frozenRowIndex = 0,
   } = options;
 
-  const { frozenColumnIndex = 0, frozenRowIndex = 0 } = options || {};
   const {
     display: optionsHeaderDisplay = true,
     columnHeight: optionsHeaderColumnHeight = 0,

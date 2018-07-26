@@ -49,7 +49,7 @@ class DataGridEvents extends React.Component {
             return true;
         };
         this.onKeyUp = (e) => {
-            const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, scrollTop = 0, } = this.props;
+            const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, } = this.props;
             const proc = {
                 [stores_1.KeyCodes.ENTER]: () => {
                     const col = colGroup[focusedCol];
@@ -70,7 +70,7 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onKeyDown = (e) => {
-            const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, isInlineEditing = false, inlineEditingCell = {}, } = this.props;
+            const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, isInlineEditing = false, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0 } = options;
             const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, CTInnerWidth = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;

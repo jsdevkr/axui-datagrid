@@ -9,6 +9,7 @@
   box-shadow: $axui-datagrid-column-filter-box-shadow;
   border-radius: 5px;
   padding: 5px;
+  z-index: 10;
   [data-options] {
     height: 100%;
     border: 1px solid #eee;

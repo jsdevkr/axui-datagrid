@@ -17,6 +17,26 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var stores_1 = require("../stores");
@@ -73,11 +93,10 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
-            var propStyles = _this.props.styles;
+            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, sortInfo = _a.sortInfo;
             var _k = options.frozenColumnIndex, frozenColumnIndex = _k === void 0 ? 0 : _k;
             var CTInnerWidth = styles.CTInnerWidth;
-            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _l = newState.styles, _styles = _l === void 0 ? {} : _l, _filteredList = newState.filteredList;
+            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _l = newState.styles, _styles = _l === void 0 ? {} : _l, _filteredList = newState.filteredList, _sortInfo = newState.sortInfo;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 var _m = __assign({}, styles, _styles), _o = _m.CTInnerWidth, _CTInnerWidth = _o === void 0 ? 0 : _o, _p = _m.frozenPanelWidth, _frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _m.asidePanelWidth, _asidePanelWidth = _q === void 0 ? 0 : _q, _r = _m.rightPanelWidth, _rightPanelWidth = _r === void 0 ? 0 : _r, _s = _m.scrollContentWidth, scrollWidth = _s === void 0 ? 0 : _s, _t = _m.scrollContentHeight, scrollHeight = _t === void 0 ? 0 : _t, _u = _m.scrollContentContainerWidth, clientWidth = _u === void 0 ? 0 : _u, _v = _m.scrollContentContainerHeight, clientHeight = _v === void 0 ? 0 : _v;
@@ -115,6 +134,16 @@ var StoreProvider = /** @class */ (function (_super) {
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(utils_1.getNode(_this.state.getRootNode), _this.state, _filteredList).styles;
+            }
+            if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
+                onChangeSelected({
+                    data: _filteredList,
+                });
+            }
+            if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
+                onChangeSelected({
+                    data: filteredList,
+                });
             }
             _this.setState(newState);
         };
@@ -220,7 +249,7 @@ var StoreProvider = /** @class */ (function (_super) {
                             }
                         });
                         _this.setStoreState({
-                            sortInfo: currentSortInfo,
+                            sortInfo: __assign({}, currentSortInfo),
                             filteredList: sortedList,
                             isInlineEditing: false,
                             inlineEditingCell: {},
@@ -251,6 +280,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         }
                     }
                     _this.setStoreState({
+                        filteredList: __spread(filteredList),
                         isInlineEditing: false,
                         inlineEditingCell: {},
                         selectionRows: (_a = {},
@@ -300,6 +330,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
                         selectedRowIndexSelected: rowSelected,
+                        filteredList: __spread(filteredList),
                     });
                 },
                 _l[stores_1.DispatchTypes.SELECT_ALL] = function () {
@@ -319,6 +350,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     }
                     _this.setStoreState({
                         listSelectedAll: selectedAll,
+                        filteredList: __spread(filteredList),
                     });
                 },
                 _l);
@@ -346,11 +378,12 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.getClipBoardNode === prevState.getClipBoardNode &&
             newProps.rootObject === prevState.rootObject &&
             newProps.data === prevState.data &&
-            newProps.filteredList === prevState.filteredList &&
             newProps.options === prevState.options &&
             newProps.height === prevState.height &&
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
+            newProps.onScrollEnd === prevState.onScrollEnd &&
+            newProps.onChangeSelected === prevState.onChangeSelected &&
             newProps.headerTable === prevState.headerTable &&
             newProps.bodyRowTable === prevState.bodyRowTable &&
             newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -369,11 +402,30 @@ var StoreProvider = /** @class */ (function (_super) {
         }
         else {
             var scrollTop = prevState.scrollTop;
+            var filteredList = prevState.filteredList || [];
+            var styles = prevState.styles || {};
+            var data = newProps.data, _a = newProps.styles, _styles = _a === void 0 ? {} : _a, _b = newProps.options, _options = _b === void 0 ? {} : _b;
+            // 데이터를 정리하는 과정. data > filteredList
+            if (data && newProps.data !== prevState.data) {
+                // sort 되었다고 판단됨. filteredList를 sort 해주어야 함.
+                var _c = prevState.options, options = _c === void 0 ? {} : _c;
+                var _d = options.columnKeys, optionColumnKeys_1 = _d === void 0 ? {} : _d;
+                filteredList = data.filter(function (n) {
+                    return !n[optionColumnKeys_1.deleted || '__deleted__'];
+                });
+                // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
+                if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+                }
+            }
+            // 데이터 길이에 따라 스타일이 조정되어야 하므로
+            // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
+            styles = __assign({}, _styles, utils_1.getStylesAboutFilteredList(filteredList, _options, _styles));
+            // loadingData 상태값이 true 이면
+            // 컨텐츠 스크롤 위치를 맨 끝으로 보내도록 함.
             if (newProps.loadingData &&
                 newProps.loadingData !== prevState.loadingData) {
-                var filteredList = newProps.filteredList, _a = newProps.styles, styles = _a === void 0 ? {} : _a;
                 var focusRow = filteredList.length - 1;
-                var _b = styles.bodyTrHeight, bodyTrHeight = _b === void 0 ? 0 : _b, _c = styles.scrollContentWidth, scrollContentWidth = _c === void 0 ? 0 : _c, _d = styles.scrollContentHeight, scrollContentHeight = _d === void 0 ? 0 : _d, _e = styles.scrollContentContainerWidth, scrollContentContainerWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerHeight, scrollContentContainerHeight = _f === void 0 ? 0 : _f;
+                var _e = styles.bodyTrHeight, bodyTrHeight = _e === void 0 ? 0 : _e, _f = styles.scrollContentWidth, scrollContentWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerHeight, scrollContentContainerHeight = _j === void 0 ? 0 : _j;
                 scrollTop = utils_1.getScrollPosition(0, -focusRow * bodyTrHeight, {
                     scrollWidth: scrollContentWidth,
                     scrollHeight: scrollContentHeight,
@@ -392,12 +444,13 @@ var StoreProvider = /** @class */ (function (_super) {
                 getClipBoardNode: newProps.getClipBoardNode,
                 rootObject: newProps.rootObject,
                 data: newProps.data,
-                filteredList: newProps.filteredList,
+                filteredList: filteredList,
                 options: newProps.options,
                 height: newProps.height,
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
+                onChangeSelected: newProps.onChangeSelected,
                 headerTable: newProps.headerTable,
                 bodyRowTable: newProps.bodyRowTable,
                 bodyRowMap: newProps.bodyRowMap,
@@ -412,7 +465,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 colGroupMap: newProps.colGroupMap,
                 leftHeaderColGroup: newProps.leftHeaderColGroup,
                 headerColGroup: newProps.headerColGroup,
-                styles: newProps.styles,
+                styles: styles,
                 printStartColIndex: newProps.printStartColIndex,
                 printEndColIndex: newProps.printEndColIndex,
                 visibleHeaderColGroup: newProps.visibleHeaderColGroup,

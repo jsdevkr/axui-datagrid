@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -7,11 +7,9 @@ class LoadingState extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/basicData.json');
+    let gridData = require('examples/basicData.json');
 
     this.state = {
-      loading: false,
-      loadingData: false,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },
@@ -19,7 +17,8 @@ class LoadingState extends React.Component<any, any> {
         { key: 'date', label: 'Date', formatter: 'date' },
         { key: 'money', label: 'Money', formatter: 'money' },
       ],
-      data: gridData,
+      data: [...gridData],
+      filteredList: [...gridData],
       options: {
         showRowSelector: true,
       },
@@ -27,7 +26,7 @@ class LoadingState extends React.Component<any, any> {
   }
 
   render() {
-    const { loading, loadingData, height, columns, data, options } = this.state;
+    const { height, columns, data, options } = this.state;
 
     return (
       <Wrapper>
@@ -36,13 +35,24 @@ class LoadingState extends React.Component<any, any> {
           <p>You can express the loading status with loading props</p>
 
           <DataGrid
-            loading={loading}
-            loadingData={loadingData}
             height={height}
             style={{ fontSize: '12px' }}
             columns={columns}
             data={data}
             options={options}
+            onChangeSelected={param => {
+              this.setState({
+                filteredList: param.data,
+              });
+            }}
+          />
+          <Divider />
+
+          <h2>Data</h2>
+          <textarea
+            style={{ width: '100%', height: '400px', padding: '10px' }}
+            value={JSON.stringify(this.state.filteredList)}
+            readOnly
           />
         </Segment>
       </Wrapper>
