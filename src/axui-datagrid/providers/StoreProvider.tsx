@@ -124,6 +124,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       let scrollTop = prevState.scrollTop;
       let filteredList = prevState.filteredList || [];
       let styles: types.DataGridStyles = prevState.styles || {};
+      const { sortInfo } = prevState;
       const { data, styles: _styles = {}, options: _options = {} } = newProps;
 
       // 데이터를 정리하는 과정. data > filteredList
@@ -137,7 +138,42 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         });
 
         // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
-        if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+        if (sortInfo && Object.keys(sortInfo).length) {
+          let sortInfoArray: any[] = [];
+          for (let k in sortInfo) {
+            if (sortInfo[k]) {
+              sortInfoArray[sortInfo[k].seq] = {
+                key: k,
+                order: sortInfo[k].orderBy,
+              };
+            }
+          }
+          sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+
+          let i = 0,
+            l = sortInfoArray.length,
+            aValue: any,
+            bValue: any;
+
+          const getValueByKey = function(_item: any, _key: string) {
+            return _item[_key] || '';
+          };
+          filteredList = filteredList.sort((a: any, b: any): any => {
+            for (i = 0; i < l; i++) {
+              aValue = getValueByKey(a, sortInfoArray[i].key);
+              bValue = getValueByKey(b, sortInfoArray[i].key);
+
+              if (typeof aValue !== typeof bValue) {
+                aValue = '' + aValue;
+                bValue = '' + bValue;
+              }
+              if (aValue < bValue) {
+                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+              } else if (aValue > bValue) {
+                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+              }
+            }
+          });
         }
       }
 
@@ -366,13 +402,13 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
 
     if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
       onChangeSelected({
-        data: _filteredList,
+        filteredList: _filteredList,
       });
     }
 
     if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
       onChangeSelected({
-        data: filteredList,
+        filteredList: filteredList,
       });
     }
 

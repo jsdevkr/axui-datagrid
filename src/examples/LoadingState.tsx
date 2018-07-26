@@ -27,6 +27,7 @@ class LoadingState extends React.Component<any, any> {
   }
 
   onScrollEnd = () => {
+    const appendData = require('examples/basicData.json');
     this.setState({
       loadingData: true,
     });
@@ -34,6 +35,7 @@ class LoadingState extends React.Component<any, any> {
     setTimeout(() => {
       this.setState({
         loadingData: false,
+        data: [...this.state.data, ...appendData],
       });
     }, 1000);
   };

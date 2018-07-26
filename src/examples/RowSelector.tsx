@@ -42,7 +42,7 @@ class LoadingState extends React.Component<any, any> {
             options={options}
             onChangeSelected={param => {
               this.setState({
-                filteredList: param.data,
+                filteredList: param.filteredList,
               });
             }}
           />
