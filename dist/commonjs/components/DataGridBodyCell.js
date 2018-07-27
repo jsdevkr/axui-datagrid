@@ -19,6 +19,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     function DataGridBodyCell() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
+        _this.activeComposition = false;
         _this.setEditInputNode = function (element) {
             _this.editInput = element;
         };
@@ -81,12 +82,14 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                         case stores_1.KeyCodes.UP_ARROW:
                         case stores_1.KeyCodes.DOWN_ARROW:
                         case stores_1.KeyCodes.ENTER:
-                            dispatch(stores_1.DispatchTypes.UPDATE, {
-                                row: inlineEditingCell.rowIndex,
-                                colIndex: inlineEditingCell.colIndex,
-                                value: e.target.value,
-                                eventWhichKey: e.which,
-                            });
+                            if (!_this.activeComposition) {
+                                dispatch(stores_1.DispatchTypes.UPDATE, {
+                                    row: inlineEditingCell.rowIndex,
+                                    colIndex: inlineEditingCell.colIndex,
+                                    value: e.target.value,
+                                    eventWhichKey: e.which,
+                                });
+                            }
                             break;
                         default:
                             break;
@@ -100,6 +103,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     }
     DataGridBodyCell.prototype.componentDidUpdate = function (prevProps, prevState) {
         if (this.editInput) {
+            this.activeComposition = false;
             this.editInput.select();
         }
     };
@@ -136,7 +140,13 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             inlineEditingCell.rowIndex === li &&
             inlineEditingCell.colIndex === col.colIndex) {
             return (React.createElement("td", { key: ci, colSpan: col.colSpan, rowSpan: col.rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
-                React.createElement("input", { type: "text", ref: this.setEditInputNode, onBlur: function (e) {
+                React.createElement("input", { type: "text", ref: this.setEditInputNode, onCompositionUpdate: function (e) {
+                        _this.activeComposition = true;
+                    }, onCompositionEnd: function (e) {
+                        setTimeout(function () {
+                            _this.activeComposition = false;
+                        });
+                    }, onBlur: function (e) {
                         _this.onEventInput(stores_1.EventNames.BLUR, e);
                     }, onKeyUp: function (e) {
                         _this.onEventInput(stores_1.EventNames.KEYUP, e);

@@ -15,6 +15,7 @@ interface IState {}
 class DataGridBodyCell extends React.Component<IProps, IState> {
   editInput: HTMLInputElement;
   state = {};
+  activeComposition: boolean = false;
 
   setEditInputNode = (element: any) => {
     this.editInput = element;
@@ -22,6 +23,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
 
   componentDidUpdate(prevProps: IProps, prevState: IState) {
     if (this.editInput) {
+      this.activeComposition = false;
       this.editInput.select();
     }
   }
@@ -98,13 +100,14 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           case KeyCodes.UP_ARROW:
           case KeyCodes.DOWN_ARROW:
           case KeyCodes.ENTER:
-            dispatch(DispatchTypes.UPDATE, {
-              row: inlineEditingCell.rowIndex,
-              colIndex: inlineEditingCell.colIndex,
-              value: e.target.value,
-              eventWhichKey: e.which,
-            });
-
+            if (!this.activeComposition) {
+              dispatch(DispatchTypes.UPDATE, {
+                row: inlineEditingCell.rowIndex,
+                colIndex: inlineEditingCell.colIndex,
+                value: e.target.value,
+                eventWhichKey: e.which,
+              });
+            }
             break;
           default:
             break;
@@ -180,6 +183,14 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           <input
             type="text"
             ref={this.setEditInputNode}
+            onCompositionUpdate={(e: any) => {
+              this.activeComposition = true;
+            }}
+            onCompositionEnd={(e: any) => {
+              setTimeout(() => {
+                this.activeComposition = false;
+              });
+            }}
             onBlur={(e: any) => {
               this.onEventInput(EventNames.BLUR, e);
             }}

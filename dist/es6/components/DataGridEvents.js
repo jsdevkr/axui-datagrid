@@ -70,7 +70,7 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onKeyDown = (e) => {
-            const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, isInlineEditing = false, } = this.props;
+            const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0 } = options;
             const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, CTInnerWidth = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
@@ -308,13 +308,11 @@ class DataGridEvents extends React.Component {
                 }
             }
             else {
-                if (!isInlineEditing) {
-                    proc[e.which] && proc[e.which]();
-                }
+                proc[e.which] && proc[e.which]();
             }
         };
         this.onFireEvent = (e, eventName) => {
-            const { loading, loadingData } = this.props;
+            const { loading, loadingData, isInlineEditing = false } = this.props;
             const proc = {
                 [stores_1.EventNames.WHEEL]: () => {
                     if (!loadingData) {
@@ -326,12 +324,12 @@ class DataGridEvents extends React.Component {
                     }
                 },
                 [stores_1.EventNames.KEYDOWN]: () => {
-                    if (!loadingData) {
+                    if (!loadingData && !isInlineEditing) {
                         this.onKeyDown(e);
                     }
                 },
                 [stores_1.EventNames.KEYUP]: () => {
-                    if (!loadingData) {
+                    if (!loadingData && !isInlineEditing) {
                         this.onKeyUp(e);
                     }
                 },

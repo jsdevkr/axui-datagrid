@@ -137,12 +137,12 @@ var StoreProvider = /** @class */ (function (_super) {
             }
             if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
                 onChangeSelected({
-                    data: _filteredList,
+                    filteredList: _filteredList,
                 });
             }
             if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
                 onChangeSelected({
-                    data: filteredList,
+                    filteredList: filteredList,
                 });
             }
             _this.setState(newState);
@@ -404,6 +404,7 @@ var StoreProvider = /** @class */ (function (_super) {
             var scrollTop = prevState.scrollTop;
             var filteredList = prevState.filteredList || [];
             var styles = prevState.styles || {};
+            var sortInfo = prevState.sortInfo;
             var data = newProps.data, _a = newProps.styles, _styles = _a === void 0 ? {} : _a, _b = newProps.options, _options = _b === void 0 ? {} : _b;
             // 데이터를 정리하는 과정. data > filteredList
             if (data && newProps.data !== prevState.data) {
@@ -414,7 +415,37 @@ var StoreProvider = /** @class */ (function (_super) {
                     return !n[optionColumnKeys_1.deleted || '__deleted__'];
                 });
                 // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
-                if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+                if (sortInfo && Object.keys(sortInfo).length) {
+                    var sortInfoArray_2 = [];
+                    for (var k in sortInfo) {
+                        if (sortInfo[k]) {
+                            sortInfoArray_2[sortInfo[k].seq] = {
+                                key: k,
+                                order: sortInfo[k].orderBy,
+                            };
+                        }
+                    }
+                    sortInfoArray_2 = sortInfoArray_2.filter(function (o) { return typeof o !== 'undefined'; });
+                    var i_2 = 0, l_2 = sortInfoArray_2.length, aValue_2, bValue_2;
+                    var getValueByKey_2 = function (_item, _key) {
+                        return _item[_key] || '';
+                    };
+                    filteredList = filteredList.sort(function (a, b) {
+                        for (i_2 = 0; i_2 < l_2; i_2++) {
+                            aValue_2 = getValueByKey_2(a, sortInfoArray_2[i_2].key);
+                            bValue_2 = getValueByKey_2(b, sortInfoArray_2[i_2].key);
+                            if (typeof aValue_2 !== typeof bValue_2) {
+                                aValue_2 = '' + aValue_2;
+                                bValue_2 = '' + bValue_2;
+                            }
+                            if (aValue_2 < bValue_2) {
+                                return sortInfoArray_2[i_2].order === 'asc' ? -1 : 1;
+                            }
+                            else if (aValue_2 > bValue_2) {
+                                return sortInfoArray_2[i_2].order === 'asc' ? 1 : -1;
+                            }
+                        }
+                    });
                 }
             }
             // 데이터 길이에 따라 스타일이 조정되어야 하므로

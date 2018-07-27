@@ -93,3 +93,4 @@ export default Basic;
 
 * v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.
 * v0.3.2 - Add a new props onChangeSelected, refactoring StoreProvider
+* v0.3.3 - Changed keyboard event firing to be determined by 'onCompositionUpdate' state. In InlineEdit mode.

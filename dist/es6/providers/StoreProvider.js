@@ -98,12 +98,12 @@ class StoreProvider extends React.Component {
             }
             if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
                 onChangeSelected({
-                    data: _filteredList,
+                    filteredList: _filteredList,
                 });
             }
             if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
                 onChangeSelected({
-                    data: filteredList,
+                    filteredList: filteredList,
                 });
             }
             this.setState(newState);
@@ -362,6 +362,7 @@ class StoreProvider extends React.Component {
             let scrollTop = prevState.scrollTop;
             let filteredList = prevState.filteredList || [];
             let styles = prevState.styles || {};
+            const { sortInfo } = prevState;
             const { data, styles: _styles = {}, options: _options = {} } = newProps;
             // 데이터를 정리하는 과정. data > filteredList
             if (data && newProps.data !== prevState.data) {
@@ -372,7 +373,37 @@ class StoreProvider extends React.Component {
                     return !n[optionColumnKeys.deleted || '__deleted__'];
                 });
                 // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
-                if (prevState.sortInfo && Object.keys(prevState.sortInfo).length) {
+                if (sortInfo && Object.keys(sortInfo).length) {
+                    let sortInfoArray = [];
+                    for (let k in sortInfo) {
+                        if (sortInfo[k]) {
+                            sortInfoArray[sortInfo[k].seq] = {
+                                key: k,
+                                order: sortInfo[k].orderBy,
+                            };
+                        }
+                    }
+                    sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+                    let i = 0, l = sortInfoArray.length, aValue, bValue;
+                    const getValueByKey = function (_item, _key) {
+                        return _item[_key] || '';
+                    };
+                    filteredList = filteredList.sort((a, b) => {
+                        for (i = 0; i < l; i++) {
+                            aValue = getValueByKey(a, sortInfoArray[i].key);
+                            bValue = getValueByKey(b, sortInfoArray[i].key);
+                            if (typeof aValue !== typeof bValue) {
+                                aValue = '' + aValue;
+                                bValue = '' + bValue;
+                            }
+                            if (aValue < bValue) {
+                                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                            }
+                            else if (aValue > bValue) {
+                                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                            }
+                        }
+                    });
                 }
             }
             // 데이터 길이에 따라 스타일이 조정되어야 하므로

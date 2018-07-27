@@ -8,6 +8,7 @@ class DataGridBodyCell extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {};
+        this.activeComposition = false;
         this.setEditInputNode = (element) => {
             this.editInput = element;
         };
@@ -69,12 +70,14 @@ class DataGridBodyCell extends React.Component {
                         case stores_1.KeyCodes.UP_ARROW:
                         case stores_1.KeyCodes.DOWN_ARROW:
                         case stores_1.KeyCodes.ENTER:
-                            dispatch(stores_1.DispatchTypes.UPDATE, {
-                                row: inlineEditingCell.rowIndex,
-                                colIndex: inlineEditingCell.colIndex,
-                                value: e.target.value,
-                                eventWhichKey: e.which,
-                            });
+                            if (!this.activeComposition) {
+                                dispatch(stores_1.DispatchTypes.UPDATE, {
+                                    row: inlineEditingCell.rowIndex,
+                                    colIndex: inlineEditingCell.colIndex,
+                                    value: e.target.value,
+                                    eventWhichKey: e.which,
+                                });
+                            }
                             break;
                         default:
                             break;
@@ -86,6 +89,7 @@ class DataGridBodyCell extends React.Component {
     }
     componentDidUpdate(prevProps, prevState) {
         if (this.editInput) {
+            this.activeComposition = false;
             this.editInput.select();
         }
     }
@@ -121,7 +125,13 @@ class DataGridBodyCell extends React.Component {
             inlineEditingCell.rowIndex === li &&
             inlineEditingCell.colIndex === col.colIndex) {
             return (React.createElement("td", { key: ci, colSpan: col.colSpan, rowSpan: col.rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
-                React.createElement("input", { type: "text", ref: this.setEditInputNode, onBlur: (e) => {
+                React.createElement("input", { type: "text", ref: this.setEditInputNode, onCompositionUpdate: (e) => {
+                        this.activeComposition = true;
+                    }, onCompositionEnd: (e) => {
+                        setTimeout(() => {
+                            this.activeComposition = false;
+                        });
+                    }, onBlur: (e) => {
                         this.onEventInput(stores_1.EventNames.BLUR, e);
                     }, onKeyUp: (e) => {
                         this.onEventInput(stores_1.EventNames.KEYUP, e);

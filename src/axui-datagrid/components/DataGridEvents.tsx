@@ -121,7 +121,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       focusedRow = 0,
       options = {},
       styles = {},
-      isInlineEditing = false,
     } = this.props;
 
     const {
@@ -412,14 +411,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
         metaProc[e.which]();
       }
     } else {
-      if (!isInlineEditing) {
-        proc[e.which] && proc[e.which]();
-      }
+      proc[e.which] && proc[e.which]();
     }
   };
 
   onFireEvent = (e: any, eventName: EventNames) => {
-    const { loading, loadingData } = this.props;
+    const { loading, loadingData, isInlineEditing = false } = this.props;
     const proc = {
       [EventNames.WHEEL]: () => {
         if (!loadingData) {
@@ -430,12 +427,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
         }
       },
       [EventNames.KEYDOWN]: () => {
-        if (!loadingData) {
+        if (!loadingData && !isInlineEditing) {
           this.onKeyDown(e);
         }
       },
       [EventNames.KEYUP]: () => {
-        if (!loadingData) {
+        if (!loadingData && !isInlineEditing) {
           this.onKeyUp(e);
         }
       },
