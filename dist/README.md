@@ -9,87 +9,174 @@
 npm install axui-datagrid -S
 ```
 
-# Usage
+# Run
+
+```bash
+cd [my-open-source-folder]
+git clone https://github.com/axui/datagrid.git
+npm i
+npm start
+```
+
+# Props
+
+## data?: any[] = [];
+
+## columns: DataGridColumn[];
+
+## height?: number = 400;
+
+## style?: any;
+
+## options?: DataGridOptions = defaultOptions;
+
+```typescript jsx
+static defaultColumnKeys: types.DataGridColumnKeys = {
+    selected: '__selected__',
+    modified: '__modified__',
+    deleted: '__deleted__',
+    disableSelection: '__disable_selection__',
+};
+static defaultHeader: types.DataGridOptionHeader = {
+    display: true,
+    align: 'left',
+    columnHeight: 24,
+    columnPadding: 3,
+    columnBorderWidth: 1,
+    selector: true,
+    sortable: true,
+    enableFilter: true,
+    clickAction: 'sort',
+};
+static defaultBody: types.DataGridOptionBody = {
+    align: 'left',
+    columnHeight: 24,
+    columnPadding: 3,
+    columnBorderWidth: 1,
+    grouping: false,
+    mergeCells: false,
+};
+static defaultPageButtons: types.DataGridOptionPageButton[] = [
+    { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+    { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+    { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+    { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+    { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+    { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
+];
+static defaultPage: types.DataGridOptionPage = {
+    buttonsContainerWidth: 150,
+    buttons: DataGrid.defaultPageButtons,
+    buttonHeight: 16,
+    height: 20,
+};
+static defaultScroller: types.DataGridOptionScroller = {
+    size: 14,
+    arrowSize: 14,
+    barMinSize: 12,
+    padding: 3,
+    disabledVerticalScroll: false,
+};
+static defaultOptions: types.DataGridOptions = {
+    frozenColumnIndex: 0,
+    frozenRowIndex: 0,
+    showLineNumber: true,
+    showRowSelector: false,
+    multipleSelect: true,
+    columnMinWidth: 100,
+    lineNumberColumnWidth: 60,
+    rowSelectorColumnWidth: 28,
+    remoteSort: false,
+    asidePanelWidth: 0,
+    header: DataGrid.defaultHeader,
+    body: DataGrid.defaultBody,
+    page: DataGrid.defaultPage,
+    scroller: DataGrid.defaultScroller,
+    columnKeys: DataGrid.defaultColumnKeys,
+    bodyLoaderHeight: 100,
+};
+```
+
+## onBeforeEvent?: (e: any, eventName: string) => void;
+
+## onAfterEvent?: (e: any, eventName: string) => void;
+
+## onScrollEnd?: (param: onScrollEndFunctionParam) => void;
+
+## onChangeSelected?: (param: onChangeSelectedParam) => void;
+
+## loading?: boolean = false;
+
+## loadingData?: boolean = false;
+
+# Sample
+
+[You can see source code here](https://github.com/axui/datagrid/tree/master/src/examples)
+
+Here is one example code for using a datagrid
 
 ```typescript jsx
 import * as React from 'react';
-import { Segment } from 'semantic-ui-react';
 
-import 'axui-datagrid/style.scss';
+import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
-interface IProps {}
-interface IState {}
-class Basic extends React.Component<IProps, IState> {
-  state = {};
+class Formatter extends React.Component<any, any> {
+  constructor(props: any) {
+    super(props);
 
-  render() {
-    let gridData = [];
+    const gridData = require('examples/basicData.json');
 
-    for (let i = 1; i < 30; i++) {
-      gridData.push({
-        a: 'a',
-        b: 'b',
-        c: 'c',
-        saleDt: 'saleDt',
-        customer: 'customer',
-        saleType: 'saleType',
-        price: 100 * i,
-        amount: i,
-        cost: 100 * i * i,
-      });
-    }
+    this.state = {
+      height: 400,
+      columns: [
+        { key: 'id', width: 60, label: 'ID', align: 'center' },
+        {
+          key: 'title',
+          width: 200,
+          label: 'Title',
+          formatter: function(args: any) {
+            // console.log(args);
+            return ' * ' + args.value;
+          },
+        },
+        { key: 'writer', label: 'Writer', align: 'center' },
+        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
+        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+      ],
+      data: gridData,
+    };
+  }
 
-    const columns = [
-      {
-        key: 'a',
-        label: '필드A',
-        width: 50,
-        align: 'center',
-      },
-      { key: 'b', label: '필드B', align: 'center', editor: { type: 'text' } },
-      { key: 'c', label: '필드C', align: 'center', editor: { type: 'text' } },
-      { key: 'price', label: '단가', formatter: 'money', align: 'right' },
-      {
-        key: 'amount',
-        width: 50,
-        label: '수량',
-        formatter: 'money',
-        align: 'right',
-      },
-      { key: 'cost', label: '금액', align: 'right', formatter: 'money' },
-      { key: 'saleDt', label: '판매일자', align: 'center' },
-      {
-        key: 'customer',
-        label: '고객명',
-        align: 'center',
-        editor: { type: 'text' },
-      },
-      { key: 'saleType', label: '판매타입', align: 'center' },
-    ];
+  public render() {
     return (
-      <>
-        <Segment>
-          <h1>Basic</h1>
-
+      <Wrapper>
+        <Segment padded>
+          <h1>Formatter</h1>
+          <p>
+            You can use 'date', 'money' predefined in 'columns> col.formatter',
+            or you can change the values as desired using a user-defined
+            function.
+          </p>
           <DataGrid
-            data={gridData}
-            columns={columns}
-            options={{
-              showLineNumber: true,
-            }}
+            height={this.state.height}
             style={{ fontSize: '12px' }}
+            columns={this.state.columns}
+            data={this.state.data}
+            options={this.state.options}
           />
         </Segment>
-      </>
+      </Wrapper>
     );
   }
 }
 
-export default Basic;
+export default Formatter;
 ```
 
 # Version history
 
 * v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.
 * v0.3.2 - Add a new props onChangeSelected, refactoring StoreProvider
+* v0.3.3 - Changed keyboard event firing to be determined by 'onCompositionUpdate' state. In InlineEdit mode.
+* v0.3.5 - Update document and minor bug fix on inline-edit.

@@ -8,15 +8,31 @@ const Usage = () => (
 
     <Segment>
       <h2>Install</h2>
-
-      <CodeViewer>$ npm install axui-datagrid -S</CodeViewer>
+      <CodeViewer>$ npm i axui-datagrid -S</CodeViewer>
     </Segment>
 
     <Divider />
 
     <Segment>
+      <h2>Develop</h2>
+      <CodeViewer>
+        {`
+$ cd [my-open-source-folder]
+$ git clone https://github.com/axui/datagrid.git
+$ npm i
+$ npm start
+`}
+      </CodeViewer>
+      <p>You can view axui-datagrid in the browser. http://localhost:3000</p>
+    </Segment>
+
+    <Segment>
       <h2>Example</h2>
 
+      <p>
+        <a href="https://github.com/axui/datagrid/tree/master/src/examples" target="_blank">
+          You can see source code here.</a> and It is one example code for using a datagrid
+      </p>
       <CodeViewer>
         {`
 import * as React from 'react';
