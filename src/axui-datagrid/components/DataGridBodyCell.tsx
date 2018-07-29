@@ -197,7 +197,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
             onKeyUp={(e: any) => {
               this.onEventInput(EventNames.KEYUP, e);
             }}
-            data-inline-editz
+            data-inline-edit
             defaultValue={value}
           />
         </td>
