@@ -321,7 +321,7 @@ var DataGridBody = /** @class */ (function (_super) {
     DataGridBody.prototype.render = function () {
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.loadingData, loadingData = _f === void 0 ? false : _f;
         var _g = options.frozenRowIndex, frozenRowIndex = _g === void 0 ? 0 : _g, _h = options.bodyLoaderHeight, bodyLoaderHeight = _h === void 0 ? 0 : _h;
-        var _j = styles.CTInnerWidth, CTInnerWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 0 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.footSumHeight, footSumHeight = _r === void 0 ? 0 : _r;
+        var _j = styles.CTInnerWidth, CTInnerWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 0 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.verticalScrollerWidth, verticalScrollerWidth = _r === void 0 ? 0 : _r, _s = styles.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s;
         var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
         var loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
         var topBodyScrollConfig = {
@@ -348,7 +348,11 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         var topBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: CTInnerWidth -
+                asidePanelWidth -
+                frozenPanelWidth -
+                rightPanelWidth -
+                verticalScrollerWidth,
             top: 0,
             height: frozenPanelHeight,
         };
@@ -366,7 +370,11 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         var bodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: CTInnerWidth -
+                asidePanelWidth -
+                frozenPanelWidth -
+                rightPanelWidth -
+                verticalScrollerWidth,
             top: frozenPanelHeight - loadingDataHeight,
             height: bodyHeight - frozenPanelHeight - footSumHeight,
         };

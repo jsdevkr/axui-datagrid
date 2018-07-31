@@ -307,7 +307,7 @@ class DataGridBody extends React.Component {
     render() {
         const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, } = this.props;
         const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
-        const { CTInnerWidth = 0, bodyHeight = 0, bodyTrHeight = 0, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = styles;
+        const { CTInnerWidth = 0, bodyHeight = 0, bodyTrHeight = 0, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, footSumHeight = 0, } = styles;
         const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
         const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
         let topBodyScrollConfig = {
@@ -334,7 +334,11 @@ class DataGridBody extends React.Component {
         };
         let topBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: CTInnerWidth -
+                asidePanelWidth -
+                frozenPanelWidth -
+                rightPanelWidth -
+                verticalScrollerWidth,
             top: 0,
             height: frozenPanelHeight,
         };
@@ -352,7 +356,11 @@ class DataGridBody extends React.Component {
         };
         let bodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: CTInnerWidth -
+                asidePanelWidth -
+                frozenPanelWidth -
+                rightPanelWidth -
+                verticalScrollerWidth,
             top: frozenPanelHeight - loadingDataHeight,
             height: bodyHeight - frozenPanelHeight - footSumHeight,
         };

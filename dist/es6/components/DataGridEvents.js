@@ -72,21 +72,24 @@ class DataGridEvents extends React.Component {
         this.onKeyDown = (e) => {
             const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
-            const { frozenRowIndex = 0 } = options;
-            const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, CTInnerWidth = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
+            const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
+            const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
             const rootNode = utils_1.getNode(getRootNode);
             const clipBoardNode = utils_1.getNode(getClipBoardNode);
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             const eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
-                frozenRowIndex +
+                // frozenRowIndex +
                 Math.floor(bodyHeight / bodyTrHeight);
             const sColIndex = printStartColIndex;
             const eColIndex = printEndColIndex;
             const pRowSize = Math.floor(bodyHeight / bodyTrHeight);
             const getAvailScrollTop = (rowIndex) => {
                 let _scrollTop = undefined;
+                if (frozenRowIndex >= rowIndex) {
+                    return;
+                }
                 if (sRowIndex >= rowIndex) {
-                    _scrollTop = -rowIndex * bodyTrHeight;
+                    _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
                 }
                 else if (eRowIndex <= rowIndex) {
                     _scrollTop =
@@ -107,17 +110,20 @@ class DataGridEvents extends React.Component {
             };
             const getAvailScrollLeft = (colIndex) => {
                 let _scrollLeft = undefined;
-                if (sColIndex >= colIndex) {
-                    _scrollLeft = -headerColGroup[colIndex]._sx;
+                if (frozenColumnIndex > colIndex) {
+                    return;
                 }
-                else if (eColIndex <= colIndex) {
+                if (sColIndex >= colIndex - frozenColumnIndex) {
+                    _scrollLeft = -colGroup[colIndex]._sx + frozenPanelWidth;
+                }
+                else if (eColIndex <= colIndex - frozenColumnIndex) {
+                    // 끝점 계산
                     _scrollLeft =
-                        -headerColGroup[colIndex]._ex +
-                            (CTInnerWidth -
-                                asidePanelWidth -
-                                frozenPanelWidth -
-                                rightPanelWidth -
-                                verticalScrollerWidth);
+                        scrollContentContainerWidth -
+                            colGroup[colIndex]._ex +
+                            frozenPanelWidth -
+                            verticalScrollerWidth -
+                            rightPanelWidth;
                 }
                 if (typeof _scrollLeft !== 'undefined') {
                     _scrollLeft = utils_1.getScrollPosition(_scrollLeft, scrollTop, {
@@ -290,8 +296,8 @@ class DataGridEvents extends React.Component {
                 [stores_1.KeyCodes.RIGHT_ARROW]: () => {
                     e.preventDefault();
                     e.stopPropagation();
-                    let focusCol = focusedCol + 1 >= headerColGroup.length
-                        ? headerColGroup.length - 1
+                    let focusCol = focusedCol + 1 >= colGroup.length
+                        ? colGroup.length - 1
                         : focusedCol + 1;
                     setStoreState({
                         scrollLeft: getAvailScrollLeft(focusCol),

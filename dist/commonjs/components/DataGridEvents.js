@@ -84,21 +84,24 @@ var DataGridEvents = /** @class */ (function (_super) {
         _this.onKeyDown = function (e) {
             var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m;
             var _o = _this.props, _p = _o.printStartColIndex, printStartColIndex = _p === void 0 ? 0 : _p, _q = _o.printEndColIndex, printEndColIndex = _q === void 0 ? colGroup.length : _q;
-            var _r = options.frozenRowIndex, frozenRowIndex = _r === void 0 ? 0 : _r;
-            var _s = styles.bodyTrHeight, bodyTrHeight = _s === void 0 ? 0 : _s, _t = styles.bodyHeight, bodyHeight = _t === void 0 ? 0 : _t, _u = styles.scrollContentWidth, scrollContentWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentHeight, scrollContentHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentContainerWidth, scrollContentContainerWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerHeight, scrollContentContainerHeight = _x === void 0 ? 0 : _x, _y = styles.CTInnerWidth, CTInnerWidth = _y === void 0 ? 0 : _y, _z = styles.asidePanelWidth, asidePanelWidth = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
+            var _r = options.frozenRowIndex, frozenRowIndex = _r === void 0 ? 0 : _r, _s = options.frozenColumnIndex, frozenColumnIndex = _s === void 0 ? 0 : _s;
+            var _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.bodyHeight, bodyHeight = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y, _z = styles.frozenPanelWidth, frozenPanelWidth = _z === void 0 ? 0 : _z, _0 = styles.rightPanelWidth, rightPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.verticalScrollerWidth, verticalScrollerWidth = _1 === void 0 ? 0 : _1;
             var rootNode = utils_1.getNode(getRootNode);
             var clipBoardNode = utils_1.getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
-                frozenRowIndex +
+                // frozenRowIndex +
                 Math.floor(bodyHeight / bodyTrHeight);
             var sColIndex = printStartColIndex;
             var eColIndex = printEndColIndex;
             var pRowSize = Math.floor(bodyHeight / bodyTrHeight);
             var getAvailScrollTop = function (rowIndex) {
                 var _scrollTop = undefined;
+                if (frozenRowIndex >= rowIndex) {
+                    return;
+                }
                 if (sRowIndex >= rowIndex) {
-                    _scrollTop = -rowIndex * bodyTrHeight;
+                    _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
                 }
                 else if (eRowIndex <= rowIndex) {
                     _scrollTop =
@@ -119,17 +122,20 @@ var DataGridEvents = /** @class */ (function (_super) {
             };
             var getAvailScrollLeft = function (colIndex) {
                 var _scrollLeft = undefined;
-                if (sColIndex >= colIndex) {
-                    _scrollLeft = -headerColGroup[colIndex]._sx;
+                if (frozenColumnIndex > colIndex) {
+                    return;
                 }
-                else if (eColIndex <= colIndex) {
+                if (sColIndex >= colIndex - frozenColumnIndex) {
+                    _scrollLeft = -colGroup[colIndex]._sx + frozenPanelWidth;
+                }
+                else if (eColIndex <= colIndex - frozenColumnIndex) {
+                    // 끝점 계산
                     _scrollLeft =
-                        -headerColGroup[colIndex]._ex +
-                            (CTInnerWidth -
-                                asidePanelWidth -
-                                frozenPanelWidth -
-                                rightPanelWidth -
-                                verticalScrollerWidth);
+                        scrollContentContainerWidth -
+                            colGroup[colIndex]._ex +
+                            frozenPanelWidth -
+                            verticalScrollerWidth -
+                            rightPanelWidth;
                 }
                 if (typeof _scrollLeft !== 'undefined') {
                     _scrollLeft = utils_1.getScrollPosition(_scrollLeft, scrollTop, {
@@ -144,8 +150,8 @@ var DataGridEvents = /** @class */ (function (_super) {
                 }
                 return _scrollLeft;
             };
-            var metaProc = (_3 = {},
-                _3[stores_1.KeyCodes.C] = function () {
+            var metaProc = (_2 = {},
+                _2[stores_1.KeyCodes.C] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var copySuccess = false;
@@ -172,7 +178,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     rootNode && rootNode.focus();
                     return copySuccess;
                 },
-                _3[stores_1.KeyCodes.A] = function () {
+                _2[stores_1.KeyCodes.A] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var state = {
@@ -199,9 +205,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                     state.focusedCol = 0;
                     setStoreState(state);
                 },
-                _3);
-            var proc = (_4 = {},
-                _4[stores_1.KeyCodes.ESC] = function () {
+                _2);
+            var proc = (_3 = {},
+                _3[stores_1.KeyCodes.ESC] = function () {
                     setStoreState({
                         selectionRows: (_a = {},
                             _a[focusedRow] = true,
@@ -212,7 +218,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a, _b;
                 },
-                _4[stores_1.KeyCodes.HOME] = function () {
+                _3[stores_1.KeyCodes.HOME] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = 0;
@@ -225,7 +231,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.END] = function () {
+                _3[stores_1.KeyCodes.END] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = filteredList.length - 1;
@@ -238,7 +244,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.PAGE_UP] = function () {
+                _3[stores_1.KeyCodes.PAGE_UP] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
@@ -251,7 +257,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.PAGE_DOWN] = function () {
+                _3[stores_1.KeyCodes.PAGE_DOWN] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + pRowSize >= filteredList.length
@@ -266,7 +272,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.UP_ARROW] = function () {
+                _3[stores_1.KeyCodes.UP_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
@@ -279,7 +285,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.DOWN_ARROW] = function () {
+                _3[stores_1.KeyCodes.DOWN_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + 1 >= filteredList.length
@@ -294,7 +300,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.LEFT_ARROW] = function () {
+                _3[stores_1.KeyCodes.LEFT_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
@@ -307,11 +313,11 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4[stores_1.KeyCodes.RIGHT_ARROW] = function () {
+                _3[stores_1.KeyCodes.RIGHT_ARROW] = function () {
                     e.preventDefault();
                     e.stopPropagation();
-                    var focusCol = focusedCol + 1 >= headerColGroup.length
-                        ? headerColGroup.length - 1
+                    var focusCol = focusedCol + 1 >= colGroup.length
+                        ? colGroup.length - 1
                         : focusedCol + 1;
                     setStoreState({
                         scrollLeft: getAvailScrollLeft(focusCol),
@@ -322,7 +328,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     });
                     var _a;
                 },
-                _4);
+                _3);
             if (e.metaKey) {
                 if (e.which in metaProc) {
                     metaProc[e.which]();
@@ -331,7 +337,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             else {
                 proc[e.which] && proc[e.which]();
             }
-            var _3, _4;
+            var _2, _3;
         };
         _this.onFireEvent = function (e, eventName) {
             var _a = _this.props, loading = _a.loading, loadingData = _a.loadingData, _b = _a.isInlineEditing, isInlineEditing = _b === void 0 ? false : _b;

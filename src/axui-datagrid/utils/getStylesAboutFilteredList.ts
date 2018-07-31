@@ -14,6 +14,10 @@ function getStylesAboutFilteredList(
     pageHeight = 0,
     scrollContentContainerHeight = 0,
     verticalScrollerHeight = 0,
+    CTInnerWidth = 0,
+    asidePanelWidth = 0,
+    frozenPanelWidth = 0,
+    rightPanelWidth = 0,
   } = styles;
   const {
     scroller: optionsScroller = {},
@@ -52,6 +56,13 @@ function getStylesAboutFilteredList(
   if (optionsScrollerBarMinSize > currentStyles.verticalScrollBarHeight) {
     currentStyles.verticalScrollBarHeight = optionsScrollerBarMinSize;
   }
+
+  currentStyles.scrollContentContainerWidth =
+    CTInnerWidth -
+    asidePanelWidth -
+    frozenPanelWidth -
+    rightPanelWidth -
+    currentStyles.verticalScrollerWidth;
 
   if (
     horizontalScrollerHeight > 0 &&

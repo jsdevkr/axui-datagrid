@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function getStylesAboutFilteredList(_list, options, styles) {
-    const { elHeight = 0, headerHeight = 0, footSumHeight = 0, bodyTrHeight = 0, horizontalScrollerHeight = 0, pageHeight = 0, scrollContentContainerHeight = 0, verticalScrollerHeight = 0, } = styles;
+    const { elHeight = 0, headerHeight = 0, footSumHeight = 0, bodyTrHeight = 0, horizontalScrollerHeight = 0, pageHeight = 0, scrollContentContainerHeight = 0, verticalScrollerHeight = 0, CTInnerWidth = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, } = styles;
     const { scroller: optionsScroller = {}, page: optionsPage = {}, frozenRowIndex = 0, } = options;
     const { height: optionsPageHeight = 0 } = optionsPage;
     const { size: optionsScrollerSize = 0, barMinSize: optionsScrollerBarMinSize = 0, } = optionsScroller;
@@ -24,6 +24,12 @@ function getStylesAboutFilteredList(_list, options, styles) {
     if (optionsScrollerBarMinSize > currentStyles.verticalScrollBarHeight) {
         currentStyles.verticalScrollBarHeight = optionsScrollerBarMinSize;
     }
+    currentStyles.scrollContentContainerWidth =
+        CTInnerWidth -
+            asidePanelWidth -
+            frozenPanelWidth -
+            rightPanelWidth -
+            currentStyles.verticalScrollerWidth;
     if (horizontalScrollerHeight > 0 &&
         elHeight -
             headerHeight -

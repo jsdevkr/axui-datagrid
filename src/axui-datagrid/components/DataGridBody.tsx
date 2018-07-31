@@ -428,6 +428,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,
       rightPanelWidth = 0,
+      verticalScrollerWidth = 0,
       footSumHeight = 0,
     } = styles;
     const sRowIndex =
@@ -460,7 +461,11 @@ class DataGridBody extends React.Component<IProps, IState> {
     let topBodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
-        CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+        CTInnerWidth -
+        asidePanelWidth -
+        frozenPanelWidth -
+        rightPanelWidth -
+        verticalScrollerWidth,
       top: 0,
       height: frozenPanelHeight,
     };
@@ -479,7 +484,11 @@ class DataGridBody extends React.Component<IProps, IState> {
     let bodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
-        CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+        CTInnerWidth -
+        asidePanelWidth -
+        frozenPanelWidth -
+        rightPanelWidth -
+        verticalScrollerWidth,
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
