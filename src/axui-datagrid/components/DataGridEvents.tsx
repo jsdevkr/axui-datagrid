@@ -128,7 +128,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       printEndColIndex = colGroup.length,
     } = this.props;
 
-    const { frozenRowIndex = 0 } = options;
+    const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
     const {
       bodyTrHeight = 0,
       bodyHeight = 0,
@@ -136,8 +136,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       scrollContentHeight = 0,
       scrollContentContainerWidth = 0,
       scrollContentContainerHeight = 0,
-      CTInnerWidth = 0,
-      asidePanelWidth = 0,
       frozenPanelWidth = 0,
       rightPanelWidth = 0,
       verticalScrollerWidth = 0,
@@ -149,18 +147,22 @@ class DataGridEvents extends React.Component<IProps, IState> {
     const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
     const eRowIndex =
       Math.floor(-scrollTop / bodyTrHeight) +
-      frozenRowIndex +
+      // frozenRowIndex +
       Math.floor(bodyHeight / bodyTrHeight);
 
     const sColIndex = printStartColIndex;
     const eColIndex = printEndColIndex;
     const pRowSize = Math.floor(bodyHeight / bodyTrHeight);
 
-    const getAvailScrollTop = (rowIndex: number): number => {
+    const getAvailScrollTop = (rowIndex: number): number | undefined => {
       let _scrollTop: number | undefined = undefined;
 
+      if (frozenRowIndex >= rowIndex) {
+        return;
+      }
+
       if (sRowIndex >= rowIndex) {
-        _scrollTop = -rowIndex * bodyTrHeight;
+        _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
       } else if (eRowIndex <= rowIndex) {
         _scrollTop =
           -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
@@ -179,19 +181,23 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
       return _scrollTop;
     };
-    const getAvailScrollLeft = (colIndex: number): number => {
+    const getAvailScrollLeft = (colIndex: number): number | undefined => {
       let _scrollLeft: number | undefined = undefined;
 
-      if (sColIndex >= colIndex) {
-        _scrollLeft = -(headerColGroup[colIndex]._sx as number);
-      } else if (eColIndex <= colIndex) {
+      if (frozenColumnIndex > colIndex) {
+        return;
+      }
+
+      if (sColIndex >= colIndex - frozenColumnIndex) {
+        _scrollLeft = -(colGroup[colIndex]._sx as number) + frozenPanelWidth;
+      } else if (eColIndex <= colIndex - frozenColumnIndex) {
+        // 끝점 계산
         _scrollLeft =
-          -(headerColGroup[colIndex]._ex as number) +
-          (CTInnerWidth -
-            asidePanelWidth -
-            frozenPanelWidth -
-            rightPanelWidth -
-            verticalScrollerWidth);
+          scrollContentContainerWidth -
+          (colGroup[colIndex]._ex as number) +
+          frozenPanelWidth -
+          verticalScrollerWidth -
+          rightPanelWidth;
       }
 
       if (typeof _scrollLeft !== 'undefined') {
@@ -392,8 +398,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
         e.stopPropagation();
 
         let focusCol =
-          focusedCol + 1 >= headerColGroup.length
-            ? headerColGroup.length - 1
+          focusedCol + 1 >= colGroup.length
+            ? colGroup.length - 1
             : focusedCol + 1;
 
         setStoreState({
