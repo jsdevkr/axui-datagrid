@@ -265,19 +265,26 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   }
 
   updateDimensions() {
-    const { scrollLeft = 0, scrollTop = 0 } = this.state;
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      bodyRowData = { rows: [{ cols: [] }] },
+      bodyGroupingData = { rows: [{ cols: [] }] },
+      options = {},
+    } = this.state;
+    const { frozenColumnIndex = 0 } = options;
 
-    const styles = calculateDimensions(
+    const calculatedObject = calculateDimensions(
       getNode(this.state.getRootNode),
       this.state,
-    ).styles;
+    );
 
     const {
       scrollContentWidth = 0,
       scrollContentHeight = 0,
       scrollContentContainerWidth = 0,
       scrollContentContainerHeight = 0,
-    } = styles;
+    } = calculatedObject.styles;
 
     let {
       scrollLeft: newScrollLeft = 0,
@@ -289,8 +296,47 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       clientHeight: scrollContentContainerHeight,
     });
 
+    const {
+      CTInnerWidth: _CTInnerWidth = 0,
+      frozenPanelWidth: _frozenPanelWidth = 0,
+      asidePanelWidth: _asidePanelWidth = 0,
+      rightPanelWidth: _rightPanelWidth = 0,
+    } = calculatedObject.styles;
+
+    const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
+      calculatedObject.headerColGroup,
+      Math.abs(newScrollLeft || 0) + _frozenPanelWidth,
+      Math.abs(newScrollLeft || 0) +
+        _frozenPanelWidth +
+        (_CTInnerWidth -
+          _asidePanelWidth -
+          _frozenPanelWidth -
+          _rightPanelWidth),
+    );
+
+    const visibleHeaderColGroup = calculatedObject.headerColGroup.slice(
+      printStartColIndex,
+      printEndColIndex + 1,
+    );
+
+    const visibleBodyRowData = getTableByStartEndColumnIndex(
+      bodyRowData,
+      printStartColIndex + frozenColumnIndex,
+      printEndColIndex + frozenColumnIndex,
+    );
+    const visibleBodyGroupingData = getTableByStartEndColumnIndex(
+      bodyGroupingData,
+      printStartColIndex + frozenColumnIndex,
+      printEndColIndex + frozenColumnIndex,
+    );
+
     this.setStoreState({
-      styles: styles,
+      styles: calculatedObject.styles,
+      printStartColIndex,
+      printEndColIndex,
+      visibleHeaderColGroup,
+      visibleBodyRowData,
+      visibleBodyGroupingData,
       scrollLeft: newScrollLeft,
       scrollTop: newScrollTop,
     });

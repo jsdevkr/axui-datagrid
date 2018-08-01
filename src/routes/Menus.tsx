@@ -24,6 +24,7 @@ export const Menus = {
     menus: [
       { to: '/examples/LargeData', label: 'LargeData' },
       { to: '/examples/Formatter', label: 'Formatting of data' },
+      { to: '/examples/ChangeColumns', label: 'Change Columns' },
       { to: '/examples/FrozenColumnRow', label: 'Frozen column and row' },
       { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
       { to: '/examples/InlineEdit', label: 'Inline edit' },
