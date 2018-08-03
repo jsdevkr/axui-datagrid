@@ -13,6 +13,7 @@ class LoadingState extends React.Component<any, any> {
     this.state = {
       loading: false,
       loadingData: false,
+      height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },

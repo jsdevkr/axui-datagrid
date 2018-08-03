@@ -10,6 +10,7 @@ class MultiColumnHeader extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
+      height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },
