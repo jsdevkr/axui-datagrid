@@ -18,6 +18,32 @@ npm i
 npm start
 ```
 
+# Features
+
+### Large Data
+
+![axui-datagrid example LargeData](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-01.784bf3b8.jpg)
+
+### Frozen row / col
+
+![axui-datagrid example Frozen row,col](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-02.1d489db6.jpg)
+
+### Multi header
+
+![axui-datagrid example Multi header](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-03.30ec1f56.jpg)
+
+### Loading
+
+![axui-datagrid example Loading](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-04.65d90b02.jpg)
+
+### Row selector
+
+![axui-datagrid example Row selector](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-05.aa1f3985.jpg)
+
+### Inline edit
+
+![axui-datagrid example Inline edit](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-06.c9d1af9b.jpg)
+
 # Props
 
 ## data?: any[] = [];

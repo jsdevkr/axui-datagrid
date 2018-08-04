@@ -13,8 +13,10 @@ interface IProps extends RouteComponentProps<any> {
 }
 interface IState {
   mounted: boolean;
-  defaultOpenKeys: any[];
-  defaultSelectedKeys: any[];
+  defaultOpenKeys: string[];
+  defaultSelectedKeys: string[];
+  openKeys: string[];
+  selectedKeys: string[];
   menus: { [key: string]: any };
 }
 
@@ -23,6 +25,8 @@ class SideNav extends React.Component<IProps, IState> {
     mounted: false,
     defaultOpenKeys: [],
     defaultSelectedKeys: [],
+    openKeys: [],
+    selectedKeys: [],
     menus: Menus,
   };
 
@@ -52,6 +56,8 @@ class SideNav extends React.Component<IProps, IState> {
           menus,
           defaultOpenKeys,
           defaultSelectedKeys,
+          openKeys: defaultOpenKeys,
+          selectedKeys: defaultSelectedKeys,
           mounted: true,
         };
       } else {
@@ -62,9 +68,45 @@ class SideNav extends React.Component<IProps, IState> {
     }
   }
 
+  componentDidUpdate(prevProps: any) {
+    if (this.props.location !== prevProps.location) {
+      this.onRouteChanged();
+    }
+  }
+
+  onRouteChanged() {
+    // console.log('ROUTE CHANGED');
+    const { menus } = this.state;
+    let selectedKeys: string[] = [];
+    let openKeys: string[] = [];
+
+    Object.keys(menus).forEach((k: string) => {
+      menus[k].menus.forEach((menu: any) => {
+        if (menu.to === location.pathname) {
+          openKeys.push(k);
+          selectedKeys.push(menu.to);
+        }
+      });
+    });
+
+    this.setState({
+      openKeys,
+      selectedKeys,
+    });
+
+    window.scroll(0, 0);
+  }
+
   render() {
     const { leftMenuWidth } = this.props;
-    const { menus, mounted, defaultOpenKeys, defaultSelectedKeys } = this.state;
+    const {
+      menus,
+      mounted,
+      defaultOpenKeys,
+      defaultSelectedKeys,
+      openKeys,
+      selectedKeys,
+    } = this.state;
 
     if (!mounted) {
       return null;
@@ -87,7 +129,7 @@ class SideNav extends React.Component<IProps, IState> {
           </div>
           <h1>axui-datagrid</h1>
 
-          <Row gutter={1} className='pkg-infos'>
+          <Row gutter={1} className="pkg-infos">
             <Col span={12}>version : {pkg.version}</Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               {pkg.license}
@@ -103,8 +145,13 @@ class SideNav extends React.Component<IProps, IState> {
         <Menu
           mode="inline"
           theme="dark"
-          defaultSelectedKeys={defaultSelectedKeys}
-          defaultOpenKeys={defaultOpenKeys}
+          openKeys={openKeys}
+          selectedKeys={selectedKeys}
+          onOpenChange={(nextOpenKeys: string[]) => {
+            this.setState({
+              openKeys: nextOpenKeys,
+            });
+          }}
         >
           {Object.keys(menus).map((k: string) => {
             return (

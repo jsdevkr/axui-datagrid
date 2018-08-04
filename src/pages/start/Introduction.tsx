@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 import 'styles/globals';
 import { Wrapper, Segment } from 'components';
+import { Divider, Button } from 'antd';
 
 const feature01 = require('assets/datagrid-feature-01.jpg');
 const feature02 = require('assets/datagrid-feature-02.jpg');
@@ -43,33 +45,95 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Large Data</h3>
           <p>
-            <img src={feature01} width={'100%'} style={{ maxWidth: 800 }} />
+            To represent large amounts of data in the browser, a large amount of
+            HTML nodes Required. However, if you represent a large amount of
+            HTML nodes in your browser The browser will slow down and
+            inconvenience you. Because axui-datagrid only prints the areas that
+            need to be displayed in the grid container area, it can process
+            large amounts of data quickly.{' '}
           </p>
+          <NavLink to={'examples/LargeData'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature01} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
 
           <h3>Frozen row / col</h3>
           <p>
-            <img src={feature02} width={'100%'} style={{ maxWidth: 800 }} />
+            If options.frozenColumnIndex and options.frozenRowIndex are
+            specified, then 'DataGrid' You can set the frame fixed area.
           </p>
+
+          <NavLink to={'examples/FrozenColumnRow'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature02} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
 
           <h3>Multi header</h3>
           <p>
-            <img src={feature03} width={'100%'} style={{ maxWidth: 800 }} />
+            You can set up multiple-line headers by adding columns inside
+            'columns> col'.
           </p>
 
+          <NavLink to={'examples/MultiColumnHeader'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature03} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
+
           <h3>Loading</h3>
-          <p>
+          <p>You can express the loading status with loading props</p>
+          <NavLink to={'examples/LoadingState'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
             <img src={feature04} width={'100%'} style={{ maxWidth: 800 }} />
-          </p>
+          </NavLink>
+
+          <Divider />
 
           <h3>Row selector</h3>
           <p>
-            <img src={feature05} width={'100%'} style={{ maxWidth: 800 }} />
+            'options> showRowSelector' If you set the value to true, a check box
+            appears, allowing you to select each row of 'datagrid'.
           </p>
+          <NavLink to={'examples/RowSelector'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature05} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
 
           <h3>Inline edit</h3>
           <p>
-            <img src={feature06} width={'100%'} style={{ maxWidth: 800 }} />
+            If you define the editor attribute in 'columns> col', you can use
+            the editor mode of that column. You can activate editor mode using
+            double-click or return key.
           </p>
+          <NavLink to={'examples/InlineEdit'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature06} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
         </Segment>
       </Wrapper>
     );

@@ -29,35 +29,23 @@ class LoadingState extends React.Component<any, any> {
   render() {
     const { height, columns, data, options } = this.state;
 
-    return (
-      <Wrapper>
+    return <Wrapper>
         <Segment padded>
           <h1>RowSelector</h1>
-          <p>You can express the loading status with loading props</p>
+          <p>
+            'options> showRowSelector' If you set the value to true, a check
+            box appears, allowing you to select each row of 'datagrid'.
+          </p>
 
-          <DataGrid
-            height={height}
-            style={{ fontSize: '12px' }}
-            columns={columns}
-            data={data}
-            options={options}
-            onChangeSelected={param => {
-              this.setState({
-                filteredList: param.filteredList,
-              });
-            }}
-          />
+          <DataGrid height={height} style={{ fontSize: '12px' }} columns={columns} data={data} options={options} onChangeSelected={param => {
+              this.setState({ filteredList: param.filteredList });
+            }} />
           <Divider />
 
           <h2>Data</h2>
-          <textarea
-            style={{ width: '100%', height: '400px', padding: '10px' }}
-            value={JSON.stringify(this.state.filteredList)}
-            readOnly
-          />
+          <textarea style={{ width: '100%', height: '400px', padding: '10px' }} value={JSON.stringify(this.state.filteredList)} readOnly />
         </Segment>
-      </Wrapper>
-    );
+      </Wrapper>;
   }
 }
 
