@@ -12,7 +12,7 @@ var DatagridHeaderCell = function (_a) {
         optionsHeaderColumnPadding * 2 -
         optionsHeaderColumnBorderWidth;
     var label, sorter;
-    if (col.key === '__row_selector__') {
+    if (col.key === '_row_selector_') {
         if (optionsHeader.selector) {
             label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
                     maxHeight: lineHeight + 'px',

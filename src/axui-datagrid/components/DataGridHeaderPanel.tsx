@@ -113,7 +113,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
       };
 
       switch (key) {
-        case '__line_number__':
+        case '_line_number_':
           {
             state.selectionRows = (() => {
               let rows = {};
@@ -134,7 +134,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
             setStoreState(state);
           }
           break;
-        case '__row_selector__':
+        case '_row_selector_':
           dispatch(DispatchTypes.SELECT_ALL, {});
           break;
         default:
@@ -176,7 +176,7 @@ class DataGridHeaderPanel extends React.Component<IProps, IState> {
           break;
       }
 
-      if (key === '__line_number__') {
+      if (key === '_line_number_') {
       } else {
       }
     }

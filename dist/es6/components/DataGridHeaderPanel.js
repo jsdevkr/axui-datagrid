@@ -77,7 +77,7 @@ class DataGridHeaderPanel extends React.Component {
                     focusedCol: focusedCol,
                 };
                 switch (key) {
-                    case '__line_number__':
+                    case '_line_number_':
                         {
                             state.selectionRows = (() => {
                                 let rows = {};
@@ -97,7 +97,7 @@ class DataGridHeaderPanel extends React.Component {
                             setStoreState(state);
                         }
                         break;
-                    case '__row_selector__':
+                    case '_row_selector_':
                         dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
                         break;
                     default:
@@ -134,7 +134,7 @@ class DataGridHeaderPanel extends React.Component {
                         }
                         break;
                 }
-                if (key === '__line_number__') {
+                if (key === '_line_number_') {
                 }
                 else {
                 }

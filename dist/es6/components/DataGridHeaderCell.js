@@ -11,7 +11,7 @@ const DatagridHeaderCell = ({ listSelectedAll = false, options = {}, focusedCol,
         optionsHeaderColumnPadding * 2 -
         optionsHeaderColumnBorderWidth;
     let label, sorter;
-    if (col.key === '__row_selector__') {
+    if (col.key === '_row_selector_') {
         if (optionsHeader.selector) {
             label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
                     maxHeight: lineHeight + 'px',

@@ -40,7 +40,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                 }
                 else {
                     currentFilterInfo[isColumnFilter] = (_c = {},
-                        _c['__CHECK_ALL__'] = false,
+                        _c['_CHECK_ALL_'] = false,
                         _c);
                 }
             }
@@ -49,7 +49,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                 var isAllChecked_1 = true;
                 if (isColumnFilter in currentFilterInfo) {
                     filterOptions.forEach(function (O) {
-                        if (O.value !== '__CHECK_ALL__') {
+                        if (O.value !== '_CHECK_ALL_') {
                             if (O.value === value) {
                                 filter_1[O.value] = checked;
                             }
@@ -67,7 +67,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                 }
                 else {
                     filterOptions.forEach(function (O) {
-                        if (O.value !== '__CHECK_ALL__') {
+                        if (O.value !== '_CHECK_ALL_') {
                             if (O.value === value) {
                                 filter_1[O.value] = checked;
                             }
@@ -80,7 +80,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                         }
                     });
                 }
-                filter_1.__CHECK_ALL__ = isAllChecked_1;
+                filter_1._CHECK_ALL_ = isAllChecked_1;
                 currentFilterInfo[isColumnFilter] = filter_1;
             }
             dispatch(stores_1.DispatchTypes.FILTER, {
@@ -105,14 +105,14 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
         var columnFilterInfo = filterInfo[isColumnFilter];
         var filterOptions = utils_1.uniqBy(data
             .filter(function (n) {
-            return !n[optionColumnKeys.deleted || '__deleted__'];
+            return !n[optionColumnKeys.deleted || '_deleted_'];
         })
             .map(function (item) {
             var value = item[colGroup[isColumnFilter].key || ''];
             var text = value;
             var checked = false;
             if (typeof value === 'undefined') {
-                value = '__UNDEFINED__';
+                value = '_UNDEFINED_';
                 text = '값 없음';
             }
             if (typeof columnFilterInfo === 'undefined' ||
@@ -122,13 +122,13 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
             else if (typeof columnFilterInfo !== 'undefined' &&
                 columnFilterInfo !== false &&
                 typeof columnFilterInfo[value] === 'undefined') {
-                checked = columnFilterInfo.__CHECK_ALL__;
+                checked = columnFilterInfo._CHECK_ALL_;
             }
             else if (value in columnFilterInfo) {
                 checked = columnFilterInfo[value];
             }
             else {
-                checked = columnFilterInfo.__CHECK_ALL__;
+                checked = columnFilterInfo._CHECK_ALL_;
             }
             return {
                 value: value,
@@ -137,12 +137,12 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
             };
         }), 'value');
         filterOptions.splice(0, 0, {
-            value: '__CHECK_ALL__',
+            value: '_CHECK_ALL_',
             text: '전체선택',
             checkAll: true,
             checked: typeof columnFilterInfo === 'undefined' ||
                 columnFilterInfo === false ||
-                columnFilterInfo.__CHECK_ALL__,
+                columnFilterInfo._CHECK_ALL_,
         });
         var filterStyles = {
             top: headerHeight - 2,

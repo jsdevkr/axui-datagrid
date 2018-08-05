@@ -134,7 +134,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         const { columnKeys: optionColumnKeys = {} } = options;
 
         filteredList = data.filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '__deleted__'];
+          return !n[optionColumnKeys.deleted || '_deleted_'];
         });
 
         // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
@@ -485,25 +485,25 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         const checkAll =
           filterInfo[colIndex] === false
             ? true
-            : filterInfo[colIndex].__check_all__;
+            : filterInfo[colIndex]._check_all_;
 
         if (checkAll) {
           filteredList =
             data &&
             data.filter((n: any) => {
-              return !n[optionColumnKeys.deleted || '__deleted__'];
+              return !n[optionColumnKeys.deleted || '_deleted_'];
             });
         } else {
           filteredList = data.filter((n: any) => {
             if (n) {
               const value = n[colGroup[colIndex].key || ''];
 
-              if (n[optionColumnKeys.deleted || '__deleted__']) {
+              if (n[optionColumnKeys.deleted || '_deleted_']) {
                 return false;
               }
 
               if (typeof value === 'undefined') {
-                if (!filterInfo[colIndex].__UNDEFINED__) {
+                if (!filterInfo[colIndex]._UNDEFINED_) {
                   return false;
                 }
               } else {
@@ -673,13 +673,13 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         } else if (checked === false) {
           rowSelected = false;
         } else {
-          rowSelected = !filteredList[rowIndex].__selected__;
+          rowSelected = !filteredList[rowIndex]._selected_;
         }
 
         if (!rowSelected) {
           selectedAll = false;
         }
-        filteredList[rowIndex].__selected__ = rowSelected;
+        filteredList[rowIndex]._selected_ = rowSelected;
 
         this.setStoreState({
           listSelectedAll: selectedAll,
@@ -700,7 +700,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         }
 
         for (let i = 0, l = filteredList.length; i < l; i++) {
-          filteredList[i].__selected__ = selectedAll;
+          filteredList[i]._selected_ = selectedAll;
         }
 
         this.setStoreState({

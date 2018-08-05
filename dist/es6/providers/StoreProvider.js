@@ -118,23 +118,23 @@ class StoreProvider extends React.Component {
                     const { colIndex, filterInfo } = param;
                     const checkAll = filterInfo[colIndex] === false
                         ? true
-                        : filterInfo[colIndex].__check_all__;
+                        : filterInfo[colIndex]._check_all_;
                     if (checkAll) {
                         filteredList =
                             data &&
                                 data.filter((n) => {
-                                    return !n[optionColumnKeys.deleted || '__deleted__'];
+                                    return !n[optionColumnKeys.deleted || '_deleted_'];
                                 });
                     }
                     else {
                         filteredList = data.filter((n) => {
                             if (n) {
                                 const value = n[colGroup[colIndex].key || ''];
-                                if (n[optionColumnKeys.deleted || '__deleted__']) {
+                                if (n[optionColumnKeys.deleted || '_deleted_']) {
                                     return false;
                                 }
                                 if (typeof value === 'undefined') {
-                                    if (!filterInfo[colIndex].__UNDEFINED__) {
+                                    if (!filterInfo[colIndex]._UNDEFINED_) {
                                         return false;
                                     }
                                 }
@@ -280,12 +280,12 @@ class StoreProvider extends React.Component {
                         rowSelected = false;
                     }
                     else {
-                        rowSelected = !filteredList[rowIndex].__selected__;
+                        rowSelected = !filteredList[rowIndex]._selected_;
                     }
                     if (!rowSelected) {
                         selectedAll = false;
                     }
-                    filteredList[rowIndex].__selected__ = rowSelected;
+                    filteredList[rowIndex]._selected_ = rowSelected;
                     this.setStoreState({
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
@@ -306,7 +306,7 @@ class StoreProvider extends React.Component {
                         selectedAll = !selectedAll;
                     }
                     for (let i = 0, l = filteredList.length; i < l; i++) {
-                        filteredList[i].__selected__ = selectedAll;
+                        filteredList[i]._selected_ = selectedAll;
                     }
                     this.setStoreState({
                         listSelectedAll: selectedAll,
@@ -370,7 +370,7 @@ class StoreProvider extends React.Component {
                 const { options = {} } = prevState;
                 const { columnKeys: optionColumnKeys = {} } = options;
                 filteredList = data.filter((n) => {
-                    return !n[optionColumnKeys.deleted || '__deleted__'];
+                    return !n[optionColumnKeys.deleted || '_deleted_'];
                 });
                 // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
                 if (sortInfo && Object.keys(sortInfo).length) {
@@ -471,17 +471,33 @@ class StoreProvider extends React.Component {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     }
     updateDimensions() {
-        const { scrollLeft = 0, scrollTop = 0 } = this.state;
-        const styles = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state).styles;
-        const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+        const { scrollLeft = 0, scrollTop = 0, bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, options = {}, } = this.state;
+        const { frozenColumnIndex = 0 } = options;
+        const calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
+        const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = calculatedObject.styles;
         let { scrollLeft: newScrollLeft = 0, scrollTop: newScrollTop = 0, } = utils_1.getScrollPosition(scrollLeft, scrollTop, {
             scrollWidth: scrollContentWidth,
             scrollHeight: scrollContentHeight,
             clientWidth: scrollContentContainerWidth,
             clientHeight: scrollContentContainerHeight,
         });
+        const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, } = calculatedObject.styles;
+        const { printStartColIndex, printEndColIndex } = utils_1.getPositionPrintColGroup(calculatedObject.headerColGroup, Math.abs(newScrollLeft || 0) + _frozenPanelWidth, Math.abs(newScrollLeft || 0) +
+            _frozenPanelWidth +
+            (_CTInnerWidth -
+                _asidePanelWidth -
+                _frozenPanelWidth -
+                _rightPanelWidth));
+        const visibleHeaderColGroup = calculatedObject.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
+        const visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+        const visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         this.setStoreState({
-            styles: styles,
+            styles: calculatedObject.styles,
+            printStartColIndex,
+            printEndColIndex,
+            visibleHeaderColGroup,
+            visibleBodyRowData,
+            visibleBodyGroupingData,
             scrollLeft: newScrollLeft,
             scrollTop: newScrollTop,
         });

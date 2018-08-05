@@ -157,23 +157,23 @@ var StoreProvider = /** @class */ (function (_super) {
                     var colIndex = param.colIndex, filterInfo = param.filterInfo;
                     var checkAll = filterInfo[colIndex] === false
                         ? true
-                        : filterInfo[colIndex].__check_all__;
+                        : filterInfo[colIndex]._check_all_;
                     if (checkAll) {
                         filteredList =
                             data &&
                                 data.filter(function (n) {
-                                    return !n[optionColumnKeys.deleted || '__deleted__'];
+                                    return !n[optionColumnKeys.deleted || '_deleted_'];
                                 });
                     }
                     else {
                         filteredList = data.filter(function (n) {
                             if (n) {
                                 var value = n[colGroup[colIndex].key || ''];
-                                if (n[optionColumnKeys.deleted || '__deleted__']) {
+                                if (n[optionColumnKeys.deleted || '_deleted_']) {
                                     return false;
                                 }
                                 if (typeof value === 'undefined') {
-                                    if (!filterInfo[colIndex].__UNDEFINED__) {
+                                    if (!filterInfo[colIndex]._UNDEFINED_) {
                                         return false;
                                     }
                                 }
@@ -320,12 +320,12 @@ var StoreProvider = /** @class */ (function (_super) {
                         rowSelected = false;
                     }
                     else {
-                        rowSelected = !filteredList[rowIndex].__selected__;
+                        rowSelected = !filteredList[rowIndex]._selected_;
                     }
                     if (!rowSelected) {
                         selectedAll = false;
                     }
-                    filteredList[rowIndex].__selected__ = rowSelected;
+                    filteredList[rowIndex]._selected_ = rowSelected;
                     _this.setStoreState({
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
@@ -346,7 +346,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         selectedAll = !selectedAll;
                     }
                     for (var i = 0, l = filteredList.length; i < l; i++) {
-                        filteredList[i].__selected__ = selectedAll;
+                        filteredList[i]._selected_ = selectedAll;
                     }
                     _this.setStoreState({
                         listSelectedAll: selectedAll,
@@ -412,7 +412,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 var _c = prevState.options, options = _c === void 0 ? {} : _c;
                 var _d = options.columnKeys, optionColumnKeys_1 = _d === void 0 ? {} : _d;
                 filteredList = data.filter(function (n) {
-                    return !n[optionColumnKeys_1.deleted || '__deleted__'];
+                    return !n[optionColumnKeys_1.deleted || '_deleted_'];
                 });
                 // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
                 if (sortInfo && Object.keys(sortInfo).length) {
@@ -513,17 +513,33 @@ var StoreProvider = /** @class */ (function (_super) {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     };
     StoreProvider.prototype.updateDimensions = function () {
-        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c;
-        var styles = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state).styles;
-        var _d = styles.scrollContentWidth, scrollContentWidth = _d === void 0 ? 0 : _d, _e = styles.scrollContentHeight, scrollContentHeight = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentContainerHeight, scrollContentContainerHeight = _g === void 0 ? 0 : _g;
-        var _h = utils_1.getScrollPosition(scrollLeft, scrollTop, {
+        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.bodyRowData, bodyRowData = _d === void 0 ? { rows: [{ cols: [] }] } : _d, _e = _a.bodyGroupingData, bodyGroupingData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.options, options = _f === void 0 ? {} : _f;
+        var _g = options.frozenColumnIndex, frozenColumnIndex = _g === void 0 ? 0 : _g;
+        var calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
+        var _h = calculatedObject.styles, _j = _h.scrollContentWidth, scrollContentWidth = _j === void 0 ? 0 : _j, _k = _h.scrollContentHeight, scrollContentHeight = _k === void 0 ? 0 : _k, _l = _h.scrollContentContainerWidth, scrollContentContainerWidth = _l === void 0 ? 0 : _l, _m = _h.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m;
+        var _o = utils_1.getScrollPosition(scrollLeft, scrollTop, {
             scrollWidth: scrollContentWidth,
             scrollHeight: scrollContentHeight,
             clientWidth: scrollContentContainerWidth,
             clientHeight: scrollContentContainerHeight,
-        }), _j = _h.scrollLeft, newScrollLeft = _j === void 0 ? 0 : _j, _k = _h.scrollTop, newScrollTop = _k === void 0 ? 0 : _k;
+        }), _p = _o.scrollLeft, newScrollLeft = _p === void 0 ? 0 : _p, _q = _o.scrollTop, newScrollTop = _q === void 0 ? 0 : _q;
+        var _r = calculatedObject.styles, _s = _r.CTInnerWidth, _CTInnerWidth = _s === void 0 ? 0 : _s, _t = _r.frozenPanelWidth, _frozenPanelWidth = _t === void 0 ? 0 : _t, _u = _r.asidePanelWidth, _asidePanelWidth = _u === void 0 ? 0 : _u, _v = _r.rightPanelWidth, _rightPanelWidth = _v === void 0 ? 0 : _v;
+        var _w = utils_1.getPositionPrintColGroup(calculatedObject.headerColGroup, Math.abs(newScrollLeft || 0) + _frozenPanelWidth, Math.abs(newScrollLeft || 0) +
+            _frozenPanelWidth +
+            (_CTInnerWidth -
+                _asidePanelWidth -
+                _frozenPanelWidth -
+                _rightPanelWidth)), printStartColIndex = _w.printStartColIndex, printEndColIndex = _w.printEndColIndex;
+        var visibleHeaderColGroup = calculatedObject.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
+        var visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+        var visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         this.setStoreState({
-            styles: styles,
+            styles: calculatedObject.styles,
+            printStartColIndex: printStartColIndex,
+            printEndColIndex: printEndColIndex,
+            visibleHeaderColGroup: visibleHeaderColGroup,
+            visibleBodyRowData: visibleBodyRowData,
+            visibleBodyGroupingData: visibleBodyGroupingData,
             scrollLeft: newScrollLeft,
             scrollTop: newScrollTop,
         });

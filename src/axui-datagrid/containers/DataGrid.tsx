@@ -30,10 +30,10 @@ interface IState extends types.DataGridRootState {}
 class DataGrid extends React.Component<IProps, IState> {
   static defaultHeight: number = 400;
   static defaultColumnKeys: types.DataGridColumnKeys = {
-    selected: '__selected__',
-    modified: '__modified__',
-    deleted: '__deleted__',
-    disableSelection: '__disable_selection__',
+    selected: '_selected_',
+    modified: '_modified_',
+    deleted: '_deleted_',
+    disableSelection: '_disable_selection_',
   };
   static defaultHeader: types.DataGridOptionHeader = {
     display: true,

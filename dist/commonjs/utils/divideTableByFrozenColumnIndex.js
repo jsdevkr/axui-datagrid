@@ -38,7 +38,7 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
                     _width: options.lineNumberColumnWidth,
                     align: 'center',
                     columnAttr: 'lineNumber',
-                    key: '__line_number__',
+                    key: '_line_number_',
                     label: '',
                 });
                 asideColGroup.push(_col);
@@ -51,7 +51,7 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
                     _width: options.rowSelectorColumnWidth,
                     align: 'center',
                     columnAttr: 'rowSelector',
-                    key: '__row_selector__',
+                    key: '_row_selector_',
                     label: '',
                 });
                 asideColGroup.push(_col);

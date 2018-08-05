@@ -37,7 +37,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     optionsHeaderColumnBorderWidth;
   let label, sorter;
 
-  if (col.key === '__row_selector__') {
+  if (col.key === '_row_selector_') {
     if (optionsHeader.selector) {
       label = (
         <div

@@ -30,7 +30,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
         currentFilterInfo[isColumnFilter as number] = false;
       } else {
         currentFilterInfo[isColumnFilter as number] = {
-          ['__CHECK_ALL__']: false,
+          ['_CHECK_ALL_']: false,
         };
       }
     } else {
@@ -39,7 +39,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
 
       if ((isColumnFilter as number) in currentFilterInfo) {
         filterOptions.forEach((O: any) => {
-          if (O.value !== '__CHECK_ALL__') {
+          if (O.value !== '_CHECK_ALL_') {
             if (O.value === value) {
               filter[O.value] = checked;
             } else {
@@ -55,7 +55,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
         });
       } else {
         filterOptions.forEach((O: any) => {
-          if (O.value !== '__CHECK_ALL__') {
+          if (O.value !== '_CHECK_ALL_') {
             if (O.value === value) {
               filter[O.value] = checked;
             } else {
@@ -68,7 +68,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
         });
       }
 
-      filter.__CHECK_ALL__ = isAllChecked;
+      filter._CHECK_ALL_ = isAllChecked;
       currentFilterInfo[isColumnFilter as number] = filter;
     }
 
@@ -102,7 +102,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
     let filterOptions = uniqBy(
       data
         .filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '__deleted__'];
+          return !n[optionColumnKeys.deleted || '_deleted_'];
         })
         .map(item => {
           let value = item[colGroup[isColumnFilter as number].key || ''];
@@ -110,7 +110,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
           let checked: boolean = false;
 
           if (typeof value === 'undefined') {
-            value = '__UNDEFINED__';
+            value = '_UNDEFINED_';
             text = '값 없음';
           }
 
@@ -124,11 +124,11 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
             columnFilterInfo !== false &&
             typeof columnFilterInfo[value] === 'undefined'
           ) {
-            checked = columnFilterInfo.__CHECK_ALL__;
+            checked = columnFilterInfo._CHECK_ALL_;
           } else if (value in columnFilterInfo) {
             checked = columnFilterInfo[value];
           } else {
-            checked = columnFilterInfo.__CHECK_ALL__;
+            checked = columnFilterInfo._CHECK_ALL_;
           }
 
           return {
@@ -141,13 +141,13 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
     );
 
     filterOptions.splice(0, 0, {
-      value: '__CHECK_ALL__',
+      value: '_CHECK_ALL_',
       text: '전체선택',
       checkAll: true,
       checked:
         typeof columnFilterInfo === 'undefined' ||
         columnFilterInfo === false ||
-        columnFilterInfo.__CHECK_ALL__,
+        columnFilterInfo._CHECK_ALL_,
     });
 
     let filterStyles = {

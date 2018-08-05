@@ -159,10 +159,10 @@ class DataGrid extends React.Component {
 }
 DataGrid.defaultHeight = 400;
 DataGrid.defaultColumnKeys = {
-    selected: '__selected__',
-    modified: '__modified__',
-    deleted: '__deleted__',
-    disableSelection: '__disable_selection__',
+    selected: '_selected_',
+    modified: '_modified_',
+    deleted: '_deleted_',
+    disableSelection: '_disable_selection_',
 };
 DataGrid.defaultHeader = {
     display: true,

@@ -21,7 +21,7 @@ class DatagridColumnFilter extends React.Component {
                 }
                 else {
                     currentFilterInfo[isColumnFilter] = {
-                        ['__CHECK_ALL__']: false,
+                        ['_CHECK_ALL_']: false,
                     };
                 }
             }
@@ -30,7 +30,7 @@ class DatagridColumnFilter extends React.Component {
                 let isAllChecked = true;
                 if (isColumnFilter in currentFilterInfo) {
                     filterOptions.forEach((O) => {
-                        if (O.value !== '__CHECK_ALL__') {
+                        if (O.value !== '_CHECK_ALL_') {
                             if (O.value === value) {
                                 filter[O.value] = checked;
                             }
@@ -48,7 +48,7 @@ class DatagridColumnFilter extends React.Component {
                 }
                 else {
                     filterOptions.forEach((O) => {
-                        if (O.value !== '__CHECK_ALL__') {
+                        if (O.value !== '_CHECK_ALL_') {
                             if (O.value === value) {
                                 filter[O.value] = checked;
                             }
@@ -61,7 +61,7 @@ class DatagridColumnFilter extends React.Component {
                         }
                     });
                 }
-                filter.__CHECK_ALL__ = isAllChecked;
+                filter._CHECK_ALL_ = isAllChecked;
                 currentFilterInfo[isColumnFilter] = filter;
             }
             dispatch(stores_1.DispatchTypes.FILTER, {
@@ -83,14 +83,14 @@ class DatagridColumnFilter extends React.Component {
         let columnFilterInfo = filterInfo[isColumnFilter];
         let filterOptions = utils_1.uniqBy(data
             .filter((n) => {
-            return !n[optionColumnKeys.deleted || '__deleted__'];
+            return !n[optionColumnKeys.deleted || '_deleted_'];
         })
             .map(item => {
             let value = item[colGroup[isColumnFilter].key || ''];
             let text = value;
             let checked = false;
             if (typeof value === 'undefined') {
-                value = '__UNDEFINED__';
+                value = '_UNDEFINED_';
                 text = '값 없음';
             }
             if (typeof columnFilterInfo === 'undefined' ||
@@ -100,13 +100,13 @@ class DatagridColumnFilter extends React.Component {
             else if (typeof columnFilterInfo !== 'undefined' &&
                 columnFilterInfo !== false &&
                 typeof columnFilterInfo[value] === 'undefined') {
-                checked = columnFilterInfo.__CHECK_ALL__;
+                checked = columnFilterInfo._CHECK_ALL_;
             }
             else if (value in columnFilterInfo) {
                 checked = columnFilterInfo[value];
             }
             else {
-                checked = columnFilterInfo.__CHECK_ALL__;
+                checked = columnFilterInfo._CHECK_ALL_;
             }
             return {
                 value: value,
@@ -115,12 +115,12 @@ class DatagridColumnFilter extends React.Component {
             };
         }), 'value');
         filterOptions.splice(0, 0, {
-            value: '__CHECK_ALL__',
+            value: '_CHECK_ALL_',
             text: '전체선택',
             checkAll: true,
             checked: typeof columnFilterInfo === 'undefined' ||
                 columnFilterInfo === false ||
-                columnFilterInfo.__CHECK_ALL__,
+                columnFilterInfo._CHECK_ALL_,
         });
         let filterStyles = {
             top: headerHeight - 2,

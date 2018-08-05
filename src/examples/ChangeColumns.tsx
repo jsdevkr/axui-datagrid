@@ -4,6 +4,25 @@ import { Button, Divider, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid, utils } from 'axui-datagrid';
 
+const columnsTypeA = [
+  { key: 'id', width: 60, label: 'ID', align: 'center' },
+  { key: 'title', width: 200, label: 'Title' },
+  { key: 'writer', label: 'Writer', align: 'center' },
+  { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
+  { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+];
+const columnsTypeB = [
+  { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+  { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
+  { key: 'writer', label: 'Writer', align: 'center' },
+  { key: 'title', width: 200, label: 'Title' },
+  { key: 'id', width: 60, label: 'ID', align: 'center' },
+  { key: 'title', width: 200, label: 'Title' },
+  { key: 'writer', label: 'Writer', align: 'center' },
+  { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
+  { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
+];
+
 class FrozenColumnRow extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -11,18 +30,7 @@ class FrozenColumnRow extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
-      columns: [
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title' },
-        { key: 'writer', label: 'Writer', align: 'center' },
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
-        { key: 'title', width: 200, label: 'Title' },
-        { key: 'writer', label: 'Writer', align: 'center' },
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
-      ],
+      columns: columnsTypeA,
       data: gridData,
       options: {},
     };
@@ -40,10 +48,15 @@ class FrozenColumnRow extends React.Component<any, any> {
           options: utils.mergeAll({}, this.state.options, value),
         });
       },
+      setColumns: (columnsType: string) => {
+        this.setState({
+          columns: columnsType === 'A' ? columnsTypeA : columnsTypeB,
+        });
+      },
     };
 
     if (props in processor) {
-      processor[props].call(this);
+      processor[props].call(this, value);
     } else {
       this.setState(value);
     }
@@ -71,16 +84,16 @@ class FrozenColumnRow extends React.Component<any, any> {
 
           <Button
             type="primary"
-            onClick={() => this.changeConfig('setColumns', 1)}
+            onClick={() => this.changeConfig('setColumns', 'A')}
           >
-            set columns 1
+            set columns type A
           </Button>
 
           <Button
             type="primary"
-            onClick={() => this.changeConfig('setColumns', 2)}
+            onClick={() => this.changeConfig('setColumns', 'B')}
           >
-            set columns 2
+            set columns type B
           </Button>
 
           <Divider />

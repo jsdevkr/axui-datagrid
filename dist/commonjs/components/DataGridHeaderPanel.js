@@ -88,7 +88,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                     focusedCol: focusedCol,
                 };
                 switch (key) {
-                    case '__line_number__':
+                    case '_line_number_':
                         {
                             state.selectionRows = (function () {
                                 var rows = {};
@@ -108,7 +108,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                             setStoreState(state);
                         }
                         break;
-                    case '__row_selector__':
+                    case '_row_selector_':
                         dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
                         break;
                     default:
@@ -145,7 +145,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                         }
                         break;
                 }
-                if (key === '__line_number__') {
+                if (key === '_line_number_') {
                 }
                 else {
                 }
