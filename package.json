@@ -57,15 +57,17 @@
   "scripts": {
     "start": "react-app-rewired start --scripts-version react-scripts-ts",
     "build":
-      "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6 && cp dist/package.json src/package.json",
+      "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
     "docs":
       "react-app-rewired build --scripts-version react-scripts-ts && rm -rf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME && cp ./src/404.html ./docs/404.html  && git add -A",
     "test": "NODE_ENV=test jest",
     "test-watch": "NODE_ENV=test jest --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prepublish": "npm run test",
-    "publish-by-patch": "cd dist && npm version patch && npm publish",
-    "publish-by-minor": "cd dist && npm version minor && npm publish"
+    "publish-by-patch":
+      "cd dist && npm version patch && cp dist/package.json src/package.json && npm publish",
+    "publish-by-minor":
+      "cd dist && npm version minor && cp dist/package.json src/package.json && npm publish"
   },
   "betterScripts": {
     "build:common":
