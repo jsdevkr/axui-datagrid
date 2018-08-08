@@ -31,6 +31,7 @@ export const Menus = {
       { to: '/examples/EventReceive', label: 'Event' },
       { to: '/examples/LoadingState', label: 'Loading' },
       { to: '/examples/RowSelector', label: 'RowSelector' },
+      { to: '/examples/FootSum', label: 'Foot summary' },
     ],
   },
 };
