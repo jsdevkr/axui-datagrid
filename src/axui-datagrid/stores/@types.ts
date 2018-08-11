@@ -227,6 +227,7 @@ export type DataGridState = {
 export type DataGrid = {
   data?: any[];
   columns: DataGridColumn[];
+  footSum?: DataGridColumn[][];
   height?: number;
   style?: any;
   options?: DataGridOptions;

@@ -7,6 +7,7 @@ export {
 export { default as makeBodyRowMap } from './makeBodyRowMap';
 export { default as makeBodyRowTable } from './makeBodyRowTable';
 export { default as makeHeaderTable } from './makeHeaderTable';
+export { default as makeFootSumTable } from './makeFootSumTable';
 export { default as calculateDimensions } from './calculateDimensions';
 export {
   default as getStylesAboutFilteredList,

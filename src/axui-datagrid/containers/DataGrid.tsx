@@ -17,6 +17,7 @@ import {
   makeHeaderTable,
   makeBodyRowTable,
   makeBodyRowMap,
+  makeFootSumTable,
   divideTableByFrozenColumnIndex,
   calculateDimensions,
   getNode,
@@ -169,7 +170,7 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   getProviderProps = (prevState: types.DataGridState) => {
-    const { columns = [] } = this.props;
+    const { columns = [], footSum } = this.props;
     const { options = {} } = prevState;
     const {
       frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0,
@@ -235,6 +236,16 @@ class DataGrid extends React.Component<IProps, IState> {
 
     newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
     newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+
+    // colGroup이 정의되면 footSum
+    if (footSum) {
+      newState.footSumTable = makeFootSumTable(
+        footSum,
+        newState.colGroup,
+        options,
+      );
+      console.log(newState.footSumTable);
+    }
 
     // styles
     newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;

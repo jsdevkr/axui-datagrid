@@ -10,7 +10,7 @@ class FootSum extends React.Component<any, any> {
     const gridData = require('examples/priceData.json');
 
     this.state = {
-      height: 400,
+      height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
         {
@@ -72,6 +72,7 @@ class FootSum extends React.Component<any, any> {
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}
+            footSum={this.state.footSum}
             data={this.state.data}
             options={this.state.options}
           />

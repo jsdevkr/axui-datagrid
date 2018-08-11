@@ -70,11 +70,15 @@ export interface IDataGridColumn extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
+  collector?: formatterFunction | string;
   editor?: editorFunction | string | { type?: string };
   hidden?: boolean;
   columns?: IDataGridColumn[];
   depth?: number;
+  columnAttr?: string;
 }
+
+// todo : columnAttr enum으로 만들기
 
 export interface IDataGridColumnKeys {
   selected?: string;
