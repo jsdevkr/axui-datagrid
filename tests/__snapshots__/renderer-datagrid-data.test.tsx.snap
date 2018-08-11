@@ -1035,7 +1035,7 @@ exports[`renders DataGrid has data 1`] = `
           "height": 256,
           "left": 60,
           "top": 0,
-          "width": -60,
+          "width": -74,
         }
       }
     >

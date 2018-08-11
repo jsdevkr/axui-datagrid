@@ -8,10 +8,8 @@
   "website": "http://axui-datagrid.axisj.com/",
   "author": "tom@axisj.com",
   "license": "MIT",
-  "keywords": [
-    "datagrid, react-datagrid, react-component, typescript"
-  ],
-  "dependencies": {
+  "keywords": ["datagrid, react-datagrid, react-component, typescript"],
+  "peerDependencies": {
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
