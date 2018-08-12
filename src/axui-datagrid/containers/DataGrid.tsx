@@ -189,14 +189,14 @@ class DataGrid extends React.Component<IProps, IState> {
     // header를 위한 divide
     const headerDividedObj = divideTableByFrozenColumnIndex(
       newState.headerTable,
-      frozenColumnIndex || 0,
+      frozenColumnIndex,
       options,
     );
 
     // body를 위한 divide
     const bodyDividedObj = divideTableByFrozenColumnIndex(
       newState.bodyRowTable,
-      frozenColumnIndex || 0,
+      frozenColumnIndex,
       options,
     );
 
@@ -239,12 +239,19 @@ class DataGrid extends React.Component<IProps, IState> {
 
     // colGroup이 정의되면 footSum
     if (footSum) {
+      newState.footSumColumns = [...footSum];
       newState.footSumTable = makeFootSumTable(
         footSum,
         newState.colGroup,
         options,
       );
-      console.log(newState.footSumTable);
+      const footSumDividedObj = divideTableByFrozenColumnIndex(
+        newState.footSumTable,
+        frozenColumnIndex,
+        options,
+      );
+      newState.leftFootSumData = footSumDividedObj.leftData;
+      newState.footSumData = footSumDividedObj.rightData;
     }
 
     // styles

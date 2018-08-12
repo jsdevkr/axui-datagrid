@@ -202,10 +202,10 @@ export type DataGridState = {
   leftBodyGroupingData?: DataGridColumnTableMap;
   bodyGroupingData?: DataGridColumnTableMap;
   bodyGroupingMap?: {};
-  footSumColumns?: DataGridColumn[];
-  footSumTable?: {};
-  leftFootSumData?: {};
-  footSumData?: {};
+  footSumColumns?: DataGridColumn[][];
+  footSumTable?: DataGridColumnTableMap;
+  leftFootSumData?: DataGridColumnTableMap;
+  footSumData?: DataGridColumnTableMap;
   styles?: DataGridStyles;
   options?: DataGridOptions;
 
