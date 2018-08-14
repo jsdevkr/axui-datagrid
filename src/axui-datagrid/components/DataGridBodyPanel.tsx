@@ -20,6 +20,7 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
 
   render() {
     const {
+      footSumColumns,
       filteredList = [],
       asideColGroup = [],
       leftHeaderColGroup = [],
@@ -90,10 +91,6 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
       paddingLeft: panelPaddingLeft,
     };
-
-    if (panelName === 'aside-body-scroll-container') {
-      // console.log(panelName);
-    }
 
     return (
       <div

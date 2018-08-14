@@ -418,6 +418,7 @@ class DataGridBody extends React.Component<IProps, IState> {
       options = {},
       styles = {},
       loadingData = false,
+      footSumColumns,
     } = this.props;
     const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
     const {
@@ -431,34 +432,43 @@ class DataGridBody extends React.Component<IProps, IState> {
       verticalScrollerWidth = 0,
       footSumHeight = 0,
     } = styles;
+
+    console.log(footSumColumns);
+
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
 
     const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
 
-    let topBodyScrollConfig = {
+    const topBodyScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,
       eRowIndex: frozenRowIndex,
     };
-    let bodyScrollConfig = {
+    const bodyScrollConfig = {
       frozenRowIndex: frozenRowIndex,
       sRowIndex: sRowIndex,
       eRowIndex: sRowIndex + Math.ceil(bodyHeight / bodyTrHeight) + 1,
     };
-    let topAsideBodyPanelStyle = {
+    const bottomBodyScrollConfig = {
+      frozenRowIndex: 0,
+      sRowIndex: 0,
+      eRowIndex: frozenRowIndex,
+    };
+
+    const topAsideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
       top: 0,
       height: frozenPanelHeight,
     };
-    let topLeftBodyPanelStyle = {
+    const topLeftBodyPanelStyle = {
       left: asidePanelWidth,
       width: frozenPanelWidth,
       top: 0,
       height: frozenPanelHeight,
     };
-    let topBodyPanelStyle = {
+    const topBodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
         CTInnerWidth -
@@ -469,19 +479,20 @@ class DataGridBody extends React.Component<IProps, IState> {
       top: 0,
       height: frozenPanelHeight,
     };
-    let asideBodyPanelStyle = {
+
+    const asideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
-    let leftBodyPanelStyle = {
+    const leftBodyPanelStyle = {
       left: asidePanelWidth,
       width: frozenPanelWidth,
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
-    let bodyPanelStyle = {
+    const bodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
         CTInnerWidth -
@@ -491,6 +502,30 @@ class DataGridBody extends React.Component<IProps, IState> {
         verticalScrollerWidth,
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
+    };
+
+    const bottomAsideBodyPanelStyle = {
+      left: 0,
+      width: asidePanelWidth,
+      top: bodyHeight - footSumHeight,
+      height: footSumHeight,
+    };
+    const bottomLeftBodyPanelStyle = {
+      left: asidePanelWidth,
+      width: frozenPanelWidth,
+      top: bodyHeight - footSumHeight,
+      height: footSumHeight,
+    };
+    const bottomBodyPanelStyle = {
+      left: frozenPanelWidth + asidePanelWidth,
+      width:
+        CTInnerWidth -
+        asidePanelWidth -
+        frozenPanelWidth -
+        rightPanelWidth -
+        verticalScrollerWidth,
+      top: bodyHeight - footSumHeight,
+      height: footSumHeight,
     };
 
     return (
@@ -515,6 +550,7 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelScrollConfig={topBodyScrollConfig}
           panelLeft={scrollLeft}
         />
+
         <DataGridBodyPanel
           panelName="aside-body-scroll"
           containerStyle={asideBodyPanelStyle}
@@ -534,6 +570,25 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelLeft={scrollLeft}
           panelTop={scrollTop}
         />
+
+        <DataGridBodyPanel
+          panelName="bottom-aside-body-scroll"
+          containerStyle={bottomAsideBodyPanelStyle}
+          panelScrollConfig={bottomBodyScrollConfig}
+        />
+
+        <DataGridBodyPanel
+          panelName="bottom-left-body-scroll"
+          containerStyle={bottomLeftBodyPanelStyle}
+          panelScrollConfig={bottomBodyScrollConfig}
+        />
+        <DataGridBodyPanel
+          panelName="bottom-body-scroll"
+          containerStyle={bottomBodyPanelStyle}
+          panelScrollConfig={bottomBodyScrollConfig}
+          panelLeft={scrollLeft}
+        />
+
         <DataGridBodyLoader />
       </div>
     );
