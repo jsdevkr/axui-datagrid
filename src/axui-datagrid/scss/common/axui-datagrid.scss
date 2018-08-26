@@ -440,6 +440,11 @@
       top: 0;
       right: 0;
       height: 100%;
+    } @else if $type == 'bottom-horizontal' {
+      border-top: $axui-datagrid-frozen-line-border;
+      top: 0;
+      left: 0;
+      width: 100%;
     } @else {
       border-bottom: $axui-datagrid-frozen-line-border;
       bottom: 0;

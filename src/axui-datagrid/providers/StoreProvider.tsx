@@ -11,6 +11,7 @@ import {
   getStylesAboutFilteredList,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
+import dataGridCollector from '../functions/collector';
 
 export interface IDataGridStore extends types.DataGridState {
   setStoreState: (store: types.DataGridState) => void;
@@ -63,6 +64,7 @@ const store: IDataGridStore = {
   styles: {},
 
   predefinedFormatter: {},
+  predefinedCollector: {},
   setStoreState: () => {},
   dispatch: () => {},
 };
@@ -530,6 +532,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
         this.setStoreState({
           filteredList,
           filterInfo,
+          scrollTop: 0,
         });
       },
       [DispatchTypes.SORT]: () => {
@@ -729,6 +732,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           ...this.state,
           ...{
             predefinedFormatter: { ...dataGridFormatter },
+            predefinedCollector: { ...dataGridCollector },
             setStoreState: this.setStoreState,
             dispatch: this.dispatch,
           },

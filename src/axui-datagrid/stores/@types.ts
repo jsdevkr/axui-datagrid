@@ -1,16 +1,14 @@
 import * as intfs from './@interfaces';
 
-export type DataGridSelection = intfs.IPosition;
-
 export type DataGridRect = intfs.IRect;
-
-export type DataGridEditingCell = intfs.IDataGridEditingCell;
-
-export type DataGridFormatterData = intfs.IDataGridFormatterData;
 
 export type DataGridFormatter = intfs.IDataGridFormatter;
 
 export type formatterFunction = intfs.formatterFunction;
+
+export type DataGridCollector = intfs.IDataGridCollector;
+
+export type collectorFunction = intfs.collectorFunction;
 
 export type userCallBackFunction = intfs.userCallBackFunction;
 
@@ -217,6 +215,7 @@ export type DataGridState = {
   propOptions?: string;
 
   predefinedFormatter?: DataGridFormatter;
+  predefinedCollector?: DataGridCollector;
   rootObject?: any;
   setRootState?: (state: DataGridRootState) => void;
   getRootState?: () => any;

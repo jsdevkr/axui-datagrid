@@ -10,6 +10,7 @@ import {
   getNode,
 } from '../utils';
 import DataGridBodyPanel from './DataGridBodyPanel';
+import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
 
 interface IProps extends IDataGridStore {}
@@ -433,8 +434,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       footSumHeight = 0,
     } = styles;
 
-    console.log(footSumColumns);
-
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
 
@@ -443,17 +442,12 @@ class DataGridBody extends React.Component<IProps, IState> {
     const topBodyScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,
-      eRowIndex: frozenRowIndex,
+      eRowIndex: frozenRowIndex - 1,
     };
     const bodyScrollConfig = {
       frozenRowIndex: frozenRowIndex,
       sRowIndex: sRowIndex,
       eRowIndex: sRowIndex + Math.ceil(bodyHeight / bodyTrHeight) + 1,
-    };
-    const bottomBodyScrollConfig = {
-      frozenRowIndex: 0,
-      sRowIndex: 0,
-      eRowIndex: frozenRowIndex,
     };
 
     const topAsideBodyPanelStyle = {
@@ -571,21 +565,18 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelTop={scrollTop}
         />
 
-        <DataGridBodyPanel
+        <DataGridBodyBottomPanel
           panelName="bottom-aside-body-scroll"
           containerStyle={bottomAsideBodyPanelStyle}
-          panelScrollConfig={bottomBodyScrollConfig}
         />
 
-        <DataGridBodyPanel
+        <DataGridBodyBottomPanel
           panelName="bottom-left-body-scroll"
           containerStyle={bottomLeftBodyPanelStyle}
-          panelScrollConfig={bottomBodyScrollConfig}
         />
-        <DataGridBodyPanel
+        <DataGridBodyBottomPanel
           panelName="bottom-body-scroll"
           containerStyle={bottomBodyPanelStyle}
-          panelScrollConfig={bottomBodyScrollConfig}
           panelLeft={scrollLeft}
         />
 

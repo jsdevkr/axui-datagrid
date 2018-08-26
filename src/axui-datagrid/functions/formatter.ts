@@ -1,7 +1,7 @@
-import { types } from '../stores';
+import { intfs } from '../stores';
 import { printDate } from '../utils';
 
-function money(formatterData: types.DataGridFormatterData) {
+function money(formatterData: intfs.IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     let val = ('' + formatterData.value).replace(/[^0-9^\.^\-]/g, ''),
       regExpPattern = new RegExp('([0-9])([0-9][0-9][0-9][,.])'),
@@ -21,14 +21,14 @@ function money(formatterData: types.DataGridFormatterData) {
   }
 }
 
-function date(formatterData: types.DataGridFormatterData) {
+function date(formatterData: intfs.IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     return printDate(formatterData.value, 'yyyy-MM-dd');
   } else {
     return '';
   }
 }
-function datetime(formatterData: types.DataGridFormatterData) {
+function datetime(formatterData: intfs.IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     return printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
   } else {

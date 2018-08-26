@@ -1,5 +1,3 @@
-import * as types from './@types';
-
 export interface IPosition {
   x?: number;
   y?: number;
@@ -34,11 +32,18 @@ export interface IDataGridFormatterData {
   options?: any;
 }
 
-export type formatterFunction = (
-  formatterData: types.DataGridFormatterData,
-) => any;
+export type formatterFunction = (formatterData: IDataGridFormatterData) => any;
 
-export type editorFunction = (editorData: types.DataGridFormatterData) => void;
+export interface IDataGridCollectorData {
+  data?: any;
+  key?: string;
+  value?: any;
+  options?: any;
+}
+
+export type collectorFunction = (formatterData: IDataGridCollectorData) => any;
+
+export type editorFunction = (editorData: IDataGridFormatterData) => void;
 
 export type userCallBackFunction = (param?: any) => void;
 
@@ -55,10 +60,15 @@ export interface IDataGridFormatter {
   [key: string]: formatterFunction;
 }
 
+export interface IDataGridCollector {
+  [key: string]: collectorFunction;
+}
+
 export interface IDataGridCol extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
+  collector?: collectorFunction | string;
   editor?: editorFunction | string | { type?: string };
   _ex?: number;
   _sx?: number;
@@ -70,7 +80,7 @@ export interface IDataGridColumn extends ICol {
   colIndex?: number;
   rowIndex?: number;
   formatter?: formatterFunction | string;
-  collector?: formatterFunction | string;
+  collector?: collectorFunction | string;
   editor?: editorFunction | string | { type?: string };
   hidden?: boolean;
   columns?: IDataGridColumn[];

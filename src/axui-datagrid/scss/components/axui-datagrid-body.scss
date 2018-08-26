@@ -2,36 +2,43 @@
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
-  [data-panel='body-scroll'],
-  [data-panel='left-body-scroll'],
-  [data-panel='top-left-body-scroll'],
-  [data-panel='top-body-scroll'] {
-    tr {
-      background: $axui-datagrid-row-bg-1;
-    }
-    tr.odded-line {
-      background: $axui-datagrid-row-bg-0;
-    }
-  }
-  [data-panel='top-aside-body-scroll'],
-  [data-panel='aside-body-scroll'] {
-    background: $axui-datagrid-aside-bg;
-    table tr td {
-      box-shadow: $axui-datagrid-header-column-box-shadow;
-    }
-  }
+}
 
-  [data-panel='top-left-body-scroll'],
-  [data-panel='left-body-scroll'] {
-    @include axui-datagrid-frozen-border('vertical');
+[data-panel='body-scroll'],
+[data-panel='left-body-scroll'],
+[data-panel='top-left-body-scroll'],
+[data-panel='top-body-scroll'] {
+  tr {
+    background: $axui-datagrid-row-bg-1;
   }
-  [data-scroll-container] {
-    @include axui-transition(top 0.3s ease);
-    z-index: 2;
+  tr.odded-line {
+    background: $axui-datagrid-row-bg-0;
   }
-  [data-scroll-container='top-aside-body-scroll-container'],
-  [data-scroll-container='top-left-body-scroll-container'],
-  [data-scroll-container='top-body-scroll-container'] {
-    @include axui-datagrid-frozen-border('horizontal');
+}
+[data-panel='top-aside-body-scroll'],
+[data-panel='aside-body-scroll'] {
+  background: $axui-datagrid-aside-bg;
+  table tr td {
+    box-shadow: $axui-datagrid-header-column-box-shadow;
   }
+}
+
+[data-panel='top-left-body-scroll'],
+[data-panel='left-body-scroll'] {
+  @include axui-datagrid-frozen-border('vertical');
+}
+[data-scroll-container] {
+  @include axui-transition(top 0.3s ease);
+  z-index: 2;
+}
+[data-scroll-container='top-aside-body-scroll-container'],
+[data-scroll-container='top-left-body-scroll-container'],
+[data-scroll-container='top-body-scroll-container'] {
+  @include axui-datagrid-frozen-border('horizontal');
+}
+
+[data-scroll-container='bottom-aside-body-scroll-container'],
+[data-scroll-container='bottom-left-body-scroll-container'],
+[data-scroll-container='bottom-body-scroll-container'] {
+  @include axui-datagrid-frozen-border('bottom-horizontal');
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Wrapper, Segment } from 'components';
-import { DataGrid, types as DataGridTypes } from 'axui-datagrid';
+import { DataGrid, intfs as DataGridIntfs } from 'axui-datagrid';
 
 class FootSum extends React.Component<any, any> {
   constructor(props: any) {
@@ -26,7 +26,7 @@ class FootSum extends React.Component<any, any> {
           label: 'Sum',
           align: 'right',
           formatter: function(
-            formatterData: DataGridTypes.DataGridFormatterData,
+            formatterData: DataGridIntfs.IDataGridFormatterData,
           ) {
             return formatterData.item.price * formatterData.item.qty;
           },
