@@ -20,9 +20,10 @@ var DataGridPage = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onClickPageButton = function (e, userFunction) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.focusedRow, focusedRow = _e === void 0 ? 0 : _e, _f = _a.options, options = _f === void 0 ? {} : _f, _g = _a.styles, styles = _g === void 0 ? {} : _g, setStoreState = _a.setStoreState;
-            var _h = options.frozenRowIndex, frozenRowIndex = _h === void 0 ? 0 : _h;
-            var _j = styles.bodyTrHeight, bodyTrHeight = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerWidth, scrollContentContainerWidth = _o === void 0 ? 0 : _o, _p = styles.scrollContentContainerHeight, scrollContentContainerHeight = _p === void 0 ? 0 : _p;
+            var _a;
+            var _b = _this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, _d = _b.scrollLeft, scrollLeft = _d === void 0 ? 0 : _d, _e = _b.scrollTop, scrollTop = _e === void 0 ? 0 : _e, _f = _b.focusedRow, focusedRow = _f === void 0 ? 0 : _f, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.styles, styles = _h === void 0 ? {} : _h, setStoreState = _b.setStoreState;
+            var _j = options.frozenRowIndex, frozenRowIndex = _j === void 0 ? 0 : _j;
+            var _k = styles.bodyTrHeight, bodyTrHeight = _k === void 0 ? 0 : _k, _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentWidth, scrollContentWidth = _m === void 0 ? 0 : _m, _o = styles.scrollContentHeight, scrollContentHeight = _o === void 0 ? 0 : _o, _p = styles.scrollContentContainerWidth, scrollContentContainerWidth = _p === void 0 ? 0 : _p, _q = styles.scrollContentContainerHeight, scrollContentContainerHeight = _q === void 0 ? 0 : _q;
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 frozenRowIndex +
@@ -50,8 +51,9 @@ var DataGridPage = /** @class */ (function (_super) {
                 }
                 return _scrollTop;
             };
-            var proc = (_q = {},
-                _q[stores_1.PageButtonActions.PAGE_FIRST] = function () {
+            var proc = (_a = {},
+                _a[stores_1.PageButtonActions.PAGE_FIRST] = function () {
+                    var _a;
                     var focusRow = 0;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -60,9 +62,9 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q[stores_1.PageButtonActions.PAGE_PREV] = function () {
+                _a[stores_1.PageButtonActions.PAGE_PREV] = function () {
+                    var _a;
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -71,9 +73,9 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q[stores_1.PageButtonActions.PAGE_BACK] = function () {
+                _a[stores_1.PageButtonActions.PAGE_BACK] = function () {
+                    var _a;
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -82,9 +84,9 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q[stores_1.PageButtonActions.PAGE_PLAY] = function () {
+                _a[stores_1.PageButtonActions.PAGE_PLAY] = function () {
+                    var _a;
                     var focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + 1;
@@ -95,9 +97,9 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q[stores_1.PageButtonActions.PAGE_NEXT] = function () {
+                _a[stores_1.PageButtonActions.PAGE_NEXT] = function () {
+                    var _a;
                     var focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + pRowSize;
@@ -108,9 +110,9 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q[stores_1.PageButtonActions.PAGE_LAST] = function () {
+                _a[stores_1.PageButtonActions.PAGE_LAST] = function () {
+                    var _a;
                     var focusRow = filteredList.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -119,16 +121,14 @@ var DataGridPage = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _q);
+                _a);
             if (utils_1.isFunction(userFunction)) {
                 userFunction();
             }
             else if (typeof userFunction === 'string' && userFunction in proc) {
                 proc[userFunction]();
             }
-            var _q;
         };
         return _this;
     }

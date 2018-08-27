@@ -15,6 +15,7 @@ var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridBodyPanel_1 = require("./DataGridBodyPanel");
+var DataGridBodyBottomPanel_1 = require("./DataGridBodyBottomPanel");
 var DataGridBodyLoader_1 = require("./DataGridBodyLoader");
 var DataGridBody = /** @class */ (function (_super) {
     __extends(DataGridBody, _super);
@@ -60,6 +61,7 @@ var DataGridBody = /** @class */ (function (_super) {
                 return i;
             };
             var procBodySelect = function () {
+                var _a, _b;
                 if (selectStartedCol < 0) {
                     return;
                 }
@@ -255,9 +257,9 @@ var DataGridBody = /** @class */ (function (_super) {
                     document.addEventListener('mouseup', offEvent);
                     document.addEventListener('mouseleave', offEvent);
                 }
-                var _a, _b;
             };
             var procClickLinenumber = function () {
+                var _a;
                 var state = {
                     dragging: false,
                     selectionRows: {},
@@ -287,7 +289,6 @@ var DataGridBody = /** @class */ (function (_super) {
                     state.focusedRow = selectStartedRow;
                 }
                 setStoreState(state);
-                var _a;
             };
             var procClickRowSelector = function () {
                 dispatch(stores_1.DispatchTypes.SELECT, {
@@ -319,7 +320,7 @@ var DataGridBody = /** @class */ (function (_super) {
         return _this;
     }
     DataGridBody.prototype.render = function () {
-        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.loadingData, loadingData = _f === void 0 ? false : _f;
+        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.loadingData, loadingData = _f === void 0 ? false : _f, footSumColumns = _a.footSumColumns;
         var _g = options.frozenRowIndex, frozenRowIndex = _g === void 0 ? 0 : _g, _h = options.bodyLoaderHeight, bodyLoaderHeight = _h === void 0 ? 0 : _h;
         var _j = styles.CTInnerWidth, CTInnerWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 0 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.verticalScrollerWidth, verticalScrollerWidth = _r === void 0 ? 0 : _r, _s = styles.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s;
         var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
@@ -327,7 +328,7 @@ var DataGridBody = /** @class */ (function (_super) {
         var topBodyScrollConfig = {
             frozenRowIndex: 0,
             sRowIndex: 0,
-            eRowIndex: frozenRowIndex,
+            eRowIndex: frozenRowIndex - 1,
         };
         var bodyScrollConfig = {
             frozenRowIndex: frozenRowIndex,
@@ -378,6 +379,28 @@ var DataGridBody = /** @class */ (function (_super) {
             top: frozenPanelHeight - loadingDataHeight,
             height: bodyHeight - frozenPanelHeight - footSumHeight,
         };
+        var bottomAsideBodyPanelStyle = {
+            left: 0,
+            width: asidePanelWidth,
+            top: bodyHeight - footSumHeight,
+            height: footSumHeight,
+        };
+        var bottomLeftBodyPanelStyle = {
+            left: asidePanelWidth,
+            width: frozenPanelWidth,
+            top: bodyHeight - footSumHeight,
+            height: footSumHeight,
+        };
+        var bottomBodyPanelStyle = {
+            left: frozenPanelWidth + asidePanelWidth,
+            width: CTInnerWidth -
+                asidePanelWidth -
+                frozenPanelWidth -
+                rightPanelWidth -
+                verticalScrollerWidth,
+            top: bodyHeight - footSumHeight,
+            height: footSumHeight,
+        };
         return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: styles.bodyHeight }, onMouseDown: this.onMouseDownBody },
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-aside-body-scroll", containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-left-body-scroll", containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
@@ -385,6 +408,9 @@ var DataGridBody = /** @class */ (function (_super) {
             React.createElement(DataGridBodyPanel_1.default, { panelName: "aside-body-scroll", containerStyle: asideBodyPanelStyle, panelScrollConfig: bodyScrollConfig, panelTop: scrollTop }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "left-body-scroll", containerStyle: leftBodyPanelStyle, panelScrollConfig: bodyScrollConfig, panelTop: scrollTop }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "body-scroll", containerStyle: bodyPanelStyle, panelScrollConfig: bodyScrollConfig, panelLeft: scrollLeft, panelTop: scrollTop }),
+            React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-aside-body-scroll", containerStyle: bottomAsideBodyPanelStyle }),
+            React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-left-body-scroll", containerStyle: bottomLeftBodyPanelStyle }),
+            React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-body-scroll", containerStyle: bottomBodyPanelStyle, panelLeft: scrollLeft }),
             React.createElement(DataGridBodyLoader_1.default, null)));
     };
     return DataGridBody;

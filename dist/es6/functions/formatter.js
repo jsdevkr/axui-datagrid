@@ -3,14 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
 function money(formatterData) {
     if (typeof formatterData.value !== 'undefined') {
-        let val = ('' + formatterData.value).replace(/[^0-9^\.^\-]/g, ''), regExpPattern = new RegExp('([0-9])([0-9][0-9][0-9][,.])'), arrNumber = val.split('.');
-        arrNumber[0] += '.';
-        do {
-            arrNumber[0] = arrNumber[0].replace(regExpPattern, '$1,$2');
-        } while (regExpPattern.test(arrNumber[0]));
-        return arrNumber.length > 1
-            ? arrNumber[0] + arrNumber[1].substr(0, 2)
-            : arrNumber[0].split('.')[0];
+        const dotIndex = ('' + formatterData.value).indexOf('.');
+        return utils_1.formatCurrency(formatterData.value, dotIndex > 0 ? ('' + formatterData.value).length - 1 - dotIndex : 0);
     }
     else {
         return '';

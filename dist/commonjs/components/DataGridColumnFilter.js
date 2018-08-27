@@ -29,7 +29,8 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onChange = function (filterOptions, value, checked, isCheckAll) {
-            var _a = _this.props, _b = _a.isColumnFilter, isColumnFilter = _b === void 0 ? false : _b, filterInfo = _a.filterInfo, dispatch = _a.dispatch;
+            var _a;
+            var _b = _this.props, _c = _b.isColumnFilter, isColumnFilter = _c === void 0 ? false : _c, filterInfo = _b.filterInfo, dispatch = _b.dispatch;
             if (isColumnFilter === false || !utils_1.isNumber(isColumnFilter)) {
                 return;
             }
@@ -39,9 +40,9 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                     currentFilterInfo[isColumnFilter] = false;
                 }
                 else {
-                    currentFilterInfo[isColumnFilter] = (_c = {},
-                        _c['_CHECK_ALL_'] = false,
-                        _c);
+                    currentFilterInfo[isColumnFilter] = (_a = {},
+                        _a['_CHECK_ALL_'] = false,
+                        _a);
                 }
             }
             else {
@@ -87,7 +88,6 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                 colIndex: isColumnFilter,
                 filterInfo: currentFilterInfo,
             });
-            var _c;
         };
         return _this;
     }

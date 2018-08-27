@@ -17,6 +17,26 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var ReactDOM = require("react-dom");
@@ -62,10 +82,10 @@ var DataGrid = /** @class */ (function (_super) {
             return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
         };
         _this.getProviderProps = function (prevState) {
-            var _a = _this.props.columns, columns = _a === void 0 ? [] : _a;
-            var _b = prevState.options, options = _b === void 0 ? {} : _b;
-            var _c = options.frozenColumnIndex, frozenColumnIndex = _c === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _c, _d = options.body, optionsBody = _d === void 0 ? DataGrid.defaultBody : _d;
-            var _e = optionsBody.columnHeight, columnHeight = _e === void 0 ? 0 : _e;
+            var _a = _this.props, _b = _a.columns, columns = _b === void 0 ? [] : _b, footSum = _a.footSum;
+            var _c = prevState.options, options = _c === void 0 ? {} : _c;
+            var _d = options.frozenColumnIndex, frozenColumnIndex = _d === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _d, _e = options.body, optionsBody = _e === void 0 ? DataGrid.defaultBody : _e;
+            var _f = optionsBody.columnHeight, columnHeight = _f === void 0 ? 0 : _f;
             var newState = __assign({}, prevState);
             var newStyle = {};
             // convert colGroup
@@ -73,9 +93,9 @@ var DataGrid = /** @class */ (function (_super) {
             newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
             newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, options);
             // header를 위한 divide
-            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex || 0, options);
+            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex, options);
             // body를 위한 divide
-            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex || 0, options);
+            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex, options);
             newState.asideHeaderData = headerDividedObj.asideData;
             newState.leftHeaderData = headerDividedObj.leftData;
             newState.headerData = headerDividedObj.rightData;
@@ -107,6 +127,14 @@ var DataGrid = /** @class */ (function (_super) {
             newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+            // colGroup이 정의되면 footSum
+            if (footSum) {
+                newState.footSumColumns = __spread(footSum);
+                newState.footSumTable = utils_1.makeFootSumTable(footSum, newState.colGroup, options);
+                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable, frozenColumnIndex, options);
+                newState.leftFootSumData = footSumDividedObj.leftData;
+                newState.footSumData = footSumDividedObj.rightData;
+            }
             // styles
             newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
             newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
@@ -117,13 +145,13 @@ var DataGrid = /** @class */ (function (_super) {
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
             newState.headerColGroup = calculatedObject.headerColGroup;
-            var _f = newState.styles, _g = _f.CTInnerWidth, _CTInnerWidth = _g === void 0 ? 0 : _g, _h = _f.frozenPanelWidth, _frozenPanelWidth = _h === void 0 ? 0 : _h, _j = _f.asidePanelWidth, _asidePanelWidth = _j === void 0 ? 0 : _j, _k = _f.rightPanelWidth, _rightPanelWidth = _k === void 0 ? 0 : _k;
-            var _l = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
+            var _g = newState.styles, _h = _g.CTInnerWidth, _CTInnerWidth = _h === void 0 ? 0 : _h, _j = _g.frozenPanelWidth, _frozenPanelWidth = _j === void 0 ? 0 : _j, _k = _g.asidePanelWidth, _asidePanelWidth = _k === void 0 ? 0 : _k, _l = _g.rightPanelWidth, _rightPanelWidth = _l === void 0 ? 0 : _l;
+            var _m = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
                 _frozenPanelWidth +
                 (_CTInnerWidth -
                     _asidePanelWidth -
                     _frozenPanelWidth -
-                    _rightPanelWidth)), printStartColIndex = _l.printStartColIndex, printEndColIndex = _l.printEndColIndex;
+                    _rightPanelWidth)), printStartColIndex = _m.printStartColIndex, printEndColIndex = _m.printEndColIndex;
             newState.printStartColIndex = printStartColIndex;
             newState.printEndColIndex = printEndColIndex;
             newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);

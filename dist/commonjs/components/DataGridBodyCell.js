@@ -37,6 +37,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             }
         };
         _this.onKeyUp = function (e, col, li) {
+            var _a;
             var setStoreState = _this.props.setStoreState;
             var proc = (_a = {},
                 _a[stores_1.KeyCodes.ENTER] = function () {
@@ -53,13 +54,13 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                 },
                 _a);
             proc[e.which] && proc[e.which]();
-            var _a;
         };
         _this.onEventInput = function (eventName, e) {
-            var _a = _this.props, getRootNode = _a.getRootNode, setStoreState = _a.setStoreState, dispatch = _a.dispatch, _b = _a.inlineEditingCell, inlineEditingCell = _b === void 0 ? {} : _b;
+            var _a;
+            var _b = _this.props, getRootNode = _b.getRootNode, setStoreState = _b.setStoreState, dispatch = _b.dispatch, _c = _b.inlineEditingCell, inlineEditingCell = _c === void 0 ? {} : _c;
             var rootNode = utils_1.getNode(getRootNode);
-            var proc = (_c = {},
-                _c[stores_1.EventNames.BLUR] = function () {
+            var proc = (_a = {},
+                _a[stores_1.EventNames.BLUR] = function () {
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
@@ -68,7 +69,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                         rootNode.focus();
                     }
                 },
-                _c[stores_1.EventNames.KEYUP] = function () {
+                _a[stores_1.EventNames.KEYUP] = function () {
                     switch (e.which) {
                         case stores_1.KeyCodes.ESC:
                             setStoreState({
@@ -95,9 +96,8 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                             break;
                     }
                 },
-                _c);
+                _a);
             proc[eventName] && proc[eventName]();
-            var _c;
         };
         return _this;
     }
@@ -109,15 +109,16 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     };
     DataGridBodyCell.prototype.render = function () {
         var _this = this;
-        var _a = this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, _c = _a.selectionRows, selectionRows = _c === void 0 ? [] : _c, _d = _a.selectionCols, selectionCols = _d === void 0 ? [] : _d, li = _a.li, _e = _a.col, col = _e === void 0 ? {} : _e, ci = _a.ci, value = _a.value, _f = _a.options, options = _f === void 0 ? {} : _f, _g = _a.isInlineEditing, isInlineEditing = _g === void 0 ? false : _g, _h = _a.inlineEditingCell, inlineEditingCell = _h === void 0 ? {} : _h, _j = _a.predefinedFormatter, predefinedFormatter = _j === void 0 ? {} : _j;
-        var _k = options.body, optionsBody = _k === void 0 ? {} : _k;
-        var _l = optionsBody.columnHeight, columnHeight = _l === void 0 ? 0 : _l, _m = optionsBody.columnPadding, columnPadding = _m === void 0 ? 0 : _m, _o = optionsBody.columnBorderWidth, columnBorderWidth = _o === void 0 ? 0 : _o, _p = optionsBody.align, bodyAlign = _p === void 0 ? 'left' : _p;
-        var _q = col.rowSpan, colRowSpan = _q === void 0 ? 0 : _q, _r = col.colIndex, colColIndex = _r === void 0 ? 0 : _r;
+        var _a;
+        var _b = this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, focusedRow = _b.focusedRow, focusedCol = _b.focusedCol, _d = _b.selectionRows, selectionRows = _d === void 0 ? [] : _d, _e = _b.selectionCols, selectionCols = _e === void 0 ? [] : _e, li = _b.li, _f = _b.col, col = _f === void 0 ? {} : _f, ci = _b.ci, value = _b.value, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.isInlineEditing, isInlineEditing = _h === void 0 ? false : _h, _j = _b.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _b.predefinedFormatter, predefinedFormatter = _k === void 0 ? {} : _k;
+        var _l = options.body, optionsBody = _l === void 0 ? {} : _l;
+        var _m = optionsBody.columnHeight, columnHeight = _m === void 0 ? 0 : _m, _o = optionsBody.columnPadding, columnPadding = _o === void 0 ? 0 : _o, _p = optionsBody.columnBorderWidth, columnBorderWidth = _p === void 0 ? 0 : _p, _q = optionsBody.align, bodyAlign = _q === void 0 ? 'left' : _q;
+        var _r = col.rowSpan, colRowSpan = _r === void 0 ? 0 : _r, _s = col.colIndex, colColIndex = _s === void 0 ? 0 : _s;
         var cellHeight = columnHeight * colRowSpan;
-        var tdClassNames = (_s = {},
-            _s['axui-datagrid-line-number'] = col.columnAttr === 'lineNumber',
-            _s['axui-datagrid-row-selector'] = col.columnAttr === 'rowSelector',
-            _s);
+        var tdClassNames = (_a = {},
+            _a['axui-datagrid-line-number'] = col.columnAttr === 'lineNumber',
+            _a['axui-datagrid-row-selector'] = col.columnAttr === 'rowSelector',
+            _a);
         if (col.columnAttr === 'lineNumber') {
             if (focusedRow === li) {
                 tdClassNames.focused = true;
@@ -198,7 +199,6 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                         textAlign: colAlign,
                     } }, label || ' ')));
         }
-        var _s;
     };
     return DataGridBodyCell;
 }(React.Component));

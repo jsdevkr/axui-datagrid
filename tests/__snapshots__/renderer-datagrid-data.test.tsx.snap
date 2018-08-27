@@ -4235,6 +4235,185 @@ exports[`renders DataGrid has data 1`] = `
         </table>
       </div>
     </div>
+    <div
+      data-scroll-container="bottom-aside-body-scroll-container"
+      style={
+        Object {
+          "height": 0,
+          "left": 0,
+          "top": 256,
+          "width": 60,
+        }
+      }
+    >
+      <div
+        data-panel="bottom-aside-body-scroll"
+        style={
+          Object {
+            "left": 0,
+            "paddingLeft": 0,
+            "paddingTop": 0,
+            "top": 0,
+          }
+        }
+      >
+        <table
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+        >
+          <colgroup>
+            <col
+              style={
+                Object {
+                  "width": "60px",
+                }
+              }
+            />
+            <col />
+          </colgroup>
+          <tbody>
+            <tr
+              className=""
+            >
+              <td
+                className="axui-datagrid-line-number"
+                colSpan={1}
+                rowSpan={1}
+                style={
+                  Object {
+                    "height": 24,
+                    "minHeight": "1px",
+                  }
+                }
+              >
+                <span
+                  data-pos={-1}
+                  data-span="lineNumber"
+                  style={
+                    Object {
+                      "height": "23px",
+                      "lineHeight": "17px",
+                      "textAlign": "center",
+                    }
+                  }
+                >
+                  
+                </span>
+              </td>
+              <td />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      data-scroll-container="bottom-body-scroll-container"
+      style={
+        Object {
+          "height": 0,
+          "left": 60,
+          "top": 256,
+          "width": -74,
+        }
+      }
+    >
+      <div
+        data-panel="bottom-body-scroll"
+        style={
+          Object {
+            "left": 0,
+            "paddingLeft": 0,
+            "paddingTop": 0,
+            "top": 0,
+          }
+        }
+      >
+        <table
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+        >
+          <colgroup>
+            <col
+              style={
+                Object {
+                  "width": "80px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col
+              style={
+                Object {
+                  "width": "100px",
+                }
+              }
+            />
+            <col />
+          </colgroup>
+          <tbody>
+            <tr
+              className=""
+            >
+              <td />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
   <div
     className="axui-datagrid-page"

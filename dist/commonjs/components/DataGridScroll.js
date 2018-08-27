@@ -20,19 +20,20 @@ var DatagridScroll = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onClickScrollArrow = function (e, direction) {
-            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
+            var _a;
+            var _b = _this.props, _c = _b.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _b.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _b.styles, styles = _e === void 0 ? {} : _e, setStoreState = _b.setStoreState, loading = _b.loading, loadingData = _b.loadingData;
             if (loading || loadingData) {
                 return false;
             }
-            var _e = styles.scrollContentWidth, scrollContentWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h;
-            var processor = (_j = {},
-                _j[stores_1.DirectionTypes.UP] = function () {
+            var _f = styles.scrollContentWidth, scrollContentWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentContainerWidth, scrollContentContainerWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentHeight, scrollContentHeight = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerHeight, scrollContentContainerHeight = _j === void 0 ? 0 : _j;
+            var processor = (_a = {},
+                _a[stores_1.DirectionTypes.UP] = function () {
                     var scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
                     });
                 },
-                _j[stores_1.DirectionTypes.DOWN] = function () {
+                _a[stores_1.DirectionTypes.DOWN] = function () {
                     var scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollContentContainerHeight <
@@ -41,13 +42,13 @@ var DatagridScroll = /** @class */ (function (_super) {
                             : scrollContentContainerHeight - scrollContentHeight,
                     });
                 },
-                _j[stores_1.DirectionTypes.LEFT] = function () {
+                _a[stores_1.DirectionTypes.LEFT] = function () {
                     var scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
                     });
                 },
-                _j[stores_1.DirectionTypes.RIGHT] = function () {
+                _a[stores_1.DirectionTypes.RIGHT] = function () {
                     var scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollContentContainerWidth <
@@ -56,38 +57,38 @@ var DatagridScroll = /** @class */ (function (_super) {
                             : scrollContentContainerWidth - scrollContentWidth,
                     });
                 },
-                _j);
+                _a);
             processor[direction]();
             return true;
-            var _j;
         };
         _this.onClickScrollTrack = function (e, barName) {
-            var _a = _this.props, getRootNode = _a.getRootNode, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
+            var _a;
+            var _b = _this.props, getRootNode = _b.getRootNode, _c = _b.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _b.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _b.styles, styles = _e === void 0 ? {} : _e, setStoreState = _b.setStoreState, loading = _b.loading, loadingData = _b.loadingData;
             if (loading || loadingData) {
                 return false;
             }
             e.preventDefault();
-            var _e = styles.horizontalScrollerWidth, horizontalScrollerWidth = _e === void 0 ? 0 : _e, _f = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentWidth, scrollContentWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.verticalScrollerHeight, verticalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m, _o = styles.pageButtonsContainerWidth, pageButtonsContainerWidth = _o === void 0 ? 0 : _o;
+            var _f = styles.horizontalScrollerWidth, horizontalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerWidth, scrollContentContainerWidth = _j === void 0 ? 0 : _j, _k = styles.verticalScrollerHeight, verticalScrollerHeight = _k === void 0 ? 0 : _k, _l = styles.verticalScrollBarHeight, verticalScrollBarHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o, _p = styles.pageButtonsContainerWidth, pageButtonsContainerWidth = _p === void 0 ? 0 : _p;
             var currScrollBarLeft = -scrollLeft *
                 (horizontalScrollerWidth - horizontalScrollBarWidth) /
                 (scrollContentWidth - scrollContentContainerWidth);
             var currScrollBarTop = -scrollTop *
                 (verticalScrollerHeight - verticalScrollBarHeight) /
                 (scrollContentHeight - scrollContentContainerHeight);
-            var _p = utils_1.getMousePosition(e), mouseX = _p.x, mouseY = _p.y;
+            var _q = utils_1.getMousePosition(e), mouseX = _q.x, mouseY = _q.y;
             var rootNode = utils_1.getNode(getRootNode);
-            var _q = rootNode
+            var _r = rootNode
                 ? rootNode.getBoundingClientRect()
-                : {}, _r = _q.x, grx = _r === void 0 ? 0 : _r, _s = _q.y, gry = _s === void 0 ? 0 : _s;
-            var processor = (_t = {},
-                _t[stores_1.ScrollTypes.VERTICAL] = function () {
+                : {}, _s = _r.x, grx = _s === void 0 ? 0 : _s, _t = _r.y, gry = _t === void 0 ? 0 : _t;
+            var processor = (_a = {},
+                _a[stores_1.ScrollTypes.VERTICAL] = function () {
                     var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, mouseY - gry - verticalScrollBarHeight / 2, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                     setStoreState({
                         scrollLeft: currScrollLeft,
                         scrollTop: currScrollTop,
                     });
                 },
-                _t[stores_1.ScrollTypes.HORIZONTAL] = function () {
+                _a[stores_1.ScrollTypes.HORIZONTAL] = function () {
                     var _a = utils_1.getScrollPositionByScrollBar(mouseX -
                         grx -
                         pageButtonsContainerWidth -
@@ -97,12 +98,11 @@ var DatagridScroll = /** @class */ (function (_super) {
                         scrollTop: currScrollTop,
                     });
                 },
-                _t);
+                _a);
             if (e.target.getAttribute('data-scroll')) {
                 processor[barName]();
             }
             return true;
-            var _t;
         };
         _this.onMouseDownScrollBar = function (e, barName) {
             var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, loading = _a.loading, loadingData = _a.loadingData;
@@ -119,25 +119,25 @@ var DatagridScroll = /** @class */ (function (_super) {
                 (scrollContentHeight - scrollContentContainerHeight);
             var startMousePosition = utils_1.getMousePosition(e);
             var onMouseMove = function (ee) {
-                var _a = utils_1.getMousePosition(ee), x = _a.x, y = _a.y;
-                var processor = (_b = {},
-                    _b[stores_1.ScrollTypes.VERTICAL] = function () {
+                var _a;
+                var _b = utils_1.getMousePosition(ee), x = _b.x, y = _b.y;
+                var processor = (_a = {},
+                    _a[stores_1.ScrollTypes.VERTICAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,
                         });
                     },
-                    _b[stores_1.ScrollTypes.HORIZONTAL] = function () {
+                    _a[stores_1.ScrollTypes.HORIZONTAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,
                         });
                     },
-                    _b);
+                    _a);
                 processor[barName]();
-                var _b;
             };
             var offEvent = function (ee) {
                 ee.preventDefault();

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, DispatchTypes, EventNames, KeyCodes } from '../stores';
+import { intfs, types, DispatchTypes, EventNames, KeyCodes } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction, getNode } from '../utils';
@@ -12,110 +12,7 @@ interface IProps extends IDataGridStore {
 interface IState {}
 
 class DataGridBodyBottomCell extends React.Component<IProps, IState> {
-  editInput: HTMLInputElement;
   state = {};
-  activeComposition: boolean = false;
-
-  setEditInputNode = (element: any) => {
-    this.editInput = element;
-  };
-
-  componentDidUpdate(prevProps: IProps, prevState: IState) {
-    if (this.editInput) {
-      this.activeComposition = false;
-      this.editInput.select();
-    }
-  }
-
-  onDoubleClickCell = (e: any, col: types.DataGridColumn, li: number) => {
-    const { setStoreState } = this.props;
-
-    if (col.editor) {
-      setStoreState({
-        isInlineEditing: true,
-        inlineEditingCell: {
-          rowIndex: li,
-          colIndex: col.colIndex,
-          editor: col.editor,
-        },
-      });
-    }
-  };
-
-  onKeyUp = (e: any, col: types.DataGridColumn, li: number) => {
-    const { setStoreState } = this.props;
-
-    const proc = {
-      [KeyCodes.ENTER]: () => {
-        if (col.editor) {
-          setStoreState({
-            isInlineEditing: true,
-            inlineEditingCell: {
-              rowIndex: li,
-              colIndex: col.colIndex,
-              editor: col.editor,
-            },
-          });
-        }
-      },
-    };
-
-    proc[e.which] && proc[e.which]();
-  };
-
-  onEventInput = (eventName: EventNames, e: any) => {
-    const {
-      getRootNode,
-      setStoreState,
-      dispatch,
-      inlineEditingCell = {},
-    } = this.props;
-
-    const rootNode = getNode(getRootNode);
-
-    const proc = {
-      [EventNames.BLUR]: () => {
-        setStoreState({
-          isInlineEditing: false,
-          inlineEditingCell: {},
-        });
-
-        if (rootNode) {
-          rootNode.focus();
-        }
-      },
-      [EventNames.KEYUP]: () => {
-        switch (e.which) {
-          case KeyCodes.ESC:
-            setStoreState({
-              isInlineEditing: false,
-              inlineEditingCell: {},
-            });
-
-            if (rootNode) {
-              rootNode.focus();
-            }
-            break;
-          case KeyCodes.UP_ARROW:
-          case KeyCodes.DOWN_ARROW:
-          case KeyCodes.ENTER:
-            if (!this.activeComposition) {
-              dispatch(DispatchTypes.UPDATE, {
-                row: inlineEditingCell.rowIndex,
-                colIndex: inlineEditingCell.colIndex,
-                value: e.target.value,
-                eventWhichKey: e.which,
-              });
-            }
-            break;
-          default:
-            break;
-        }
-      },
-    };
-
-    proc[eventName] && proc[eventName]();
-  };
 
   render() {
     const {
@@ -154,32 +51,39 @@ class DataGridBodyBottomCell extends React.Component<IProps, IState> {
     let label: any;
 
     const getLabel = function() {
-      let collectorData = {
+      let collectorData: intfs.IDataGridCollectorData = {
         data: filteredList,
         key: col.key,
       };
+      let formatterData: intfs.IDataGridFormatterData = {
+        data: filteredList,
+        key: col.key,
+        value: '',
+      };
+
       let labelValue: string;
 
       if (
         typeof col.collector === 'string' &&
         col.collector in predefinedCollector
       ) {
-        // todo call collector function
-
-        if (
-          typeof col.formatter === 'string' &&
-          col.formatter in predefinedFormatter
-        ) {
-          labelValue = predefinedFormatter[col.formatter](collectorData);
-        } else if (isFunction(col.formatter)) {
-          labelValue = (col.formatter as types.formatterFunction)(
-            collectorData,
-          );
-        } else {
-          labelValue = col.label || '';
-        }
+        labelValue = predefinedCollector[col.collector](collectorData);
+      } else if (isFunction(col.collector)) {
+        labelValue = (col.collector as types.collectorFunction)(collectorData);
       } else {
         labelValue = col.label || '';
+      }
+
+      // collector로 구한 값을 formatter의 value로 사용
+      formatterData.value = labelValue;
+
+      if (
+        typeof col.formatter === 'string' &&
+        col.formatter in predefinedFormatter
+      ) {
+        labelValue = predefinedFormatter[col.formatter](formatterData);
+      } else if (isFunction(col.formatter)) {
+        labelValue = (col.formatter as types.formatterFunction)(formatterData);
       }
 
       return labelValue;
@@ -213,14 +117,14 @@ class DataGridBodyBottomCell extends React.Component<IProps, IState> {
       >
         <span
           data-span={col.columnAttr || ''}
-          data-pos={col.colIndex + ',' + col.rowIndex + ',' + 'footsum'}
+          data-pos={col.colIndex}
           style={{
             height: columnHeight - columnBorderWidth + 'px',
             lineHeight: lineHeight + 'px',
             textAlign: colAlign as any,
           }}
         >
-          {label || ' '}
+          {label || ''}
         </span>
       </td>
     );

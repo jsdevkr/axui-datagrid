@@ -21,10 +21,11 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onClick = function (e, col) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.scrollLeft, scrollLeft = _d === void 0 ? 0 : _d, _e = _a.focusedCol, focusedCol = _e === void 0 ? 0 : _e, _f = _a.isColumnFilter, isColumnFilter = _f === void 0 ? false : _f, _g = _a.options, options = _g === void 0 ? {} : _g, _h = _a.styles, styles = _h === void 0 ? {} : _h, setStoreState = _a.setStoreState, dispatch = _a.dispatch;
-            var _j = options.header, optionsHeader = _j === void 0 ? {} : _j;
-            var key = col.key, _k = col.colIndex, colIndex = _k === void 0 ? 0 : _k;
-            var _l = styles.asidePanelWidth, asidePanelWidth = _l === void 0 ? 0 : _l;
+            var _a;
+            var _b = _this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, _d = _b.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.focusedCol, focusedCol = _f === void 0 ? 0 : _f, _g = _b.isColumnFilter, isColumnFilter = _g === void 0 ? false : _g, _h = _b.options, options = _h === void 0 ? {} : _h, _j = _b.styles, styles = _j === void 0 ? {} : _j, setStoreState = _b.setStoreState, dispatch = _b.dispatch;
+            var _k = options.header, optionsHeader = _k === void 0 ? {} : _k;
+            var key = col.key, _l = col.colIndex, colIndex = _l === void 0 ? 0 : _l;
+            var _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m;
             if (e.target.getAttribute('data-filter')) {
                 var closeEvent_1 = function (ee) {
                     var _isColumnFilter = _this.props.isColumnFilter;
@@ -131,9 +132,9 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                                     })();
                                 }
                                 else {
-                                    state.selectionCols = (_m = {},
-                                        _m[colIndex] = true,
-                                        _m);
+                                    state.selectionCols = (_a = {},
+                                        _a[colIndex] = true,
+                                        _a);
                                     state.focusedCol = colIndex;
                                 }
                                 setStoreState(state);
@@ -150,7 +151,6 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 else {
                 }
             }
-            var _m;
         };
         _this.onMouseDownColumnResizer = function (e, col) {
             e.preventDefault();

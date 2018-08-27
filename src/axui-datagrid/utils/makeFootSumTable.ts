@@ -38,7 +38,7 @@ function makeFootSumTable(
           colIndex: addC,
           colSpan: colSpan,
           rowSpan: 1,
-          label: '&nbsp;',
+          label: '',
         });
       }
       addC += colSpan;
@@ -51,7 +51,7 @@ function makeFootSumTable(
           colIndex: c,
           colSpan: 1,
           rowSpan: 1,
-          label: '&nbsp;',
+          label: '',
         });
       }
     }

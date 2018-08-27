@@ -43,7 +43,7 @@ class DataGrid extends React.Component {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
         this.getProviderProps = (prevState) => {
-            const { columns = [] } = this.props;
+            const { columns = [], footSum } = this.props;
             const { options = {} } = prevState;
             const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
             const { columnHeight = 0 } = optionsBody;
@@ -54,9 +54,9 @@ class DataGrid extends React.Component {
             newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
             newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, options);
             // header를 위한 divide
-            const headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex || 0, options);
+            const headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex, options);
             // body를 위한 divide
-            const bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex || 0, options);
+            const bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex, options);
             newState.asideHeaderData = headerDividedObj.asideData;
             newState.leftHeaderData = headerDividedObj.leftData;
             newState.headerData = headerDividedObj.rightData;
@@ -88,6 +88,14 @@ class DataGrid extends React.Component {
             newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+            // colGroup이 정의되면 footSum
+            if (footSum) {
+                newState.footSumColumns = [...footSum];
+                newState.footSumTable = utils_1.makeFootSumTable(footSum, newState.colGroup, options);
+                const footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable, frozenColumnIndex, options);
+                newState.leftFootSumData = footSumDividedObj.leftData;
+                newState.footSumData = footSumDividedObj.rightData;
+            }
             // styles
             newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
             newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;

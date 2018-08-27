@@ -10,7 +10,7 @@ class DataGridBodyPanel extends React.Component {
         this.state = {};
     }
     render() {
-        const { filteredList = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig = {}, panelLeft = 0, panelTop = 0, styles = {}, } = this.props;
+        const { footSumColumns, filteredList = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig = {}, panelLeft = 0, panelTop = 0, styles = {}, } = this.props;
         const { frozenPanelWidth = 0, asidePanelWidth = 0, frozenPanelHeight = 0, bodyTrHeight = 0, } = styles;
         const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
         // aside-header가 필요하지 않은지 확인
@@ -53,9 +53,6 @@ class DataGridBodyPanel extends React.Component {
             paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
             paddingLeft: panelPaddingLeft,
         };
-        if (panelName === 'aside-body-scroll-container') {
-            // console.log(panelName);
-        }
         return (React.createElement("div", { "data-scroll-container": `${panelName}-container`, style: containerStyle },
             React.createElement("div", { "data-panel": panelName, style: panelStyle },
                 React.createElement("table", { style: { height: '100%' } },

@@ -16,7 +16,8 @@
   }
 }
 [data-panel='top-aside-body-scroll'],
-[data-panel='aside-body-scroll'] {
+[data-panel='aside-body-scroll'],
+[data-panel='bottom-aside-body-scroll'] {
   background: $axui-datagrid-aside-bg;
   table tr td {
     box-shadow: $axui-datagrid-header-column-box-shadow;

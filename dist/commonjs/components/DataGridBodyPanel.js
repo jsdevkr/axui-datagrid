@@ -22,7 +22,7 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
         return _this;
     }
     DataGridBodyPanel.prototype.render = function () {
-        var _a = this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.asideColGroup, asideColGroup = _c === void 0 ? [] : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.visibleHeaderColGroup, visibleHeaderColGroup = _e === void 0 ? [] : _e, _f = _a.asideBodyRowData, asideBodyRowData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.leftBodyRowData, leftBodyRowData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.visibleBodyRowData, visibleBodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, panelName = _a.panelName, _j = _a.containerStyle, containerStyle = _j === void 0 ? {} : _j, _k = _a.panelScrollConfig, panelScrollConfig = _k === void 0 ? {} : _k, _l = _a.panelLeft, panelLeft = _l === void 0 ? 0 : _l, _m = _a.panelTop, panelTop = _m === void 0 ? 0 : _m, _o = _a.styles, styles = _o === void 0 ? {} : _o;
+        var _a = this.props, footSumColumns = _a.footSumColumns, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.asideColGroup, asideColGroup = _c === void 0 ? [] : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.visibleHeaderColGroup, visibleHeaderColGroup = _e === void 0 ? [] : _e, _f = _a.asideBodyRowData, asideBodyRowData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.leftBodyRowData, leftBodyRowData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.visibleBodyRowData, visibleBodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, panelName = _a.panelName, _j = _a.containerStyle, containerStyle = _j === void 0 ? {} : _j, _k = _a.panelScrollConfig, panelScrollConfig = _k === void 0 ? {} : _k, _l = _a.panelLeft, panelLeft = _l === void 0 ? 0 : _l, _m = _a.panelTop, panelTop = _m === void 0 ? 0 : _m, _o = _a.styles, styles = _o === void 0 ? {} : _o;
         var _p = styles.frozenPanelWidth, frozenPanelWidth = _p === void 0 ? 0 : _p, _q = styles.asidePanelWidth, asidePanelWidth = _q === void 0 ? 0 : _q, _r = styles.frozenPanelHeight, frozenPanelHeight = _r === void 0 ? 0 : _r, _s = styles.bodyTrHeight, bodyTrHeight = _s === void 0 ? 0 : _s;
         var sRowIndex = panelScrollConfig.sRowIndex, eRowIndex = panelScrollConfig.eRowIndex, frozenRowIndex = panelScrollConfig.frozenRowIndex;
         // aside-header가 필요하지 않은지 확인
@@ -65,9 +65,6 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
             paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
             paddingLeft: panelPaddingLeft,
         };
-        if (panelName === 'aside-body-scroll-container') {
-            // console.log(panelName);
-        }
         return (React.createElement("div", { "data-scroll-container": panelName + "-container", style: containerStyle },
             React.createElement("div", { "data-panel": panelName, style: panelStyle },
                 React.createElement("table", { style: { height: '100%' } },
@@ -75,6 +72,7 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
                         panelColGroup.map(function (col, ci) { return (React.createElement("col", { key: ci, style: { width: col._width + 'px' } })); }),
                         React.createElement("col", null)),
                     React.createElement("tbody", null, utils_1.arrayFromRange(sRowIndex, eRowIndex).map(function (li) {
+                        var _a;
                         var item = filteredList[li];
                         var trClassNames = (_a = {},
                             _a['odded-line'] = li % 2 !== 0,
@@ -89,7 +87,6 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
                             });
                         }
                         return null;
-                        var _a;
                     }))))));
     };
     return DataGridBodyPanel;

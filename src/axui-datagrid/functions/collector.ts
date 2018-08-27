@@ -1,11 +1,17 @@
 import { intfs } from '../stores';
 
-function avg(collectorData: intfs.IDataGridCollectorData) {
-  return 'avg';
-}
-
 function sum(collectorData: intfs.IDataGridCollectorData) {
-  return 'sum';
+  const { key = '', data } = collectorData;
+  return data.reduce(
+    (accumulator: number, currentValue: any) => accumulator + currentValue[key],
+    0,
+  );
 }
 
-export default { avg, sum };
+function avg(collectorData: intfs.IDataGridCollectorData) {
+  return parseFloat(
+    (sum(collectorData) / collectorData.data.length).toFixed(4),
+  );
+}
+
+export default { sum, avg };

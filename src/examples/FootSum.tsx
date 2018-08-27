@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Wrapper, Segment } from 'components';
-import { DataGrid, intfs as DataGridIntfs } from 'axui-datagrid';
+import { DataGrid, intfs as DataGridIntfs, utils } from 'axui-datagrid';
 
 class FootSum extends React.Component<any, any> {
   constructor(props: any) {
@@ -28,7 +28,9 @@ class FootSum extends React.Component<any, any> {
           formatter: function(
             formatterData: DataGridIntfs.IDataGridFormatterData,
           ) {
-            return formatterData.item.price * formatterData.item.qty;
+            return utils.formatCurrency(
+              formatterData.item.price * formatterData.item.qty,
+            );
           },
         },
         { key: 'description', width: 200, label: 'Description' },
@@ -43,16 +45,24 @@ class FootSum extends React.Component<any, any> {
             align: 'right',
           },
           {
-            key: 'amount',
+            key: 'qty',
             collector: 'sum',
             formatter: 'money',
             align: 'right',
           },
           {
-            key: 'cost',
-            collector: function() {
-              return 0;
+            key: 'sum',
+            collector: function(
+              collectorData: DataGridIntfs.IDataGridCollectorData,
+            ) {
+              const { data } = collectorData;
+              return data.reduce(
+                (accumulator: number, currentValue: any) =>
+                  accumulator + currentValue['price'] * currentValue['qty'],
+                0,
+              );
             },
+            formatter: 'money',
             align: 'right',
           },
         ],

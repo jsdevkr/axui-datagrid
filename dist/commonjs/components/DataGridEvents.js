@@ -60,9 +60,10 @@ var DataGridEvents = /** @class */ (function (_super) {
             return true;
         };
         _this.onKeyUp = function (e) {
-            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState, isInlineEditing = _a.isInlineEditing;
-            var proc = (_e = {},
-                _e[stores_1.KeyCodes.ENTER] = function () {
+            var _a;
+            var _b = _this.props, _c = _b.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _b.focusedRow, focusedRow = _d === void 0 ? 0 : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, setStoreState = _b.setStoreState, isInlineEditing = _b.isInlineEditing;
+            var proc = (_a = {},
+                _a[stores_1.KeyCodes.ENTER] = function () {
                     var col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -75,17 +76,17 @@ var DataGridEvents = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _e);
+                _a);
             if (!isInlineEditing && e.which in proc) {
                 proc[e.which]();
             }
-            var _e;
         };
         _this.onKeyDown = function (e) {
-            var _a = _this.props, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, getRootNode = _a.getRootNode, getClipBoardNode = _a.getClipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m;
-            var _o = _this.props, _p = _o.printStartColIndex, printStartColIndex = _p === void 0 ? 0 : _p, _q = _o.printEndColIndex, printEndColIndex = _q === void 0 ? colGroup.length : _q;
-            var _r = options.frozenRowIndex, frozenRowIndex = _r === void 0 ? 0 : _r, _s = options.frozenColumnIndex, frozenColumnIndex = _s === void 0 ? 0 : _s;
-            var _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.bodyHeight, bodyHeight = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y, _z = styles.frozenPanelWidth, frozenPanelWidth = _z === void 0 ? 0 : _z, _0 = styles.rightPanelWidth, rightPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.verticalScrollerWidth, verticalScrollerWidth = _1 === void 0 ? 0 : _1;
+            var _a, _b;
+            var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, getRootNode = _c.getRootNode, getClipBoardNode = _c.getClipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
+            var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
+            var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
+            var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.bodyHeight, bodyHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentWidth, scrollContentWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentHeight, scrollContentHeight = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerWidth, scrollContentContainerWidth = _z === void 0 ? 0 : _z, _0 = styles.scrollContentContainerHeight, scrollContentContainerHeight = _0 === void 0 ? 0 : _0, _1 = styles.frozenPanelWidth, frozenPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.rightPanelWidth, rightPanelWidth = _2 === void 0 ? 0 : _2, _3 = styles.verticalScrollerWidth, verticalScrollerWidth = _3 === void 0 ? 0 : _3;
             var rootNode = utils_1.getNode(getRootNode);
             var clipBoardNode = utils_1.getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
@@ -150,8 +151,8 @@ var DataGridEvents = /** @class */ (function (_super) {
                 }
                 return _scrollLeft;
             };
-            var metaProc = (_2 = {},
-                _2[stores_1.KeyCodes.C] = function () {
+            var metaProc = (_a = {},
+                _a[stores_1.KeyCodes.C] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var copySuccess = false;
@@ -178,7 +179,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     rootNode && rootNode.focus();
                     return copySuccess;
                 },
-                _2[stores_1.KeyCodes.A] = function () {
+                _a[stores_1.KeyCodes.A] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var state = {
@@ -205,9 +206,10 @@ var DataGridEvents = /** @class */ (function (_super) {
                     state.focusedCol = 0;
                     setStoreState(state);
                 },
-                _2);
-            var proc = (_3 = {},
-                _3[stores_1.KeyCodes.ESC] = function () {
+                _a);
+            var proc = (_b = {},
+                _b[stores_1.KeyCodes.ESC] = function () {
+                    var _a, _b;
                     setStoreState({
                         selectionRows: (_a = {},
                             _a[focusedRow] = true,
@@ -216,9 +218,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _b[focusedCol] = true,
                             _b),
                     });
-                    var _a, _b;
                 },
-                _3[stores_1.KeyCodes.HOME] = function () {
+                _b[stores_1.KeyCodes.HOME] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = 0;
@@ -229,9 +231,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.END] = function () {
+                _b[stores_1.KeyCodes.END] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = filteredList.length - 1;
@@ -242,9 +244,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.PAGE_UP] = function () {
+                _b[stores_1.KeyCodes.PAGE_UP] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
@@ -255,9 +257,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.PAGE_DOWN] = function () {
+                _b[stores_1.KeyCodes.PAGE_DOWN] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + pRowSize >= filteredList.length
@@ -270,9 +272,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.UP_ARROW] = function () {
+                _b[stores_1.KeyCodes.UP_ARROW] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
@@ -283,9 +285,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.DOWN_ARROW] = function () {
+                _b[stores_1.KeyCodes.DOWN_ARROW] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusRow = focusedRow + 1 >= filteredList.length
@@ -298,9 +300,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.LEFT_ARROW] = function () {
+                _b[stores_1.KeyCodes.LEFT_ARROW] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
@@ -311,9 +313,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedCol: focusCol,
                     });
-                    var _a;
                 },
-                _3[stores_1.KeyCodes.RIGHT_ARROW] = function () {
+                _b[stores_1.KeyCodes.RIGHT_ARROW] = function () {
+                    var _a;
                     e.preventDefault();
                     e.stopPropagation();
                     var focusCol = focusedCol + 1 >= colGroup.length
@@ -326,9 +328,8 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _a),
                         focusedCol: focusCol,
                     });
-                    var _a;
                 },
-                _3);
+                _b);
             if (e.metaKey) {
                 if (e.which in metaProc) {
                     metaProc[e.which]();
@@ -337,12 +338,12 @@ var DataGridEvents = /** @class */ (function (_super) {
             else {
                 proc[e.which] && proc[e.which]();
             }
-            var _2, _3;
         };
         _this.onFireEvent = function (e, eventName) {
-            var _a = _this.props, loading = _a.loading, loadingData = _a.loadingData, _b = _a.isInlineEditing, isInlineEditing = _b === void 0 ? false : _b;
-            var proc = (_c = {},
-                _c[stores_1.EventNames.WHEEL] = function () {
+            var _a;
+            var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
+            var proc = (_a = {},
+                _a[stores_1.EventNames.WHEEL] = function () {
                     if (!loadingData) {
                         _this.onWheel(e);
                     }
@@ -351,20 +352,20 @@ var DataGridEvents = /** @class */ (function (_super) {
                         e.stopPropagation();
                     }
                 },
-                _c[stores_1.EventNames.KEYDOWN] = function () {
+                _a[stores_1.EventNames.KEYDOWN] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyDown(e);
                     }
                 },
-                _c[stores_1.EventNames.KEYUP] = function () {
+                _a[stores_1.EventNames.KEYUP] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyUp(e);
                     }
                 },
-                _c[stores_1.EventNames.MOUSEDOWN] = function () { },
-                _c[stores_1.EventNames.MOUSEUP] = function () { },
-                _c[stores_1.EventNames.CLICK] = function () { },
-                _c);
+                _a[stores_1.EventNames.MOUSEDOWN] = function () { },
+                _a[stores_1.EventNames.MOUSEUP] = function () { },
+                _a[stores_1.EventNames.CLICK] = function () { },
+                _a);
             if (eventName in proc && !loading) {
                 if (_this.props.onBeforeEvent && !loadingData) {
                     _this.props.onBeforeEvent(e, eventName);
@@ -374,7 +375,6 @@ var DataGridEvents = /** @class */ (function (_super) {
                     _this.props.onAfterEvent(e, eventName);
                 }
             }
-            var _c;
         };
         return _this;
     }

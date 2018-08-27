@@ -13,6 +13,7 @@ export {
   default as getStylesAboutFilteredList,
 } from './getStylesAboutFilteredList';
 export { default as findParentNode } from './findParentNode';
+export { default as formatCurrency } from './formatCurrency';
 export { default as getPathValue } from './getPathValue';
 export { default as mergeAll } from './mergeAll';
 export { default as classNames } from './classNames';

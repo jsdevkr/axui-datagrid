@@ -39,6 +39,7 @@ var common_1 = require("./common");
  * @return {any}
  */
 function mergeAll(deep, target, options) {
+    var e_1, _a;
     if (arguments.length === 2) {
         target = arguments[0];
         options = arguments[1];
@@ -55,8 +56,8 @@ function mergeAll(deep, target, options) {
     }
     else {
         try {
-            for (var _a = __values(Object.keys(options)), _b = _a.next(); !_b.done; _b = _a.next()) {
-                name = _b.value;
+            for (var _b = __values(Object.keys(options)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                name = _c.value;
                 src = target[name];
                 copy = options[name];
                 // Prevent never-ending loop
@@ -86,14 +87,13 @@ function mergeAll(deep, target, options) {
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
             finally { if (e_1) throw e_1.error; }
         }
     }
     // Return the modified object
     return target;
-    var e_1, _c;
 }
 exports.default = mergeAll;
 //# sourceMappingURL=mergeAll.js.map

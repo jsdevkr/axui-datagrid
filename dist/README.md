@@ -207,3 +207,4 @@ export default Formatter;
 * v0.3.3 - Changed keyboard event firing to be determined by 'onCompositionUpdate' state. In InlineEdit mode.
 * v0.3.5 - Update document and minor bug fix on inline-edit.
 * v0.3.6 - bugfix : Wrong scrollPosition error when changed focus position by keyDown
+* v0.3.7 - Update document and change columns fix

@@ -4,6 +4,7 @@ const React = require("react");
 const stores_1 = require("../stores");
 const utils_1 = require("../utils");
 const formatter_1 = require("../functions/formatter");
+const collector_1 = require("../functions/collector");
 const store = {
     sortInfo: {},
     isColumnFilter: false,
@@ -44,6 +45,7 @@ const store = {
     options: {},
     styles: {},
     predefinedFormatter: {},
+    predefinedCollector: {},
     setStoreState: () => { },
     dispatch: () => { },
 };
@@ -151,6 +153,7 @@ class StoreProvider extends React.Component {
                     this.setStoreState({
                         filteredList,
                         filterInfo,
+                        scrollTop: 0,
                     });
                 },
                 [stores_1.DispatchTypes.SORT]: () => {
@@ -440,20 +443,24 @@ class StoreProvider extends React.Component {
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
                 onChangeSelected: newProps.onChangeSelected,
+                colGroupMap: newProps.colGroupMap,
+                asideColGroup: newProps.asideColGroup,
+                colGroup: newProps.colGroup,
                 headerTable: newProps.headerTable,
-                bodyRowTable: newProps.bodyRowTable,
-                bodyRowMap: newProps.bodyRowMap,
                 asideHeaderData: newProps.asideHeaderData,
                 leftHeaderData: newProps.leftHeaderData,
                 headerData: newProps.headerData,
-                asideColGroup: newProps.asideColGroup,
+                leftHeaderColGroup: newProps.leftHeaderColGroup,
+                headerColGroup: newProps.headerColGroup,
+                bodyRowTable: newProps.bodyRowTable,
+                bodyRowMap: newProps.bodyRowMap,
                 asideBodyRowData: newProps.asideBodyRowData,
                 leftBodyRowData: newProps.leftBodyRowData,
                 bodyRowData: newProps.bodyRowData,
-                colGroup: newProps.colGroup,
-                colGroupMap: newProps.colGroupMap,
-                leftHeaderColGroup: newProps.leftHeaderColGroup,
-                headerColGroup: newProps.headerColGroup,
+                footSumColumns: newProps.footSumColumns,
+                footSumTable: newProps.footSumTable,
+                leftFootSumData: newProps.leftFootSumData,
+                footSumData: newProps.footSumData,
                 styles: styles,
                 printStartColIndex: newProps.printStartColIndex,
                 printEndColIndex: newProps.printEndColIndex,
@@ -505,6 +512,7 @@ class StoreProvider extends React.Component {
     render() {
         return (React.createElement(Provider, { value: Object.assign({}, this.state, {
                 predefinedFormatter: Object.assign({}, formatter_1.default),
+                predefinedCollector: Object.assign({}, collector_1.default),
                 setStoreState: this.setStoreState,
                 dispatch: this.dispatch,
             }) }, this.props.children));

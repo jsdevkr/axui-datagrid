@@ -42,6 +42,7 @@ var React = require("react");
 var stores_1 = require("../stores");
 var utils_1 = require("../utils");
 var formatter_1 = require("../functions/formatter");
+var collector_1 = require("../functions/collector");
 var store = {
     sortInfo: {},
     isColumnFilter: false,
@@ -82,6 +83,7 @@ var store = {
     options: {},
     styles: {},
     predefinedFormatter: {},
+    predefinedCollector: {},
     setStoreState: function () { },
     dispatch: function () { },
 };
@@ -148,12 +150,13 @@ var StoreProvider = /** @class */ (function (_super) {
             _this.setState(newState);
         };
         _this.dispatch = function (dispatchType, param) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.listSelectedAll, listSelectedAll = _c === void 0 ? false : _c, _d = _a.scrollLeft, scrollLeft = _d === void 0 ? 0 : _d, _e = _a.colGroup, colGroup = _e === void 0 ? [] : _e, getRootNode = _a.getRootNode, _f = _a.focusedRow, focusedRow = _f === void 0 ? 0 : _f, _g = _a.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _a.options, options = _h === void 0 ? {} : _h;
-            var _j = options.columnKeys, optionColumnKeys = _j === void 0 ? {} : _j;
+            var _a;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, getRootNode = _b.getRootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j;
+            var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
             var rootNode = utils_1.getNode(getRootNode);
-            var _k = _this.state.filteredList, filteredList = _k === void 0 ? [] : _k;
-            var proc = (_l = {},
-                _l[stores_1.DispatchTypes.FILTER] = function () {
+            var _l = _this.state.filteredList, filteredList = _l === void 0 ? [] : _l;
+            var proc = (_a = {},
+                _a[stores_1.DispatchTypes.FILTER] = function () {
                     var colIndex = param.colIndex, filterInfo = param.filterInfo;
                     var checkAll = filterInfo[colIndex] === false
                         ? true
@@ -190,9 +193,10 @@ var StoreProvider = /** @class */ (function (_super) {
                     _this.setStoreState({
                         filteredList: filteredList,
                         filterInfo: filterInfo,
+                        scrollTop: 0,
                     });
                 },
-                _l[stores_1.DispatchTypes.SORT] = function () {
+                _a[stores_1.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
                     if (typeof colIndex !== 'undefined') {
                         var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
@@ -256,7 +260,8 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _l[stores_1.DispatchTypes.UPDATE] = function () {
+                _a[stores_1.DispatchTypes.UPDATE] = function () {
+                    var _a;
                     var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
                     var key = colGroup[colIndex].key;
                     var focusRow = focusedRow;
@@ -291,9 +296,8 @@ var StoreProvider = /** @class */ (function (_super) {
                     if (rootNode) {
                         rootNode.focus();
                     }
-                    var _a;
                 },
-                _l[stores_1.DispatchTypes.RESIZE_COL] = function () {
+                _a[stores_1.DispatchTypes.RESIZE_COL] = function () {
                     var col = param.col, newWidth = param.newWidth;
                     var newState = __assign({}, _this.state);
                     if (newState.colGroup) {
@@ -309,7 +313,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         columnResizing: false,
                     });
                 },
-                _l[stores_1.DispatchTypes.SELECT] = function () {
+                _a[stores_1.DispatchTypes.SELECT] = function () {
                     var rowIndex = param.rowIndex, checked = param.checked;
                     var rowSelected = false;
                     var selectedAll = listSelectedAll;
@@ -333,7 +337,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         filteredList: __spread(filteredList),
                     });
                 },
-                _l[stores_1.DispatchTypes.SELECT_ALL] = function () {
+                _a[stores_1.DispatchTypes.SELECT_ALL] = function () {
                     var checked = param.checked;
                     var selectedAll = listSelectedAll;
                     if (checked === true) {
@@ -353,9 +357,8 @@ var StoreProvider = /** @class */ (function (_super) {
                         filteredList: __spread(filteredList),
                     });
                 },
-                _l);
+                _a);
             proc[dispatchType]();
-            var _l;
         };
         return _this;
     }
@@ -482,20 +485,24 @@ var StoreProvider = /** @class */ (function (_super) {
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
                 onChangeSelected: newProps.onChangeSelected,
+                colGroupMap: newProps.colGroupMap,
+                asideColGroup: newProps.asideColGroup,
+                colGroup: newProps.colGroup,
                 headerTable: newProps.headerTable,
-                bodyRowTable: newProps.bodyRowTable,
-                bodyRowMap: newProps.bodyRowMap,
                 asideHeaderData: newProps.asideHeaderData,
                 leftHeaderData: newProps.leftHeaderData,
                 headerData: newProps.headerData,
-                asideColGroup: newProps.asideColGroup,
+                leftHeaderColGroup: newProps.leftHeaderColGroup,
+                headerColGroup: newProps.headerColGroup,
+                bodyRowTable: newProps.bodyRowTable,
+                bodyRowMap: newProps.bodyRowMap,
                 asideBodyRowData: newProps.asideBodyRowData,
                 leftBodyRowData: newProps.leftBodyRowData,
                 bodyRowData: newProps.bodyRowData,
-                colGroup: newProps.colGroup,
-                colGroupMap: newProps.colGroupMap,
-                leftHeaderColGroup: newProps.leftHeaderColGroup,
-                headerColGroup: newProps.headerColGroup,
+                footSumColumns: newProps.footSumColumns,
+                footSumTable: newProps.footSumTable,
+                leftFootSumData: newProps.leftFootSumData,
+                footSumData: newProps.footSumData,
                 styles: styles,
                 printStartColIndex: newProps.printStartColIndex,
                 printEndColIndex: newProps.printEndColIndex,
@@ -547,6 +554,7 @@ var StoreProvider = /** @class */ (function (_super) {
     StoreProvider.prototype.render = function () {
         return (React.createElement(Provider, { value: __assign({}, this.state, {
                 predefinedFormatter: __assign({}, formatter_1.default),
+                predefinedCollector: __assign({}, collector_1.default),
                 setStoreState: this.setStoreState,
                 dispatch: this.dispatch,
             }) }, this.props.children));
