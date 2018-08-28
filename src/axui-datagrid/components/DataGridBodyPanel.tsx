@@ -4,6 +4,7 @@ import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { arrayFromRange, classNames as CX } from '../utils';
 import DataGridBodyCell from './DataGridBodyCell';
+import DataGridTableColGroup from './DataGridTableColGroup';
 
 interface IProps extends IDataGridStore {
   panelName: string;
@@ -14,6 +15,39 @@ interface IProps extends IDataGridStore {
   panelTop?: number;
 }
 interface IState {}
+
+const TableBody: React.SFC<{
+  sRowIndex: number;
+  eRowIndex: number;
+  filteredList: any[];
+  bodyRow: types.DataGridColumnTableMap;
+}> = ({ sRowIndex, eRowIndex, filteredList, bodyRow }) => (
+  <tbody>
+    {arrayFromRange(sRowIndex, eRowIndex).map(li => {
+      const item = filteredList[li];
+      const trClassNames = {
+        ['odded-line']: li % 2 !== 0,
+      };
+      if (item) {
+        return bodyRow.rows.map((row, ri) => (
+          <tr key={ri} className={CX(trClassNames)}>
+            {row.cols.map((col, ci) => (
+              <DataGridBodyCell
+                key={ci}
+                li={li}
+                ci={ci}
+                col={col}
+                value={filteredList[li][col.key || '']}
+              />
+            ))}
+            <td />
+          </tr>
+        ));
+      }
+      return null;
+    })}
+  </tbody>
+);
 
 class DataGridBodyPanel extends React.Component<IProps, IState> {
   state = {};
@@ -99,41 +133,13 @@ class DataGridBodyPanel extends React.Component<IProps, IState> {
       >
         <div data-panel={panelName} style={panelStyle}>
           <table style={{ height: '100%' }}>
-            <colgroup>
-              {panelColGroup.map((col, ci) => (
-                <col key={ci} style={{ width: col._width + 'px' }} />
-              ))}
-              <col />
-            </colgroup>
-            <tbody>
-              {arrayFromRange(sRowIndex, eRowIndex).map(li => {
-                const item = filteredList[li];
-                const trClassNames = {
-                  ['odded-line']: li % 2 !== 0,
-                };
-                if (item) {
-                  return panelBodyRow.rows.map((row, ri) => {
-                    return (
-                      <tr key={ri} className={CX(trClassNames)}>
-                        {row.cols.map((col, ci) => {
-                          return (
-                            <DataGridBodyCell
-                              key={ci}
-                              li={li}
-                              ci={ci}
-                              col={col}
-                              value={filteredList[li][col.key || '']}
-                            />
-                          );
-                        })}
-                        <td />
-                      </tr>
-                    );
-                  });
-                }
-                return null;
-              })}
-            </tbody>
+            <DataGridTableColGroup panelColGroup={panelColGroup} />
+            <TableBody
+              sRowIndex={sRowIndex}
+              eRowIndex={eRowIndex}
+              filteredList={filteredList}
+              bodyRow={panelBodyRow}
+            />
           </table>
         </div>
       </div>

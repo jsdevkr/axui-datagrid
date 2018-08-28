@@ -4,6 +4,7 @@ import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { arrayFromRange, classNames as CX } from '../utils';
 import DataGridBodyBottomCell from './DataGridBodyBottomCell';
+import DataGridTableColGroup from './DataGridTableColGroup';
 
 interface IProps extends IDataGridStore {
   panelName: string;
@@ -13,6 +14,25 @@ interface IProps extends IDataGridStore {
   panelTop?: number;
 }
 interface IState {}
+
+const TableBody: React.SFC<{
+  bodyRow: types.DataGridColumnTableMap;
+}> = ({ bodyRow }) => (
+  <tbody>
+    {bodyRow.rows.map((row, ri) => {
+      return (
+        <tr key={ri} className={''}>
+          {row.cols.map((col, ci) => {
+            return (
+              <DataGridBodyBottomCell key={ci} ci={ci} col={col} value={''} />
+            );
+          })}
+          <td />
+        </tr>
+      );
+    })}
+  </tbody>
+);
 
 class DataGridBodyBottomPanel extends React.Component<IProps, IState> {
   state = {};
@@ -85,31 +105,8 @@ class DataGridBodyBottomPanel extends React.Component<IProps, IState> {
       >
         <div data-panel={panelName} style={panelStyle}>
           <table style={{ height: '100%' }}>
-            <colgroup>
-              {panelColGroup.map((col, ci) => (
-                <col key={ci} style={{ width: col._width + 'px' }} />
-              ))}
-              <col />
-            </colgroup>
-            <tbody>
-              {panelBodyRow.rows.map((row, ri) => {
-                return (
-                  <tr key={ri} className={''}>
-                    {row.cols.map((col, ci) => {
-                      return (
-                        <DataGridBodyBottomCell
-                          key={ci}
-                          ci={ci}
-                          col={col}
-                          value={''}
-                        />
-                      );
-                    })}
-                    <td />
-                  </tr>
-                );
-              })}
-            </tbody>
+            <DataGridTableColGroup panelColGroup={panelColGroup} />
+            <TableBody bodyRow={panelBodyRow} />
           </table>
         </div>
       </div>
