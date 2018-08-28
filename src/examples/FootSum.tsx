@@ -58,7 +58,7 @@ class FootSum extends React.Component<any, any> {
               const { data } = collectorData;
               return data.reduce(
                 (accumulator: number, currentValue: any) =>
-                  accumulator + currentValue['price'] * currentValue['qty'],
+                  accumulator + currentValue.price * currentValue.qty,
                 0,
               );
             },

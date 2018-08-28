@@ -501,13 +501,13 @@ class DataGridBody extends React.Component<IProps, IState> {
     const bottomAsideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
-      top: bodyHeight - footSumHeight,
+      top: bodyHeight - footSumHeight - 1,
       height: footSumHeight,
     };
     const bottomLeftBodyPanelStyle = {
       left: asidePanelWidth,
       width: frozenPanelWidth,
-      top: bodyHeight - footSumHeight,
+      top: bodyHeight - footSumHeight - 1,
       height: footSumHeight,
     };
     const bottomBodyPanelStyle = {
@@ -518,7 +518,7 @@ class DataGridBody extends React.Component<IProps, IState> {
         frozenPanelWidth -
         rightPanelWidth -
         verticalScrollerWidth,
-      top: bodyHeight - footSumHeight,
+      top: bodyHeight - footSumHeight - 1,
       height: footSumHeight,
     };
 

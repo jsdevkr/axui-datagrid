@@ -175,6 +175,7 @@
         to right,
         $axui-datagrid-aside-column-focused-bg-colors
       );
+      box-shadow: none;
     }
     &.focused {
       &:before {
