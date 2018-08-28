@@ -50,6 +50,7 @@ export type DataGridOptionHeader = {
   sortable?: boolean;
   enableFilter?: boolean;
   clickAction?: 'select' | 'sort' | undefined;
+  filterIconClassName?: string;
 };
 
 export type DataGridOptionBody = {

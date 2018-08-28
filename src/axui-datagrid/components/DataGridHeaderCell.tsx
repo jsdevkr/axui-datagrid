@@ -14,13 +14,14 @@ interface IProps extends IDataGridStore {
 const DatagridHeaderCell: React.SFC<IProps> = ({
   listSelectedAll = false,
   options = {},
-  focusedCol,
+  focusedCol = -1,
   selectionCols,
   sortInfo,
   bodyRow,
   ri,
   col,
   onClick,
+  filterInfo = {},
 }) => {
   const { header: optionsHeader = {} } = options;
   const {
@@ -29,13 +30,20 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
     align: headerAlign = '',
   } = optionsHeader;
-  const colAlign = col.align || headerAlign || '';
+  const {
+    align: colAlign = headerAlign || '',
+    colIndex = 0,
+    key: colKey = '',
+    label: colLabel = '',
+    rowSpan: colRowSpan = 1,
+    colSpan: colCowSpan = 1,
+  } = col;
 
   let lineHeight =
     optionsHeaderColumnHeight -
     optionsHeaderColumnPadding * 2 -
     optionsHeaderColumnBorderWidth;
-  let label, sorter;
+  let label, sorter, filter;
 
   if (col.key === '_row_selector_') {
     if (optionsHeader.selector) {
@@ -51,44 +59,46 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
       );
     }
   } else {
-    label = col.label;
+    label = colLabel;
   }
 
-  if (
-    col.key &&
-    col.colIndex !== null &&
-    typeof col.colIndex !== 'undefined' &&
-    sortInfo &&
-    sortInfo[col.key]
-  ) {
+  if (colKey && sortInfo && sortInfo[colKey]) {
     sorter = (
       <span
-        data-sorter={col.colIndex}
-        data-sorter-order={sortInfo[col.key].orderBy}
+        data-sorter={colIndex}
+        data-sorter-order={sortInfo[colKey].orderBy}
       />
     );
   }
 
+  // todo : filter된 상태일 때. 아이콘 처리 및 filter해제 상태 관리
+  // if (filterInfo[colIndex]) {
+  if (optionsHeader.enableFilter && colKey && colIndex > -1) {
+    filter = (
+      <span data-filter={!!filterInfo[colIndex]} data-filter-index={colIndex} />
+    );
+  }
+
   let cellHeight =
-    optionsHeaderColumnHeight * (col.rowSpan || 1) -
-    optionsHeaderColumnBorderWidth;
+    optionsHeaderColumnHeight * colRowSpan - optionsHeaderColumnBorderWidth;
+
   let tdClassNames = {
     ['axui-datagrid-header-column']: true,
     ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
     ['focused']:
-      (focusedCol || 0) > -1 &&
+      focusedCol > -1 &&
       col.colIndex === focusedCol &&
-      bodyRow.rows.length - 1 === ri + (col.rowSpan || 1) - 1,
+      bodyRow.rows.length - 1 === ri + colRowSpan - 1,
     ['selected']:
       selectionCols &&
-      selectionCols[col.colIndex || 0] &&
-      bodyRow.rows.length - 1 === ri + (col.rowSpan || 1) - 1,
+      selectionCols[colIndex] &&
+      bodyRow.rows.length - 1 === ri + colRowSpan - 1,
   };
 
   return (
     <td
-      colSpan={col.colSpan}
-      rowSpan={col.rowSpan}
+      colSpan={colCowSpan}
+      rowSpan={colRowSpan}
       className={CX(tdClassNames)}
       style={{ height: cellHeight, minHeight: '1px' }}
       onClick={(e: any) => {
@@ -107,9 +117,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
         {sorter}
         {label || ' '}
       </span>
-      {optionsHeader.enableFilter && col.key && (col.colIndex || 0) > -1 ? (
-        <span data-filter="true" data-filter-index={col.colIndex} />
-      ) : null}
+      {filter}
     </td>
   );
 };

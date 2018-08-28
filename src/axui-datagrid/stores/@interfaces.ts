@@ -88,8 +88,6 @@ export interface IDataGridColumn extends ICol {
   columnAttr?: string;
 }
 
-// todo : columnAttr enum으로 만들기
-
 export interface IDataGridColumnKeys {
   selected?: string;
   modified?: string;

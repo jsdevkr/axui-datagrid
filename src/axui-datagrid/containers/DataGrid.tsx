@@ -46,6 +46,7 @@ class DataGrid extends React.Component<IProps, IState> {
     sortable: true,
     enableFilter: true,
     clickAction: 'sort',
+    filterIconClassName: 'datagridIcon-filter'
   };
   static defaultBody: types.DataGridOptionBody = {
     align: 'left',

@@ -148,3 +148,8 @@ $axui-datagrid-column-filter-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Ctitle%3Elast%3C/title%3E%3Cpath d=%22M10.875 1.125v9.75h-1.625v-4.469l-4.063 4.063v-4.063l-4.063 4.063v-8.938l4.063 4.063v-4.063l4.063 4.063v-4.469z%22%3E%3C/path%3E%3C/svg%3E')
     no-repeat center center;
 }
+
+.datagridIcon-filter {
+  background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Cpath d=%22M7%2C7l4-4V1H1v2l4%2C4v4l2-2V7z%22/%3E%3C/svg%3E')
+    no-repeat center center;
+}
