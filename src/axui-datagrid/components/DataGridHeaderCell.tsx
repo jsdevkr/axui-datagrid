@@ -71,8 +71,6 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     );
   }
 
-  // todo : filter된 상태일 때. 아이콘 처리 및 filter해제 상태 관리
-  // if (filterInfo[colIndex]) {
   if (optionsHeader.enableFilter && colKey && colIndex > -1) {
     filter = (
       <span data-filter={!!filterInfo[colIndex]} data-filter-index={colIndex} />
