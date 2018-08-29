@@ -47,7 +47,7 @@ class DataGridBodyBottomPanel extends React.Component<IProps, IState> {
       asideBodyRowData = { rows: [{ cols: [] }] },
       footSumColumns,
       leftFootSumData = { rows: [{ cols: [] }] },
-      footSumData = { rows: [{ cols: [] }] },
+      visibleFootSumData = { rows: [{ cols: [] }] },
       panelName,
       containerStyle = {},
       panelLeft = 0,
@@ -85,7 +85,7 @@ class DataGridBodyBottomPanel extends React.Component<IProps, IState> {
       case 'bottom-body-scroll':
       default:
         panelColGroup = visibleHeaderColGroup;
-        panelBodyRow = footSumData;
+        panelBodyRow = visibleFootSumData;
         panelPaddingLeft = panelColGroup[0]
           ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
           : 0;

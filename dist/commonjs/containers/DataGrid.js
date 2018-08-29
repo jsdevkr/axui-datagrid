@@ -157,6 +157,9 @@ var DataGrid = /** @class */ (function (_super) {
             newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
             newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
             newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            if (footSum) {
+                newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(newState.footSumData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+            }
             return newState;
         };
         return _this;
@@ -221,6 +224,7 @@ var DataGrid = /** @class */ (function (_super) {
         sortable: true,
         enableFilter: true,
         clickAction: 'sort',
+        filterIconClassName: 'datagridIcon-filter',
     };
     DataGrid.defaultBody = {
         align: 'left',

@@ -209,3 +209,4 @@ export default Formatter;
 * v0.3.6 - bugfix : Wrong scrollPosition error when changed focus position by keyDown
 * v0.3.7 - Update document and change columns fix
 * v0.3.8 - support footSum props & minor bugfix
+* v0.3.9 - filtered state display on header & fixed bug of 'footSum'

@@ -62,7 +62,9 @@ class DatagridColumnFilter extends React.Component {
                     });
                 }
                 filter._CHECK_ALL_ = isAllChecked;
-                currentFilterInfo[isColumnFilter] = filter;
+                currentFilterInfo[isColumnFilter] = isAllChecked
+                    ? false
+                    : filter;
             }
             dispatch(stores_1.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,

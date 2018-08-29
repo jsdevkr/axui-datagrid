@@ -368,13 +368,13 @@ class DataGridBody extends React.Component {
         const bottomAsideBodyPanelStyle = {
             left: 0,
             width: asidePanelWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         const bottomLeftBodyPanelStyle = {
             left: asidePanelWidth,
             width: frozenPanelWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         const bottomBodyPanelStyle = {
@@ -384,7 +384,7 @@ class DataGridBody extends React.Component {
                 frozenPanelWidth -
                 rightPanelWidth -
                 verticalScrollerWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: styles.bodyHeight }, onMouseDown: this.onMouseDownBody },

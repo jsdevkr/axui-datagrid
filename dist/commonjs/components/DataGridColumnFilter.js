@@ -82,7 +82,9 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                     });
                 }
                 filter_1._CHECK_ALL_ = isAllChecked_1;
-                currentFilterInfo[isColumnFilter] = filter_1;
+                currentFilterInfo[isColumnFilter] = isAllChecked_1
+                    ? false
+                    : filter_1;
             }
             dispatch(stores_1.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,

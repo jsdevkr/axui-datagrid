@@ -382,13 +382,13 @@ var DataGridBody = /** @class */ (function (_super) {
         var bottomAsideBodyPanelStyle = {
             left: 0,
             width: asidePanelWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         var bottomLeftBodyPanelStyle = {
             left: asidePanelWidth,
             width: frozenPanelWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         var bottomBodyPanelStyle = {
@@ -398,7 +398,7 @@ var DataGridBody = /** @class */ (function (_super) {
                 frozenPanelWidth -
                 rightPanelWidth -
                 verticalScrollerWidth,
-            top: bodyHeight - footSumHeight,
+            top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
         return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: styles.bodyHeight }, onMouseDown: this.onMouseDownBody },

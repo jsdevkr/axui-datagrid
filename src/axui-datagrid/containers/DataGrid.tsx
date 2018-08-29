@@ -46,7 +46,7 @@ class DataGrid extends React.Component<IProps, IState> {
     sortable: true,
     enableFilter: true,
     clickAction: 'sort',
-    filterIconClassName: 'datagridIcon-filter'
+    filterIconClassName: 'datagridIcon-filter',
   };
   static defaultBody: types.DataGridOptionBody = {
     align: 'left',
@@ -308,6 +308,14 @@ class DataGrid extends React.Component<IProps, IState> {
       printStartColIndex + frozenColumnIndex,
       printEndColIndex + frozenColumnIndex,
     );
+
+    if (footSum) {
+      newState.visibleFootSumData = getTableByStartEndColumnIndex(
+        newState.footSumData || { rows: [{ cols: [] }] },
+        printStartColIndex + frozenColumnIndex,
+        printEndColIndex + frozenColumnIndex,
+      );
+    }
 
     return newState;
   };

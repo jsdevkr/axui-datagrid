@@ -86,16 +86,16 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, getRootNode = _c.getRootNode, getClipBoardNode = _c.getClipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
             var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
-            var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.bodyHeight, bodyHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentWidth, scrollContentWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentHeight, scrollContentHeight = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerWidth, scrollContentContainerWidth = _z === void 0 ? 0 : _z, _0 = styles.scrollContentContainerHeight, scrollContentContainerHeight = _0 === void 0 ? 0 : _0, _1 = styles.frozenPanelWidth, frozenPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.rightPanelWidth, rightPanelWidth = _2 === void 0 ? 0 : _2, _3 = styles.verticalScrollerWidth, verticalScrollerWidth = _3 === void 0 ? 0 : _3;
+            var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
             var rootNode = utils_1.getNode(getRootNode);
             var clipBoardNode = utils_1.getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
-                Math.floor(bodyHeight / bodyTrHeight);
+                Math.floor(scrollContentContainerHeight / bodyTrHeight);
             var sColIndex = printStartColIndex;
             var eColIndex = printEndColIndex;
-            var pRowSize = Math.floor(bodyHeight / bodyTrHeight);
+            var pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
             var getAvailScrollTop = function (rowIndex) {
                 var _scrollTop = undefined;
                 if (frozenRowIndex >= rowIndex) {

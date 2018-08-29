@@ -122,16 +122,13 @@ class DataGridEvents extends React.Component<IProps, IState> {
       options = {},
       styles = {},
     } = this.props;
-
     const {
       printStartColIndex = 0,
       printEndColIndex = colGroup.length,
     } = this.props;
-
     const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
     const {
       bodyTrHeight = 0,
-      bodyHeight = 0,
       scrollContentWidth = 0,
       scrollContentHeight = 0,
       scrollContentContainerWidth = 0,
@@ -148,11 +145,11 @@ class DataGridEvents extends React.Component<IProps, IState> {
     const eRowIndex =
       Math.floor(-scrollTop / bodyTrHeight) +
       // frozenRowIndex +
-      Math.floor(bodyHeight / bodyTrHeight);
+      Math.floor(scrollContentContainerHeight / bodyTrHeight);
 
     const sColIndex = printStartColIndex;
     const eColIndex = printEndColIndex;
-    const pRowSize = Math.floor(bodyHeight / bodyTrHeight);
+    const pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
 
     const getAvailScrollTop = (rowIndex: number): number | undefined => {
       let _scrollTop: number | undefined = undefined;

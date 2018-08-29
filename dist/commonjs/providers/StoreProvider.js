@@ -95,28 +95,29 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, sortInfo = _a.sortInfo;
-            var _k = options.frozenColumnIndex, frozenColumnIndex = _k === void 0 ? 0 : _k;
+            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, sortInfo = _a.sortInfo;
+            var _l = options.frozenColumnIndex, frozenColumnIndex = _l === void 0 ? 0 : _l;
             var CTInnerWidth = styles.CTInnerWidth;
-            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _l = newState.styles, _styles = _l === void 0 ? {} : _l, _filteredList = newState.filteredList, _sortInfo = newState.sortInfo;
+            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _m = newState.styles, _styles = _m === void 0 ? {} : _m, _filteredList = newState.filteredList, _sortInfo = newState.sortInfo;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
-                var _m = __assign({}, styles, _styles), _o = _m.CTInnerWidth, _CTInnerWidth = _o === void 0 ? 0 : _o, _p = _m.frozenPanelWidth, _frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _m.asidePanelWidth, _asidePanelWidth = _q === void 0 ? 0 : _q, _r = _m.rightPanelWidth, _rightPanelWidth = _r === void 0 ? 0 : _r, _s = _m.scrollContentWidth, scrollWidth = _s === void 0 ? 0 : _s, _t = _m.scrollContentHeight, scrollHeight = _t === void 0 ? 0 : _t, _u = _m.scrollContentContainerWidth, clientWidth = _u === void 0 ? 0 : _u, _v = _m.scrollContentContainerHeight, clientHeight = _v === void 0 ? 0 : _v;
+                var _o = __assign({}, styles, _styles), _p = _o.CTInnerWidth, _CTInnerWidth = _p === void 0 ? 0 : _p, _q = _o.frozenPanelWidth, _frozenPanelWidth = _q === void 0 ? 0 : _q, _r = _o.asidePanelWidth, _asidePanelWidth = _r === void 0 ? 0 : _r, _s = _o.rightPanelWidth, _rightPanelWidth = _s === void 0 ? 0 : _s, _t = _o.scrollContentWidth, scrollWidth = _t === void 0 ? 0 : _t, _u = _o.scrollContentHeight, scrollHeight = _u === void 0 ? 0 : _u, _v = _o.scrollContentContainerWidth, clientWidth = _v === void 0 ? 0 : _v, _w = _o.scrollContentContainerHeight, clientHeight = _w === void 0 ? 0 : _w;
                 var endOfScrollTop = false;
                 var endOfScrollLeft = false;
                 if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
                     if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
-                        var _w = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
+                        var _x = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
                             _frozenPanelWidth +
                             (_CTInnerWidth -
                                 _asidePanelWidth -
                                 _frozenPanelWidth -
-                                _rightPanelWidth)), printStartColIndex = _w.printStartColIndex, printEndColIndex = _w.printEndColIndex;
+                                _rightPanelWidth)), printStartColIndex = _x.printStartColIndex, printEndColIndex = _x.printEndColIndex;
                         newState.printStartColIndex = printStartColIndex;
                         newState.printEndColIndex = printEndColIndex;
                         newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
                         newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                         newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                        newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                     }
                     if (clientWidth >= scrollWidth + _scrollLeft) {
                         endOfScrollLeft = true;
@@ -509,6 +510,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 visibleHeaderColGroup: newProps.visibleHeaderColGroup,
                 visibleBodyRowData: newProps.visibleBodyRowData,
                 visibleBodyGroupingData: newProps.visibleBodyGroupingData,
+                visibleFootSumData: newProps.visibleFootSumData,
             });
         }
     };
@@ -520,26 +522,27 @@ var StoreProvider = /** @class */ (function (_super) {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     };
     StoreProvider.prototype.updateDimensions = function () {
-        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.bodyRowData, bodyRowData = _d === void 0 ? { rows: [{ cols: [] }] } : _d, _e = _a.bodyGroupingData, bodyGroupingData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.options, options = _f === void 0 ? {} : _f;
-        var _g = options.frozenColumnIndex, frozenColumnIndex = _g === void 0 ? 0 : _g;
+        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.bodyRowData, bodyRowData = _d === void 0 ? { rows: [{ cols: [] }] } : _d, _e = _a.bodyGroupingData, bodyGroupingData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.footSumData, footSumData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.options, options = _g === void 0 ? {} : _g;
+        var _h = options.frozenColumnIndex, frozenColumnIndex = _h === void 0 ? 0 : _h;
         var calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
-        var _h = calculatedObject.styles, _j = _h.scrollContentWidth, scrollContentWidth = _j === void 0 ? 0 : _j, _k = _h.scrollContentHeight, scrollContentHeight = _k === void 0 ? 0 : _k, _l = _h.scrollContentContainerWidth, scrollContentContainerWidth = _l === void 0 ? 0 : _l, _m = _h.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m;
-        var _o = utils_1.getScrollPosition(scrollLeft, scrollTop, {
+        var _j = calculatedObject.styles, _k = _j.scrollContentWidth, scrollContentWidth = _k === void 0 ? 0 : _k, _l = _j.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = _j.scrollContentContainerWidth, scrollContentContainerWidth = _m === void 0 ? 0 : _m, _o = _j.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o;
+        var _p = utils_1.getScrollPosition(scrollLeft, scrollTop, {
             scrollWidth: scrollContentWidth,
             scrollHeight: scrollContentHeight,
             clientWidth: scrollContentContainerWidth,
             clientHeight: scrollContentContainerHeight,
-        }), _p = _o.scrollLeft, newScrollLeft = _p === void 0 ? 0 : _p, _q = _o.scrollTop, newScrollTop = _q === void 0 ? 0 : _q;
-        var _r = calculatedObject.styles, _s = _r.CTInnerWidth, _CTInnerWidth = _s === void 0 ? 0 : _s, _t = _r.frozenPanelWidth, _frozenPanelWidth = _t === void 0 ? 0 : _t, _u = _r.asidePanelWidth, _asidePanelWidth = _u === void 0 ? 0 : _u, _v = _r.rightPanelWidth, _rightPanelWidth = _v === void 0 ? 0 : _v;
-        var _w = utils_1.getPositionPrintColGroup(calculatedObject.headerColGroup, Math.abs(newScrollLeft || 0) + _frozenPanelWidth, Math.abs(newScrollLeft || 0) +
+        }), _q = _p.scrollLeft, newScrollLeft = _q === void 0 ? 0 : _q, _r = _p.scrollTop, newScrollTop = _r === void 0 ? 0 : _r;
+        var _s = calculatedObject.styles, _t = _s.CTInnerWidth, _CTInnerWidth = _t === void 0 ? 0 : _t, _u = _s.frozenPanelWidth, _frozenPanelWidth = _u === void 0 ? 0 : _u, _v = _s.asidePanelWidth, _asidePanelWidth = _v === void 0 ? 0 : _v, _w = _s.rightPanelWidth, _rightPanelWidth = _w === void 0 ? 0 : _w;
+        var _x = utils_1.getPositionPrintColGroup(calculatedObject.headerColGroup, Math.abs(newScrollLeft || 0) + _frozenPanelWidth, Math.abs(newScrollLeft || 0) +
             _frozenPanelWidth +
             (_CTInnerWidth -
                 _asidePanelWidth -
                 _frozenPanelWidth -
-                _rightPanelWidth)), printStartColIndex = _w.printStartColIndex, printEndColIndex = _w.printEndColIndex;
+                _rightPanelWidth)), printStartColIndex = _x.printStartColIndex, printEndColIndex = _x.printEndColIndex;
         var visibleHeaderColGroup = calculatedObject.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
         var visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         var visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+        var visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         this.setStoreState({
             styles: calculatedObject.styles,
             printStartColIndex: printStartColIndex,
@@ -547,6 +550,7 @@ var StoreProvider = /** @class */ (function (_super) {
             visibleHeaderColGroup: visibleHeaderColGroup,
             visibleBodyRowData: visibleBodyRowData,
             visibleBodyGroupingData: visibleBodyGroupingData,
+            visibleFootSumData: visibleFootSumData,
             scrollLeft: newScrollLeft,
             scrollTop: newScrollTop,
         });

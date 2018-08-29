@@ -73,16 +73,16 @@ class DataGridEvents extends React.Component {
             const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
-            const { bodyTrHeight = 0, bodyHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
+            const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
             const rootNode = utils_1.getNode(getRootNode);
             const clipBoardNode = utils_1.getNode(getClipBoardNode);
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             const eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
-                Math.floor(bodyHeight / bodyTrHeight);
+                Math.floor(scrollContentContainerHeight / bodyTrHeight);
             const sColIndex = printStartColIndex;
             const eColIndex = printEndColIndex;
-            const pRowSize = Math.floor(bodyHeight / bodyTrHeight);
+            const pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
             const getAvailScrollTop = (rowIndex) => {
                 let _scrollTop = undefined;
                 if (frozenRowIndex >= rowIndex) {

@@ -3,13 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
 const DataGridBodyBottomCell_1 = require("./DataGridBodyBottomCell");
+const DataGridTableColGroup_1 = require("./DataGridTableColGroup");
+const TableBody = ({ bodyRow }) => (React.createElement("tbody", null, bodyRow.rows.map((row, ri) => {
+    return (React.createElement("tr", { key: ri, className: '' },
+        row.cols.map((col, ci) => {
+            return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, value: '' }));
+        }),
+        React.createElement("td", null)));
+})));
 class DataGridBodyBottomPanel extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {};
     }
     render() {
-        const { filteredList = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, footSumColumns, leftFootSumData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles = {}, } = this.props;
+        const { filteredList = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, footSumColumns, leftFootSumData = { rows: [{ cols: [] }] }, visibleFootSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles = {}, } = this.props;
         const { frozenPanelWidth = 0, asidePanelWidth = 0, bodyTrHeight = 0, } = styles;
         // aside또는 left가 필요 없는 상황
         if ((panelName === 'bottom-aside-body-scroll' && asidePanelWidth === 0) ||
@@ -31,7 +39,7 @@ class DataGridBodyBottomPanel extends React.Component {
             case 'bottom-body-scroll':
             default:
                 panelColGroup = visibleHeaderColGroup;
-                panelBodyRow = footSumData;
+                panelBodyRow = visibleFootSumData;
                 panelPaddingLeft = panelColGroup[0]
                     ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
                     : 0;
@@ -45,16 +53,8 @@ class DataGridBodyBottomPanel extends React.Component {
         return (React.createElement("div", { "data-scroll-container": `${panelName}-container`, style: containerStyle },
             React.createElement("div", { "data-panel": panelName, style: panelStyle },
                 React.createElement("table", { style: { height: '100%' } },
-                    React.createElement("colgroup", null,
-                        panelColGroup.map((col, ci) => (React.createElement("col", { key: ci, style: { width: col._width + 'px' } }))),
-                        React.createElement("col", null)),
-                    React.createElement("tbody", null, panelBodyRow.rows.map((row, ri) => {
-                        return (React.createElement("tr", { key: ri, className: '' },
-                            row.cols.map((col, ci) => {
-                                return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, value: '' }));
-                            }),
-                            React.createElement("td", null)));
-                    }))))));
+                    React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
+                    React.createElement(TableBody, { bodyRow: panelBodyRow })))));
     }
 }
 exports.default = hoc_1.connectStore(DataGridBodyBottomPanel);

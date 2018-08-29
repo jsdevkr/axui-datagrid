@@ -79,42 +79,50 @@
 
   &.axui-datagrid-header-column {
     cursor: default;
+
+    [data-filter] {
+      $filter-size: 6px;
+
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      margin-top: -7px;
+      cursor: pointer;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: url('data:image/svg+xml;utf8, %3Csvg version=%221.1%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Cpath d=%22M7%2C7l4-4V1H1v2l4%2C4v4l2-2V7z%22/%3E%3C/svg%3E')
+        no-repeat center center #fff;
+      background-size: 8px;
+      opacity: 0;
+
+      /*
+      &:before {
+        @include axui-datagrid-sort-arrow(
+          $axui-datagrid-header-sorter-size,
+          2.8,
+          2.2,
+          $axui-datagrid-header-sorter-color,
+          1,
+          'down'
+        );
+        top: 50%;
+        left: 50%;
+        margin-top: -$axui-datagrid-header-sorter-size / 2.2 / 2.2;
+        margin-left: -$axui-datagrid-header-sorter-size / 2.8;
+      }
+      */
+    }
+    [data-filter='true'] {
+      opacity: 0.7;
+    }
+
     &:hover {
       background: $axui-datagrid-row-hover-bg;
       [data-filter] {
-        $filter-size: 6px;
-
-        position: absolute;
-        right: 4px;
-        top: 50%;
-        width: 14px;
-        height: 14px;
-        margin-top: -7px;
-        cursor: pointer;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        background: #fff;
-        opacity: 0.5;
-
-        &:before {
-          @include axui-datagrid-sort-arrow(
-            $axui-datagrid-header-sorter-size,
-            2.8,
-            2.2,
-            $axui-datagrid-header-sorter-color,
-            1,
-            'down'
-          );
-          top: 50%;
-          left: 50%;
-          margin-top: -$axui-datagrid-header-sorter-size / 2.2 / 2.2;
-          margin-left: -$axui-datagrid-header-sorter-size / 2.8;
-        }
-
-        &:hover {
-          opacity: 1;
-        }
+        opacity: 0.7;
       }
     }
     &.selected {
@@ -175,6 +183,7 @@
         to right,
         $axui-datagrid-aside-column-focused-bg-colors
       );
+      box-shadow: none;
     }
     &.focused {
       &:before {

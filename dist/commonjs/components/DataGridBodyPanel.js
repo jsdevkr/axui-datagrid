@@ -14,6 +14,23 @@ var React = require("react");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridBodyCell_1 = require("./DataGridBodyCell");
+var DataGridTableColGroup_1 = require("./DataGridTableColGroup");
+var TableBody = function (_a) {
+    var sRowIndex = _a.sRowIndex, eRowIndex = _a.eRowIndex, filteredList = _a.filteredList, bodyRow = _a.bodyRow;
+    return (React.createElement("tbody", null, utils_1.arrayFromRange(sRowIndex, eRowIndex).map(function (li) {
+        var _a;
+        var item = filteredList[li];
+        var trClassNames = (_a = {},
+            _a['odded-line'] = li % 2 !== 0,
+            _a);
+        if (item) {
+            return bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri, className: utils_1.classNames(trClassNames) },
+                row.cols.map(function (col, ci) { return (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, value: filteredList[li][col.key || ''] })); }),
+                React.createElement("td", null))); });
+        }
+        return null;
+    })));
+};
 var DataGridBodyPanel = /** @class */ (function (_super) {
     __extends(DataGridBodyPanel, _super);
     function DataGridBodyPanel() {
@@ -68,26 +85,8 @@ var DataGridBodyPanel = /** @class */ (function (_super) {
         return (React.createElement("div", { "data-scroll-container": panelName + "-container", style: containerStyle },
             React.createElement("div", { "data-panel": panelName, style: panelStyle },
                 React.createElement("table", { style: { height: '100%' } },
-                    React.createElement("colgroup", null,
-                        panelColGroup.map(function (col, ci) { return (React.createElement("col", { key: ci, style: { width: col._width + 'px' } })); }),
-                        React.createElement("col", null)),
-                    React.createElement("tbody", null, utils_1.arrayFromRange(sRowIndex, eRowIndex).map(function (li) {
-                        var _a;
-                        var item = filteredList[li];
-                        var trClassNames = (_a = {},
-                            _a['odded-line'] = li % 2 !== 0,
-                            _a);
-                        if (item) {
-                            return panelBodyRow.rows.map(function (row, ri) {
-                                return (React.createElement("tr", { key: ri, className: utils_1.classNames(trClassNames) },
-                                    row.cols.map(function (col, ci) {
-                                        return (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, value: filteredList[li][col.key || ''] }));
-                                    }),
-                                    React.createElement("td", null)));
-                            });
-                        }
-                        return null;
-                    }))))));
+                    React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
+                    React.createElement(TableBody, { sRowIndex: sRowIndex, eRowIndex: eRowIndex, filteredList: filteredList, bodyRow: panelBodyRow })))));
     };
     return DataGridBodyPanel;
 }(React.Component));

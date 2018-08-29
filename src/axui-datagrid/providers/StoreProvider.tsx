@@ -258,6 +258,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           visibleHeaderColGroup: newProps.visibleHeaderColGroup,
           visibleBodyRowData: newProps.visibleBodyRowData,
           visibleBodyGroupingData: newProps.visibleBodyGroupingData,
+          visibleFootSumData: newProps.visibleFootSumData,
         },
       };
     }
@@ -281,6 +282,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       scrollTop = 0,
       bodyRowData = { rows: [{ cols: [] }] },
       bodyGroupingData = { rows: [{ cols: [] }] },
+      footSumData = { rows: [{ cols: [] }] },
       options = {},
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
@@ -341,6 +343,12 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       printEndColIndex + frozenColumnIndex,
     );
 
+    const visibleFootSumData = getTableByStartEndColumnIndex(
+      footSumData || { rows: [{ cols: [] }] },
+      printStartColIndex + frozenColumnIndex,
+      printEndColIndex + frozenColumnIndex,
+    );
+
     this.setStoreState({
       styles: calculatedObject.styles,
       printStartColIndex,
@@ -348,6 +356,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       visibleHeaderColGroup,
       visibleBodyRowData,
       visibleBodyGroupingData,
+      visibleFootSumData,
       scrollLeft: newScrollLeft,
       scrollTop: newScrollTop,
     });
@@ -364,6 +373,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
       headerColGroup = [],
       bodyRowData = { rows: [{ cols: [] }] },
       bodyGroupingData = { rows: [{ cols: [] }] },
+      footSumData = { rows: [{ cols: [] }] },
       onScrollEnd,
       onChangeSelected,
       sortInfo,
@@ -426,6 +436,11 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           );
           newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
             bodyGroupingData,
+            printStartColIndex + frozenColumnIndex,
+            printEndColIndex + frozenColumnIndex,
+          );
+          newState.visibleFootSumData = getTableByStartEndColumnIndex(
+            footSumData,
             printStartColIndex + frozenColumnIndex,
             printEndColIndex + frozenColumnIndex,
           );

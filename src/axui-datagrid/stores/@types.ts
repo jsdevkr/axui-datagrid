@@ -211,6 +211,7 @@ export type DataGridState = {
   visibleHeaderColGroup?: DataGridCol[];
   visibleBodyRowData?: DataGridColumnTableMap;
   visibleBodyGroupingData?: DataGridColumnTableMap;
+  visibleFootSumData?: DataGridColumnTableMap;
 
   propColumns?: string;
   propOptions?: string;

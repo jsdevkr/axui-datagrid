@@ -56,7 +56,7 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, onScrollEnd, onChangeSelected, sortInfo, } = this.state;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, onChangeSelected, sortInfo, } = this.state;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
             const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, sortInfo: _sortInfo, } = newState;
@@ -78,6 +78,7 @@ class StoreProvider extends React.Component {
                         newState.visibleHeaderColGroup = headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
                         newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                         newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+                        newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                     }
                     if (clientWidth >= scrollWidth + _scrollLeft) {
                         endOfScrollLeft = true;
@@ -467,6 +468,7 @@ class StoreProvider extends React.Component {
                 visibleHeaderColGroup: newProps.visibleHeaderColGroup,
                 visibleBodyRowData: newProps.visibleBodyRowData,
                 visibleBodyGroupingData: newProps.visibleBodyGroupingData,
+                visibleFootSumData: newProps.visibleFootSumData,
             });
         }
     }
@@ -478,7 +480,7 @@ class StoreProvider extends React.Component {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     }
     updateDimensions() {
-        const { scrollLeft = 0, scrollTop = 0, bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, options = {}, } = this.state;
+        const { scrollLeft = 0, scrollTop = 0, bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, options = {}, } = this.state;
         const { frozenColumnIndex = 0 } = options;
         const calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
         const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = calculatedObject.styles;
@@ -498,6 +500,7 @@ class StoreProvider extends React.Component {
         const visibleHeaderColGroup = calculatedObject.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
         const visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(bodyRowData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         const visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
+        const visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
         this.setStoreState({
             styles: calculatedObject.styles,
             printStartColIndex,
@@ -505,6 +508,7 @@ class StoreProvider extends React.Component {
             visibleHeaderColGroup,
             visibleBodyRowData,
             visibleBodyGroupingData,
+            visibleFootSumData,
             scrollLeft: newScrollLeft,
             scrollTop: newScrollTop,
         });
