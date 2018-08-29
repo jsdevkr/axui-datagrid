@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
+import styled from 'styled-components';
 import { Menus } from 'routes';
 
 import { Layout, Menu, Row, Col } from 'antd';
@@ -19,6 +20,59 @@ interface IState {
   selectedKeys: string[];
   menus: { [key: string]: any };
 }
+
+const LayoutSider = styled(Layout.Sider as any)`
+  .app-left-menu {
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 0;
+      background-color: #133b5d;
+    }
+
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 0;
+      background-color: #1c6091;
+    }
+  }
+
+  .sider-header {
+    padding: 5px 15px 20px 15px;
+    .logo-img {
+      width: 80px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+    h1 {
+      @extend .font-display;
+      color: #fff;
+      font-size: 24px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .pkg-infos {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .github-btn {
+      display: inline-block;
+      .gh-btn {
+        margin-bottom: 0.5em;
+      }
+      .gh-count {
+        margin-right: 1em;
+        margin-bottom: 0.5em;
+      }
+    }
+  }
+`;
 
 class SideNav extends React.Component<IProps, IState> {
   state = {
@@ -113,7 +167,7 @@ class SideNav extends React.Component<IProps, IState> {
     }
 
     return (
-      <Layout.Sider
+      <LayoutSider
         className="app-left-menu"
         width={leftMenuWidth}
         style={{
@@ -173,7 +227,7 @@ class SideNav extends React.Component<IProps, IState> {
             );
           })}
         </Menu>
-      </Layout.Sider>
+      </LayoutSider>
     );
   }
 }
