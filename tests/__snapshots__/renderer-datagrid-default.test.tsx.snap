@@ -58,9 +58,7 @@ exports[`renders DataGrid default 1`] = `
           <col />
         </colgroup>
         <tbody>
-          <tr
-            className=""
-          >
+          <tr>
             <td
               className="axui-datagrid-header-column axui-datagrid-header-corner"
               colSpan={1}
@@ -184,9 +182,7 @@ exports[`renders DataGrid default 1`] = `
             <col />
           </colgroup>
           <tbody>
-            <tr
-              className=""
-            >
+            <tr>
               <td
                 className="axui-datagrid-header-column"
                 colSpan={1}
@@ -212,7 +208,7 @@ exports[`renders DataGrid default 1`] = `
                   필드A
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={0}
                 />
               </td>
@@ -241,7 +237,7 @@ exports[`renders DataGrid default 1`] = `
                   필드B
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={1}
                 />
               </td>
@@ -270,7 +266,7 @@ exports[`renders DataGrid default 1`] = `
                   필드C
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={2}
                 />
               </td>
@@ -299,7 +295,7 @@ exports[`renders DataGrid default 1`] = `
                   단가
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={3}
                 />
               </td>
@@ -328,7 +324,7 @@ exports[`renders DataGrid default 1`] = `
                   수량
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={4}
                 />
               </td>
@@ -357,7 +353,7 @@ exports[`renders DataGrid default 1`] = `
                   금액
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={5}
                 />
               </td>
@@ -386,7 +382,7 @@ exports[`renders DataGrid default 1`] = `
                   판매일자
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={6}
                 />
               </td>
@@ -415,7 +411,7 @@ exports[`renders DataGrid default 1`] = `
                   고객명
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={7}
                 />
               </td>
@@ -444,7 +440,7 @@ exports[`renders DataGrid default 1`] = `
                   판매타입
                 </span>
                 <span
-                  data-filter="true"
+                  data-filter={false}
                   data-filter-index={8}
                 />
               </td>
@@ -729,7 +725,7 @@ exports[`renders DataGrid default 1`] = `
         Object {
           "height": 0,
           "left": 0,
-          "top": 256,
+          "top": 255,
           "width": 60,
         }
       }
@@ -803,7 +799,7 @@ exports[`renders DataGrid default 1`] = `
         Object {
           "height": 0,
           "left": 60,
-          "top": 256,
+          "top": 255,
           "width": -60,
         }
       }

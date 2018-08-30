@@ -4,13 +4,11 @@
   "description": "DataGrid, DataSheet for React",
   "jsnext:main": "es6/index.js",
   "main": "commonjs/index.js",
-  "repository": "https://github.com/axui/datagrid",
+  "repository": "https://github.com/jsdevkr/datagrid",
   "website": "http://axui-datagrid.axisj.com/",
   "author": "tom@axisj.com",
   "license": "MIT",
-  "keywords": [
-    "datagrid, react-datagrid, react-component, typescript"
-  ],
+  "keywords": ["datagrid, react-datagrid, react-component, typescript"],
   "peerDependencies": {
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
