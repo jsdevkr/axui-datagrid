@@ -4,31 +4,82 @@ import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction, getNode } from '../utils';
 
+const CellLabel: React.SFC<{
+  lineHeight: number;
+  col: types.DataGridCol;
+  list: any[];
+  li: number;
+  predefinedFormatter: types.DataGridFormatter;
+}> = props => {
+  const { col, list: data, li, lineHeight, predefinedFormatter } = props;
+  const { key = '', columnAttr = '', formatter } = col;
+
+  let formatterData = {
+    data,
+    item: data[li],
+    index: li,
+    key: col.key,
+    value: data[li][col.key || ''],
+  };
+
+  switch (key) {
+    case '_line_number_':
+      return <>{li + 1}</>;
+    case '_row_selector_':
+      return (
+        <div
+          className="axui-datagrid-check-box"
+          data-span={columnAttr}
+          data-checked={data[li]._selected_}
+          style={{
+            maxHeight: lineHeight + 'px',
+            minHeight: lineHeight + 'px',
+          }}
+        />
+      );
+    default:
+      let labelValue: string;
+
+      if (typeof formatter === 'string' && formatter in predefinedFormatter) {
+        labelValue = predefinedFormatter[formatter](formatterData);
+      } else if (isFunction(formatter)) {
+        labelValue = (formatter as types.formatterFunction)(formatterData);
+      } else {
+        labelValue = data[li][key];
+      }
+
+      return <>{labelValue}</>;
+  }
+};
+
 interface IProps extends IDataGridStore {
   li: number;
   ci: number;
   col?: types.DataGridCol;
   value?: any;
 }
-interface IState {}
 
-class DataGridBodyCell extends React.Component<IProps, IState> {
+class DataGridBodyCell extends React.Component<IProps> {
   editInput: HTMLInputElement;
   state = {};
   activeComposition: boolean = false;
 
-  setEditInputNode = (element: any) => {
+  setEditInputNode = (element: HTMLInputElement) => {
     this.editInput = element;
   };
 
-  componentDidUpdate(prevProps: IProps, prevState: IState) {
+  componentDidUpdate(prevProps: IProps) {
     if (this.editInput) {
       this.activeComposition = false;
       this.editInput.select();
     }
   }
 
-  onDoubleClickCell = (e: any, col: types.DataGridColumn, li: number) => {
+  onDoubleClickCell = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    col: types.DataGridColumn,
+    li: number,
+  ) => {
     const { setStoreState } = this.props;
 
     if (col.editor) {
@@ -43,7 +94,11 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
     }
   };
 
-  onKeyUp = (e: any, col: types.DataGridColumn, li: number) => {
+  onKeyUp = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    col: types.DataGridColumn,
+    li: number,
+  ) => {
     const { setStoreState } = this.props;
 
     const proc = {
@@ -64,7 +119,10 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
     proc[e.which] && proc[e.which]();
   };
 
-  onEventInput = (eventName: EventNames, e: any) => {
+  onEventInput = (
+    eventName: EventNames,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     const {
       getRootNode,
       setStoreState,
@@ -104,7 +162,7 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
               dispatch(DispatchTypes.UPDATE, {
                 row: inlineEditingCell.rowIndex,
                 colIndex: inlineEditingCell.colIndex,
-                value: e.target.value,
+                value: e.currentTarget.value,
                 eventWhichKey: e.which,
               });
             }
@@ -142,27 +200,34 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
       columnBorderWidth = 0,
       align: bodyAlign = 'left',
     } = optionsBody;
-    const { rowSpan: colRowSpan = 0, colIndex: colColIndex = 0 } = col;
+    const {
+      rowSpan = 0,
+      colSpan = 0,
+      colIndex = 0,
+      rowIndex = 0,
+      align: colAlign = bodyAlign,
+      columnAttr = '',
+    } = col;
 
-    let cellHeight = columnHeight * colRowSpan;
+    let cellHeight = columnHeight * rowSpan;
     let tdClassNames: { [key: string]: any } = {
-      ['axui-datagrid-line-number']: col.columnAttr === 'lineNumber',
-      ['axui-datagrid-row-selector']: col.columnAttr === 'rowSelector',
+      ['axui-datagrid-line-number']: columnAttr === 'lineNumber',
+      ['axui-datagrid-row-selector']: columnAttr === 'rowSelector',
     };
 
-    if (col.columnAttr === 'lineNumber') {
+    if (columnAttr === 'lineNumber') {
       if (focusedRow === li) {
         tdClassNames.focused = true;
       }
       if (selectionRows[li]) {
         tdClassNames.selected = true;
       }
-    } else if (col.columnAttr === 'rowSelector') {
+    } else if (columnAttr === 'rowSelector') {
     } else {
-      if (selectionRows[li] && selectionCols[colColIndex]) {
+      if (selectionRows[li] && selectionCols[colIndex]) {
         tdClassNames.selected = true;
       }
-      if (focusedRow === li && focusedCol === colColIndex) {
+      if (focusedRow === li && focusedCol === colIndex) {
         tdClassNames.focused = true;
       }
     }
@@ -170,13 +235,13 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
     if (
       isInlineEditing &&
       inlineEditingCell.rowIndex === li &&
-      inlineEditingCell.colIndex === col.colIndex
+      inlineEditingCell.colIndex === colIndex
     ) {
       return (
         <td
           key={ci}
-          colSpan={col.colSpan}
-          rowSpan={col.rowSpan}
+          colSpan={colSpan}
+          rowSpan={rowSpan}
           className={CX(tdClassNames)}
           style={{ height: cellHeight, minHeight: '1px' }}
         >
@@ -205,59 +270,12 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
     } else {
       const lineHeight: number =
         columnHeight - columnPadding * 2 - columnBorderWidth;
-      const colAlign = col.align || bodyAlign || '';
-
-      let label: any;
-
-      const getLabel = function(_item: any, _itemIdx: number) {
-        let formatterData = {
-          data: filteredList,
-          item: _item,
-          index: _itemIdx,
-          key: col.key,
-          value: _item[col.key || ''],
-        };
-        let labelValue: string;
-
-        if (
-          typeof col.formatter === 'string' &&
-          col.formatter in predefinedFormatter
-        ) {
-          labelValue = predefinedFormatter[col.formatter](formatterData);
-        } else if (isFunction(col.formatter)) {
-          labelValue = (col.formatter as types.formatterFunction)(
-            formatterData,
-          );
-        } else {
-          labelValue = _item[col.key || ''];
-        }
-
-        return labelValue;
-      };
-
-      if (col.key === '_line_number_') {
-        label = li + 1;
-      } else if (col.key === '_row_selector_') {
-        label = (
-          <div
-            className="axui-datagrid-check-box"
-            data-span={col.columnAttr || ''}
-            data-checked={filteredList[li]._selected_}
-            style={{
-              maxHeight: lineHeight + 'px',
-              minHeight: lineHeight + 'px',
-            }}
-          />
-        );
-      } else {
-        label = getLabel(filteredList[li], li);
-      }
 
       return (
         <td
           key={ci}
-          colSpan={col.colSpan}
-          rowSpan={col.rowSpan}
+          colSpan={colSpan}
+          rowSpan={rowSpan}
           className={CX(tdClassNames)}
           style={{ height: cellHeight, minHeight: '1px' }}
           onDoubleClick={(e: any) => {
@@ -265,15 +283,21 @@ class DataGridBodyCell extends React.Component<IProps, IState> {
           }}
         >
           <span
-            data-span={col.columnAttr || ''}
-            data-pos={col.colIndex + ',' + col.rowIndex + ',' + li}
+            data-span={columnAttr}
+            data-pos={colIndex + ',' + rowIndex + ',' + li}
             style={{
               height: columnHeight - columnBorderWidth + 'px',
               lineHeight: lineHeight + 'px',
               textAlign: colAlign as any,
             }}
           >
-            {label || ' '}
+            <CellLabel
+              lineHeight={lineHeight}
+              col={col}
+              list={filteredList}
+              li={li}
+              predefinedFormatter={predefinedFormatter}
+            />
           </span>
         </td>
       );

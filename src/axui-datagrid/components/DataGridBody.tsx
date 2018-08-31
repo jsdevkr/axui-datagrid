@@ -14,12 +14,11 @@ import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
 
 interface IProps extends IDataGridStore {}
-interface IState {}
 
-class DataGridBody extends React.Component<IProps, IState> {
+class DataGridBody extends React.Component<IProps> {
   state = {};
 
-  onMouseDownBody = (e: any) => {
+  onMouseDownBody = (e: React.MouseEvent<Element>) => {
     const {
       filteredList = [],
       colGroup = [],
@@ -59,7 +58,7 @@ class DataGridBody extends React.Component<IProps, IState> {
     } = styles;
 
     const startMousePosition = getMousePosition(e);
-    const spanType: string = e.target.getAttribute('data-span');
+    const spanType = e.currentTarget.getAttribute('data-span');
     const rootNode = getNode(getRootNode);
     const { x: leftPadding = 0, y: topPadding = 0 } =
       rootNode && (rootNode.getBoundingClientRect() as any);
@@ -419,7 +418,6 @@ class DataGridBody extends React.Component<IProps, IState> {
       options = {},
       styles = {},
       loadingData = false,
-      footSumColumns,
     } = this.props;
     const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
     const {
@@ -544,7 +542,6 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelScrollConfig={topBodyScrollConfig}
           panelLeft={scrollLeft}
         />
-
         <DataGridBodyPanel
           panelName="aside-body-scroll"
           containerStyle={asideBodyPanelStyle}
@@ -564,12 +561,10 @@ class DataGridBody extends React.Component<IProps, IState> {
           panelLeft={scrollLeft}
           panelTop={scrollTop}
         />
-
         <DataGridBodyBottomPanel
           panelName="bottom-aside-body-scroll"
           containerStyle={bottomAsideBodyPanelStyle}
         />
-
         <DataGridBodyBottomPanel
           panelName="bottom-left-body-scroll"
           containerStyle={bottomLeftBodyPanelStyle}
@@ -579,8 +574,10 @@ class DataGridBody extends React.Component<IProps, IState> {
           containerStyle={bottomBodyPanelStyle}
           panelLeft={scrollLeft}
         />
-
-        <DataGridBodyLoader />
+        <DataGridBodyLoader
+          loadingData={loadingData}
+          bodyLoaderHeight={bodyLoaderHeight}
+        />
       </div>
     );
   }
