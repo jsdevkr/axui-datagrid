@@ -9,12 +9,14 @@ import {
 } from '../utils';
 
 interface IProps extends IDataGridStore {}
-interface IState {}
 
-class DatagridScroll extends React.Component<IProps, IState> {
+class DatagridScroll extends React.Component<IProps> {
   state = {};
 
-  onClickScrollArrow = (e: any, direction: DirectionTypes) => {
+  onClickScrollArrow = (
+    e: React.MouseEvent<HTMLDivElement>,
+    direction: DirectionTypes,
+  ) => {
     const {
       scrollLeft = 0,
       scrollTop = 0,
@@ -77,7 +79,10 @@ class DatagridScroll extends React.Component<IProps, IState> {
     return true;
   };
 
-  onClickScrollTrack = (e: any, barName: ScrollTypes) => {
+  onClickScrollTrack = (
+    e: React.MouseEvent<HTMLDivElement>,
+    barName: ScrollTypes,
+  ) => {
     const {
       getRootNode,
       scrollLeft = 0,
@@ -155,14 +160,17 @@ class DatagridScroll extends React.Component<IProps, IState> {
       },
     };
 
-    if (e.target.getAttribute('data-scroll')) {
+    if (e.target['getAttribute']('data-scroll')) {
       processor[barName]();
     }
 
     return true;
   };
 
-  onMouseDownScrollBar = (e: any, barName: ScrollTypes) => {
+  onMouseDownScrollBar = (
+    e: React.MouseEvent<HTMLDivElement>,
+    barName: ScrollTypes,
+  ) => {
     const {
       scrollLeft = 0,
       scrollTop = 0,
@@ -240,7 +248,6 @@ class DatagridScroll extends React.Component<IProps, IState> {
 
     const offEvent = (ee: any) => {
       ee.preventDefault();
-      // console.log('off');
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);

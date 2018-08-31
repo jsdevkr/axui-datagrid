@@ -77,9 +77,9 @@ class DatagridColumnFilterOption extends React.Component<IProps, IState> {
     );
   }
 
-  onScroll = (e: any) => {
+  onScroll = (e: React.SyntheticEvent<HTMLElement>) => {
     this.setState({
-      scrollTop: e.target.scrollTop,
+      scrollTop: e.currentTarget.scrollTop,
     });
   };
 
@@ -103,7 +103,7 @@ class DatagridColumnFilterOption extends React.Component<IProps, IState> {
       <div
         data-options=""
         ref={this.setContainerNode}
-        onScroll={throttle(this.onScroll, 10)}
+        onScroll={throttle(this.onScroll, 100)}
       >
         {mounted ? this.getOption() : null}
       </div>

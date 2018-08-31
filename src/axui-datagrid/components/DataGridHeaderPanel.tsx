@@ -11,11 +11,6 @@ import {
 import DataGridHeaderCell from './DataGridHeaderCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 
-interface IProps extends IDataGridStore {
-  panelName: string;
-  style?: any;
-}
-interface IState {}
 
 const TableBody: React.SFC<{
   bodyRow: types.DataGridColumnTableMap;
@@ -77,7 +72,12 @@ const ColumnResizer: React.SFC<{
   );
 };
 
-class DataGridHeaderPanel extends React.Component<IProps, IState> {
+
+interface IProps extends IDataGridStore {
+  panelName: string;
+  style?: any;
+}
+class DataGridHeaderPanel extends React.Component<IProps> {
   state = {};
 
   onHandleClick = (e: any, col: types.DataGridCol) => {

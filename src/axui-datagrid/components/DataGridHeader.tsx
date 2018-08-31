@@ -5,9 +5,8 @@ import DataGridHeaderPanel from './DataGridHeaderPanel';
 import DataGridHeaderColumnResizer from './DataGridHeaderColumnResizer';
 
 interface IProps extends IDataGridStore {}
-interface IState {}
 
-class DataGridHeader extends React.Component<IProps, IState> {
+class DataGridHeader extends React.Component<IProps> {
   state = {
     columnResizing: false,
     columnResizerLeft: 0,

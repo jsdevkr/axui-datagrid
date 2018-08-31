@@ -4,12 +4,6 @@ import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction } from '../utils';
 
-interface IProps extends IDataGridStore {
-  ci: number;
-  col?: types.DataGridCol;
-  value?: any;
-}
-
 const CellLabel: React.SFC<{
   lineHeight: number;
   col: types.DataGridCol;
@@ -72,6 +66,12 @@ const CellLabel: React.SFC<{
       return <>{labelValue}</>;
   }
 };
+
+interface IProps extends IDataGridStore {
+  ci: number;
+  col?: types.DataGridCol;
+  value?: any;
+}
 
 const DataGridBodyBottomCell: React.SFC<IProps> = props => {
   const {

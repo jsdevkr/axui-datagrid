@@ -4,6 +4,49 @@ import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX } from '../utils';
 
+const CellLabel: React.SFC<{
+  lineHeight: number;
+  col: types.DataGridCol;
+  optionsHeader: types.DataGridOptionHeader;
+  listSelectedAll: boolean;
+}> = ({ col, lineHeight, optionsHeader, listSelectedAll }) => {
+  const { key = '', label = '' } = col;
+  switch (key) {
+    case '_row_selector_':
+      if (optionsHeader.selector) {
+        return (
+          <div
+            className="axui-datagrid-check-box"
+            data-checked={listSelectedAll}
+            style={{
+              maxHeight: lineHeight + 'px',
+              minHeight: lineHeight + 'px',
+            }}
+          />
+        );
+      } else {
+        return null;
+      }
+
+    default:
+      return <>{label}</>;
+  }
+};
+
+const CellSorter: React.SFC<{
+  show: boolean;
+  colIndex: number;
+  orderBy: string;
+}> = ({ show, colIndex, orderBy }) =>
+  show ? <span data-sorter={colIndex} data-sorter-order={orderBy} /> : null;
+
+const CellFilter: React.SFC<{
+  show: boolean;
+  colIndex: number;
+  isFiltered: boolean;
+}> = ({ show, colIndex, isFiltered }) =>
+  show ? <span data-filter={isFiltered} data-filter-index={colIndex} /> : null;
+
 interface IProps extends IDataGridStore {
   bodyRow: types.DataGridColumnTableMap;
   ri: number;
@@ -16,7 +59,7 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
   options = {},
   focusedCol = -1,
   selectionCols,
-  sortInfo,
+  sortInfo = {},
   bodyRow,
   ri,
   col,
@@ -34,72 +77,37 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
     align: colAlign = headerAlign || '',
     colIndex = 0,
     key: colKey = '',
-    label: colLabel = '',
     rowSpan: colRowSpan = 1,
     colSpan: colCowSpan = 1,
   } = col;
-
-  let lineHeight =
+  const lineHeight =
     optionsHeaderColumnHeight -
     optionsHeaderColumnPadding * 2 -
     optionsHeaderColumnBorderWidth;
-  let label, sorter, filter;
-
-  if (col.key === '_row_selector_') {
-    if (optionsHeader.selector) {
-      label = (
-        <div
-          className="axui-datagrid-check-box"
-          data-checked={listSelectedAll}
-          style={{
-            maxHeight: lineHeight + 'px',
-            minHeight: lineHeight + 'px',
-          }}
-        />
-      );
-    }
-  } else {
-    label = colLabel;
-  }
-
-  if (colKey && sortInfo && sortInfo[colKey]) {
-    sorter = (
-      <span
-        data-sorter={colIndex}
-        data-sorter-order={sortInfo[colKey].orderBy}
-      />
-    );
-  }
-
-  if (optionsHeader.enableFilter && colKey && colIndex > -1) {
-    filter = (
-      <span data-filter={!!filterInfo[colIndex]} data-filter-index={colIndex} />
-    );
-  }
-
-  let cellHeight =
-    optionsHeaderColumnHeight * colRowSpan - optionsHeaderColumnBorderWidth;
-
-  let tdClassNames = {
-    ['axui-datagrid-header-column']: true,
-    ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
-    ['focused']:
-      focusedCol > -1 &&
-      col.colIndex === focusedCol &&
-      bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-    ['selected']:
-      selectionCols &&
-      selectionCols[colIndex] &&
-      bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-  };
 
   return (
     <td
       colSpan={colCowSpan}
       rowSpan={colRowSpan}
-      className={CX(tdClassNames)}
-      style={{ height: cellHeight, minHeight: '1px' }}
-      onClick={(e: any) => {
+      className={CX({
+        ['axui-datagrid-header-column']: true,
+        ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
+        ['focused']:
+          focusedCol > -1 &&
+          colIndex === focusedCol &&
+          bodyRow.rows.length - 1 === ri + colRowSpan - 1,
+        ['selected']:
+          selectionCols &&
+          selectionCols[colIndex] &&
+          bodyRow.rows.length - 1 === ri + colRowSpan - 1,
+      })}
+      style={{
+        height:
+          optionsHeaderColumnHeight * colRowSpan -
+          optionsHeaderColumnBorderWidth,
+        minHeight: '1px',
+      }}
+      onClick={(e: React.MouseEvent<Element>) => {
         onClick(e, col);
       }}
     >
@@ -112,10 +120,25 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
           lineHeight: lineHeight + 'px',
         }}
       >
-        {sorter}
-        {label || ' '}
+        <CellSorter
+          show={colKey && sortInfo[colKey]}
+          colIndex={colIndex}
+          orderBy={sortInfo[colKey] ? sortInfo[colKey].orderBy : ''}
+        />
+        <CellLabel
+          col={col}
+          lineHeight={lineHeight}
+          optionsHeader={optionsHeader}
+          listSelectedAll={listSelectedAll}
+        />
       </span>
-      {filter}
+      <CellFilter
+        show={
+          (optionsHeader.enableFilter && colKey && colIndex > -1) as boolean
+        }
+        colIndex={colIndex}
+        isFiltered={!!filterInfo[colIndex]}
+      />
     </td>
   );
 };

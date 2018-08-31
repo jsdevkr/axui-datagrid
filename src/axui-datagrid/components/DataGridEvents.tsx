@@ -12,7 +12,7 @@ interface IState {}
 class DataGridEvents extends React.Component<IProps, IState> {
   state = {};
 
-  onWheel = (e: any) => {
+  onWheel = (e: WheelEvent) => {
     const {
       scrollLeft = 0,
       scrollTop = 0,
@@ -74,7 +74,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     return true;
   };
 
-  onKeyUp = (e: any) => {
+  onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const {
       colGroup = [],
       focusedRow = 0,
@@ -105,7 +105,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onKeyDown = (e: any) => {
+  onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const {
       filteredList = [],
       getRootNode,
@@ -423,7 +423,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     const proc = {
       [EventNames.WHEEL]: () => {
         if (!loadingData) {
-          this.onWheel(e);
+          this.onWheel(e as WheelEvent);
         } else {
           e.preventDefault();
           e.stopPropagation();

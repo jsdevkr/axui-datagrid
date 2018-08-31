@@ -382,7 +382,7 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridPage />
               <DataGridScroll />
               <DataGridColumnFilter />
-              <DataGridLoader />
+              <DataGridLoader loading={loading} />
             </>
           ) : null}
         </DataGridEvents>

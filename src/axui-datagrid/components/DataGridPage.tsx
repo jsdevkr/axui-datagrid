@@ -4,14 +4,41 @@ import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { classNames as CX, isFunction, getScrollPosition } from '../utils';
 
-interface IProps extends IDataGridStore {}
-interface IState {}
+const PageButtons: React.SFC<{
+  pageButtons: types.DataGridOptionPageButton[];
+  pageButtonHeight: number;
+  onClickPageButton: (
+    e: React.MouseEvent<HTMLElement>,
+    userFunction: string | types.userCallBackFunction,
+  ) => void;
+}> = ({ pageButtons, pageButtonHeight, onClickPageButton }) => (
+  <>
+    {pageButtons.map((button, bi) => {
+      return (
+        <button
+          key={bi}
+          style={{
+            height: pageButtonHeight,
+            width: button.width || pageButtonHeight,
+          }}
+          onClick={(e: React.MouseEvent<HTMLElement>) => {
+            onClickPageButton(e, button.onClick);
+          }}
+        >
+          <div data-button-svg className={CX(button.className)} />
+        </button>
+      );
+    })}
+  </>
+);
 
-class DataGridPage extends React.Component<IProps, IState> {
+interface IProps extends IDataGridStore {}
+
+class DataGridPage extends React.Component<IProps> {
   state = {};
 
   onClickPageButton = (
-    e: any,
+    e: React.MouseEvent<HTMLElement>,
     userFunction: string | types.userCallBackFunction,
   ) => {
     const {
@@ -160,22 +187,11 @@ class DataGridPage extends React.Component<IProps, IState> {
           className="axui-datagrid-page-buttons"
           style={{ width: pageButtonsContainerWidth }}
         >
-          {pageButtons.map((button, bi) => {
-            return (
-              <button
-                key={bi}
-                style={{
-                  height: pageButtonHeight,
-                  width: button.width || pageButtonHeight,
-                }}
-                onClick={(e: any) => {
-                  this.onClickPageButton(e, button.onClick);
-                }}
-              >
-                <div data-button-svg className={CX(button.className)} />
-              </button>
-            );
-          })}
+          <PageButtons
+            pageButtons={pageButtons}
+            pageButtonHeight={pageButtonHeight}
+            onClickPageButton={this.onClickPageButton}
+          />
         </div>
       </div>
     );
