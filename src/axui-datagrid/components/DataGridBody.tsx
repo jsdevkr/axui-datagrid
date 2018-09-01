@@ -58,7 +58,7 @@ class DataGridBody extends React.Component<IProps> {
     } = styles;
 
     const startMousePosition = getMousePosition(e);
-    const spanType = e.currentTarget.getAttribute('data-span');
+    const spanType = e.target['getAttribute']('data-span');
     const rootNode = getNode(getRootNode);
     const { x: leftPadding = 0, y: topPadding = 0 } =
       rootNode && (rootNode.getBoundingClientRect() as any);
@@ -342,7 +342,7 @@ class DataGridBody extends React.Component<IProps> {
         document.addEventListener('mouseleave', offEvent);
       }
     };
-    const procClickLinenumber = () => {
+    const procClickLineNumber = () => {
       let state = {
         dragging: false,
         selectionRows: {},
@@ -398,7 +398,7 @@ class DataGridBody extends React.Component<IProps> {
 
     switch (spanType) {
       case 'lineNumber':
-        procClickLinenumber();
+        procClickLineNumber();
         break;
       case 'rowSelector':
         procClickRowSelector();

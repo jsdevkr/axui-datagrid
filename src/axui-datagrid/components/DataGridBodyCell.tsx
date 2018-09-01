@@ -13,8 +13,7 @@ const CellLabel: React.SFC<{
 }> = props => {
   const { col, list: data, li, lineHeight, predefinedFormatter } = props;
   const { key = '', columnAttr = '', formatter } = col;
-
-  let formatterData = {
+  const formatterData = {
     data,
     item: data[li],
     index: li,
