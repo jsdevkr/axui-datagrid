@@ -44,6 +44,10 @@ npm start
 
 ![axui-datagrid example Inline edit](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-06.c9d1af9b.jpg)
 
+### Foot Summary
+
+![axui-datagrid example Foot Summary](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-07.c9d1af9b.jpg)
+
 # Props
 
 ## data?: any[] = [];
