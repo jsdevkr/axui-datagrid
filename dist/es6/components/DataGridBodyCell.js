@@ -4,6 +4,38 @@ const React = require("react");
 const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const CellLabel = props => {
+    const { col, list: data, li, lineHeight, predefinedFormatter } = props;
+    const { key = '', columnAttr = '', formatter } = col;
+    const formatterData = {
+        data,
+        item: data[li],
+        index: li,
+        key: col.key,
+        value: data[li][col.key || ''],
+    };
+    switch (key) {
+        case '_line_number_':
+            return React.createElement(React.Fragment, null, li + 1);
+        case '_row_selector_':
+            return (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": data[li]._selected_, style: {
+                    maxHeight: lineHeight + 'px',
+                    minHeight: lineHeight + 'px',
+                } }));
+        default:
+            let labelValue;
+            if (typeof formatter === 'string' && formatter in predefinedFormatter) {
+                labelValue = predefinedFormatter[formatter](formatterData);
+            }
+            else if (utils_1.isFunction(formatter)) {
+                labelValue = formatter(formatterData);
+            }
+            else {
+                labelValue = data[li][key];
+            }
+            return React.createElement(React.Fragment, null, labelValue);
+    }
+};
 class DataGridBodyCell extends React.Component {
     constructor() {
         super(...arguments);
@@ -74,7 +106,7 @@ class DataGridBodyCell extends React.Component {
                                 dispatch(stores_1.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
-                                    value: e.target.value,
+                                    value: e.currentTarget.value,
                                     eventWhichKey: e.which,
                                 });
                             }
@@ -87,7 +119,7 @@ class DataGridBodyCell extends React.Component {
             proc[eventName] && proc[eventName]();
         };
     }
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         if (this.editInput) {
             this.activeComposition = false;
             this.editInput.select();
@@ -97,13 +129,13 @@ class DataGridBodyCell extends React.Component {
         const { filteredList = [], focusedRow, focusedCol, selectionRows = [], selectionCols = [], li, col = {}, ci, value, options = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, } = this.props;
         const { body: optionsBody = {} } = options;
         const { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = optionsBody;
-        const { rowSpan: colRowSpan = 0, colIndex: colColIndex = 0 } = col;
-        let cellHeight = columnHeight * colRowSpan;
+        const { rowSpan = 0, colSpan = 0, colIndex = 0, rowIndex = 0, align: colAlign = bodyAlign, columnAttr = '', } = col;
+        let cellHeight = columnHeight * rowSpan;
         let tdClassNames = {
-            ['axui-datagrid-line-number']: col.columnAttr === 'lineNumber',
-            ['axui-datagrid-row-selector']: col.columnAttr === 'rowSelector',
+            ['axui-datagrid-line-number']: columnAttr === 'lineNumber',
+            ['axui-datagrid-row-selector']: columnAttr === 'rowSelector',
         };
-        if (col.columnAttr === 'lineNumber') {
+        if (columnAttr === 'lineNumber') {
             if (focusedRow === li) {
                 tdClassNames.focused = true;
             }
@@ -111,20 +143,20 @@ class DataGridBodyCell extends React.Component {
                 tdClassNames.selected = true;
             }
         }
-        else if (col.columnAttr === 'rowSelector') {
+        else if (columnAttr === 'rowSelector') {
         }
         else {
-            if (selectionRows[li] && selectionCols[colColIndex]) {
+            if (selectionRows[li] && selectionCols[colIndex]) {
                 tdClassNames.selected = true;
             }
-            if (focusedRow === li && focusedCol === colColIndex) {
+            if (focusedRow === li && focusedCol === colIndex) {
                 tdClassNames.focused = true;
             }
         }
         if (isInlineEditing &&
             inlineEditingCell.rowIndex === li &&
-            inlineEditingCell.colIndex === col.colIndex) {
-            return (React.createElement("td", { key: ci, colSpan: col.colSpan, rowSpan: col.rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
+            inlineEditingCell.colIndex === colIndex) {
+            return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
                 React.createElement("input", { type: "text", ref: this.setEditInputNode, onCompositionUpdate: (e) => {
                         this.activeComposition = true;
                     }, onCompositionEnd: (e) => {
@@ -139,49 +171,15 @@ class DataGridBodyCell extends React.Component {
         }
         else {
             const lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
-            const colAlign = col.align || bodyAlign || '';
-            let label;
-            const getLabel = function (_item, _itemIdx) {
-                let formatterData = {
-                    data: filteredList,
-                    item: _item,
-                    index: _itemIdx,
-                    key: col.key,
-                    value: _item[col.key || ''],
-                };
-                let labelValue;
-                if (typeof col.formatter === 'string' &&
-                    col.formatter in predefinedFormatter) {
-                    labelValue = predefinedFormatter[col.formatter](formatterData);
-                }
-                else if (utils_1.isFunction(col.formatter)) {
-                    labelValue = col.formatter(formatterData);
-                }
-                else {
-                    labelValue = _item[col.key || ''];
-                }
-                return labelValue;
-            };
-            if (col.key === '_line_number_') {
-                label = li + 1;
-            }
-            else if (col.key === '_row_selector_') {
-                label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": col.columnAttr || '', "data-checked": filteredList[li]._selected_, style: {
-                        maxHeight: lineHeight + 'px',
-                        minHeight: lineHeight + 'px',
-                    } }));
-            }
-            else {
-                label = getLabel(filteredList[li], li);
-            }
-            return (React.createElement("td", { key: ci, colSpan: col.colSpan, rowSpan: col.rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: (e) => {
+            return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: (e) => {
                     this.onDoubleClickCell(e, col, li);
                 } },
-                React.createElement("span", { "data-span": col.columnAttr || '', "data-pos": col.colIndex + ',' + col.rowIndex + ',' + li, style: {
+                React.createElement("span", { "data-span": columnAttr, "data-pos": colIndex + ',' + rowIndex + ',' + li, style: {
                         height: columnHeight - columnBorderWidth + 'px',
                         lineHeight: lineHeight + 'px',
                         textAlign: colAlign,
-                    } }, label || ' ')));
+                    } },
+                    React.createElement(CellLabel, { lineHeight: lineHeight, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter }))));
         }
     }
 }

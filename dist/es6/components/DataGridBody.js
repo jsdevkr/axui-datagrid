@@ -18,7 +18,7 @@ class DataGridBody extends React.Component {
             }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
-            const spanType = e.target.getAttribute('data-span');
+            const spanType = e.target['getAttribute']('data-span');
             const rootNode = utils_1.getNode(getRootNode);
             const { x: leftPadding = 0, y: topPadding = 0 } = rootNode && rootNode.getBoundingClientRect();
             const startScrollLeft = scrollLeft;
@@ -246,7 +246,7 @@ class DataGridBody extends React.Component {
                     document.addEventListener('mouseleave', offEvent);
                 }
             };
-            const procClickLinenumber = () => {
+            const procClickLineNumber = () => {
                 let state = {
                     dragging: false,
                     selectionRows: {},
@@ -293,7 +293,7 @@ class DataGridBody extends React.Component {
             }
             switch (spanType) {
                 case 'lineNumber':
-                    procClickLinenumber();
+                    procClickLineNumber();
                     break;
                 case 'rowSelector':
                     procClickRowSelector();
@@ -306,7 +306,7 @@ class DataGridBody extends React.Component {
         };
     }
     render() {
-        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, footSumColumns, } = this.props;
+        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, } = this.props;
         const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
         const { CTInnerWidth = 0, bodyHeight = 0, bodyTrHeight = 0, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, footSumHeight = 0, } = styles;
         const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
@@ -397,7 +397,7 @@ class DataGridBody extends React.Component {
             React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-aside-body-scroll", containerStyle: bottomAsideBodyPanelStyle }),
             React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-left-body-scroll", containerStyle: bottomLeftBodyPanelStyle }),
             React.createElement(DataGridBodyBottomPanel_1.default, { panelName: "bottom-body-scroll", containerStyle: bottomBodyPanelStyle, panelLeft: scrollLeft }),
-            React.createElement(DataGridBodyLoader_1.default, null)));
+            React.createElement(DataGridBodyLoader_1.default, { loadingData: loadingData, bodyLoaderHeight: bodyLoaderHeight })));
     }
 }
 exports.default = hoc_1.connectStore(DataGridBody);

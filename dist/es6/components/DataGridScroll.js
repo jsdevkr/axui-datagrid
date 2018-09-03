@@ -86,7 +86,7 @@ class DatagridScroll extends React.Component {
                     });
                 },
             };
-            if (e.target.getAttribute('data-scroll')) {
+            if (e.target['getAttribute']('data-scroll')) {
                 processor[barName]();
             }
             return true;
@@ -127,7 +127,6 @@ class DatagridScroll extends React.Component {
             };
             const offEvent = (ee) => {
                 ee.preventDefault();
-                // console.log('off');
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);

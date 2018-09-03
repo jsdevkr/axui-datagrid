@@ -1,14 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
@@ -31,64 +21,55 @@ var TableBody = function (_a) {
         return null;
     })));
 };
-var DataGridBodyPanel = /** @class */ (function (_super) {
-    __extends(DataGridBodyPanel, _super);
-    function DataGridBodyPanel() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = {};
-        return _this;
+var DataGridBodyPanel = function (props) {
+    var _a = props.filteredList, filteredList = _a === void 0 ? [] : _a, _b = props.asideColGroup, asideColGroup = _b === void 0 ? [] : _b, _c = props.leftHeaderColGroup, leftHeaderColGroup = _c === void 0 ? [] : _c, _d = props.visibleHeaderColGroup, visibleHeaderColGroup = _d === void 0 ? [] : _d, _e = props.asideBodyRowData, asideBodyRowData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = props.leftBodyRowData, leftBodyRowData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = props.visibleBodyRowData, visibleBodyRowData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, panelName = props.panelName, _h = props.containerStyle, containerStyle = _h === void 0 ? {} : _h, _j = props.panelScrollConfig, panelScrollConfig = _j === void 0 ? {} : _j, _k = props.panelLeft, panelLeft = _k === void 0 ? 0 : _k, _l = props.panelTop, panelTop = _l === void 0 ? 0 : _l, _m = props.styles, styles = _m === void 0 ? {} : _m;
+    var _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.asidePanelWidth, asidePanelWidth = _p === void 0 ? 0 : _p, _q = styles.frozenPanelHeight, frozenPanelHeight = _q === void 0 ? 0 : _q, _r = styles.bodyTrHeight, bodyTrHeight = _r === void 0 ? 0 : _r;
+    var sRowIndex = panelScrollConfig.sRowIndex, eRowIndex = panelScrollConfig.eRowIndex, frozenRowIndex = panelScrollConfig.frozenRowIndex;
+    // aside-header가 필요하지 않은지 확인
+    if ((panelName === 'top-aside-body-scroll' &&
+        (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||
+        (panelName === 'top-left-body-scroll' &&
+            (frozenPanelWidth === 0 || frozenPanelHeight === 0)) ||
+        (panelName === 'top-body-scroll' && frozenPanelHeight === 0) ||
+        (panelName === 'aside-body-scroll' && asidePanelWidth === 0) ||
+        (panelName === 'left-body-scroll' && frozenPanelWidth === 0)) {
+        return null;
     }
-    DataGridBodyPanel.prototype.render = function () {
-        var _a = this.props, footSumColumns = _a.footSumColumns, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.asideColGroup, asideColGroup = _c === void 0 ? [] : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.visibleHeaderColGroup, visibleHeaderColGroup = _e === void 0 ? [] : _e, _f = _a.asideBodyRowData, asideBodyRowData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.leftBodyRowData, leftBodyRowData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.visibleBodyRowData, visibleBodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, panelName = _a.panelName, _j = _a.containerStyle, containerStyle = _j === void 0 ? {} : _j, _k = _a.panelScrollConfig, panelScrollConfig = _k === void 0 ? {} : _k, _l = _a.panelLeft, panelLeft = _l === void 0 ? 0 : _l, _m = _a.panelTop, panelTop = _m === void 0 ? 0 : _m, _o = _a.styles, styles = _o === void 0 ? {} : _o;
-        var _p = styles.frozenPanelWidth, frozenPanelWidth = _p === void 0 ? 0 : _p, _q = styles.asidePanelWidth, asidePanelWidth = _q === void 0 ? 0 : _q, _r = styles.frozenPanelHeight, frozenPanelHeight = _r === void 0 ? 0 : _r, _s = styles.bodyTrHeight, bodyTrHeight = _s === void 0 ? 0 : _s;
-        var sRowIndex = panelScrollConfig.sRowIndex, eRowIndex = panelScrollConfig.eRowIndex, frozenRowIndex = panelScrollConfig.frozenRowIndex;
-        // aside-header가 필요하지 않은지 확인
-        if ((panelName === 'top-aside-body-scroll' &&
-            (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||
-            (panelName === 'top-left-body-scroll' &&
-                (frozenPanelWidth === 0 || frozenPanelHeight === 0)) ||
-            (panelName === 'top-body-scroll' && frozenPanelHeight === 0) ||
-            (panelName === 'aside-body-scroll' && asidePanelWidth === 0) ||
-            (panelName === 'left-body-scroll' && frozenPanelWidth === 0)) {
-            return null;
-        }
-        var panelColGroup = [];
-        var panelBodyRow = { rows: [{ cols: [] }] };
-        var panelPaddingLeft = 0;
-        switch (panelName) {
-            case 'top-aside-body-scroll':
-            case 'aside-body-scroll':
-                panelColGroup = asideColGroup;
-                panelBodyRow = asideBodyRowData;
-                break;
-            case 'top-left-body-scroll':
-            case 'left-body-scroll':
-                panelColGroup = leftHeaderColGroup;
-                panelBodyRow = leftBodyRowData;
-                break;
-            case 'top-body-scroll':
-            case 'body-scroll':
-            default:
-                panelColGroup = visibleHeaderColGroup;
-                // headerColGroup;
-                panelBodyRow = visibleBodyRowData;
-                panelPaddingLeft = panelColGroup[0]
-                    ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
-                    : 0;
-        }
-        var panelStyle = {
-            left: panelLeft,
-            top: panelTop,
-            paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
-            paddingLeft: panelPaddingLeft,
-        };
-        return (React.createElement("div", { "data-scroll-container": panelName + "-container", style: containerStyle },
-            React.createElement("div", { "data-panel": panelName, style: panelStyle },
-                React.createElement("table", { style: { height: '100%' } },
-                    React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
-                    React.createElement(TableBody, { sRowIndex: sRowIndex, eRowIndex: eRowIndex, filteredList: filteredList, bodyRow: panelBodyRow })))));
+    var panelColGroup = [];
+    var panelBodyRow = { rows: [{ cols: [] }] };
+    var panelPaddingLeft = 0;
+    switch (panelName) {
+        case 'top-aside-body-scroll':
+        case 'aside-body-scroll':
+            panelColGroup = asideColGroup;
+            panelBodyRow = asideBodyRowData;
+            break;
+        case 'top-left-body-scroll':
+        case 'left-body-scroll':
+            panelColGroup = leftHeaderColGroup;
+            panelBodyRow = leftBodyRowData;
+            break;
+        case 'top-body-scroll':
+        case 'body-scroll':
+        default:
+            panelColGroup = visibleHeaderColGroup;
+            // headerColGroup;
+            panelBodyRow = visibleBodyRowData;
+            panelPaddingLeft = panelColGroup[0]
+                ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
+                : 0;
+    }
+    var panelStyle = {
+        left: panelLeft,
+        top: panelTop,
+        paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
+        paddingLeft: panelPaddingLeft,
     };
-    return DataGridBodyPanel;
-}(React.Component));
+    return (React.createElement("div", { "data-scroll-container": panelName + "-container", style: containerStyle },
+        React.createElement("div", { "data-panel": panelName, style: panelStyle },
+            React.createElement("table", { style: { height: '100%' } },
+                React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
+                React.createElement(TableBody, { sRowIndex: sRowIndex, eRowIndex: eRowIndex, filteredList: filteredList, bodyRow: panelBodyRow })))));
+};
 exports.default = hoc_1.connectStore(DataGridBodyPanel);
 //# sourceMappingURL=DataGridBodyPanel.js.map

@@ -15,7 +15,7 @@ class DatagridColumnFilterOption extends React.Component {
         };
         this.onScroll = (e) => {
             this.setState({
-                scrollTop: e.target.scrollTop,
+                scrollTop: e.currentTarget.scrollTop,
             });
         };
         this.setContainerNode = (element) => {
@@ -60,7 +60,7 @@ class DatagridColumnFilterOption extends React.Component {
     }
     render() {
         const { mounted } = this.state;
-        return (React.createElement("div", { "data-options": "", ref: this.setContainerNode, onScroll: utils_1.throttle(this.onScroll, 10) }, mounted ? this.getOption() : null));
+        return (React.createElement("div", { "data-options": "", ref: this.setContainerNode, onScroll: utils_1.throttle(this.onScroll, 100) }, mounted ? this.getOption() : null));
     }
 }
 exports.default = hoc_1.connectStore(DatagridColumnFilterOption);

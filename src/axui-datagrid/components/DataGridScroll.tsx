@@ -160,7 +160,7 @@ class DatagridScroll extends React.Component<IProps> {
       },
     };
 
-    if (e.target['getAttribute']('data-scroll')) {
+    if ((e.target as any).getAttribute('data-scroll')) {
       processor[barName]();
     }
 

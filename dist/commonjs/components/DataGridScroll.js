@@ -99,7 +99,7 @@ var DatagridScroll = /** @class */ (function (_super) {
                     });
                 },
                 _a);
-            if (e.target.getAttribute('data-scroll')) {
+            if (e.target['getAttribute']('data-scroll')) {
                 processor[barName]();
             }
             return true;
@@ -141,7 +141,6 @@ var DatagridScroll = /** @class */ (function (_super) {
             };
             var offEvent = function (ee) {
                 ee.preventDefault();
-                // console.log('off');
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);

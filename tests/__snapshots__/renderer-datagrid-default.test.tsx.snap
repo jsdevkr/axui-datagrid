@@ -81,7 +81,7 @@ exports[`renders DataGrid default 1`] = `
                   }
                 }
               >
-                 
+                
               </span>
             </td>
             <td />
@@ -783,9 +783,7 @@ exports[`renders DataGrid default 1`] = `
                       "textAlign": "center",
                     }
                   }
-                >
-                  
-                </span>
+                />
               </td>
               <td />
             </tr>

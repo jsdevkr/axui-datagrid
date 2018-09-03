@@ -165,7 +165,7 @@ class DataGrid extends React.Component {
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
-                    React.createElement(components_1.DataGridLoader, null))) : null)));
+                    React.createElement(components_1.DataGridLoader, { loading: loading }))) : null)));
     }
 }
 DataGrid.defaultHeight = 400;

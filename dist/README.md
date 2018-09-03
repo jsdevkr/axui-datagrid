@@ -3,6 +3,8 @@
 
 # axui-datagrid
 
+demo : http://axui-datagrid.axisj.com/
+
 # Install
 
 ```bash
@@ -12,8 +14,8 @@ npm install axui-datagrid -S
 # Run
 
 ```bash
-cd [my-open-source-folder]
 git clone https://github.com/axui/datagrid.git
+cd datagrid
 npm i
 npm start
 ```
@@ -43,6 +45,10 @@ npm start
 ### Inline edit
 
 ![axui-datagrid example Inline edit](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-06.c9d1af9b.jpg)
+
+### Foot Summary
+
+![axui-datagrid example Foot Summary](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-07.c9d1af9b.jpg)
 
 # Props
 
@@ -210,3 +216,4 @@ export default Formatter;
 * v0.3.7 - Update document and change columns fix
 * v0.3.8 - support footSum props & minor bugfix
 * v0.3.9 - filtered state display on header & fixed bug of 'footSum'
+* v0.3.10 - Fixed bug : When clicking line Number cell did not working.

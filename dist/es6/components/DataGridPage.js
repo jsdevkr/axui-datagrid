@@ -4,6 +4,15 @@ const React = require("react");
 const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const PageButtons = ({ pageButtons, pageButtonHeight, onClickPageButton }) => (React.createElement(React.Fragment, null, pageButtons.map((button, bi) => {
+    return (React.createElement("button", { key: bi, style: {
+            height: pageButtonHeight,
+            width: button.width || pageButtonHeight,
+        }, onClick: (e) => {
+            onClickPageButton(e, button.onClick);
+        } },
+        React.createElement("div", { "data-button-svg": true, className: utils_1.classNames(button.className) })));
+})));
 class DataGridPage extends React.Component {
     constructor() {
         super(...arguments);
@@ -119,15 +128,8 @@ class DataGridPage extends React.Component {
         const { page: optionPage = {} } = options;
         const { buttons: pageButtons = [], buttonHeight: pageButtonHeight = 0, } = optionPage;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-buttons", style: { width: pageButtonsContainerWidth } }, pageButtons.map((button, bi) => {
-                return (React.createElement("button", { key: bi, style: {
-                        height: pageButtonHeight,
-                        width: button.width || pageButtonHeight,
-                    }, onClick: (e) => {
-                        this.onClickPageButton(e, button.onClick);
-                    } },
-                    React.createElement("div", { "data-button-svg": true, className: utils_1.classNames(button.className) })));
-            }))));
+            React.createElement("div", { className: "axui-datagrid-page-buttons", style: { width: pageButtonsContainerWidth } },
+                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton }))));
     }
 }
 exports.default = hoc_1.connectStore(DataGridPage);

@@ -10,6 +10,7 @@ const feature03 = require('assets/datagrid-feature-03.jpg');
 const feature04 = require('assets/datagrid-feature-04.jpg');
 const feature05 = require('assets/datagrid-feature-05.jpg');
 const feature06 = require('assets/datagrid-feature-06.jpg');
+const feature07 = require('assets/datagrid-feature-07.jpg');
 
 interface IProps {}
 interface IState {}
@@ -133,6 +134,23 @@ class Introduction extends React.Component<IProps, IState> {
             </Button>
             <br />
             <img src={feature06} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
+
+          <h3>Foot Summary</h3>
+          <p>
+            You can use footSum props The value of the footSum column, which
+            consists of an array, can be determined using the built-in collector
+            (avg, sum) function, Alternatively, you can define your own
+            function.
+          </p>
+          <NavLink to={'examples/FootSum'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature07} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
         </Segment>
       </Wrapper>

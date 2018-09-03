@@ -26,7 +26,7 @@ var DatagridColumnFilterOption = /** @class */ (function (_super) {
         };
         _this.onScroll = function (e) {
             _this.setState({
-                scrollTop: e.target.scrollTop,
+                scrollTop: e.currentTarget.scrollTop,
             });
         };
         _this.setContainerNode = function (element) {
@@ -72,7 +72,7 @@ var DatagridColumnFilterOption = /** @class */ (function (_super) {
     };
     DatagridColumnFilterOption.prototype.render = function () {
         var mounted = this.state.mounted;
-        return (React.createElement("div", { "data-options": "", ref: this.setContainerNode, onScroll: utils_1.throttle(this.onScroll, 10) }, mounted ? this.getOption() : null));
+        return (React.createElement("div", { "data-options": "", ref: this.setContainerNode, onScroll: utils_1.throttle(this.onScroll, 100) }, mounted ? this.getOption() : null));
     };
     return DatagridColumnFilterOption;
 }(React.Component));

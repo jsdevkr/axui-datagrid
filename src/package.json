@@ -1,10 +1,10 @@
 {
   "name": "axui-datagrid",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "DataGrid, DataSheet for React",
   "jsnext:main": "es6/index.js",
   "main": "commonjs/index.js",
-  "repository": "https://github.com/axui/datagrid",
+  "repository": "https://github.com/jsdevkr/datagrid",
   "website": "http://axui-datagrid.axisj.com/",
   "author": "tom@axisj.com",
   "license": "MIT",

@@ -1,91 +1,68 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
-var DataGridBodyBottomCell = /** @class */ (function (_super) {
-    __extends(DataGridBodyBottomCell, _super);
-    function DataGridBodyBottomCell() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = {};
-        return _this;
-    }
-    DataGridBodyBottomCell.prototype.render = function () {
-        var _a;
-        var _b = this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, focusedRow = _b.focusedRow, focusedCol = _b.focusedCol, _d = _b.selectionRows, selectionRows = _d === void 0 ? [] : _d, _e = _b.selectionCols, selectionCols = _e === void 0 ? [] : _e, _f = _b.col, col = _f === void 0 ? {} : _f, ci = _b.ci, value = _b.value, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.predefinedFormatter, predefinedFormatter = _h === void 0 ? {} : _h, _j = _b.predefinedCollector, predefinedCollector = _j === void 0 ? {} : _j;
-        var _k = options.body, optionsBody = _k === void 0 ? {} : _k;
-        var _l = optionsBody.columnHeight, columnHeight = _l === void 0 ? 0 : _l, _m = optionsBody.columnPadding, columnPadding = _m === void 0 ? 0 : _m, _o = optionsBody.columnBorderWidth, columnBorderWidth = _o === void 0 ? 0 : _o, _p = optionsBody.align, bodyAlign = _p === void 0 ? 'left' : _p;
-        var _q = col.rowSpan, colRowSpan = _q === void 0 ? 0 : _q, _r = col.colIndex, colColIndex = _r === void 0 ? 0 : _r;
-        var cellHeight = columnHeight * colRowSpan;
-        var tdClassNames = (_a = {},
-            _a['axui-datagrid-line-number'] = col.columnAttr === 'lineNumber',
-            _a['axui-datagrid-row-selector'] = col.columnAttr === 'rowSelector',
-            _a);
-        var lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
-        var colAlign = col.align || bodyAlign || '';
-        var label;
-        var getLabel = function () {
-            var collectorData = {
-                data: filteredList,
-                key: col.key,
-            };
-            var formatterData = {
-                data: filteredList,
-                key: col.key,
-                value: '',
-            };
-            var labelValue;
-            if (typeof col.collector === 'string' &&
-                col.collector in predefinedCollector) {
-                labelValue = predefinedCollector[col.collector](collectorData);
+var CellLabel = function (props) {
+    var col = props.col, data = props.list, lineHeight = props.lineHeight, predefinedFormatter = props.predefinedFormatter, predefinedCollector = props.predefinedCollector;
+    var key = col.key, _a = col.label, label = _a === void 0 ? '' : _a, _b = col.columnAttr, columnAttr = _b === void 0 ? '' : _b, collector = col.collector, formatter = col.formatter;
+    var collectorData = {
+        data: data,
+        key: key,
+    };
+    var formatterData = {
+        data: data,
+        key: key,
+        value: '',
+    };
+    switch (key) {
+        case '_line_number_':
+            return null;
+        case '_row_selector_':
+            return (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": false, style: {
+                    maxHeight: lineHeight + 'px',
+                    minHeight: lineHeight + 'px',
+                } }));
+        default:
+            var labelValue = void 0;
+            if (typeof collector === 'string' && collector in predefinedCollector) {
+                labelValue = predefinedCollector[collector](collectorData);
             }
-            else if (utils_1.isFunction(col.collector)) {
-                labelValue = col.collector(collectorData);
+            else if (utils_1.isFunction(collector)) {
+                labelValue = collector(collectorData);
             }
             else {
-                labelValue = col.label || '';
+                labelValue = label;
             }
-            // collector로 구한 값을 formatter의 value로 사용
+            // set formatterData.value by collector value
             formatterData.value = labelValue;
-            if (typeof col.formatter === 'string' &&
-                col.formatter in predefinedFormatter) {
-                labelValue = predefinedFormatter[col.formatter](formatterData);
+            if (typeof formatter === 'string' && formatter in predefinedFormatter) {
+                labelValue = predefinedFormatter[formatter](formatterData);
             }
             else if (utils_1.isFunction(col.formatter)) {
                 labelValue = col.formatter(formatterData);
             }
-            return labelValue;
-        };
-        if (col.key === '_line_number_') {
-            label = '';
-        }
-        else if (col.key === '_row_selector_') {
-            label = (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": col.columnAttr || '', "data-checked": false, style: {
-                    maxHeight: lineHeight + 'px',
-                    minHeight: lineHeight + 'px',
-                } }));
-        }
-        else {
-            label = getLabel();
-        }
-        return (React.createElement("td", { key: ci, colSpan: col.colSpan, rowSpan: col.rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' } },
-            React.createElement("span", { "data-span": col.columnAttr || '', "data-pos": col.colIndex, style: {
-                    height: columnHeight - columnBorderWidth + 'px',
-                    lineHeight: lineHeight + 'px',
-                    textAlign: colAlign,
-                } }, label || '')));
-    };
-    return DataGridBodyBottomCell;
-}(React.Component));
+            return React.createElement(React.Fragment, null, labelValue);
+    }
+};
+var DataGridBodyBottomCell = function (props) {
+    var _a;
+    var _b = props.filteredList, filteredList = _b === void 0 ? [] : _b, _c = props.col, col = _c === void 0 ? {} : _c, ci = props.ci, _d = props.options, options = _d === void 0 ? {} : _d, _e = props.predefinedFormatter, predefinedFormatter = _e === void 0 ? {} : _e, _f = props.predefinedCollector, predefinedCollector = _f === void 0 ? {} : _f;
+    var _g = options.body, optionsBody = _g === void 0 ? {} : _g;
+    var _h = optionsBody.columnHeight, columnHeight = _h === void 0 ? 0 : _h, _j = optionsBody.columnPadding, columnPadding = _j === void 0 ? 0 : _j, _k = optionsBody.columnBorderWidth, columnBorderWidth = _k === void 0 ? 0 : _k, _l = optionsBody.align, bodyAlign = _l === void 0 ? 'left' : _l;
+    var _m = col.rowSpan, colRowSpan = _m === void 0 ? 0 : _m, _o = col.colIndex, colColIndex = _o === void 0 ? 0 : _o, _p = col.align, colAlign = _p === void 0 ? bodyAlign || '' : _p, _q = col.columnAttr, columnAttr = _q === void 0 ? '' : _q, _r = col.colSpan, colSpan = _r === void 0 ? 1 : _r, _s = col.rowSpan, rowSpan = _s === void 0 ? 1 : _s;
+    var tdClassNames = (_a = {},
+        _a['axui-datagrid-line-number'] = columnAttr === 'lineNumber',
+        _a['axui-datagrid-row-selector'] = columnAttr === 'rowSelector',
+        _a);
+    var lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
+    return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: utils_1.classNames(tdClassNames), style: { height: columnHeight * colRowSpan, minHeight: '1px' } },
+        React.createElement("span", { "data-span": columnAttr, "data-pos": colColIndex, style: {
+                height: columnHeight - columnBorderWidth + 'px',
+                lineHeight: lineHeight + 'px',
+                textAlign: colAlign,
+            } },
+            React.createElement(CellLabel, { col: col, list: filteredList, lineHeight: lineHeight, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }))));
+};
 exports.default = hoc_1.connectStore(DataGridBodyBottomCell);
 //# sourceMappingURL=DataGridBodyBottomCell.js.map
