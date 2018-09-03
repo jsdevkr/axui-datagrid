@@ -18,7 +18,7 @@ class DataGridBody extends React.Component {
             }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
-            const spanType = e.target['getAttribute']('data-span');
+            const spanType = e.target.getAttribute('data-span');
             const rootNode = utils_1.getNode(getRootNode);
             const { x: leftPadding = 0, y: topPadding = 0 } = rootNode && rootNode.getBoundingClientRect();
             const startScrollLeft = scrollLeft;

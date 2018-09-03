@@ -86,7 +86,7 @@ class DatagridScroll extends React.Component {
                     });
                 },
             };
-            if (e.target['getAttribute']('data-scroll')) {
+            if (e.target.getAttribute('data-scroll')) {
                 processor[barName]();
             }
             return true;

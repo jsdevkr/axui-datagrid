@@ -3,7 +3,7 @@
 
 # axui-datagrid
 
-demo : http://axui-datagrid.axisj.com/
+demo : http://datagrid.jsdev.kr
 
 # Install
 
@@ -217,3 +217,4 @@ export default Formatter;
 * v0.3.8 - support footSum props & minor bugfix
 * v0.3.9 - filtered state display on header & fixed bug of 'footSum'
 * v0.3.10 - Fixed bug : When clicking line Number cell did not working.
+* v0.3.11 - Minor bug fix
