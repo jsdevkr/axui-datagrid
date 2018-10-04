@@ -55,4 +55,3 @@ var DataGridBodyBottomPanel = function (props) {
                 React.createElement(TableBody, { bodyRow: panelBodyRow })))));
 };
 exports.default = hoc_1.connectStore(DataGridBodyBottomPanel);
-//# sourceMappingURL=DataGridBodyBottomPanel.js.map

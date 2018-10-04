@@ -43,4 +43,3 @@ class DataGridHeader extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DataGridHeader);
-//# sourceMappingURL=DataGridHeader.js.map

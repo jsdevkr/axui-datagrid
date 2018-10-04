@@ -159,4 +159,3 @@ var DataGridPage = /** @class */ (function (_super) {
     return DataGridPage;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridPage);
-//# sourceMappingURL=DataGridPage.js.map

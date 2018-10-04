@@ -17,4 +17,3 @@ function getScrollPositionByScrollBar(scrollBarLeft, scrollBarTop, { horizontalS
 }
 exports.getScrollPositionByScrollBar = getScrollPositionByScrollBar;
 exports.default = getScrollPositionByScrollBar;
-//# sourceMappingURL=getScrollPositionByScrollBar.js.map

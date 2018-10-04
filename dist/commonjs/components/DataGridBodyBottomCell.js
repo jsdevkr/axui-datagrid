@@ -65,4 +65,3 @@ var DataGridBodyBottomCell = function (props) {
             React.createElement(CellLabel, { col: col, list: filteredList, lineHeight: lineHeight, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }))));
 };
 exports.default = hoc_1.connectStore(DataGridBodyBottomCell);
-//# sourceMappingURL=DataGridBodyBottomCell.js.map

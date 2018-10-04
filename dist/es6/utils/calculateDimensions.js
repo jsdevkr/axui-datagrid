@@ -158,4 +158,3 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     };
 }
 exports.default = calculateDimensions;
-//# sourceMappingURL=calculateDimensions.js.map

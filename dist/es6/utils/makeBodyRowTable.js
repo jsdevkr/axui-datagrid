@@ -110,4 +110,3 @@ function makeBodyRowTable(bodyColumns, options) {
     return bodyTable;
 }
 exports.default = makeBodyRowTable;
-//# sourceMappingURL=makeBodyRowTable.js.map

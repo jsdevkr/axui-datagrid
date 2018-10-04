@@ -33,4 +33,3 @@ function getTableByStartEndColumnIndex(rowTable, startColumnIndex, endColumnInde
     return tempTable;
 }
 exports.default = getTableByStartEndColumnIndex;
-//# sourceMappingURL=getTableByStartEndColumnIndex.js.map

@@ -53,4 +53,3 @@ function makeFootSumTable(footSumColumns, colGroup, options) {
     return footSumTable;
 }
 exports.default = makeFootSumTable;
-//# sourceMappingURL=makeFootSumTable.js.map

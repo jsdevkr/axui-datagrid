@@ -133,4 +133,3 @@ class DataGridPage extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DataGridPage);
-//# sourceMappingURL=DataGridPage.js.map

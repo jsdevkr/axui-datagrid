@@ -15,4 +15,3 @@ function arrayFromRange(start, end, step) {
     return range;
 }
 exports.default = arrayFromRange;
-//# sourceMappingURL=arrayFromRange.js.map

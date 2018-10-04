@@ -27,4 +27,3 @@ function datetime(formatterData) {
     }
 }
 exports.default = { money: money, date: date, datetime: datetime };
-//# sourceMappingURL=formatter.js.map

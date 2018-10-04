@@ -55,4 +55,3 @@ exports.padRight = common_1.padRight;
 exports.isDate = common_1.isDate;
 exports.isFunction = common_1.isFunction;
 exports.isNumber = common_1.isNumber;
-//# sourceMappingURL=index.js.map

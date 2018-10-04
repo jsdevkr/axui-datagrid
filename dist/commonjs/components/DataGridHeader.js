@@ -59,4 +59,3 @@ var DataGridHeader = /** @class */ (function (_super) {
     return DataGridHeader;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridHeader);
-//# sourceMappingURL=DataGridHeader.js.map

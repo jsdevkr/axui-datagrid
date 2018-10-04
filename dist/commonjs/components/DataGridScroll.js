@@ -255,4 +255,3 @@ var DatagridScroll = /** @class */ (function (_super) {
     return DatagridScroll;
 }(React.Component));
 exports.default = hoc_1.connectStore(DatagridScroll);
-//# sourceMappingURL=DataGridScroll.js.map

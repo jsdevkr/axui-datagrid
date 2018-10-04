@@ -37,4 +37,3 @@ function getScrollPosition(scrollLeft, scrollTop, _a) {
 }
 exports.getScrollPosition = getScrollPosition;
 exports.default = getScrollPosition;
-//# sourceMappingURL=getScrollPosition.js.map

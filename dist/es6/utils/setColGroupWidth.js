@@ -50,4 +50,3 @@ function setColGroupWidth(colGroup, container, options) {
     return colGroup;
 }
 exports.default = setColGroupWidth;
-//# sourceMappingURL=setColGroupWidth.js.map

@@ -80,4 +80,3 @@ var DatagridColumnFilterOption = /** @class */ (function (_super) {
     return DatagridColumnFilterOption;
 }(React.Component));
 exports.default = hoc_1.connectStore(DatagridColumnFilterOption);
-//# sourceMappingURL=DataGridColumnFilterOption.js.map

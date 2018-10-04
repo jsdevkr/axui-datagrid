@@ -572,4 +572,3 @@ var StoreProvider = /** @class */ (function (_super) {
     return StoreProvider;
 }(React.Component));
 exports.default = { Provider: StoreProvider, Consumer: Consumer };
-//# sourceMappingURL=StoreProvider.js.map

@@ -265,4 +265,3 @@ DataGrid.defaultStyles = {
 };
 DataGrid.defaultThrottleWait = 100;
 exports.default = DataGrid;
-//# sourceMappingURL=DataGrid.js.map

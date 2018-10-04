@@ -13,4 +13,3 @@ const formatCurrency = function (value, n = 0, x = 3) {
         .replace(new RegExp(re, 'g'), '$&,');
 };
 exports.default = formatCurrency;
-//# sourceMappingURL=formatCurrency.js.map

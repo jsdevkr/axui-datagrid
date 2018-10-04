@@ -63,4 +63,3 @@ var DatagridHeaderCell = function (_a) {
         React.createElement(CellFilter, { show: (optionsHeader.enableFilter && colKey && colIndex > -1), colIndex: colIndex, isFiltered: !!filterInfo[colIndex] })));
 };
 exports.default = hoc_1.connectStore(DatagridHeaderCell);
-//# sourceMappingURL=DataGridHeaderCell.js.map

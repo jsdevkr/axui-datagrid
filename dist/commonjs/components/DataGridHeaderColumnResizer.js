@@ -7,4 +7,3 @@ var DataGridHeaderColumnResizer = function (_a) {
         React.createElement("div", { "data-column-resizing": true, style: { left: columnResizerLeft } }))) : null;
 };
 exports.default = DataGridHeaderColumnResizer;
-//# sourceMappingURL=DataGridHeaderColumnResizer.js.map

@@ -5,4 +5,3 @@ const DataGridTableColGroup = ({ panelColGroup }) => (React.createElement("colgr
     panelColGroup.map((col, ci) => (React.createElement("col", { key: ci, style: { width: col._width + 'px' } }))),
     React.createElement("col", null)));
 exports.default = DataGridTableColGroup;
-//# sourceMappingURL=DataGridTableColGroup.js.map

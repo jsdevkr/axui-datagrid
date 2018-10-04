@@ -15,4 +15,3 @@ function classNames(classNameObject) {
     return cx.join(' ');
 }
 exports.default = classNames;
-//# sourceMappingURL=classNames.js.map

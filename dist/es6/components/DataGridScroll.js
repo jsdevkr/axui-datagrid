@@ -231,4 +231,3 @@ class DatagridScroll extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DatagridScroll);
-//# sourceMappingURL=DataGridScroll.js.map

@@ -261,4 +261,3 @@ function padRight(s, l = 2, padder = '0') {
     return s.toString() + times(padder || '0', l - s.length);
 }
 exports.padRight = padRight;
-//# sourceMappingURL=common.js.map

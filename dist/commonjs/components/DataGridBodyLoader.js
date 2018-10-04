@@ -13,4 +13,3 @@ var DataGridBodyLoader = function (props) {
         React.createElement("div", { "data-loader-text": "" }, "Loading")));
 };
 exports.default = DataGridBodyLoader;
-//# sourceMappingURL=DataGridBodyLoader.js.map

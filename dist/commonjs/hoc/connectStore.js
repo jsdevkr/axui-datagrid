@@ -41,4 +41,3 @@ function connectStore(WrappedComponent) {
     return Component;
 }
 exports.default = connectStore;
-//# sourceMappingURL=connectStore.js.map

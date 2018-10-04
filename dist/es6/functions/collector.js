@@ -8,4 +8,3 @@ function avg(collectorData) {
     return parseFloat((sum(collectorData) / collectorData.data.length).toFixed(4));
 }
 exports.default = { sum, avg };
-//# sourceMappingURL=collector.js.map

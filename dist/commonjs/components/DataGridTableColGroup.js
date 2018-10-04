@@ -8,4 +8,3 @@ var DataGridTableColGroup = function (_a) {
         React.createElement("col", null)));
 };
 exports.default = DataGridTableColGroup;
-//# sourceMappingURL=DataGridTableColGroup.js.map

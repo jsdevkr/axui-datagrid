@@ -235,4 +235,3 @@ function printDate(d, format) {
     return new PrintDate().setDate(d).print(format);
 }
 exports.printDate = printDate;
-//# sourceMappingURL=printDate.js.map

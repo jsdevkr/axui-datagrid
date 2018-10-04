@@ -46,4 +46,3 @@ function getOuterHeight(element) {
     return element ? element.offsetHeight : 0;
 }
 exports.getOuterHeight = getOuterHeight;
-//# sourceMappingURL=getWidthHeight.js.map

@@ -68,4 +68,3 @@ const DataGridBodyPanel = props => {
                 React.createElement(TableBody, { sRowIndex: sRowIndex, eRowIndex: eRowIndex, filteredList: filteredList, bodyRow: panelBodyRow })))));
 };
 exports.default = hoc_1.connectStore(DataGridBodyPanel);
-//# sourceMappingURL=DataGridBodyPanel.js.map

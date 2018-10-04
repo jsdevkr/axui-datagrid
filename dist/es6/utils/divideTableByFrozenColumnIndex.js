@@ -91,4 +91,3 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
     };
 }
 exports.default = divideTableByFrozenColumnIndex;
-//# sourceMappingURL=divideTableByFrozenColumnIndex.js.map

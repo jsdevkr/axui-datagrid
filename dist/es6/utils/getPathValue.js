@@ -27,4 +27,3 @@ function getPathValue(targetObject, paths, defaultValue) {
     return typeof targetObject === 'undefined' ? defaultValue : targetObject;
 }
 exports.default = getPathValue;
-//# sourceMappingURL=getPathValue.js.map

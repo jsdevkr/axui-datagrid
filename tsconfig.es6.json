@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "dist/es6",
     "module": "commonjs",
-    "target": "es6"
+    "target": "es6",
+    "allowJs": false,
+    "declaration": true,
+    "sourceMap": false
   },
   "include": ["src/axui-datagrid/**/*"]
 }

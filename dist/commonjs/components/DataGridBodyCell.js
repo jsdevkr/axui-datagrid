@@ -204,4 +204,3 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     return DataGridBodyCell;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridBodyCell);
-//# sourceMappingURL=DataGridBodyCell.js.map

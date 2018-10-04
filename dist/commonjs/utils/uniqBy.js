@@ -31,4 +31,3 @@ var uniqBy = function (arr, predicate) {
         .values());
 };
 exports.default = uniqBy;
-//# sourceMappingURL=uniqBy.js.map

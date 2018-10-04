@@ -36,4 +36,3 @@ function getScrollPosition(scrollLeft, scrollTop, { scrollWidth, scrollHeight, c
 }
 exports.getScrollPosition = getScrollPosition;
 exports.default = getScrollPosition;
-//# sourceMappingURL=getScrollPosition.js.map

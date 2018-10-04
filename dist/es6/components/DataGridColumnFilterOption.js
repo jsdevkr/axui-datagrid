@@ -64,4 +64,3 @@ class DatagridColumnFilterOption extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DatagridColumnFilterOption);
-//# sourceMappingURL=DataGridColumnFilterOption.js.map

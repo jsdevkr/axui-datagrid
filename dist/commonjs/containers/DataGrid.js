@@ -312,4 +312,3 @@ var DataGrid = /** @class */ (function (_super) {
     return DataGrid;
 }(React.Component));
 exports.default = DataGrid;
-//# sourceMappingURL=DataGrid.js.map

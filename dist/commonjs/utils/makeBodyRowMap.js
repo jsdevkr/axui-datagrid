@@ -29,4 +29,3 @@ function makeBodyRowMap(rowTable, options) {
     return map;
 }
 exports.default = makeBodyRowMap;
-//# sourceMappingURL=makeBodyRowMap.js.map

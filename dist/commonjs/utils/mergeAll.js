@@ -96,4 +96,3 @@ function mergeAll(deep, target, options) {
     return target;
 }
 exports.default = mergeAll;
-//# sourceMappingURL=mergeAll.js.map

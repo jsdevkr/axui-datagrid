@@ -31,4 +31,3 @@ function findParentNode(_target, _predicate) {
     return _target;
 }
 exports.default = findParentNode;
-//# sourceMappingURL=findParentNode.js.map

@@ -373,4 +373,3 @@ class DataGridEvents extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DataGridEvents);
-//# sourceMappingURL=DataGridEvents.js.map

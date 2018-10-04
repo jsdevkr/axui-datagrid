@@ -24,31 +24,31 @@ npm start
 
 ### Large Data
 
-![axui-datagrid example LargeData](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-01.784bf3b8.jpg)
+![axui-datagrid example LargeData](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-01.jpg)
 
 ### Frozen row / col
 
-![axui-datagrid example Frozen row,col](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-02.1d489db6.jpg)
+![axui-datagrid example Frozen row,col](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-02.jpg)
 
 ### Multi header
 
-![axui-datagrid example Multi header](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-03.30ec1f56.jpg)
+![axui-datagrid example Multi header](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-03.jpg)
 
 ### Loading
 
-![axui-datagrid example Loading](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-04.65d90b02.jpg)
+![axui-datagrid example Loading](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-04.jpg)
 
 ### Row selector
 
-![axui-datagrid example Row selector](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-05.aa1f3985.jpg)
+![axui-datagrid example Row selector](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-05.jpg)
 
 ### Inline edit
 
-![axui-datagrid example Inline edit](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-06.c9d1af9b.jpg)
+![axui-datagrid example Inline edit](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-06.jpg)
 
 ### Foot Summary
 
-![axui-datagrid example Foot Summary](https://cdn.rawgit.com/axui/datagrid/22ff9055/docs/static/media/datagrid-feature-07.c9d1af9b.jpg)
+![axui-datagrid example Foot Summary](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-07.jpg)
 
 # Props
 

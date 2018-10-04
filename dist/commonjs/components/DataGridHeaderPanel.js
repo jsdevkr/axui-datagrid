@@ -274,4 +274,3 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
     return DataGridHeaderPanel;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridHeaderPanel);
-//# sourceMappingURL=DataGridHeaderPanel.js.map

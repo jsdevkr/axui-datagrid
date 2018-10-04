@@ -401,4 +401,3 @@ class DataGridBody extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DataGridBody);
-//# sourceMappingURL=DataGridBody.js.map

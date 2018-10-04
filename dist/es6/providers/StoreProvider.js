@@ -523,4 +523,3 @@ class StoreProvider extends React.Component {
     }
 }
 exports.default = { Provider: StoreProvider, Consumer };
-//# sourceMappingURL=StoreProvider.js.map

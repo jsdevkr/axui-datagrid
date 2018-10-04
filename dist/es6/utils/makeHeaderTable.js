@@ -70,4 +70,3 @@ function makeHeaderTable(headerColumns, options) {
     return table;
 }
 exports.default = makeHeaderTable;
-//# sourceMappingURL=makeHeaderTable.js.map

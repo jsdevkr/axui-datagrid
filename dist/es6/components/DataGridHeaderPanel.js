@@ -253,4 +253,3 @@ class DataGridHeaderPanel extends React.Component {
     }
 }
 exports.default = hoc_1.connectStore(DataGridHeaderPanel);
-//# sourceMappingURL=DataGridHeaderPanel.js.map

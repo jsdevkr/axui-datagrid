@@ -4,4 +4,3 @@ function getNode(getNodeFn) {
     return getNodeFn && getNodeFn();
 }
 exports.default = getNode;
-//# sourceMappingURL=getNode.js.map

@@ -419,4 +419,3 @@ var DataGridBody = /** @class */ (function (_super) {
     return DataGridBody;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridBody);
-//# sourceMappingURL=DataGridBody.js.map

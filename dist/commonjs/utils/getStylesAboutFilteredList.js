@@ -45,4 +45,3 @@ function getStylesAboutFilteredList(_list, options, styles) {
     return currentStyles;
 }
 exports.default = getStylesAboutFilteredList;
-//# sourceMappingURL=getStylesAboutFilteredList.js.map

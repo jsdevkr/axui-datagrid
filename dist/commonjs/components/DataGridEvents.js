@@ -402,4 +402,3 @@ var DataGridEvents = /** @class */ (function (_super) {
     return DataGridEvents;
 }(React.Component));
 exports.default = hoc_1.connectStore(DataGridEvents);
-//# sourceMappingURL=DataGridEvents.js.map

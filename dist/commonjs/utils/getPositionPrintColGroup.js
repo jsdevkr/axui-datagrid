@@ -16,4 +16,3 @@ function getPositionPrintColGroup(_headerColGroup, sx, ex) {
     return { printStartColIndex: printStartColIndex, printEndColIndex: printEndColIndex };
 }
 exports.default = getPositionPrintColGroup;
-//# sourceMappingURL=getPositionPrintColGroup.js.map

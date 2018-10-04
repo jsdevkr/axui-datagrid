@@ -16,4 +16,3 @@ var DataGridLoader_1 = require("./DataGridLoader");
 exports.DataGridLoader = DataGridLoader_1.default;
 var DataGridBodyLoader_1 = require("./DataGridBodyLoader");
 exports.DataGridBodyLoader = DataGridBodyLoader_1.default;
-//# sourceMappingURL=index.js.map

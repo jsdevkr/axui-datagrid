@@ -10,4 +10,3 @@ const DataGridLoader = props => {
         React.createElement("div", { "data-loader-text": "" }, "Loading")));
 };
 exports.default = DataGridLoader;
-//# sourceMappingURL=DataGridLoader.js.map
