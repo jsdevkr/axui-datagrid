@@ -25,17 +25,17 @@ class LargeData extends React.Component<any, any> {
         '2018-02-03',
       ],
       customerTypes: [
-        '장기영',
-        '황인서',
-        '양용성',
-        '이하종',
-        '김혜미',
-        '홍시아',
-        '김종호',
-        '이희남',
-        '고재철',
-        '현지숙',
-        '홍상훈',
+        'TOM',
+        'BRANT',
+        'BENJAMIN',
+        'BILL',
+        'KELLY',
+        'CIA',
+        'ALAIN',
+        'ROBB',
+        'ISSAC',
+        'ELLIE',
+        'PAUL',
       ],
     };
 
@@ -120,6 +120,7 @@ class LargeData extends React.Component<any, any> {
             need to be displayed in the grid container area, it can process
             large amounts of data quickly.
           </p>
+
           <DataGrid
             height={this.state.height}
             style={{ fontSize: '12px' }}
@@ -136,12 +137,14 @@ class LargeData extends React.Component<any, any> {
           >
             height : 300
           </Button>
+
           <Button
             type="primary"
             onClick={() => this.changeConfig('setHeight', 400)}
           >
             height : 400
           </Button>
+
           <Button
             type="primary"
             onClick={() => this.changeConfig('setHeight', 500)}

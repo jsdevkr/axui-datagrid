@@ -7,7 +7,7 @@ class Formatter extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/basicData.json');
+    const gridData = require('examples/data/data-basic.json');
 
     this.state = {
       height: 400,
@@ -30,7 +30,7 @@ class Formatter extends React.Component<any, any> {
     };
   }
 
-  public render() {
+  render() {
     return (
       <Wrapper>
         <Segment padded>

@@ -7,7 +7,7 @@ class FootSum extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/priceData.json');
+    const gridData = require('examples/data/data-price.json');
 
     this.state = {
       height: 300,

@@ -27,7 +27,7 @@ class FrozenColumnRow extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/basicData.json');
+    const gridData = require('examples/data/data-basic.json');
 
     this.state = {
       columns: columnsTypeA,

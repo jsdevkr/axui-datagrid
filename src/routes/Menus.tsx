@@ -32,6 +32,7 @@ export const Menus = {
       { to: '/examples/LoadingState', label: 'Loading' },
       { to: '/examples/RowSelector', label: 'RowSelector' },
       { to: '/examples/FootSum', label: 'Foot summary' },
+      // { to: '/examples/BodyGrouping', label: 'Body grouping' },
     ],
   },
 };
