@@ -1,16 +1,20 @@
 import { getOuterWidth } from './getWidthHeight';
-import { types } from '../stores';
 import setColGroupWidth from './setColGroupWidth';
+import {
+  IDataGridState,
+  IDataGridStyles,
+  IDataGridCol,
+} from '../common/@types';
 
 function calculateDimensions(
   containerDOM: HTMLDivElement | undefined,
-  state: types.DataGridState,
+  state: IDataGridState,
   toBeFilteredList?: any[],
 ): {
-  styles: types.DataGridStyles;
-  colGroup: types.DataGridCol[];
-  leftHeaderColGroup: types.DataGridCol[];
-  headerColGroup: types.DataGridCol[];
+  styles: IDataGridStyles;
+  colGroup: IDataGridCol[];
+  leftHeaderColGroup: IDataGridCol[];
+  headerColGroup: IDataGridCol[];
 } {
   const {
     filteredList = [],
@@ -51,9 +55,9 @@ function calculateDimensions(
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = list ? list.length : 0;
 
-  let currentStyles: types.DataGridStyles = { ...styles };
-  let currentColGroup: types.DataGridCol[] = [];
-  let currentHeaderColGroup: types.DataGridCol[] = [];
+  let currentStyles: IDataGridStyles = { ...styles };
+  let currentColGroup: IDataGridCol[] = [];
+  let currentHeaderColGroup: IDataGridCol[] = [];
 
   currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
   currentStyles.CTInnerWidth = currentStyles.elWidth = getOuterWidth(
@@ -220,8 +224,8 @@ function calculateDimensions(
   currentStyles.scrollerPadding = optionsScrollerPadding;
   currentStyles.scrollerArrowSize = optionsScrollerArrowSize;
   currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
-    ? currentStyles.scrollContentContainerHeight *
-      currentStyles.verticalScrollerHeight /
+    ? (currentStyles.scrollContentContainerHeight *
+        currentStyles.verticalScrollerHeight) /
       currentStyles.scrollContentHeight
     : 0;
 
@@ -230,8 +234,8 @@ function calculateDimensions(
   }
 
   currentStyles.horizontalScrollBarWidth = currentStyles.scrollContentWidth
-    ? currentStyles.scrollContentContainerWidth *
-      currentStyles.horizontalScrollerWidth /
+    ? (currentStyles.scrollContentContainerWidth *
+        currentStyles.horizontalScrollerWidth) /
       currentStyles.scrollContentWidth
     : 0;
 

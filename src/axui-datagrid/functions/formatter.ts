@@ -1,7 +1,7 @@
-import { intfs } from '../stores';
 import { printDate, formatCurrency } from '../utils';
+import { IDataGridFormatterData } from '../common/@types';
 
-function money(formatterData: intfs.IDataGridFormatterData) {
+function money(formatterData: IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     const dotIndex = ('' + formatterData.value).indexOf('.');
     return formatCurrency(
@@ -13,14 +13,14 @@ function money(formatterData: intfs.IDataGridFormatterData) {
   }
 }
 
-function date(formatterData: intfs.IDataGridFormatterData) {
+function date(formatterData: IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     return printDate(formatterData.value, 'yyyy-MM-dd');
   } else {
     return '';
   }
 }
-function datetime(formatterData: intfs.IDataGridFormatterData) {
+function datetime(formatterData: IDataGridFormatterData) {
   if (typeof formatterData.value !== 'undefined') {
     return printDate(formatterData.value, 'yyyy-MM-dd hh:mm:ss');
   } else {

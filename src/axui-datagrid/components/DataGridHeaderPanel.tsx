@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { types, DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import {
@@ -10,11 +9,12 @@ import {
 } from '../utils';
 import DataGridHeaderCell from './DataGridHeaderCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
-
+import { IDataGridColumnTableMap, IDataGridCol } from '../common/@types';
+import { DispatchTypes } from '../common/@enums';
 
 const TableBody: React.SFC<{
-  bodyRow: types.DataGridColumnTableMap;
-  onClick: (e: any, col: types.DataGridCol) => void;
+  bodyRow: IDataGridColumnTableMap;
+  onClick: (e: any, col: IDataGridCol) => void;
 }> = ({ bodyRow, onClick }) => (
   <tbody>
     {bodyRow.rows.map((row, ri) => (
@@ -35,11 +35,11 @@ const TableBody: React.SFC<{
 );
 
 const ColumnResizer: React.SFC<{
-  colGroup: types.DataGridCol[];
+  colGroup: IDataGridCol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
     e: React.SyntheticEvent<Element>,
-    col: types.DataGridCol,
+    col: IDataGridCol,
   ) => void;
 }> = ({ colGroup, resizerHeight, onMouseDownColumnResizer }) => {
   let resizerLeft = 0;
@@ -72,7 +72,6 @@ const ColumnResizer: React.SFC<{
   );
 };
 
-
 interface IProps extends IDataGridStore {
   panelName: string;
   style?: any;
@@ -80,7 +79,7 @@ interface IProps extends IDataGridStore {
 class DataGridHeaderPanel extends React.Component<IProps> {
   state = {};
 
-  onHandleClick = (e: any, col: types.DataGridCol) => {
+  onHandleClick = (e: any, col: IDataGridCol) => {
     const {
       filteredList = [],
       colGroup = [],
@@ -243,7 +242,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     }
   };
 
-  onMouseDownColumnResizer = (e: any, col: types.DataGridCol) => {
+  onMouseDownColumnResizer = (e: any, col: IDataGridCol) => {
     e.preventDefault();
 
     const { setStoreState, getRootNode, dispatch } = this.props;
@@ -333,7 +332,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
       columnHeight: optionsHeaderColumnHeight = 0,
       columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
     } = optionsHeader;
-    const colGroup: types.DataGridCol[] = (() => {
+    const colGroup: IDataGridCol[] = (() => {
       switch (panelName) {
         case 'aside-header':
           return asideColGroup;
@@ -343,7 +342,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
           return headerColGroup;
       }
     })();
-    const bodyRow: types.DataGridColumnTableMap = (() => {
+    const bodyRow: IDataGridColumnTableMap = (() => {
       switch (panelName) {
         case 'aside-header':
           return asideHeaderData;

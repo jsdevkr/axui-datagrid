@@ -1,15 +1,21 @@
 import * as React from 'react';
-import { types, DispatchTypes, EventNames, KeyCodes } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction, getNode } from '../utils';
+import {
+  IDataGridCol,
+  IDataGridFormatter,
+  formatterFunction,
+  IDataGridColumn,
+} from '../common/@types';
+import { KeyCodes, EventNames, DispatchTypes } from '../common/@enums';
 
 const CellLabel: React.SFC<{
   lineHeight: number;
-  col: types.DataGridCol;
+  col: IDataGridCol;
   list: any[];
   li: number;
-  predefinedFormatter: types.DataGridFormatter;
+  predefinedFormatter: IDataGridFormatter;
 }> = props => {
   const { col, list: data, li, lineHeight, predefinedFormatter } = props;
   const { key = '', columnAttr = '', formatter } = col;
@@ -42,7 +48,7 @@ const CellLabel: React.SFC<{
       if (typeof formatter === 'string' && formatter in predefinedFormatter) {
         labelValue = predefinedFormatter[formatter](formatterData);
       } else if (isFunction(formatter)) {
-        labelValue = (formatter as types.formatterFunction)(formatterData);
+        labelValue = (formatter as formatterFunction)(formatterData);
       } else {
         labelValue = data[li][key];
       }
@@ -54,7 +60,7 @@ const CellLabel: React.SFC<{
 interface IProps extends IDataGridStore {
   li: number;
   ci: number;
-  col?: types.DataGridCol;
+  col?: IDataGridCol;
   value?: any;
 }
 
@@ -76,7 +82,7 @@ class DataGridBodyCell extends React.Component<IProps> {
 
   onDoubleClickCell = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    col: types.DataGridColumn,
+    col: IDataGridColumn,
     li: number,
   ) => {
     const { setStoreState } = this.props;
@@ -95,7 +101,7 @@ class DataGridBodyCell extends React.Component<IProps> {
 
   onKeyUp = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    col: types.DataGridColumn,
+    col: IDataGridColumn,
     li: number,
   ) => {
     const { setStoreState } = this.props;

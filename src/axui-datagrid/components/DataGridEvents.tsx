@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { EventNames, KeyCodes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { getScrollPosition, getNode } from '../utils';
+import { KeyCodes, EventNames } from '../common/@enums';
 
 interface IProps extends IDataGridStore {
   style?: any;

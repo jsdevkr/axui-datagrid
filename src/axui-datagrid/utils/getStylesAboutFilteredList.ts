@@ -1,9 +1,9 @@
-import { types } from '../stores';
+import { IDataGridOptions, IDataGridStyles } from '../common/@types';
 
 function getStylesAboutFilteredList(
   _list: any[],
-  options: types.DataGridOptions,
-  styles: types.DataGridStyles,
+  options: IDataGridOptions,
+  styles: IDataGridStyles,
 ) {
   const {
     elHeight = 0,
@@ -32,7 +32,7 @@ function getStylesAboutFilteredList(
 
   const dataLength = _list ? _list.length : 0;
 
-  let currentStyles: types.DataGridStyles = {};
+  let currentStyles: IDataGridStyles = {};
 
   currentStyles.frozenPanelHeight = frozenRowIndex * bodyTrHeight;
 
@@ -48,8 +48,7 @@ function getStylesAboutFilteredList(
     currentStyles.verticalScrollerWidth = optionsScrollerSize;
   }
   currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
-    ? scrollContentContainerHeight *
-      verticalScrollerHeight /
+    ? (scrollContentContainerHeight * verticalScrollerHeight) /
       currentStyles.scrollContentHeight
     : 0;
 

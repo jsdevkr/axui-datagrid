@@ -11,7 +11,7 @@ import {
   DataGridPage,
   DataGridLoader,
 } from './components';
-import { types } from './stores';
+
 import {
   mergeAll,
   makeHeaderTable,
@@ -24,19 +24,33 @@ import {
   getTableByStartEndColumnIndex,
   getPositionPrintColGroup,
 } from './utils';
+import {
+  IDataGrid,
+  IDataGridRootState,
+  IDataGridOptionHeader,
+  IDataGridOptionBody,
+  IDataGridOptionPageButton,
+  IDataGridOptionPage,
+  IDataGridOptionScroller,
+  IDataGridOptions,
+  IDataGridStyles,
+  IDataGridState,
+  IDataGridColumnKeys,
+  IDataGridCol,
+} from './common/@types';
 
-interface IProps extends types.DataGrid {}
-interface IState extends types.DataGridRootState {}
+interface IProps extends IDataGrid {}
+interface IState extends IDataGridRootState {}
 
 class DataGrid extends React.Component<IProps, IState> {
   static defaultHeight: number = 400;
-  static defaultColumnKeys: types.DataGridColumnKeys = {
+  static defaultColumnKeys: IDataGridColumnKeys = {
     selected: '_selected_',
     modified: '_modified_',
     deleted: '_deleted_',
     disableSelection: '_disable_selection_',
   };
-  static defaultHeader: types.DataGridOptionHeader = {
+  static defaultHeader: IDataGridOptionHeader = {
     display: true,
     align: 'left',
     columnHeight: 24,
@@ -48,7 +62,7 @@ class DataGrid extends React.Component<IProps, IState> {
     clickAction: 'sort',
     filterIconClassName: 'datagridIcon-filter',
   };
-  static defaultBody: types.DataGridOptionBody = {
+  static defaultBody: IDataGridOptionBody = {
     align: 'left',
     columnHeight: 24,
     columnPadding: 3,
@@ -56,7 +70,7 @@ class DataGrid extends React.Component<IProps, IState> {
     grouping: false,
     mergeCells: false,
   };
-  static defaultPageButtons: types.DataGridOptionPageButton[] = [
+  static defaultPageButtons: IDataGridOptionPageButton[] = [
     { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
     { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
     { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
@@ -64,20 +78,20 @@ class DataGrid extends React.Component<IProps, IState> {
     { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
     { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
   ];
-  static defaultPage: types.DataGridOptionPage = {
+  static defaultPage: IDataGridOptionPage = {
     buttonsContainerWidth: 150,
     buttons: DataGrid.defaultPageButtons,
     buttonHeight: 16,
     height: 20,
   };
-  static defaultScroller: types.DataGridOptionScroller = {
+  static defaultScroller: IDataGridOptionScroller = {
     size: 14,
     arrowSize: 14,
     barMinSize: 12,
     padding: 3,
     disabledVerticalScroll: false,
   };
-  static defaultOptions: types.DataGridOptions = {
+  static defaultOptions: IDataGridOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,
@@ -95,7 +109,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
   };
-  static defaultStyles: types.DataGridStyles = {
+  static defaultStyles: IDataGridStyles = {
     calculatedHeight: null,
     asidePanelWidth: 0,
     frozenPanelWidth: 0,
@@ -148,7 +162,7 @@ class DataGrid extends React.Component<IProps, IState> {
    * otherwise you will fall into a trap.
    * @param {DataGridRootState} state
    */
-  setRootState = (state: types.DataGridRootState) => {
+  setRootState = (state: IDataGridRootState) => {
     this.setState(state);
   };
 
@@ -166,11 +180,11 @@ class DataGrid extends React.Component<IProps, IState> {
 
   onFireEvent = () => {};
 
-  getOptions = (options: types.DataGridOptions): types.DataGridOptions => {
+  getOptions = (options: IDataGridOptions): IDataGridOptions => {
     return mergeAll(true, { ...DataGrid.defaultOptions }, options);
   };
 
-  getProviderProps = (prevState: types.DataGridState) => {
+  getProviderProps = (prevState: IDataGridState) => {
     const { columns = [], footSum } = this.props;
     const { options = {} } = prevState;
     const {
@@ -179,24 +193,27 @@ class DataGrid extends React.Component<IProps, IState> {
     } = options;
     const { columnHeight = 0 } = optionsBody;
 
-    let newState: types.DataGridState = { ...prevState };
-    let newStyle: types.DataGridStyles = {};
+    let newState: IDataGridState = { ...prevState };
+    let newStyle: IDataGridStyles = {};
 
     // convert colGroup
     newState.headerTable = makeHeaderTable(columns, options);
     newState.bodyRowTable = makeBodyRowTable(columns, options);
-    newState.bodyRowMap = makeBodyRowMap(newState.bodyRowTable, options);
+    newState.bodyRowMap = makeBodyRowMap(
+      newState.bodyRowTable || { rows: [] },
+      options,
+    );
 
     // header를 위한 divide
     const headerDividedObj = divideTableByFrozenColumnIndex(
-      newState.headerTable,
+      newState.headerTable || { rows: [] },
       frozenColumnIndex,
       options,
     );
 
     // body를 위한 divide
     const bodyDividedObj = divideTableByFrozenColumnIndex(
-      newState.bodyRowTable,
+      newState.bodyRowTable || { rows: [] },
       frozenColumnIndex,
       options,
     );
@@ -213,25 +230,27 @@ class DataGrid extends React.Component<IProps, IState> {
     // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
 
     newState.colGroupMap = {};
-    newState.headerTable.rows.forEach((row, ridx) => {
-      row.cols.forEach((col, cidx) => {
-        if (newState.colGroupMap) {
-          const currentCol: types.DataGridCol = {
-            key: col.key,
-            label: col.label,
-            width: col.width,
-            align: col.align,
-            colSpan: col.colSpan,
-            rowSpan: col.rowSpan,
-            colIndex: col.colIndex,
-            rowIndex: col.rowIndex,
-            formatter: col.formatter,
-            editor: col.editor,
-          };
-          newState.colGroupMap[col.colIndex || 0] = currentCol;
-        }
+    if (newState.headerTable) {
+      newState.headerTable.rows.forEach((row, ridx) => {
+        row.cols.forEach((col, cidx) => {
+          if (newState.colGroupMap) {
+            const currentCol: IDataGridCol = {
+              key: col.key,
+              label: col.label,
+              width: col.width,
+              align: col.align,
+              colSpan: col.colSpan,
+              rowSpan: col.rowSpan,
+              colIndex: col.colIndex,
+              rowIndex: col.rowIndex,
+              formatter: col.formatter,
+              editor: col.editor,
+            };
+            newState.colGroupMap[col.colIndex || 0] = currentCol;
+          }
+        });
       });
-    });
+    }
 
     newState.colGroup = Object.values(newState.colGroupMap);
 
@@ -247,7 +266,7 @@ class DataGrid extends React.Component<IProps, IState> {
         options,
       );
       const footSumDividedObj = divideTableByFrozenColumnIndex(
-        newState.footSumTable,
+        newState.footSumTable || { rows: [] },
         frozenColumnIndex,
         options,
       );
@@ -257,8 +276,9 @@ class DataGrid extends React.Component<IProps, IState> {
 
     // styles
     newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
-
-    newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
+    newStyle.bodyTrHeight = newState.bodyRowTable
+      ? newState.bodyRowTable.rows.length * columnHeight
+      : 20;
 
     newState.styles = newStyle;
 
@@ -278,7 +298,7 @@ class DataGrid extends React.Component<IProps, IState> {
       frozenPanelWidth: _frozenPanelWidth = 0,
       asidePanelWidth: _asidePanelWidth = 0,
       rightPanelWidth: _rightPanelWidth = 0,
-    } = newState.styles;
+    } = newState.styles!;
     const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
       newState.headerColGroup,
       Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth,
@@ -320,10 +340,10 @@ class DataGrid extends React.Component<IProps, IState> {
     return newState;
   };
 
-  componentDidMount() {
-    this.setState({
-      mounted: true,
-    });
+  constructor(props: IProps) {
+    super(props);
+
+    this.rootNode = React.createRef();
   }
 
   public render() {
@@ -341,7 +361,7 @@ class DataGrid extends React.Component<IProps, IState> {
       loadingData = false,
     } = this.props;
 
-    let providerProps: types.DataGridState = {};
+    let providerProps: IDataGridState = {};
     let gridRootStyle = mergeAll(
       {
         height: this.state.calculatedHeight || height,
@@ -388,6 +408,12 @@ class DataGrid extends React.Component<IProps, IState> {
         </DataGridEvents>
       </DataGridStore.Provider>
     );
+  }
+
+  componentDidMount() {
+    this.setState({
+      mounted: true,
+    });
   }
 }
 

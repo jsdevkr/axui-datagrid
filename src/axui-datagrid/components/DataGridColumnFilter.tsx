@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { isNumber, uniqBy } from '../utils';
 import DataGridColumnFilterOption from './DataGridColumnFilterOption';
+import { DispatchTypes } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 interface IState {}

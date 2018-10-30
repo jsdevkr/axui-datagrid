@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { types } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import DataGridBodyBottomCell from './DataGridBodyBottomCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
+import { IDataGridColumnTableMap, IDataGridCol } from '../common/@types';
 
 const TableBody: React.SFC<{
-  bodyRow: types.DataGridColumnTableMap;
+  bodyRow: IDataGridColumnTableMap;
 }> = ({ bodyRow }) => (
   <tbody>
     {bodyRow.rows.map((row, ri) => {
@@ -59,8 +59,8 @@ const DataGridBodyBottomPanel: React.SFC<IProps> = props => {
     return null;
   }
 
-  let panelColGroup: types.DataGridCol[] = [];
-  let panelBodyRow: types.DataGridColumnTableMap = { rows: [{ cols: [] }] };
+  let panelColGroup: IDataGridCol[] = [];
+  let panelBodyRow: IDataGridColumnTableMap = { rows: [{ cols: [] }] };
   let panelPaddingLeft: number = 0;
 
   switch (panelName) {

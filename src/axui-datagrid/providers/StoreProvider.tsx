@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { types, KeyCodes, DispatchTypes } from '../stores';
 import {
   calculateDimensions,
   throttle,
@@ -12,13 +11,16 @@ import {
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
+import {
+  IDataGridState,
+  DataGridDispatchParam,
+  IDataGridStyles,
+} from '../common/@types';
+import { DispatchTypes, KeyCodes } from '../common/@enums';
 
-export interface IDataGridStore extends types.DataGridState {
-  setStoreState: (store: types.DataGridState) => void;
-  dispatch: (
-    dispatchType: DispatchTypes,
-    param: types.DataGridDispatchParam,
-  ) => void;
+export interface IDataGridStore extends IDataGridState {
+  setStoreState: (store: IDataGridState) => void;
+  dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
 }
 
 const store: IDataGridStore = {
@@ -71,15 +73,12 @@ const store: IDataGridStore = {
 
 const { Provider, Consumer } = React.createContext(store);
 
-class StoreProvider extends React.Component<any, types.DataGridState> {
+class StoreProvider extends React.Component<any, IDataGridState> {
   state = store;
 
   throttledUpdateDimensions: any;
 
-  static getDerivedStateFromProps(
-    newProps: any,
-    prevState: types.DataGridState,
-  ) {
+  static getDerivedStateFromProps(newProps: any, prevState: IDataGridState) {
     /*
       초기에만 값을 수신하여 랜더링 하고, 그 후엔 setState로 제어 되는 항목.
       newProps.styles === prevState.styles &&
@@ -125,7 +124,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     } else {
       let scrollTop = prevState.scrollTop;
       let filteredList = prevState.filteredList || [];
-      let styles: types.DataGridStyles = prevState.styles || {};
+      let styles: IDataGridStyles = prevState.styles || {};
       const { sortInfo } = prevState;
       const { data, styles: _styles = {}, options: _options = {} } = newProps;
 
@@ -160,22 +159,24 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
           const getValueByKey = function(_item: any, _key: string) {
             return _item[_key] || '';
           };
-          filteredList = filteredList.sort((a: any, b: any): any => {
-            for (i = 0; i < l; i++) {
-              aValue = getValueByKey(a, sortInfoArray[i].key);
-              bValue = getValueByKey(b, sortInfoArray[i].key);
+          filteredList = filteredList.sort(
+            (a: any, b: any): any => {
+              for (i = 0; i < l; i++) {
+                aValue = getValueByKey(a, sortInfoArray[i].key);
+                bValue = getValueByKey(b, sortInfoArray[i].key);
 
-              if (typeof aValue !== typeof bValue) {
-                aValue = '' + aValue;
-                bValue = '' + bValue;
+                if (typeof aValue !== typeof bValue) {
+                  aValue = '' + aValue;
+                  bValue = '' + bValue;
+                }
+                if (aValue < bValue) {
+                  return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                } else if (aValue > bValue) {
+                  return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                }
               }
-              if (aValue < bValue) {
-                return sortInfoArray[i].order === 'asc' ? -1 : 1;
-              } else if (aValue > bValue) {
-                return sortInfoArray[i].order === 'asc' ? 1 : -1;
-              }
-            }
-          });
+            },
+          );
         }
       }
 
@@ -363,7 +364,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
   }
 
   // state 가 업데이트 되기 전.
-  setStoreState = (newState: types.DataGridState) => {
+  setStoreState = (newState: IDataGridState) => {
     const {
       filteredList = [],
       scrollLeft = 0,
@@ -487,10 +488,7 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
     this.setState(newState);
   };
 
-  dispatch = (
-    dispatchType: DispatchTypes,
-    param: types.DataGridDispatchParam,
-  ) => {
+  dispatch = (dispatchType: DispatchTypes, param: DataGridDispatchParam) => {
     const {
       data = [],
       listSelectedAll = false,
@@ -598,22 +596,24 @@ class StoreProvider extends React.Component<any, types.DataGridState> {
             aValue: any,
             bValue: any;
 
-          const sortedList = filteredList.sort((a: any, b: any): any => {
-            for (i = 0; i < l; i++) {
-              aValue = getValueByKey(a, sortInfoArray[i].key);
-              bValue = getValueByKey(b, sortInfoArray[i].key);
+          const sortedList = filteredList.sort(
+            (a: any, b: any): any => {
+              for (i = 0; i < l; i++) {
+                aValue = getValueByKey(a, sortInfoArray[i].key);
+                bValue = getValueByKey(b, sortInfoArray[i].key);
 
-              if (typeof aValue !== typeof bValue) {
-                aValue = '' + aValue;
-                bValue = '' + bValue;
+                if (typeof aValue !== typeof bValue) {
+                  aValue = '' + aValue;
+                  bValue = '' + bValue;
+                }
+                if (aValue < bValue) {
+                  return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                } else if (aValue > bValue) {
+                  return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                }
               }
-              if (aValue < bValue) {
-                return sortInfoArray[i].order === 'asc' ? -1 : 1;
-              } else if (aValue > bValue) {
-                return sortInfoArray[i].order === 'asc' ? 1 : -1;
-              }
-            }
-          });
+            },
+          );
 
           this.setStoreState({
             sortInfo: { ...currentSortInfo },

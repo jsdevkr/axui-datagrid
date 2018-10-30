@@ -1,4 +1,4 @@
-import { types } from '../stores';
+import { IDataGridColumnTableMap, IDataGridOptions } from '../common/@types';
 
 /**
  *
@@ -7,8 +7,8 @@ import { types } from '../stores';
  * @return {{[p: string]: any}}
  */
 function makeBodyRowMap(
-  rowTable: types.DataGridColumnTableMap,
-  options: types.DataGridOptions,
+  rowTable: IDataGridColumnTableMap,
+  options: IDataGridOptions,
 ): { [key: string]: any } {
   let map = {};
 

@@ -1,5 +1,5 @@
 import { isNumber } from './common';
-import { types } from '../stores';
+import { IDataGridCol, IRect, IDataGridOptions } from '../common/@types';
 
 /**
  * 그리드 colGroup의 width 값을 처리 하는 함수. 왜? '*', '%'로 된 값은 상대적인 값이기 때문에. 컨테이너의 너비에 따라 재계산이 필요합니다.
@@ -9,9 +9,9 @@ import { types } from '../stores';
  * @return {DataGridCol[]}
  */
 function setColGroupWidth(
-  colGroup: types.DataGridCol[],
-  container: types.DataGridRect,
-  options: types.DataGridOptions,
+  colGroup: IDataGridCol[],
+  container: IRect,
+  options: IDataGridOptions,
 ) {
   const { columnMinWidth = 0 } = options;
   let totalWidth = 0;
@@ -29,8 +29,8 @@ function setColGroupWidth(
       ('' + col.width).substring(('' + col.width).length - 1) === '%'
     ) {
       totalWidth += col._width =
-        container.width *
-        Number(('' + col.width).substring(0, ('' + col.width).length - 1)) /
+        (container.width *
+          Number(('' + col.width).substring(0, ('' + col.width).length - 1))) /
         100;
     }
   });

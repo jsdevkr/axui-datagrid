@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { ScrollTypes, DirectionTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import {
@@ -7,6 +6,7 @@ import {
   getScrollPositionByScrollBar,
   getNode,
 } from '../utils';
+import { ScrollTypes, DirectionTypes } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 
@@ -112,12 +112,10 @@ class DatagridScroll extends React.Component<IProps> {
     } = styles;
 
     const currScrollBarLeft: number =
-      -scrollLeft *
-      (horizontalScrollerWidth - horizontalScrollBarWidth) /
+      (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
       (scrollContentWidth - scrollContentContainerWidth);
     const currScrollBarTop: number =
-      -scrollTop *
-      (verticalScrollerHeight - verticalScrollBarHeight) /
+      (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
       (scrollContentHeight - scrollContentContainerHeight);
 
     const { x: mouseX, y: mouseY } = getMousePosition(e);
@@ -198,12 +196,10 @@ class DatagridScroll extends React.Component<IProps> {
     e.preventDefault();
 
     const currScrollBarLeft: number =
-      -scrollLeft *
-      (horizontalScrollerWidth - horizontalScrollBarWidth) /
+      (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
       (scrollContentWidth - scrollContentContainerWidth);
     const currScrollBarTop: number =
-      -scrollTop *
-      (verticalScrollerHeight - verticalScrollBarHeight) /
+      (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
       (scrollContentHeight - scrollContentContainerHeight);
 
     let startMousePosition = getMousePosition(e);
@@ -282,13 +278,11 @@ class DatagridScroll extends React.Component<IProps> {
     } = styles;
 
     const scrollBarLeft =
-      -scrollLeft *
-      (horizontalScrollerWidth - horizontalScrollBarWidth) /
+      (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
       (scrollContentWidth - scrollContentContainerWidth);
 
     const scrollBarTop =
-      -scrollTop *
-      (verticalScrollerHeight - verticalScrollBarHeight) /
+      (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
       (scrollContentHeight - scrollContentContainerHeight);
 
     if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) {

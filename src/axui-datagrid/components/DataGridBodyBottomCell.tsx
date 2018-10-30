@@ -1,15 +1,23 @@
 import * as React from 'react';
-import { intfs, types } from '../stores';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction } from '../utils';
+import {
+  IDataGridCol,
+  IDataGridFormatter,
+  IDataGridCollector,
+  IDataGridCollectorData,
+  IDataGridFormatterData,
+  collectorFunction,
+  formatterFunction,
+} from '../common/@types';
 
 const CellLabel: React.SFC<{
   lineHeight: number;
-  col: types.DataGridCol;
+  col: IDataGridCol;
   list: any[];
-  predefinedFormatter: types.DataGridFormatter;
-  predefinedCollector: types.DataGridCollector;
+  predefinedFormatter: IDataGridFormatter;
+  predefinedCollector: IDataGridCollector;
 }> = props => {
   const {
     col,
@@ -19,11 +27,11 @@ const CellLabel: React.SFC<{
     predefinedCollector,
   } = props;
   const { key, label = '', columnAttr = '', collector, formatter } = col;
-  let collectorData: intfs.IDataGridCollectorData = {
+  let collectorData: IDataGridCollectorData = {
     data,
     key,
   };
-  let formatterData: intfs.IDataGridFormatterData = {
+  let formatterData: IDataGridFormatterData = {
     data,
     key,
     value: '',
@@ -49,7 +57,7 @@ const CellLabel: React.SFC<{
       if (typeof collector === 'string' && collector in predefinedCollector) {
         labelValue = predefinedCollector[collector](collectorData);
       } else if (isFunction(collector)) {
-        labelValue = (collector as types.collectorFunction)(collectorData);
+        labelValue = (collector as collectorFunction)(collectorData);
       } else {
         labelValue = label;
       }
@@ -60,7 +68,7 @@ const CellLabel: React.SFC<{
       if (typeof formatter === 'string' && formatter in predefinedFormatter) {
         labelValue = predefinedFormatter[formatter](formatterData);
       } else if (isFunction(col.formatter)) {
-        labelValue = (col.formatter as types.formatterFunction)(formatterData);
+        labelValue = (col.formatter as formatterFunction)(formatterData);
       }
 
       return <>{labelValue}</>;
@@ -69,7 +77,7 @@ const CellLabel: React.SFC<{
 
 interface IProps extends IDataGridStore {
   ci: number;
-  col?: types.DataGridCol;
+  col?: IDataGridCol;
   value?: any;
 }
 

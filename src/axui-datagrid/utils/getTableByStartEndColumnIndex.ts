@@ -1,11 +1,11 @@
-import { types } from '../stores';
+import { IDataGridColumnTableMap } from '../common/@types';
 
 function getTableByStartEndColumnIndex(
-  rowTable: types.DataGridColumnTableMap,
+  rowTable: IDataGridColumnTableMap,
   startColumnIndex: number,
   endColumnIndex: number,
-): types.DataGridColumnTableMap {
-  let tempTable: types.DataGridColumnTableMap = { rows: [] };
+): IDataGridColumnTableMap {
+  let tempTable: IDataGridColumnTableMap = { rows: [] };
 
   if ('rows' in rowTable) {
     rowTable.rows.forEach((row, r) => {

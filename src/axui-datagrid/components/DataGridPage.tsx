@@ -1,15 +1,19 @@
 import * as React from 'react';
-import { types, PageButtonActions } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { classNames as CX, isFunction, getScrollPosition } from '../utils';
+import {
+  IDataGridOptionPageButton,
+  userCallBackFunction,
+} from '../common/@types';
+import { PageButtonActions } from '../common/@enums';
 
 const PageButtons: React.SFC<{
-  pageButtons: types.DataGridOptionPageButton[];
+  pageButtons: IDataGridOptionPageButton[];
   pageButtonHeight: number;
   onClickPageButton: (
     e: React.MouseEvent<HTMLElement>,
-    userFunction: string | types.userCallBackFunction,
+    userFunction: string | userCallBackFunction,
   ) => void;
 }> = ({ pageButtons, pageButtonHeight, onClickPageButton }) => (
   <>
@@ -39,7 +43,7 @@ class DataGridPage extends React.Component<IProps> {
 
   onClickPageButton = (
     e: React.MouseEvent<HTMLElement>,
-    userFunction: string | types.userCallBackFunction,
+    userFunction: string | userCallBackFunction,
   ) => {
     const {
       filteredList = [],

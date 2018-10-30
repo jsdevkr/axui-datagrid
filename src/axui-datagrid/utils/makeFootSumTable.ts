@@ -1,11 +1,16 @@
-import { types } from '../stores';
+import {
+  IDataGridColumn,
+  IDataGridCol,
+  IDataGridOptions,
+  IDataGridColumnTableMap,
+} from '../common/@types';
 
 function makeFootSumTable(
-  footSumColumns: types.DataGridColumn[][],
-  colGroup: types.DataGridCol[],
-  options: types.DataGridOptions,
-): types.DataGridColumnTableMap {
-  let footSumTable: types.DataGridColumnTableMap = {
+  footSumColumns: IDataGridColumn[][],
+  colGroup: IDataGridCol[],
+  options: IDataGridOptions,
+): IDataGridColumnTableMap {
+  let footSumTable: IDataGridColumnTableMap = {
     rows: [],
   };
   let colIndex = 0;

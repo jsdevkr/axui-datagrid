@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { types, DispatchTypes } from '../stores';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import {
@@ -12,6 +11,8 @@ import {
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
+import { IDataGridState, IDataGridMoving } from '../common/@types';
+import { DispatchTypes } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 
@@ -62,6 +63,7 @@ class DataGridBody extends React.Component<IProps> {
     const rootNode = getNode(getRootNode);
     const { x: leftPadding = 0, y: topPadding = 0 } =
       rootNode && (rootNode.getBoundingClientRect() as any);
+
     const startScrollLeft = scrollLeft;
     const startScrollTop = scrollTop;
     const startX: number = startMousePosition.x - leftPadding;
@@ -75,7 +77,9 @@ class DataGridBody extends React.Component<IProps> {
       );
       return i < 0
         ? 0
-        : i >= filteredList.length - 1 ? filteredList.length - 1 : i;
+        : i >= filteredList.length - 1
+          ? filteredList.length - 1
+          : i;
     };
     const getColIndex: Function = (x: number, _scrollLeft: number): number => {
       const p: number =
@@ -104,8 +108,8 @@ class DataGridBody extends React.Component<IProps> {
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
         const setStateCall = (
-          currState: types.DataGridState,
-          _moving?: types.DataGridMoving,
+          currState: IDataGridState,
+          _moving?: IDataGridMoving,
         ): void => {
           const {
             selectionEndOffset: currSelectionEndOffset = {},
@@ -161,7 +165,7 @@ class DataGridBody extends React.Component<IProps> {
           setStoreState(currState);
         };
 
-        const scrollMoving = (_moving: types.DataGridMoving): boolean => {
+        const scrollMoving = (_moving: IDataGridMoving): boolean => {
           const {
             scrollTop: propsScrollTop = 0,
             scrollLeft: propsScrollLeft = 0,
@@ -216,7 +220,7 @@ class DataGridBody extends React.Component<IProps> {
         let p1Y: number = Math.min(y1, y2);
         let p2Y: number = Math.max(y1, y2);
 
-        let moving: types.DataGridMoving = {
+        let moving: IDataGridMoving = {
           active: false,
           top: false,
           left: false,
@@ -484,6 +488,7 @@ class DataGridBody extends React.Component<IProps> {
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
+
     const bodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
