@@ -20,9 +20,7 @@ class LoadingState extends React.Component<any, any> {
       ],
       data: [...gridData],
       filteredList: [...gridData],
-      options: {
-        showRowSelector: true,
-      },
+      options: {},
     };
   }
 
@@ -44,8 +42,13 @@ class LoadingState extends React.Component<any, any> {
             columns={columns}
             data={data}
             options={options}
-            onChangeSelected={param => {
-              this.setState({ filteredList: param.filteredList });
+            rowSelector={{
+              show: true,
+              rowKey: '',
+              selectedRowKeys: [],
+              onChange: param => {
+                this.setState({ filteredList: param.filteredList });
+              },
             }}
           />
           <Divider />

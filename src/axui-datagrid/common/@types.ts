@@ -231,6 +231,10 @@ export interface IDataGridState {
   onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
   onChangeSelected?: (param: IonChangeSelectedParam) => void;
+
+  selection?: IDataGridSelection;
+  rowSelector?: IDataGridRowSelector;
+
   isInlineEditing?: boolean;
   inlineEditingCell?: IDataGridEditingCell;
 
@@ -299,6 +303,18 @@ export interface IDataGridState {
   getClipBoardNode?: () => HTMLTextAreaElement;
 } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
+export interface IDataGridRowSelector {
+  show: boolean;
+  rowKey: string;
+  selectedRowKeys?: string[];
+  onChange?: (param: IonChangeSelectedParam) => void;
+}
+export interface IDataGridSelection {
+  rows?: number[];
+  cols?: number[];
+  onChange?: (param: IonChangeSelectedParam) => void;
+}
+
 export interface IDataGrid {
   data?: any[];
   columns: IDataGridColumn[];
@@ -312,6 +328,8 @@ export interface IDataGrid {
   onChangeSelected?: (param: IonChangeSelectedParam) => void;
   loading?: boolean;
   loadingData?: boolean;
+  rowSelector?: IDataGridRowSelector;
+  selection?: IDataGridSelection;
 }
 
 export interface IDataGridRootState {

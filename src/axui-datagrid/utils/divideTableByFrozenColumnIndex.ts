@@ -54,6 +54,7 @@ function divideTableByFrozenColumnIndex(
 
         asidePanelWidth += options.lineNumberColumnWidth || 0;
       }
+
       if (options.showRowSelector) {
         _col = {
           ...col,
@@ -68,7 +69,6 @@ function divideTableByFrozenColumnIndex(
         };
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);
-
         asidePanelWidth += options.rowSelectorColumnWidth || 0;
       }
     }

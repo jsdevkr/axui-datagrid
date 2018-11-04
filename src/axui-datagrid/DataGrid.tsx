@@ -95,7 +95,6 @@ class DataGrid extends React.Component<IProps, IState> {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,
-    showRowSelector: false,
     multipleSelect: true,
     columnMinWidth: 100,
     lineNumberColumnWidth: 60,
@@ -193,8 +192,20 @@ class DataGrid extends React.Component<IProps, IState> {
     } = options;
     const { columnHeight = 0 } = optionsBody;
 
+    // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
     let newState: IDataGridState = { ...prevState };
     let newStyle: IDataGridStyles = {};
+
+    // options.showRowSelector 체크
+    if (newState.rowSelector) {
+      if (typeof newState.rowSelector.show === 'undefined') {
+        newState.rowSelector.show = true;
+      }
+
+      if (newState.options && newState.rowSelector.show) {
+        newState.options.showRowSelector = true;
+      }
+    }
 
     // convert colGroup
     newState.headerTable = makeHeaderTable(columns, options);
@@ -359,6 +370,8 @@ class DataGrid extends React.Component<IProps, IState> {
       height = DataGrid.defaultHeight,
       loading = false,
       loadingData = false,
+      selection,
+      rowSelector,
     } = this.props;
 
     let providerProps: IDataGridState = {};
@@ -385,9 +398,13 @@ class DataGrid extends React.Component<IProps, IState> {
         onAfterEvent,
         onScrollEnd,
         onChangeSelected,
+        selection,
+        rowSelector,
         options: this.getOptions(options),
       });
     }
+
+    console.log(providerProps);
 
     return (
       <DataGridStore.Provider {...providerProps}>

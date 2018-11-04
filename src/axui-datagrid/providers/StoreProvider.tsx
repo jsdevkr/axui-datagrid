@@ -105,6 +105,8 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.onAfterEvent === prevState.onAfterEvent &&
       newProps.onScrollEnd === prevState.onScrollEnd &&
       newProps.onChangeSelected === prevState.onChangeSelected &&
+      newProps.selection === prevState.selection &&
+      newProps.rowSelector === prevState.rowSelector &&
       newProps.headerTable === prevState.headerTable &&
       newProps.bodyRowTable === prevState.bodyRowTable &&
       newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -230,6 +232,8 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           onAfterEvent: newProps.onAfterEvent,
           onScrollEnd: newProps.onScrollEnd,
           onChangeSelected: newProps.onChangeSelected,
+          selection: newProps.selection,
+          rowSelector: newProps.rowSelector,
 
           colGroupMap: newProps.colGroupMap,
           asideColGroup: newProps.asideColGroup,
