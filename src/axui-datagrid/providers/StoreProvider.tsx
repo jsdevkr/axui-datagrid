@@ -96,7 +96,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.setRootState === prevState.setRootState &&
       newProps.getRootState === prevState.getRootState &&
       newProps.getRootNode === prevState.getRootNode &&
-      newProps.getClipBoardNode === prevState.getClipBoardNode &&
+      newProps.clipBoardNode === prevState.clipBoardNode &&
       newProps.rootObject === prevState.rootObject &&
       newProps.data === prevState.data &&
       newProps.options === prevState.options &&
@@ -222,7 +222,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           setRootState: newProps.setRootState,
           getRootState: newProps.getRootState,
           getRootNode: newProps.getRootNode,
-          getClipBoardNode: newProps.getClipBoardNode,
+          clipBoardNode: newProps.clipBoardNode,
           rootObject: newProps.rootObject,
           data: newProps.data,
           filteredList,

@@ -141,7 +141,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
   rootObject: any = {};
   rootNode: any = null;
-  clipBoardNode: any = null;
+  clipBoardNode: React.RefObject<HTMLTextAreaElement> = React.createRef();
 
   state = {
     mounted: false, // 루트 엘리먼트 준비여부
@@ -150,10 +150,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   setRootNode = (element: any) => {
     this.rootNode = ReactDOM.findDOMNode(element);
-  };
-
-  setClipBoardNode = (element: any) => {
-    this.clipBoardNode = ReactDOM.findDOMNode(element);
   };
 
   /**
@@ -171,10 +167,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   getRootNode = () => {
     return this.rootNode;
-  };
-
-  getClipBoardNode = () => {
-    return this.clipBoardNode;
   };
 
   onFireEvent = () => {};
@@ -390,7 +382,7 @@ class DataGrid extends React.Component<IProps, IState> {
         setRootState: this.setRootState,
         getRootState: this.getRootState,
         getRootNode: this.getRootNode,
-        getClipBoardNode: this.getClipBoardNode,
+        clipBoardNode: this.clipBoardNode,
         rootObject: this.rootObject,
         data,
         height,
@@ -404,13 +396,11 @@ class DataGrid extends React.Component<IProps, IState> {
       });
     }
 
-    console.log(providerProps);
-
     return (
       <DataGridStore.Provider {...providerProps}>
         <DataGridEvents ref={this.setRootNode} style={gridRootStyle}>
           <div className="axui-datagrid-clip-board">
-            <textarea ref={this.setClipBoardNode} />
+            <textarea ref={this.clipBoardNode} />
           </div>
           {mounted ? (
             <>

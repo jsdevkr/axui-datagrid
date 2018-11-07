@@ -300,7 +300,8 @@ export interface IDataGridState {
   setRootState?: (state: IDataGridRootState) => void;
   getRootState?: () => any;
   getRootNode?: () => HTMLDivElement;
-  getClipBoardNode?: () => HTMLTextAreaElement;
+  // getClipBoardNode?: () => HTMLTextAreaElement;
+  clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
 } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
 export interface IDataGridRowSelector {

@@ -109,7 +109,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     const {
       filteredList = [],
       getRootNode,
-      getClipBoardNode,
+      clipBoardNode,
       colGroup = [],
       headerColGroup = [],
       selectionRows = {},
@@ -139,7 +139,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     } = styles;
 
     const rootNode = getNode(getRootNode);
-    const clipBoardNode = getNode(getClipBoardNode);
+    // const clipBoardNode = getNode(getClipBoardNode);
 
     const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
     const eRowIndex =
@@ -231,9 +231,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
           }
         }
 
-        if (clipBoardNode) {
-          clipBoardNode.value = copiedString;
-          clipBoardNode.select();
+        if (clipBoardNode && clipBoardNode.current) {
+          clipBoardNode.current.value = copiedString;
+          clipBoardNode.current.select();
         }
 
         try {
