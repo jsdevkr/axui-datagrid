@@ -14,11 +14,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridHeaderCell_1 = require("./DataGridHeaderCell");
 var DataGridTableColGroup_1 = require("./DataGridTableColGroup");
+var _enums_1 = require("../common/@enums");
 var TableBody = function (_a) {
     var bodyRow = _a.bodyRow, onClick = _a.onClick;
     return (React.createElement("tbody", null, bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri },
@@ -139,7 +139,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                         }
                         break;
                     case '_row_selector_':
-                        dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
+                        dispatch(_enums_1.DispatchTypes.SELECT_ALL, {});
                         break;
                     default:
                         {
@@ -170,7 +170,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                             }
                             else if (optionsHeader.clickAction === 'sort' &&
                                 optionsHeader.sortable) {
-                                dispatch(stores_1.DispatchTypes.SORT, { colIndex: colIndex });
+                                dispatch(_enums_1.DispatchTypes.SORT, { colIndex: colIndex });
                             }
                         }
                         break;
@@ -183,9 +183,11 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         };
         _this.onMouseDownColumnResizer = function (e, col) {
             e.preventDefault();
-            var _a = _this.props, setStoreState = _a.setStoreState, getRootNode = _a.getRootNode, dispatch = _a.dispatch;
-            var rootNode = utils_1.getNode(getRootNode);
-            var _b = (rootNode && rootNode.getBoundingClientRect()).x, rootX = _b === void 0 ? 0 : _b;
+            var _a = _this.props, setStoreState = _a.setStoreState, rootNode = _a.rootNode, dispatch = _a.dispatch;
+            // const rootNode = getNode(getRootNode);
+            var _b = (rootNode &&
+                rootNode.current &&
+                rootNode.current.getBoundingClientRect()).x, rootX = _b === void 0 ? 0 : _b;
             var resizer = e.target;
             var prevLeft = Number(resizer.getAttribute('data-prev-left'));
             var currLeft = Number(resizer.getAttribute('data-left'));
@@ -210,7 +212,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
                 if (typeof newWidth !== 'undefined') {
-                    dispatch(stores_1.DispatchTypes.RESIZE_COL, {
+                    dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                         col: col,
                         newWidth: newWidth,
                     });

@@ -14,9 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
+var _enums_1 = require("../common/@enums");
 var DataGridEvents = /** @class */ (function (_super) {
     __extends(DataGridEvents, _super);
     function DataGridEvents() {
@@ -66,7 +66,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _a;
             var _b = _this.props, _c = _b.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _b.focusedRow, focusedRow = _d === void 0 ? 0 : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, setStoreState = _b.setStoreState, isInlineEditing = _b.isInlineEditing;
             var proc = (_a = {},
-                _a[stores_1.KeyCodes.ENTER] = function () {
+                _a[_enums_1.KeyCodes.ENTER] = function () {
                     var col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -86,12 +86,12 @@ var DataGridEvents = /** @class */ (function (_super) {
         };
         _this.onKeyDown = function (e) {
             var _a, _b;
-            var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, getRootNode = _c.getRootNode, getClipBoardNode = _c.getClipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
+            var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, rootNode = _c.rootNode, clipBoardNode = _c.clipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
             var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
             var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
-            var rootNode = utils_1.getNode(getRootNode);
-            var clipBoardNode = utils_1.getNode(getClipBoardNode);
+            // const rootNode = getNode(getRootNode);
+            // const clipBoardNode = getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
@@ -155,7 +155,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 return _scrollLeft;
             };
             var metaProc = (_a = {},
-                _a[stores_1.KeyCodes.C] = function () {
+                _a[_enums_1.KeyCodes.C] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var copySuccess = false;
@@ -171,18 +171,18 @@ var DataGridEvents = /** @class */ (function (_super) {
                             copiedString += '\n';
                         }
                     }
-                    if (clipBoardNode) {
-                        clipBoardNode.value = copiedString;
-                        clipBoardNode.select();
+                    if (clipBoardNode && clipBoardNode.current) {
+                        clipBoardNode.current.value = copiedString;
+                        clipBoardNode.current.select();
                     }
                     try {
                         copySuccess = document.execCommand('copy');
                     }
                     catch (e) { }
-                    rootNode && rootNode.focus();
+                    rootNode && rootNode.current && rootNode.current.focus();
                     return copySuccess;
                 },
-                _a[stores_1.KeyCodes.A] = function () {
+                _a[_enums_1.KeyCodes.A] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var state = {
@@ -211,7 +211,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 },
                 _a);
             var proc = (_b = {},
-                _b[stores_1.KeyCodes.ESC] = function () {
+                _b[_enums_1.KeyCodes.ESC] = function () {
                     var _a, _b;
                     setStoreState({
                         selectionRows: (_a = {},
@@ -222,7 +222,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _b),
                     });
                 },
-                _b[stores_1.KeyCodes.HOME] = function () {
+                _b[_enums_1.KeyCodes.HOME] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -235,7 +235,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.END] = function () {
+                _b[_enums_1.KeyCodes.END] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -248,7 +248,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.PAGE_UP] = function () {
+                _b[_enums_1.KeyCodes.PAGE_UP] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -261,7 +261,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.PAGE_DOWN] = function () {
+                _b[_enums_1.KeyCodes.PAGE_DOWN] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -276,7 +276,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.UP_ARROW] = function () {
+                _b[_enums_1.KeyCodes.UP_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -289,7 +289,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.DOWN_ARROW] = function () {
+                _b[_enums_1.KeyCodes.DOWN_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -304,7 +304,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[stores_1.KeyCodes.LEFT_ARROW] = function () {
+                _b[_enums_1.KeyCodes.LEFT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -317,7 +317,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedCol: focusCol,
                     });
                 },
-                _b[stores_1.KeyCodes.RIGHT_ARROW] = function () {
+                _b[_enums_1.KeyCodes.RIGHT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -346,7 +346,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _a;
             var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
             var proc = (_a = {},
-                _a[stores_1.EventNames.WHEEL] = function () {
+                _a[_enums_1.EventNames.WHEEL] = function () {
                     if (!loadingData) {
                         _this.onWheel(e);
                     }
@@ -355,19 +355,19 @@ var DataGridEvents = /** @class */ (function (_super) {
                         e.stopPropagation();
                     }
                 },
-                _a[stores_1.EventNames.KEYDOWN] = function () {
+                _a[_enums_1.EventNames.KEYDOWN] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyDown(e);
                     }
                 },
-                _a[stores_1.EventNames.KEYUP] = function () {
+                _a[_enums_1.EventNames.KEYUP] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyUp(e);
                     }
                 },
-                _a[stores_1.EventNames.MOUSEDOWN] = function () { },
-                _a[stores_1.EventNames.MOUSEUP] = function () { },
-                _a[stores_1.EventNames.CLICK] = function () { },
+                _a[_enums_1.EventNames.MOUSEDOWN] = function () { },
+                _a[_enums_1.EventNames.MOUSEUP] = function () { },
+                _a[_enums_1.EventNames.CLICK] = function () { },
                 _a);
             if (eventName in proc && !loading) {
                 if (_this.props.onBeforeEvent && !loadingData) {
@@ -383,18 +383,18 @@ var DataGridEvents = /** @class */ (function (_super) {
     }
     DataGridEvents.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", { className: "axui-datagrid", tabIndex: -1, style: this.props.style, onWheel: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.WHEEL);
+        return (React.createElement("div", { onWheel: function (e) {
+                _this.onFireEvent(e, _enums_1.EventNames.WHEEL);
             }, onKeyDown: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.KEYDOWN);
+                _this.onFireEvent(e, _enums_1.EventNames.KEYDOWN);
             }, onKeyUp: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.KEYUP);
+                _this.onFireEvent(e, _enums_1.EventNames.KEYUP);
             }, onMouseDown: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.MOUSEDOWN);
+                _this.onFireEvent(e, _enums_1.EventNames.MOUSEDOWN);
             }, onMouseUp: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.MOUSEUP);
+                _this.onFireEvent(e, _enums_1.EventNames.MOUSEUP);
             }, onClick: function (e) {
-                _this.onFireEvent(e, stores_1.EventNames.CLICK);
+                _this.onFireEvent(e, _enums_1.EventNames.CLICK);
             }, onTouchStartCapture: function (e) {
                 // this.onFireEvent(e, EventNames.TOUCHSTART);
             } }, this.props.children));

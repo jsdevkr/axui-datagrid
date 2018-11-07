@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const _enums_1 = require("../common/@enums");
 class DatagridScroll extends React.Component {
     constructor() {
         super(...arguments);
@@ -15,13 +15,13 @@ class DatagridScroll extends React.Component {
             }
             const { scrollContentWidth = 0, scrollContentContainerWidth = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             const processor = {
-                [stores_1.DirectionTypes.UP]: () => {
+                [_enums_1.DirectionTypes.UP]: () => {
                     let scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
                     });
                 },
-                [stores_1.DirectionTypes.DOWN]: () => {
+                [_enums_1.DirectionTypes.DOWN]: () => {
                     let scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollContentContainerHeight <
@@ -30,13 +30,13 @@ class DatagridScroll extends React.Component {
                             : scrollContentContainerHeight - scrollContentHeight,
                     });
                 },
-                [stores_1.DirectionTypes.LEFT]: () => {
+                [_enums_1.DirectionTypes.LEFT]: () => {
                     let scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
                     });
                 },
-                [stores_1.DirectionTypes.RIGHT]: () => {
+                [_enums_1.DirectionTypes.RIGHT]: () => {
                     let scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollContentContainerWidth <
@@ -50,32 +50,29 @@ class DatagridScroll extends React.Component {
             return true;
         };
         this.onClickScrollTrack = (e, barName) => {
-            const { getRootNode, scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, loading, loadingData, } = this.props;
+            const { rootNode, scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, loading, loadingData, } = this.props;
             if (loading || loadingData) {
                 return false;
             }
             e.preventDefault();
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, pageButtonsContainerWidth = 0, } = styles;
-            const currScrollBarLeft = -scrollLeft *
-                (horizontalScrollerWidth - horizontalScrollBarWidth) /
+            const currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
                 (scrollContentWidth - scrollContentContainerWidth);
-            const currScrollBarTop = -scrollTop *
-                (verticalScrollerHeight - verticalScrollBarHeight) /
+            const currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
                 (scrollContentHeight - scrollContentContainerHeight);
             const { x: mouseX, y: mouseY } = utils_1.getMousePosition(e);
-            const rootNode = utils_1.getNode(getRootNode);
-            const { x: grx = 0, y: gry = 0 } = rootNode
-                ? rootNode.getBoundingClientRect()
+            const { x: grx = 0, y: gry = 0 } = rootNode && rootNode.current
+                ? rootNode.current.getBoundingClientRect()
                 : {};
             const processor = {
-                [stores_1.ScrollTypes.VERTICAL]: () => {
+                [_enums_1.ScrollTypes.VERTICAL]: () => {
                     let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, mouseY - gry - verticalScrollBarHeight / 2, styles);
                     setStoreState({
                         scrollLeft: currScrollLeft,
                         scrollTop: currScrollTop,
                     });
                 },
-                [stores_1.ScrollTypes.HORIZONTAL]: () => {
+                [_enums_1.ScrollTypes.HORIZONTAL]: () => {
                     let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(mouseX -
                         grx -
                         pageButtonsContainerWidth -
@@ -98,24 +95,22 @@ class DatagridScroll extends React.Component {
             }
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             e.preventDefault();
-            const currScrollBarLeft = -scrollLeft *
-                (horizontalScrollerWidth - horizontalScrollBarWidth) /
+            const currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
                 (scrollContentWidth - scrollContentContainerWidth);
-            const currScrollBarTop = -scrollTop *
-                (verticalScrollerHeight - verticalScrollBarHeight) /
+            const currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
                 (scrollContentHeight - scrollContentContainerHeight);
             let startMousePosition = utils_1.getMousePosition(e);
             const onMouseMove = (ee) => {
                 const { x, y } = utils_1.getMousePosition(ee);
                 const processor = {
-                    [stores_1.ScrollTypes.VERTICAL]: () => {
+                    [_enums_1.ScrollTypes.VERTICAL]: () => {
                         let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles);
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,
                         });
                     },
-                    [stores_1.ScrollTypes.HORIZONTAL]: () => {
+                    [_enums_1.ScrollTypes.HORIZONTAL]: () => {
                         let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
                         setStoreState({
                             scrollLeft: currScrollLeft,
@@ -140,11 +135,9 @@ class DatagridScroll extends React.Component {
     render() {
         const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
         const { pageHeight = 0, verticalScrollerWidth = 0, verticalScrollerHeight = 0, horizontalScrollerWidth = 0, horizontalScrollerHeight = 0, verticalScrollBarHeight = 0, horizontalScrollBarWidth = 0, scrollerArrowSize = 0, scrollerPadding = 0, scrollContentContainerWidth = 1, scrollContentContainerHeight = 1, scrollContentWidth = 0, scrollContentHeight = 0, } = styles;
-        const scrollBarLeft = -scrollLeft *
-            (horizontalScrollerWidth - horizontalScrollBarWidth) /
+        const scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
             (scrollContentWidth - scrollContentContainerWidth);
-        const scrollBarTop = -scrollTop *
-            (verticalScrollerHeight - verticalScrollBarHeight) /
+        const scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
             (scrollContentHeight - scrollContentContainerHeight);
         if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) {
             return null;
@@ -216,18 +209,18 @@ class DatagridScroll extends React.Component {
         return (React.createElement("div", { className: "axui-datagrid-scroller" },
             verticalScrollerWidth ? (React.createElement("div", { "data-scroll-track": "vertical", style: verticalStyles },
                 React.createElement("div", { "data-scroll-arrow": "up", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => this.onClickScrollArrow(e, stores_1.DirectionTypes.UP) })),
-                React.createElement("div", { "data-scroll": "vertical", onClick: e => this.onClickScrollTrack(e, stores_1.ScrollTypes.VERTICAL) },
-                    React.createElement("div", { className: "axui-datagrid-scroll-bar", style: verticalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, stores_1.ScrollTypes.VERTICAL) })),
+                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DirectionTypes.UP) })),
+                React.createElement("div", { "data-scroll": "vertical", onClick: e => this.onClickScrollTrack(e, _enums_1.ScrollTypes.VERTICAL) },
+                    React.createElement("div", { className: "axui-datagrid-scroll-bar", style: verticalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, _enums_1.ScrollTypes.VERTICAL) })),
                 React.createElement("div", { "data-scroll-arrow": "down", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => this.onClickScrollArrow(e, stores_1.DirectionTypes.DOWN) })))) : null,
+                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DirectionTypes.DOWN) })))) : null,
             horizontalScrollerHeight ? (React.createElement("div", { "data-scroll-track": "horizontal", style: horizontalStyles },
                 React.createElement("div", { "data-scroll-arrow": "left", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => this.onClickScrollArrow(e, stores_1.DirectionTypes.LEFT) })),
-                React.createElement("div", { "data-scroll": "horizontal", onClick: e => this.onClickScrollTrack(e, stores_1.ScrollTypes.HORIZONTAL) },
-                    React.createElement("div", { className: "axui-datagrid-scroll-bar", style: horizontalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, stores_1.ScrollTypes.HORIZONTAL) })),
+                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DirectionTypes.LEFT) })),
+                React.createElement("div", { "data-scroll": "horizontal", onClick: e => this.onClickScrollTrack(e, _enums_1.ScrollTypes.HORIZONTAL) },
+                    React.createElement("div", { className: "axui-datagrid-scroll-bar", style: horizontalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, _enums_1.ScrollTypes.HORIZONTAL) })),
                 React.createElement("div", { "data-scroll-arrow": "right", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => this.onClickScrollArrow(e, stores_1.DirectionTypes.RIGHT) })))) : null));
+                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DirectionTypes.RIGHT) })))) : null));
     }
 }
 exports.default = hoc_1.connectStore(DatagridScroll);

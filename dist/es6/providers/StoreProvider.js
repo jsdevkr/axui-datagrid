@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const utils_1 = require("../utils");
 const formatter_1 = require("../functions/formatter");
 const collector_1 = require("../functions/collector");
+const _enums_1 = require("../common/@enums");
 const store = {
     sortInfo: {},
     isColumnFilter: false,
@@ -97,7 +97,7 @@ class StoreProvider extends React.Component {
                 }
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
-                newState.styles = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state, _filteredList).styles;
+                newState.styles = utils_1.calculateDimensions(this.state.rootNode && this.state.rootNode.current, this.state, _filteredList).styles;
             }
             if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
                 onChangeSelected({
@@ -112,12 +112,11 @@ class StoreProvider extends React.Component {
             this.setState(newState);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], getRootNode, focusedRow = 0, sortInfo = {}, options = {}, } = this.state;
+            const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, } = this.state;
             const { columnKeys: optionColumnKeys = {} } = options;
-            const rootNode = utils_1.getNode(getRootNode);
             let { filteredList = [] } = this.state;
             const proc = {
-                [stores_1.DispatchTypes.FILTER]: () => {
+                [_enums_1.DispatchTypes.FILTER]: () => {
                     const { colIndex, filterInfo } = param;
                     const checkAll = filterInfo[colIndex] === false
                         ? true
@@ -157,7 +156,7 @@ class StoreProvider extends React.Component {
                         scrollTop: 0,
                     });
                 },
-                [stores_1.DispatchTypes.SORT]: () => {
+                [_enums_1.DispatchTypes.SORT]: () => {
                     const { colIndex } = param;
                     if (typeof colIndex !== 'undefined') {
                         const { key: colKey = '' } = colGroup[colIndex];
@@ -221,7 +220,7 @@ class StoreProvider extends React.Component {
                         });
                     }
                 },
-                [stores_1.DispatchTypes.UPDATE]: () => {
+                [_enums_1.DispatchTypes.UPDATE]: () => {
                     const { row, colIndex, value, eventWhichKey } = param;
                     const key = colGroup[colIndex].key;
                     let focusRow = focusedRow;
@@ -231,10 +230,10 @@ class StoreProvider extends React.Component {
                     }
                     if (eventWhichKey) {
                         switch (eventWhichKey) {
-                            case stores_1.KeyCodes.UP_ARROW:
+                            case _enums_1.KeyCodes.UP_ARROW:
                                 focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                                 break;
-                            case stores_1.KeyCodes.DOWN_ARROW:
+                            case _enums_1.KeyCodes.DOWN_ARROW:
                                 focusRow =
                                     focusedRow + 1 >= filteredList.length
                                         ? filteredList.length - 1
@@ -253,17 +252,17 @@ class StoreProvider extends React.Component {
                         },
                         focusedRow: focusRow,
                     });
-                    if (rootNode) {
-                        rootNode.focus();
+                    if (rootNode && rootNode.current) {
+                        rootNode.current.focus();
                     }
                 },
-                [stores_1.DispatchTypes.RESIZE_COL]: () => {
+                [_enums_1.DispatchTypes.RESIZE_COL]: () => {
                     const { col, newWidth } = param;
                     let newState = Object.assign({}, this.state);
                     if (newState.colGroup) {
                         newState.colGroup[col.colIndex]._width = newState.colGroup[col.colIndex].width = newWidth;
                     }
-                    const { styles, leftHeaderColGroup, headerColGroup, } = utils_1.calculateDimensions(rootNode, newState);
+                    const { styles, leftHeaderColGroup, headerColGroup, } = utils_1.calculateDimensions(rootNode && rootNode.current, newState);
                     this.setStoreState({
                         scrollLeft,
                         colGroup: colGroup,
@@ -273,7 +272,7 @@ class StoreProvider extends React.Component {
                         columnResizing: false,
                     });
                 },
-                [stores_1.DispatchTypes.SELECT]: () => {
+                [_enums_1.DispatchTypes.SELECT]: () => {
                     const { rowIndex, checked } = param;
                     let rowSelected = false;
                     let selectedAll = listSelectedAll;
@@ -297,7 +296,7 @@ class StoreProvider extends React.Component {
                         filteredList: [...filteredList],
                     });
                 },
-                [stores_1.DispatchTypes.SELECT_ALL]: () => {
+                [_enums_1.DispatchTypes.SELECT_ALL]: () => {
                     const { checked } = param;
                     let selectedAll = listSelectedAll;
                     if (checked === true) {
@@ -336,8 +335,8 @@ class StoreProvider extends React.Component {
             newProps.loadingData === prevState.loadingData &&
             newProps.setRootState === prevState.setRootState &&
             newProps.getRootState === prevState.getRootState &&
-            newProps.getRootNode === prevState.getRootNode &&
-            newProps.getClipBoardNode === prevState.getClipBoardNode &&
+            newProps.rootNode === prevState.rootNode &&
+            newProps.clipBoardNode === prevState.clipBoardNode &&
             newProps.rootObject === prevState.rootObject &&
             newProps.data === prevState.data &&
             newProps.options === prevState.options &&
@@ -346,6 +345,8 @@ class StoreProvider extends React.Component {
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
             newProps.onChangeSelected === prevState.onChangeSelected &&
+            newProps.selection === prevState.selection &&
+            newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&
             newProps.bodyRowTable === prevState.bodyRowTable &&
             newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -433,8 +434,8 @@ class StoreProvider extends React.Component {
                 loadingData: newProps.loadingData,
                 setRootState: newProps.setRootState,
                 getRootState: newProps.getRootState,
-                getRootNode: newProps.getRootNode,
-                getClipBoardNode: newProps.getClipBoardNode,
+                rootNode: newProps.rootNode,
+                clipBoardNode: newProps.clipBoardNode,
                 rootObject: newProps.rootObject,
                 data: newProps.data,
                 filteredList,
@@ -444,6 +445,8 @@ class StoreProvider extends React.Component {
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
                 onChangeSelected: newProps.onChangeSelected,
+                selection: newProps.selection,
+                rowSelector: newProps.rowSelector,
                 colGroupMap: newProps.colGroupMap,
                 asideColGroup: newProps.asideColGroup,
                 colGroup: newProps.colGroup,
@@ -480,9 +483,9 @@ class StoreProvider extends React.Component {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     }
     updateDimensions() {
-        const { scrollLeft = 0, scrollTop = 0, bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, options = {}, } = this.state;
+        const { scrollLeft = 0, scrollTop = 0, bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, options = {}, rootNode, } = this.state;
         const { frozenColumnIndex = 0 } = options;
-        const calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
+        const calculatedObject = utils_1.calculateDimensions(rootNode && rootNode.current, this.state);
         const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = calculatedObject.styles;
         let { scrollLeft: newScrollLeft = 0, scrollTop: newScrollTop = 0, } = utils_1.getScrollPosition(scrollLeft, scrollTop, {
             scrollWidth: scrollContentWidth,

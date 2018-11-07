@@ -14,9 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
+var _enums_1 = require("../common/@enums");
 var CellLabel = function (props) {
     var col = props.col, data = props.list, li = props.li, lineHeight = props.lineHeight, predefinedFormatter = props.predefinedFormatter;
     var _a = col.key, key = _a === void 0 ? '' : _a, _b = col.columnAttr, columnAttr = _b === void 0 ? '' : _b, formatter = col.formatter;
@@ -75,7 +75,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             var _a;
             var setStoreState = _this.props.setStoreState;
             var proc = (_a = {},
-                _a[stores_1.KeyCodes.ENTER] = function () {
+                _a[_enums_1.KeyCodes.ENTER] = function () {
                     if (col.editor) {
                         setStoreState({
                             isInlineEditing: true,
@@ -92,34 +92,33 @@ var DataGridBodyCell = /** @class */ (function (_super) {
         };
         _this.onEventInput = function (eventName, e) {
             var _a;
-            var _b = _this.props, getRootNode = _b.getRootNode, setStoreState = _b.setStoreState, dispatch = _b.dispatch, _c = _b.inlineEditingCell, inlineEditingCell = _c === void 0 ? {} : _c;
-            var rootNode = utils_1.getNode(getRootNode);
+            var _b = _this.props, rootNode = _b.rootNode, setStoreState = _b.setStoreState, dispatch = _b.dispatch, _c = _b.inlineEditingCell, inlineEditingCell = _c === void 0 ? {} : _c;
             var proc = (_a = {},
-                _a[stores_1.EventNames.BLUR] = function () {
+                _a[_enums_1.EventNames.BLUR] = function () {
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
                     });
-                    if (rootNode) {
-                        rootNode.focus();
+                    if (rootNode && rootNode.current) {
+                        rootNode.current.focus();
                     }
                 },
-                _a[stores_1.EventNames.KEYUP] = function () {
+                _a[_enums_1.EventNames.KEYUP] = function () {
                     switch (e.which) {
-                        case stores_1.KeyCodes.ESC:
+                        case _enums_1.KeyCodes.ESC:
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
                             });
-                            if (rootNode) {
-                                rootNode.focus();
+                            if (rootNode && rootNode.current) {
+                                rootNode.current.focus();
                             }
                             break;
-                        case stores_1.KeyCodes.UP_ARROW:
-                        case stores_1.KeyCodes.DOWN_ARROW:
-                        case stores_1.KeyCodes.ENTER:
+                        case _enums_1.KeyCodes.UP_ARROW:
+                        case _enums_1.KeyCodes.DOWN_ARROW:
+                        case _enums_1.KeyCodes.ENTER:
                             if (!_this.activeComposition) {
-                                dispatch(stores_1.DispatchTypes.UPDATE, {
+                                dispatch(_enums_1.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
@@ -183,9 +182,9 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                             _this.activeComposition = false;
                         });
                     }, onBlur: function (e) {
-                        _this.onEventInput(stores_1.EventNames.BLUR, e);
+                        _this.onEventInput(_enums_1.EventNames.BLUR, e);
                     }, onKeyUp: function (e) {
-                        _this.onEventInput(stores_1.EventNames.KEYUP, e);
+                        _this.onEventInput(_enums_1.EventNames.KEYUP, e);
                     }, "data-inline-edit": true, defaultValue: value })));
         }
         else {

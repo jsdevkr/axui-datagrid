@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const DataGridHeaderCell_1 = require("./DataGridHeaderCell");
 const DataGridTableColGroup_1 = require("./DataGridTableColGroup");
+const _enums_1 = require("../common/@enums");
 const TableBody = ({ bodyRow, onClick }) => (React.createElement("tbody", null, bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri },
     row.cols.map((col, ci) => (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: onClick }))),
     React.createElement("td", null))))));
@@ -120,7 +120,7 @@ class DataGridHeaderPanel extends React.Component {
                         }
                         break;
                     case '_row_selector_':
-                        dispatch(stores_1.DispatchTypes.SELECT_ALL, {});
+                        dispatch(_enums_1.DispatchTypes.SELECT_ALL, {});
                         break;
                     default:
                         {
@@ -151,7 +151,7 @@ class DataGridHeaderPanel extends React.Component {
                             }
                             else if (optionsHeader.clickAction === 'sort' &&
                                 optionsHeader.sortable) {
-                                dispatch(stores_1.DispatchTypes.SORT, { colIndex });
+                                dispatch(_enums_1.DispatchTypes.SORT, { colIndex });
                             }
                         }
                         break;
@@ -164,9 +164,11 @@ class DataGridHeaderPanel extends React.Component {
         };
         this.onMouseDownColumnResizer = (e, col) => {
             e.preventDefault();
-            const { setStoreState, getRootNode, dispatch } = this.props;
-            const rootNode = utils_1.getNode(getRootNode);
-            const { x: rootX = 0 } = rootNode && rootNode.getBoundingClientRect();
+            const { setStoreState, rootNode, dispatch } = this.props;
+            // const rootNode = getNode(getRootNode);
+            const { x: rootX = 0 } = rootNode &&
+                rootNode.current &&
+                rootNode.current.getBoundingClientRect();
             const resizer = e.target;
             const prevLeft = Number(resizer.getAttribute('data-prev-left'));
             const currLeft = Number(resizer.getAttribute('data-left'));
@@ -191,7 +193,7 @@ class DataGridHeaderPanel extends React.Component {
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
                 if (typeof newWidth !== 'undefined') {
-                    dispatch(stores_1.DispatchTypes.RESIZE_COL, {
+                    dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                         col,
                         newWidth,
                     });

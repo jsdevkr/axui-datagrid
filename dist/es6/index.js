@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const DataGrid_1 = require("./DataGrid");
 exports.DataGrid = DataGrid_1.default;
-const stores_1 = require("./stores");
-exports.types = stores_1.types;
-exports.intfs = stores_1.intfs;
+const enums = require("./common/@enums");
+exports.enums = enums;
+const types = require("./common/@types");
+exports.types = types;
 const utils = require("./utils");
 exports.utils = utils;

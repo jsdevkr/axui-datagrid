@@ -1,3 +1,3 @@
-import { types } from '../stores';
-declare function makeFootSumTable(footSumColumns: types.DataGridColumn[][], colGroup: types.DataGridCol[], options: types.DataGridOptions): types.DataGridColumnTableMap;
+import { IDataGridColumn, IDataGridCol, IDataGridOptions, IDataGridColumnTableMap } from '../common/@types';
+declare function makeFootSumTable(footSumColumns: IDataGridColumn[][], colGroup: IDataGridCol[], options: IDataGridOptions): IDataGridColumnTableMap;
 export default makeFootSumTable;

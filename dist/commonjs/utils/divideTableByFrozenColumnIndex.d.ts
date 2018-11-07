@@ -1,4 +1,4 @@
-import { types } from '../stores';
+import { IDataGridColumnTableMap, DataGridColumnDivideTable, IDataGridOptions } from '../common/@types';
 /**
  *
  * @param {DataGridColumnTableMap} rowTable
@@ -6,5 +6,5 @@ import { types } from '../stores';
  * @param {DataGridOptions} options
  * @return {DataGridColumnDivideTable}
  */
-declare function divideTableByFrozenColumnIndex(rowTable: types.DataGridColumnTableMap, frozenColumnIndex: number, options: types.DataGridOptions): types.DataGridColumnDivideTable;
+declare function divideTableByFrozenColumnIndex(rowTable: IDataGridColumnTableMap, frozenColumnIndex: number, options: IDataGridOptions): DataGridColumnDivideTable;
 export default divideTableByFrozenColumnIndex;

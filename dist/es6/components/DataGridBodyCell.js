@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const _enums_1 = require("../common/@enums");
 const CellLabel = props => {
     const { col, list: data, li, lineHeight, predefinedFormatter } = props;
     const { key = '', columnAttr = '', formatter } = col;
@@ -60,7 +60,7 @@ class DataGridBodyCell extends React.Component {
         this.onKeyUp = (e, col, li) => {
             const { setStoreState } = this.props;
             const proc = {
-                [stores_1.KeyCodes.ENTER]: () => {
+                [_enums_1.KeyCodes.ENTER]: () => {
                     if (col.editor) {
                         setStoreState({
                             isInlineEditing: true,
@@ -76,34 +76,33 @@ class DataGridBodyCell extends React.Component {
             proc[e.which] && proc[e.which]();
         };
         this.onEventInput = (eventName, e) => {
-            const { getRootNode, setStoreState, dispatch, inlineEditingCell = {}, } = this.props;
-            const rootNode = utils_1.getNode(getRootNode);
+            const { rootNode, setStoreState, dispatch, inlineEditingCell = {}, } = this.props;
             const proc = {
-                [stores_1.EventNames.BLUR]: () => {
+                [_enums_1.EventNames.BLUR]: () => {
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
                     });
-                    if (rootNode) {
-                        rootNode.focus();
+                    if (rootNode && rootNode.current) {
+                        rootNode.current.focus();
                     }
                 },
-                [stores_1.EventNames.KEYUP]: () => {
+                [_enums_1.EventNames.KEYUP]: () => {
                     switch (e.which) {
-                        case stores_1.KeyCodes.ESC:
+                        case _enums_1.KeyCodes.ESC:
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
                             });
-                            if (rootNode) {
-                                rootNode.focus();
+                            if (rootNode && rootNode.current) {
+                                rootNode.current.focus();
                             }
                             break;
-                        case stores_1.KeyCodes.UP_ARROW:
-                        case stores_1.KeyCodes.DOWN_ARROW:
-                        case stores_1.KeyCodes.ENTER:
+                        case _enums_1.KeyCodes.UP_ARROW:
+                        case _enums_1.KeyCodes.DOWN_ARROW:
+                        case _enums_1.KeyCodes.ENTER:
                             if (!this.activeComposition) {
-                                dispatch(stores_1.DispatchTypes.UPDATE, {
+                                dispatch(_enums_1.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
@@ -164,9 +163,9 @@ class DataGridBodyCell extends React.Component {
                             this.activeComposition = false;
                         });
                     }, onBlur: (e) => {
-                        this.onEventInput(stores_1.EventNames.BLUR, e);
+                        this.onEventInput(_enums_1.EventNames.BLUR, e);
                     }, onKeyUp: (e) => {
-                        this.onEventInput(stores_1.EventNames.KEYUP, e);
+                        this.onEventInput(_enums_1.EventNames.KEYUP, e);
                     }, "data-inline-edit": true, defaultValue: value })));
         }
         else {

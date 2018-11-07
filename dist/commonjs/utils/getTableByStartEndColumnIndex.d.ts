@@ -1,3 +1,3 @@
-import { types } from '../stores';
-declare function getTableByStartEndColumnIndex(rowTable: types.DataGridColumnTableMap, startColumnIndex: number, endColumnIndex: number): types.DataGridColumnTableMap;
+import { IDataGridColumnTableMap } from '../common/@types';
+declare function getTableByStartEndColumnIndex(rowTable: IDataGridColumnTableMap, startColumnIndex: number, endColumnIndex: number): IDataGridColumnTableMap;
 export default getTableByStartEndColumnIndex;

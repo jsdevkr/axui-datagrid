@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const DataGridColumnFilterOption_1 = require("./DataGridColumnFilterOption");
+const _enums_1 = require("../common/@enums");
 class DatagridColumnFilter extends React.Component {
     constructor() {
         super(...arguments);
@@ -66,7 +66,7 @@ class DatagridColumnFilter extends React.Component {
                     ? false
                     : filter;
             }
-            dispatch(stores_1.DispatchTypes.FILTER, {
+            dispatch(_enums_1.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,
                 filterInfo: currentFilterInfo,
             });

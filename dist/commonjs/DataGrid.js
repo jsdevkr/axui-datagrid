@@ -45,7 +45,6 @@ var __spread = (this && this.__spread) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var ReactDOM = require("react-dom");
 var providers_1 = require("./providers");
 var components_1 = require("./components");
 var utils_1 = require("./utils");
@@ -54,17 +53,11 @@ var DataGrid = /** @class */ (function (_super) {
     function DataGrid() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.rootObject = {};
-        _this.rootNode = null;
-        _this.clipBoardNode = null;
+        _this.rootNode = React.createRef();
+        _this.clipBoardNode = React.createRef();
         _this.state = {
             mounted: false,
             calculatedHeight: undefined,
-        };
-        _this.setRootNode = function (element) {
-            _this.rootNode = ReactDOM.findDOMNode(element);
-        };
-        _this.setClipBoardNode = function (element) {
-            _this.clipBoardNode = ReactDOM.findDOMNode(element);
         };
         /**
          * You must execute setRootState only once in the child component.
@@ -77,13 +70,6 @@ var DataGrid = /** @class */ (function (_super) {
         _this.getRootState = function () {
             return _this.state;
         };
-        _this.getRootNode = function () {
-            return _this.rootNode;
-        };
-        _this.getClipBoardNode = function () {
-            return _this.clipBoardNode;
-        };
-        _this.onFireEvent = function () { };
         _this.getOptions = function (options) {
             return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
         };
@@ -92,16 +78,26 @@ var DataGrid = /** @class */ (function (_super) {
             var _c = prevState.options, options = _c === void 0 ? {} : _c;
             var _d = options.frozenColumnIndex, frozenColumnIndex = _d === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _d, _e = options.body, optionsBody = _e === void 0 ? DataGrid.defaultBody : _e;
             var _f = optionsBody.columnHeight, columnHeight = _f === void 0 ? 0 : _f;
+            // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
             var newState = __assign({}, prevState);
             var newStyle = {};
+            // options.showRowSelector 체크
+            if (newState.rowSelector) {
+                if (typeof newState.rowSelector.show === 'undefined') {
+                    newState.rowSelector.show = true;
+                }
+                if (newState.options && newState.rowSelector.show) {
+                    newState.options.showRowSelector = true;
+                }
+            }
             // convert colGroup
             newState.headerTable = utils_1.makeHeaderTable(columns, options);
             newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
-            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, options);
+            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable || { rows: [] }, options);
             // header를 위한 divide
-            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex, options);
+            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable || { rows: [] }, frozenColumnIndex, options);
             // body를 위한 divide
-            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex, options);
+            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
             newState.asideHeaderData = headerDividedObj.asideData;
             newState.leftHeaderData = headerDividedObj.leftData;
             newState.headerData = headerDividedObj.rightData;
@@ -111,25 +107,27 @@ var DataGrid = /** @class */ (function (_super) {
             newState.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
             newState.colGroupMap = {};
-            newState.headerTable.rows.forEach(function (row, ridx) {
-                row.cols.forEach(function (col, cidx) {
-                    if (newState.colGroupMap) {
-                        var currentCol = {
-                            key: col.key,
-                            label: col.label,
-                            width: col.width,
-                            align: col.align,
-                            colSpan: col.colSpan,
-                            rowSpan: col.rowSpan,
-                            colIndex: col.colIndex,
-                            rowIndex: col.rowIndex,
-                            formatter: col.formatter,
-                            editor: col.editor,
-                        };
-                        newState.colGroupMap[col.colIndex || 0] = currentCol;
-                    }
+            if (newState.headerTable) {
+                newState.headerTable.rows.forEach(function (row, ridx) {
+                    row.cols.forEach(function (col, cidx) {
+                        if (newState.colGroupMap) {
+                            var currentCol = {
+                                key: col.key,
+                                label: col.label,
+                                width: col.width,
+                                align: col.align,
+                                colSpan: col.colSpan,
+                                rowSpan: col.rowSpan,
+                                colIndex: col.colIndex,
+                                rowIndex: col.rowIndex,
+                                formatter: col.formatter,
+                                editor: col.editor,
+                            };
+                            newState.colGroupMap[col.colIndex || 0] = currentCol;
+                        }
+                    });
                 });
-            });
+            }
             newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
@@ -137,16 +135,18 @@ var DataGrid = /** @class */ (function (_super) {
             if (footSum) {
                 newState.footSumColumns = __spread(footSum);
                 newState.footSumTable = utils_1.makeFootSumTable(footSum, newState.colGroup, options);
-                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable, frozenColumnIndex, options);
+                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable || { rows: [] }, frozenColumnIndex, options);
                 newState.leftFootSumData = footSumDividedObj.leftData;
                 newState.footSumData = footSumDividedObj.rightData;
             }
             // styles
             newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
-            newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
+            newStyle.bodyTrHeight = newState.bodyRowTable
+                ? newState.bodyRowTable.rows.length * columnHeight
+                : 20;
             newState.styles = newStyle;
             // 초기 스타일 생성.
-            var calculatedObject = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState);
+            var calculatedObject = utils_1.calculateDimensions(newState.rootNode && newState.rootNode.current, newState);
             newState.styles = calculatedObject.styles;
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
@@ -170,14 +170,9 @@ var DataGrid = /** @class */ (function (_super) {
         };
         return _this;
     }
-    DataGrid.prototype.componentDidMount = function () {
-        this.setState({
-            mounted: true,
-        });
-    };
     DataGrid.prototype.render = function () {
         var mounted = this.state.mounted;
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector;
         var providerProps = {};
         var gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -189,8 +184,8 @@ var DataGrid = /** @class */ (function (_super) {
                 loadingData: loadingData,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
-                getRootNode: this.getRootNode,
-                getClipBoardNode: this.getClipBoardNode,
+                rootNode: this.rootNode,
+                clipBoardNode: this.clipBoardNode,
                 rootObject: this.rootObject,
                 data: data,
                 height: height,
@@ -198,20 +193,27 @@ var DataGrid = /** @class */ (function (_super) {
                 onAfterEvent: onAfterEvent,
                 onScrollEnd: onScrollEnd,
                 onChangeSelected: onChangeSelected,
+                selection: selection,
+                rowSelector: rowSelector,
                 options: this.getOptions(options),
             });
         }
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
+            React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },
-                    React.createElement("textarea", { ref: this.setClipBoardNode })),
-                mounted ? (React.createElement(React.Fragment, null,
+                    React.createElement("textarea", { ref: this.clipBoardNode })),
+                mounted ? (React.createElement(components_1.DataGridEvents, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))) : null)));
+    };
+    DataGrid.prototype.componentDidMount = function () {
+        this.setState({
+            mounted: true,
+        });
     };
     DataGrid.defaultHeight = 400;
     DataGrid.defaultColumnKeys = {
@@ -265,7 +267,6 @@ var DataGrid = /** @class */ (function (_super) {
         frozenColumnIndex: 0,
         frozenRowIndex: 0,
         showLineNumber: true,
-        showRowSelector: false,
         multipleSelect: true,
         columnMinWidth: 100,
         lineNumberColumnWidth: 60,

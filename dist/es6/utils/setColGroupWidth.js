@@ -24,8 +24,8 @@ function setColGroupWidth(colGroup, container, options) {
         }
         else if (('' + col.width).substring(('' + col.width).length - 1) === '%') {
             totalWidth += col._width =
-                container.width *
-                    Number(('' + col.width).substring(0, ('' + col.width).length - 1)) /
+                (container.width *
+                    Number(('' + col.width).substring(0, ('' + col.width).length - 1))) /
                     100;
         }
     });

@@ -135,16 +135,16 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     currentStyles.scrollerPadding = optionsScrollerPadding;
     currentStyles.scrollerArrowSize = optionsScrollerArrowSize;
     currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
-        ? currentStyles.scrollContentContainerHeight *
-            currentStyles.verticalScrollerHeight /
+        ? (currentStyles.scrollContentContainerHeight *
+            currentStyles.verticalScrollerHeight) /
             currentStyles.scrollContentHeight
         : 0;
     if (optionsScrollerBarMinSize > currentStyles.verticalScrollBarHeight) {
         currentStyles.verticalScrollBarHeight = optionsScrollerBarMinSize;
     }
     currentStyles.horizontalScrollBarWidth = currentStyles.scrollContentWidth
-        ? currentStyles.scrollContentContainerWidth *
-            currentStyles.horizontalScrollerWidth /
+        ? (currentStyles.scrollContentContainerWidth *
+            currentStyles.horizontalScrollerWidth) /
             currentStyles.scrollContentWidth
         : 0;
     if (optionsScrollerBarMinSize > currentStyles.horizontalScrollBarWidth) {

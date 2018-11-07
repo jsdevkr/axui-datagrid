@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const ReactDOM = require("react-dom");
 const providers_1 = require("./providers");
 const components_1 = require("./components");
 const utils_1 = require("./utils");
@@ -9,17 +8,11 @@ class DataGrid extends React.Component {
     constructor() {
         super(...arguments);
         this.rootObject = {};
-        this.rootNode = null;
-        this.clipBoardNode = null;
+        this.rootNode = React.createRef();
+        this.clipBoardNode = React.createRef();
         this.state = {
             mounted: false,
             calculatedHeight: undefined,
-        };
-        this.setRootNode = (element) => {
-            this.rootNode = ReactDOM.findDOMNode(element);
-        };
-        this.setClipBoardNode = (element) => {
-            this.clipBoardNode = ReactDOM.findDOMNode(element);
         };
         /**
          * You must execute setRootState only once in the child component.
@@ -32,13 +25,6 @@ class DataGrid extends React.Component {
         this.getRootState = () => {
             return this.state;
         };
-        this.getRootNode = () => {
-            return this.rootNode;
-        };
-        this.getClipBoardNode = () => {
-            return this.clipBoardNode;
-        };
-        this.onFireEvent = () => { };
         this.getOptions = (options) => {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
@@ -47,16 +33,26 @@ class DataGrid extends React.Component {
             const { options = {} } = prevState;
             const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
             const { columnHeight = 0 } = optionsBody;
+            // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
             let newState = Object.assign({}, prevState);
             let newStyle = {};
+            // options.showRowSelector 체크
+            if (newState.rowSelector) {
+                if (typeof newState.rowSelector.show === 'undefined') {
+                    newState.rowSelector.show = true;
+                }
+                if (newState.options && newState.rowSelector.show) {
+                    newState.options.showRowSelector = true;
+                }
+            }
             // convert colGroup
             newState.headerTable = utils_1.makeHeaderTable(columns, options);
             newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
-            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable, options);
+            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable || { rows: [] }, options);
             // header를 위한 divide
-            const headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable, frozenColumnIndex, options);
+            const headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable || { rows: [] }, frozenColumnIndex, options);
             // body를 위한 divide
-            const bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable, frozenColumnIndex, options);
+            const bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
             newState.asideHeaderData = headerDividedObj.asideData;
             newState.leftHeaderData = headerDividedObj.leftData;
             newState.headerData = headerDividedObj.rightData;
@@ -66,25 +62,27 @@ class DataGrid extends React.Component {
             newState.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
             newState.colGroupMap = {};
-            newState.headerTable.rows.forEach((row, ridx) => {
-                row.cols.forEach((col, cidx) => {
-                    if (newState.colGroupMap) {
-                        const currentCol = {
-                            key: col.key,
-                            label: col.label,
-                            width: col.width,
-                            align: col.align,
-                            colSpan: col.colSpan,
-                            rowSpan: col.rowSpan,
-                            colIndex: col.colIndex,
-                            rowIndex: col.rowIndex,
-                            formatter: col.formatter,
-                            editor: col.editor,
-                        };
-                        newState.colGroupMap[col.colIndex || 0] = currentCol;
-                    }
+            if (newState.headerTable) {
+                newState.headerTable.rows.forEach((row, ridx) => {
+                    row.cols.forEach((col, cidx) => {
+                        if (newState.colGroupMap) {
+                            const currentCol = {
+                                key: col.key,
+                                label: col.label,
+                                width: col.width,
+                                align: col.align,
+                                colSpan: col.colSpan,
+                                rowSpan: col.rowSpan,
+                                colIndex: col.colIndex,
+                                rowIndex: col.rowIndex,
+                                formatter: col.formatter,
+                                editor: col.editor,
+                            };
+                            newState.colGroupMap[col.colIndex || 0] = currentCol;
+                        }
+                    });
                 });
-            });
+            }
             newState.colGroup = Object.values(newState.colGroupMap);
             newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
             newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
@@ -92,16 +90,18 @@ class DataGrid extends React.Component {
             if (footSum) {
                 newState.footSumColumns = [...footSum];
                 newState.footSumTable = utils_1.makeFootSumTable(footSum, newState.colGroup, options);
-                const footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable, frozenColumnIndex, options);
+                const footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable || { rows: [] }, frozenColumnIndex, options);
                 newState.leftFootSumData = footSumDividedObj.leftData;
                 newState.footSumData = footSumDividedObj.rightData;
             }
             // styles
             newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
-            newStyle.bodyTrHeight = newState.bodyRowTable.rows.length * columnHeight;
+            newStyle.bodyTrHeight = newState.bodyRowTable
+                ? newState.bodyRowTable.rows.length * columnHeight
+                : 20;
             newState.styles = newStyle;
             // 초기 스타일 생성.
-            const calculatedObject = utils_1.calculateDimensions(utils_1.getNode(newState.getRootNode), newState);
+            const calculatedObject = utils_1.calculateDimensions(newState.rootNode && newState.rootNode.current, newState);
             newState.styles = calculatedObject.styles;
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
@@ -124,14 +124,9 @@ class DataGrid extends React.Component {
             return newState;
         };
     }
-    componentDidMount() {
-        this.setState({
-            mounted: true,
-        });
-    }
     render() {
         const { mounted } = this.state;
-        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onChangeSelected, height = DataGrid.defaultHeight, loading = false, loadingData = false, } = this.props;
+        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onChangeSelected, height = DataGrid.defaultHeight, loading = false, loadingData = false, selection, rowSelector, } = this.props;
         let providerProps = {};
         let gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
@@ -143,8 +138,8 @@ class DataGrid extends React.Component {
                 loadingData,
                 setRootState: this.setRootState,
                 getRootState: this.getRootState,
-                getRootNode: this.getRootNode,
-                getClipBoardNode: this.getClipBoardNode,
+                rootNode: this.rootNode,
+                clipBoardNode: this.clipBoardNode,
                 rootObject: this.rootObject,
                 data,
                 height,
@@ -152,20 +147,27 @@ class DataGrid extends React.Component {
                 onAfterEvent,
                 onScrollEnd,
                 onChangeSelected,
+                selection,
+                rowSelector,
                 options: this.getOptions(options),
             });
         }
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
-            React.createElement(components_1.DataGridEvents, { ref: this.setRootNode, style: gridRootStyle },
+            React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },
-                    React.createElement("textarea", { ref: this.setClipBoardNode })),
-                mounted ? (React.createElement(React.Fragment, null,
+                    React.createElement("textarea", { ref: this.clipBoardNode })),
+                mounted ? (React.createElement(components_1.DataGridEvents, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))) : null)));
+    }
+    componentDidMount() {
+        this.setState({
+            mounted: true,
+        });
     }
 }
 DataGrid.defaultHeight = 400;
@@ -220,7 +222,6 @@ DataGrid.defaultOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,
-    showRowSelector: false,
     multipleSelect: true,
     columnMinWidth: 100,
     lineNumberColumnWidth: 60,

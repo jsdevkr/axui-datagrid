@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const ReactDOM = require("react-dom");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 class DatagridColumnFilterOption extends React.Component {
@@ -13,13 +12,11 @@ class DatagridColumnFilterOption extends React.Component {
             clientHeight: 0,
             scrollHeight: 0,
         };
+        this.containerNode = React.createRef();
         this.onScroll = (e) => {
             this.setState({
                 scrollTop: e.currentTarget.scrollTop,
             });
-        };
-        this.setContainerNode = (element) => {
-            this.containerNode = ReactDOM.findDOMNode(element);
         };
     }
     getOption() {
@@ -54,13 +51,13 @@ class DatagridColumnFilterOption extends React.Component {
         const { filterOptions, optionItemHeight } = this.props;
         this.setState({
             mounted: true,
-            clientHeight: utils_1.getInnerHeight(ReactDOM.findDOMNode(this.containerNode)),
+            clientHeight: utils_1.getInnerHeight(this.containerNode.current),
             scrollHeight: filterOptions.length * optionItemHeight,
         });
     }
     render() {
         const { mounted } = this.state;
-        return (React.createElement("div", { "data-options": "", ref: this.setContainerNode, onScroll: utils_1.throttle(this.onScroll, 100) }, mounted ? this.getOption() : null));
+        return (React.createElement("div", { "data-options": "", ref: this.containerNode, onScroll: utils_1.throttle(this.onScroll, 100) }, mounted ? this.getOption() : null));
     }
 }
 exports.default = hoc_1.connectStore(DatagridColumnFilterOption);

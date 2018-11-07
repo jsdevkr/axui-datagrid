@@ -45,10 +45,10 @@ var __spread = (this && this.__spread) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var utils_1 = require("../utils");
 var formatter_1 = require("../functions/formatter");
 var collector_1 = require("../functions/collector");
+var _enums_1 = require("../common/@enums");
 var store = {
     sortInfo: {},
     isColumnFilter: false,
@@ -142,7 +142,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 }
             }
             if (_filteredList && filteredList.length !== _filteredList.length) {
-                newState.styles = utils_1.calculateDimensions(utils_1.getNode(_this.state.getRootNode), _this.state, _filteredList).styles;
+                newState.styles = utils_1.calculateDimensions(_this.state.rootNode && _this.state.rootNode.current, _this.state, _filteredList).styles;
             }
             if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
                 onChangeSelected({
@@ -158,12 +158,11 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
-            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, getRootNode = _b.getRootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, rootNode = _b.rootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j;
             var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
-            var rootNode = utils_1.getNode(getRootNode);
             var _l = _this.state.filteredList, filteredList = _l === void 0 ? [] : _l;
             var proc = (_a = {},
-                _a[stores_1.DispatchTypes.FILTER] = function () {
+                _a[_enums_1.DispatchTypes.FILTER] = function () {
                     var colIndex = param.colIndex, filterInfo = param.filterInfo;
                     var checkAll = filterInfo[colIndex] === false
                         ? true
@@ -203,7 +202,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         scrollTop: 0,
                     });
                 },
-                _a[stores_1.DispatchTypes.SORT] = function () {
+                _a[_enums_1.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
                     if (typeof colIndex !== 'undefined') {
                         var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
@@ -267,7 +266,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _a[stores_1.DispatchTypes.UPDATE] = function () {
+                _a[_enums_1.DispatchTypes.UPDATE] = function () {
                     var _a;
                     var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
                     var key = colGroup[colIndex].key;
@@ -278,10 +277,10 @@ var StoreProvider = /** @class */ (function (_super) {
                     }
                     if (eventWhichKey) {
                         switch (eventWhichKey) {
-                            case stores_1.KeyCodes.UP_ARROW:
+                            case _enums_1.KeyCodes.UP_ARROW:
                                 focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                                 break;
-                            case stores_1.KeyCodes.DOWN_ARROW:
+                            case _enums_1.KeyCodes.DOWN_ARROW:
                                 focusRow =
                                     focusedRow + 1 >= filteredList.length
                                         ? filteredList.length - 1
@@ -300,17 +299,17 @@ var StoreProvider = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
-                    if (rootNode) {
-                        rootNode.focus();
+                    if (rootNode && rootNode.current) {
+                        rootNode.current.focus();
                     }
                 },
-                _a[stores_1.DispatchTypes.RESIZE_COL] = function () {
+                _a[_enums_1.DispatchTypes.RESIZE_COL] = function () {
                     var col = param.col, newWidth = param.newWidth;
                     var newState = __assign({}, _this.state);
                     if (newState.colGroup) {
                         newState.colGroup[col.colIndex]._width = newState.colGroup[col.colIndex].width = newWidth;
                     }
-                    var _a = utils_1.calculateDimensions(rootNode, newState), styles = _a.styles, leftHeaderColGroup = _a.leftHeaderColGroup, headerColGroup = _a.headerColGroup;
+                    var _a = utils_1.calculateDimensions(rootNode && rootNode.current, newState), styles = _a.styles, leftHeaderColGroup = _a.leftHeaderColGroup, headerColGroup = _a.headerColGroup;
                     _this.setStoreState({
                         scrollLeft: scrollLeft,
                         colGroup: colGroup,
@@ -320,7 +319,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         columnResizing: false,
                     });
                 },
-                _a[stores_1.DispatchTypes.SELECT] = function () {
+                _a[_enums_1.DispatchTypes.SELECT] = function () {
                     var rowIndex = param.rowIndex, checked = param.checked;
                     var rowSelected = false;
                     var selectedAll = listSelectedAll;
@@ -344,7 +343,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         filteredList: __spread(filteredList),
                     });
                 },
-                _a[stores_1.DispatchTypes.SELECT_ALL] = function () {
+                _a[_enums_1.DispatchTypes.SELECT_ALL] = function () {
                     var checked = param.checked;
                     var selectedAll = listSelectedAll;
                     if (checked === true) {
@@ -384,8 +383,8 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.loadingData === prevState.loadingData &&
             newProps.setRootState === prevState.setRootState &&
             newProps.getRootState === prevState.getRootState &&
-            newProps.getRootNode === prevState.getRootNode &&
-            newProps.getClipBoardNode === prevState.getClipBoardNode &&
+            newProps.rootNode === prevState.rootNode &&
+            newProps.clipBoardNode === prevState.clipBoardNode &&
             newProps.rootObject === prevState.rootObject &&
             newProps.data === prevState.data &&
             newProps.options === prevState.options &&
@@ -394,6 +393,8 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
             newProps.onChangeSelected === prevState.onChangeSelected &&
+            newProps.selection === prevState.selection &&
+            newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&
             newProps.bodyRowTable === prevState.bodyRowTable &&
             newProps.bodyRowMap === prevState.bodyRowMap &&
@@ -481,8 +482,8 @@ var StoreProvider = /** @class */ (function (_super) {
                 loadingData: newProps.loadingData,
                 setRootState: newProps.setRootState,
                 getRootState: newProps.getRootState,
-                getRootNode: newProps.getRootNode,
-                getClipBoardNode: newProps.getClipBoardNode,
+                rootNode: newProps.rootNode,
+                clipBoardNode: newProps.clipBoardNode,
                 rootObject: newProps.rootObject,
                 data: newProps.data,
                 filteredList: filteredList,
@@ -492,6 +493,8 @@ var StoreProvider = /** @class */ (function (_super) {
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
                 onChangeSelected: newProps.onChangeSelected,
+                selection: newProps.selection,
+                rowSelector: newProps.rowSelector,
                 colGroupMap: newProps.colGroupMap,
                 asideColGroup: newProps.asideColGroup,
                 colGroup: newProps.colGroup,
@@ -528,9 +531,9 @@ var StoreProvider = /** @class */ (function (_super) {
         window.removeEventListener('resize', this.throttledUpdateDimensions);
     };
     StoreProvider.prototype.updateDimensions = function () {
-        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.bodyRowData, bodyRowData = _d === void 0 ? { rows: [{ cols: [] }] } : _d, _e = _a.bodyGroupingData, bodyGroupingData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.footSumData, footSumData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.options, options = _g === void 0 ? {} : _g;
+        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.bodyRowData, bodyRowData = _d === void 0 ? { rows: [{ cols: [] }] } : _d, _e = _a.bodyGroupingData, bodyGroupingData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.footSumData, footSumData = _f === void 0 ? { rows: [{ cols: [] }] } : _f, _g = _a.options, options = _g === void 0 ? {} : _g, rootNode = _a.rootNode;
         var _h = options.frozenColumnIndex, frozenColumnIndex = _h === void 0 ? 0 : _h;
-        var calculatedObject = utils_1.calculateDimensions(utils_1.getNode(this.state.getRootNode), this.state);
+        var calculatedObject = utils_1.calculateDimensions(rootNode && rootNode.current, this.state);
         var _j = calculatedObject.styles, _k = _j.scrollContentWidth, scrollContentWidth = _k === void 0 ? 0 : _k, _l = _j.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = _j.scrollContentContainerWidth, scrollContentContainerWidth = _m === void 0 ? 0 : _m, _o = _j.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o;
         var _p = utils_1.getScrollPosition(scrollLeft, scrollTop, {
             scrollWidth: scrollContentWidth,

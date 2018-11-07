@@ -1,4 +1,5 @@
 import DataGrid from './DataGrid';
-import { types, intfs } from './stores';
+import * as enums from './common/@enums';
+import * as types from './common/@types';
 import * as utils from './utils';
-export { types, intfs, utils, DataGrid };
+export { enums, types, utils, DataGrid };

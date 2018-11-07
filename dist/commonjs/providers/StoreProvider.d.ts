@@ -1,21 +1,22 @@
 import * as React from 'react';
-import { types, DispatchTypes } from '../stores';
-export interface IDataGridStore extends types.DataGridState {
-    setStoreState: (store: types.DataGridState) => void;
-    dispatch: (dispatchType: DispatchTypes, param: types.DataGridDispatchParam) => void;
+import { IDataGridState, DataGridDispatchParam, IDataGridStyles } from '../common/@types';
+import { DispatchTypes } from '../common/@enums';
+export interface IDataGridStore extends IDataGridState {
+    setStoreState: (store: IDataGridState) => void;
+    dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
 }
-declare class StoreProvider extends React.Component<any, types.DataGridState> {
+declare class StoreProvider extends React.Component<any, IDataGridState> {
     state: IDataGridStore;
     throttledUpdateDimensions: any;
-    static getDerivedStateFromProps(newProps: any, prevState: types.DataGridState): {
+    static getDerivedStateFromProps(newProps: any, prevState: IDataGridState): {
         scrollTop: number | undefined;
         mounted: any;
         loading: any;
         loadingData: any;
         setRootState: any;
         getRootState: any;
-        getRootNode: any;
-        getClipBoardNode: any;
+        rootNode: any;
+        clipBoardNode: any;
         rootObject: any;
         data: any;
         filteredList: any[];
@@ -25,6 +26,8 @@ declare class StoreProvider extends React.Component<any, types.DataGridState> {
         onAfterEvent: any;
         onScrollEnd: any;
         onChangeSelected: any;
+        selection: any;
+        rowSelector: any;
         colGroupMap: any;
         asideColGroup: any;
         colGroup: any;
@@ -43,7 +46,7 @@ declare class StoreProvider extends React.Component<any, types.DataGridState> {
         footSumTable: any;
         leftFootSumData: any;
         footSumData: any;
-        styles: types.DataGridStyles;
+        styles: IDataGridStyles;
         printStartColIndex: any;
         printEndColIndex: any;
         visibleHeaderColGroup: any;
@@ -57,7 +60,7 @@ declare class StoreProvider extends React.Component<any, types.DataGridState> {
         sortInfo?: {} | undefined;
         filterInfo?: {} | undefined;
         isInlineEditing?: boolean | undefined;
-        inlineEditingCell?: import("axui-datagrid/stores/@interfaces").IDataGridEditingCell | undefined;
+        inlineEditingCell?: import("axui-datagrid/common/@types").IDataGridEditingCell | undefined;
         columnResizing?: boolean | undefined;
         columnResizerLeft?: number | undefined;
         isColumnFilter?: number | boolean | undefined;
@@ -68,26 +71,26 @@ declare class StoreProvider extends React.Component<any, types.DataGridState> {
         selectionCols?: {} | undefined;
         focusedRow?: number | undefined;
         focusedCol?: number | undefined;
-        selectionStartOffset?: import("axui-datagrid/stores/@interfaces").IPosition | undefined;
-        selectionEndOffset?: import("axui-datagrid/stores/@interfaces").IPosition | undefined;
-        selectionMinOffset?: import("axui-datagrid/stores/@interfaces").IPosition | undefined;
-        selectionMaxOffset?: import("axui-datagrid/stores/@interfaces").IPosition | undefined;
-        bodyGrouping?: import("axui-datagrid/stores/@interfaces").IDataGridCol[] | undefined;
-        bodyGroupingTable?: types.DataGridColumnTableMap | undefined;
-        asideBodyGroupingData?: types.DataGridColumnTableMap | undefined;
-        leftBodyGroupingData?: types.DataGridColumnTableMap | undefined;
-        bodyGroupingData?: types.DataGridColumnTableMap | undefined;
+        selectionStartOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
+        selectionEndOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
+        selectionMinOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
+        selectionMaxOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
+        bodyGrouping?: import("axui-datagrid/common/@types").IDataGridCol[] | undefined;
+        bodyGroupingTable?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;
+        asideBodyGroupingData?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;
+        leftBodyGroupingData?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;
+        bodyGroupingData?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;
         bodyGroupingMap?: {} | undefined;
         propColumns?: string | undefined;
         propOptions?: string | undefined;
-        predefinedFormatter?: import("axui-datagrid/stores/@interfaces").IDataGridFormatter | undefined;
-        predefinedCollector?: import("axui-datagrid/stores/@interfaces").IDataGridCollector | undefined;
+        predefinedFormatter?: import("axui-datagrid/common/@types").IDataGridFormatter | undefined;
+        predefinedCollector?: import("axui-datagrid/common/@types").IDataGridCollector | undefined;
     } | null;
     componentDidMount(): void;
     componentWillUnmount(): void;
     updateDimensions(): void;
-    setStoreState: (newState: types.DataGridState) => void;
-    dispatch: (dispatchType: DispatchTypes, param: types.DataGridDispatchParam) => void;
+    setStoreState: (newState: IDataGridState) => void;
+    dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
     render(): JSX.Element;
 }
 declare const _default: {

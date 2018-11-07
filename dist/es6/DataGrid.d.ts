@@ -1,45 +1,40 @@
 import * as React from 'react';
-import { types } from './stores';
-interface IProps extends types.DataGrid {
+import { IDataGrid, IDataGridRootState, IDataGridOptionHeader, IDataGridOptionBody, IDataGridOptionPageButton, IDataGridOptionPage, IDataGridOptionScroller, IDataGridOptions, IDataGridStyles, IDataGridState, IDataGridColumnKeys } from './common/@types';
+interface IProps extends IDataGrid {
 }
-interface IState extends types.DataGridRootState {
+interface IState extends IDataGridRootState {
 }
 declare class DataGrid extends React.Component<IProps, IState> {
     static defaultHeight: number;
-    static defaultColumnKeys: types.DataGridColumnKeys;
-    static defaultHeader: types.DataGridOptionHeader;
-    static defaultBody: types.DataGridOptionBody;
-    static defaultPageButtons: types.DataGridOptionPageButton[];
-    static defaultPage: types.DataGridOptionPage;
-    static defaultScroller: types.DataGridOptionScroller;
-    static defaultOptions: types.DataGridOptions;
-    static defaultStyles: types.DataGridStyles;
+    static defaultColumnKeys: IDataGridColumnKeys;
+    static defaultHeader: IDataGridOptionHeader;
+    static defaultBody: IDataGridOptionBody;
+    static defaultPageButtons: IDataGridOptionPageButton[];
+    static defaultPage: IDataGridOptionPage;
+    static defaultScroller: IDataGridOptionScroller;
+    static defaultOptions: IDataGridOptions;
+    static defaultStyles: IDataGridStyles;
     static defaultThrottleWait: number;
     rootObject: any;
-    rootNode: any;
-    clipBoardNode: any;
+    rootNode: React.RefObject<HTMLDivElement>;
+    clipBoardNode: React.RefObject<HTMLTextAreaElement>;
     state: {
         mounted: boolean;
         calculatedHeight: undefined;
     };
-    setRootNode: (element: any) => void;
-    setClipBoardNode: (element: any) => void;
     /**
      * You must execute setRootState only once in the child component.
      * otherwise you will fall into a trap.
      * @param {DataGridRootState} state
      */
-    setRootState: (state: types.DataGridRootState) => void;
+    setRootState: (state: IDataGridRootState) => void;
     getRootState: () => {
         mounted: boolean;
         calculatedHeight: undefined;
     };
-    getRootNode: () => any;
-    getClipBoardNode: () => any;
-    onFireEvent: () => void;
-    getOptions: (options: types.DataGridOptions) => types.DataGridOptions;
-    getProviderProps: (prevState: types.DataGridState) => types.DataGridState;
-    componentDidMount(): void;
+    getOptions: (options: IDataGridOptions) => IDataGridOptions;
+    getProviderProps: (prevState: IDataGridState) => IDataGridState;
     render(): JSX.Element;
+    componentDidMount(): void;
 }
 export default DataGrid;

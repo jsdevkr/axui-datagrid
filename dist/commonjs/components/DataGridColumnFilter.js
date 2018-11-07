@@ -25,10 +25,10 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridColumnFilterOption_1 = require("./DataGridColumnFilterOption");
+var _enums_1 = require("../common/@enums");
 var DatagridColumnFilter = /** @class */ (function (_super) {
     __extends(DatagridColumnFilter, _super);
     function DatagridColumnFilter() {
@@ -92,7 +92,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                     ? false
                     : filter_1;
             }
-            dispatch(stores_1.DispatchTypes.FILTER, {
+            dispatch(_enums_1.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,
                 filterInfo: currentFilterInfo,
             });

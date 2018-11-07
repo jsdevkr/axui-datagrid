@@ -14,9 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var stores_1 = require("../stores");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
+var _enums_1 = require("../common/@enums");
 var PageButtons = function (_a) {
     var pageButtons = _a.pageButtons, pageButtonHeight = _a.pageButtonHeight, onClickPageButton = _a.onClickPageButton;
     return (React.createElement(React.Fragment, null, pageButtons.map(function (button, bi) {
@@ -67,7 +67,7 @@ var DataGridPage = /** @class */ (function (_super) {
                 return _scrollTop;
             };
             var proc = (_a = {},
-                _a[stores_1.PageButtonActions.PAGE_FIRST] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_FIRST] = function () {
                     var _a;
                     var focusRow = 0;
                     setStoreState({
@@ -78,7 +78,7 @@ var DataGridPage = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _a[stores_1.PageButtonActions.PAGE_PREV] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_PREV] = function () {
                     var _a;
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
@@ -89,7 +89,7 @@ var DataGridPage = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _a[stores_1.PageButtonActions.PAGE_BACK] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_BACK] = function () {
                     var _a;
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
@@ -100,7 +100,7 @@ var DataGridPage = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _a[stores_1.PageButtonActions.PAGE_PLAY] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_PLAY] = function () {
                     var _a;
                     var focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
@@ -113,7 +113,7 @@ var DataGridPage = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _a[stores_1.PageButtonActions.PAGE_NEXT] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_NEXT] = function () {
                     var _a;
                     var focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
@@ -126,7 +126,7 @@ var DataGridPage = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _a[stores_1.PageButtonActions.PAGE_LAST] = function () {
+                _a[_enums_1.PageButtonActions.PAGE_LAST] = function () {
                     var _a;
                     var focusRow = filteredList.length - 1;
                     setStoreState({

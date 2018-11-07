@@ -1,26 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const DataGridBodyPanel_1 = require("./DataGridBodyPanel");
 const DataGridBodyBottomPanel_1 = require("./DataGridBodyBottomPanel");
 const DataGridBodyLoader_1 = require("./DataGridBodyLoader");
+const _enums_1 = require("../common/@enums");
 class DataGridBody extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {};
         this.onMouseDownBody = (e) => {
-            const { filteredList = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, getRootNode, rootObject = {}, loading, loadingData, } = this.props;
+            const { filteredList = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, rootNode, rootObject = {}, loading, loadingData, } = this.props;
             if (loading || loadingData) {
                 return false;
             }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
-            const rootNode = utils_1.getNode(getRootNode);
-            const { x: leftPadding = 0, y: topPadding = 0 } = rootNode && rootNode.getBoundingClientRect();
+            const { x: leftPadding = 0, y: topPadding = 0 } = rootNode &&
+                rootNode.current &&
+                rootNode.current.getBoundingClientRect();
             const startScrollLeft = scrollLeft;
             const startScrollTop = scrollTop;
             const startX = startMousePosition.x - leftPadding;
@@ -32,7 +33,9 @@ class DataGridBody extends React.Component {
                     bodyTrHeight);
                 return i < 0
                     ? 0
-                    : i >= filteredList.length - 1 ? filteredList.length - 1 : i;
+                    : i >= filteredList.length - 1
+                        ? filteredList.length - 1
+                        : i;
             };
             const getColIndex = (x, _scrollLeft) => {
                 const p = x -
@@ -278,7 +281,7 @@ class DataGridBody extends React.Component {
                 setStoreState(state);
             };
             const procClickRowSelector = () => {
-                dispatch(stores_1.DispatchTypes.SELECT, {
+                dispatch(_enums_1.DispatchTypes.SELECT, {
                     rowIndex: selectStartedRow,
                 });
             };

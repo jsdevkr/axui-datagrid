@@ -17,8 +17,7 @@ function getStylesAboutFilteredList(_list, options, styles) {
         currentStyles.verticalScrollerWidth = optionsScrollerSize;
     }
     currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
-        ? scrollContentContainerHeight *
-            verticalScrollerHeight /
+        ? (scrollContentContainerHeight * verticalScrollerHeight) /
             currentStyles.scrollContentHeight
         : 0;
     if (optionsScrollerBarMinSize > currentStyles.verticalScrollBarHeight) {

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const stores_1 = require("../stores");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const _enums_1 = require("../common/@enums");
 class DataGridEvents extends React.Component {
     constructor() {
         super(...arguments);
@@ -51,7 +51,7 @@ class DataGridEvents extends React.Component {
         this.onKeyUp = (e) => {
             const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, isInlineEditing, } = this.props;
             const proc = {
-                [stores_1.KeyCodes.ENTER]: () => {
+                [_enums_1.KeyCodes.ENTER]: () => {
                     const col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -70,12 +70,12 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onKeyDown = (e) => {
-            const { filteredList = [], getRootNode, getClipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
+            const { filteredList = [], rootNode, clipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
             const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
-            const rootNode = utils_1.getNode(getRootNode);
-            const clipBoardNode = utils_1.getNode(getClipBoardNode);
+            // const rootNode = getNode(getRootNode);
+            // const clipBoardNode = getNode(getClipBoardNode);
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             const eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
@@ -139,7 +139,7 @@ class DataGridEvents extends React.Component {
                 return _scrollLeft;
             };
             const metaProc = {
-                [stores_1.KeyCodes.C]: () => {
+                [_enums_1.KeyCodes.C]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let copySuccess = false;
@@ -155,18 +155,18 @@ class DataGridEvents extends React.Component {
                             copiedString += '\n';
                         }
                     }
-                    if (clipBoardNode) {
-                        clipBoardNode.value = copiedString;
-                        clipBoardNode.select();
+                    if (clipBoardNode && clipBoardNode.current) {
+                        clipBoardNode.current.value = copiedString;
+                        clipBoardNode.current.select();
                     }
                     try {
                         copySuccess = document.execCommand('copy');
                     }
                     catch (e) { }
-                    rootNode && rootNode.focus();
+                    rootNode && rootNode.current && rootNode.current.focus();
                     return copySuccess;
                 },
-                [stores_1.KeyCodes.A]: () => {
+                [_enums_1.KeyCodes.A]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let state = {
@@ -195,7 +195,7 @@ class DataGridEvents extends React.Component {
                 },
             };
             const proc = {
-                [stores_1.KeyCodes.ESC]: () => {
+                [_enums_1.KeyCodes.ESC]: () => {
                     setStoreState({
                         selectionRows: {
                             [focusedRow]: true,
@@ -205,7 +205,7 @@ class DataGridEvents extends React.Component {
                         },
                     });
                 },
-                [stores_1.KeyCodes.HOME]: () => {
+                [_enums_1.KeyCodes.HOME]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     const focusRow = 0;
@@ -217,7 +217,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.END]: () => {
+                [_enums_1.KeyCodes.END]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     const focusRow = filteredList.length - 1;
@@ -229,7 +229,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.PAGE_UP]: () => {
+                [_enums_1.KeyCodes.PAGE_UP]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     const focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
@@ -241,7 +241,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.PAGE_DOWN]: () => {
+                [_enums_1.KeyCodes.PAGE_DOWN]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let focusRow = focusedRow + pRowSize >= filteredList.length
@@ -255,7 +255,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.UP_ARROW]: () => {
+                [_enums_1.KeyCodes.UP_ARROW]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
@@ -267,7 +267,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.DOWN_ARROW]: () => {
+                [_enums_1.KeyCodes.DOWN_ARROW]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let focusRow = focusedRow + 1 >= filteredList.length
@@ -281,7 +281,7 @@ class DataGridEvents extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [stores_1.KeyCodes.LEFT_ARROW]: () => {
+                [_enums_1.KeyCodes.LEFT_ARROW]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
@@ -293,7 +293,7 @@ class DataGridEvents extends React.Component {
                         focusedCol: focusCol,
                     });
                 },
-                [stores_1.KeyCodes.RIGHT_ARROW]: () => {
+                [_enums_1.KeyCodes.RIGHT_ARROW]: () => {
                     e.preventDefault();
                     e.stopPropagation();
                     let focusCol = focusedCol + 1 >= colGroup.length
@@ -320,7 +320,7 @@ class DataGridEvents extends React.Component {
         this.onFireEvent = (e, eventName) => {
             const { loading, loadingData, isInlineEditing = false } = this.props;
             const proc = {
-                [stores_1.EventNames.WHEEL]: () => {
+                [_enums_1.EventNames.WHEEL]: () => {
                     if (!loadingData) {
                         this.onWheel(e);
                     }
@@ -329,19 +329,19 @@ class DataGridEvents extends React.Component {
                         e.stopPropagation();
                     }
                 },
-                [stores_1.EventNames.KEYDOWN]: () => {
+                [_enums_1.EventNames.KEYDOWN]: () => {
                     if (!loadingData && !isInlineEditing) {
                         this.onKeyDown(e);
                     }
                 },
-                [stores_1.EventNames.KEYUP]: () => {
+                [_enums_1.EventNames.KEYUP]: () => {
                     if (!loadingData && !isInlineEditing) {
                         this.onKeyUp(e);
                     }
                 },
-                [stores_1.EventNames.MOUSEDOWN]: () => { },
-                [stores_1.EventNames.MOUSEUP]: () => { },
-                [stores_1.EventNames.CLICK]: () => { },
+                [_enums_1.EventNames.MOUSEDOWN]: () => { },
+                [_enums_1.EventNames.MOUSEUP]: () => { },
+                [_enums_1.EventNames.CLICK]: () => { },
             };
             if (eventName in proc && !loading) {
                 if (this.props.onBeforeEvent && !loadingData) {
@@ -355,18 +355,18 @@ class DataGridEvents extends React.Component {
         };
     }
     render() {
-        return (React.createElement("div", { className: "axui-datagrid", tabIndex: -1, style: this.props.style, onWheel: e => {
-                this.onFireEvent(e, stores_1.EventNames.WHEEL);
+        return (React.createElement("div", { onWheel: e => {
+                this.onFireEvent(e, _enums_1.EventNames.WHEEL);
             }, onKeyDown: e => {
-                this.onFireEvent(e, stores_1.EventNames.KEYDOWN);
+                this.onFireEvent(e, _enums_1.EventNames.KEYDOWN);
             }, onKeyUp: e => {
-                this.onFireEvent(e, stores_1.EventNames.KEYUP);
+                this.onFireEvent(e, _enums_1.EventNames.KEYUP);
             }, onMouseDown: e => {
-                this.onFireEvent(e, stores_1.EventNames.MOUSEDOWN);
+                this.onFireEvent(e, _enums_1.EventNames.MOUSEDOWN);
             }, onMouseUp: e => {
-                this.onFireEvent(e, stores_1.EventNames.MOUSEUP);
+                this.onFireEvent(e, _enums_1.EventNames.MOUSEUP);
             }, onClick: e => {
-                this.onFireEvent(e, stores_1.EventNames.CLICK);
+                this.onFireEvent(e, _enums_1.EventNames.CLICK);
             }, onTouchStartCapture: e => {
                 // this.onFireEvent(e, EventNames.TOUCHSTART);
             } }, this.props.children));
