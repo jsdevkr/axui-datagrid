@@ -95,7 +95,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.loadingData === prevState.loadingData &&
       newProps.setRootState === prevState.setRootState &&
       newProps.getRootState === prevState.getRootState &&
-      newProps.getRootNode === prevState.getRootNode &&
+      newProps.rootNode === prevState.rootNode &&
       newProps.clipBoardNode === prevState.clipBoardNode &&
       newProps.rootObject === prevState.rootObject &&
       newProps.data === prevState.data &&
@@ -221,7 +221,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           loadingData: newProps.loadingData,
           setRootState: newProps.setRootState,
           getRootState: newProps.getRootState,
-          getRootNode: newProps.getRootNode,
+          rootNode: newProps.rootNode,
           clipBoardNode: newProps.clipBoardNode,
           rootObject: newProps.rootObject,
           data: newProps.data,
@@ -289,11 +289,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       bodyGroupingData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
       options = {},
+      rootNode,
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
 
     const calculatedObject = calculateDimensions(
-      getNode(this.state.getRootNode),
+      rootNode && rootNode.current,
       this.state,
     );
 
@@ -471,7 +472,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
 
     if (_filteredList && filteredList.length !== _filteredList.length) {
       newState.styles = calculateDimensions(
-        getNode(this.state.getRootNode),
+        this.state.rootNode && this.state.rootNode.current,
         this.state,
         _filteredList,
       ).styles;
@@ -498,13 +499,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       listSelectedAll = false,
       scrollLeft = 0,
       colGroup = [],
-      getRootNode,
+      rootNode,
       focusedRow = 0,
       sortInfo = {},
       options = {},
     } = this.state;
     const { columnKeys: optionColumnKeys = {} } = options;
-    const rootNode = getNode(getRootNode);
     let { filteredList = [] } = this.state;
 
     const proc = {
@@ -664,8 +664,8 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           focusedRow: focusRow,
         });
 
-        if (rootNode) {
-          rootNode.focus();
+        if (rootNode && rootNode.current) {
+          rootNode.current.focus();
         }
       },
       [DispatchTypes.RESIZE_COL]: () => {
@@ -682,7 +682,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           styles,
           leftHeaderColGroup,
           headerColGroup,
-        } = calculateDimensions(rootNode, newState);
+        } = calculateDimensions(rootNode && rootNode.current, newState);
 
         this.setStoreState({
           scrollLeft,

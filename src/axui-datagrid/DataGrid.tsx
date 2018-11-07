@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 import { DataGridStore } from './providers';
 import {
@@ -140,16 +139,12 @@ class DataGrid extends React.Component<IProps, IState> {
   static defaultThrottleWait = 100;
 
   rootObject: any = {};
-  rootNode: any = null;
+  rootNode: React.RefObject<HTMLDivElement> = React.createRef();
   clipBoardNode: React.RefObject<HTMLTextAreaElement> = React.createRef();
 
   state = {
     mounted: false, // 루트 엘리먼트 준비여부
     calculatedHeight: undefined,
-  };
-
-  setRootNode = (element: any) => {
-    this.rootNode = ReactDOM.findDOMNode(element);
   };
 
   /**
@@ -164,12 +159,6 @@ class DataGrid extends React.Component<IProps, IState> {
   getRootState = () => {
     return this.state;
   };
-
-  getRootNode = () => {
-    return this.rootNode;
-  };
-
-  onFireEvent = () => {};
 
   getOptions = (options: IDataGridOptions): IDataGridOptions => {
     return mergeAll(true, { ...DataGrid.defaultOptions }, options);
@@ -287,7 +276,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
     // 초기 스타일 생성.
     const calculatedObject = calculateDimensions(
-      getNode(newState.getRootNode),
+      newState.rootNode && newState.rootNode.current,
       newState,
     );
 
@@ -343,12 +332,6 @@ class DataGrid extends React.Component<IProps, IState> {
     return newState;
   };
 
-  constructor(props: IProps) {
-    super(props);
-
-    this.rootNode = React.createRef();
-  }
-
   public render() {
     const { mounted } = this.state;
     const {
@@ -381,7 +364,7 @@ class DataGrid extends React.Component<IProps, IState> {
         loadingData,
         setRootState: this.setRootState,
         getRootState: this.getRootState,
-        getRootNode: this.getRootNode,
+        rootNode: this.rootNode,
         clipBoardNode: this.clipBoardNode,
         rootObject: this.rootObject,
         data,
@@ -398,21 +381,26 @@ class DataGrid extends React.Component<IProps, IState> {
 
     return (
       <DataGridStore.Provider {...providerProps}>
-        <DataGridEvents ref={this.setRootNode} style={gridRootStyle}>
+        <div
+          tabIndex={-1}
+          ref={this.rootNode}
+          className="axui-datagrid"
+          style={gridRootStyle}
+        >
           <div className="axui-datagrid-clip-board">
             <textarea ref={this.clipBoardNode} />
           </div>
           {mounted ? (
-            <>
+            <DataGridEvents>
               <DataGridHeader />
               <DataGridBody />
               <DataGridPage />
               <DataGridScroll />
               <DataGridColumnFilter />
               <DataGridLoader loading={loading} />
-            </>
+            </DataGridEvents>
           ) : null}
-        </DataGridEvents>
+        </div>
       </DataGridStore.Provider>
     );
   }

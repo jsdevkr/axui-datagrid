@@ -33,7 +33,7 @@ class DataGridBody extends React.Component<IProps> {
       styles = {},
       setStoreState,
       dispatch,
-      getRootNode,
+      rootNode,
       rootObject = {},
       loading,
       loadingData,
@@ -60,9 +60,10 @@ class DataGridBody extends React.Component<IProps> {
 
     const startMousePosition = getMousePosition(e);
     const spanType = (e.target as any).getAttribute('data-span');
-    const rootNode = getNode(getRootNode);
     const { x: leftPadding = 0, y: topPadding = 0 } =
-      rootNode && (rootNode.getBoundingClientRect() as any);
+      rootNode &&
+      rootNode.current &&
+      (rootNode.current.getBoundingClientRect() as any);
 
     const startScrollLeft = scrollLeft;
     const startScrollTop = scrollTop;

@@ -245,11 +245,13 @@ class DataGridHeaderPanel extends React.Component<IProps> {
   onMouseDownColumnResizer = (e: any, col: IDataGridCol) => {
     e.preventDefault();
 
-    const { setStoreState, getRootNode, dispatch } = this.props;
+    const { setStoreState, rootNode, dispatch } = this.props;
 
-    const rootNode = getNode(getRootNode);
+    // const rootNode = getNode(getRootNode);
     const { x: rootX = 0 } =
-      rootNode && (rootNode.getBoundingClientRect() as any);
+      rootNode &&
+      rootNode.current &&
+      (rootNode.current.getBoundingClientRect() as any);
     const resizer = e.target;
     const prevLeft = Number(resizer.getAttribute('data-prev-left'));
     const currLeft = Number(resizer.getAttribute('data-left'));

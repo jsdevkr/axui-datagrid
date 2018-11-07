@@ -7,7 +7,7 @@ import {
 } from '../common/@types';
 
 function calculateDimensions(
-  containerDOM: HTMLDivElement | undefined,
+  containerDOM: HTMLDivElement | undefined | null,
   state: IDataGridState,
   toBeFilteredList?: any[],
 ): {
@@ -60,6 +60,7 @@ function calculateDimensions(
   let currentHeaderColGroup: IDataGridCol[] = [];
 
   currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
+
   currentStyles.CTInnerWidth = currentStyles.elWidth = getOuterWidth(
     containerDOM,
   );

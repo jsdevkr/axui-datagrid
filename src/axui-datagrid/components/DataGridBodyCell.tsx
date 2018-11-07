@@ -129,13 +129,11 @@ class DataGridBodyCell extends React.Component<IProps> {
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const {
-      getRootNode,
+      rootNode,
       setStoreState,
       dispatch,
       inlineEditingCell = {},
     } = this.props;
-
-    const rootNode = getNode(getRootNode);
 
     const proc = {
       [EventNames.BLUR]: () => {
@@ -144,8 +142,8 @@ class DataGridBodyCell extends React.Component<IProps> {
           inlineEditingCell: {},
         });
 
-        if (rootNode) {
-          rootNode.focus();
+        if (rootNode && rootNode.current) {
+          rootNode.current.focus();
         }
       },
       [EventNames.KEYUP]: () => {
@@ -156,8 +154,8 @@ class DataGridBodyCell extends React.Component<IProps> {
               inlineEditingCell: {},
             });
 
-            if (rootNode) {
-              rootNode.focus();
+            if (rootNode && rootNode.current) {
+              rootNode.current.focus();
             }
             break;
           case KeyCodes.UP_ARROW:

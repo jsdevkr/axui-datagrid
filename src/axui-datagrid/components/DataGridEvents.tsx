@@ -4,9 +4,7 @@ import { connectStore } from '../hoc';
 import { getScrollPosition, getNode } from '../utils';
 import { KeyCodes, EventNames } from '../common/@enums';
 
-interface IProps extends IDataGridStore {
-  style?: any;
-}
+interface IProps extends IDataGridStore {}
 interface IState {}
 
 class DataGridEvents extends React.Component<IProps, IState> {
@@ -108,7 +106,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
   onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const {
       filteredList = [],
-      getRootNode,
+      rootNode,
       clipBoardNode,
       colGroup = [],
       headerColGroup = [],
@@ -138,7 +136,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       verticalScrollerWidth = 0,
     } = styles;
 
-    const rootNode = getNode(getRootNode);
+    // const rootNode = getNode(getRootNode);
     // const clipBoardNode = getNode(getClipBoardNode);
 
     const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
@@ -240,7 +238,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           copySuccess = document.execCommand('copy');
         } catch (e) {}
 
-        rootNode && rootNode.focus();
+        rootNode && rootNode.current && rootNode.current.focus();
 
         return copySuccess;
       },
@@ -460,9 +458,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
   render() {
     return (
       <div
-        className="axui-datagrid"
-        tabIndex={-1}
-        style={this.props.style}
         onWheel={e => {
           this.onFireEvent(e, EventNames.WHEEL);
         }}
