@@ -135,10 +135,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       rightPanelWidth = 0,
       verticalScrollerWidth = 0,
     } = styles;
-
-    // const rootNode = getNode(getRootNode);
-    // const clipBoardNode = getNode(getClipBoardNode);
-
     const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
     const eRowIndex =
       Math.floor(-scrollTop / bodyTrHeight) +
@@ -416,7 +412,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onFireEvent = (e: any, eventName: EventNames) => {
+  onFireEvent = (e: any) => {
     const { loading, loadingData, isInlineEditing = false } = this.props;
     const proc = {
       [EventNames.WHEEL]: () => {
@@ -437,52 +433,41 @@ class DataGridEvents extends React.Component<IProps, IState> {
           this.onKeyUp(e);
         }
       },
-      [EventNames.MOUSEDOWN]: () => {},
-      [EventNames.MOUSEUP]: () => {},
-      [EventNames.CLICK]: () => {},
     };
 
-    if (eventName in proc && !loading) {
+    if (e.type in proc && !loading) {
       if (this.props.onBeforeEvent && !loadingData) {
-        this.props.onBeforeEvent(e, eventName);
+        this.props.onBeforeEvent(e, e.type);
       }
 
-      proc[eventName]();
+      proc[e.type]();
 
       if (this.props.onAfterEvent && !loadingData) {
-        this.props.onAfterEvent(e, eventName);
+        this.props.onAfterEvent(e, e.type);
       }
     }
   };
 
   render() {
-    return (
-      <div
-        onWheel={e => {
-          this.onFireEvent(e, EventNames.WHEEL);
-        }}
-        onKeyDown={e => {
-          this.onFireEvent(e, EventNames.KEYDOWN);
-        }}
-        onKeyUp={e => {
-          this.onFireEvent(e, EventNames.KEYUP);
-        }}
-        onMouseDown={e => {
-          this.onFireEvent(e, EventNames.MOUSEDOWN);
-        }}
-        onMouseUp={e => {
-          this.onFireEvent(e, EventNames.MOUSEUP);
-        }}
-        onClick={e => {
-          this.onFireEvent(e, EventNames.CLICK);
-        }}
-        onTouchStartCapture={e => {
-          // this.onFireEvent(e, EventNames.TOUCHSTART);
-        }}
-      >
-        {this.props.children}
-      </div>
-    );
+    return <div>{this.props.children}</div>;
+  }
+
+  componentWillMount() {
+    const { rootNode } = this.props;
+    if (rootNode && rootNode.current) {
+      rootNode.current.addEventListener('keydown', this.onFireEvent);
+      rootNode.current.addEventListener('keyup', this.onFireEvent);
+      rootNode.current.addEventListener('wheel', this.onFireEvent);
+    }
+  }
+
+  componentWillUnmount() {
+    const { rootNode } = this.props;
+    if (rootNode && rootNode.current) {
+      rootNode.current.removeEventListener('keydown', this.onFireEvent);
+      rootNode.current.removeEventListener('keyup', this.onFireEvent);
+      rootNode.current.addEventListener('wheel', this.onFireEvent);
+    }
   }
 }
 
