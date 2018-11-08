@@ -74,8 +74,6 @@ class DataGridEvents extends React.Component {
             const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
             const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
             const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
-            // const rootNode = getNode(getRootNode);
-            // const clipBoardNode = getNode(getClipBoardNode);
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             const eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
@@ -317,7 +315,7 @@ class DataGridEvents extends React.Component {
                 proc[e.which] && proc[e.which]();
             }
         };
-        this.onFireEvent = (e, eventName) => {
+        this.onFireEvent = (e) => {
             const { loading, loadingData, isInlineEditing = false } = this.props;
             const proc = {
                 [_enums_1.EventNames.WHEEL]: () => {
@@ -339,37 +337,36 @@ class DataGridEvents extends React.Component {
                         this.onKeyUp(e);
                     }
                 },
-                [_enums_1.EventNames.MOUSEDOWN]: () => { },
-                [_enums_1.EventNames.MOUSEUP]: () => { },
-                [_enums_1.EventNames.CLICK]: () => { },
             };
-            if (eventName in proc && !loading) {
+            if (e.type in proc && !loading) {
                 if (this.props.onBeforeEvent && !loadingData) {
-                    this.props.onBeforeEvent(e, eventName);
+                    this.props.onBeforeEvent(e, e.type);
                 }
-                proc[eventName]();
+                proc[e.type]();
                 if (this.props.onAfterEvent && !loadingData) {
-                    this.props.onAfterEvent(e, eventName);
+                    this.props.onAfterEvent(e, e.type);
                 }
             }
         };
     }
     render() {
-        return (React.createElement("div", { onWheel: e => {
-                this.onFireEvent(e, _enums_1.EventNames.WHEEL);
-            }, onKeyDown: e => {
-                this.onFireEvent(e, _enums_1.EventNames.KEYDOWN);
-            }, onKeyUp: e => {
-                this.onFireEvent(e, _enums_1.EventNames.KEYUP);
-            }, onMouseDown: e => {
-                this.onFireEvent(e, _enums_1.EventNames.MOUSEDOWN);
-            }, onMouseUp: e => {
-                this.onFireEvent(e, _enums_1.EventNames.MOUSEUP);
-            }, onClick: e => {
-                this.onFireEvent(e, _enums_1.EventNames.CLICK);
-            }, onTouchStartCapture: e => {
-                // this.onFireEvent(e, EventNames.TOUCHSTART);
-            } }, this.props.children));
+        return React.createElement("div", null, this.props.children);
+    }
+    componentWillMount() {
+        const { rootNode } = this.props;
+        if (rootNode && rootNode.current) {
+            rootNode.current.addEventListener('keydown', this.onFireEvent);
+            rootNode.current.addEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('wheel', this.onFireEvent);
+        }
+    }
+    componentWillUnmount() {
+        const { rootNode } = this.props;
+        if (rootNode && rootNode.current) {
+            rootNode.current.removeEventListener('keydown', this.onFireEvent);
+            rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('wheel', this.onFireEvent);
+        }
     }
 }
 exports.default = hoc_1.connectStore(DataGridEvents);

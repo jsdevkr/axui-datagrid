@@ -90,8 +90,6 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
             var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
-            // const rootNode = getNode(getRootNode);
-            // const clipBoardNode = getNode(getClipBoardNode);
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
@@ -342,7 +340,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 proc[e.which] && proc[e.which]();
             }
         };
-        _this.onFireEvent = function (e, eventName) {
+        _this.onFireEvent = function (e) {
             var _a;
             var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
             var proc = (_a = {},
@@ -365,39 +363,37 @@ var DataGridEvents = /** @class */ (function (_super) {
                         _this.onKeyUp(e);
                     }
                 },
-                _a[_enums_1.EventNames.MOUSEDOWN] = function () { },
-                _a[_enums_1.EventNames.MOUSEUP] = function () { },
-                _a[_enums_1.EventNames.CLICK] = function () { },
                 _a);
-            if (eventName in proc && !loading) {
+            if (e.type in proc && !loading) {
                 if (_this.props.onBeforeEvent && !loadingData) {
-                    _this.props.onBeforeEvent(e, eventName);
+                    _this.props.onBeforeEvent(e, e.type);
                 }
-                proc[eventName]();
+                proc[e.type]();
                 if (_this.props.onAfterEvent && !loadingData) {
-                    _this.props.onAfterEvent(e, eventName);
+                    _this.props.onAfterEvent(e, e.type);
                 }
             }
         };
         return _this;
     }
     DataGridEvents.prototype.render = function () {
-        var _this = this;
-        return (React.createElement("div", { onWheel: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.WHEEL);
-            }, onKeyDown: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.KEYDOWN);
-            }, onKeyUp: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.KEYUP);
-            }, onMouseDown: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.MOUSEDOWN);
-            }, onMouseUp: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.MOUSEUP);
-            }, onClick: function (e) {
-                _this.onFireEvent(e, _enums_1.EventNames.CLICK);
-            }, onTouchStartCapture: function (e) {
-                // this.onFireEvent(e, EventNames.TOUCHSTART);
-            } }, this.props.children));
+        return React.createElement("div", null, this.props.children);
+    };
+    DataGridEvents.prototype.componentWillMount = function () {
+        var rootNode = this.props.rootNode;
+        if (rootNode && rootNode.current) {
+            rootNode.current.addEventListener('keydown', this.onFireEvent);
+            rootNode.current.addEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('wheel', this.onFireEvent);
+        }
+    };
+    DataGridEvents.prototype.componentWillUnmount = function () {
+        var rootNode = this.props.rootNode;
+        if (rootNode && rootNode.current) {
+            rootNode.current.removeEventListener('keydown', this.onFireEvent);
+            rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('wheel', this.onFireEvent);
+        }
     };
     return DataGridEvents;
 }(React.Component));

@@ -1,6 +1,6 @@
 {
   "name": "axui-datagrid",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "DataGrid, DataSheet for React",
   "jsnext:main": "es6/index.js",
   "main": "commonjs/index.js",
