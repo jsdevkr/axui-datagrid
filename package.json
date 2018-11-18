@@ -1,6 +1,6 @@
 {
   "name": "axui-datagrid",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "description": "DataGrid, DataSheet for React",
   "jsnext:main": "dist/es6/index.js",
   "main": "dist/commonjs/index.js",
@@ -31,6 +31,7 @@
     "file-loader": "^2.0.0",
     "history": "^4.7.2",
     "jest": "^23.5.0",
+    "jsonfile": "^5.0.0",
     "less": "^3.5.3",
     "less-loader": "^4.1.0",
     "node-sass": "^4.8.3",
@@ -62,8 +63,8 @@
     "test-watch": "NODE_ENV=test jest --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prepublish": "npm run test",
-    "publish:patch": "cd dist && npm version patch && cp ./package.json ../src/package.json && cd .. && npm run docs",
-    "publish:minor": "cd dist && npm version minor && cp ./package.json ../src/package.json && cd .. && npm run docs"
+    "publish:patch": "cd dist && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
+    "publish:minor": "cd dist && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
   },
   "betterScripts": {
     "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css  --output-style compressed && cp ./src/axui-datagrid/style.scss ./dist/style.scss && cp -R ./src/axui-datagrid/scss ./dist/scss && cp ./README.md ./dist/README.md",
