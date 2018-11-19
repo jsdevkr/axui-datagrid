@@ -24,7 +24,8 @@ class Introduction extends React.Component<IProps, IState> {
     return (
       <Wrapper>
         <h1>axui-datagrid</h1>
-
+        {/*<!-- pull request -->*/}
+        {/*<!-- pull request 22 -->*/}
         <Segment>
           <h2>Introduction</h2>
           <p>
