@@ -79,8 +79,8 @@ class DataGridBody extends React.Component<IProps> {
       return i < 0
         ? 0
         : i >= filteredList.length - 1
-          ? filteredList.length - 1
-          : i;
+        ? filteredList.length - 1
+        : i;
     };
     const getColIndex: Function = (x: number, _scrollLeft: number): number => {
       const p: number =
@@ -160,7 +160,7 @@ class DataGridBody extends React.Component<IProps> {
               currState.selectionCols[i] = true;
             }
           } else {
-            console.log('get selection fail', sRow, eRow, sCol, eCol);
+            // console.log('get selection fail', sRow, eRow, sCol, eCol);
           }
 
           setStoreState(currState);
