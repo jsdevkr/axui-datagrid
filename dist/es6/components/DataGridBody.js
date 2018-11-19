@@ -93,7 +93,7 @@ class DataGridBody extends React.Component {
                             }
                         }
                         else {
-                            console.log('get selection fail', sRow, eRow, sCol, eCol);
+                            // console.log('get selection fail', sRow, eRow, sCol, eCol);
                         }
                         setStoreState(currState);
                     };
