@@ -63,7 +63,7 @@
     "test": "NODE_ENV=test jest",
     "test-watch": "NODE_ENV=test jest --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "prepublish": "npm run test",
+    "prepublish": "npm run test && npm run build",
     "publish:patch": "cd dist && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
     "publish:minor": "cd dist && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
   },
