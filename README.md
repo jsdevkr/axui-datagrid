@@ -3,19 +3,19 @@
 
 # axui-datagrid
 
-demo : http://datagrid.jsdev.kr
+demo : http://axui-datagrid.jsdev.kr
 
 # Install
 
 ```bash
-npm install axui-datagrid -S
+npm install axui-datagrid
 ```
 
 # Run
 
 ```bash
-git clone https://github.com/axui/datagrid.git
-cd datagrid
+git clone https://github.com/jsdevkr/axui-datagrid.git
+cd axui-datagrid
 npm i
 npm start
 ```
@@ -208,13 +208,15 @@ export default Formatter;
 
 # Version history
 
-* v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.
-* v0.3.2 - Add a new props onChangeSelected, refactoring StoreProvider
-* v0.3.3 - Changed keyboard event firing to be determined by 'onCompositionUpdate' state. In InlineEdit mode.
-* v0.3.5 - Update document and minor bug fix on inline-edit.
-* v0.3.6 - bugfix : Wrong scrollPosition error when changed focus position by keyDown
-* v0.3.7 - Update document and change columns fix
-* v0.3.8 - support footSum props & minor bugfix
-* v0.3.9 - filtered state display on header & fixed bug of 'footSum'
-* v0.3.10 - Fixed bug : When clicking line Number cell did not working.
-* v0.3.11 - Minor bug fix
+- v0.3.0 - Add a new prop loading, loadingData, and onScrollEnd to the DataGrid.
+- v0.3.2 - Add a new props onChangeSelected, refactoring StoreProvider
+- v0.3.3 - Changed keyboard event firing to be determined by 'onCompositionUpdate' state. In InlineEdit mode.
+- v0.3.5 - Update document and minor bug fix on inline-edit.
+- v0.3.6 - bugfix : Wrong scrollPosition error when changed focus position by keyDown
+- v0.3.7 - Update document and change columns fix
+- v0.3.8 - support footSum props & minor bugfix
+- v0.3.9 - filtered state display on header & fixed bug of 'footSum'
+- v0.3.10 - Fixed bug : When clicking line Number cell did not working.
+- v0.3.11 - Minor bug fix
+- v0.3.14 - Code changes that were using 'findDOMNode'. so has remove dependencies 'react-dom'
+- v0.3.18 - update readme
