@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Redirect,
+  RouteComponentProps,
+} from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import { NoMatch, ErrorBoundary, SideNav } from 'components';
 import { Layout } from 'antd';
@@ -24,6 +30,12 @@ class App extends React.Component {
       maxWidth: '1150px',
     };
 
+    const RedirectIntro = () => <Redirect to="/introduction" />;
+    const RedirectExampleRoot = () => <Redirect to="/examples/LargeData" />;
+    const RedirectExample = (p: RouteComponentProps<any>) => (
+      <Examples {...p} />
+    );
+
     return (
       <ErrorBoundary>
         <BrowserRouter>
@@ -32,17 +44,11 @@ class App extends React.Component {
             <Layout style={contentStyles}>
               <Layout.Content>
                 <Switch>
-                  <Route
-                    exact
-                    path="/"
-                    render={() => <Redirect to="/introduction" />}
-                  />
                   <Route path="/introduction" component={Introduction} />
                   <Route path="/usage" component={Usage} />
-                  <Route
-                    path="/examples/:name"
-                    render={p => <Examples {...p} />}
-                  />
+                  <Route path="/examples/:name" component={RedirectExample} />
+                  <Route path="/examples" component={RedirectExampleRoot} />
+                  <Route path="/" component={RedirectIntro} />
                   <Route component={NoMatch} />
                 </Switch>
               </Layout.Content>
