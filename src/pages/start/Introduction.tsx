@@ -81,9 +81,11 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Multi header</h3>
           <p>
-            You can set up multiple-line headers by adding columns inside
-            'columns> col'.
+          The column in the datagrid can be created with the context 'column: &#91; &#93;' you write. Inside '&#91; &#93;', one '&#123; &#125;' means a one column. 
+          <br/>So if you want to create multi column header, you can use 'columns : &#91; &#93;' in the column what you want to create a multi column header. 
+          <br/>For example, columns : &#91; &#123; &#125; , &#123; &#123; &#125; &#123; &#125; &#125; &#93; context means that this datagrid has three columns, and the second column is a multi column header which has 2 columns.
           </p>
+          
 
           <NavLink to={'examples/MultiColumnHeader'}>
             <Button type={'primary'} size={'small'} ghost>
