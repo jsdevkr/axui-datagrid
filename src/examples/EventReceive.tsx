@@ -40,8 +40,9 @@ class EventReceive extends React.Component<any, any> {
         <Segment padded>
           <h1>Event</h1>
           <p>
-            onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의
-            이벤트가 발생될때 callback을 받을 수 있습니다.
+            If you define the onBeforeEvent or the onAfterEvent attributes on
+            DataGrid tag, you can get a callback before processing particular
+            events or after. And the events are 'keyup', 'keydown', 'wheel'.
           </p>
           <DataGrid
             height={this.state.height}
