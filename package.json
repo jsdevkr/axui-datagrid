@@ -12,7 +12,9 @@
   "keywords": [
     "datagrid, react-datagrid, react-component, typescript"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "axui-contextmenu": "^0.2.0"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.9.4",
