@@ -230,7 +230,7 @@ export interface IDataGridState {
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-  onChangeSelected?: (param: IonChangeSelectedParam) => void;
+  // onChangeSelected?: (param: IonChangeSelectedParam) => void;
 
   selection?: IDataGridSelection;
   rowSelector?: IDataGridRowSelector;

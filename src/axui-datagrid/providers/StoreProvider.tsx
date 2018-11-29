@@ -104,7 +104,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.onBeforeEvent === prevState.onBeforeEvent &&
       newProps.onAfterEvent === prevState.onAfterEvent &&
       newProps.onScrollEnd === prevState.onScrollEnd &&
-      newProps.onChangeSelected === prevState.onChangeSelected &&
+      // newProps.onChangeSelected === prevState.onChangeSelected &&
       newProps.selection === prevState.selection &&
       newProps.rowSelector === prevState.rowSelector &&
       newProps.headerTable === prevState.headerTable &&
@@ -381,8 +381,9 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       bodyGroupingData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
       onScrollEnd,
-      onChangeSelected,
+      // onChangeSelected,
       sortInfo,
+      rowSelector,
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
@@ -393,6 +394,8 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       filteredList: _filteredList,
       sortInfo: _sortInfo,
     } = newState;
+    // changed onChangeSelected to rowSelector.onChange since 0.3.20
+    const onChangeSelected = rowSelector && rowSelector.onChange;
 
     if (
       typeof _scrollLeft !== 'undefined' ||

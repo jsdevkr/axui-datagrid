@@ -56,10 +56,14 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, onChangeSelected, sortInfo, } = this.state;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, 
+            // onChangeSelected,
+            sortInfo, rowSelector, } = this.state;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
             const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, sortInfo: _sortInfo, } = newState;
+            // changed onChangeSelected to rowSelector.onChange since 0.3.20
+            const onChangeSelected = rowSelector && rowSelector.onChange;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, scrollContentWidth: scrollWidth = 0, scrollContentHeight: scrollHeight = 0, scrollContentContainerWidth: clientWidth = 0, scrollContentContainerHeight: clientHeight = 0, } = Object.assign({}, styles, _styles);
@@ -344,7 +348,7 @@ class StoreProvider extends React.Component {
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
-            newProps.onChangeSelected === prevState.onChangeSelected &&
+            // newProps.onChangeSelected === prevState.onChangeSelected &&
             newProps.selection === prevState.selection &&
             newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&
