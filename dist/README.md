@@ -135,11 +135,20 @@ static defaultOptions: types.DataGridOptions = {
 
 ## onScrollEnd?: (param: onScrollEndFunctionParam) => void;
 
-## onChangeSelected?: (param: onChangeSelectedParam) => void;
-
 ## loading?: boolean = false;
 
 ## loadingData?: boolean = false;
+
+## rowSelector?: IDataGridRowSelector;
+
+```typescript jsx
+ {
+  show: boolean;
+  rowKey: string;
+  selectedRowKeys?: string[];
+  onChange?: (param: IonChangeSelectedParam) => void;
+}
+```
 
 # Sample
 
@@ -220,3 +229,5 @@ export default Formatter;
 - v0.3.11 - Minor bug fix
 - v0.3.14 - Code changes that were using 'findDOMNode'. so has remove dependencies 'react-dom'
 - v0.3.18 - update readme
+- v0.3.20 - changed onChangeSelected to rowSelector.onChange
+- v0.4.0 - support contextmenu event

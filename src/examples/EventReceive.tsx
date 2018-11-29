@@ -50,7 +50,6 @@ class EventReceive extends React.Component<any, any> {
     }
   };
 
-
   render() {
     return (
       <Wrapper>
@@ -68,6 +67,10 @@ class EventReceive extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
             onBeforeEvent={(e, eventName) => {
+              if (eventName === 'contextmenu') {
+                e.preventDefault();
+                // e.stopPropagation();
+              }
               this.receiveEvent(eventName);
             }}
           />
@@ -79,25 +82,24 @@ class EventReceive extends React.Component<any, any> {
 
           <Divider />
 
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 300)}
-        >
-          height : 300
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 400)}
-        >
-          height : 400"
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 500)}
-        >
-          height : 500"
-        </Button>
-
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
         </Segment>
       </Wrapper>
     );

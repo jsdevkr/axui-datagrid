@@ -10,6 +10,7 @@ var EventNames;
     EventNames["CLICK"] = "click";
     EventNames["TOUCHSTART"] = "touchStart";
     EventNames["BLUR"] = "blur";
+    EventNames["CONTEXTMENU"] = "contextmenu";
 })(EventNames = exports.EventNames || (exports.EventNames = {}));
 var KeyCodes;
 (function (KeyCodes) {

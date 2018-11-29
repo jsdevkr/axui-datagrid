@@ -7,6 +7,7 @@ export enum EventNames {
   'CLICK' = 'click',
   'TOUCHSTART' = 'touchStart',
   'BLUR' = 'blur',
+  'CONTEXTMENU' = 'contextmenu',
 }
 
 export enum KeyCodes {

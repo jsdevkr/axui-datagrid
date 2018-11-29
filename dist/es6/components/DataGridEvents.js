@@ -337,6 +337,10 @@ class DataGridEvents extends React.Component {
                         this.onKeyUp(e);
                     }
                 },
+                [_enums_1.EventNames.CONTEXTMENU]: () => {
+                    // e.preventDefault();
+                    // e.stopPropagation();
+                },
             };
             if (e.type in proc && !loading) {
                 if (this.props.onBeforeEvent && !loadingData) {
@@ -357,6 +361,7 @@ class DataGridEvents extends React.Component {
         if (rootNode && rootNode.current) {
             rootNode.current.addEventListener('keydown', this.onFireEvent);
             rootNode.current.addEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('contextmenu', this.onFireEvent);
             rootNode.current.addEventListener('wheel', this.onFireEvent);
         }
     }
@@ -365,6 +370,7 @@ class DataGridEvents extends React.Component {
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
             rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     }

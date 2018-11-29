@@ -284,8 +284,8 @@ export interface IDataGrid {
     height?: number;
     style?: any;
     options?: IDataGridOptions;
-    onBeforeEvent?: (e: any, eventName: string) => void;
-    onAfterEvent?: (e: any, eventName: string) => void;
+    onBeforeEvent?: (e: React.MouseEvent<any> | React.KeyboardEvent<any>, eventName: string) => void;
+    onAfterEvent?: (e: React.MouseEvent<any> | React.KeyboardEvent<any>, eventName: string) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     loading?: boolean;

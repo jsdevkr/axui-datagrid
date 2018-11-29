@@ -363,6 +363,10 @@ var DataGridEvents = /** @class */ (function (_super) {
                         _this.onKeyUp(e);
                     }
                 },
+                _a[_enums_1.EventNames.CONTEXTMENU] = function () {
+                    // e.preventDefault();
+                    // e.stopPropagation();
+                },
                 _a);
             if (e.type in proc && !loading) {
                 if (_this.props.onBeforeEvent && !loadingData) {
@@ -384,6 +388,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         if (rootNode && rootNode.current) {
             rootNode.current.addEventListener('keydown', this.onFireEvent);
             rootNode.current.addEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('contextmenu', this.onFireEvent);
             rootNode.current.addEventListener('wheel', this.onFireEvent);
         }
     };
@@ -392,6 +397,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
             rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     };
