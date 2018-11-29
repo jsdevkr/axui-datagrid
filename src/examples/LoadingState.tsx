@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider, Checkbox } from 'antd';
+import { Divider, Checkbox, Button,Form, Select} from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -38,6 +38,23 @@ class LoadingState extends React.Component<any, any> {
         data: [...this.state.data, ...appendData],
       });
     }, 1000);
+  };
+
+
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this, value);
+    } else {
+      this.setState(value);
+    }
   };
 
   render() {
@@ -80,6 +97,26 @@ class LoadingState extends React.Component<any, any> {
           >
             loadingData
           </Checkbox>
+          <Divider />
+
+<Button
+  type="primary"
+  onClick={() => this.changeConfig('setHeight', 300)}
+>
+  height : 300
+</Button>
+<Button
+  type="primary"
+  onClick={() => this.changeConfig('setHeight', 400)}
+>
+  height : 400"
+</Button>
+<Button
+  type="primary"
+  onClick={() => this.changeConfig('setHeight', 500)}
+>
+  height : 500"
+</Button>
         </Segment>
       </Wrapper>
     );
