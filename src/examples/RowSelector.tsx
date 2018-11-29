@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Divider } from 'antd';
+import { Divider,Form, Select, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -23,6 +23,23 @@ class LoadingState extends React.Component<any, any> {
       options: {},
     };
   }
+
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this, value);
+    } else {
+      this.setState(value);
+    }
+  };
+
 
   render() {
     const { height, columns, data, options } = this.state;
@@ -60,6 +77,29 @@ class LoadingState extends React.Component<any, any> {
             value={JSON.stringify(this.state.filteredList)}
             readOnly
           />
+          <Divider />
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
+
+
+
         </Segment>
       </Wrapper>
     );
