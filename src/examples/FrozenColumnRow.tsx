@@ -60,8 +60,10 @@ class FrozenColumnRow extends React.Component<any, any> {
         <Segment padded>
           <h1>Frozen Column {'&'} Row</h1>
           <p>
-            If options.frozenColumnIndex and options.frozenRowIndex are
-            specified, then 'DataGrid' You can set the frame fixed area.
+            Users can dynamically specify options.frozenColumnIndex and options.
+            frozenRowIndex to set the frame fixed area. <br/>
+            Then, the row and column areas can be specified 
+            in the fixed size chosen by the user.   
           </p>
           <DataGrid
             height={height}

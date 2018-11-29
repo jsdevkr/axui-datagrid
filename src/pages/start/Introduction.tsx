@@ -24,7 +24,7 @@ class Introduction extends React.Component<IProps, IState> {
     return (
       <Wrapper>
         <h1>axui-datagrid</h1>
-
+        {/*<!-- pull request -->*/}
         <Segment>
           <h2>Introduction</h2>
           <p>
@@ -65,8 +65,10 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Frozen row / col</h3>
           <p>
-            If options.frozenColumnIndex and options.frozenRowIndex are
-            specified, then 'DataGrid' You can set the frame fixed area.
+            Users can dynamically specify options.frozenColumnIndex and options.
+            frozenRowIndex to set the frame fixed area. 
+            Then, The row and column areas can be specified 
+            in the fixed size chosen by the user.    
           </p>
 
           <NavLink to={'examples/FrozenColumnRow'}>
