@@ -392,7 +392,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
-            rootNode.current.addEventListener('wheel', this.onFireEvent);
+            rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     };
     return DataGridEvents;
