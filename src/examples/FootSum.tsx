@@ -78,10 +78,10 @@ class FootSum extends React.Component<any, any> {
         <Segment padded>
           <h1>FootSum</h1>
           <p>
-            You can use footSum props The value of the footSum column, which
-            consists of an array, can be determined using the built-in collector
-            (avg, sum) function, Alternatively, you can define your own
-            function.
+            You can use footSum props. <br></br>
+            The value of the footSum column, which consists of an array, can be determined using the built-in collector
+            (avg, sum) function. <br></br>
+            Alternatively, you can define your own function.
           </p>
           <DataGrid
             height={this.state.height}
