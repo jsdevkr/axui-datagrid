@@ -101,10 +101,14 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd, onChangeSelected = _a.onChangeSelected, sortInfo = _a.sortInfo;
+            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd, 
+            // onChangeSelected,
+            sortInfo = _a.sortInfo, rowSelector = _a.rowSelector;
             var _l = options.frozenColumnIndex, frozenColumnIndex = _l === void 0 ? 0 : _l;
             var CTInnerWidth = styles.CTInnerWidth;
             var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _m = newState.styles, _styles = _m === void 0 ? {} : _m, _filteredList = newState.filteredList, _sortInfo = newState.sortInfo;
+            // changed onChangeSelected to rowSelector.onChange since 0.3.20
+            var onChangeSelected = rowSelector && rowSelector.onChange;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 var _o = __assign({}, styles, _styles), _p = _o.CTInnerWidth, _CTInnerWidth = _p === void 0 ? 0 : _p, _q = _o.frozenPanelWidth, _frozenPanelWidth = _q === void 0 ? 0 : _q, _r = _o.asidePanelWidth, _asidePanelWidth = _r === void 0 ? 0 : _r, _s = _o.rightPanelWidth, _rightPanelWidth = _s === void 0 ? 0 : _s, _t = _o.scrollContentWidth, scrollWidth = _t === void 0 ? 0 : _t, _u = _o.scrollContentHeight, scrollHeight = _u === void 0 ? 0 : _u, _v = _o.scrollContentContainerWidth, clientWidth = _v === void 0 ? 0 : _v, _w = _o.scrollContentContainerHeight, clientHeight = _w === void 0 ? 0 : _w;
@@ -392,7 +396,7 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
-            newProps.onChangeSelected === prevState.onChangeSelected &&
+            // newProps.onChangeSelected === prevState.onChangeSelected &&
             newProps.selection === prevState.selection &&
             newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&

@@ -205,7 +205,6 @@ export interface IDataGridState {
     onBeforeEvent?: (e: any, eventName: string) => void;
     onAfterEvent?: (e: any, eventName: string) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
     selection?: IDataGridSelection;
     rowSelector?: IDataGridRowSelector;
     isInlineEditing?: boolean;
