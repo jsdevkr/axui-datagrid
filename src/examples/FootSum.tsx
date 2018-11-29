@@ -88,16 +88,15 @@ class FootSum extends React.Component<any, any> {
     }
   };
 
-
   public render() {
     return (
       <Wrapper>
         <Segment padded>
           <h1>FootSum</h1>
           <p>
-            You can use footSum props. <br></br>
-            The value of the footSum column, which consists of an array, can be determined using the built-in collector
-            (avg, sum) function. <br></br>
+            You can use footSum props. <br />
+            The value of the footSum column, which consists of an array, can be
+            determined using the built-in collector (avg, sum) function. <br />
             Alternatively, you can define your own function.
           </p>
           <DataGrid
@@ -109,29 +108,26 @@ class FootSum extends React.Component<any, any> {
             options={this.state.options}
           />
 
-        <Divider />
-        
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 300)}
-        >
-          height : 300
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 400)}
-        >
-          height : 400"
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => this.changeConfig('setHeight', 500)}
-        >
-          height : 500"
-        </Button>
+          <Divider />
 
-
-
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
         </Segment>
       </Wrapper>
     );

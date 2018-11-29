@@ -135,11 +135,20 @@ static defaultOptions: types.DataGridOptions = {
 
 ## onScrollEnd?: (param: onScrollEndFunctionParam) => void;
 
-## onChangeSelected?: (param: onChangeSelectedParam) => void;
-
 ## loading?: boolean = false;
 
 ## loadingData?: boolean = false;
+
+## rowSelector?: IDataGridRowSelector;
+
+```typescript jsx
+ {
+  show: boolean;
+  rowKey: string;
+  selectedRowKeys?: string[];
+  onChange?: (param: IonChangeSelectedParam) => void;
+}
+```
 
 # Sample
 
