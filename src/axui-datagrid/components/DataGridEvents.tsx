@@ -72,7 +72,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     return true;
   };
 
-  onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  onKeyUp = (e: React.KeyboardEvent<any>) => {
     const {
       colGroup = [],
       focusedRow = 0,
@@ -103,7 +103,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  onKeyDown = (e: React.KeyboardEvent<any>) => {
     const {
       filteredList = [],
       rootNode,
@@ -412,6 +412,34 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
+  onContextmenu = (e: React.MouseEvent<any>) => {
+    const {
+      onRightClick,
+      focusedRow,
+      focusedCol,
+      filteredList,
+      colGroup,
+    } = this.props;
+
+    if (
+      onRightClick &&
+      filteredList &&
+      typeof focusedRow !== 'undefined' &&
+      typeof focusedCol !== 'undefined' &&
+      colGroup
+    ) {
+      const { key: itemKey = '' } = colGroup[focusedCol];
+
+      onRightClick({
+        e,
+        item: filteredList[focusedRow],
+        value: filteredList[focusedRow][itemKey],
+        focusedRow,
+        focusedCol,
+      });
+    }
+  };
+
   onFireEvent = (e: any) => {
     const { loading, loadingData, isInlineEditing = false } = this.props;
     const proc = {
@@ -434,20 +462,21 @@ class DataGridEvents extends React.Component<IProps, IState> {
         }
       },
       [EventNames.CONTEXTMENU]: () => {
-        // e.preventDefault();
-        // e.stopPropagation();
+        if (!loadingData && !isInlineEditing) {
+          this.onContextmenu(e);
+        }
       },
     };
 
     if (e.type in proc && !loading) {
       if (this.props.onBeforeEvent && !loadingData) {
-        this.props.onBeforeEvent(e, e.type);
+        this.props.onBeforeEvent({ e, eventName: e.type });
       }
 
       proc[e.type]();
 
       if (this.props.onAfterEvent && !loadingData) {
-        this.props.onAfterEvent(e, e.type);
+        this.props.onAfterEvent({ e, eventName: e.type });
       }
     }
   };

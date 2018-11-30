@@ -56,11 +56,27 @@ npm start
 
 ## columns: DataGridColumn[];
 
+```typescript jsx
+export interface IDataGridColumn extends ICol {
+  colIndex?: number;
+  rowIndex?: number;
+  formatter?: formatterFunction | string;
+  collector?: collectorFunction | string;
+  editor?: editorFunction | string | { type?: string };
+  hidden?: boolean;
+  columns?: IDataGridColumn[];
+  depth?: number;
+  columnAttr?: string;
+}
+```
+
 ## height?: number = 400;
 
 ## style?: any;
 
 ## options?: DataGridOptions = defaultOptions;
+
+_defaultOptions_
 
 ```typescript jsx
 static defaultColumnKeys: types.DataGridColumnKeys = {
@@ -129,17 +145,21 @@ static defaultOptions: types.DataGridOptions = {
 };
 ```
 
-## onBeforeEvent?: (e: any, eventName: string) => void;
+## onBeforeEvent?: ({e: React.MouseEvent<any> | React.KeyboardEvent<any>; eventName: string;}) => void;
 
-## onAfterEvent?: (e: any, eventName: string) => void;
+## onAfterEvent?: ({e: React.MouseEvent<any> | React.KeyboardEvent<any>; eventName: string;}) => void;
 
-## onScrollEnd?: (param: onScrollEndFunctionParam) => void;
+## onScrollEnd?: ({endOfScrollTop?: boolean; endOfScrollLeft?: boolean;}) => void;
+
+## onRightClick?: ({e: React.MouseEvent<any>; item: any; value: any; focusedRow?: number; focusedCol?: number;}) => void;
 
 ## loading?: boolean = false;
 
 ## loadingData?: boolean = false;
 
 ## rowSelector?: IDataGridRowSelector;
+
+_IDataGridRowSelector_
 
 ```typescript jsx
  {
@@ -231,3 +251,4 @@ export default Formatter;
 - v0.3.18 - update readme
 - v0.3.20 - changed onChangeSelected to rowSelector.onChange
 - v0.4.0 - support contextmenu event
+- v0.5.0 - support selection.onChange, Add a new props onRightClick, refactoring StoreProvider

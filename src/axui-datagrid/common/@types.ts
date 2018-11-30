@@ -39,6 +39,19 @@ export interface IDataGridCollectorData {
   options?: any;
 }
 
+export interface IonEventParam {
+  e: React.MouseEvent<any> | React.KeyboardEvent<any>;
+  eventName: string;
+}
+
+export interface IonRightClickParam {
+  e: React.MouseEvent<any>;
+  item: any;
+  value: any;
+  focusedRow?: number;
+  focusedCol?: number;
+}
+
 export interface IonScrollEndFunctionParam {
   endOfScrollTop?: boolean;
   endOfScrollLeft?: boolean;
@@ -46,6 +59,11 @@ export interface IonScrollEndFunctionParam {
 
 export interface IonChangeSelectedParam {
   filteredList?: any[];
+}
+
+export interface IonChangeSelectionParam {
+  rows?: number[];
+  cols?: number[];
 }
 
 export interface IDataGridFormatter {
@@ -227,10 +245,10 @@ export interface IDataGridState {
   filterInfo?: {};
   height?: number;
 
-  onBeforeEvent?: (e: any, eventName: string) => void;
-  onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
+  onBeforeEvent?: (param: IonEventParam) => void;
+  onAfterEvent?: (param: IonEventParam) => void;
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-  // onChangeSelected?: (param: IonChangeSelectedParam) => void;
+  onRightClick?: (param: IonRightClickParam) => void;
 
   selection?: IDataGridSelection;
   rowSelector?: IDataGridRowSelector;
@@ -255,6 +273,11 @@ export interface IDataGridState {
   selectionEndOffset?: IPosition;
   selectionMinOffset?: IPosition;
   selectionMaxOffset?: IPosition;
+
+  selectionSRow?: number;
+  selectionSCol?: number;
+  selectionERow?: number;
+  selectionECol?: number;
 
   printStartColIndex?: number;
   printEndColIndex?: number;
@@ -314,7 +337,7 @@ export interface IDataGridRowSelector {
 export interface IDataGridSelection {
   rows?: number[];
   cols?: number[];
-  onChange?: (param: IonChangeSelectedParam) => void;
+  onChange?: (param: IonChangeSelectionParam) => void;
 }
 
 export interface IDataGrid {
@@ -324,20 +347,14 @@ export interface IDataGrid {
   height?: number;
   style?: any;
   options?: IDataGridOptions;
-  onBeforeEvent?: (
-    e: React.MouseEvent<any> | React.KeyboardEvent<any>,
-    eventName: string,
-  ) => void;
-  onAfterEvent?: (
-    e: React.MouseEvent<any> | React.KeyboardEvent<any>,
-    eventName: string,
-  ) => void;
+  onBeforeEvent?: (param: IonEventParam) => void;
+  onAfterEvent?: (param: IonEventParam) => void;
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-  onChangeSelected?: (param: IonChangeSelectedParam) => void;
   loading?: boolean;
   loadingData?: boolean;
   rowSelector?: IDataGridRowSelector;
   selection?: IDataGridSelection;
+  onRightClick?: (param: IonRightClickParam) => void;
 }
 
 export interface IDataGridRootState {

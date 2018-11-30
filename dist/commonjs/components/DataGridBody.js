@@ -30,10 +30,6 @@ var DataGridBody = /** @class */ (function (_super) {
             if (loading || loadingData) {
                 return false;
             }
-            // only first mouse button
-            if (e.button !== 0) {
-                return false;
-            }
             var _m = styles.frozenPanelWidth, frozenPanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelHeight, frozenPanelHeight = _o === void 0 ? 0 : _o, _p = styles.headerHeight, headerHeight = _p === void 0 ? 0 : _p, _q = styles.bodyHeight, bodyHeight = _q === void 0 ? 0 : _q, _r = styles.CTInnerWidth, CTInnerWidth = _r === void 0 ? 0 : _r, _s = styles.verticalScrollerWidth, verticalScrollerWidth = _s === void 0 ? 0 : _s, _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.asidePanelWidth, asidePanelWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y;
             var startMousePosition = utils_1.getMousePosition(e);
             var spanType = e.target.getAttribute('data-span');
@@ -115,6 +111,12 @@ var DataGridBody = /** @class */ (function (_super) {
                             // console.log('get selection fail', sRow, eRow, sCol, eCol);
                         }
                         setStoreState(currState);
+                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                            sRow: sRow,
+                            eRow: eRow,
+                            sCol: sCol,
+                            eCol: eCol,
+                        });
                     };
                     var scrollMoving = function (_moving) {
                         var _a = _this.props, _b = _a.scrollTop, propsScrollTop = _b === void 0 ? 0 : _b, _c = _a.scrollLeft, propsScrollLeft = _c === void 0 ? 0 : _c, propsSelectionEndOffset = _a.selectionEndOffset;
@@ -244,6 +246,12 @@ var DataGridBody = /** @class */ (function (_super) {
                             state.selectionCols[i] = true;
                         }
                         setStoreState(state);
+                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                            sRow: sRow,
+                            eRow: eRow,
+                            sCol: sCol,
+                            eCol: eCol,
+                        });
                         selectStartedRow = focusedRow;
                         selectStartedCol = focusedCol;
                         document.addEventListener('mousemove', throttledOnMouseMove);
@@ -262,6 +270,12 @@ var DataGridBody = /** @class */ (function (_super) {
                         selectionCols: (_b = {}, _b[selectStartedCol] = true, _b),
                         focusedRow: selectStartedRow,
                         focusedCol: selectStartedCol,
+                    });
+                    dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        sRow: selectStartedRow,
+                        eRow: selectStartedRow,
+                        sCol: selectStartedCol,
+                        eCol: selectStartedCol,
                     });
                     document.addEventListener('mousemove', throttledOnMouseMove);
                     document.addEventListener('mouseup', offEvent);
@@ -305,6 +319,23 @@ var DataGridBody = /** @class */ (function (_super) {
                     rowIndex: selectStartedRow,
                 });
             };
+            var procBodyClick = function () {
+                var _a, _b;
+                if (selectStartedCol < 0) {
+                    return;
+                }
+                // 셀렉션 저장정보 초기화
+                setStoreState({
+                    selectionStartOffset: undefined,
+                    selectionEndOffset: undefined,
+                    selectionMinOffset: undefined,
+                    selectionMaxOffset: undefined,
+                    selectionRows: (_a = {}, _a[selectStartedRow] = true, _a),
+                    selectionCols: (_b = {}, _b[selectStartedCol] = true, _b),
+                    focusedRow: selectStartedRow,
+                    focusedCol: selectStartedCol,
+                });
+            };
             // 선택이 시작된 row / col
             var selectStartedRow = getRowIndex(startY, startScrollTop);
             var selectStartedCol = getColIndex(startX, startScrollLeft);
@@ -314,16 +345,22 @@ var DataGridBody = /** @class */ (function (_super) {
                 // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
                 return false;
             }
-            switch (spanType) {
-                case 'lineNumber':
-                    procClickLineNumber();
-                    break;
-                case 'rowSelector':
-                    procClickRowSelector();
-                    break;
-                default:
-                    procBodySelect();
-                    break;
+            // only first mouse button
+            if (e.button === 0) {
+                switch (spanType) {
+                    case 'lineNumber':
+                        procClickLineNumber();
+                        break;
+                    case 'rowSelector':
+                        procClickRowSelector();
+                        break;
+                    default:
+                        procBodySelect();
+                        break;
+                }
+            }
+            else {
+                procBodyClick();
             }
             return true;
         };

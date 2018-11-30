@@ -55,6 +55,7 @@ var DispatchTypes;
     DispatchTypes[DispatchTypes["RESIZE_COL"] = 4] = "RESIZE_COL";
     DispatchTypes[DispatchTypes["SELECT"] = 5] = "SELECT";
     DispatchTypes[DispatchTypes["SELECT_ALL"] = 6] = "SELECT_ALL";
+    DispatchTypes[DispatchTypes["CHANGE_SELECTION"] = 7] = "CHANGE_SELECTION";
 })(DispatchTypes = exports.DispatchTypes || (exports.DispatchTypes = {}));
 var PageButtonActions;
 (function (PageButtonActions) {

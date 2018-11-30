@@ -43,11 +43,6 @@ class DataGridBody extends React.Component<IProps> {
       return false;
     }
 
-    // only first mouse button
-    if (e.button !== 0) {
-      return false;
-    }
-
     const {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,
@@ -169,6 +164,13 @@ class DataGridBody extends React.Component<IProps> {
           }
 
           setStoreState(currState);
+
+          dispatch(DispatchTypes.CHANGE_SELECTION, {
+            sRow,
+            eRow,
+            sCol,
+            eCol,
+          });
         };
 
         const scrollMoving = (_moving: IDataGridMoving): boolean => {
@@ -327,6 +329,13 @@ class DataGridBody extends React.Component<IProps> {
 
           setStoreState(state);
 
+          dispatch(DispatchTypes.CHANGE_SELECTION, {
+            sRow,
+            eRow,
+            sCol,
+            eCol,
+          });
+
           selectStartedRow = focusedRow;
           selectStartedCol = focusedCol;
 
@@ -345,6 +354,13 @@ class DataGridBody extends React.Component<IProps> {
           selectionCols: { [selectStartedCol]: true },
           focusedRow: selectStartedRow,
           focusedCol: selectStartedCol,
+        });
+
+        dispatch(DispatchTypes.CHANGE_SELECTION, {
+          sRow: selectStartedRow,
+          eRow: selectStartedRow,
+          sCol: selectStartedCol,
+          eCol: selectStartedCol,
         });
 
         document.addEventListener('mousemove', throttledOnMouseMove);
@@ -392,6 +408,22 @@ class DataGridBody extends React.Component<IProps> {
         rowIndex: selectStartedRow,
       });
     };
+    const procBodyClick = () => {
+      if (selectStartedCol < 0) {
+        return;
+      }
+      // 셀렉션 저장정보 초기화
+      setStoreState({
+        selectionStartOffset: undefined,
+        selectionEndOffset: undefined,
+        selectionMinOffset: undefined,
+        selectionMaxOffset: undefined,
+        selectionRows: { [selectStartedRow]: true },
+        selectionCols: { [selectStartedCol]: true },
+        focusedRow: selectStartedRow,
+        focusedCol: selectStartedCol,
+      });
+    };
 
     // 선택이 시작된 row / col
     let selectStartedRow: number = getRowIndex(startY, startScrollTop);
@@ -406,16 +438,21 @@ class DataGridBody extends React.Component<IProps> {
       return false;
     }
 
-    switch (spanType) {
-      case 'lineNumber':
-        procClickLineNumber();
-        break;
-      case 'rowSelector':
-        procClickRowSelector();
-        break;
-      default:
-        procBodySelect();
-        break;
+    // only first mouse button
+    if (e.button === 0) {
+      switch (spanType) {
+        case 'lineNumber':
+          procClickLineNumber();
+          break;
+        case 'rowSelector':
+          procClickRowSelector();
+          break;
+        default:
+          procBodySelect();
+          break;
+      }
+    } else {
+      procBodyClick();
     }
 
     return true;

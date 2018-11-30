@@ -16,10 +16,6 @@ class DataGridBody extends React.Component {
             if (loading || loadingData) {
                 return false;
             }
-            // only first mouse button
-            if (e.button !== 0) {
-                return false;
-            }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
@@ -100,6 +96,12 @@ class DataGridBody extends React.Component {
                             // console.log('get selection fail', sRow, eRow, sCol, eCol);
                         }
                         setStoreState(currState);
+                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                            sRow,
+                            eRow,
+                            sCol,
+                            eCol,
+                        });
                     };
                     const scrollMoving = (_moving) => {
                         const { scrollTop: propsScrollTop = 0, scrollLeft: propsScrollLeft = 0, selectionEndOffset: propsSelectionEndOffset, } = this.props;
@@ -229,6 +231,12 @@ class DataGridBody extends React.Component {
                             state.selectionCols[i] = true;
                         }
                         setStoreState(state);
+                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                            sRow,
+                            eRow,
+                            sCol,
+                            eCol,
+                        });
                         selectStartedRow = focusedRow;
                         selectStartedCol = focusedCol;
                         document.addEventListener('mousemove', throttledOnMouseMove);
@@ -247,6 +255,12 @@ class DataGridBody extends React.Component {
                         selectionCols: { [selectStartedCol]: true },
                         focusedRow: selectStartedRow,
                         focusedCol: selectStartedCol,
+                    });
+                    dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        sRow: selectStartedRow,
+                        eRow: selectStartedRow,
+                        sCol: selectStartedCol,
+                        eCol: selectStartedCol,
                     });
                     document.addEventListener('mousemove', throttledOnMouseMove);
                     document.addEventListener('mouseup', offEvent);
@@ -289,6 +303,22 @@ class DataGridBody extends React.Component {
                     rowIndex: selectStartedRow,
                 });
             };
+            const procBodyClick = () => {
+                if (selectStartedCol < 0) {
+                    return;
+                }
+                // 셀렉션 저장정보 초기화
+                setStoreState({
+                    selectionStartOffset: undefined,
+                    selectionEndOffset: undefined,
+                    selectionMinOffset: undefined,
+                    selectionMaxOffset: undefined,
+                    selectionRows: { [selectStartedRow]: true },
+                    selectionCols: { [selectStartedCol]: true },
+                    focusedRow: selectStartedRow,
+                    focusedCol: selectStartedCol,
+                });
+            };
             // 선택이 시작된 row / col
             let selectStartedRow = getRowIndex(startY, startScrollTop);
             let selectStartedCol = getColIndex(startX, startScrollLeft);
@@ -298,16 +328,22 @@ class DataGridBody extends React.Component {
                 // 선택된 셀이 에디팅중인 셀이라면 함수 실행 중지
                 return false;
             }
-            switch (spanType) {
-                case 'lineNumber':
-                    procClickLineNumber();
-                    break;
-                case 'rowSelector':
-                    procClickRowSelector();
-                    break;
-                default:
-                    procBodySelect();
-                    break;
+            // only first mouse button
+            if (e.button === 0) {
+                switch (spanType) {
+                    case 'lineNumber':
+                        procClickLineNumber();
+                        break;
+                    case 'rowSelector':
+                        procClickRowSelector();
+                        break;
+                    default:
+                        procBodySelect();
+                        break;
+                }
+            }
+            else {
+                procBodyClick();
             }
             return true;
         };

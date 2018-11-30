@@ -47,7 +47,8 @@ export declare enum DispatchTypes {
     'UPDATE' = 3,
     'RESIZE_COL' = 4,
     'SELECT' = 5,
-    'SELECT_ALL' = 6
+    'SELECT_ALL' = 6,
+    'CHANGE_SELECTION' = 7
 }
 export declare enum PageButtonActions {
     'PAGE_FIRST' = "PAGE_FIRST",

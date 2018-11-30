@@ -51,6 +51,7 @@ export enum DispatchTypes {
   'RESIZE_COL',
   'SELECT',
   'SELECT_ALL',
+  'CHANGE_SELECTION',
 }
 
 export enum PageButtonActions {

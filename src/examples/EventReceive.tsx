@@ -66,12 +66,19 @@ class EventReceive extends React.Component<any, any> {
             columns={this.state.columns}
             data={this.state.data}
             options={this.state.options}
-            onBeforeEvent={(e, eventName) => {
-              if (eventName === 'contextmenu') {
-                e.preventDefault();
-                // e.stopPropagation();
-              }
+            onBeforeEvent={({ e, eventName }) => {
               this.receiveEvent(eventName);
+            }}
+            onRightClick={({ e, item, value, focusedRow, focusedCol }) => {
+              e.preventDefault();
+              // e.stopPropagation();
+              // item : item of list, value: keyvalue of item
+              console.log(item, value, focusedRow, focusedCol);
+            }}
+            selection={{
+              onChange: selection => {
+                console.log(selection);
+              },
             }}
           />
           <Divider />

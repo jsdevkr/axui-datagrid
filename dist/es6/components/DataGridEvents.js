@@ -315,6 +315,23 @@ class DataGridEvents extends React.Component {
                 proc[e.which] && proc[e.which]();
             }
         };
+        this.onContextmenu = (e) => {
+            const { onRightClick, focusedRow, focusedCol, filteredList, colGroup, } = this.props;
+            if (onRightClick &&
+                filteredList &&
+                typeof focusedRow !== 'undefined' &&
+                typeof focusedCol !== 'undefined' &&
+                colGroup) {
+                const { key: itemKey = '' } = colGroup[focusedCol];
+                onRightClick({
+                    e,
+                    item: filteredList[focusedRow],
+                    value: filteredList[focusedRow][itemKey],
+                    focusedRow,
+                    focusedCol,
+                });
+            }
+        };
         this.onFireEvent = (e) => {
             const { loading, loadingData, isInlineEditing = false } = this.props;
             const proc = {
@@ -338,17 +355,18 @@ class DataGridEvents extends React.Component {
                     }
                 },
                 [_enums_1.EventNames.CONTEXTMENU]: () => {
-                    // e.preventDefault();
-                    // e.stopPropagation();
+                    if (!loadingData && !isInlineEditing) {
+                        this.onContextmenu(e);
+                    }
                 },
             };
             if (e.type in proc && !loading) {
                 if (this.props.onBeforeEvent && !loadingData) {
-                    this.props.onBeforeEvent(e, e.type);
+                    this.props.onBeforeEvent({ e, eventName: e.type });
                 }
                 proc[e.type]();
                 if (this.props.onAfterEvent && !loadingData) {
-                    this.props.onAfterEvent(e, e.type);
+                    this.props.onAfterEvent({ e, eventName: e.type });
                 }
             }
         };

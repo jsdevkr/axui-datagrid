@@ -18,6 +18,10 @@ const store = {
     selectionEndOffset: {},
     selectionMinOffset: {},
     selectionMaxOffset: {},
+    selectionSRow: -1,
+    selectionSCol: -1,
+    selectionERow: -1,
+    selectionECol: -1,
     columnResizing: false,
     columnResizerLeft: 0,
     mounted: false,
@@ -56,14 +60,10 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, 
-            // onChangeSelected,
-            sortInfo, rowSelector, } = this.state;
+            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
-            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, sortInfo: _sortInfo, } = newState;
-            // changed onChangeSelected to rowSelector.onChange since 0.3.20
-            const onChangeSelected = rowSelector && rowSelector.onChange;
+            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, styles: _styles = {}, filteredList: _filteredList, } = newState;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, scrollContentWidth: scrollWidth = 0, scrollContentHeight: scrollHeight = 0, scrollContentContainerWidth: clientWidth = 0, scrollContentContainerHeight: clientHeight = 0, } = Object.assign({}, styles, _styles);
@@ -103,20 +103,11 @@ class StoreProvider extends React.Component {
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(this.state.rootNode && this.state.rootNode.current, this.state, _filteredList).styles;
             }
-            if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
-                onChangeSelected({
-                    filteredList: _filteredList,
-                });
-            }
-            if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
-                onChangeSelected({
-                    filteredList: filteredList,
-                });
-            }
             this.setState(newState);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, } = this.state;
+            const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, } = this.state;
+            const onChangeSelected = rowSelector && rowSelector.onChange;
             const { columnKeys: optionColumnKeys = {} } = options;
             let { filteredList = [] } = this.state;
             const proc = {
@@ -159,6 +150,11 @@ class StoreProvider extends React.Component {
                         filterInfo,
                         scrollTop: 0,
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList,
+                        });
+                    }
                 },
                 [_enums_1.DispatchTypes.SORT]: () => {
                     const { colIndex } = param;
@@ -222,6 +218,11 @@ class StoreProvider extends React.Component {
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
+                        if (onChangeSelected) {
+                            onChangeSelected({
+                                filteredList: filteredList,
+                            });
+                        }
                     }
                 },
                 [_enums_1.DispatchTypes.UPDATE]: () => {
@@ -256,6 +257,11 @@ class StoreProvider extends React.Component {
                         },
                         focusedRow: focusRow,
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
                     if (rootNode && rootNode.current) {
                         rootNode.current.focus();
                     }
@@ -299,6 +305,11 @@ class StoreProvider extends React.Component {
                         selectedRowIndexSelected: rowSelected,
                         filteredList: [...filteredList],
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
                 },
                 [_enums_1.DispatchTypes.SELECT_ALL]: () => {
                     const { checked } = param;
@@ -319,6 +330,35 @@ class StoreProvider extends React.Component {
                         listSelectedAll: selectedAll,
                         filteredList: [...filteredList],
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
+                },
+                [_enums_1.DispatchTypes.CHANGE_SELECTION]: () => {
+                    const { sRow, sCol, eRow, eCol } = param;
+                    if (selectionSRow !== sRow ||
+                        selectionSCol !== sCol ||
+                        selectionERow !== eRow ||
+                        selectionECol !== eCol) {
+                        // console.log(sRow, sCol, eRow, eCol);
+                        if (selection &&
+                            selection.onChange &&
+                            selectionRows &&
+                            selectionCols) {
+                            selection.onChange({
+                                rows: Object.keys(selectionRows).map(n => Number(n)),
+                                cols: Object.keys(selectionCols).map(n => Number(n)),
+                            });
+                        }
+                        this.setStoreState({
+                            selectionSRow: sRow,
+                            selectionSCol: sCol,
+                            selectionERow: eRow,
+                            selectionECol: eCol,
+                        });
+                    }
                 },
             };
             proc[dispatchType]();
@@ -348,7 +388,7 @@ class StoreProvider extends React.Component {
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
-            // newProps.onChangeSelected === prevState.onChangeSelected &&
+            newProps.onRightClick === prevState.onRightClick &&
             newProps.selection === prevState.selection &&
             newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&
@@ -448,7 +488,7 @@ class StoreProvider extends React.Component {
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
-                onChangeSelected: newProps.onChangeSelected,
+                onRightClick: newProps.onRightClick,
                 selection: newProps.selection,
                 rowSelector: newProps.rowSelector,
                 colGroupMap: newProps.colGroupMap,
