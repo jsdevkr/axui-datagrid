@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { Button, Divider, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid, utils } from 'axui-datagrid';
 import {
@@ -72,16 +72,32 @@ class FootSum extends React.Component<any, any> {
     };
   }
 
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this, value);
+    } else {
+      this.setState(value);
+    }
+  };
+
   public render() {
     return (
       <Wrapper>
         <Segment padded>
           <h1>FootSum</h1>
           <p>
-            You can use footSum props The value of the footSum column, which
-            consists of an array, can be determined using the built-in collector
-            (avg, sum) function, Alternatively, you can define your own
-            function.
+            You can use footSum props. <br />
+            The value of the footSum column, which consists of an array, can be
+            determined using the built-in collector (avg, sum) function. <br />
+            Alternatively, you can define your own function.
           </p>
           <DataGrid
             height={this.state.height}
@@ -91,6 +107,27 @@ class FootSum extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
           />
+
+          <Divider />
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
         </Segment>
       </Wrapper>
     );

@@ -16,6 +16,10 @@ class DataGridBody extends React.Component {
             if (loading || loadingData) {
                 return false;
             }
+            // only first mouse button
+            if (e.button !== 0) {
+                return false;
+            }
             const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
