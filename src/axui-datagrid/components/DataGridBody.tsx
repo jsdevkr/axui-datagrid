@@ -43,6 +43,11 @@ class DataGridBody extends React.Component<IProps> {
       return false;
     }
 
+    // only first mouse button
+    if (e.button !== 0) {
+      return false;
+    }
+
     const {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,

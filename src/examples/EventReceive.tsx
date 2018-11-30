@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider } from 'antd';
+import { Button, Divider, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -34,14 +34,31 @@ class EventReceive extends React.Component<any, any> {
     });
   };
 
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this, value);
+    } else {
+      this.setState(value);
+    }
+  };
+
   render() {
     return (
       <Wrapper>
         <Segment padded>
           <h1>Event</h1>
           <p>
-            onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의
-            이벤트가 발생될때 callback을 받을 수 있습니다.
+            If you define the onBeforeEvent or the onAfterEvent attributes on
+            DataGrid tag, you can get a callback before processing particular
+            events or after. And the events are 'keyup', 'keydown', 'wheel'.
           </p>
           <DataGrid
             height={this.state.height}
@@ -50,6 +67,10 @@ class EventReceive extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
             onBeforeEvent={(e, eventName) => {
+              if (eventName === 'contextmenu') {
+                e.preventDefault();
+                // e.stopPropagation();
+              }
               this.receiveEvent(eventName);
             }}
           />
@@ -58,6 +79,27 @@ class EventReceive extends React.Component<any, any> {
             style={{ width: '100%', height: '400px', padding: '10px' }}
             value={this.state.eventLog.join('\n')}
           />
+
+          <Divider />
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
         </Segment>
       </Wrapper>
     );

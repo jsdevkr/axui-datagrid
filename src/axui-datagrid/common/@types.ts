@@ -230,7 +230,7 @@ export interface IDataGridState {
   onBeforeEvent?: (e: any, eventName: string) => void;
   onAfterEvent?: (e: any, eventName: string) => void; // 원본과 비교를 위한 JSON.stringify 값
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-  onChangeSelected?: (param: IonChangeSelectedParam) => void;
+  // onChangeSelected?: (param: IonChangeSelectedParam) => void;
 
   selection?: IDataGridSelection;
   rowSelector?: IDataGridRowSelector;
@@ -324,8 +324,14 @@ export interface IDataGrid {
   height?: number;
   style?: any;
   options?: IDataGridOptions;
-  onBeforeEvent?: (e: any, eventName: string) => void;
-  onAfterEvent?: (e: any, eventName: string) => void;
+  onBeforeEvent?: (
+    e: React.MouseEvent<any> | React.KeyboardEvent<any>,
+    eventName: string,
+  ) => void;
+  onAfterEvent?: (
+    e: React.MouseEvent<any> | React.KeyboardEvent<any>,
+    eventName: string,
+  ) => void;
   onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
   onChangeSelected?: (param: IonChangeSelectedParam) => void;
   loading?: boolean;

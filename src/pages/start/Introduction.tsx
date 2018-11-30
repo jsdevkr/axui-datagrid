@@ -11,6 +11,10 @@ const feature04 = require('assets/datagrid-feature-04.jpg');
 const feature05 = require('assets/datagrid-feature-05.jpg');
 const feature06 = require('assets/datagrid-feature-06.jpg');
 const feature07 = require('assets/datagrid-feature-07.jpg');
+const feature08 = require('assets/datagrid-feature-08.png');
+const feature091 = require('assets/datagrid-feature-09-1.png');
+const feature092 = require('assets/datagrid-feature-09-2.png');
+const feature10 = require('assets/datagrid-feature-10.png');
 
 interface IProps {}
 interface IState {}
@@ -62,11 +66,43 @@ class Introduction extends React.Component<IProps, IState> {
           </NavLink>
 
           <Divider />
-
-          <h3>Frozen row / col</h3>
+          {/* Formatting of data  */}
+          <h3>Formatting of data</h3>
           <p>
-            If options.frozenColumnIndex and options.frozenRowIndex are
-            specified, then 'DataGrid' You can set the frame fixed area.
+            You can use 'date', 'money' predefined in 'columns> col.formatter',
+            or you can change the values as desired using a user-defined
+            function.{' '}
+          </p>
+          <NavLink to={'examples/Formatter'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature08} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
+          {/* change columns */}
+          <h3>Change Columns</h3>
+          <p>
+            This is an example of changing the columns props in the datagrid.{' '}
+          </p>
+          <NavLink to={'examples/ChangeColumns'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature091} width={'50%'} style={{ maxWidth: 800 }} />
+            <img src={feature092} width={'50%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
+
+          <h3>Frozen column and row</h3>
+          <p>
+            Users can dynamically specify options.frozenColumnIndex and options.
+            frozenRowIndex to set the frame fixed area. Then, The row and column
+            areas can be specified in the fixed size chosen by the user.
           </p>
 
           <NavLink to={'examples/FrozenColumnRow'}>
@@ -79,13 +115,21 @@ class Introduction extends React.Component<IProps, IState> {
 
           <Divider />
 
-          <h3>Multi header</h3>
+          <h3>Multi column header</h3>
           <p>
-          The column in the datagrid can be created with the context 'column: &#91; &#93;' you write. Inside '&#91; &#93;', one '&#123; &#125;' means a one column. 
-          <br/>So if you want to create multi column header, you can use 'columns : &#91; &#93;' in the column what you want to create a multi column header. 
-          <br/>For example, columns : &#91; &#123; &#125; , &#123; &#123; &#125; &#123; &#125; &#125; &#93; context means that this datagrid has three columns, and the second column is a multi column header which has 2 columns.
+            The column in the datagrid can be created with the context 'column:
+            &#91; &#93;' you write. Inside '&#91; &#93;', one '&#123; &#125;'
+            means a one column.
+            <br />
+            So if you want to create multi column header, you can use 'columns :
+            &#91; &#93;' in the column what you want to create a multi column
+            header.
+            <br />
+            For example, columns : &#91; &#123; &#125; , &#123; &#123; &#125;
+            &#123; &#125; &#125; &#93; context means that this datagrid has
+            three columns, and the second column is a multi column header which
+            has 2 columns.
           </p>
-          
 
           <NavLink to={'examples/MultiColumnHeader'}>
             <Button type={'primary'} size={'small'} ghost>
@@ -95,6 +139,35 @@ class Introduction extends React.Component<IProps, IState> {
             <img src={feature03} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
 
+          <Divider />
+          <h3>Inline edit</h3>
+          <p>
+            If you define the editor attribute in 'columns> col', you can use
+            the editor mode of that column. You can activate editor mode using
+            double-click or return key.
+          </p>
+          <NavLink to={'examples/InlineEdit'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature06} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+          <Divider />
+
+          {/* Event */}
+          <h3>Event</h3>
+          <p>
+            onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의
+            이벤트가 발생될때 callback을 받을 수 있습니다.
+          </p>
+          <NavLink to={'examples/EventReceive'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature10} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
           <Divider />
 
           <h3>Loading</h3>
@@ -124,28 +197,14 @@ class Introduction extends React.Component<IProps, IState> {
 
           <Divider />
 
-          <h3>Inline edit</h3>
-          <p>
-            One column is consists of the attributes which are defined in '&#123; &#125;' context. 
-            <br/>So if you want to edit contents of columns, you have to add the editor attribute like 'editor: &#123;type: 'text' &#125;' within '&#123; &#125;' what you want to add editor mode.
-            <br/>After this, you can activate editor mode using double-click or return key.
-          </p>
-          <NavLink to={'examples/InlineEdit'}>
-            <Button type={'primary'} size={'small'} ghost>
-              View Examples
-            </Button>
-            <br />
-            <img src={feature06} width={'100%'} style={{ maxWidth: 800 }} />
-          </NavLink>
-
-          <Divider />
-
           <h3>Foot Summary</h3>
           <p>
-            You can use footSum props The value of the footSum column, which
-            consists of an array, can be determined using the built-in collector
-            (avg, sum) function, Alternatively, you can define your own
-            function.
+            You can use footSum props.
+            <br />
+            The value of the footSum column, which consists of an array, can be
+            determined using the built-in collector (avg, sum) function.
+            <br />
+            Alternatively, you can define your own function.
           </p>
           <NavLink to={'examples/FootSum'}>
             <Button type={'primary'} size={'small'} ghost>

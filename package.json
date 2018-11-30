@@ -1,6 +1,6 @@
 {
   "name": "axui-datagrid",
-  "version": "0.3.17",
+  "version": "0.4.0",
   "description": "DataGrid, DataSheet for React",
   "jsnext:main": "dist/es6/index.js",
   "module": "dist/es6/index.js",
@@ -65,12 +65,12 @@
     "test": "NODE_ENV=test jest",
     "test-watch": "NODE_ENV=test jest --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "prepublish": "npm run test && npm run build",
+    "prepublish": "npm run build",
     "publish:patch": "cd dist && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
     "publish:minor": "cd dist && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
   },
   "betterScripts": {
-    "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css  --output-style compressed && cp ./src/axui-datagrid/style.scss ./dist/style.scss && cp -R ./src/axui-datagrid/scss ./dist/scss && cp ./README.md ./dist/README.md",
+    "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css --output-style compressed && rm -rf ./dist/scss && cp ./src/axui-datagrid/style.scss ./dist/style.scss && cp -R ./src/axui-datagrid/scss ./dist/scss && cp ./README.md ./dist/README.md",
     "build:es5": "rm -rf ./dist/commonjs && tsc --p tsconfig.es5.json",
     "build:es6": "rm -rf ./dist/es6 && tsc --p tsconfig.es6.json"
   },

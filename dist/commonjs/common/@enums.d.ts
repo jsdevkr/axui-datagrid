@@ -6,7 +6,8 @@ export declare enum EventNames {
     'MOUSEUP' = "mouseup",
     'CLICK' = "click",
     'TOUCHSTART' = "touchStart",
-    'BLUR' = "blur"
+    'BLUR' = "blur",
+    'CONTEXTMENU' = "contextmenu"
 }
 export declare enum KeyCodes {
     'BACKSPACE' = 8,
