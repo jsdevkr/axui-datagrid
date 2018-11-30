@@ -15,6 +15,10 @@ const feature08 = require('assets/datagrid-feature-08.png');
 const feature09_1 = require('assets/datagrid-feature-09-1.png');
 const feature09_2 = require('assets/datagrid-feature-09-2.png');
 const feature10 = require('assets/datagrid-feature-10.png');
+const feature11_1 = require('assets/datagrid-feature-11-1.png');
+const feature11_2 = require('assets/datagrid-feature-11-2.png');
+const feature11_3 = require('assets/datagrid-feature-11-3.png');
+
 
 
 interface IProps {}
@@ -201,6 +205,24 @@ class Introduction extends React.Component<IProps, IState> {
             <br />
             <img src={feature07} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
+
+          <Divider />
+
+          <h3>Align Header</h3>
+          <p>
+            This example changes the 'options.header.align' property.
+          </p>
+          <NavLink to={'examples/AlignHeader'}>
+            <Button type={'primary'} size={'small'} ghost>
+              View Examples
+            </Button>
+            <br />
+            <img src={feature11_1} width={'100%'} style={{ maxWidth: 800 }} />
+            <img src={feature11_2} width={'100%'} style={{ maxWidth: 800 }} />
+            <img src={feature11_3} width={'100%'} style={{ maxWidth: 800 }} />
+          </NavLink>
+
+          <Divider />
         </Segment>
       </Wrapper>
     );
