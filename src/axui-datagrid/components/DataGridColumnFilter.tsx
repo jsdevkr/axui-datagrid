@@ -5,6 +5,9 @@ import { isNumber, uniqBy } from '../utils';
 import DataGridColumnFilterOption from './DataGridColumnFilterOption';
 import { DispatchTypes } from '../common/@enums';
 
+//이 부분에서 filter 기능 수행
+//filter된 전체 항목을 출력하는 부분을 찾자
+
 interface IProps extends IDataGridStore {}
 interface IState {}
 
@@ -110,7 +113,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
           let value = item[colGroup[isColumnFilter as number].key || ''];
           let text: string = value;
           let checked: boolean = false;
-
+          
           if (typeof value === 'undefined') {
             value = '_UNDEFINED_';
             text = '값 없음';
@@ -138,6 +141,8 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
             text: text,
             checked: checked,
           };
+        }).sort((a, b) => {
+          return +(a.value > b.value) || +(a.value === b.value) - 1;
         }),
       'value',
     );
