@@ -7,6 +7,7 @@ export enum EventNames {
   'CLICK' = 'click',
   'TOUCHSTART' = 'touchStart',
   'BLUR' = 'blur',
+  'CONTEXTMENU' = 'contextmenu',
 }
 
 export enum KeyCodes {
@@ -50,6 +51,7 @@ export enum DispatchTypes {
   'RESIZE_COL',
   'SELECT',
   'SELECT_ALL',
+  'CHANGE_SELECTION',
 }
 
 export enum PageButtonActions {

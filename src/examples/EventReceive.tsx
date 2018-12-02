@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider } from 'antd';
+import { Button, Divider, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -34,6 +34,22 @@ class EventReceive extends React.Component<any, any> {
     });
   };
 
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this, value);
+    } else {
+      this.setState(value);
+    }
+  };
+
   render() {
     return (
       <Wrapper>
@@ -50,8 +66,19 @@ class EventReceive extends React.Component<any, any> {
             columns={this.state.columns}
             data={this.state.data}
             options={this.state.options}
-            onBeforeEvent={(e, eventName) => {
+            onBeforeEvent={({ e, eventName }) => {
               this.receiveEvent(eventName);
+            }}
+            onRightClick={({ e, item, value, focusedRow, focusedCol }) => {
+              e.preventDefault();
+              // e.stopPropagation();
+              // item : item of list, value: keyvalue of item
+              console.log(item, value, focusedRow, focusedCol);
+            }}
+            selection={{
+              onChange: selection => {
+                console.log(selection);
+              },
             }}
           />
           <Divider />
@@ -59,6 +86,27 @@ class EventReceive extends React.Component<any, any> {
             style={{ width: '100%', height: '400px', padding: '10px' }}
             value={this.state.eventLog.join('\n')}
           />
+
+          <Divider />
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400"
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500"
+          </Button>
         </Segment>
       </Wrapper>
     );

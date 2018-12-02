@@ -12,14 +12,12 @@ const feature05 = require('assets/datagrid-feature-05.jpg');
 const feature06 = require('assets/datagrid-feature-06.jpg');
 const feature07 = require('assets/datagrid-feature-07.jpg');
 const feature08 = require('assets/datagrid-feature-08.png');
-const feature09_1 = require('assets/datagrid-feature-09-1.png');
-const feature09_2 = require('assets/datagrid-feature-09-2.png');
+const feature091 = require('assets/datagrid-feature-09-1.png');
+const feature092 = require('assets/datagrid-feature-09-2.png');
 const feature10 = require('assets/datagrid-feature-10.png');
-const feature11_1 = require('assets/datagrid-feature-11-1.png');
-const feature11_2 = require('assets/datagrid-feature-11-2.png');
-const feature11_3 = require('assets/datagrid-feature-11-3.png');
-
-
+const feature111 = require('assets/datagrid-feature-11-1.png');
+const feature112 = require('assets/datagrid-feature-11-2.png');
+const feature113 = require('assets/datagrid-feature-11-3.png');
 
 interface IProps {}
 interface IState {}
@@ -41,12 +39,13 @@ class Introduction extends React.Component<IProps, IState> {
             web application development. And I made it using 'React + ES6 + TS'.
           </p>
           <p>
-            'datagrid UI component' is a UI that shows data as a spreadsheet It
-            says. There are so many features that axui-datagrid needs to be a
-            complete `datagrid UI component`. However, the function of
+            'datagrid UI component' is a UI that shows data as a spreadsheet.
+            The 'axui-datagrid' component requires a lot of functionality to
+            become a complete 'datagrid' component. However, the function of
             outputting and controlling a large amount of data at a high speed is
-            more important than the function having all functions. We've also
-            optimized it for developers using 'React + ES6 + TS'.
+            more important than the function having all functions. So
+            `axui-datagrid` focuses on high-speed control. We've also optimized
+            it for developers using 'React + ES6 + TS'.
           </p>
         </Segment>
 
@@ -71,10 +70,10 @@ class Introduction extends React.Component<IProps, IState> {
           </NavLink>
 
           <Divider />
- {/* Formatting of data  */}
+          {/* Formatting of data  */}
           <h3>Formatting of data</h3>
           <p>
-          You can use 'date', 'money' predefined in 'columns> col.formatter',
+            You can use 'date', 'money' predefined in 'columns> col.formatter',
             or you can change the values as desired using a user-defined
             function.{' '}
           </p>
@@ -87,26 +86,27 @@ class Introduction extends React.Component<IProps, IState> {
           </NavLink>
 
           <Divider />
-{/* change columns */}
+          {/* change columns */}
           <h3>Change Columns</h3>
           <p>
-          This is an example of changing the columns props in the datagrid.{' '}
+            This is an example of changing the columns props in the datagrid.{' '}
           </p>
           <NavLink to={'examples/ChangeColumns'}>
             <Button type={'primary'} size={'small'} ghost>
               View Examples
             </Button>
             <br />
-            <img src={feature09_1} width={'50%'} style={{ maxWidth: 800 }} />
-            <img src={feature09_2} width={'50%'} style={{ maxWidth: 800 }} />
+            <img src={feature091} width={'50%'} style={{ maxWidth: 800 }} />
+            <img src={feature092} width={'50%'} style={{ maxWidth: 800 }} />
           </NavLink>
 
           <Divider />
 
           <h3>Frozen column and row</h3>
           <p>
-            If options.frozenColumnIndex and options.frozenRowIndex are
-            specified, then 'DataGrid' You can set the frame fixed area.
+            Users can dynamically specify options.frozenColumnIndex and options.
+            frozenRowIndex to set the frame fixed area. Then, The row and column
+            areas can be specified in the fixed size chosen by the user.
           </p>
 
           <NavLink to={'examples/FrozenColumnRow'}>
@@ -121,11 +121,19 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Multi column header</h3>
           <p>
-          The column in the datagrid can be created with the context 'column: &#91; &#93;' you write. Inside '&#91; &#93;', one '&#123; &#125;' means a one column. 
-          <br/>So if you want to create multi column header, you can use 'columns : &#91; &#93;' in the column what you want to create a multi column header. 
-          <br/>For example, columns : &#91; &#123; &#125; , &#123; &#123; &#125; &#123; &#125; &#125; &#93; context means that this datagrid has three columns, and the second column is a multi column header which has 2 columns.
+            The column in the datagrid can be created with the context 'column:
+            &#91; &#93;' you write. Inside '&#91; &#93;', one '&#123; &#125;'
+            means a one column.
+            <br />
+            So if you want to create multi column header, you can use 'columns :
+            &#91; &#93;' in the column what you want to create a multi column
+            header.
+            <br />
+            For example, columns : &#91; &#123; &#125; , &#123; &#123; &#125;
+            &#123; &#125; &#125; &#93; context means that this datagrid has
+            three columns, and the second column is a multi column header which
+            has 2 columns.
           </p>
-          
 
           <NavLink to={'examples/MultiColumnHeader'}>
             <Button type={'primary'} size={'small'} ghost>
@@ -153,7 +161,10 @@ class Introduction extends React.Component<IProps, IState> {
 
           {/* Event */}
           <h3>Event</h3>
-          <p>onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의 이벤트가 발생될때 callback을 받을 수 있습니다.</p>
+          <p>
+            onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의
+            이벤트가 발생될때 callback을 받을 수 있습니다.
+          </p>
           <NavLink to={'examples/EventReceive'}>
             <Button type={'primary'} size={'small'} ghost>
               View Examples
@@ -172,7 +183,6 @@ class Introduction extends React.Component<IProps, IState> {
             <br />
             <img src={feature04} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
-
 
           <Divider />
 
@@ -193,9 +203,11 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Foot Summary</h3>
           <p>
-            You can use footSum props.<br></br>
-            The value of the footSum column, which consists of an array, can be determined using the built-in collector
-            (avg, sum) function.<br></br> 
+            You can use footSum props.
+            <br />
+            The value of the footSum column, which consists of an array, can be
+            determined using the built-in collector (avg, sum) function.
+            <br />
             Alternatively, you can define your own function.
           </p>
           <NavLink to={'examples/FootSum'}>
@@ -209,17 +221,15 @@ class Introduction extends React.Component<IProps, IState> {
           <Divider />
 
           <h3>Align Header</h3>
-          <p>
-            This example changes the 'options.header.align' property.
-          </p>
+          <p>This example changes the 'options.header.align' property.</p>
           <NavLink to={'examples/AlignHeader'}>
             <Button type={'primary'} size={'small'} ghost>
               View Examples
             </Button>
             <br />
-            <img src={feature11_1} width={'100%'} style={{ maxWidth: 800 }} />
-            <img src={feature11_2} width={'100%'} style={{ maxWidth: 800 }} />
-            <img src={feature11_3} width={'100%'} style={{ maxWidth: 800 }} />
+            <img src={feature111} width={'100%'} style={{ maxWidth: 800 }} />
+            <img src={feature112} width={'100%'} style={{ maxWidth: 800 }} />
+            <img src={feature113} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
 
           <Divider />

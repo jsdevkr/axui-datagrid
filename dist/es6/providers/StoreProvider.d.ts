@@ -25,7 +25,7 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         onBeforeEvent: any;
         onAfterEvent: any;
         onScrollEnd: any;
-        onChangeSelected: any;
+        onRightClick: any;
         selection: any;
         rowSelector: any;
         colGroupMap: any;
@@ -75,6 +75,10 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         selectionEndOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
         selectionMinOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
         selectionMaxOffset?: import("axui-datagrid/common/@types").IPosition | undefined;
+        selectionSRow?: number | undefined;
+        selectionSCol?: number | undefined;
+        selectionERow?: number | undefined;
+        selectionECol?: number | undefined;
         bodyGrouping?: import("axui-datagrid/common/@types").IDataGridCol[] | undefined;
         bodyGroupingTable?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;
         asideBodyGroupingData?: import("axui-datagrid/common/@types").IDataGridColumnTableMap | undefined;

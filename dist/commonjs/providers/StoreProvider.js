@@ -62,6 +62,10 @@ var store = {
     selectionEndOffset: {},
     selectionMinOffset: {},
     selectionMaxOffset: {},
+    selectionSRow: -1,
+    selectionSCol: -1,
+    selectionERow: -1,
+    selectionECol: -1,
     columnResizing: false,
     columnResizerLeft: 0,
     mounted: false,
@@ -101,14 +105,10 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd, 
-            // onChangeSelected,
-            sortInfo = _a.sortInfo, rowSelector = _a.rowSelector;
+            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd;
             var _l = options.frozenColumnIndex, frozenColumnIndex = _l === void 0 ? 0 : _l;
             var CTInnerWidth = styles.CTInnerWidth;
-            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _m = newState.styles, _styles = _m === void 0 ? {} : _m, _filteredList = newState.filteredList, _sortInfo = newState.sortInfo;
-            // changed onChangeSelected to rowSelector.onChange since 0.3.20
-            var onChangeSelected = rowSelector && rowSelector.onChange;
+            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _m = newState.styles, _styles = _m === void 0 ? {} : _m, _filteredList = newState.filteredList;
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
                 var _o = __assign({}, styles, _styles), _p = _o.CTInnerWidth, _CTInnerWidth = _p === void 0 ? 0 : _p, _q = _o.frozenPanelWidth, _frozenPanelWidth = _q === void 0 ? 0 : _q, _r = _o.asidePanelWidth, _asidePanelWidth = _r === void 0 ? 0 : _r, _s = _o.rightPanelWidth, _rightPanelWidth = _s === void 0 ? 0 : _s, _t = _o.scrollContentWidth, scrollWidth = _t === void 0 ? 0 : _t, _u = _o.scrollContentHeight, scrollHeight = _u === void 0 ? 0 : _u, _v = _o.scrollContentContainerWidth, clientWidth = _v === void 0 ? 0 : _v, _w = _o.scrollContentContainerHeight, clientHeight = _w === void 0 ? 0 : _w;
@@ -148,21 +148,12 @@ var StoreProvider = /** @class */ (function (_super) {
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(_this.state.rootNode && _this.state.rootNode.current, _this.state, _filteredList).styles;
             }
-            if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
-                onChangeSelected({
-                    filteredList: _filteredList,
-                });
-            }
-            if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
-                onChangeSelected({
-                    filteredList: filteredList,
-                });
-            }
             _this.setState(newState);
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
-            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, rootNode = _b.rootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, rootNode = _b.rootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j, rowSelector = _b.rowSelector, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection;
+            var onChangeSelected = rowSelector && rowSelector.onChange;
             var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
             var _l = _this.state.filteredList, filteredList = _l === void 0 ? [] : _l;
             var proc = (_a = {},
@@ -205,6 +196,11 @@ var StoreProvider = /** @class */ (function (_super) {
                         filterInfo: filterInfo,
                         scrollTop: 0,
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
                 },
                 _a[_enums_1.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
@@ -268,6 +264,11 @@ var StoreProvider = /** @class */ (function (_super) {
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
+                        if (onChangeSelected) {
+                            onChangeSelected({
+                                filteredList: filteredList,
+                            });
+                        }
                     }
                 },
                 _a[_enums_1.DispatchTypes.UPDATE] = function () {
@@ -303,6 +304,11 @@ var StoreProvider = /** @class */ (function (_super) {
                             _a),
                         focusedRow: focusRow,
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
                     if (rootNode && rootNode.current) {
                         rootNode.current.focus();
                     }
@@ -346,6 +352,11 @@ var StoreProvider = /** @class */ (function (_super) {
                         selectedRowIndexSelected: rowSelected,
                         filteredList: __spread(filteredList),
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
                 },
                 _a[_enums_1.DispatchTypes.SELECT_ALL] = function () {
                     var checked = param.checked;
@@ -366,6 +377,35 @@ var StoreProvider = /** @class */ (function (_super) {
                         listSelectedAll: selectedAll,
                         filteredList: __spread(filteredList),
                     });
+                    if (onChangeSelected) {
+                        onChangeSelected({
+                            filteredList: filteredList,
+                        });
+                    }
+                },
+                _a[_enums_1.DispatchTypes.CHANGE_SELECTION] = function () {
+                    var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
+                    if (selectionSRow !== sRow ||
+                        selectionSCol !== sCol ||
+                        selectionERow !== eRow ||
+                        selectionECol !== eCol) {
+                        // console.log(sRow, sCol, eRow, eCol);
+                        if (selection &&
+                            selection.onChange &&
+                            selectionRows &&
+                            selectionCols) {
+                            selection.onChange({
+                                rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
+                                cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),
+                            });
+                        }
+                        _this.setStoreState({
+                            selectionSRow: sRow,
+                            selectionSCol: sCol,
+                            selectionERow: eRow,
+                            selectionECol: eCol,
+                        });
+                    }
                 },
                 _a);
             proc[dispatchType]();
@@ -396,7 +436,7 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.onBeforeEvent === prevState.onBeforeEvent &&
             newProps.onAfterEvent === prevState.onAfterEvent &&
             newProps.onScrollEnd === prevState.onScrollEnd &&
-            // newProps.onChangeSelected === prevState.onChangeSelected &&
+            newProps.onRightClick === prevState.onRightClick &&
             newProps.selection === prevState.selection &&
             newProps.rowSelector === prevState.rowSelector &&
             newProps.headerTable === prevState.headerTable &&
@@ -496,7 +536,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 onBeforeEvent: newProps.onBeforeEvent,
                 onAfterEvent: newProps.onAfterEvent,
                 onScrollEnd: newProps.onScrollEnd,
-                onChangeSelected: newProps.onChangeSelected,
+                onRightClick: newProps.onRightClick,
                 selection: newProps.selection,
                 rowSelector: newProps.rowSelector,
                 colGroupMap: newProps.colGroupMap,

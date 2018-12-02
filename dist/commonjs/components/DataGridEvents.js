@@ -340,6 +340,23 @@ var DataGridEvents = /** @class */ (function (_super) {
                 proc[e.which] && proc[e.which]();
             }
         };
+        _this.onContextmenu = function (e) {
+            var _a = _this.props, onRightClick = _a.onRightClick, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, filteredList = _a.filteredList, colGroup = _a.colGroup;
+            if (onRightClick &&
+                filteredList &&
+                typeof focusedRow !== 'undefined' &&
+                typeof focusedCol !== 'undefined' &&
+                colGroup) {
+                var _b = colGroup[focusedCol].key, itemKey = _b === void 0 ? '' : _b;
+                onRightClick({
+                    e: e,
+                    item: filteredList[focusedRow],
+                    value: filteredList[focusedRow][itemKey],
+                    focusedRow: focusedRow,
+                    focusedCol: focusedCol,
+                });
+            }
+        };
         _this.onFireEvent = function (e) {
             var _a;
             var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
@@ -363,14 +380,19 @@ var DataGridEvents = /** @class */ (function (_super) {
                         _this.onKeyUp(e);
                     }
                 },
+                _a[_enums_1.EventNames.CONTEXTMENU] = function () {
+                    if (!loadingData && !isInlineEditing) {
+                        _this.onContextmenu(e);
+                    }
+                },
                 _a);
             if (e.type in proc && !loading) {
                 if (_this.props.onBeforeEvent && !loadingData) {
-                    _this.props.onBeforeEvent(e, e.type);
+                    _this.props.onBeforeEvent({ e: e, eventName: e.type });
                 }
                 proc[e.type]();
                 if (_this.props.onAfterEvent && !loadingData) {
-                    _this.props.onAfterEvent(e, e.type);
+                    _this.props.onAfterEvent({ e: e, eventName: e.type });
                 }
             }
         };
@@ -384,6 +406,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         if (rootNode && rootNode.current) {
             rootNode.current.addEventListener('keydown', this.onFireEvent);
             rootNode.current.addEventListener('keyup', this.onFireEvent);
+            rootNode.current.addEventListener('contextmenu', this.onFireEvent);
             rootNode.current.addEventListener('wheel', this.onFireEvent);
         }
     };
@@ -392,6 +415,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
             rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     };

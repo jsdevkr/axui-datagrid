@@ -36,6 +36,10 @@ const store: IDataGridStore = {
   selectionEndOffset: {},
   selectionMinOffset: {},
   selectionMaxOffset: {},
+  selectionSRow: -1,
+  selectionSCol: -1,
+  selectionERow: -1,
+  selectionECol: -1,
   columnResizing: false,
   columnResizerLeft: 0,
 
@@ -104,7 +108,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.onBeforeEvent === prevState.onBeforeEvent &&
       newProps.onAfterEvent === prevState.onAfterEvent &&
       newProps.onScrollEnd === prevState.onScrollEnd &&
-      // newProps.onChangeSelected === prevState.onChangeSelected &&
+      newProps.onRightClick === prevState.onRightClick &&
       newProps.selection === prevState.selection &&
       newProps.rowSelector === prevState.rowSelector &&
       newProps.headerTable === prevState.headerTable &&
@@ -231,7 +235,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           onBeforeEvent: newProps.onBeforeEvent,
           onAfterEvent: newProps.onAfterEvent,
           onScrollEnd: newProps.onScrollEnd,
-          onChangeSelected: newProps.onChangeSelected,
+          onRightClick: newProps.onRightClick,
           selection: newProps.selection,
           rowSelector: newProps.rowSelector,
 
@@ -381,9 +385,6 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       bodyGroupingData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
       onScrollEnd,
-      // onChangeSelected,
-      sortInfo,
-      rowSelector,
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
@@ -392,10 +393,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       scrollTop: _scrollTop,
       styles: _styles = {},
       filteredList: _filteredList,
-      sortInfo: _sortInfo,
     } = newState;
-    // changed onChangeSelected to rowSelector.onChange since 0.3.20
-    const onChangeSelected = rowSelector && rowSelector.onChange;
 
     if (
       typeof _scrollLeft !== 'undefined' ||
@@ -481,18 +479,6 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       ).styles;
     }
 
-    if (_filteredList && _filteredList !== filteredList && onChangeSelected) {
-      onChangeSelected({
-        filteredList: _filteredList,
-      });
-    }
-
-    if (_sortInfo && _sortInfo !== sortInfo && onChangeSelected) {
-      onChangeSelected({
-        filteredList: filteredList,
-      });
-    }
-
     this.setState(newState);
   };
 
@@ -506,7 +492,16 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       focusedRow = 0,
       sortInfo = {},
       options = {},
+      rowSelector,
+      selectionSRow,
+      selectionSCol,
+      selectionERow,
+      selectionECol,
+      selectionRows,
+      selectionCols,
+      selection,
     } = this.state;
+    const onChangeSelected = rowSelector && rowSelector.onChange;
     const { columnKeys: optionColumnKeys = {} } = options;
     let { filteredList = [] } = this.state;
 
@@ -554,6 +549,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           filterInfo,
           scrollTop: 0,
         });
+
+        if (onChangeSelected) {
+          onChangeSelected({
+            filteredList,
+          });
+        }
       },
       [DispatchTypes.SORT]: () => {
         const { colIndex } = param;
@@ -628,6 +629,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
             isInlineEditing: false,
             inlineEditingCell: {},
           });
+
+          if (onChangeSelected) {
+            onChangeSelected({
+              filteredList: filteredList,
+            });
+          }
         }
       },
       [DispatchTypes.UPDATE]: () => {
@@ -666,6 +673,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           },
           focusedRow: focusRow,
         });
+
+        if (onChangeSelected) {
+          onChangeSelected({
+            filteredList: filteredList,
+          });
+        }
 
         if (rootNode && rootNode.current) {
           rootNode.current.focus();
@@ -721,6 +734,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           selectedRowIndexSelected: rowSelected,
           filteredList: [...filteredList],
         });
+
+        if (onChangeSelected) {
+          onChangeSelected({
+            filteredList: filteredList,
+          });
+        }
       },
       [DispatchTypes.SELECT_ALL]: () => {
         const { checked } = param;
@@ -741,6 +760,43 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           listSelectedAll: selectedAll,
           filteredList: [...filteredList],
         });
+
+        if (onChangeSelected) {
+          onChangeSelected({
+            filteredList: filteredList,
+          });
+        }
+      },
+      [DispatchTypes.CHANGE_SELECTION]: () => {
+        const { sRow, sCol, eRow, eCol } = param;
+
+        if (
+          selectionSRow !== sRow ||
+          selectionSCol !== sCol ||
+          selectionERow !== eRow ||
+          selectionECol !== eCol
+        ) {
+          // console.log(sRow, sCol, eRow, eCol);
+
+          if (
+            selection &&
+            selection.onChange &&
+            selectionRows &&
+            selectionCols
+          ) {
+            selection.onChange({
+              rows: Object.keys(selectionRows).map(n => Number(n)),
+              cols: Object.keys(selectionCols).map(n => Number(n)),
+            });
+          }
+
+          this.setStoreState({
+            selectionSRow: sRow,
+            selectionSCol: sCol,
+            selectionERow: eRow,
+            selectionECol: eCol,
+          });
+        }
       },
     };
 
