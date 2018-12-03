@@ -26,6 +26,7 @@ class InlineEdit extends React.Component<any, any> {
           key: 'money',
           label: 'Money',
           formatter: 'money',
+          align: 'right',
           editor: { type: 'text' },
         },
       ],
