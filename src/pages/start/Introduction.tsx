@@ -77,7 +77,7 @@ class Introduction extends React.Component<IProps, IState> {
             or the values as desired using a user-defined function and apply the formula to the data in the column.
             The results are then displayed accoding to the function. 
             For example, if you defined the formatter of the 'money' column as a function(args: any) &#123; return args.value*2 &#125;,
-            you can see the money columns update double.{' '}
+            you can see the money columns update doubled.{' '}
           </p>
           <NavLink to={'examples/Formatter'}>
             <Button type={'primary'} size={'small'} ghost>
