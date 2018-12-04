@@ -59,7 +59,7 @@ class Introduction extends React.Component<IProps, IState> {
             HTML nodes in your browser The browser will slow down and
             inconvenience you. Because axui-datagrid only prints the areas that
             need to be displayed in the grid container area, it can process
-            large amounts of data quickly.{' '}
+            large amounts of data quickly with ease.{' '}
           </p>
           <NavLink to={'examples/LargeData'}>
             <Button type={'primary'} size={'small'} ghost>
@@ -73,9 +73,11 @@ class Introduction extends React.Component<IProps, IState> {
           {/* Formatting of data  */}
           <h3>Formatting of data</h3>
           <p>
-            You can use 'date', 'money' predefined in 'columns> col.formatter',
-            or you can change the values as desired using a user-defined
-            function.{' '}
+            Users can change the values using 'date', 'money' predefined in 'columns>col.formatter',
+            or the values as desired using a user-defined function and apply the formula to the data in the column.
+            The results are then displayed accoding to the function. 
+            For example, if you defined the formatter of the 'money' column as a function(args: any) &#123; return args.value*2 &#125;,
+            you can see the money columns update double.{' '}
           </p>
           <NavLink to={'examples/Formatter'}>
             <Button type={'primary'} size={'small'} ghost>

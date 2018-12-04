@@ -118,7 +118,7 @@ class LargeData extends React.Component<any, any> {
             HTML nodes in your browser The browser will slow down and
             inconvenience you. Because axui-datagrid only prints the areas that
             need to be displayed in the grid container area, it can process
-            large amounts of data quickly.
+            large amounts of data quickly with ease.
           </p>
 
           <DataGrid
