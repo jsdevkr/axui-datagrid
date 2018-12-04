@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid, utils } from 'axui-datagrid';
 import {
@@ -83,6 +84,23 @@ class FootSum extends React.Component<any, any> {
       data: gridData,
     };
   }
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this);
+    } else {
+      this.setState(value);
+    }
+  };
+
+
 
   public render() {
     return (
@@ -103,6 +121,29 @@ class FootSum extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
           />
+
+      <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500
+          </Button>
+
+
         </Segment>
       </Wrapper>
     );
