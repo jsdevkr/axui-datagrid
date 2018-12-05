@@ -12,6 +12,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
@@ -26,7 +46,7 @@ var TableBody = function (_a) {
         React.createElement("td", null))); })));
 };
 var ColumnResizer = function (_a) {
-    var colGroup = _a.colGroup, resizerHeight = _a.resizerHeight, onMouseDownColumnResizer = _a.onMouseDownColumnResizer;
+    var colGroup = _a.colGroup, resizerHeight = _a.resizerHeight, onMouseDownColumnResizer = _a.onMouseDownColumnResizer, onDoubleClickColumnResizer = _a.onDoubleClickColumnResizer;
     var resizerLeft = 0;
     var resizerWidth = 4;
     return (React.createElement(React.Fragment, null, colGroup.map(function (col, ci) {
@@ -37,7 +57,7 @@ var ColumnResizer = function (_a) {
                     width: resizerWidth,
                     height: resizerHeight + 'px',
                     left: resizerLeft - resizerWidth / 2 + 'px',
-                }, onMouseDown: function (e) { return onMouseDownColumnResizer(e, col); } }));
+                }, onMouseDown: function (e) { return onMouseDownColumnResizer(e, col); }, onDoubleClick: function (e) { return onDoubleClickColumnResizer(e, col); } }));
         }
         else {
             return null;
@@ -184,7 +204,6 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         _this.onMouseDownColumnResizer = function (e, col) {
             e.preventDefault();
             var _a = _this.props, setStoreState = _a.setStoreState, rootNode = _a.rootNode, dispatch = _a.dispatch;
-            // const rootNode = getNode(getRootNode);
             var _b = (rootNode &&
                 rootNode.current &&
                 rootNode.current.getBoundingClientRect()).x, rootX = _b === void 0 ? 0 : _b;
@@ -211,7 +230,10 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
-                if (typeof newWidth !== 'undefined') {
+                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
+                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+                // newWidth !== 0 을 추가
+                if (typeof newWidth !== 'undefined' && newWidth !== 0) {
                     dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                         col: col,
                         newWidth: newWidth,
@@ -226,6 +248,28 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', offEvent);
             document.addEventListener('mouseleave', offEvent);
+        };
+        _this.onDoubleClickColumnResizer = function (e, col) {
+            e.preventDefault();
+            // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
+            // 단, 컬럼 명이 최소길이다.
+            // widthOfOneChar = 한 문자의 너비
+            var widthOfOneChar = 14;
+            var _a = _this.props, dispatch = _a.dispatch, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c;
+            var longestWordLength = Math.max.apply(Math, __spread(filteredList
+                .filter(function (item) {
+                var value = item[colGroup[col.colIndex].key || ''];
+                return value !== undefined;
+            }).map(function (item) {
+                var value = item[colGroup[col.colIndex].key || ''];
+                return String(value).length;
+            })));
+            var columnWordLength = (colGroup[col.colIndex].label || '').length;
+            var newWidth = (longestWordLength > columnWordLength ? longestWordLength : columnWordLength) * widthOfOneChar;
+            dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
+                col: col,
+                newWidth: newWidth,
+            });
         };
         return _this;
     }
@@ -271,7 +315,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
             React.createElement("table", { style: { height: '100%' } },
                 React.createElement(DataGridTableColGroup_1.default, { panelColGroup: colGroup }),
                 React.createElement(TableBody, { bodyRow: bodyRow, onClick: this.onHandleClick })),
-            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer }))));
+            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
     };
     return DataGridHeaderPanel;
 }(React.Component));

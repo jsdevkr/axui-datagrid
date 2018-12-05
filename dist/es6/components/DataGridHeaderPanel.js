@@ -9,7 +9,7 @@ const _enums_1 = require("../common/@enums");
 const TableBody = ({ bodyRow, onClick }) => (React.createElement("tbody", null, bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri },
     row.cols.map((col, ci) => (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: onClick }))),
     React.createElement("td", null))))));
-const ColumnResizer = ({ colGroup, resizerHeight, onMouseDownColumnResizer }) => {
+const ColumnResizer = ({ colGroup, resizerHeight, onMouseDownColumnResizer, onDoubleClickColumnResizer }) => {
     let resizerLeft = 0;
     let resizerWidth = 4;
     return (React.createElement(React.Fragment, null, colGroup.map((col, ci) => {
@@ -20,7 +20,7 @@ const ColumnResizer = ({ colGroup, resizerHeight, onMouseDownColumnResizer }) =>
                     width: resizerWidth,
                     height: resizerHeight + 'px',
                     left: resizerLeft - resizerWidth / 2 + 'px',
-                }, onMouseDown: e => onMouseDownColumnResizer(e, col) }));
+                }, onMouseDown: e => onMouseDownColumnResizer(e, col), onDoubleClick: e => onDoubleClickColumnResizer(e, col) }));
         }
         else {
             return null;
@@ -165,7 +165,6 @@ class DataGridHeaderPanel extends React.Component {
         this.onMouseDownColumnResizer = (e, col) => {
             e.preventDefault();
             const { setStoreState, rootNode, dispatch } = this.props;
-            // const rootNode = getNode(getRootNode);
             const { x: rootX = 0 } = rootNode &&
                 rootNode.current &&
                 rootNode.current.getBoundingClientRect();
@@ -192,7 +191,10 @@ class DataGridHeaderPanel extends React.Component {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
-                if (typeof newWidth !== 'undefined') {
+                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
+                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+                // newWidth !== 0 을 추가
+                if (typeof newWidth !== 'undefined' && newWidth !== 0) {
                     dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                         col,
                         newWidth,
@@ -207,6 +209,28 @@ class DataGridHeaderPanel extends React.Component {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', offEvent);
             document.addEventListener('mouseleave', offEvent);
+        };
+        this.onDoubleClickColumnResizer = (e, col) => {
+            e.preventDefault();
+            // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
+            // 단, 컬럼 명이 최소길이다.
+            // widthOfOneChar = 한 문자의 너비
+            const widthOfOneChar = 14;
+            const { dispatch, filteredList = [], colGroup = [] } = this.props;
+            const longestWordLength = Math.max(...filteredList
+                .filter(item => {
+                let value = item[colGroup[col.colIndex].key || ''];
+                return value !== undefined;
+            }).map(item => {
+                let value = item[colGroup[col.colIndex].key || ''];
+                return String(value).length;
+            }));
+            const columnWordLength = (colGroup[col.colIndex].label || '').length;
+            const newWidth = (longestWordLength > columnWordLength ? longestWordLength : columnWordLength) * widthOfOneChar;
+            dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
+                col,
+                newWidth,
+            });
         };
     }
     render() {
@@ -251,7 +275,7 @@ class DataGridHeaderPanel extends React.Component {
             React.createElement("table", { style: { height: '100%' } },
                 React.createElement(DataGridTableColGroup_1.default, { panelColGroup: colGroup }),
                 React.createElement(TableBody, { bodyRow: bodyRow, onClick: this.onHandleClick })),
-            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer }))));
+            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
     }
 }
 exports.default = hoc_1.connectStore(DataGridHeaderPanel);
