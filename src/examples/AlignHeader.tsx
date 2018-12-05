@@ -61,6 +61,22 @@ class AlignHeader extends React.Component<any, any> {
     }
   }
 
+  changeConfig2 = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this);
+    } else {
+      this.setState(value);
+    }
+  };
+
   render() {
     return (
       <Wrapper>
@@ -75,6 +91,30 @@ class AlignHeader extends React.Component<any, any> {
             data={this.state.data}
             options={this.state.options}
           />
+
+          <Divider />
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig2('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig2('setHeight', 400)}
+          >
+            height : 400
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig2('setHeight', 500)}
+          >
+            height : 500
+          </Button>
+
 
           <Divider />
 
