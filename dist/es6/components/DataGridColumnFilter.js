@@ -73,7 +73,7 @@ class DatagridColumnFilter extends React.Component {
         };
     }
     render() {
-        const { isColumnFilter = false, colGroup = [], options = {}, styles = {}, scrollLeft = 0, filterInfo = {}, data = [], } = this.props;
+        const { isColumnFilter = false, colGroup = [], options = {}, styles = {}, scrollLeft = 0, filterInfo = {}, data = [], predefinedFormatter, } = this.props;
         const { columnKeys: optionColumnKeys = {} } = options;
         const { bodyHeight = 0 } = styles;
         const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;
@@ -91,6 +91,7 @@ class DatagridColumnFilter extends React.Component {
             let value = item[colGroup[isColumnFilter].key || ''];
             let text = value;
             let checked = false;
+            let formatter = colGroup[isColumnFilter].formatter;
             if (typeof value === 'undefined') {
                 value = '_UNDEFINED_';
                 text = '값 없음';
@@ -110,11 +111,27 @@ class DatagridColumnFilter extends React.Component {
             else {
                 checked = columnFilterInfo._CHECK_ALL_;
             }
+            const formatterData = {
+                value,
+                text,
+            };
+            if (typeof predefinedFormatter === 'undefined') {
+            }
+            else if (typeof formatter === 'string' &&
+                formatter in predefinedFormatter) {
+                text = predefinedFormatter[formatter](formatterData);
+            }
+            else if (utils_1.isFunction(formatter)) {
+                text = formatter(formatterData);
+            }
             return {
                 value: value,
                 text: text,
                 checked: checked,
             };
+        })
+            .sort((a, b) => {
+            return +(a.value > b.value) || +(a.value === b.value) - 1;
         }), 'value');
         filterOptions.splice(0, 0, {
             value: '_CHECK_ALL_',

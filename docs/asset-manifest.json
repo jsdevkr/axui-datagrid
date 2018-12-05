@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.ea67ffb6.css",
   "main.css.map": "static/css/main.ea67ffb6.css.map",
-  "main.js": "static/js/main.e1e63326.js",
-  "main.js.map": "static/js/main.e1e63326.js.map",
+  "main.js": "static/js/main.bc5bd225.js",
+  "main.js.map": "static/js/main.bc5bd225.js.map",
   "static/media/axui-logo.png": "static/media/axui-logo.bdc57a37.png",
   "static/media/datagrid-feature-01.jpg": "static/media/datagrid-feature-01.784bf3b8.jpg",
   "static/media/datagrid-feature-02.jpg": "static/media/datagrid-feature-02.1d489db6.jpg",
@@ -14,5 +14,8 @@
   "static/media/datagrid-feature-08.png": "static/media/datagrid-feature-08.be2a37ef.png",
   "static/media/datagrid-feature-09-1.png": "static/media/datagrid-feature-09-1.6a864798.png",
   "static/media/datagrid-feature-09-2.png": "static/media/datagrid-feature-09-2.953c8c44.png",
-  "static/media/datagrid-feature-10.png": "static/media/datagrid-feature-10.f07e4220.png"
+  "static/media/datagrid-feature-10.png": "static/media/datagrid-feature-10.f07e4220.png",
+  "static/media/datagrid-feature-11-1.png": "static/media/datagrid-feature-11-1.680c9766.png",
+  "static/media/datagrid-feature-11-2.png": "static/media/datagrid-feature-11-2.613ed9e3.png",
+  "static/media/datagrid-feature-11-3.png": "static/media/datagrid-feature-11-3.47c907b5.png"
 }

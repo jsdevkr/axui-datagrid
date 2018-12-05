@@ -4,7 +4,7 @@ import { connectStore } from '../hoc';
 import { isNumber, uniqBy, isFunction } from '../utils';
 import DataGridColumnFilterOption from './DataGridColumnFilterOption';
 import { DispatchTypes } from '../common/@enums';
-import {formatterFunction} from '../common/@types';
+import { formatterFunction } from '../common/@types';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -101,7 +101,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
     if (isColumnFilter === false || !isNumber(isColumnFilter)) {
       return null;
     }
-    
+
     let columnFilterInfo = filterInfo[isColumnFilter as number];
     let filterOptions = uniqBy(
       data
@@ -112,10 +112,8 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
           let value = item[colGroup[isColumnFilter as number].key || ''];
           let text: string = value;
           let checked: boolean = false;
-          //추가된부분
           let formatter = colGroup[isColumnFilter as number].formatter;
-          console.log("DO:",colGroup[isColumnFilter as number].formatter, predefinedFormatter);
-          //
+
           if (typeof value === 'undefined') {
             value = '_UNDEFINED_';
             text = '값 없음';
@@ -138,21 +136,21 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
             checked = columnFilterInfo._CHECK_ALL_;
           }
 
-
           const formatterData = {
             value,
             text,
             // checked,
           };
 
-          if(typeof predefinedFormatter === 'undefined'){
-          }
-          else if (typeof formatter === 'string' && formatter in predefinedFormatter) {
+          if (typeof predefinedFormatter === 'undefined') {
+          } else if (
+            typeof formatter === 'string' &&
+            formatter in predefinedFormatter
+          ) {
             text = predefinedFormatter[formatter](formatterData);
-          } 
-          else if (isFunction(formatter)) {
-            text = (formatter as formatterFunction)(value);
-          } 
+          } else if (isFunction(formatter)) {
+            text = (formatter as formatterFunction)(formatterData);
+          }
 
           return {
             value: value,

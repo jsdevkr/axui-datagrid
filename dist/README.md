@@ -252,3 +252,4 @@ export default Formatter;
 - v0.3.20 - changed onChangeSelected to rowSelector.onChange
 - v0.4.0 - support contextmenu event
 - v0.5.0 - support selection.onChange, Add a new props onRightClick, refactoring StoreProvider
+- v0.5.1 - Improve columnFilter & modify examples
