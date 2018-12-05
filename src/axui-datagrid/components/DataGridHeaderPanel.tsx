@@ -41,7 +41,11 @@ const ColumnResizer: React.SFC<{
     e: React.SyntheticEvent<Element>,
     col: IDataGridCol,
   ) => void;
-}> = ({ colGroup, resizerHeight, onMouseDownColumnResizer }) => {
+  onDoubleClickColumnResizer: (
+    e: React.SyntheticEvent<Element>,
+    col: IDataGridCol,
+  ) => void;
+}> = ({ colGroup, resizerHeight, onMouseDownColumnResizer, onDoubleClickColumnResizer }) => {
   let resizerLeft = 0;
   let resizerWidth = 4;
   return (
@@ -62,6 +66,7 @@ const ColumnResizer: React.SFC<{
                 left: resizerLeft - resizerWidth / 2 + 'px',
               }}
               onMouseDown={e => onMouseDownColumnResizer(e, col)}
+              onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
             />
           );
         } else {
@@ -78,7 +83,6 @@ interface IProps extends IDataGridStore {
 }
 class DataGridHeaderPanel extends React.Component<IProps> {
   state = {};
-
   onHandleClick = (e: any, col: IDataGridCol) => {
     const {
       filteredList = [],
@@ -95,7 +99,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     const { header: optionsHeader = {} } = options;
     const { key, colIndex = 0 } = col;
     const { asidePanelWidth = 0 } = styles;
-
+    
     if (e.target.getAttribute('data-filter')) {
       const closeEvent = (ee: any) => {
         const { isColumnFilter: _isColumnFilter } = this.props;
@@ -247,7 +251,6 @@ class DataGridHeaderPanel extends React.Component<IProps> {
 
     const { setStoreState, rootNode, dispatch } = this.props;
 
-    // const rootNode = getNode(getRootNode);
     const { x: rootX = 0 } =
       rootNode &&
       rootNode.current &&
@@ -258,7 +261,6 @@ class DataGridHeaderPanel extends React.Component<IProps> {
 
     let newWidth: number = 0;
     let startMousePosition = getMousePosition(e).x;
-
     const onMouseMove = (ee: any) => {
       const { x } = getMousePosition(ee);
       let newLeft = currLeft + x - startMousePosition;
@@ -280,7 +282,10 @@ class DataGridHeaderPanel extends React.Component<IProps> {
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
 
-      if (typeof newWidth !== 'undefined') {
+      // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
+      // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+      // newWidth !== 0 을 추가
+      if (typeof newWidth !== 'undefined' && newWidth !== 0) {
         dispatch(DispatchTypes.RESIZE_COL, {
           col,
           newWidth,
@@ -297,6 +302,33 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     document.addEventListener('mouseleave', offEvent);
   };
 
+  onDoubleClickColumnResizer = (e: any, col: IDataGridCol) => {
+    e.preventDefault();
+    // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
+    // 단, 컬럼 명이 최소길이다.
+    // widthOfOneChar = 한 문자의 너비
+    const widthOfOneChar = 14;
+    const { dispatch, filteredList=[], colGroup=[] } = this.props;
+
+    const longestWordLength = Math.max(...
+      filteredList
+        .filter(item => {
+          let value = item[colGroup[col.colIndex as number].key || ''];
+          return value !== undefined;
+        }).map(item => {
+          let value = item[colGroup[col.colIndex as number].key || ''];
+          return String(value).length;
+        }));
+
+    const columnWordLength = (colGroup[col.colIndex as number].label || '').length;
+
+    const newWidth =  (longestWordLength > columnWordLength ? longestWordLength : columnWordLength)* widthOfOneChar;
+
+    dispatch(DispatchTypes.RESIZE_COL, {
+      col,
+      newWidth,
+    });
+  };
   render() {
     const {
       panelName,
@@ -370,6 +402,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
             colGroup={colGroup}
             resizerHeight={resizerHeight}
             onMouseDownColumnResizer={this.onMouseDownColumnResizer}
+            onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
           />
         )}
       </div>
@@ -378,3 +411,4 @@ class DataGridHeaderPanel extends React.Component<IProps> {
 }
 
 export default connectStore(DataGridHeaderPanel);
+
