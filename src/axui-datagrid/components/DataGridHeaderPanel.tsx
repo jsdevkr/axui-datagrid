@@ -310,16 +310,15 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     const widthOfOneChar = 14;
     const { dispatch, filteredList=[], colGroup=[] } = this.props;
 
-    const longestWordLength = filteredList
+    const longestWordLength = Math.max(...
+      filteredList
         .filter(item => {
           let value = item[colGroup[col.colIndex as number].key || ''];
           return value !== undefined;
         }).map(item => {
           let value = item[colGroup[col.colIndex as number].key || ''];
           return String(value).length;
-        }).sort((a, b) => {
-          return (a > b) ? -1 : (a < b) ? 1 : 0;
-        })[0];
+        }));
 
     const columnWordLength = (colGroup[col.colIndex as number].label || '').length;
 
