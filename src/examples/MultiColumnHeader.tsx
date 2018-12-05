@@ -22,7 +22,7 @@ class MultiColumnHeader extends React.Component<any, any> {
             { key: 'date', label: 'Date', formatter: 'date' },
           ],
         },
-        { key: 'money', label: 'Money', formatter: 'money' },
+        { key: 'money', label: 'Money', formatter: 'money', align: 'right' },
       ],
       data: gridData,
       options: {
