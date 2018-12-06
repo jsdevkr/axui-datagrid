@@ -1,13 +1,42 @@
 import * as React from 'react';
-
+import styled from "styled-components";
 import { Button, Divider } from 'antd';
+import mouseEventSubscribe, {
+  IMousePosition
+} from "../axui-datagrid/utils/mouseEventSubscribe";
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
+
+console.log("???"+styled.div);
+const MyBox = styled.div`
+  position: relative;
+  background: #eee;
+
+.resizer {
+  position: absolute;
+  right: -12px;
+  bottom: -12px;
+  width: 15px;
+  height: 12px;
+  font-size: 12px;
+  line-height: 12px;
+  transform: rotate(45deg);
+  cursor: se-resize;
+  user-select: none;
+}
+`;
+
+
+
 class LargeData extends React.Component<any, any> {
+  
+  containerRef: React.RefObject<any>;
+
+
   constructor(props: any) {
     super(props);
-
+    this.containerRef = React.createRef();
     let gridData = [];
 
     const typeGroup = {
@@ -62,7 +91,7 @@ class LargeData extends React.Component<any, any> {
     }
 
     this.state = {
-      height: 300,
+      boxHeight: 300,
       columns: [
         {
           key: 'a',
@@ -91,6 +120,26 @@ class LargeData extends React.Component<any, any> {
     };
   }
 
+  
+  handleColResizerMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const {
+      left: containerLeft,
+      top: containerTop
+    } = this.containerRef.current.getBoundingClientRect();
+
+    mouseEventSubscribe(
+      (mpos: IMousePosition) => {
+        this.setState({
+          boxWidth: mpos.clientX - containerLeft,
+          boxHeight: mpos.clientY - containerTop
+        });
+      },
+      () => {
+        // resize 종료 (마우스 업 이벤트 발생.)
+      }
+    );
+    };
+
   changeConfig = (props: any, value: any) => {
     const processor = {
       setHeight: () => {
@@ -107,8 +156,11 @@ class LargeData extends React.Component<any, any> {
     }
   };
 
+
   render() {
+    const { boxWidth, boxHeight } = this.state;
     return (
+      <div>
       <Wrapper>
         <Segment padded>
           <h1>LargeData</h1>
@@ -121,14 +173,21 @@ class LargeData extends React.Component<any, any> {
             large amounts of data quickly.
           </p>
 
-          <DataGrid
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
-          />
-
+          <MyBox
+            style={{ width: boxWidth, height: boxHeight }}
+            ref={this.containerRef}
+          >
+              <DataGrid
+                height={this.state.boxHeight}
+                style={{ fontSize: '12px' }}
+                columns={this.state.columns}
+                data={this.state.data}
+                options={this.state.options}
+              />
+              <div className="resizer" onMouseDownCapture={this.handleColResizerMove}>
+                ⇆
+              </div>
+          </MyBox>
           <Divider />
 
           <Button
@@ -153,8 +212,10 @@ class LargeData extends React.Component<any, any> {
           </Button>
         </Segment>
       </Wrapper>
+      </div>
     );
   }
 }
+
 
 export default LargeData;
