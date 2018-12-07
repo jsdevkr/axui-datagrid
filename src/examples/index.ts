@@ -9,3 +9,4 @@ export { default as LoadingState } from './LoadingState';
 export { default as RowSelector } from './RowSelector';
 export { default as ChangeColumns } from './ChangeColumns';
 export { default as FootSum } from './FootSum';
+export { default as Resizing } from './Resizing';
