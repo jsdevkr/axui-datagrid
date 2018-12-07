@@ -1,10 +1,15 @@
-import { injectGlobal } from 'styled-components';
-import styledNormalize from 'styled-normalize';
-import './antd-theme.less';
+import { createGlobalStyle } from 'styled-components';
 
+import './antd-theme.less';
 import './styles.scss';
 import 'react-github-button/assets/style.css';
 
-injectGlobal`
-  ${styledNormalize}
+export const GlobalStyles = createGlobalStyle`
+  .clearfix:before, .clearfix:after {
+    content: " ";
+    display: table;
+  }
+  .clearfix:after {
+    clear: both;
+  }
 `;
