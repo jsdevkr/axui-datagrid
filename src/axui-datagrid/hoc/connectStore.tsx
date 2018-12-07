@@ -9,7 +9,7 @@ export type IConnectStore = IDataGridStore;
 interface IProps {}
 
 function connectStore<P extends IConnectStore>(
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ExoticComponent<P>,
 ): React.ComponentClass<Omit<P, keyof IConnectStore>> {
   class Component extends React.Component<IProps> {
     render() {

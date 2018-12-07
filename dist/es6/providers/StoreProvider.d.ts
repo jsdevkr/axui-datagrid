@@ -99,6 +99,6 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
 }
 declare const _default: {
     Provider: typeof StoreProvider;
-    Consumer: React.ComponentType<React.ConsumerProps<IDataGridStore>>;
+    Consumer: React.ExoticComponent<React.ConsumerProps<IDataGridStore>>;
 };
 export default _default;
