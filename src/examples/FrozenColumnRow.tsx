@@ -81,7 +81,7 @@ class FrozenColumnRow extends React.Component<any, any> {
                 labelInValue
                 defaultValue={
                   {
-                    key: '' + this.state.options.frozenRowIndex,
+                    key: '' + this.state.options.frozenRowIndex+" row",
                   } as any
                 }
                 onChange={(value: any) => {
@@ -90,19 +90,16 @@ class FrozenColumnRow extends React.Component<any, any> {
                   });
                 }}
               >
-                <Select.Option value="0">0 row</Select.Option>
-                <Select.Option value="1">1 row</Select.Option>
-                <Select.Option value="2">2 row</Select.Option>
-                <Select.Option value="3">3 row</Select.Option>
-                <Select.Option value="4">4 row</Select.Option>
-                <Select.Option value="5">5 row</Select.Option>
+                {this.state.data.map((some:any,i:number)=>{
+                return <Select.Option key="" value={i}>{i} row</Select.Option>;
+              })}
               </Select>
             </Form.Item>
             <Form.Item id={'col'} label={'Column'}>
               <Select
                 labelInValue
                 defaultValue={
-                  { key: '' + this.state.options.frozenColumnIndex } as any
+                  { key: '' + this.state.options.frozenColumnIndex+" column" } as any
                 }
                 onChange={(value: any) => {
                   this.changeConfig('setOptions', {
@@ -110,12 +107,9 @@ class FrozenColumnRow extends React.Component<any, any> {
                   });
                 }}
               >
-                <Select.Option value="0">0 column</Select.Option>
-                <Select.Option value="1">1 column</Select.Option>
-                <Select.Option value="2">2 column</Select.Option>
-                <Select.Option value="3">3 column</Select.Option>
-                <Select.Option value="4">4 column</Select.Option>
-                <Select.Option value="5">5 column</Select.Option>
+                {this.state.columns.map((some:any,i:number)=>{
+                return <Select.Option key="" value={i}>{i} column</Select.Option>;
+              })}
               </Select>
             </Form.Item>
           </Form>
