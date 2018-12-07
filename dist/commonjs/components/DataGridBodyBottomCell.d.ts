@@ -6,5 +6,5 @@ interface IProps extends IDataGridStore {
     col?: IDataGridCol;
     value?: any;
 }
-declare const _default: React.ComponentClass<Pick<IProps, "col" | "value" | "ci">, any>;
+declare const _default: React.ComponentClass<Pick<IProps, "col" | "ci" | "value">, any>;
 export default _default;
