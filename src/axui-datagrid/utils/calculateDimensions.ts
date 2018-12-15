@@ -141,6 +141,7 @@ function calculateDimensions(
     }
   })();
 
+  // scroll content width
   currentStyles.scrollContentWidth = currentHeaderColGroup.reduce(
     (prev: number, curr) => {
       return prev + (curr._width || 0);

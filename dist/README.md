@@ -253,3 +253,4 @@ export default Formatter;
 - v0.4.0 - support contextmenu event
 - v0.5.0 - support selection.onChange, Add a new props onRightClick, refactoring StoreProvider
 - v0.5.1 - Improve columnFilter & modify examples
+- v0.5.2 - Bugfix : The scrollBar is not displayed where resizing a column.

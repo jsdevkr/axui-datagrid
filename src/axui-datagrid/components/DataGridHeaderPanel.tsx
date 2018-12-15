@@ -12,10 +12,11 @@ import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGridColumnTableMap, IDataGridCol } from '../common/@types';
 import { DispatchTypes } from '../common/@enums';
 
-const TableBody: React.SFC<{
+interface ITableBody {
   bodyRow: IDataGridColumnTableMap;
   onClick: (e: any, col: IDataGridCol) => void;
-}> = ({ bodyRow, onClick }) => (
+}
+const TableBody: React.SFC<ITableBody> = ({ bodyRow, onClick }) => (
   <tbody>
     {bodyRow.rows.map((row, ri) => (
       <tr key={ri}>
@@ -34,7 +35,7 @@ const TableBody: React.SFC<{
   </tbody>
 );
 
-const ColumnResizer: React.SFC<{
+interface IColumnResizer {
   colGroup: IDataGridCol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
@@ -45,7 +46,13 @@ const ColumnResizer: React.SFC<{
     e: React.SyntheticEvent<Element>,
     col: IDataGridCol,
   ) => void;
-}> = ({ colGroup, resizerHeight, onMouseDownColumnResizer, onDoubleClickColumnResizer }) => {
+}
+const ColumnResizer: React.SFC<IColumnResizer> = ({
+  colGroup,
+  resizerHeight,
+  onMouseDownColumnResizer,
+  onDoubleClickColumnResizer,
+}) => {
   let resizerLeft = 0;
   let resizerWidth = 4;
   return (
@@ -77,11 +84,11 @@ const ColumnResizer: React.SFC<{
   );
 };
 
-interface IProps extends IDataGridStore {
+interface IDataGridHeaderPanel extends IDataGridStore {
   panelName: string;
   style?: any;
 }
-class DataGridHeaderPanel extends React.Component<IProps> {
+class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
   state = {};
   onHandleClick = (e: any, col: IDataGridCol) => {
     const {
@@ -99,7 +106,7 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     const { header: optionsHeader = {} } = options;
     const { key, colIndex = 0 } = col;
     const { asidePanelWidth = 0 } = styles;
-    
+
     if (e.target.getAttribute('data-filter')) {
       const closeEvent = (ee: any) => {
         const { isColumnFilter: _isColumnFilter } = this.props;
@@ -282,8 +289,8 @@ class DataGridHeaderPanel extends React.Component<IProps> {
       document.removeEventListener('mouseup', offEvent);
       document.removeEventListener('mouseleave', offEvent);
 
-      // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
-      // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+      // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어
+      // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어
       // newWidth !== 0 을 추가
       if (typeof newWidth !== 'undefined' && newWidth !== 0) {
         dispatch(DispatchTypes.RESIZE_COL, {
@@ -308,21 +315,27 @@ class DataGridHeaderPanel extends React.Component<IProps> {
     // 단, 컬럼 명이 최소길이다.
     // widthOfOneChar = 한 문자의 너비
     const widthOfOneChar = 14;
-    const { dispatch, filteredList=[], colGroup=[] } = this.props;
+    const { dispatch, filteredList = [], colGroup = [] } = this.props;
 
-    const longestWordLength = Math.max(...
-      filteredList
+    const longestWordLength = Math.max(
+      ...filteredList
         .filter(item => {
           let value = item[colGroup[col.colIndex as number].key || ''];
           return value !== undefined;
-        }).map(item => {
+        })
+        .map(item => {
           let value = item[colGroup[col.colIndex as number].key || ''];
           return String(value).length;
-        }));
+        }),
+    );
 
-    const columnWordLength = (colGroup[col.colIndex as number].label || '').length;
+    const columnWordLength = (colGroup[col.colIndex as number].label || '')
+      .length;
 
-    const newWidth =  (longestWordLength > columnWordLength ? longestWordLength : columnWordLength)* widthOfOneChar;
+    const newWidth =
+      (longestWordLength > columnWordLength
+        ? longestWordLength
+        : columnWordLength) * widthOfOneChar;
 
     dispatch(DispatchTypes.RESIZE_COL, {
       col,
@@ -411,4 +424,3 @@ class DataGridHeaderPanel extends React.Component<IProps> {
 }
 
 export default connectStore(DataGridHeaderPanel);
-

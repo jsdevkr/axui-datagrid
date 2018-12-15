@@ -319,15 +319,23 @@ var StoreProvider = /** @class */ (function (_super) {
                     if (newState.colGroup) {
                         newState.colGroup[col.colIndex]._width = newState.colGroup[col.colIndex].width = newWidth;
                     }
-                    var _a = utils_1.calculateDimensions(rootNode && rootNode.current, newState), styles = _a.styles, leftHeaderColGroup = _a.leftHeaderColGroup, headerColGroup = _a.headerColGroup;
+                    _this.updateDimensions();
                     _this.setStoreState({
-                        scrollLeft: scrollLeft,
-                        colGroup: colGroup,
-                        leftHeaderColGroup: leftHeaderColGroup,
-                        headerColGroup: headerColGroup,
-                        styles: styles,
                         columnResizing: false,
                     });
+                    // const {
+                    //   styles,
+                    //   leftHeaderColGroup,
+                    //   headerColGroup,
+                    // } = calculateDimensions(rootNode && rootNode.current, newState);
+                    // this.setStoreState({
+                    //   scrollLeft,
+                    //   colGroup: colGroup,
+                    //   leftHeaderColGroup: leftHeaderColGroup,
+                    //   headerColGroup: headerColGroup,
+                    //   styles: styles,
+                    //   columnResizing: false,
+                    // });
                 },
                 _a[_enums_1.DispatchTypes.SELECT] = function () {
                     var rowIndex = param.rowIndex, checked = param.checked;

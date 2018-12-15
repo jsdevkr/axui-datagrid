@@ -694,20 +694,26 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           ].width = newWidth;
         }
 
-        const {
-          styles,
-          leftHeaderColGroup,
-          headerColGroup,
-        } = calculateDimensions(rootNode && rootNode.current, newState);
+        this.updateDimensions();
 
         this.setStoreState({
-          scrollLeft,
-          colGroup: colGroup,
-          leftHeaderColGroup: leftHeaderColGroup,
-          headerColGroup: headerColGroup,
-          styles: styles,
           columnResizing: false,
         });
+
+        // const {
+        //   styles,
+        //   leftHeaderColGroup,
+        //   headerColGroup,
+        // } = calculateDimensions(rootNode && rootNode.current, newState);
+
+        // this.setStoreState({
+        //   scrollLeft,
+        //   colGroup: colGroup,
+        //   leftHeaderColGroup: leftHeaderColGroup,
+        //   headerColGroup: headerColGroup,
+        //   styles: styles,
+        //   columnResizing: false,
+        // });
       },
       [DispatchTypes.SELECT]: () => {
         const { rowIndex, checked } = param;

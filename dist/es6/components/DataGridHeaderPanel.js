@@ -9,7 +9,7 @@ const _enums_1 = require("../common/@enums");
 const TableBody = ({ bodyRow, onClick }) => (React.createElement("tbody", null, bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri },
     row.cols.map((col, ci) => (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: onClick }))),
     React.createElement("td", null))))));
-const ColumnResizer = ({ colGroup, resizerHeight, onMouseDownColumnResizer, onDoubleClickColumnResizer }) => {
+const ColumnResizer = ({ colGroup, resizerHeight, onMouseDownColumnResizer, onDoubleClickColumnResizer, }) => {
     let resizerLeft = 0;
     let resizerWidth = 4;
     return (React.createElement(React.Fragment, null, colGroup.map((col, ci) => {
@@ -191,8 +191,8 @@ class DataGridHeaderPanel extends React.Component {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
-                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
-                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어
+                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어
                 // newWidth !== 0 을 추가
                 if (typeof newWidth !== 'undefined' && newWidth !== 0) {
                     dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
@@ -221,12 +221,16 @@ class DataGridHeaderPanel extends React.Component {
                 .filter(item => {
                 let value = item[colGroup[col.colIndex].key || ''];
                 return value !== undefined;
-            }).map(item => {
+            })
+                .map(item => {
                 let value = item[colGroup[col.colIndex].key || ''];
                 return String(value).length;
             }));
-            const columnWordLength = (colGroup[col.colIndex].label || '').length;
-            const newWidth = (longestWordLength > columnWordLength ? longestWordLength : columnWordLength) * widthOfOneChar;
+            const columnWordLength = (colGroup[col.colIndex].label || '')
+                .length;
+            const newWidth = (longestWordLength > columnWordLength
+                ? longestWordLength
+                : columnWordLength) * widthOfOneChar;
             dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                 col,
                 newWidth,

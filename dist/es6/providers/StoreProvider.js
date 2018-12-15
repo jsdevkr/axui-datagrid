@@ -272,15 +272,23 @@ class StoreProvider extends React.Component {
                     if (newState.colGroup) {
                         newState.colGroup[col.colIndex]._width = newState.colGroup[col.colIndex].width = newWidth;
                     }
-                    const { styles, leftHeaderColGroup, headerColGroup, } = utils_1.calculateDimensions(rootNode && rootNode.current, newState);
+                    this.updateDimensions();
                     this.setStoreState({
-                        scrollLeft,
-                        colGroup: colGroup,
-                        leftHeaderColGroup: leftHeaderColGroup,
-                        headerColGroup: headerColGroup,
-                        styles: styles,
                         columnResizing: false,
                     });
+                    // const {
+                    //   styles,
+                    //   leftHeaderColGroup,
+                    //   headerColGroup,
+                    // } = calculateDimensions(rootNode && rootNode.current, newState);
+                    // this.setStoreState({
+                    //   scrollLeft,
+                    //   colGroup: colGroup,
+                    //   leftHeaderColGroup: leftHeaderColGroup,
+                    //   headerColGroup: headerColGroup,
+                    //   styles: styles,
+                    //   columnResizing: false,
+                    // });
                 },
                 [_enums_1.DispatchTypes.SELECT]: () => {
                     const { rowIndex, checked } = param;

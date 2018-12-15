@@ -1,4 +1,5 @@
 {
   "editor.tabSize": 2,
-  "editor.showFoldingControls": "always"
+  "editor.showFoldingControls": "always",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

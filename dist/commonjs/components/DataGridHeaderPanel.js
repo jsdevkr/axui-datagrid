@@ -230,8 +230,8 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', offEvent);
                 document.removeEventListener('mouseleave', offEvent);
-                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어 
-                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어 
+                // 움직이지 않고 클릭만 했음에도, newWidth=0 으로 설정되어
+                // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어
                 // newWidth !== 0 을 추가
                 if (typeof newWidth !== 'undefined' && newWidth !== 0) {
                     dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
@@ -260,12 +260,16 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 .filter(function (item) {
                 var value = item[colGroup[col.colIndex].key || ''];
                 return value !== undefined;
-            }).map(function (item) {
+            })
+                .map(function (item) {
                 var value = item[colGroup[col.colIndex].key || ''];
                 return String(value).length;
             })));
-            var columnWordLength = (colGroup[col.colIndex].label || '').length;
-            var newWidth = (longestWordLength > columnWordLength ? longestWordLength : columnWordLength) * widthOfOneChar;
+            var columnWordLength = (colGroup[col.colIndex].label || '')
+                .length;
+            var newWidth = (longestWordLength > columnWordLength
+                ? longestWordLength
+                : columnWordLength) * widthOfOneChar;
             dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
                 col: col,
                 newWidth: newWidth,

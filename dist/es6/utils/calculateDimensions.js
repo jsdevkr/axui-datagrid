@@ -71,6 +71,7 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
             return 0;
         }
     })();
+    // scroll content width
     currentStyles.scrollContentWidth = currentHeaderColGroup.reduce((prev, curr) => {
         return prev + (curr._width || 0);
     }, 0);
