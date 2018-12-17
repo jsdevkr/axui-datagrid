@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -34,7 +34,8 @@ function connectStore(WrappedComponent) {
         }
         Component.prototype.render = function () {
             var _this = this;
-            return (React.createElement(providers_1.DataGridStore.Consumer, null, function (store) { return React.createElement(WrappedComponent, __assign({}, _this.props, store)); }));
+            var Comp = WrappedComponent;
+            return (React.createElement(providers_1.DataGridStore.Consumer, null, function (store) { return React.createElement(Comp, __assign({}, _this.props, store)); }));
         };
         return Component;
     }(React.Component));

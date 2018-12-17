@@ -37,7 +37,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       delta.y = e.detail * 10;
     } else {
       if (typeof e.deltaY === 'undefined') {
-        delta.y = -e.wheelDelta;
+        delta.y = -(e as any).wheelDelta;
         delta.x = 0;
       } else {
         delta.y = e.deltaY;
