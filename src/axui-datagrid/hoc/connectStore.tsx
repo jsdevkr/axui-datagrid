@@ -13,9 +13,10 @@ function connectStore<P extends IConnectStore>(
 ): React.ComponentClass<Omit<P, keyof IConnectStore>> {
   class Component extends React.Component<IProps> {
     render() {
+      const Comp = WrappedComponent as any;
       return (
         <DataGridStore.Consumer>
-          {store => <WrappedComponent {...this.props} {...store} />}
+          {store => <Comp {...this.props} {...store} />}
         </DataGridStore.Consumer>
       );
     }
