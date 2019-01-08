@@ -470,7 +470,7 @@ class DataGridBody extends React.Component<IProps> {
     const {
       CTInnerWidth = 0,
       bodyHeight = 0,
-      bodyTrHeight = 0,
+      bodyTrHeight = 1,
       asidePanelWidth = 0,
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,
@@ -480,8 +480,7 @@ class DataGridBody extends React.Component<IProps> {
     } = styles;
 
     const sRowIndex =
-      Math.floor(-scrollTop / (bodyTrHeight || 0)) + frozenRowIndex;
-
+      Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
     const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
 
     const topBodyScrollConfig = {
@@ -492,7 +491,7 @@ class DataGridBody extends React.Component<IProps> {
     const bodyScrollConfig = {
       frozenRowIndex: frozenRowIndex,
       sRowIndex: sRowIndex,
-      eRowIndex: sRowIndex + Math.ceil(bodyHeight / bodyTrHeight) + 1,
+      eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1,
     };
 
     const topAsideBodyPanelStyle = {
