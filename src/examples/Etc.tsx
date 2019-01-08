@@ -42,8 +42,53 @@ class Etc extends React.Component<any, any> {
     const { boxWidth, boxHeight } = this.state;
 
     const grid = {
-      columns: [],
-      data: [],
+      columns: [
+        {
+          autoIncrement: true,
+          displaySize: 5,
+          index: 0,
+          key: '0',
+          label: 'city_id',
+          name: 'city_id',
+          nullable: false,
+          type: 'SMALLINT UNSIGNED',
+          width: 120,
+        },
+        {
+          autoIncrement: false,
+          displaySize: 50,
+          index: 1,
+          key: '1',
+          label: 'city',
+          name: 'city',
+          nullable: false,
+          type: 'VARCHAR',
+          width: 120,
+        },
+        {
+          autoIncrement: false,
+          displaySize: 50,
+          index: 2,
+          key: '2',
+          label: 'country_id',
+          name: 'country_id',
+          nullable: false,
+          type: 'VARCHAR',
+          width: 120,
+        },
+        {
+          autoIncrement: false,
+          displaySize: 50,
+          index: 3,
+          key: '3',
+          label: 'last_updated',
+          name: 'last_updated',
+          nullable: false,
+          type: 'VARCHAR',
+          width: 120,
+        },
+      ],
+      data: [['A', 'B'], ['A', 'B'], ['A', 'B']],
       options: {},
     };
 
