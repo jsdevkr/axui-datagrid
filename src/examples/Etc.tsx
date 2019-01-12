@@ -89,7 +89,6 @@ class Etc extends React.Component<any, any> {
         },
       ],
       data: [['A', 'B'], ['A', 'B'], ['A', 'B']],
-      options: {},
     };
 
     return (
@@ -105,7 +104,7 @@ class Etc extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={grid.columns}
               data={grid.data}
-              options={grid.options}
+              options={{ lineNumberColumnWidth: 50 }}
             />
           </MyBox>
         </Segment>
