@@ -104,7 +104,7 @@ var StoreProvider = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = store;
         // state 가 업데이트 되기 전.
-        _this.setStoreState = function (newState) {
+        _this.setStoreState = function (newState, callback) {
             var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.bodyGroupingData, bodyGroupingData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, _k = _a.footSumData, footSumData = _k === void 0 ? { rows: [{ cols: [] }] } : _k, onScrollEnd = _a.onScrollEnd;
             var _l = options.frozenColumnIndex, frozenColumnIndex = _l === void 0 ? 0 : _l;
             var CTInnerWidth = styles.CTInnerWidth;
@@ -114,8 +114,11 @@ var StoreProvider = /** @class */ (function (_super) {
                 var _o = __assign({}, styles, _styles), _p = _o.CTInnerWidth, _CTInnerWidth = _p === void 0 ? 0 : _p, _q = _o.frozenPanelWidth, _frozenPanelWidth = _q === void 0 ? 0 : _q, _r = _o.asidePanelWidth, _asidePanelWidth = _r === void 0 ? 0 : _r, _s = _o.rightPanelWidth, _rightPanelWidth = _s === void 0 ? 0 : _s, _t = _o.scrollContentWidth, scrollWidth = _t === void 0 ? 0 : _t, _u = _o.scrollContentHeight, scrollHeight = _u === void 0 ? 0 : _u, _v = _o.scrollContentContainerWidth, clientWidth = _v === void 0 ? 0 : _v, _w = _o.scrollContentContainerHeight, clientHeight = _w === void 0 ? 0 : _w;
                 var endOfScrollTop = false;
                 var endOfScrollLeft = false;
-                if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
+                if (typeof _scrollLeft !== 'undefined') {
                     if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+                        if (_this.state.setScrollLeft) {
+                            _this.state.setScrollLeft(_scrollLeft);
+                        }
                         var _x = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
                             _frozenPanelWidth +
                             (_CTInnerWidth -
@@ -129,11 +132,15 @@ var StoreProvider = /** @class */ (function (_super) {
                         newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                         newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                     }
-                    if (clientWidth >= scrollWidth + _scrollLeft) {
+                    if (_scrollLeft !== scrollLeft &&
+                        clientWidth >= scrollWidth + _scrollLeft) {
                         endOfScrollLeft = true;
                     }
                 }
                 if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (_this.state.setScrollTop) {
+                        _this.state.setScrollTop(_scrollTop);
+                    }
                     if (clientHeight >= scrollHeight + _scrollTop) {
                         endOfScrollTop = true;
                     }
@@ -148,7 +155,13 @@ var StoreProvider = /** @class */ (function (_super) {
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(_this.state.rootNode && _this.state.rootNode.current, _this.state, _filteredList).styles;
             }
-            _this.setState(newState);
+            _this.setState(function (prevState) {
+                return __assign({}, newState);
+            }, function () {
+                if (callback) {
+                    callback();
+                }
+            });
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
@@ -460,11 +473,16 @@ var StoreProvider = /** @class */ (function (_super) {
             newProps.colGroup === prevState.colGroup &&
             newProps.colGroupMap === prevState.colGroupMap &&
             newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
-            newProps.headerColGroup === prevState.headerColGroup) {
+            newProps.headerColGroup === prevState.headerColGroup &&
+            (prevState.styles &&
+                newProps.styles.CTInnerWidth === prevState.styles.CTInnerWidth) &&
+            (prevState.styles &&
+                newProps.styles.CTInnerHeight === prevState.styles.CTInnerHeight)) {
             return null;
         }
         else {
             var scrollTop = prevState.scrollTop;
+            var scrollLeft = prevState.scrollLeft;
             var filteredList = prevState.filteredList || [];
             var styles = prevState.styles || {};
             var sortInfo = prevState.sortInfo;
@@ -511,6 +529,36 @@ var StoreProvider = /** @class */ (function (_super) {
                     });
                 }
             }
+            if (prevState.styles &&
+                newProps.styles &&
+                newProps.styles.CTInnerWidth !== prevState.styles.CTInnerWidth) {
+                if (scrollLeft &&
+                    scrollLeft !== 0 &&
+                    Number(styles.scrollContentWidth) + scrollLeft <
+                        Number(styles.scrollContentContainerWidth)) {
+                    scrollLeft =
+                        Number(styles.scrollContentContainerWidth) -
+                            Number(styles.scrollContentWidth);
+                    if (scrollLeft > 0) {
+                        scrollLeft = 0;
+                    }
+                }
+            }
+            if (prevState.styles &&
+                newProps.styles &&
+                newProps.styles.CTInnerHeight !== prevState.styles.CTInnerHeight) {
+                if (scrollTop &&
+                    scrollTop !== 0 &&
+                    Number(styles.scrollContentHeight) + scrollTop <
+                        Number(styles.scrollContentContainerHeight)) {
+                    scrollTop =
+                        Number(styles.scrollContentContainerHeight) -
+                            Number(styles.scrollContentHeight);
+                    if (scrollTop > 0) {
+                        scrollTop = 0;
+                    }
+                }
+            }
             // 데이터 길이에 따라 스타일이 조정되어야 하므로
             // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
             styles = __assign({}, _styles, utils_1.getStylesAboutFilteredList(filteredList, _options, _styles));
@@ -528,6 +576,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 }).scrollTop;
             }
             return __assign({}, prevState, {
+                scrollLeft: scrollLeft,
                 scrollTop: scrollTop,
                 mounted: newProps.mounted,
                 loading: newProps.loading,

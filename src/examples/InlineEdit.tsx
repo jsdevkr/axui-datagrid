@@ -61,11 +61,18 @@ class InlineEdit extends React.Component<any, any> {
         <Segment padded>
           <h1>Inline Edit</h1>
           <p>
-          One column is consists of the attributes which are defined in '&#123; &#125;' context. 
-          <br/>So if you want to edit contents of columns, you have to add the editor attribute like 'editor: &#123;type: 'text' &#125;' within '&#123; &#125;' what you want to add editor mode.
-          <br/>After this, you can activate editor mode using double-click or return key.
+            One column is consists of the attributes which are defined in
+            '&#123; &#125;' context.
+            <br />
+            So if you want to edit contents of columns, you have to add the
+            editor attribute like 'editor: &#123;type: 'text' &#125;' within
+            '&#123; &#125;' what you want to add editor mode.
+            <br />
+            After this, you can activate editor mode using double-click or
+            return key.
           </p>
           <DataGrid
+            width={600}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}
@@ -74,7 +81,7 @@ class InlineEdit extends React.Component<any, any> {
           />
 
           <Divider />
-        
+
           <Button
             type="primary"
             onClick={() => this.changeConfig('setHeight', 300)}
@@ -93,12 +100,8 @@ class InlineEdit extends React.Component<any, any> {
           >
             height : 500
           </Button>
-
-
         </Segment>
       </Wrapper>
-      
-
     );
   }
 }

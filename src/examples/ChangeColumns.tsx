@@ -70,12 +70,14 @@ class FrozenColumnRow extends React.Component<any, any> {
         <Segment padded>
           <h1>Change Columns</h1>
           <p>
-            As each person may have different priorities in setting columns, 
-            it helps users to change the columns props in the datagrid.<br/>
-            Column conditions can be dynamically changed by the developer, 
-            and users can set the column type accordingly.
+            As each person may have different priorities in setting columns, it
+            helps users to change the columns props in the datagrid.
+            <br />
+            Column conditions can be dynamically changed by the developer, and
+            users can set the column type accordingly.
           </p>
           <DataGrid
+            width={600}
             height={height}
             style={{ fontSize: '12px' }}
             columns={columns}

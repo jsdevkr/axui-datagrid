@@ -100,8 +100,6 @@ class FootSum extends React.Component<any, any> {
     }
   };
 
-
-
   public render() {
     return (
       <Wrapper>
@@ -114,6 +112,7 @@ class FootSum extends React.Component<any, any> {
             function.
           </p>
           <DataGrid
+            width={600}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}
@@ -122,7 +121,7 @@ class FootSum extends React.Component<any, any> {
             options={this.state.options}
           />
 
-      <Button
+          <Button
             type="primary"
             onClick={() => this.changeConfig('setHeight', 300)}
           >
@@ -142,8 +141,6 @@ class FootSum extends React.Component<any, any> {
           >
             height : 500
           </Button>
-
-
         </Segment>
       </Wrapper>
     );

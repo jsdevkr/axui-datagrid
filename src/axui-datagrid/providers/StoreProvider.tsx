@@ -124,11 +124,17 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       newProps.colGroup === prevState.colGroup &&
       newProps.colGroupMap === prevState.colGroupMap &&
       newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
-      newProps.headerColGroup === prevState.headerColGroup
+      newProps.headerColGroup === prevState.headerColGroup &&
+      (prevState.styles &&
+        newProps.styles.CTInnerWidth === prevState.styles.CTInnerWidth) &&
+      (prevState.styles &&
+        newProps.styles.CTInnerHeight === prevState.styles.CTInnerHeight)
     ) {
       return null;
     } else {
       let scrollTop = prevState.scrollTop;
+      let scrollLeft = prevState.scrollLeft;
+
       let filteredList = prevState.filteredList || [];
       let styles: IDataGridStyles = prevState.styles || {};
       const { sortInfo } = prevState;
@@ -186,6 +192,46 @@ class StoreProvider extends React.Component<any, IDataGridState> {
         }
       }
 
+      if (
+        prevState.styles &&
+        newProps.styles &&
+        newProps.styles.CTInnerWidth !== prevState.styles.CTInnerWidth
+      ) {
+        if (
+          scrollLeft &&
+          scrollLeft !== 0 &&
+          Number(styles.scrollContentWidth) + scrollLeft <
+            Number(styles.scrollContentContainerWidth)
+        ) {
+          scrollLeft =
+            Number(styles.scrollContentContainerWidth) -
+            Number(styles.scrollContentWidth);
+          if (scrollLeft > 0) {
+            scrollLeft = 0;
+          }
+        }
+      }
+
+      if (
+        prevState.styles &&
+        newProps.styles &&
+        newProps.styles.CTInnerHeight !== prevState.styles.CTInnerHeight
+      ) {
+        if (
+          scrollTop &&
+          scrollTop !== 0 &&
+          Number(styles.scrollContentHeight) + scrollTop <
+            Number(styles.scrollContentContainerHeight)
+        ) {
+          scrollTop =
+            Number(styles.scrollContentContainerHeight) -
+            Number(styles.scrollContentHeight);
+          if (scrollTop > 0) {
+            scrollTop = 0;
+          }
+        }
+      }
+
       // 데이터 길이에 따라 스타일이 조정되어야 하므로
       // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
       styles = {
@@ -219,7 +265,8 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       return {
         ...prevState,
         ...{
-          scrollTop: scrollTop,
+          scrollLeft,
+          scrollTop,
           mounted: newProps.mounted,
           loading: newProps.loading,
           loadingData: newProps.loadingData,
@@ -373,7 +420,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
   }
 
   // state 가 업데이트 되기 전.
-  setStoreState = (newState: IDataGridState) => {
+  setStoreState = (newState: IDataGridState, callback?: () => void) => {
     const {
       filteredList = [],
       scrollLeft = 0,
@@ -413,8 +460,12 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       let endOfScrollTop: boolean = false;
       let endOfScrollLeft: boolean = false;
 
-      if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
+      if (typeof _scrollLeft !== 'undefined') {
         if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+          if (this.state.setScrollLeft) {
+            this.state.setScrollLeft(_scrollLeft);
+          }
+
           const {
             printStartColIndex,
             printEndColIndex,
@@ -452,12 +503,18 @@ class StoreProvider extends React.Component<any, IDataGridState> {
             printEndColIndex + frozenColumnIndex,
           );
         }
-        if (clientWidth >= scrollWidth + _scrollLeft) {
+        if (
+          _scrollLeft !== scrollLeft &&
+          clientWidth >= scrollWidth + _scrollLeft
+        ) {
           endOfScrollLeft = true;
         }
       }
 
       if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+        if (this.state.setScrollTop) {
+          this.state.setScrollTop(_scrollTop);
+        }
         if (clientHeight >= scrollHeight + _scrollTop) {
           endOfScrollTop = true;
         }
@@ -479,7 +536,16 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       ).styles;
     }
 
-    this.setState(newState);
+    this.setState(
+      prevState => {
+        return { ...newState };
+      },
+      () => {
+        if (callback) {
+          callback();
+        }
+      },
+    );
   };
 
   dispatch = (dispatchType: DispatchTypes, param: DataGridDispatchParam) => {

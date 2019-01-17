@@ -9,6 +9,7 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
     state: IDataGridStore;
     throttledUpdateDimensions: any;
     static getDerivedStateFromProps(newProps: any, prevState: IDataGridState): {
+        scrollLeft: number | undefined;
         scrollTop: number | undefined;
         mounted: any;
         loading: any;
@@ -59,12 +60,12 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         selectedRowIndexSelected?: boolean | undefined;
         sortInfo?: {} | undefined;
         filterInfo?: {} | undefined;
+        width?: number | undefined;
         isInlineEditing?: boolean | undefined;
         inlineEditingCell?: import("../common/@types").IDataGridEditingCell | undefined;
         columnResizing?: boolean | undefined;
         columnResizerLeft?: number | undefined;
         isColumnFilter?: number | boolean | undefined;
-        scrollLeft?: number | undefined;
         endOfScrollTop?: boolean | undefined;
         endOfScrollLeft?: boolean | undefined;
         selectionRows?: {} | undefined;
@@ -89,11 +90,13 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         propOptions?: string | undefined;
         predefinedFormatter?: import("../common/@types").IDataGridFormatter | undefined;
         predefinedCollector?: import("../common/@types").IDataGridCollector | undefined;
+        setScrollLeft?: ((scrollLeft: number) => void) | undefined;
+        setScrollTop?: ((scrollTop: number) => void) | undefined;
     } | null;
     componentDidMount(): void;
     componentWillUnmount(): void;
     updateDimensions(): void;
-    setStoreState: (newState: IDataGridState) => void;
+    setStoreState: (newState: IDataGridState, callback?: (() => void) | undefined) => void;
     dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
     render(): JSX.Element;
 }

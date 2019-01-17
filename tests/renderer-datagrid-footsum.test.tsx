@@ -259,6 +259,7 @@ it('renders DataGrid has data', () => {
   const tree = renderer
     .create(
       <DataGrid
+        width={300}
         columns={state.columns}
         height={state.height}
         data={state.data}

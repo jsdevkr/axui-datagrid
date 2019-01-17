@@ -61,6 +61,7 @@ class EventReceive extends React.Component<any, any> {
             events or after. And the events are 'keyup', 'keydown', 'wheel'.
           </p>
           <DataGrid
+            width={600}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}

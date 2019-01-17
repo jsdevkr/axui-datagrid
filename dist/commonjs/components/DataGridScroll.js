@@ -156,8 +156,14 @@ var DatagridScroll = /** @class */ (function (_super) {
         var _e = styles.pageHeight, pageHeight = _e === void 0 ? 0 : _e, _f = styles.verticalScrollerWidth, verticalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.verticalScrollerHeight, verticalScrollerHeight = _g === void 0 ? 0 : _g, _h = styles.horizontalScrollerWidth, horizontalScrollerWidth = _h === void 0 ? 0 : _h, _j = styles.horizontalScrollerHeight, horizontalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _l === void 0 ? 0 : _l, _m = styles.scrollerArrowSize, scrollerArrowSize = _m === void 0 ? 0 : _m, _o = styles.scrollerPadding, scrollerPadding = _o === void 0 ? 0 : _o, _p = styles.scrollContentContainerWidth, scrollContentContainerWidth = _p === void 0 ? 1 : _p, _q = styles.scrollContentContainerHeight, scrollContentContainerHeight = _q === void 0 ? 1 : _q, _r = styles.scrollContentWidth, scrollContentWidth = _r === void 0 ? 0 : _r, _s = styles.scrollContentHeight, scrollContentHeight = _s === void 0 ? 0 : _s;
         var scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
             (scrollContentWidth - scrollContentContainerWidth);
+        if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
+            scrollBarLeft = horizontalScrollerWidth - horizontalScrollBarWidth;
+        }
         var scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
             (scrollContentHeight - scrollContentContainerHeight);
+        if (verticalScrollBarHeight + scrollBarTop > verticalScrollerHeight) {
+            scrollBarTop = verticalScrollerHeight - verticalScrollBarHeight;
+        }
         if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) {
             return null;
         }

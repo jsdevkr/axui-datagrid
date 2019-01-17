@@ -135,10 +135,16 @@ class DatagridScroll extends React.Component {
     render() {
         const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
         const { pageHeight = 0, verticalScrollerWidth = 0, verticalScrollerHeight = 0, horizontalScrollerWidth = 0, horizontalScrollerHeight = 0, verticalScrollBarHeight = 0, horizontalScrollBarWidth = 0, scrollerArrowSize = 0, scrollerPadding = 0, scrollContentContainerWidth = 1, scrollContentContainerHeight = 1, scrollContentWidth = 0, scrollContentHeight = 0, } = styles;
-        const scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
+        let scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
             (scrollContentWidth - scrollContentContainerWidth);
-        const scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
+        if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
+            scrollBarLeft = horizontalScrollerWidth - horizontalScrollBarWidth;
+        }
+        let scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
             (scrollContentHeight - scrollContentContainerHeight);
+        if (verticalScrollBarHeight + scrollBarTop > verticalScrollerHeight) {
+            scrollBarTop = verticalScrollerHeight - verticalScrollBarHeight;
+        }
         if (verticalScrollerWidth === 0 && horizontalScrollerHeight === 0) {
             return null;
         }

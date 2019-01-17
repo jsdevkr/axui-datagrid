@@ -18,10 +18,13 @@ declare class DataGrid extends React.Component<IProps, IState> {
     rootObject: any;
     rootNode: React.RefObject<HTMLDivElement>;
     clipBoardNode: React.RefObject<HTMLTextAreaElement>;
+    scrollLeft: number;
+    scrollTop: number;
     state: {
         mounted: boolean;
         calculatedHeight: undefined;
     };
+    constructor(props: IProps);
     /**
      * You must execute setRootState only once in the child component.
      * otherwise you will fall into a trap.
@@ -32,6 +35,8 @@ declare class DataGrid extends React.Component<IProps, IState> {
         mounted: boolean;
         calculatedHeight: undefined;
     };
+    setScrollLeft: (scrollLeft: number) => void;
+    setScrollTop: (scrollTop: number) => void;
     getOptions: (options: IDataGridOptions) => IDataGridOptions;
     getProviderProps: (prevState: IDataGridState) => IDataGridState;
     render(): JSX.Element;

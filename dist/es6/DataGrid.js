@@ -5,11 +5,11 @@ const providers_1 = require("./providers");
 const components_1 = require("./components");
 const utils_1 = require("./utils");
 class DataGrid extends React.Component {
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+        super(props);
         this.rootObject = {};
-        this.rootNode = React.createRef();
-        this.clipBoardNode = React.createRef();
+        this.scrollLeft = 0;
+        this.scrollTop = 0;
         this.state = {
             mounted: false,
             calculatedHeight: undefined,
@@ -25,6 +25,12 @@ class DataGrid extends React.Component {
         this.getRootState = () => {
             return this.state;
         };
+        this.setScrollLeft = (scrollLeft) => {
+            this.scrollLeft = scrollLeft;
+        };
+        this.setScrollTop = (scrollTop) => {
+            this.scrollTop = scrollTop;
+        };
         this.getOptions = (options) => {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
@@ -36,6 +42,8 @@ class DataGrid extends React.Component {
             // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
             let newState = Object.assign({}, prevState);
             let newStyle = {};
+            newState.scrollLeft = this.scrollLeft;
+            newState.scrollTop = this.scrollTop;
             // options.showRowSelector 체크
             if (newState.rowSelector) {
                 if (typeof newState.rowSelector.show === 'undefined') {
@@ -102,6 +110,8 @@ class DataGrid extends React.Component {
             newState.styles = newStyle;
             // 초기 스타일 생성.
             const calculatedObject = utils_1.calculateDimensions(newState.rootNode && newState.rootNode.current, newState);
+            newState.scrollLeft = calculatedObject.scrollLeft;
+            newState.scrollTop = calculatedObject.scrollTop;
             newState.styles = calculatedObject.styles;
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
@@ -123,13 +133,16 @@ class DataGrid extends React.Component {
             }
             return newState;
         };
+        this.rootNode = React.createRef();
+        this.clipBoardNode = React.createRef();
     }
     render() {
         const { mounted } = this.state;
-        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, loading = false, loadingData = false, selection, rowSelector, } = this.props;
+        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, } = this.props;
         let providerProps = {};
         let gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
+            width: width,
         }, style);
         if (mounted) {
             providerProps = this.getProviderProps({
@@ -141,7 +154,10 @@ class DataGrid extends React.Component {
                 rootNode: this.rootNode,
                 clipBoardNode: this.clipBoardNode,
                 rootObject: this.rootObject,
+                setScrollLeft: this.setScrollLeft,
+                setScrollTop: this.setScrollTop,
                 data,
+                width,
                 height,
                 onBeforeEvent,
                 onAfterEvent,
@@ -151,6 +167,14 @@ class DataGrid extends React.Component {
                 rowSelector,
                 options: this.getOptions(options),
             });
+            if (providerProps.scrollLeft &&
+                this.scrollLeft !== providerProps.scrollLeft) {
+                this.scrollLeft = providerProps.scrollLeft;
+            }
+            if (providerProps.scrollTop &&
+                this.scrollTop !== providerProps.scrollTop) {
+                this.scrollTop = providerProps.scrollTop;
+            }
         }
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },

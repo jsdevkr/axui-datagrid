@@ -59,7 +59,7 @@ class StoreProvider extends React.Component {
         super(...arguments);
         this.state = store;
         // state 가 업데이트 되기 전.
-        this.setStoreState = (newState) => {
+        this.setStoreState = (newState, callback) => {
             const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, bodyGroupingData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
             const { frozenColumnIndex = 0 } = options;
             const { CTInnerWidth } = styles;
@@ -69,8 +69,11 @@ class StoreProvider extends React.Component {
                 const { CTInnerWidth: _CTInnerWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, asidePanelWidth: _asidePanelWidth = 0, rightPanelWidth: _rightPanelWidth = 0, scrollContentWidth: scrollWidth = 0, scrollContentHeight: scrollHeight = 0, scrollContentContainerWidth: clientWidth = 0, scrollContentContainerHeight: clientHeight = 0, } = Object.assign({}, styles, _styles);
                 let endOfScrollTop = false;
                 let endOfScrollLeft = false;
-                if (typeof _scrollLeft !== 'undefined' && _scrollLeft !== scrollLeft) {
+                if (typeof _scrollLeft !== 'undefined') {
                     if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
+                        if (this.state.setScrollLeft) {
+                            this.state.setScrollLeft(_scrollLeft);
+                        }
                         const { printStartColIndex, printEndColIndex, } = utils_1.getPositionPrintColGroup(headerColGroup, Math.abs(_scrollLeft) + _frozenPanelWidth, Math.abs(_scrollLeft) +
                             _frozenPanelWidth +
                             (_CTInnerWidth -
@@ -84,11 +87,15 @@ class StoreProvider extends React.Component {
                         newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(bodyGroupingData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                         newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(footSumData, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
                     }
-                    if (clientWidth >= scrollWidth + _scrollLeft) {
+                    if (_scrollLeft !== scrollLeft &&
+                        clientWidth >= scrollWidth + _scrollLeft) {
                         endOfScrollLeft = true;
                     }
                 }
                 if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (this.state.setScrollTop) {
+                        this.state.setScrollTop(_scrollTop);
+                    }
                     if (clientHeight >= scrollHeight + _scrollTop) {
                         endOfScrollTop = true;
                     }
@@ -103,7 +110,13 @@ class StoreProvider extends React.Component {
             if (_filteredList && filteredList.length !== _filteredList.length) {
                 newState.styles = utils_1.calculateDimensions(this.state.rootNode && this.state.rootNode.current, this.state, _filteredList).styles;
             }
-            this.setState(newState);
+            this.setState(prevState => {
+                return Object.assign({}, newState);
+            }, () => {
+                if (callback) {
+                    callback();
+                }
+            });
         };
         this.dispatch = (dispatchType, param) => {
             const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, } = this.state;
@@ -412,11 +425,16 @@ class StoreProvider extends React.Component {
             newProps.colGroup === prevState.colGroup &&
             newProps.colGroupMap === prevState.colGroupMap &&
             newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
-            newProps.headerColGroup === prevState.headerColGroup) {
+            newProps.headerColGroup === prevState.headerColGroup &&
+            (prevState.styles &&
+                newProps.styles.CTInnerWidth === prevState.styles.CTInnerWidth) &&
+            (prevState.styles &&
+                newProps.styles.CTInnerHeight === prevState.styles.CTInnerHeight)) {
             return null;
         }
         else {
             let scrollTop = prevState.scrollTop;
+            let scrollLeft = prevState.scrollLeft;
             let filteredList = prevState.filteredList || [];
             let styles = prevState.styles || {};
             const { sortInfo } = prevState;
@@ -463,6 +481,36 @@ class StoreProvider extends React.Component {
                     });
                 }
             }
+            if (prevState.styles &&
+                newProps.styles &&
+                newProps.styles.CTInnerWidth !== prevState.styles.CTInnerWidth) {
+                if (scrollLeft &&
+                    scrollLeft !== 0 &&
+                    Number(styles.scrollContentWidth) + scrollLeft <
+                        Number(styles.scrollContentContainerWidth)) {
+                    scrollLeft =
+                        Number(styles.scrollContentContainerWidth) -
+                            Number(styles.scrollContentWidth);
+                    if (scrollLeft > 0) {
+                        scrollLeft = 0;
+                    }
+                }
+            }
+            if (prevState.styles &&
+                newProps.styles &&
+                newProps.styles.CTInnerHeight !== prevState.styles.CTInnerHeight) {
+                if (scrollTop &&
+                    scrollTop !== 0 &&
+                    Number(styles.scrollContentHeight) + scrollTop <
+                        Number(styles.scrollContentContainerHeight)) {
+                    scrollTop =
+                        Number(styles.scrollContentContainerHeight) -
+                            Number(styles.scrollContentHeight);
+                    if (scrollTop > 0) {
+                        scrollTop = 0;
+                    }
+                }
+            }
             // 데이터 길이에 따라 스타일이 조정되어야 하므로
             // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
             styles = Object.assign({}, _styles, utils_1.getStylesAboutFilteredList(filteredList, _options, _styles));
@@ -480,7 +528,8 @@ class StoreProvider extends React.Component {
                 }).scrollTop;
             }
             return Object.assign({}, prevState, {
-                scrollTop: scrollTop,
+                scrollLeft,
+                scrollTop,
                 mounted: newProps.mounted,
                 loading: newProps.loading,
                 loadingData: newProps.loadingData,

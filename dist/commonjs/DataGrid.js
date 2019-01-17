@@ -50,11 +50,11 @@ var components_1 = require("./components");
 var utils_1 = require("./utils");
 var DataGrid = /** @class */ (function (_super) {
     __extends(DataGrid, _super);
-    function DataGrid() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function DataGrid(props) {
+        var _this = _super.call(this, props) || this;
         _this.rootObject = {};
-        _this.rootNode = React.createRef();
-        _this.clipBoardNode = React.createRef();
+        _this.scrollLeft = 0;
+        _this.scrollTop = 0;
         _this.state = {
             mounted: false,
             calculatedHeight: undefined,
@@ -70,6 +70,12 @@ var DataGrid = /** @class */ (function (_super) {
         _this.getRootState = function () {
             return _this.state;
         };
+        _this.setScrollLeft = function (scrollLeft) {
+            _this.scrollLeft = scrollLeft;
+        };
+        _this.setScrollTop = function (scrollTop) {
+            _this.scrollTop = scrollTop;
+        };
         _this.getOptions = function (options) {
             return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
         };
@@ -81,6 +87,8 @@ var DataGrid = /** @class */ (function (_super) {
             // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
             var newState = __assign({}, prevState);
             var newStyle = {};
+            newState.scrollLeft = _this.scrollLeft;
+            newState.scrollTop = _this.scrollTop;
             // options.showRowSelector 체크
             if (newState.rowSelector) {
                 if (typeof newState.rowSelector.show === 'undefined') {
@@ -147,6 +155,8 @@ var DataGrid = /** @class */ (function (_super) {
             newState.styles = newStyle;
             // 초기 스타일 생성.
             var calculatedObject = utils_1.calculateDimensions(newState.rootNode && newState.rootNode.current, newState);
+            newState.scrollLeft = calculatedObject.scrollLeft;
+            newState.scrollTop = calculatedObject.scrollTop;
             newState.styles = calculatedObject.styles;
             newState.colGroup = calculatedObject.colGroup;
             newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
@@ -168,14 +178,17 @@ var DataGrid = /** @class */ (function (_super) {
             }
             return newState;
         };
+        _this.rootNode = React.createRef();
+        _this.clipBoardNode = React.createRef();
         return _this;
     }
     DataGrid.prototype.render = function () {
         var mounted = this.state.mounted;
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, width = _a.width, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector;
         var providerProps = {};
         var gridRootStyle = utils_1.mergeAll({
             height: this.state.calculatedHeight || height,
+            width: width,
         }, style);
         if (mounted) {
             providerProps = this.getProviderProps({
@@ -187,7 +200,10 @@ var DataGrid = /** @class */ (function (_super) {
                 rootNode: this.rootNode,
                 clipBoardNode: this.clipBoardNode,
                 rootObject: this.rootObject,
+                setScrollLeft: this.setScrollLeft,
+                setScrollTop: this.setScrollTop,
                 data: data,
+                width: width,
                 height: height,
                 onBeforeEvent: onBeforeEvent,
                 onAfterEvent: onAfterEvent,
@@ -197,6 +213,14 @@ var DataGrid = /** @class */ (function (_super) {
                 rowSelector: rowSelector,
                 options: this.getOptions(options),
             });
+            if (providerProps.scrollLeft &&
+                this.scrollLeft !== providerProps.scrollLeft) {
+                this.scrollLeft = providerProps.scrollLeft;
+            }
+            if (providerProps.scrollTop &&
+                this.scrollTop !== providerProps.scrollTop) {
+                this.scrollTop = providerProps.scrollTop;
+            }
         }
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },

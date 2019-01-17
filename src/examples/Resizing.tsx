@@ -317,6 +317,7 @@ class Resizing extends React.Component<any, any> {
             ref={this.containerRef}
           >
             <DataGrid
+              width={this.state.boxWidth}
               height={this.state.boxHeight}
               style={{ fontSize: '12px' }}
               columns={grid.columns}

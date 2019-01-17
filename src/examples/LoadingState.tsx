@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider, Checkbox, Button,Form, Select} from 'antd';
+import { Divider, Checkbox, Button, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -40,7 +40,6 @@ class LoadingState extends React.Component<any, any> {
     }, 1000);
   };
 
-
   changeConfig = (props: any, value: any) => {
     const processor = {
       setHeight: () => {
@@ -67,6 +66,7 @@ class LoadingState extends React.Component<any, any> {
           <p>You can express the loading status with loading props</p>
 
           <DataGrid
+            width={600}
             loading={loading}
             loadingData={loadingData}
             height={height}
@@ -99,24 +99,24 @@ class LoadingState extends React.Component<any, any> {
           </Checkbox>
           <Divider />
 
-<Button
-  type="primary"
-  onClick={() => this.changeConfig('setHeight', 300)}
->
-  height : 300
-</Button>
-<Button
-  type="primary"
-  onClick={() => this.changeConfig('setHeight', 400)}
->
-  height : 400
-</Button>
-<Button
-  type="primary"
-  onClick={() => this.changeConfig('setHeight', 500)}
->
-  height : 500
-</Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 300)}
+          >
+            height : 300
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 400)}
+          >
+            height : 400
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => this.changeConfig('setHeight', 500)}
+          >
+            height : 500
+          </Button>
         </Segment>
       </Wrapper>
     );

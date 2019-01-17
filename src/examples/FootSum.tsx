@@ -100,6 +100,7 @@ class FootSum extends React.Component<any, any> {
             Alternatively, you can define your own function.
           </p>
           <DataGrid
+            width={600}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}

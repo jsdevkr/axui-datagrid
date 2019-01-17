@@ -243,6 +243,7 @@ export interface IDataGridState {
   selectedRowIndexSelected?: boolean;
   sortInfo?: {};
   filterInfo?: {};
+  width?: number;
   height?: number;
 
   onBeforeEvent?: (param: IonEventParam) => void;
@@ -322,6 +323,8 @@ export interface IDataGridState {
   rootObject?: any;
   setRootState?: (state: IDataGridRootState) => void;
   getRootState?: () => any;
+  setScrollLeft?: (scrollLeft: number) => void;
+  setScrollTop?: (scrollTop: number) => void;
   // getRootNode?: () => HTMLDivElement;
   // getClipBoardNode?: () => HTMLTextAreaElement;
   rootNode?: React.RefObject<HTMLDivElement>;
@@ -344,7 +347,8 @@ export interface IDataGrid {
   data?: any[];
   columns: IDataGridColumn[];
   footSum?: IDataGridColumn[][];
-  height?: number;
+  width: number;
+  height: number;
   style?: any;
   options?: IDataGridOptions;
   onBeforeEvent?: (param: IonEventParam) => void;

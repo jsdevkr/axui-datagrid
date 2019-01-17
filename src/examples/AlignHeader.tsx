@@ -85,6 +85,7 @@ class AlignHeader extends React.Component<any, any> {
           <p>This example changes the 'options.header.align' property.</p>
 
           <DataGrid
+            width={600}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}
@@ -114,7 +115,6 @@ class AlignHeader extends React.Component<any, any> {
           >
             height : 500
           </Button>
-
 
           <Divider />
 

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition, getNode } from '../utils';
+import { getScrollPosition, getNode, throttle } from '../utils';
 import { KeyCodes, EventNames } from '../common/@enums';
+import { IDataGridState } from 'axui-datagrid/common/@types';
 
 interface IProps extends IDataGridStore {}
 interface IState {}

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const getWidthHeight_1 = require("./getWidthHeight");
 const setColGroupWidth_1 = require("./setColGroupWidth");
 function calculateDimensions(containerDOM, state, toBeFilteredList) {
-    const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, height = 0, } = state;
+    const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, height = 0, width = 0, } = state;
+    let { scrollLeft = 0, scrollTop = 0 } = state;
     let list = toBeFilteredList || filteredList;
     const { header: optionsHeader = {}, scroller: optionsScroller = {}, page: optionsPage = {}, frozenColumnIndex = 0, frozenRowIndex = 0, } = options;
     const { display: optionsHeaderDisplay = true, columnHeight: optionsHeaderColumnHeight = 0, } = optionsHeader;
@@ -15,7 +15,7 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     let currentColGroup = [];
     let currentHeaderColGroup = [];
     currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
-    currentStyles.CTInnerWidth = currentStyles.elWidth = getWidthHeight_1.getOuterWidth(containerDOM);
+    currentStyles.CTInnerWidth = currentStyles.elWidth = width;
     currentStyles.CTInnerHeight = currentStyles.elHeight = height;
     currentStyles.rightPanelWidth = 0;
     currentStyles.pageHeight = 0;
@@ -151,7 +151,36 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     if (optionsScrollerBarMinSize > currentStyles.horizontalScrollBarWidth) {
         currentStyles.horizontalScrollBarWidth = optionsScrollerBarMinSize;
     }
+    // scrollLeft, scrollTop의 위치가 맞지 않으면 조정.
+    if (scrollLeft !== 0 &&
+        currentStyles.scrollContentWidth +
+            scrollLeft +
+            currentStyles.scrollerArrowSize <
+            currentStyles.scrollContentContainerWidth) {
+        scrollLeft =
+            currentStyles.scrollContentContainerWidth -
+                currentStyles.scrollContentWidth -
+                currentStyles.scrollerArrowSize;
+        if (scrollLeft > 0) {
+            scrollLeft = 0;
+        }
+    }
+    if (scrollTop !== 0 &&
+        currentStyles.scrollContentHeight +
+            scrollTop +
+            currentStyles.scrollerArrowSize <
+            currentStyles.scrollContentContainerHeight) {
+        scrollTop =
+            currentStyles.scrollContentContainerHeight -
+                currentStyles.scrollContentHeight -
+                currentStyles.scrollerArrowSize;
+        if (scrollTop > 0) {
+            scrollTop = 0;
+        }
+    }
     return {
+        scrollLeft,
+        scrollTop,
         styles: currentStyles,
         colGroup: currentColGroup,
         leftHeaderColGroup: currentColGroup.slice(0, frozenColumnIndex),

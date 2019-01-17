@@ -139,13 +139,22 @@ class DataGrid extends React.Component<IProps, IState> {
   static defaultThrottleWait = 100;
 
   rootObject: any = {};
-  rootNode: React.RefObject<HTMLDivElement> = React.createRef();
-  clipBoardNode: React.RefObject<HTMLTextAreaElement> = React.createRef();
+  rootNode: React.RefObject<HTMLDivElement>;
+  clipBoardNode: React.RefObject<HTMLTextAreaElement>;
+  scrollLeft: number = 0;
+  scrollTop: number = 0;
 
   state = {
     mounted: false, // 루트 엘리먼트 준비여부
     calculatedHeight: undefined,
   };
+
+  constructor(props: IProps) {
+    super(props);
+
+    this.rootNode = React.createRef();
+    this.clipBoardNode = React.createRef();
+  }
 
   /**
    * You must execute setRootState only once in the child component.
@@ -158,6 +167,13 @@ class DataGrid extends React.Component<IProps, IState> {
 
   getRootState = () => {
     return this.state;
+  };
+
+  setScrollLeft = (scrollLeft: number) => {
+    this.scrollLeft = scrollLeft;
+  };
+  setScrollTop = (scrollTop: number) => {
+    this.scrollTop = scrollTop;
   };
 
   getOptions = (options: IDataGridOptions): IDataGridOptions => {
@@ -176,6 +192,9 @@ class DataGrid extends React.Component<IProps, IState> {
     // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
     let newState: IDataGridState = { ...prevState };
     let newStyle: IDataGridStyles = {};
+
+    newState.scrollLeft = this.scrollLeft;
+    newState.scrollTop = this.scrollTop;
 
     // options.showRowSelector 체크
     if (newState.rowSelector) {
@@ -280,6 +299,8 @@ class DataGrid extends React.Component<IProps, IState> {
       newState,
     );
 
+    newState.scrollLeft = calculatedObject.scrollLeft;
+    newState.scrollTop = calculatedObject.scrollTop;
     newState.styles = calculatedObject.styles;
     newState.colGroup = calculatedObject.colGroup;
     newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
@@ -291,6 +312,7 @@ class DataGrid extends React.Component<IProps, IState> {
       asidePanelWidth: _asidePanelWidth = 0,
       rightPanelWidth: _rightPanelWidth = 0,
     } = newState.styles!;
+
     const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
       newState.headerColGroup,
       Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth,
@@ -343,6 +365,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onScrollEnd,
       onRightClick,
       height = DataGrid.defaultHeight,
+      width,
       loading = false,
       loadingData = false,
       selection,
@@ -353,6 +376,7 @@ class DataGrid extends React.Component<IProps, IState> {
     let gridRootStyle = mergeAll(
       {
         height: this.state.calculatedHeight || height,
+        width: width,
       },
       style,
     );
@@ -367,7 +391,10 @@ class DataGrid extends React.Component<IProps, IState> {
         rootNode: this.rootNode,
         clipBoardNode: this.clipBoardNode,
         rootObject: this.rootObject,
+        setScrollLeft: this.setScrollLeft,
+        setScrollTop: this.setScrollTop,
         data,
+        width,
         height,
         onBeforeEvent,
         onAfterEvent,
@@ -377,6 +404,19 @@ class DataGrid extends React.Component<IProps, IState> {
         rowSelector,
         options: this.getOptions(options),
       });
+
+      if (
+        providerProps.scrollLeft &&
+        this.scrollLeft !== providerProps.scrollLeft
+      ) {
+        this.scrollLeft = providerProps.scrollLeft;
+      }
+      if (
+        providerProps.scrollTop &&
+        this.scrollTop !== providerProps.scrollTop
+      ) {
+        this.scrollTop = providerProps.scrollTop;
+      }
     }
 
     return (

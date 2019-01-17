@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Divider,Form, Select, Button } from 'antd';
+import { Divider, Form, Select, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -40,7 +40,6 @@ class LoadingState extends React.Component<any, any> {
     }
   };
 
-
   render() {
     const { height, columns, data, options } = this.state;
 
@@ -54,6 +53,7 @@ class LoadingState extends React.Component<any, any> {
           </p>
 
           <DataGrid
+            width={600}
             height={height}
             style={{ fontSize: '12px' }}
             columns={columns}
@@ -97,9 +97,6 @@ class LoadingState extends React.Component<any, any> {
           >
             height : 500
           </Button>
-
-
-
         </Segment>
       </Wrapper>
     );

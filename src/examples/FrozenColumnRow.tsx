@@ -61,11 +61,11 @@ class FrozenColumnRow extends React.Component<any, any> {
           <h1>Frozen Column {'&'} Row</h1>
           <p>
             Users can dynamically specify options.frozenColumnIndex and options.
-            frozenRowIndex to set the frame fixed area. 
-            Then, The row and column areas can be specified 
-            in the fixed size chosen by the user.
+            frozenRowIndex to set the frame fixed area. Then, The row and column
+            areas can be specified in the fixed size chosen by the user.
           </p>
           <DataGrid
+            width={600}
             height={height}
             style={{ fontSize: '12px' }}
             columns={columns}
@@ -81,7 +81,7 @@ class FrozenColumnRow extends React.Component<any, any> {
                 labelInValue
                 defaultValue={
                   {
-                    key: '' + this.state.options.frozenRowIndex+" row",
+                    key: '' + this.state.options.frozenRowIndex + ' row',
                   } as any
                 }
                 onChange={(value: any) => {
@@ -90,16 +90,22 @@ class FrozenColumnRow extends React.Component<any, any> {
                   });
                 }}
               >
-                {this.state.data.map((some:any,i:number)=>{
-                return <Select.Option key="" value={i}>{i} row</Select.Option>;
-              })}
+                {this.state.data.map((some: any, i: number) => {
+                  return (
+                    <Select.Option key="" value={i}>
+                      {i} row
+                    </Select.Option>
+                  );
+                })}
               </Select>
             </Form.Item>
             <Form.Item id={'col'} label={'Column'}>
               <Select
                 labelInValue
                 defaultValue={
-                  { key: '' + this.state.options.frozenColumnIndex+" column" } as any
+                  {
+                    key: '' + this.state.options.frozenColumnIndex + ' column',
+                  } as any
                 }
                 onChange={(value: any) => {
                   this.changeConfig('setOptions', {
@@ -107,9 +113,13 @@ class FrozenColumnRow extends React.Component<any, any> {
                   });
                 }}
               >
-                {this.state.columns.map((some:any,i:number)=>{
-                return <Select.Option key="" value={i}>{i} column</Select.Option>;
-              })}
+                {this.state.columns.map((some: any, i: number) => {
+                  return (
+                    <Select.Option key="" value={i}>
+                      {i} column
+                    </Select.Option>
+                  );
+                })}
               </Select>
             </Form.Item>
           </Form>
