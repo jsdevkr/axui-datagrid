@@ -49,7 +49,7 @@ class DataGridPage extends React.Component {
                 return _scrollTop;
             };
             const proc = {
-                [_enums_1.PageButtonActions.PAGE_FIRST]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_FIRST]: () => {
                     const focusRow = 0;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -59,7 +59,7 @@ class DataGridPage extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [_enums_1.PageButtonActions.PAGE_PREV]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_PREV]: () => {
                     const focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -69,7 +69,7 @@ class DataGridPage extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [_enums_1.PageButtonActions.PAGE_BACK]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_BACK]: () => {
                     let focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -79,7 +79,7 @@ class DataGridPage extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [_enums_1.PageButtonActions.PAGE_PLAY]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_PLAY]: () => {
                     let focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + 1;
@@ -91,7 +91,7 @@ class DataGridPage extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [_enums_1.PageButtonActions.PAGE_NEXT]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_NEXT]: () => {
                     let focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + pRowSize;
@@ -103,7 +103,7 @@ class DataGridPage extends React.Component {
                         focusedRow: focusRow,
                     });
                 },
-                [_enums_1.PageButtonActions.PAGE_LAST]: () => {
+                [_enums_1.DataGridEnums.PageButtonActions.PAGE_LAST]: () => {
                     const focusRow = filteredList.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),

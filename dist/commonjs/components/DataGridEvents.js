@@ -66,7 +66,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _a;
             var _b = _this.props, _c = _b.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _b.focusedRow, focusedRow = _d === void 0 ? 0 : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, setStoreState = _b.setStoreState, isInlineEditing = _b.isInlineEditing;
             var proc = (_a = {},
-                _a[_enums_1.KeyCodes.ENTER] = function () {
+                _a[_enums_1.DataGridEnums.KeyCodes.ENTER] = function () {
                     var col = colGroup[focusedCol];
                     if (col.editor) {
                         setStoreState({
@@ -153,7 +153,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 return _scrollLeft;
             };
             var metaProc = (_a = {},
-                _a[_enums_1.KeyCodes.C] = function () {
+                _a[_enums_1.DataGridEnums.KeyCodes.C] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var copySuccess = false;
@@ -180,7 +180,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     rootNode && rootNode.current && rootNode.current.focus();
                     return copySuccess;
                 },
-                _a[_enums_1.KeyCodes.A] = function () {
+                _a[_enums_1.DataGridEnums.KeyCodes.A] = function () {
                     e.preventDefault();
                     e.stopPropagation();
                     var state = {
@@ -209,7 +209,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 },
                 _a);
             var proc = (_b = {},
-                _b[_enums_1.KeyCodes.ESC] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.ESC] = function () {
                     var _a, _b;
                     setStoreState({
                         selectionRows: (_a = {},
@@ -220,7 +220,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                             _b),
                     });
                 },
-                _b[_enums_1.KeyCodes.HOME] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.HOME] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -233,7 +233,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.END] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.END] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -246,7 +246,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.PAGE_UP] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.PAGE_UP] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -259,7 +259,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.PAGE_DOWN] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.PAGE_DOWN] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -274,7 +274,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.UP_ARROW] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.UP_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -287,7 +287,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.DOWN_ARROW] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.DOWN_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -302,7 +302,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedRow: focusRow,
                     });
                 },
-                _b[_enums_1.KeyCodes.LEFT_ARROW] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.LEFT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -315,7 +315,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                         focusedCol: focusCol,
                     });
                 },
-                _b[_enums_1.KeyCodes.RIGHT_ARROW] = function () {
+                _b[_enums_1.DataGridEnums.KeyCodes.RIGHT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
                     e.stopPropagation();
@@ -361,7 +361,7 @@ var DataGridEvents = /** @class */ (function (_super) {
             var _a;
             var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
             var proc = (_a = {},
-                _a[_enums_1.EventNames.WHEEL] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.WHEEL] = function () {
                     if (!loadingData) {
                         _this.onWheel(e);
                     }
@@ -370,17 +370,17 @@ var DataGridEvents = /** @class */ (function (_super) {
                         e.stopPropagation();
                     }
                 },
-                _a[_enums_1.EventNames.KEYDOWN] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.KEYDOWN] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyDown(e);
                     }
                 },
-                _a[_enums_1.EventNames.KEYUP] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.KEYUP] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onKeyUp(e);
                     }
                 },
-                _a[_enums_1.EventNames.CONTEXTMENU] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.CONTEXTMENU] = function () {
                     if (!loadingData && !isInlineEditing) {
                         _this.onContextmenu(e);
                     }

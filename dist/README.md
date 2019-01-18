@@ -189,6 +189,7 @@ class Formatter extends React.Component<any, any> {
     const gridData = require('examples/basicData.json');
 
     this.state = {
+      width: 400,
       height: 400,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
@@ -220,6 +221,7 @@ class Formatter extends React.Component<any, any> {
             function.
           </p>
           <DataGrid
+            width={this.state.width}
             height={this.state.height}
             style={{ fontSize: '12px' }}
             columns={this.state.columns}
@@ -254,3 +256,4 @@ export default Formatter;
 - v0.5.0 - support selection.onChange, Add a new props onRightClick, refactoring StoreProvider
 - v0.5.1 - Improve columnFilter & modify examples
 - v0.5.2 - Bugfix : The scrollBar is not displayed where resizing a column.
+- v0.6.0 - Add a new prop width

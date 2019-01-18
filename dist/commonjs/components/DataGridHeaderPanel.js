@@ -159,7 +159,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                         }
                         break;
                     case '_row_selector_':
-                        dispatch(_enums_1.DispatchTypes.SELECT_ALL, {});
+                        dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL, {});
                         break;
                     default:
                         {
@@ -190,7 +190,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                             }
                             else if (optionsHeader.clickAction === 'sort' &&
                                 optionsHeader.sortable) {
-                                dispatch(_enums_1.DispatchTypes.SORT, { colIndex: colIndex });
+                                dispatch(_enums_1.DataGridEnums.DispatchTypes.SORT, { colIndex: colIndex });
                             }
                         }
                         break;
@@ -234,7 +234,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
                 // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어
                 // newWidth !== 0 을 추가
                 if (typeof newWidth !== 'undefined' && newWidth !== 0) {
-                    dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
+                    dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
                         col: col,
                         newWidth: newWidth,
                     });
@@ -270,7 +270,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
             var newWidth = (longestWordLength > columnWordLength
                 ? longestWordLength
                 : columnWordLength) * widthOfOneChar;
-            dispatch(_enums_1.DispatchTypes.RESIZE_COL, {
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
                 col: col,
                 newWidth: newWidth,
             });

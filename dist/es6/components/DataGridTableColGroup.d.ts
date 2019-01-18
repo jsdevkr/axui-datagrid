@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IDataGridCol } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 declare const DataGridTableColGroup: React.SFC<{
-    panelColGroup: IDataGridCol[];
+    panelColGroup: IDataGrid.ICol[];
 }>;
 export default DataGridTableColGroup;

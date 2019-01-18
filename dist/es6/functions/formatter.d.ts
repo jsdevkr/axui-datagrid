@@ -1,7 +1,7 @@
-import { IDataGridFormatterData } from '../common/@types';
-declare function money(formatterData: IDataGridFormatterData): string;
-declare function date(formatterData: IDataGridFormatterData): string | Date;
-declare function datetime(formatterData: IDataGridFormatterData): string | Date;
+import { IDataGrid } from '../common/@types';
+declare function money(formatterData: IDataGrid.IFormatterData): string;
+declare function date(formatterData: IDataGrid.IFormatterData): string | Date;
+declare function datetime(formatterData: IDataGrid.IFormatterData): string | Date;
 declare const _default: {
     money: typeof money;
     date: typeof date;

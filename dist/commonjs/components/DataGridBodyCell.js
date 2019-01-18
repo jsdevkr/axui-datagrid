@@ -75,7 +75,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             var _a;
             var setStoreState = _this.props.setStoreState;
             var proc = (_a = {},
-                _a[_enums_1.KeyCodes.ENTER] = function () {
+                _a[_enums_1.DataGridEnums.KeyCodes.ENTER] = function () {
                     if (col.editor) {
                         setStoreState({
                             isInlineEditing: true,
@@ -94,7 +94,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             var _a;
             var _b = _this.props, rootNode = _b.rootNode, setStoreState = _b.setStoreState, dispatch = _b.dispatch, _c = _b.inlineEditingCell, inlineEditingCell = _c === void 0 ? {} : _c;
             var proc = (_a = {},
-                _a[_enums_1.EventNames.BLUR] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.BLUR] = function () {
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
@@ -103,9 +103,9 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                         rootNode.current.focus();
                     }
                 },
-                _a[_enums_1.EventNames.KEYUP] = function () {
+                _a[_enums_1.DataGridEnums.EventNames.KEYUP] = function () {
                     switch (e.which) {
-                        case _enums_1.KeyCodes.ESC:
+                        case _enums_1.DataGridEnums.KeyCodes.ESC:
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
@@ -114,11 +114,11 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                                 rootNode.current.focus();
                             }
                             break;
-                        case _enums_1.KeyCodes.UP_ARROW:
-                        case _enums_1.KeyCodes.DOWN_ARROW:
-                        case _enums_1.KeyCodes.ENTER:
+                        case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                        case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                        case _enums_1.DataGridEnums.KeyCodes.ENTER:
                             if (!_this.activeComposition) {
-                                dispatch(_enums_1.DispatchTypes.UPDATE, {
+                                dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
@@ -182,9 +182,9 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                             _this.activeComposition = false;
                         });
                     }, onBlur: function (e) {
-                        _this.onEventInput(_enums_1.EventNames.BLUR, e);
+                        _this.onEventInput(_enums_1.DataGridEnums.EventNames.BLUR, e);
                     }, onKeyUp: function (e) {
-                        _this.onEventInput(_enums_1.EventNames.KEYUP, e);
+                        _this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
                     }, "data-inline-edit": true, defaultValue: value })));
         }
         else {

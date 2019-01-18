@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
-import { IDataGridCol, IDataGridColumnTableMap } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 interface IProps extends IDataGridStore {
-    bodyRow: IDataGridColumnTableMap;
+    bodyRow: IDataGrid.IColumnTableMap;
     ri: number;
-    col: IDataGridCol;
-    onClick: (e: any, col: IDataGridCol) => void;
+    col: IDataGrid.ICol;
+    onClick: (e: any, col: IDataGrid.ICol) => void;
 }
 declare const _default: React.ComponentClass<Pick<IProps, "col" | "bodyRow" | "ri" | "onClick">, any>;
 export default _default;

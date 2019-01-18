@@ -96,7 +96,7 @@ class DataGridBody extends React.Component {
                             // console.log('get selection fail', sRow, eRow, sCol, eCol);
                         }
                         setStoreState(currState);
-                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                             sRow,
                             eRow,
                             sCol,
@@ -231,7 +231,7 @@ class DataGridBody extends React.Component {
                             state.selectionCols[i] = true;
                         }
                         setStoreState(state);
-                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                             sRow,
                             eRow,
                             sCol,
@@ -256,7 +256,7 @@ class DataGridBody extends React.Component {
                         focusedRow: selectStartedRow,
                         focusedCol: selectStartedCol,
                     });
-                    dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                    dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                         sRow: selectStartedRow,
                         eRow: selectStartedRow,
                         sCol: selectStartedCol,
@@ -299,7 +299,7 @@ class DataGridBody extends React.Component {
                 setStoreState(state);
             };
             const procClickRowSelector = () => {
-                dispatch(_enums_1.DispatchTypes.SELECT, {
+                dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
                     rowIndex: selectStartedRow,
                 });
             };

@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { IDataGridState, DataGridDispatchParam, IDataGridStyles } from '../common/@types';
-import { DispatchTypes } from '../common/@enums';
-export interface IDataGridStore extends IDataGridState {
-    setStoreState: (store: IDataGridState) => void;
-    dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
+export interface IDataGridStore extends IDataGrid.IStoreState {
+    setStoreState: (store: IDataGrid.IStoreState) => void;
+    dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
 }
-declare class StoreProvider extends React.Component<any, IDataGridState> {
+declare class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
     state: IDataGridStore;
     throttledUpdateDimensions: any;
-    static getDerivedStateFromProps(newProps: any, prevState: IDataGridState): {
+    static getDerivedStateFromProps(newProps: any, prevState: IDataGrid.IStoreState): {
         scrollLeft: number | undefined;
         scrollTop: number | undefined;
         mounted: any;
@@ -47,7 +47,7 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         footSumTable: any;
         leftFootSumData: any;
         footSumData: any;
-        styles: IDataGridStyles;
+        styles: IDataGrid.IStyles;
         printStartColIndex: any;
         printEndColIndex: any;
         visibleHeaderColGroup: any;
@@ -62,7 +62,7 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         filterInfo?: {} | undefined;
         width?: number | undefined;
         isInlineEditing?: boolean | undefined;
-        inlineEditingCell?: import("../common/@types").IDataGridEditingCell | undefined;
+        inlineEditingCell?: IDataGrid.IEditingCell | undefined;
         columnResizing?: boolean | undefined;
         columnResizerLeft?: number | undefined;
         isColumnFilter?: number | boolean | undefined;
@@ -72,32 +72,32 @@ declare class StoreProvider extends React.Component<any, IDataGridState> {
         selectionCols?: {} | undefined;
         focusedRow?: number | undefined;
         focusedCol?: number | undefined;
-        selectionStartOffset?: import("../common/@types").IPosition | undefined;
-        selectionEndOffset?: import("../common/@types").IPosition | undefined;
-        selectionMinOffset?: import("../common/@types").IPosition | undefined;
-        selectionMaxOffset?: import("../common/@types").IPosition | undefined;
+        selectionStartOffset?: IDataGrid.IPosition | undefined;
+        selectionEndOffset?: IDataGrid.IPosition | undefined;
+        selectionMinOffset?: IDataGrid.IPosition | undefined;
+        selectionMaxOffset?: IDataGrid.IPosition | undefined;
         selectionSRow?: number | undefined;
         selectionSCol?: number | undefined;
         selectionERow?: number | undefined;
         selectionECol?: number | undefined;
-        bodyGrouping?: import("../common/@types").IDataGridCol[] | undefined;
-        bodyGroupingTable?: import("../common/@types").IDataGridColumnTableMap | undefined;
-        asideBodyGroupingData?: import("../common/@types").IDataGridColumnTableMap | undefined;
-        leftBodyGroupingData?: import("../common/@types").IDataGridColumnTableMap | undefined;
-        bodyGroupingData?: import("../common/@types").IDataGridColumnTableMap | undefined;
+        bodyGrouping?: IDataGrid.ICol[] | undefined;
+        bodyGroupingTable?: IDataGrid.IColumnTableMap | undefined;
+        asideBodyGroupingData?: IDataGrid.IColumnTableMap | undefined;
+        leftBodyGroupingData?: IDataGrid.IColumnTableMap | undefined;
+        bodyGroupingData?: IDataGrid.IColumnTableMap | undefined;
         bodyGroupingMap?: {} | undefined;
         propColumns?: string | undefined;
         propOptions?: string | undefined;
-        predefinedFormatter?: import("../common/@types").IDataGridFormatter | undefined;
-        predefinedCollector?: import("../common/@types").IDataGridCollector | undefined;
+        predefinedFormatter?: IDataGrid.IFormatter | undefined;
+        predefinedCollector?: IDataGrid.ICollector | undefined;
         setScrollLeft?: ((scrollLeft: number) => void) | undefined;
         setScrollTop?: ((scrollTop: number) => void) | undefined;
     } | null;
     componentDidMount(): void;
     componentWillUnmount(): void;
     updateDimensions(): void;
-    setStoreState: (newState: IDataGridState, callback?: (() => void) | undefined) => void;
-    dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
+    setStoreState: (newState: IDataGrid.IStoreState, callback?: (() => void) | undefined) => void;
+    dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
     render(): JSX.Element;
 }
 declare const _default: {

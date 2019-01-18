@@ -30,13 +30,13 @@ var DatagridScroll = /** @class */ (function (_super) {
             }
             var _f = styles.scrollContentWidth, scrollContentWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentContainerWidth, scrollContentContainerWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentHeight, scrollContentHeight = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerHeight, scrollContentContainerHeight = _j === void 0 ? 0 : _j;
             var processor = (_a = {},
-                _a[_enums_1.DirectionTypes.UP] = function () {
+                _a[_enums_1.DataGridEnums.DirectionTypes.UP] = function () {
                     var scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
                     });
                 },
-                _a[_enums_1.DirectionTypes.DOWN] = function () {
+                _a[_enums_1.DataGridEnums.DirectionTypes.DOWN] = function () {
                     var scrollAmount = scrollContentContainerHeight;
                     setStoreState({
                         scrollTop: scrollContentContainerHeight <
@@ -45,13 +45,13 @@ var DatagridScroll = /** @class */ (function (_super) {
                             : scrollContentContainerHeight - scrollContentHeight,
                     });
                 },
-                _a[_enums_1.DirectionTypes.LEFT] = function () {
+                _a[_enums_1.DataGridEnums.DirectionTypes.LEFT] = function () {
                     var scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
                     });
                 },
-                _a[_enums_1.DirectionTypes.RIGHT] = function () {
+                _a[_enums_1.DataGridEnums.DirectionTypes.RIGHT] = function () {
                     var scrollAmount = scrollContentContainerWidth;
                     setStoreState({
                         scrollLeft: scrollContentContainerWidth <
@@ -81,14 +81,14 @@ var DatagridScroll = /** @class */ (function (_super) {
                 ? rootNode.current.getBoundingClientRect()
                 : {}, _s = _r.x, grx = _s === void 0 ? 0 : _s, _t = _r.y, gry = _t === void 0 ? 0 : _t;
             var processor = (_a = {},
-                _a[_enums_1.ScrollTypes.VERTICAL] = function () {
+                _a[_enums_1.DataGridEnums.ScrollTypes.VERTICAL] = function () {
                     var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, mouseY - gry - verticalScrollBarHeight / 2, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                     setStoreState({
                         scrollLeft: currScrollLeft,
                         scrollTop: currScrollTop,
                     });
                 },
-                _a[_enums_1.ScrollTypes.HORIZONTAL] = function () {
+                _a[_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL] = function () {
                     var _a = utils_1.getScrollPositionByScrollBar(mouseX -
                         grx -
                         pageButtonsContainerWidth -
@@ -120,14 +120,14 @@ var DatagridScroll = /** @class */ (function (_super) {
                 var _a;
                 var _b = utils_1.getMousePosition(ee), x = _b.x, y = _b.y;
                 var processor = (_a = {},
-                    _a[_enums_1.ScrollTypes.VERTICAL] = function () {
+                    _a[_enums_1.DataGridEnums.ScrollTypes.VERTICAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, currScrollBarTop + (y - startMousePosition.y), styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,
                         });
                     },
-                    _a[_enums_1.ScrollTypes.HORIZONTAL] = function () {
+                    _a[_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                         setStoreState({
                             scrollLeft: currScrollLeft,
@@ -234,22 +234,34 @@ var DatagridScroll = /** @class */ (function (_super) {
         return (React.createElement("div", { className: "axui-datagrid-scroller" },
             verticalScrollerWidth ? (React.createElement("div", { "data-scroll-track": "vertical", style: verticalStyles },
                 React.createElement("div", { "data-scroll-arrow": "up", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: function (e) { return _this.onClickScrollArrow(e, _enums_1.DirectionTypes.UP); } })),
-                React.createElement("div", { "data-scroll": "vertical", onClick: function (e) { return _this.onClickScrollTrack(e, _enums_1.ScrollTypes.VERTICAL); } },
+                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: function (e) {
+                            return _this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.UP);
+                        } })),
+                React.createElement("div", { "data-scroll": "vertical", onClick: function (e) {
+                        return _this.onClickScrollTrack(e, _enums_1.DataGridEnums.ScrollTypes.VERTICAL);
+                    } },
                     React.createElement("div", { className: "axui-datagrid-scroll-bar", style: verticalBarStyles, onMouseDown: function (e) {
-                            return _this.onMouseDownScrollBar(e, _enums_1.ScrollTypes.VERTICAL);
+                            return _this.onMouseDownScrollBar(e, _enums_1.DataGridEnums.ScrollTypes.VERTICAL);
                         } })),
                 React.createElement("div", { "data-scroll-arrow": "down", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: function (e) { return _this.onClickScrollArrow(e, _enums_1.DirectionTypes.DOWN); } })))) : null,
+                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: function (e) {
+                            return _this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.DOWN);
+                        } })))) : null,
             horizontalScrollerHeight ? (React.createElement("div", { "data-scroll-track": "horizontal", style: horizontalStyles },
                 React.createElement("div", { "data-scroll-arrow": "left", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: function (e) { return _this.onClickScrollArrow(e, _enums_1.DirectionTypes.LEFT); } })),
-                React.createElement("div", { "data-scroll": "horizontal", onClick: function (e) { return _this.onClickScrollTrack(e, _enums_1.ScrollTypes.HORIZONTAL); } },
+                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: function (e) {
+                            return _this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.LEFT);
+                        } })),
+                React.createElement("div", { "data-scroll": "horizontal", onClick: function (e) {
+                        return _this.onClickScrollTrack(e, _enums_1.DataGridEnums.ScrollTypes.HORIZONTAL);
+                    } },
                     React.createElement("div", { className: "axui-datagrid-scroll-bar", style: horizontalBarStyles, onMouseDown: function (e) {
-                            return _this.onMouseDownScrollBar(e, _enums_1.ScrollTypes.HORIZONTAL);
+                            return _this.onMouseDownScrollBar(e, _enums_1.DataGridEnums.ScrollTypes.HORIZONTAL);
                         } })),
                 React.createElement("div", { "data-scroll-arrow": "right", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: function (e) { return _this.onClickScrollArrow(e, _enums_1.DirectionTypes.RIGHT); } })))) : null));
+                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: function (e) {
+                            return _this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.RIGHT);
+                        } })))) : null));
     };
     return DatagridScroll;
 }(React.Component));

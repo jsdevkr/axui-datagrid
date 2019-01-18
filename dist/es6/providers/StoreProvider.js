@@ -124,7 +124,7 @@ class StoreProvider extends React.Component {
             const { columnKeys: optionColumnKeys = {} } = options;
             let { filteredList = [] } = this.state;
             const proc = {
-                [_enums_1.DispatchTypes.FILTER]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.FILTER]: () => {
                     const { colIndex, filterInfo } = param;
                     const checkAll = filterInfo[colIndex] === false
                         ? true
@@ -169,7 +169,7 @@ class StoreProvider extends React.Component {
                         });
                     }
                 },
-                [_enums_1.DispatchTypes.SORT]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.SORT]: () => {
                     const { colIndex } = param;
                     if (typeof colIndex !== 'undefined') {
                         const { key: colKey = '' } = colGroup[colIndex];
@@ -238,7 +238,7 @@ class StoreProvider extends React.Component {
                         }
                     }
                 },
-                [_enums_1.DispatchTypes.UPDATE]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.UPDATE]: () => {
                     const { row, colIndex, value, eventWhichKey } = param;
                     const key = colGroup[colIndex].key;
                     let focusRow = focusedRow;
@@ -248,10 +248,10 @@ class StoreProvider extends React.Component {
                     }
                     if (eventWhichKey) {
                         switch (eventWhichKey) {
-                            case _enums_1.KeyCodes.UP_ARROW:
+                            case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
                                 focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                                 break;
-                            case _enums_1.KeyCodes.DOWN_ARROW:
+                            case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                                 focusRow =
                                     focusedRow + 1 >= filteredList.length
                                         ? filteredList.length - 1
@@ -279,7 +279,7 @@ class StoreProvider extends React.Component {
                         rootNode.current.focus();
                     }
                 },
-                [_enums_1.DispatchTypes.RESIZE_COL]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL]: () => {
                     const { col, newWidth } = param;
                     let newState = Object.assign({}, this.state);
                     if (newState.colGroup) {
@@ -303,7 +303,7 @@ class StoreProvider extends React.Component {
                     //   columnResizing: false,
                     // });
                 },
-                [_enums_1.DispatchTypes.SELECT]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.SELECT]: () => {
                     const { rowIndex, checked } = param;
                     let rowSelected = false;
                     let selectedAll = listSelectedAll;
@@ -332,7 +332,7 @@ class StoreProvider extends React.Component {
                         });
                     }
                 },
-                [_enums_1.DispatchTypes.SELECT_ALL]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL]: () => {
                     const { checked } = param;
                     let selectedAll = listSelectedAll;
                     if (checked === true) {
@@ -357,7 +357,7 @@ class StoreProvider extends React.Component {
                         });
                     }
                 },
-                [_enums_1.DispatchTypes.CHANGE_SELECTION]: () => {
+                [_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION]: () => {
                     const { sRow, sCol, eRow, eCol } = param;
                     if (selectionSRow !== sRow ||
                         selectionSCol !== sCol ||

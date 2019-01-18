@@ -170,7 +170,7 @@ var StoreProvider = /** @class */ (function (_super) {
             var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
             var _l = _this.state.filteredList, filteredList = _l === void 0 ? [] : _l;
             var proc = (_a = {},
-                _a[_enums_1.DispatchTypes.FILTER] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.FILTER] = function () {
                     var colIndex = param.colIndex, filterInfo = param.filterInfo;
                     var checkAll = filterInfo[colIndex] === false
                         ? true
@@ -215,7 +215,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _a[_enums_1.DispatchTypes.SORT] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
                     if (typeof colIndex !== 'undefined') {
                         var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
@@ -284,7 +284,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         }
                     }
                 },
-                _a[_enums_1.DispatchTypes.UPDATE] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.UPDATE] = function () {
                     var _a;
                     var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
                     var key = colGroup[colIndex].key;
@@ -295,10 +295,10 @@ var StoreProvider = /** @class */ (function (_super) {
                     }
                     if (eventWhichKey) {
                         switch (eventWhichKey) {
-                            case _enums_1.KeyCodes.UP_ARROW:
+                            case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
                                 focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                                 break;
-                            case _enums_1.KeyCodes.DOWN_ARROW:
+                            case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                                 focusRow =
                                     focusedRow + 1 >= filteredList.length
                                         ? filteredList.length - 1
@@ -326,7 +326,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         rootNode.current.focus();
                     }
                 },
-                _a[_enums_1.DispatchTypes.RESIZE_COL] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL] = function () {
                     var col = param.col, newWidth = param.newWidth;
                     var newState = __assign({}, _this.state);
                     if (newState.colGroup) {
@@ -350,7 +350,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     //   columnResizing: false,
                     // });
                 },
-                _a[_enums_1.DispatchTypes.SELECT] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.SELECT] = function () {
                     var rowIndex = param.rowIndex, checked = param.checked;
                     var rowSelected = false;
                     var selectedAll = listSelectedAll;
@@ -379,7 +379,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _a[_enums_1.DispatchTypes.SELECT_ALL] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL] = function () {
                     var checked = param.checked;
                     var selectedAll = listSelectedAll;
                     if (checked === true) {
@@ -404,7 +404,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                     }
                 },
-                _a[_enums_1.DispatchTypes.CHANGE_SELECTION] = function () {
+                _a[_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION] = function () {
                     var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
                     if (selectionSRow !== sRow ||
                         selectionSCol !== sCol ||

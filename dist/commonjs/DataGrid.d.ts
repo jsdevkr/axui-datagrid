@@ -1,19 +1,19 @@
 import * as React from 'react';
-import { IDataGrid, IDataGridRootState, IDataGridOptionHeader, IDataGridOptionBody, IDataGridOptionPageButton, IDataGridOptionPage, IDataGridOptionScroller, IDataGridOptions, IDataGridStyles, IDataGridState, IDataGridColumnKeys } from './common/@types';
-interface IProps extends IDataGrid {
+import { IDataGrid } from './common/@types';
+interface IProps extends IDataGrid.IProps {
 }
-interface IState extends IDataGridRootState {
+interface IState extends IDataGrid.IRootState {
 }
 declare class DataGrid extends React.Component<IProps, IState> {
     static defaultHeight: number;
-    static defaultColumnKeys: IDataGridColumnKeys;
-    static defaultHeader: IDataGridOptionHeader;
-    static defaultBody: IDataGridOptionBody;
-    static defaultPageButtons: IDataGridOptionPageButton[];
-    static defaultPage: IDataGridOptionPage;
-    static defaultScroller: IDataGridOptionScroller;
-    static defaultOptions: IDataGridOptions;
-    static defaultStyles: IDataGridStyles;
+    static defaultColumnKeys: IDataGrid.IColumnKeys;
+    static defaultHeader: IDataGrid.IOptionHeader;
+    static defaultBody: IDataGrid.IOptionBody;
+    static defaultPageButtons: IDataGrid.IOptionPageButton[];
+    static defaultPage: IDataGrid.IOptionPage;
+    static defaultScroller: IDataGrid.IOptionScroller;
+    static defaultOptions: IDataGrid.IOptions;
+    static defaultStyles: IDataGrid.IStyles;
     static defaultThrottleWait: number;
     rootObject: any;
     rootNode: React.RefObject<HTMLDivElement>;
@@ -30,15 +30,15 @@ declare class DataGrid extends React.Component<IProps, IState> {
      * otherwise you will fall into a trap.
      * @param {DataGridRootState} state
      */
-    setRootState: (state: IDataGridRootState) => void;
+    setRootState: (state: IDataGrid.IRootState) => void;
     getRootState: () => {
         mounted: boolean;
         calculatedHeight: undefined;
     };
     setScrollLeft: (scrollLeft: number) => void;
     setScrollTop: (scrollTop: number) => void;
-    getOptions: (options: IDataGridOptions) => IDataGridOptions;
-    getProviderProps: (prevState: IDataGridState) => IDataGridState;
+    getOptions: (options: IDataGrid.IOptions) => IDataGrid.IOptions;
+    getProviderProps: (prevState: IDataGrid.IStoreState) => IDataGrid.IStoreState;
     render(): JSX.Element;
     componentDidMount(): void;
 }

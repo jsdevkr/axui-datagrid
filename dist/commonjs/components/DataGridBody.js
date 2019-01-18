@@ -111,7 +111,7 @@ var DataGridBody = /** @class */ (function (_super) {
                             // console.log('get selection fail', sRow, eRow, sCol, eCol);
                         }
                         setStoreState(currState);
-                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                             sRow: sRow,
                             eRow: eRow,
                             sCol: sCol,
@@ -246,7 +246,7 @@ var DataGridBody = /** @class */ (function (_super) {
                             state.selectionCols[i] = true;
                         }
                         setStoreState(state);
-                        dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                        dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                             sRow: sRow,
                             eRow: eRow,
                             sCol: sCol,
@@ -271,7 +271,7 @@ var DataGridBody = /** @class */ (function (_super) {
                         focusedRow: selectStartedRow,
                         focusedCol: selectStartedCol,
                     });
-                    dispatch(_enums_1.DispatchTypes.CHANGE_SELECTION, {
+                    dispatch(_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
                         sRow: selectStartedRow,
                         eRow: selectStartedRow,
                         sCol: selectStartedCol,
@@ -315,7 +315,7 @@ var DataGridBody = /** @class */ (function (_super) {
                 setStoreState(state);
             };
             var procClickRowSelector = function () {
-                dispatch(_enums_1.DispatchTypes.SELECT, {
+                dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
                     rowIndex: selectStartedRow,
                 });
             };

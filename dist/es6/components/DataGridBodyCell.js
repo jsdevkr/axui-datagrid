@@ -60,7 +60,7 @@ class DataGridBodyCell extends React.Component {
         this.onKeyUp = (e, col, li) => {
             const { setStoreState } = this.props;
             const proc = {
-                [_enums_1.KeyCodes.ENTER]: () => {
+                [_enums_1.DataGridEnums.KeyCodes.ENTER]: () => {
                     if (col.editor) {
                         setStoreState({
                             isInlineEditing: true,
@@ -78,7 +78,7 @@ class DataGridBodyCell extends React.Component {
         this.onEventInput = (eventName, e) => {
             const { rootNode, setStoreState, dispatch, inlineEditingCell = {}, } = this.props;
             const proc = {
-                [_enums_1.EventNames.BLUR]: () => {
+                [_enums_1.DataGridEnums.EventNames.BLUR]: () => {
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
@@ -87,9 +87,9 @@ class DataGridBodyCell extends React.Component {
                         rootNode.current.focus();
                     }
                 },
-                [_enums_1.EventNames.KEYUP]: () => {
+                [_enums_1.DataGridEnums.EventNames.KEYUP]: () => {
                     switch (e.which) {
-                        case _enums_1.KeyCodes.ESC:
+                        case _enums_1.DataGridEnums.KeyCodes.ESC:
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
@@ -98,11 +98,11 @@ class DataGridBodyCell extends React.Component {
                                 rootNode.current.focus();
                             }
                             break;
-                        case _enums_1.KeyCodes.UP_ARROW:
-                        case _enums_1.KeyCodes.DOWN_ARROW:
-                        case _enums_1.KeyCodes.ENTER:
+                        case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                        case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                        case _enums_1.DataGridEnums.KeyCodes.ENTER:
                             if (!this.activeComposition) {
-                                dispatch(_enums_1.DispatchTypes.UPDATE, {
+                                dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
@@ -163,9 +163,9 @@ class DataGridBodyCell extends React.Component {
                             this.activeComposition = false;
                         });
                     }, onBlur: (e) => {
-                        this.onEventInput(_enums_1.EventNames.BLUR, e);
+                        this.onEventInput(_enums_1.DataGridEnums.EventNames.BLUR, e);
                     }, onKeyUp: (e) => {
-                        this.onEventInput(_enums_1.EventNames.KEYUP, e);
+                        this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
                     }, "data-inline-edit": true, defaultValue: value })));
         }
         else {

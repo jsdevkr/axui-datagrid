@@ -92,7 +92,7 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
                     ? false
                     : filter_1;
             }
-            dispatch(_enums_1.DispatchTypes.FILTER, {
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,
                 filterInfo: currentFilterInfo,
             });

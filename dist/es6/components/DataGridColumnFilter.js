@@ -66,7 +66,7 @@ class DatagridColumnFilter extends React.Component {
                     ? false
                     : filter;
             }
-            dispatch(_enums_1.DispatchTypes.FILTER, {
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.FILTER, {
                 colIndex: isColumnFilter,
                 filterInfo: currentFilterInfo,
             });
