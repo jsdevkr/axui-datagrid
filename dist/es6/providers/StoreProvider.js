@@ -535,6 +535,8 @@ class StoreProvider extends React.Component {
                 loadingData: newProps.loadingData,
                 setRootState: newProps.setRootState,
                 getRootState: newProps.getRootState,
+                setScrollLeft: newProps.setScrollLeft,
+                setScrollTop: newProps.setScrollTop,
                 rootNode: newProps.rootNode,
                 clipBoardNode: newProps.clipBoardNode,
                 rootObject: newProps.rootObject,

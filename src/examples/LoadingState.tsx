@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Divider, Checkbox, Button, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 class LoadingState extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -31,18 +32,20 @@ class LoadingState extends React.Component<any, any> {
     this.dataGridContainerRef = React.createRef();
   }
 
-  onScrollEnd = () => {
-    const appendData = require('examples/data/data-basic.json');
-    this.setState({
-      loadingData: true,
-    });
-
-    setTimeout(() => {
+  onScrollEnd = (param: IDataGrid.IonScrollEndFunctionParam) => {
+    if (param.endOfScrollTop) {
+      const appendData = require('examples/data/data-basic.json');
       this.setState({
-        loadingData: false,
-        data: [...this.state.data, ...appendData],
+        loadingData: true,
       });
-    }, 1000);
+
+      setTimeout(() => {
+        this.setState({
+          loadingData: false,
+          data: [...this.state.data, ...appendData],
+        });
+      }, 1000);
+    }
   };
 
   changeConfig = (props: any, value: any) => {
@@ -88,10 +91,7 @@ class LoadingState extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
-              onScrollEnd={(param: any) => {
-                // console.log('scroll end' + param);
-                this.onScrollEnd();
-              }}
+              onScrollEnd={this.onScrollEnd}
             />
           </div>
           <Divider />

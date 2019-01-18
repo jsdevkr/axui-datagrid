@@ -16,6 +16,8 @@ declare class StoreProvider extends React.Component<any, IDataGrid.IStoreState> 
         loadingData: any;
         setRootState: any;
         getRootState: any;
+        setScrollLeft: any;
+        setScrollTop: any;
         rootNode: any;
         clipBoardNode: any;
         rootObject: any;
@@ -90,8 +92,6 @@ declare class StoreProvider extends React.Component<any, IDataGrid.IStoreState> 
         propOptions?: string | undefined;
         predefinedFormatter?: IDataGrid.IFormatter | undefined;
         predefinedCollector?: IDataGrid.ICollector | undefined;
-        setScrollLeft?: ((scrollLeft: number) => void) | undefined;
-        setScrollTop?: ((scrollTop: number) => void) | undefined;
     } | null;
     componentDidMount(): void;
     componentWillUnmount(): void;

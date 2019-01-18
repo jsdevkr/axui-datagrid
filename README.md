@@ -257,3 +257,4 @@ export default Formatter;
 - v0.5.1 - Improve columnFilter & modify examples
 - v0.5.2 - Bugfix : The scrollBar is not displayed where resizing a column.
 - v0.6.0 - Add a new prop width and Add IDataGrid namespace.
+- v0.6.1 - Fixed an issue where the column position is not kept according to the scroll position.
