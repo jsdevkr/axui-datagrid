@@ -70,7 +70,9 @@ export interface IDataGridColumn extends ICol {
 }
 ```
 
-## height?: number = 400;
+## width: number = 400;
+
+## height: number = 400;
 
 ## style?: any;
 
