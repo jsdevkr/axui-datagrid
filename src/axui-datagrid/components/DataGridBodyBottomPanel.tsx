@@ -3,10 +3,10 @@ import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import DataGridBodyBottomCell from './DataGridBodyBottomCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
-import { IDataGridColumnTableMap, IDataGridCol } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 const TableBody: React.SFC<{
-  bodyRow: IDataGridColumnTableMap;
+  bodyRow: IDataGrid.IColumnTableMap;
 }> = ({ bodyRow }) => (
   <tbody>
     {bodyRow.rows.map((row, ri) => {
@@ -59,8 +59,8 @@ const DataGridBodyBottomPanel: React.SFC<IProps> = props => {
     return null;
   }
 
-  let panelColGroup: IDataGridCol[] = [];
-  let panelBodyRow: IDataGridColumnTableMap = { rows: [{ cols: [] }] };
+  let panelColGroup: IDataGrid.ICol[] = [];
+  let panelBodyRow: IDataGrid.IColumnTableMap = { rows: [{ cols: [] }] };
   let panelPaddingLeft: number = 0;
 
   switch (panelName) {

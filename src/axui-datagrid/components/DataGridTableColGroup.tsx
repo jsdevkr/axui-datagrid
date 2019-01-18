@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IDataGridCol } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 const DataGridTableColGroup: React.SFC<{
-  panelColGroup: IDataGridCol[];
+  panelColGroup: IDataGrid.ICol[];
 }> = ({ panelColGroup }) => (
   <colgroup>
     {panelColGroup.map((col, ci) => (

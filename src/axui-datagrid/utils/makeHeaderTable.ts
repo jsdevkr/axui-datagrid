@@ -1,9 +1,4 @@
-import {
-  IDataGridColumn,
-  IDataGridOptions,
-  IDataGridColumnTableMap,
-  IDataGridColumnTableMapRow,
-} from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 /**
  *
@@ -12,20 +7,20 @@ import {
  * @return {DataGridColumnTableMap}
  */
 function makeHeaderTable(
-  headerColumns: IDataGridColumn[],
-  options: IDataGridOptions,
-): IDataGridColumnTableMap {
-  let table: IDataGridColumnTableMap = {
+  headerColumns: IDataGrid.IColumn[],
+  options: IDataGrid.IOptions,
+): IDataGrid.IColumnTableMap {
+  let table: IDataGrid.IColumnTableMap = {
     rows: [],
   };
   let colIndex = 0;
 
   function makeRows(
-    rowsColumns: IDataGridColumn[],
+    rowsColumns: IDataGrid.IColumn[],
     depth: number,
     parentField?: any,
   ): number {
-    let row: IDataGridColumnTableMapRow = { cols: [] };
+    let row: IDataGrid.IColumnTableMapRow = { cols: [] };
     let i: number = 0;
     let l: number = rowsColumns.length;
     let colSpan: number = 1;

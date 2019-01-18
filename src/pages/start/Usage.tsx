@@ -135,6 +135,8 @@ class Basic extends React.Component<IProps, IState> {
           <h1>Basic</h1>
 
           <DataGrid
+            width={300}
+            height={300}
             data={gridData}
             columns={columns}
             options={{

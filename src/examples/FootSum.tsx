@@ -2,18 +2,18 @@ import * as React from 'react';
 import { Button, Divider, Form, Select } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid, utils } from 'axui-datagrid';
-import {
-  IDataGridFormatterData,
-  IDataGridCollectorData,
-} from 'axui-datagrid/common/@types';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 class FootSum extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
     const gridData = require('examples/data/data-price.json');
 
     this.state = {
+      width: 300,
       height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
@@ -29,7 +29,7 @@ class FootSum extends React.Component<any, any> {
           key: 'sum',
           label: 'Sum',
           align: 'right',
-          formatter: function(formatterData: IDataGridFormatterData) {
+          formatter: function(formatterData: IDataGrid.IFormatterData) {
             return utils.formatCurrency(
               formatterData.item.price * formatterData.item.qty,
             );
@@ -54,7 +54,7 @@ class FootSum extends React.Component<any, any> {
           },
           {
             key: 'sum',
-            collector: function(collectorData: IDataGridCollectorData) {
+            collector: function(collectorData: IDataGrid.ICollectorData) {
               const { data } = collectorData;
               return data.reduce(
                 (accumulator: number, currentValue: any) =>
@@ -70,6 +70,8 @@ class FootSum extends React.Component<any, any> {
 
       data: gridData,
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -89,6 +91,8 @@ class FootSum extends React.Component<any, any> {
   };
 
   public render() {
+    const { width, height, columns, data, options } = this.state;
+
     return (
       <Wrapper>
         <Segment padded>
@@ -99,15 +103,17 @@ class FootSum extends React.Component<any, any> {
             determined using the built-in collector (avg, sum) function. <br />
             Alternatively, you can define your own function.
           </p>
-          <DataGrid
-            width={600}
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            footSum={this.state.footSum}
-            data={this.state.data}
-            options={this.state.options}
-          />
+
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -132,6 +138,25 @@ class FootSum extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

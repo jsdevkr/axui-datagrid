@@ -9,12 +9,12 @@ import {
 } from '../utils';
 import DataGridHeaderCell from './DataGridHeaderCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
-import { IDataGridColumnTableMap, IDataGridCol } from '../common/@types';
-import { DispatchTypes } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
 
 interface ITableBody {
-  bodyRow: IDataGridColumnTableMap;
-  onClick: (e: any, col: IDataGridCol) => void;
+  bodyRow: IDataGrid.IColumnTableMap;
+  onClick: (e: any, col: IDataGrid.ICol) => void;
 }
 const TableBody: React.SFC<ITableBody> = ({ bodyRow, onClick }) => (
   <tbody>
@@ -36,15 +36,15 @@ const TableBody: React.SFC<ITableBody> = ({ bodyRow, onClick }) => (
 );
 
 interface IColumnResizer {
-  colGroup: IDataGridCol[];
+  colGroup: IDataGrid.ICol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
     e: React.SyntheticEvent<Element>,
-    col: IDataGridCol,
+    col: IDataGrid.ICol,
   ) => void;
   onDoubleClickColumnResizer: (
     e: React.SyntheticEvent<Element>,
-    col: IDataGridCol,
+    col: IDataGrid.ICol,
   ) => void;
 }
 const ColumnResizer: React.SFC<IColumnResizer> = ({
@@ -90,7 +90,7 @@ interface IDataGridHeaderPanel extends IDataGridStore {
 }
 class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
   state = {};
-  onHandleClick = (e: any, col: IDataGridCol) => {
+  onHandleClick = (e: any, col: IDataGrid.ICol) => {
     const {
       filteredList = [],
       colGroup = [],
@@ -206,7 +206,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           }
           break;
         case '_row_selector_':
-          dispatch(DispatchTypes.SELECT_ALL, {});
+          dispatch(DataGridEnums.DispatchTypes.SELECT_ALL, {});
           break;
         default:
           {
@@ -241,7 +241,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
               optionsHeader.clickAction === 'sort' &&
               optionsHeader.sortable
             ) {
-              dispatch(DispatchTypes.SORT, { colIndex });
+              dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
             }
           }
           break;
@@ -253,7 +253,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     }
   };
 
-  onMouseDownColumnResizer = (e: any, col: IDataGridCol) => {
+  onMouseDownColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
     const { setStoreState, rootNode, dispatch } = this.props;
@@ -293,7 +293,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       // 컬럼의 크기가 0으로 줄어들어 안보이는 경우가 있어
       // newWidth !== 0 을 추가
       if (typeof newWidth !== 'undefined' && newWidth !== 0) {
-        dispatch(DispatchTypes.RESIZE_COL, {
+        dispatch(DataGridEnums.DispatchTypes.RESIZE_COL, {
           col,
           newWidth,
         });
@@ -309,7 +309,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     document.addEventListener('mouseleave', offEvent);
   };
 
-  onDoubleClickColumnResizer = (e: any, col: IDataGridCol) => {
+  onDoubleClickColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
     // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
     // 단, 컬럼 명이 최소길이다.
@@ -337,7 +337,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
         ? longestWordLength
         : columnWordLength) * widthOfOneChar;
 
-    dispatch(DispatchTypes.RESIZE_COL, {
+    dispatch(DataGridEnums.DispatchTypes.RESIZE_COL, {
       col,
       newWidth,
     });
@@ -379,7 +379,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       columnHeight: optionsHeaderColumnHeight = 0,
       columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
     } = optionsHeader;
-    const colGroup: IDataGridCol[] = (() => {
+    const colGroup: IDataGrid.ICol[] = (() => {
       switch (panelName) {
         case 'aside-header':
           return asideColGroup;
@@ -389,7 +389,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           return headerColGroup;
       }
     })();
-    const bodyRow: IDataGridColumnTableMap = (() => {
+    const bodyRow: IDataGrid.IColumnTableMap = (() => {
       switch (panelName) {
         case 'aside-header':
           return asideHeaderData;

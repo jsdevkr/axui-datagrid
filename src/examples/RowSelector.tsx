@@ -4,12 +4,15 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
 class LoadingState extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
     let gridData = require('examples/data/data-basic.json');
 
     this.state = {
+      width: 300,
       height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
@@ -22,6 +25,8 @@ class LoadingState extends React.Component<any, any> {
       filteredList: [...gridData],
       options: {},
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -41,7 +46,7 @@ class LoadingState extends React.Component<any, any> {
   };
 
   render() {
-    const { height, columns, data, options } = this.state;
+    const { width, height, columns, data, options } = this.state;
 
     return (
       <Wrapper>
@@ -52,23 +57,25 @@ class LoadingState extends React.Component<any, any> {
             appears, allowing you to select each row of 'datagrid'.
           </p>
 
-          <DataGrid
-            width={600}
-            height={height}
-            style={{ fontSize: '12px' }}
-            columns={columns}
-            data={data}
-            options={options}
-            rowSelector={{
-              show: true,
-              rowKey: '',
-              selectedRowKeys: [],
-              onChange: param => {
-                console.log(param);
-                this.setState({ filteredList: param.filteredList });
-              },
-            }}
-          />
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+              rowSelector={{
+                show: true,
+                rowKey: '',
+                selectedRowKeys: [],
+                onChange: param => {
+                  console.log(param);
+                  this.setState({ filteredList: param.filteredList });
+                },
+              }}
+            />
+          </div>
           <Divider />
 
           <h2>Data</h2>
@@ -100,6 +107,25 @@ class LoadingState extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

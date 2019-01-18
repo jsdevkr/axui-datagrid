@@ -5,6 +5,8 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
 class LargeData extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
@@ -62,6 +64,7 @@ class LargeData extends React.Component<any, any> {
     }
 
     this.state = {
+      width: 300,
       height: 300,
       columns: [
         {
@@ -89,6 +92,8 @@ class LargeData extends React.Component<any, any> {
         showRowSelector: false,
       },
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -108,6 +113,8 @@ class LargeData extends React.Component<any, any> {
   };
 
   render() {
+    const { width, height, columns, data, options } = this.state;
+
     return (
       <Wrapper>
         <Segment padded>
@@ -121,14 +128,16 @@ class LargeData extends React.Component<any, any> {
             large amounts of data quickly with ease.
           </p>
 
-          <DataGrid
-            width={600}
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
-          />
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -155,6 +164,25 @@ class LargeData extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

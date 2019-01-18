@@ -5,12 +5,16 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid, utils } from 'axui-datagrid';
 
 class FrozenColumnRow extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
     const gridData = require('examples/data/data-basic.json');
 
     this.state = {
+      width: 300,
+      height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
         { key: 'title', width: 200, label: 'Title' },
@@ -29,6 +33,8 @@ class FrozenColumnRow extends React.Component<any, any> {
         frozenRowIndex: 2,
       },
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -53,7 +59,7 @@ class FrozenColumnRow extends React.Component<any, any> {
   };
 
   public render() {
-    const { height, columns, data, options } = this.state;
+    const { width, height, columns, data, options } = this.state;
 
     return (
       <Wrapper>
@@ -64,14 +70,17 @@ class FrozenColumnRow extends React.Component<any, any> {
             frozenRowIndex to set the frame fixed area. Then, The row and column
             areas can be specified in the fixed size chosen by the user.
           </p>
-          <DataGrid
-            width={600}
-            height={height}
-            style={{ fontSize: '12px' }}
-            columns={columns}
-            data={data}
-            options={options}
-          />
+
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -147,6 +156,25 @@ class FrozenColumnRow extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

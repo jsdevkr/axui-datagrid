@@ -5,6 +5,8 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
 class Formatter extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
@@ -12,6 +14,7 @@ class Formatter extends React.Component<any, any> {
     '';
 
     this.state = {
+      width: 400,
       height: 400,
       columns: [
         { key: 'id', width: 60, label: 'ID', align: 'center' },
@@ -30,6 +33,8 @@ class Formatter extends React.Component<any, any> {
       ],
       data: gridData,
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -49,6 +54,8 @@ class Formatter extends React.Component<any, any> {
   };
 
   render() {
+    const { width, height, columns, data, options } = this.state;
+
     return (
       <Wrapper>
         <Segment padded>
@@ -62,14 +69,17 @@ class Formatter extends React.Component<any, any> {
             function(args: any) &#123; return args.value*2 &#125;, you can see
             the money columns update doubled.
           </p>
-          <DataGrid
-            width={600}
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
-          />
+
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -96,6 +106,25 @@ class Formatter extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

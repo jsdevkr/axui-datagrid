@@ -19,37 +19,23 @@ import {
   makeFootSumTable,
   divideTableByFrozenColumnIndex,
   calculateDimensions,
-  getNode,
   getTableByStartEndColumnIndex,
   getPositionPrintColGroup,
 } from './utils';
-import {
-  IDataGrid,
-  IDataGridRootState,
-  IDataGridOptionHeader,
-  IDataGridOptionBody,
-  IDataGridOptionPageButton,
-  IDataGridOptionPage,
-  IDataGridOptionScroller,
-  IDataGridOptions,
-  IDataGridStyles,
-  IDataGridState,
-  IDataGridColumnKeys,
-  IDataGridCol,
-} from './common/@types';
+import { IDataGrid } from './common/@types';
 
-interface IProps extends IDataGrid {}
-interface IState extends IDataGridRootState {}
+interface IProps extends IDataGrid.IProps {}
+interface IState extends IDataGrid.IRootState {}
 
 class DataGrid extends React.Component<IProps, IState> {
   static defaultHeight: number = 400;
-  static defaultColumnKeys: IDataGridColumnKeys = {
+  static defaultColumnKeys: IDataGrid.IColumnKeys = {
     selected: '_selected_',
     modified: '_modified_',
     deleted: '_deleted_',
     disableSelection: '_disable_selection_',
   };
-  static defaultHeader: IDataGridOptionHeader = {
+  static defaultHeader: IDataGrid.IOptionHeader = {
     display: true,
     align: 'left',
     columnHeight: 24,
@@ -61,7 +47,7 @@ class DataGrid extends React.Component<IProps, IState> {
     clickAction: 'sort',
     filterIconClassName: 'datagridIcon-filter',
   };
-  static defaultBody: IDataGridOptionBody = {
+  static defaultBody: IDataGrid.IOptionBody = {
     align: 'left',
     columnHeight: 24,
     columnPadding: 3,
@@ -69,7 +55,7 @@ class DataGrid extends React.Component<IProps, IState> {
     grouping: false,
     mergeCells: false,
   };
-  static defaultPageButtons: IDataGridOptionPageButton[] = [
+  static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
     { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
     { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
     { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
@@ -77,20 +63,20 @@ class DataGrid extends React.Component<IProps, IState> {
     { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
     { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
   ];
-  static defaultPage: IDataGridOptionPage = {
+  static defaultPage: IDataGrid.IOptionPage = {
     buttonsContainerWidth: 150,
     buttons: DataGrid.defaultPageButtons,
     buttonHeight: 16,
     height: 20,
   };
-  static defaultScroller: IDataGridOptionScroller = {
+  static defaultScroller: IDataGrid.IOptionScroller = {
     size: 14,
     arrowSize: 14,
     barMinSize: 12,
     padding: 3,
     disabledVerticalScroll: false,
   };
-  static defaultOptions: IDataGridOptions = {
+  static defaultOptions: IDataGrid.IOptions = {
     frozenColumnIndex: 0,
     frozenRowIndex: 0,
     showLineNumber: true,
@@ -107,7 +93,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
   };
-  static defaultStyles: IDataGridStyles = {
+  static defaultStyles: IDataGrid.IStyles = {
     calculatedHeight: null,
     asidePanelWidth: 0,
     frozenPanelWidth: 0,
@@ -161,7 +147,7 @@ class DataGrid extends React.Component<IProps, IState> {
    * otherwise you will fall into a trap.
    * @param {DataGridRootState} state
    */
-  setRootState = (state: IDataGridRootState) => {
+  setRootState = (state: IDataGrid.IRootState) => {
     this.setState(state);
   };
 
@@ -176,11 +162,11 @@ class DataGrid extends React.Component<IProps, IState> {
     this.scrollTop = scrollTop;
   };
 
-  getOptions = (options: IDataGridOptions): IDataGridOptions => {
+  getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
     return mergeAll(true, { ...DataGrid.defaultOptions }, options);
   };
 
-  getProviderProps = (prevState: IDataGridState) => {
+  getProviderProps = (prevState: IDataGrid.IStoreState) => {
     const { columns = [], footSum } = this.props;
     const { options = {} } = prevState;
     const {
@@ -190,8 +176,8 @@ class DataGrid extends React.Component<IProps, IState> {
     const { columnHeight = 0 } = optionsBody;
 
     // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
-    let newState: IDataGridState = { ...prevState };
-    let newStyle: IDataGridStyles = {};
+    let newState: IDataGrid.IStoreState = { ...prevState };
+    let newStyle: IDataGrid.IStyles = {};
 
     newState.scrollLeft = this.scrollLeft;
     newState.scrollTop = this.scrollTop;
@@ -245,7 +231,7 @@ class DataGrid extends React.Component<IProps, IState> {
       newState.headerTable.rows.forEach((row, ridx) => {
         row.cols.forEach((col, cidx) => {
           if (newState.colGroupMap) {
-            const currentCol: IDataGridCol = {
+            const currentCol: IDataGrid.ICol = {
               key: col.key,
               label: col.label,
               width: col.width,
@@ -372,7 +358,7 @@ class DataGrid extends React.Component<IProps, IState> {
       rowSelector,
     } = this.props;
 
-    let providerProps: IDataGridState = {};
+    let providerProps: IDataGrid.IStoreState = {};
     let gridRootStyle = mergeAll(
       {
         height: this.state.calculatedHeight || height,

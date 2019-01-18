@@ -1,11 +1,11 @@
-import { IDataGridColumnTableMap } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 function getTableByStartEndColumnIndex(
-  rowTable: IDataGridColumnTableMap,
+  rowTable: IDataGrid.IColumnTableMap,
   startColumnIndex: number,
   endColumnIndex: number,
-): IDataGridColumnTableMap {
-  let tempTable: IDataGridColumnTableMap = { rows: [] };
+): IDataGrid.IColumnTableMap {
+  let tempTable: IDataGrid.IColumnTableMap = { rows: [] };
 
   if ('rows' in rowTable) {
     rowTable.rows.forEach((row, r) => {

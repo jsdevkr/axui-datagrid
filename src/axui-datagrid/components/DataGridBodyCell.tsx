@@ -2,20 +2,15 @@ import * as React from 'react';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX, isFunction, getNode } from '../utils';
-import {
-  IDataGridCol,
-  IDataGridFormatter,
-  formatterFunction,
-  IDataGridColumn,
-} from '../common/@types';
-import { KeyCodes, EventNames, DispatchTypes } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
 
 const CellLabel: React.SFC<{
   lineHeight: number;
-  col: IDataGridCol;
+  col: IDataGrid.ICol;
   list: any[];
   li: number;
-  predefinedFormatter: IDataGridFormatter;
+  predefinedFormatter: IDataGrid.IFormatter;
 }> = props => {
   const { col, list: data, li, lineHeight, predefinedFormatter } = props;
   const { key = '', columnAttr = '', formatter } = col;
@@ -48,7 +43,7 @@ const CellLabel: React.SFC<{
       if (typeof formatter === 'string' && formatter in predefinedFormatter) {
         labelValue = predefinedFormatter[formatter](formatterData);
       } else if (isFunction(formatter)) {
-        labelValue = (formatter as formatterFunction)(formatterData);
+        labelValue = (formatter as IDataGrid.formatterFunction)(formatterData);
       } else {
         labelValue = data[li][key];
       }
@@ -60,7 +55,7 @@ const CellLabel: React.SFC<{
 interface IProps extends IDataGridStore {
   li: number;
   ci: number;
-  col?: IDataGridCol;
+  col?: IDataGrid.ICol;
   value?: any;
 }
 
@@ -82,7 +77,7 @@ class DataGridBodyCell extends React.Component<IProps> {
 
   onDoubleClickCell = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    col: IDataGridColumn,
+    col: IDataGrid.IColumn,
     li: number,
   ) => {
     const { setStoreState } = this.props;
@@ -101,13 +96,13 @@ class DataGridBodyCell extends React.Component<IProps> {
 
   onKeyUp = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    col: IDataGridColumn,
+    col: IDataGrid.IColumn,
     li: number,
   ) => {
     const { setStoreState } = this.props;
 
     const proc = {
-      [KeyCodes.ENTER]: () => {
+      [DataGridEnums.KeyCodes.ENTER]: () => {
         if (col.editor) {
           setStoreState({
             isInlineEditing: true,
@@ -125,7 +120,7 @@ class DataGridBodyCell extends React.Component<IProps> {
   };
 
   onEventInput = (
-    eventName: EventNames,
+    eventName: DataGridEnums.EventNames,
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const {
@@ -136,7 +131,7 @@ class DataGridBodyCell extends React.Component<IProps> {
     } = this.props;
 
     const proc = {
-      [EventNames.BLUR]: () => {
+      [DataGridEnums.EventNames.BLUR]: () => {
         setStoreState({
           isInlineEditing: false,
           inlineEditingCell: {},
@@ -146,9 +141,9 @@ class DataGridBodyCell extends React.Component<IProps> {
           rootNode.current.focus();
         }
       },
-      [EventNames.KEYUP]: () => {
+      [DataGridEnums.EventNames.KEYUP]: () => {
         switch (e.which) {
-          case KeyCodes.ESC:
+          case DataGridEnums.KeyCodes.ESC:
             setStoreState({
               isInlineEditing: false,
               inlineEditingCell: {},
@@ -158,11 +153,11 @@ class DataGridBodyCell extends React.Component<IProps> {
               rootNode.current.focus();
             }
             break;
-          case KeyCodes.UP_ARROW:
-          case KeyCodes.DOWN_ARROW:
-          case KeyCodes.ENTER:
+          case DataGridEnums.KeyCodes.UP_ARROW:
+          case DataGridEnums.KeyCodes.DOWN_ARROW:
+          case DataGridEnums.KeyCodes.ENTER:
             if (!this.activeComposition) {
-              dispatch(DispatchTypes.UPDATE, {
+              dispatch(DataGridEnums.DispatchTypes.UPDATE, {
                 row: inlineEditingCell.rowIndex,
                 colIndex: inlineEditingCell.colIndex,
                 value: e.currentTarget.value,
@@ -260,10 +255,10 @@ class DataGridBodyCell extends React.Component<IProps> {
               });
             }}
             onBlur={(e: any) => {
-              this.onEventInput(EventNames.BLUR, e);
+              this.onEventInput(DataGridEnums.EventNames.BLUR, e);
             }}
             onKeyUp={(e: any) => {
-              this.onEventInput(EventNames.KEYUP, e);
+              this.onEventInput(DataGridEnums.EventNames.KEYUP, e);
             }}
             data-inline-edit
             defaultValue={value}

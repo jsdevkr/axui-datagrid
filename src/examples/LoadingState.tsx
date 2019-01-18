@@ -5,6 +5,8 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
 class LoadingState extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
@@ -13,6 +15,7 @@ class LoadingState extends React.Component<any, any> {
     this.state = {
       loading: false,
       loadingData: false,
+      width: 300,
       height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID' },
@@ -24,6 +27,8 @@ class LoadingState extends React.Component<any, any> {
       data: gridData,
       options: {},
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   onScrollEnd = () => {
@@ -57,7 +62,15 @@ class LoadingState extends React.Component<any, any> {
   };
 
   render() {
-    const { loading, loadingData, height, columns, data, options } = this.state;
+    const {
+      loading,
+      loadingData,
+      width,
+      height,
+      columns,
+      data,
+      options,
+    } = this.state;
 
     return (
       <Wrapper>
@@ -65,20 +78,22 @@ class LoadingState extends React.Component<any, any> {
           <h1>Loading</h1>
           <p>You can express the loading status with loading props</p>
 
-          <DataGrid
-            width={600}
-            loading={loading}
-            loadingData={loadingData}
-            height={height}
-            style={{ fontSize: '12px' }}
-            columns={columns}
-            data={data}
-            options={options}
-            onScrollEnd={(param: any) => {
-              // console.log('scroll end' + param);
-              this.onScrollEnd();
-            }}
-          />
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              loading={loading}
+              loadingData={loadingData}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+              onScrollEnd={(param: any) => {
+                // console.log('scroll end' + param);
+                this.onScrollEnd();
+              }}
+            />
+          </div>
           <Divider />
           <h3>Set Loading state</h3>
           <Checkbox
@@ -120,6 +135,25 @@ class LoadingState extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

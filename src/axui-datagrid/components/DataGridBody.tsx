@@ -11,8 +11,8 @@ import {
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
-import { IDataGridState, IDataGridMoving } from '../common/@types';
-import { DispatchTypes } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 
@@ -109,8 +109,8 @@ class DataGridBody extends React.Component<IProps> {
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
         const setStateCall = (
-          currState: IDataGridState,
-          _moving?: IDataGridMoving,
+          currState: IDataGrid.IStoreState,
+          _moving?: IDataGrid.IMoving,
         ): void => {
           const {
             selectionEndOffset: currSelectionEndOffset = {},
@@ -165,7 +165,7 @@ class DataGridBody extends React.Component<IProps> {
 
           setStoreState(currState);
 
-          dispatch(DispatchTypes.CHANGE_SELECTION, {
+          dispatch(DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
             sRow,
             eRow,
             sCol,
@@ -173,7 +173,7 @@ class DataGridBody extends React.Component<IProps> {
           });
         };
 
-        const scrollMoving = (_moving: IDataGridMoving): boolean => {
+        const scrollMoving = (_moving: IDataGrid.IMoving): boolean => {
           const {
             scrollTop: propsScrollTop = 0,
             scrollLeft: propsScrollLeft = 0,
@@ -228,7 +228,7 @@ class DataGridBody extends React.Component<IProps> {
         let p1Y: number = Math.min(y1, y2);
         let p2Y: number = Math.max(y1, y2);
 
-        let moving: IDataGridMoving = {
+        let moving: IDataGrid.IMoving = {
           active: false,
           top: false,
           left: false,
@@ -329,7 +329,7 @@ class DataGridBody extends React.Component<IProps> {
 
           setStoreState(state);
 
-          dispatch(DispatchTypes.CHANGE_SELECTION, {
+          dispatch(DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
             sRow,
             eRow,
             sCol,
@@ -356,7 +356,7 @@ class DataGridBody extends React.Component<IProps> {
           focusedCol: selectStartedCol,
         });
 
-        dispatch(DispatchTypes.CHANGE_SELECTION, {
+        dispatch(DataGridEnums.DispatchTypes.CHANGE_SELECTION, {
           sRow: selectStartedRow,
           eRow: selectStartedRow,
           sCol: selectStartedCol,
@@ -404,7 +404,7 @@ class DataGridBody extends React.Component<IProps> {
       setStoreState(state);
     };
     const procClickRowSelector = () => {
-      dispatch(DispatchTypes.SELECT, {
+      dispatch(DataGridEnums.DispatchTypes.SELECT, {
         rowIndex: selectStartedRow,
       });
     };

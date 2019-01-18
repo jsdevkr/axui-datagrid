@@ -5,12 +5,15 @@ import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
 class InlineEdit extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
     const gridData = require('examples/data/data-basic.json');
 
     this.state = {
+      width: 300,
       height: 300,
       columns: [
         { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
@@ -37,6 +40,8 @@ class InlineEdit extends React.Component<any, any> {
         },
       },
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -56,6 +61,8 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   public render() {
+    const { width, height, columns, data, options } = this.state;
+
     return (
       <Wrapper>
         <Segment padded>
@@ -71,14 +78,17 @@ class InlineEdit extends React.Component<any, any> {
             After this, you can activate editor mode using double-click or
             return key.
           </p>
-          <DataGrid
-            width={600}
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
-          />
+
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -103,6 +113,25 @@ class InlineEdit extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

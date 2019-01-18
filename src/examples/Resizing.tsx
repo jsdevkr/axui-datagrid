@@ -27,8 +27,8 @@ const MyBox = styled.div`
 
 class Resizing extends React.Component<any, any> {
   state = {
-    boxWidth: 1000,
-    boxHeight: 500,
+    boxWidth: 500,
+    boxHeight: 300,
   };
 
   containerRef: React.RefObject<any>;

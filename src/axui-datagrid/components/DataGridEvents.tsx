@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition, getNode, throttle } from '../utils';
-import { KeyCodes, EventNames } from '../common/@enums';
-import { IDataGridState } from 'axui-datagrid/common/@types';
+import { getScrollPosition } from '../utils';
+import { DataGridEnums } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -83,7 +82,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     } = this.props;
 
     const proc = {
-      [KeyCodes.ENTER]: () => {
+      [DataGridEnums.KeyCodes.ENTER]: () => {
         const col = colGroup[focusedCol];
 
         if (col.editor) {
@@ -207,7 +206,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     };
 
     const metaProc = {
-      [KeyCodes.C]: () => {
+      [DataGridEnums.KeyCodes.C]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -239,7 +238,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
         return copySuccess;
       },
-      [KeyCodes.A]: () => {
+      [DataGridEnums.KeyCodes.A]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -271,7 +270,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     };
 
     const proc = {
-      [KeyCodes.ESC]: () => {
+      [DataGridEnums.KeyCodes.ESC]: () => {
         setStoreState({
           selectionRows: {
             [focusedRow]: true,
@@ -281,7 +280,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           },
         });
       },
-      [KeyCodes.HOME]: () => {
+      [DataGridEnums.KeyCodes.HOME]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -295,7 +294,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.END]: () => {
+      [DataGridEnums.KeyCodes.END]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -309,7 +308,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.PAGE_UP]: () => {
+      [DataGridEnums.KeyCodes.PAGE_UP]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -323,7 +322,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.PAGE_DOWN]: () => {
+      [DataGridEnums.KeyCodes.PAGE_DOWN]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -340,7 +339,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.UP_ARROW]: () => {
+      [DataGridEnums.KeyCodes.UP_ARROW]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -354,7 +353,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.DOWN_ARROW]: () => {
+      [DataGridEnums.KeyCodes.DOWN_ARROW]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -371,7 +370,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedRow: focusRow,
         });
       },
-      [KeyCodes.LEFT_ARROW]: () => {
+      [DataGridEnums.KeyCodes.LEFT_ARROW]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -385,7 +384,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           focusedCol: focusCol,
         });
       },
-      [KeyCodes.RIGHT_ARROW]: () => {
+      [DataGridEnums.KeyCodes.RIGHT_ARROW]: () => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -444,7 +443,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
   onFireEvent = (e: any) => {
     const { loading, loadingData, isInlineEditing = false } = this.props;
     const proc = {
-      [EventNames.WHEEL]: () => {
+      [DataGridEnums.EventNames.WHEEL]: () => {
         if (!loadingData) {
           this.onWheel(e as WheelEvent);
         } else {
@@ -452,17 +451,17 @@ class DataGridEvents extends React.Component<IProps, IState> {
           e.stopPropagation();
         }
       },
-      [EventNames.KEYDOWN]: () => {
+      [DataGridEnums.EventNames.KEYDOWN]: () => {
         if (!loadingData && !isInlineEditing) {
           this.onKeyDown(e);
         }
       },
-      [EventNames.KEYUP]: () => {
+      [DataGridEnums.EventNames.KEYUP]: () => {
         if (!loadingData && !isInlineEditing) {
           this.onKeyUp(e);
         }
       },
-      [EventNames.CONTEXTMENU]: () => {
+      [DataGridEnums.EventNames.CONTEXTMENU]: () => {
         if (!loadingData && !isInlineEditing) {
           this.onContextmenu(e);
         }

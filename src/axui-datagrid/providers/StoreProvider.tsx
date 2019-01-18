@@ -11,16 +11,15 @@ import {
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
-import {
-  IDataGridState,
-  DataGridDispatchParam,
-  IDataGridStyles,
-} from '../common/@types';
-import { DispatchTypes, KeyCodes } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
 
-export interface IDataGridStore extends IDataGridState {
-  setStoreState: (store: IDataGridState) => void;
-  dispatch: (dispatchType: DispatchTypes, param: DataGridDispatchParam) => void;
+export interface IDataGridStore extends IDataGrid.IStoreState {
+  setStoreState: (store: IDataGrid.IStoreState) => void;
+  dispatch: (
+    dispatchType: DataGridEnums.DispatchTypes,
+    param: IDataGrid.DispatchParam,
+  ) => void;
 }
 
 const store: IDataGridStore = {
@@ -77,12 +76,15 @@ const store: IDataGridStore = {
 
 const { Provider, Consumer } = React.createContext(store);
 
-class StoreProvider extends React.Component<any, IDataGridState> {
+class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
   state = store;
 
   throttledUpdateDimensions: any;
 
-  static getDerivedStateFromProps(newProps: any, prevState: IDataGridState) {
+  static getDerivedStateFromProps(
+    newProps: any,
+    prevState: IDataGrid.IStoreState,
+  ) {
     /*
       초기에만 값을 수신하여 랜더링 하고, 그 후엔 setState로 제어 되는 항목.
       newProps.styles === prevState.styles &&
@@ -136,7 +138,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
       let scrollLeft = prevState.scrollLeft;
 
       let filteredList = prevState.filteredList || [];
-      let styles: IDataGridStyles = prevState.styles || {};
+      let styles: IDataGrid.IStyles = prevState.styles || {};
       const { sortInfo } = prevState;
       const { data, styles: _styles = {}, options: _options = {} } = newProps;
 
@@ -420,7 +422,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
   }
 
   // state 가 업데이트 되기 전.
-  setStoreState = (newState: IDataGridState, callback?: () => void) => {
+  setStoreState = (newState: IDataGrid.IStoreState, callback?: () => void) => {
     const {
       filteredList = [],
       scrollLeft = 0,
@@ -548,7 +550,10 @@ class StoreProvider extends React.Component<any, IDataGridState> {
     );
   };
 
-  dispatch = (dispatchType: DispatchTypes, param: DataGridDispatchParam) => {
+  dispatch = (
+    dispatchType: DataGridEnums.DispatchTypes,
+    param: IDataGrid.DispatchParam,
+  ) => {
     const {
       data = [],
       listSelectedAll = false,
@@ -572,7 +577,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
     let { filteredList = [] } = this.state;
 
     const proc = {
-      [DispatchTypes.FILTER]: () => {
+      [DataGridEnums.DispatchTypes.FILTER]: () => {
         const { colIndex, filterInfo } = param;
         const checkAll =
           filterInfo[colIndex] === false
@@ -622,7 +627,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           });
         }
       },
-      [DispatchTypes.SORT]: () => {
+      [DataGridEnums.DispatchTypes.SORT]: () => {
         const { colIndex } = param;
         if (typeof colIndex !== 'undefined') {
           const { key: colKey = '' } = colGroup[colIndex];
@@ -703,7 +708,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           }
         }
       },
-      [DispatchTypes.UPDATE]: () => {
+      [DataGridEnums.DispatchTypes.UPDATE]: () => {
         const { row, colIndex, value, eventWhichKey } = param;
         const key = colGroup[colIndex].key;
 
@@ -716,10 +721,10 @@ class StoreProvider extends React.Component<any, IDataGridState> {
 
         if (eventWhichKey) {
           switch (eventWhichKey) {
-            case KeyCodes.UP_ARROW:
+            case DataGridEnums.KeyCodes.UP_ARROW:
               focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
               break;
-            case KeyCodes.DOWN_ARROW:
+            case DataGridEnums.KeyCodes.DOWN_ARROW:
               focusRow =
                 focusedRow + 1 >= filteredList.length
                   ? filteredList.length - 1
@@ -750,7 +755,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           rootNode.current.focus();
         }
       },
-      [DispatchTypes.RESIZE_COL]: () => {
+      [DataGridEnums.DispatchTypes.RESIZE_COL]: () => {
         const { col, newWidth } = param;
 
         let newState: IDataGridStore = { ...this.state };
@@ -781,7 +786,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
         //   columnResizing: false,
         // });
       },
-      [DispatchTypes.SELECT]: () => {
+      [DataGridEnums.DispatchTypes.SELECT]: () => {
         const { rowIndex, checked } = param;
 
         let rowSelected: boolean = false;
@@ -813,7 +818,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           });
         }
       },
-      [DispatchTypes.SELECT_ALL]: () => {
+      [DataGridEnums.DispatchTypes.SELECT_ALL]: () => {
         const { checked } = param;
         let selectedAll: boolean = listSelectedAll;
         if (checked === true) {
@@ -839,7 +844,7 @@ class StoreProvider extends React.Component<any, IDataGridState> {
           });
         }
       },
-      [DispatchTypes.CHANGE_SELECTION]: () => {
+      [DataGridEnums.DispatchTypes.CHANGE_SELECTION]: () => {
         const { sRow, sCol, eRow, eCol } = param;
 
         if (

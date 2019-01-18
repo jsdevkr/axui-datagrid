@@ -1,21 +1,17 @@
 import setColGroupWidth from './setColGroupWidth';
-import {
-  IDataGridState,
-  IDataGridStyles,
-  IDataGridCol,
-} from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 function calculateDimensions(
   containerDOM: HTMLDivElement | undefined | null,
-  state: IDataGridState,
+  state: IDataGrid.IStoreState,
   toBeFilteredList?: any[],
 ): {
   scrollLeft: number;
   scrollTop: number;
-  styles: IDataGridStyles;
-  colGroup: IDataGridCol[];
-  leftHeaderColGroup: IDataGridCol[];
-  headerColGroup: IDataGridCol[];
+  styles: IDataGrid.IStyles;
+  colGroup: IDataGrid.ICol[];
+  leftHeaderColGroup: IDataGrid.ICol[];
+  headerColGroup: IDataGrid.ICol[];
 } {
   const {
     filteredList = [],
@@ -59,9 +55,9 @@ function calculateDimensions(
   const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
   const dataLength = list ? list.length : 0;
 
-  let currentStyles: IDataGridStyles = { ...styles };
-  let currentColGroup: IDataGridCol[] = [];
-  let currentHeaderColGroup: IDataGridCol[] = [];
+  let currentStyles: IDataGrid.IStyles = { ...styles };
+  let currentColGroup: IDataGrid.ICol[] = [];
+  let currentHeaderColGroup: IDataGrid.ICol[] = [];
 
   currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
 

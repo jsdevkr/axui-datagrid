@@ -1,9 +1,9 @@
-import { IDataGridOptions, IDataGridStyles } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 function getStylesAboutFilteredList(
   _list: any[],
-  options: IDataGridOptions,
-  styles: IDataGridStyles,
+  options: IDataGrid.IOptions,
+  styles: IDataGrid.IStyles,
 ) {
   const {
     elHeight = 0,
@@ -32,7 +32,7 @@ function getStylesAboutFilteredList(
 
   const dataLength = _list ? _list.length : 0;
 
-  let currentStyles: IDataGridStyles = {};
+  let currentStyles: IDataGrid.IStyles = {};
 
   currentStyles.frozenPanelHeight = frozenRowIndex * bodyTrHeight;
 

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 import { DataGrid, utils } from '../src/axui-datagrid';
-import {
-  IDataGridFormatterData,
-  IDataGridCollectorData,
-} from 'axui-datagrid/common/@types';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 it('renders DataGrid has data', () => {
   let gridData: any[] = [
@@ -236,7 +233,7 @@ it('renders DataGrid has data', () => {
         },
         {
           key: 'sum',
-          collector: function(collectorData: IDataGridCollectorData) {
+          collector: function(collectorData: IDataGrid.ICollectorData) {
             const { data } = collectorData;
             return data.reduce(
               (accumulator: number, currentValue: any) =>

@@ -1,8 +1,4 @@
-import {
-  IDataGridColumnTableMap,
-  DataGridColumnDivideTable,
-  IDataGridOptions,
-} from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 /**
  *
@@ -12,15 +8,15 @@ import {
  * @return {DataGridColumnDivideTable}
  */
 function divideTableByFrozenColumnIndex(
-  rowTable: IDataGridColumnTableMap,
+  rowTable: IDataGrid.IColumnTableMap,
   frozenColumnIndex: number,
-  options: IDataGridOptions,
-): DataGridColumnDivideTable {
-  let asideTable: IDataGridColumnTableMap = { rows: [] };
+  options: IDataGrid.IOptions,
+): IDataGrid.ColumnDivideTable {
+  let asideTable: IDataGrid.IColumnTableMap = { rows: [] };
   let asideColGroup: any[] = [];
   let asidePanelWidth = 0;
-  let tempTableLeft: IDataGridColumnTableMap = { rows: [] };
-  let tempTableRight: IDataGridColumnTableMap = { rows: [] };
+  let tempTableLeft: IDataGrid.IColumnTableMap = { rows: [] };
+  let tempTableRight: IDataGrid.IColumnTableMap = { rows: [] };
 
   // make asideTable
   for (let i = 0, l = rowTable.rows.length; i < l; i++) {

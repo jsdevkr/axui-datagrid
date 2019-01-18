@@ -1,7 +1,7 @@
-import { IDataGridCol } from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 function getPositionPrintColGroup(
-  _headerColGroup: IDataGridCol[],
+  _headerColGroup: IDataGrid.ICol[],
   sx: number,
   ex: number,
 ) {

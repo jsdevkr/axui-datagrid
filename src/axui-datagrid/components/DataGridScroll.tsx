@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import {
-  getMousePosition,
-  getScrollPositionByScrollBar,
-  getNode,
-} from '../utils';
-import { ScrollTypes, DirectionTypes } from '../common/@enums';
+import { getMousePosition, getScrollPositionByScrollBar } from '../utils';
+import { DataGridEnums } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 
@@ -15,7 +11,7 @@ class DatagridScroll extends React.Component<IProps> {
 
   onClickScrollArrow = (
     e: React.MouseEvent<HTMLDivElement>,
-    direction: DirectionTypes,
+    direction: DataGridEnums.DirectionTypes,
   ) => {
     const {
       scrollLeft = 0,
@@ -38,14 +34,14 @@ class DatagridScroll extends React.Component<IProps> {
     } = styles;
 
     const processor = {
-      [DirectionTypes.UP]: () => {
+      [DataGridEnums.DirectionTypes.UP]: () => {
         let scrollAmount = scrollContentContainerHeight;
         setStoreState({
           scrollTop:
             scrollTop + scrollAmount < 0 ? scrollTop + scrollAmount : 0,
         });
       },
-      [DirectionTypes.DOWN]: () => {
+      [DataGridEnums.DirectionTypes.DOWN]: () => {
         let scrollAmount = scrollContentContainerHeight;
         setStoreState({
           scrollTop:
@@ -55,14 +51,14 @@ class DatagridScroll extends React.Component<IProps> {
               : scrollContentContainerHeight - scrollContentHeight,
         });
       },
-      [DirectionTypes.LEFT]: () => {
+      [DataGridEnums.DirectionTypes.LEFT]: () => {
         let scrollAmount = scrollContentContainerWidth;
         setStoreState({
           scrollLeft:
             scrollLeft + scrollAmount < 0 ? scrollLeft + scrollAmount : 0,
         });
       },
-      [DirectionTypes.RIGHT]: () => {
+      [DataGridEnums.DirectionTypes.RIGHT]: () => {
         let scrollAmount = scrollContentContainerWidth;
         setStoreState({
           scrollLeft:
@@ -81,7 +77,7 @@ class DatagridScroll extends React.Component<IProps> {
 
   onClickScrollTrack = (
     e: React.MouseEvent<HTMLDivElement>,
-    barName: ScrollTypes,
+    barName: DataGridEnums.ScrollTypes,
   ) => {
     const {
       rootNode,
@@ -125,7 +121,7 @@ class DatagridScroll extends React.Component<IProps> {
         : {};
 
     const processor = {
-      [ScrollTypes.VERTICAL]: () => {
+      [DataGridEnums.ScrollTypes.VERTICAL]: () => {
         let {
           scrollLeft: currScrollLeft = 0,
           scrollTop: currScrollTop = 0,
@@ -139,7 +135,7 @@ class DatagridScroll extends React.Component<IProps> {
           scrollTop: currScrollTop,
         });
       },
-      [ScrollTypes.HORIZONTAL]: () => {
+      [DataGridEnums.ScrollTypes.HORIZONTAL]: () => {
         let {
           scrollLeft: currScrollLeft = 0,
           scrollTop: currScrollTop = 0,
@@ -167,7 +163,7 @@ class DatagridScroll extends React.Component<IProps> {
 
   onMouseDownScrollBar = (
     e: React.MouseEvent<HTMLDivElement>,
-    barName: ScrollTypes,
+    barName: DataGridEnums.ScrollTypes,
   ) => {
     const {
       scrollLeft = 0,
@@ -208,7 +204,7 @@ class DatagridScroll extends React.Component<IProps> {
       const { x, y } = getMousePosition(ee);
 
       const processor = {
-        [ScrollTypes.VERTICAL]: () => {
+        [DataGridEnums.ScrollTypes.VERTICAL]: () => {
           let {
             scrollLeft: currScrollLeft = 0,
             scrollTop: currScrollTop = 0,
@@ -223,7 +219,7 @@ class DatagridScroll extends React.Component<IProps> {
             scrollTop: currScrollTop,
           });
         },
-        [ScrollTypes.HORIZONTAL]: () => {
+        [DataGridEnums.ScrollTypes.HORIZONTAL]: () => {
           let {
             scrollLeft: currScrollLeft = 0,
             scrollTop: currScrollTop = 0,
@@ -371,18 +367,25 @@ class DatagridScroll extends React.Component<IProps> {
               <div
                 data-arrow
                 style={verticalTopArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, DirectionTypes.UP)}
+                onClick={e =>
+                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.UP)
+                }
               />
             </div>
             <div
               data-scroll="vertical"
-              onClick={e => this.onClickScrollTrack(e, ScrollTypes.VERTICAL)}
+              onClick={e =>
+                this.onClickScrollTrack(e, DataGridEnums.ScrollTypes.VERTICAL)
+              }
             >
               <div
                 className="axui-datagrid-scroll-bar"
                 style={verticalBarStyles}
                 onMouseDown={e =>
-                  this.onMouseDownScrollBar(e, ScrollTypes.VERTICAL)
+                  this.onMouseDownScrollBar(
+                    e,
+                    DataGridEnums.ScrollTypes.VERTICAL,
+                  )
                 }
               />
             </div>
@@ -390,7 +393,9 @@ class DatagridScroll extends React.Component<IProps> {
               <div
                 data-arrow
                 style={verticalBottomArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, DirectionTypes.DOWN)}
+                onClick={e =>
+                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.DOWN)
+                }
               />
             </div>
           </div>
@@ -401,18 +406,25 @@ class DatagridScroll extends React.Component<IProps> {
               <div
                 data-arrow
                 style={horizontalLeftArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, DirectionTypes.LEFT)}
+                onClick={e =>
+                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.LEFT)
+                }
               />
             </div>
             <div
               data-scroll="horizontal"
-              onClick={e => this.onClickScrollTrack(e, ScrollTypes.HORIZONTAL)}
+              onClick={e =>
+                this.onClickScrollTrack(e, DataGridEnums.ScrollTypes.HORIZONTAL)
+              }
             >
               <div
                 className="axui-datagrid-scroll-bar"
                 style={horizontalBarStyles}
                 onMouseDown={e =>
-                  this.onMouseDownScrollBar(e, ScrollTypes.HORIZONTAL)
+                  this.onMouseDownScrollBar(
+                    e,
+                    DataGridEnums.ScrollTypes.HORIZONTAL,
+                  )
                 }
               />
             </div>
@@ -420,7 +432,9 @@ class DatagridScroll extends React.Component<IProps> {
               <div
                 data-arrow
                 style={horizontalRightArrowStyles}
-                onClick={e => this.onClickScrollArrow(e, DirectionTypes.RIGHT)}
+                onClick={e =>
+                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.RIGHT)
+                }
               />
             </div>
           </div>

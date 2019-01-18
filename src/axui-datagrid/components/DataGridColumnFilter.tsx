@@ -3,8 +3,8 @@ import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { isNumber, uniqBy, isFunction } from '../utils';
 import DataGridColumnFilterOption from './DataGridColumnFilterOption';
-import { DispatchTypes } from '../common/@enums';
-import { formatterFunction } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -75,7 +75,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
         : filter;
     }
 
-    dispatch(DispatchTypes.FILTER, {
+    dispatch(DataGridEnums.DispatchTypes.FILTER, {
       colIndex: isColumnFilter as number,
       filterInfo: currentFilterInfo,
     });
@@ -149,7 +149,7 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
           ) {
             text = predefinedFormatter[formatter](formatterData);
           } else if (isFunction(formatter)) {
-            text = (formatter as formatterFunction)(formatterData);
+            text = (formatter as IDataGrid.formatterFunction)(formatterData);
           }
 
           return {

@@ -2,16 +2,12 @@ import * as React from 'react';
 import { connectStore } from '../hoc';
 import { IDataGridStore } from '../providers';
 import { classNames as CX } from '../utils';
-import {
-  IDataGridCol,
-  IDataGridOptionHeader,
-  IDataGridColumnTableMap,
-} from '../common/@types';
+import { IDataGrid } from '../common/@types';
 
 const CellLabel: React.SFC<{
   lineHeight: number;
-  col: IDataGridCol;
-  optionsHeader: IDataGridOptionHeader;
+  col: IDataGrid.ICol;
+  optionsHeader: IDataGrid.IOptionHeader;
   listSelectedAll: boolean;
 }> = ({ col, lineHeight, optionsHeader, listSelectedAll }) => {
   const { key = '', label = '' } = col;
@@ -52,10 +48,10 @@ const CellFilter: React.SFC<{
   show ? <span data-filter={isFiltered} data-filter-index={colIndex} /> : null;
 
 interface IProps extends IDataGridStore {
-  bodyRow: IDataGridColumnTableMap;
+  bodyRow: IDataGrid.IColumnTableMap;
   ri: number;
-  col: IDataGridCol;
-  onClick: (e: any, col: IDataGridCol) => void;
+  col: IDataGrid.ICol;
+  onClick: (e: any, col: IDataGrid.ICol) => void;
 }
 
 const DatagridHeaderCell: React.SFC<IProps> = ({

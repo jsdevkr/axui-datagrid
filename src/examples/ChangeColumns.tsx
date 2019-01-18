@@ -24,16 +24,22 @@ const columnsTypeB = [
 ];
 
 class FrozenColumnRow extends React.Component<any, any> {
+  dataGridContainerRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: any) {
     super(props);
 
     const gridData = require('examples/data/data-basic.json');
 
     this.state = {
+      width: 300,
+      height: 300,
       columns: columnsTypeA,
       data: gridData,
       options: {},
     };
+
+    this.dataGridContainerRef = React.createRef();
   }
 
   changeConfig = (props: any, value: any) => {
@@ -63,7 +69,7 @@ class FrozenColumnRow extends React.Component<any, any> {
   };
 
   public render() {
-    const { height, columns, data, options } = this.state;
+    const { width, height, columns, data, options } = this.state;
 
     return (
       <Wrapper>
@@ -76,14 +82,17 @@ class FrozenColumnRow extends React.Component<any, any> {
             Column conditions can be dynamically changed by the developer, and
             users can set the column type accordingly.
           </p>
-          <DataGrid
-            width={600}
-            height={height}
-            style={{ fontSize: '12px' }}
-            columns={columns}
-            data={data}
-            options={options}
-          />
+
+          <div ref={this.dataGridContainerRef}>
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={options}
+            />
+          </div>
 
           <Divider />
 
@@ -124,6 +133,26 @@ class FrozenColumnRow extends React.Component<any, any> {
         </Segment>
       </Wrapper>
     );
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+        height,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 
