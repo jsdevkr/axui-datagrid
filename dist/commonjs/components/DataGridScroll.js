@@ -73,9 +73,9 @@ var DatagridScroll = /** @class */ (function (_super) {
             e.preventDefault();
             var _f = styles.horizontalScrollerWidth, horizontalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerWidth, scrollContentContainerWidth = _j === void 0 ? 0 : _j, _k = styles.verticalScrollerHeight, verticalScrollerHeight = _k === void 0 ? 0 : _k, _l = styles.verticalScrollBarHeight, verticalScrollBarHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o, _p = styles.pageButtonsContainerWidth, pageButtonsContainerWidth = _p === void 0 ? 0 : _p;
             var currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-                (scrollContentWidth - scrollContentContainerWidth);
+                (scrollContentWidth - scrollContentContainerWidth) || 1;
             var currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-                (scrollContentHeight - scrollContentContainerHeight);
+                (scrollContentHeight - scrollContentContainerHeight) || 1;
             var _q = utils_1.getMousePosition(e), mouseX = _q.x, mouseY = _q.y;
             var _r = rootNode && rootNode.current
                 ? rootNode.current.getBoundingClientRect()
@@ -112,9 +112,9 @@ var DatagridScroll = /** @class */ (function (_super) {
             var _e = styles.horizontalScrollerWidth, horizontalScrollerWidth = _e === void 0 ? 0 : _e, _f = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentWidth, scrollContentWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.verticalScrollerHeight, verticalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m;
             e.preventDefault();
             var currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-                (scrollContentWidth - scrollContentContainerWidth);
+                (scrollContentWidth - scrollContentContainerWidth) || 1;
             var currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-                (scrollContentHeight - scrollContentContainerHeight);
+                (scrollContentHeight - scrollContentContainerHeight) || 1;
             var startMousePosition = utils_1.getMousePosition(e);
             var onMouseMove = function (ee) {
                 var _a;
@@ -155,12 +155,12 @@ var DatagridScroll = /** @class */ (function (_super) {
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d;
         var _e = styles.pageHeight, pageHeight = _e === void 0 ? 0 : _e, _f = styles.verticalScrollerWidth, verticalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.verticalScrollerHeight, verticalScrollerHeight = _g === void 0 ? 0 : _g, _h = styles.horizontalScrollerWidth, horizontalScrollerWidth = _h === void 0 ? 0 : _h, _j = styles.horizontalScrollerHeight, horizontalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _l === void 0 ? 0 : _l, _m = styles.scrollerArrowSize, scrollerArrowSize = _m === void 0 ? 0 : _m, _o = styles.scrollerPadding, scrollerPadding = _o === void 0 ? 0 : _o, _p = styles.scrollContentContainerWidth, scrollContentContainerWidth = _p === void 0 ? 1 : _p, _q = styles.scrollContentContainerHeight, scrollContentContainerHeight = _q === void 0 ? 1 : _q, _r = styles.scrollContentWidth, scrollContentWidth = _r === void 0 ? 0 : _r, _s = styles.scrollContentHeight, scrollContentHeight = _s === void 0 ? 0 : _s;
         var scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-            (scrollContentWidth - scrollContentContainerWidth);
+            (scrollContentWidth - scrollContentContainerWidth) || 1;
         if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
             scrollBarLeft = horizontalScrollerWidth - horizontalScrollBarWidth;
         }
         var scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-            (scrollContentHeight - scrollContentContainerHeight);
+            (scrollContentHeight - scrollContentContainerHeight) || 1;
         if (verticalScrollBarHeight + scrollBarTop > verticalScrollerHeight) {
             scrollBarTop = verticalScrollerHeight - verticalScrollBarHeight;
         }

@@ -57,9 +57,9 @@ class DatagridScroll extends React.Component {
             e.preventDefault();
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, pageButtonsContainerWidth = 0, } = styles;
             const currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-                (scrollContentWidth - scrollContentContainerWidth);
+                (scrollContentWidth - scrollContentContainerWidth) || 1;
             const currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-                (scrollContentHeight - scrollContentContainerHeight);
+                (scrollContentHeight - scrollContentContainerHeight) || 1;
             const { x: mouseX, y: mouseY } = utils_1.getMousePosition(e);
             const { x: grx = 0, y: gry = 0 } = rootNode && rootNode.current
                 ? rootNode.current.getBoundingClientRect()
@@ -96,9 +96,9 @@ class DatagridScroll extends React.Component {
             const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             e.preventDefault();
             const currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-                (scrollContentWidth - scrollContentContainerWidth);
+                (scrollContentWidth - scrollContentContainerWidth) || 1;
             const currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-                (scrollContentHeight - scrollContentContainerHeight);
+                (scrollContentHeight - scrollContentContainerHeight) || 1;
             let startMousePosition = utils_1.getMousePosition(e);
             const onMouseMove = (ee) => {
                 const { x, y } = utils_1.getMousePosition(ee);
@@ -136,12 +136,12 @@ class DatagridScroll extends React.Component {
         const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
         const { pageHeight = 0, verticalScrollerWidth = 0, verticalScrollerHeight = 0, horizontalScrollerWidth = 0, horizontalScrollerHeight = 0, verticalScrollBarHeight = 0, horizontalScrollBarWidth = 0, scrollerArrowSize = 0, scrollerPadding = 0, scrollContentContainerWidth = 1, scrollContentContainerHeight = 1, scrollContentWidth = 0, scrollContentHeight = 0, } = styles;
         let scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-            (scrollContentWidth - scrollContentContainerWidth);
+            (scrollContentWidth - scrollContentContainerWidth) || 1;
         if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
             scrollBarLeft = horizontalScrollerWidth - horizontalScrollBarWidth;
         }
         let scrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-            (scrollContentHeight - scrollContentContainerHeight);
+            (scrollContentHeight - scrollContentContainerHeight) || 1;
         if (verticalScrollBarHeight + scrollBarTop > verticalScrollerHeight) {
             scrollBarTop = verticalScrollerHeight - verticalScrollBarHeight;
         }

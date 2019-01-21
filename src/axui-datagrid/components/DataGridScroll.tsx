@@ -109,10 +109,10 @@ class DatagridScroll extends React.Component<IProps> {
 
     const currScrollBarLeft: number =
       (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-      (scrollContentWidth - scrollContentContainerWidth);
+        (scrollContentWidth - scrollContentContainerWidth) || 1;
     const currScrollBarTop: number =
       (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-      (scrollContentHeight - scrollContentContainerHeight);
+        (scrollContentHeight - scrollContentContainerHeight) || 1;
 
     const { x: mouseX, y: mouseY } = getMousePosition(e);
     const { x: grx = 0, y: gry = 0 } =
@@ -193,10 +193,10 @@ class DatagridScroll extends React.Component<IProps> {
 
     const currScrollBarLeft: number =
       (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-      (scrollContentWidth - scrollContentContainerWidth);
+        (scrollContentWidth - scrollContentContainerWidth) || 1;
     const currScrollBarTop: number =
       (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-      (scrollContentHeight - scrollContentContainerHeight);
+        (scrollContentHeight - scrollContentContainerHeight) || 1;
 
     let startMousePosition = getMousePosition(e);
 
@@ -273,17 +273,17 @@ class DatagridScroll extends React.Component<IProps> {
       scrollContentHeight = 0,
     } = styles;
 
-    let scrollBarLeft =
+    let scrollBarLeft: number =
       (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-      (scrollContentWidth - scrollContentContainerWidth);
+        (scrollContentWidth - scrollContentContainerWidth) || 1;
 
     if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
       scrollBarLeft = horizontalScrollerWidth - horizontalScrollBarWidth;
     }
 
-    let scrollBarTop =
+    let scrollBarTop: number =
       (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-      (scrollContentHeight - scrollContentContainerHeight);
+        (scrollContentHeight - scrollContentContainerHeight) || 1;
 
     if (verticalScrollBarHeight + scrollBarTop > verticalScrollerHeight) {
       scrollBarTop = verticalScrollerHeight - verticalScrollBarHeight;
@@ -293,7 +293,7 @@ class DatagridScroll extends React.Component<IProps> {
       return null;
     }
 
-    let arrowWidth = (scrollerArrowSize - scrollerPadding * 2) / 2;
+    let arrowWidth: number = (scrollerArrowSize - scrollerPadding * 2) / 2;
     let verticalArrowStyles = {
       width: verticalScrollerWidth,
       height: scrollerArrowSize / 2 + scrollerPadding,
