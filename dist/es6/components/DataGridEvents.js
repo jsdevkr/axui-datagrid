@@ -39,11 +39,7 @@ class DataGridEvents extends React.Component {
                 scrollLeft: currScrollLeft,
                 scrollTop: currScrollTop,
             });
-            console.log(endOfScrollTop);
-            // 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
-            if (endOfScrollTop) {
-            }
-            else {
+            if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
                 e.preventDefault();
                 // e.stopPropagation();
             }
