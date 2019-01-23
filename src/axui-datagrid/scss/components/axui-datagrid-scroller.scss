@@ -42,6 +42,8 @@
 
   [data-scroll-track='horizontal'] {
     border-radius: 3px;
+    background: $axui-datagrid-scroll-track-bg-blur;
+    box-shadow: none;
   }
   [data-scroll-arrow='left'] {
     left: 0;

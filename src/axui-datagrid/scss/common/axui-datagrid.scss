@@ -478,7 +478,11 @@
     .axui-datagrid-scroll-bar {
       background: $axui-datagrid-scroll-bar-bg;
     }
+
     .axui-datagrid-scroller {
+      [data-scroll-track] {
+        background: $axui-datagrid-scroll-track-bg;
+      }
       [data-scroll-arrow] {
         [data-arrow] {
           border-color: $axui-datagrid-scroll-bar-bg;

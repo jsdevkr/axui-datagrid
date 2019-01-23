@@ -53,11 +53,12 @@ $axui-datagrid-page-status-color: #222 !default;
 //== scroll
 $axui-datagrid-scroll-track-shadow: #ccc !default;
 $axui-datagrid-scroll-track-border: 1px solid #ccc !default;
+$axui-datagrid-scroll-track-bg-blur: transparent !default;
 $axui-datagrid-scroll-track-bg: #f9f9f9 !default;
 
 $axui-datagrid-scroll-bar-border-radius: 10px !default;
 $axui-datagrid-scroll-bar-border: 0px solid #fff !default;
-$axui-datagrid-scroll-bar-bg-blur: #f9f9f9 !default;
+$axui-datagrid-scroll-bar-bg-blur: transparent !default;
 $axui-datagrid-scroll-bar-bg: #b9b9b9 !default;
 $axui-datagrid-scroll-bar-hover-border: 0px solid #ccc !default;
 $axui-datagrid-scroll-bar-hover-bg: #888888 !default;

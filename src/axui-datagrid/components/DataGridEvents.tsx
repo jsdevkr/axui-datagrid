@@ -61,6 +61,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
       scrollTop: currScrollTop,
     });
 
+    console.log(endOfScrollTop);
+
     // 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
     if (endOfScrollTop) {
     } else {
