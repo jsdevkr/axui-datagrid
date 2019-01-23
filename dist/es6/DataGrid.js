@@ -230,7 +230,7 @@ DataGrid.defaultPageButtons = [
     { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
 ];
 DataGrid.defaultPage = {
-    buttonsContainerWidth: 150,
+    buttonsContainerWidth: 240,
     buttons: DataGrid.defaultPageButtons,
     buttonHeight: 16,
     height: 20,

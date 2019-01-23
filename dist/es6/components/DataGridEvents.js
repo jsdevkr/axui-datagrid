@@ -29,7 +29,7 @@ class DataGridEvents extends React.Component {
                     delta.x = e.deltaX;
                 }
             }
-            let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
+            let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, endOfScrollTop, } = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
                 scrollWidth: scrollContentWidth,
                 scrollHeight: scrollContentHeight,
                 clientWidth: scrollContentContainerWidth,
@@ -39,13 +39,14 @@ class DataGridEvents extends React.Component {
                 scrollLeft: currScrollLeft,
                 scrollTop: currScrollTop,
             });
-            e.preventDefault();
-            e.stopPropagation();
-            /* 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
-            if (!endScroll) {
-        
+            console.log(endOfScrollTop);
+            // 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
+            if (endOfScrollTop) {
             }
-            */
+            else {
+                e.preventDefault();
+                // e.stopPropagation();
+            }
             return true;
         };
         this.onKeyUp = (e) => {

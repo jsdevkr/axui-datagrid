@@ -423,7 +423,7 @@
     width: 0;
     height: 0;
     border-style: solid;
-    border-color: $axui-datagrid-scroll-bar-bg;
+    border-color: $axui-datagrid-scroll-bar-bg-blur;
     cursor: pointer;
     &:hover {
       border-color: $axui-datagrid-scroll-bar-hover-bg;
@@ -473,6 +473,22 @@
 
   &:focus {
     outline: $axui-datagrid-outline;
+  }
+  &:hover {
+    .axui-datagrid-scroll-bar {
+      background: $axui-datagrid-scroll-bar-bg;
+    }
+
+    .axui-datagrid-scroller {
+      [data-scroll-track] {
+        background: $axui-datagrid-scroll-track-bg;
+      }
+      [data-scroll-arrow] {
+        [data-arrow] {
+          border-color: $axui-datagrid-scroll-bar-bg;
+        }
+      }
+    }
   }
 
   table {

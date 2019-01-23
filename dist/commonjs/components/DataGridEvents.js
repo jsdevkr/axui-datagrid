@@ -48,18 +48,19 @@ var DataGridEvents = /** @class */ (function (_super) {
                 scrollHeight: scrollContentHeight,
                 clientWidth: scrollContentContainerWidth,
                 clientHeight: scrollContentContainerHeight,
-            }), _l = _k.scrollLeft, currScrollLeft = _l === void 0 ? 0 : _l, _m = _k.scrollTop, currScrollTop = _m === void 0 ? 0 : _m;
+            }), _l = _k.scrollLeft, currScrollLeft = _l === void 0 ? 0 : _l, _m = _k.scrollTop, currScrollTop = _m === void 0 ? 0 : _m, endOfScrollTop = _k.endOfScrollTop;
             setStoreState({
                 scrollLeft: currScrollLeft,
                 scrollTop: currScrollTop,
             });
-            e.preventDefault();
-            e.stopPropagation();
-            /* 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
-            if (!endScroll) {
-        
+            console.log(endOfScrollTop);
+            // 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
+            if (endOfScrollTop) {
             }
-            */
+            else {
+                e.preventDefault();
+                // e.stopPropagation();
+            }
             return true;
         };
         _this.onKeyUp = function (e) {
