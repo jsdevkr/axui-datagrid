@@ -48,6 +48,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     let {
       scrollLeft: currScrollLeft = 0,
       scrollTop: currScrollTop = 0,
+      endOfScrollTop,
     } = getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
       scrollWidth: scrollContentWidth,
       scrollHeight: scrollContentHeight,
@@ -60,14 +61,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
       scrollTop: currScrollTop,
     });
 
-    e.preventDefault();
-    e.stopPropagation();
-
-    /* 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
-    if (!endScroll) {
-
+    // 휠 이벤트에서 이벤트 중지 예외처리 사용안함.
+    if (endOfScrollTop) {
+    } else {
+      e.preventDefault();
+      // e.stopPropagation();
     }
-    */
 
     return true;
   };

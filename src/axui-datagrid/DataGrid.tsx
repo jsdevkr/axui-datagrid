@@ -64,7 +64,7 @@ class DataGrid extends React.Component<IProps, IState> {
     { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
   ];
   static defaultPage: IDataGrid.IOptionPage = {
-    buttonsContainerWidth: 150,
+    buttonsContainerWidth: 240,
     buttons: DataGrid.defaultPageButtons,
     buttonHeight: 16,
     height: 20,

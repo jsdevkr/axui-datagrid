@@ -1,4 +1,5 @@
 .axui-datagrid-scroll-bar {
+  transition: background-color 300ms linear;
   position: relative;
   top: 0;
   left: 0;
@@ -7,10 +8,10 @@
   border-radius: $axui-datagrid-scroll-bar-border-radius;
   width: 100%;
   height: 100%;
+  background: $axui-datagrid-scroll-bar-bg-blur;
 
-  background: $axui-datagrid-scroll-bar-bg;
   &:hover {
     border: $axui-datagrid-scroll-bar-hover-border;
-    background: $axui-datagrid-scroll-bar-hover-bg;
+    background: $axui-datagrid-scroll-bar-hover-bg !important;
   }
 }
