@@ -81,71 +81,57 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
 
   throttledUpdateDimensions: any;
 
-  static getDerivedStateFromProps(
-    newProps: any,
-    prevState: IDataGrid.IStoreState,
-  ) {
-    /*
-      초기에만 값을 수신하여 랜더링 하고, 그 후엔 setState로 제어 되는 항목.
-      newProps.styles === prevState.styles &&
-      newProps.printStartColIndex === prevState.printStartColIndex &&
-      newProps.printEndColIndex === prevState.printEndColIndex &&
-      newProps.visibleHeaderColGroup === prevState.visibleHeaderColGroup &&
-      newProps.visibleBodyRowData === prevState.visibleBodyRowData &&
-      newProps.visibleBodyGroupingData === prevState.visibleBodyGroupingData
-     */
-
+  static getDerivedStateFromProps(nProps: any, nState: IDataGrid.IStoreState) {
     if (
-      newProps.mounted === prevState.mounted &&
-      newProps.loading === prevState.loading &&
-      newProps.loadingData === prevState.loadingData &&
-      newProps.setRootState === prevState.setRootState &&
-      newProps.getRootState === prevState.getRootState &&
-      newProps.rootNode === prevState.rootNode &&
-      newProps.clipBoardNode === prevState.clipBoardNode &&
-      newProps.rootObject === prevState.rootObject &&
-      newProps.data === prevState.data &&
-      newProps.options === prevState.options &&
-      newProps.height === prevState.height &&
-      newProps.onBeforeEvent === prevState.onBeforeEvent &&
-      newProps.onAfterEvent === prevState.onAfterEvent &&
-      newProps.onScrollEnd === prevState.onScrollEnd &&
-      newProps.onRightClick === prevState.onRightClick &&
-      newProps.selection === prevState.selection &&
-      newProps.rowSelector === prevState.rowSelector &&
-      newProps.headerTable === prevState.headerTable &&
-      newProps.bodyRowTable === prevState.bodyRowTable &&
-      newProps.bodyRowMap === prevState.bodyRowMap &&
-      newProps.asideHeaderData === prevState.asideHeaderData &&
-      newProps.leftHeaderData === prevState.leftHeaderData &&
-      newProps.headerData === prevState.headerData &&
-      newProps.asideColGroup === prevState.asideColGroup &&
-      newProps.asideBodyRowData === prevState.asideBodyRowData &&
-      newProps.leftBodyRowData === prevState.leftBodyRowData &&
-      newProps.bodyRowData === prevState.bodyRowData &&
-      newProps.colGroup === prevState.colGroup &&
-      newProps.colGroupMap === prevState.colGroupMap &&
-      newProps.leftHeaderColGroup === prevState.leftHeaderColGroup &&
-      newProps.headerColGroup === prevState.headerColGroup &&
-      (prevState.styles &&
-        newProps.styles.CTInnerWidth === prevState.styles.CTInnerWidth) &&
-      (prevState.styles &&
-        newProps.styles.CTInnerHeight === prevState.styles.CTInnerHeight)
+      nProps.mounted === nState.mounted &&
+      nProps.loading === nState.loading &&
+      nProps.loadingData === nState.loadingData &&
+      nProps.setRootState === nState.setRootState &&
+      nProps.getRootState === nState.getRootState &&
+      nProps.rootNode === nState.rootNode &&
+      nProps.clipBoardNode === nState.clipBoardNode &&
+      nProps.rootObject === nState.rootObject &&
+      nProps.data === nState.data &&
+      nProps.options === nState.options &&
+      nProps.height === nState.height &&
+      nProps.onBeforeEvent === nState.onBeforeEvent &&
+      nProps.onAfterEvent === nState.onAfterEvent &&
+      nProps.onScrollEnd === nState.onScrollEnd &&
+      nProps.onRightClick === nState.onRightClick &&
+      nProps.selection === nState.selection &&
+      nProps.rowSelector === nState.rowSelector &&
+      nProps.headerTable === nState.headerTable &&
+      nProps.bodyRowTable === nState.bodyRowTable &&
+      nProps.bodyRowMap === nState.bodyRowMap &&
+      nProps.asideHeaderData === nState.asideHeaderData &&
+      nProps.leftHeaderData === nState.leftHeaderData &&
+      nProps.headerData === nState.headerData &&
+      nProps.asideColGroup === nState.asideColGroup &&
+      nProps.asideBodyRowData === nState.asideBodyRowData &&
+      nProps.leftBodyRowData === nState.leftBodyRowData &&
+      nProps.bodyRowData === nState.bodyRowData &&
+      nProps.colGroup === nState.colGroup &&
+      nProps.colGroupMap === nState.colGroupMap &&
+      nProps.leftHeaderColGroup === nState.leftHeaderColGroup &&
+      nProps.headerColGroup === nState.headerColGroup &&
+      (nState.styles &&
+        nProps.styles.CTInnerWidth === nState.styles.CTInnerWidth &&
+        nProps.styles.CTInnerHeight === nState.styles.CTInnerHeight)
     ) {
       return null;
     } else {
-      let scrollTop = prevState.scrollTop;
-      let scrollLeft = prevState.scrollLeft;
+      let scrollTop = nState.scrollTop;
+      let scrollLeft = nState.scrollLeft;
 
-      let filteredList = prevState.filteredList || [];
-      let styles: IDataGrid.IStyles = prevState.styles || {};
-      const { sortInfo } = prevState;
-      const { data, styles: _styles = {}, options: _options = {} } = newProps;
+      let filteredList = nState.filteredList || [];
+      let styles: IDataGrid.IStyles = nState.styles || {};
+      const { sortInfo } = nState;
+      const { data, styles: _styles = {}, options: _options = {} } = nProps;
 
       // 데이터를 정리하는 과정. data > filteredList
-      if (data && newProps.data !== prevState.data) {
+      if (data && nProps.data !== nState.data) {
         // sort 되었다고 판단됨. filteredList를 sort 해주어야 함.
-        const { options = {} } = prevState;
+        const { options = {} } = nState;
         const { columnKeys: optionColumnKeys = {} } = options;
 
         filteredList = data.filter((n: any) => {
@@ -195,9 +181,9 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       }
 
       if (
-        prevState.styles &&
-        newProps.styles &&
-        newProps.styles.CTInnerWidth !== prevState.styles.CTInnerWidth
+        nState.styles &&
+        nProps.styles &&
+        nProps.styles.CTInnerWidth !== nState.styles.CTInnerWidth
       ) {
         if (
           scrollLeft &&
@@ -215,9 +201,9 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       }
 
       if (
-        prevState.styles &&
-        newProps.styles &&
-        newProps.styles.CTInnerHeight !== prevState.styles.CTInnerHeight
+        nState.styles &&
+        nProps.styles &&
+        nProps.styles.CTInnerHeight !== nState.styles.CTInnerHeight
       ) {
         if (
           scrollTop &&
@@ -234,6 +220,10 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
         }
       }
 
+      if (nState.styles) {
+        console.log(`ch1 : ${nState.styles.scrollContentWidth}`);
+      }
+
       // 데이터 길이에 따라 스타일이 조정되어야 하므로
       // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
       styles = {
@@ -241,12 +231,11 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
         ...getStylesAboutFilteredList(filteredList, _options, _styles),
       };
 
+      console.log(`ch2 : ${styles.scrollContentWidth}`);
+
       // loadingData 상태값이 true 이면
       // 컨텐츠 스크롤 위치를 맨 끝으로 보내도록 함.
-      if (
-        newProps.loadingData &&
-        newProps.loadingData !== prevState.loadingData
-      ) {
+      if (nProps.loadingData && nProps.loadingData !== nState.loadingData) {
         const focusRow = filteredList.length - 1;
         const {
           bodyTrHeight = 0,
@@ -264,61 +253,63 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
         }).scrollTop;
       }
 
+      console.log('apply ~ ', styles.scrollContentWidth);
+
       return {
-        ...prevState,
+        ...nState,
         ...{
           scrollLeft,
           scrollTop,
-          mounted: newProps.mounted,
-          loading: newProps.loading,
-          loadingData: newProps.loadingData,
-          setRootState: newProps.setRootState,
-          getRootState: newProps.getRootState,
-          setScrollLeft: newProps.setScrollLeft,
-          setScrollTop: newProps.setScrollTop,
-          rootNode: newProps.rootNode,
-          clipBoardNode: newProps.clipBoardNode,
-          rootObject: newProps.rootObject,
-          data: newProps.data,
+          mounted: nProps.mounted,
+          loading: nProps.loading,
+          loadingData: nProps.loadingData,
+          setRootState: nProps.setRootState,
+          getRootState: nProps.getRootState,
+          setScrollLeft: nProps.setScrollLeft,
+          setScrollTop: nProps.setScrollTop,
+          rootNode: nProps.rootNode,
+          clipBoardNode: nProps.clipBoardNode,
+          rootObject: nProps.rootObject,
+          data: nProps.data,
           filteredList,
-          options: newProps.options,
-          height: newProps.height,
-          onBeforeEvent: newProps.onBeforeEvent,
-          onAfterEvent: newProps.onAfterEvent,
-          onScrollEnd: newProps.onScrollEnd,
-          onRightClick: newProps.onRightClick,
-          selection: newProps.selection,
-          rowSelector: newProps.rowSelector,
+          options: nProps.options,
+          height: nProps.height,
+          onBeforeEvent: nProps.onBeforeEvent,
+          onAfterEvent: nProps.onAfterEvent,
+          onScrollEnd: nProps.onScrollEnd,
+          onRightClick: nProps.onRightClick,
+          selection: nProps.selection,
+          rowSelector: nProps.rowSelector,
 
-          colGroupMap: newProps.colGroupMap,
-          asideColGroup: newProps.asideColGroup,
-          colGroup: newProps.colGroup,
+          colGroupMap: nProps.colGroupMap,
+          asideColGroup: nProps.asideColGroup,
+          colGroup: nProps.colGroup,
 
-          headerTable: newProps.headerTable,
-          asideHeaderData: newProps.asideHeaderData,
-          leftHeaderData: newProps.leftHeaderData,
-          headerData: newProps.headerData,
-          leftHeaderColGroup: newProps.leftHeaderColGroup,
-          headerColGroup: newProps.headerColGroup,
+          headerTable: nProps.headerTable,
+          asideHeaderData: nProps.asideHeaderData,
+          leftHeaderData: nProps.leftHeaderData,
+          headerData: nProps.headerData,
+          leftHeaderColGroup: nProps.leftHeaderColGroup,
+          headerColGroup: nProps.headerColGroup,
 
-          bodyRowTable: newProps.bodyRowTable,
-          bodyRowMap: newProps.bodyRowMap,
-          asideBodyRowData: newProps.asideBodyRowData,
-          leftBodyRowData: newProps.leftBodyRowData,
-          bodyRowData: newProps.bodyRowData,
+          bodyRowTable: nProps.bodyRowTable,
+          bodyRowMap: nProps.bodyRowMap,
+          asideBodyRowData: nProps.asideBodyRowData,
+          leftBodyRowData: nProps.leftBodyRowData,
+          bodyRowData: nProps.bodyRowData,
 
-          footSumColumns: newProps.footSumColumns,
-          footSumTable: newProps.footSumTable,
-          leftFootSumData: newProps.leftFootSumData,
-          footSumData: newProps.footSumData,
+          footSumColumns: nProps.footSumColumns,
+          footSumTable: nProps.footSumTable,
+          leftFootSumData: nProps.leftFootSumData,
+          footSumData: nProps.footSumData,
 
           styles: styles,
-          printStartColIndex: newProps.printStartColIndex,
-          printEndColIndex: newProps.printEndColIndex,
-          visibleHeaderColGroup: newProps.visibleHeaderColGroup,
-          visibleBodyRowData: newProps.visibleBodyRowData,
-          visibleBodyGroupingData: newProps.visibleBodyGroupingData,
-          visibleFootSumData: newProps.visibleFootSumData,
+          printStartColIndex: nProps.printStartColIndex,
+          printEndColIndex: nProps.printEndColIndex,
+          visibleHeaderColGroup: nProps.visibleHeaderColGroup,
+          visibleBodyRowData: nProps.visibleBodyRowData,
+          visibleBodyGroupingData: nProps.visibleBodyGroupingData,
+          visibleFootSumData: nProps.visibleFootSumData,
         },
       };
     }
@@ -439,12 +430,17 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
     } = this.state;
     const { frozenColumnIndex = 0 } = options;
     const { CTInnerWidth } = styles;
+
     const {
       scrollLeft: _scrollLeft,
       scrollTop: _scrollTop,
       styles: _styles = {},
       filteredList: _filteredList,
     } = newState;
+
+    if (!newState.styles) {
+      newState.styles = styles;
+    }
 
     if (
       typeof _scrollLeft !== 'undefined' ||
@@ -460,6 +456,10 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
         scrollContentContainerWidth: clientWidth = 0,
         scrollContentContainerHeight: clientHeight = 0,
       } = { ...styles, ..._styles };
+
+      if (styles.scrollContentWidth !== scrollWidth) {
+        newState.styles.scrollContentWidth = scrollWidth;
+      }
 
       let endOfScrollTop: boolean = false;
       let endOfScrollLeft: boolean = false;
@@ -506,6 +506,8 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
             printStartColIndex + frozenColumnIndex,
             printEndColIndex + frozenColumnIndex,
           );
+
+          newState.styles.CTInnerWidth = _CTInnerWidth;
         }
         if (
           _scrollLeft !== scrollLeft &&
@@ -535,9 +537,11 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
     if (_filteredList && filteredList.length !== _filteredList.length) {
       newState.styles = calculateDimensions(
         this.state.rootNode && this.state.rootNode.current,
-        this.state,
+        newState,
         _filteredList,
       ).styles;
+    } else {
+      console.log('request ~ ', newState.styles.scrollContentWidth);
     }
 
     this.setState(
