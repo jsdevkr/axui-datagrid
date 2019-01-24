@@ -261,3 +261,4 @@ export default Formatter;
 - v0.6.0 - Add a new prop width and Add IDataGrid namespace.
 - v0.6.1 - Fixed an issue where the column position is not kept according to the scroll position.
 - v0.7.0 - Modify scrollbar style
+- v0.7.1 - Minor patch - scrollbar style
