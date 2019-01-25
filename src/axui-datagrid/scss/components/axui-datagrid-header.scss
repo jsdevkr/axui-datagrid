@@ -6,6 +6,7 @@
   @include axui-background(to bottom, $axui-datagrid-header-column-bg-colors);
   border: 0 none;
   border-bottom: $axui-datagrid-header-column-border;
+  z-index: 10;
 
   table tr td {
     box-shadow: $axui-datagrid-header-column-box-shadow;

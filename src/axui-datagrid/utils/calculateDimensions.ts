@@ -167,8 +167,7 @@ export default function calculateDimensions(
     currentStyles.headerHeight -
     currentStyles.pageHeight -
     optionsScrollerPadding * 2 -
-    optionsScrollerArrowSize -
-    2;
+    optionsScrollerArrowSize;
 
   currentStyles.horizontalScrollerWidth =
     (horizontalScrollerWidth / 100) * currentStyles.elWidth;
