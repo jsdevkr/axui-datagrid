@@ -250,8 +250,6 @@ class StoreProvider extends React.Component<
         _scrollLeft = dimensions.scrollLeft;
         _scrollTop = dimensions.scrollTop;
 
-        console.log(_styles.horizontalScrollerWidth);
-
         changed.styles = true;
       }
 
