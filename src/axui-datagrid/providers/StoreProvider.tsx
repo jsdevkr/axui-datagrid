@@ -2,16 +2,14 @@ import * as React from 'react';
 
 import {
   calculateDimensions,
-  getPositionPrintColGroup,
-  getTableByStartEndColumnIndex,
   getFilteredList,
+  setColGroupWidth,
+  getVisibleColGroup,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
-import setColGroupWidth from 'axui-datagrid/utils/setColGroupWidth';
-import getVisibleColGroup from 'axui-datagrid/utils/getVsibleCoGroup';
 
 export interface IDataGridStore extends IDataGrid.IStoreState {
   setStoreState: (store: IDataGrid.IStoreState) => void;

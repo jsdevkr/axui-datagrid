@@ -5,8 +5,6 @@ const utils_1 = require("../utils");
 const formatter_1 = require("../functions/formatter");
 const collector_1 = require("../functions/collector");
 const _enums_1 = require("../common/@enums");
-const setColGroupWidth_1 = require("axui-datagrid/utils/setColGroupWidth");
-const getVsibleCoGroup_1 = require("axui-datagrid/utils/getVsibleCoGroup");
 const store = {
     // 데이터 그리드 내부에서 사용하는 상태의 기본형.
     sortInfo: {},
@@ -76,7 +74,7 @@ class StoreProvider extends React.Component {
                 let endOfScrollLeft = false;
                 if (typeof _scrollLeft !== 'undefined') {
                     if (scrollLeft !== _scrollLeft) {
-                        const visibleData = getVsibleCoGroup_1.default(headerColGroup, {
+                        const visibleData = utils_1.getVisibleColGroup(headerColGroup, {
                             scrollLeft: _scrollLeft,
                             bodyRowData: bodyRowData,
                             footSumData: footSumData,
@@ -470,7 +468,7 @@ class StoreProvider extends React.Component {
             // colGroup > width 연산
             if (nProps.colGroup !== nState.colGroup ||
                 nProps.options !== nState.options) {
-                _colGroup = setColGroupWidth_1.default(nProps.colGroup || [], { width: nProps.width || 0 }, nProps.options);
+                _colGroup = utils_1.setColGroupWidth(nProps.colGroup || [], { width: nProps.width || 0 }, nProps.options);
                 changed.colGroup = true;
             }
             if (changed.colGroup || frozenColumnIndex !== PfrozenColumnIndex) {
@@ -514,7 +512,7 @@ class StoreProvider extends React.Component {
                 changed.frozenColumnIndex ||
                 !storeState.styles ||
                 nProps.width !== nState.width) {
-                const visibleData = getVsibleCoGroup_1.default(_headerColGroup, {
+                const visibleData = utils_1.getVisibleColGroup(_headerColGroup, {
                     scrollLeft: _scrollLeft,
                     bodyRowData: storeState.bodyRowData,
                     footSumData: storeState.footSumData,

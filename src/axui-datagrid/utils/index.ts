@@ -18,6 +18,8 @@ export { default as arrayFromRange } from './arrayFromRange';
 export { PrintDate, printDate } from './printDate';
 export { default as getScrollPosition } from './getScrollPosition';
 export { default as getFilteredList } from './getFilteredList';
+export { default as setColGroupWidth } from './setColGroupWidth';
+export { default as getVisibleColGroup } from './getVisibleColGroup';
 export {
   default as getScrollPositionByScrollBar,
 } from './getScrollPositionByScrollBar';

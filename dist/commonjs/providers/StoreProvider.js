@@ -49,8 +49,6 @@ var utils_1 = require("../utils");
 var formatter_1 = require("../functions/formatter");
 var collector_1 = require("../functions/collector");
 var _enums_1 = require("../common/@enums");
-var setColGroupWidth_1 = require("axui-datagrid/utils/setColGroupWidth");
-var getVsibleCoGroup_1 = require("axui-datagrid/utils/getVsibleCoGroup");
 var store = {
     // 데이터 그리드 내부에서 사용하는 상태의 기본형.
     sortInfo: {},
@@ -121,7 +119,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 var endOfScrollLeft = false;
                 if (typeof _scrollLeft !== 'undefined') {
                     if (scrollLeft !== _scrollLeft) {
-                        var visibleData = getVsibleCoGroup_1.default(headerColGroup, {
+                        var visibleData = utils_1.getVisibleColGroup(headerColGroup, {
                             scrollLeft: _scrollLeft,
                             bodyRowData: bodyRowData,
                             footSumData: footSumData,
@@ -518,7 +516,7 @@ var StoreProvider = /** @class */ (function (_super) {
             // colGroup > width 연산
             if (nProps.colGroup !== nState.colGroup ||
                 nProps.options !== nState.options) {
-                _colGroup = setColGroupWidth_1.default(nProps.colGroup || [], { width: nProps.width || 0 }, nProps.options);
+                _colGroup = utils_1.setColGroupWidth(nProps.colGroup || [], { width: nProps.width || 0 }, nProps.options);
                 changed.colGroup = true;
             }
             if (changed.colGroup || frozenColumnIndex !== PfrozenColumnIndex) {
@@ -562,7 +560,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 changed.frozenColumnIndex ||
                 !storeState.styles ||
                 nProps.width !== nState.width) {
-                var visibleData = getVsibleCoGroup_1.default(_headerColGroup, {
+                var visibleData = utils_1.getVisibleColGroup(_headerColGroup, {
                     scrollLeft: _scrollLeft,
                     bodyRowData: storeState.bodyRowData,
                     footSumData: storeState.footSumData,

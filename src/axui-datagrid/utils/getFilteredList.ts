@@ -1,4 +1,4 @@
-import { IDataGrid } from 'axui-datagrid/common/@types';
+import { IDataGrid } from '../common/@types';
 
 export interface IGetFilteredListParam {
   colGroup: IDataGrid.ICol[];
