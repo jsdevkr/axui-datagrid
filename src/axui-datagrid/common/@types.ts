@@ -1,3 +1,5 @@
+import { number } from 'prop-types';
+
 export namespace IDataGrid {
   export interface IPosition {
     x?: number;
@@ -133,7 +135,6 @@ export namespace IDataGrid {
   export type ColumnDivideTable = {
     asideData: IColumnTableMap;
     asideColGroup: any[];
-    asidePanelWidth: number;
     leftData: IColumnTableMap;
     rightData: IColumnTableMap;
   };
@@ -167,7 +168,6 @@ export namespace IDataGrid {
   }
 
   export interface IOptionPage {
-    buttonsContainerWidth?: number;
     buttons?: IOptionPageButton[];
     buttonHeight?: number;
     height?: number;
@@ -178,7 +178,7 @@ export namespace IDataGrid {
     arrowSize?: number;
     barMinSize?: number;
     padding?: number;
-    disabledVerticalScroll?: boolean;
+    horizontalScrollerWidth?: number;
   }
 
   export interface IOptions {
@@ -191,7 +191,6 @@ export namespace IDataGrid {
     lineNumberColumnWidth?: number;
     rowSelectorColumnWidth?: number;
     remoteSort?: boolean;
-    asidePanelWidth?: number;
     header?: IOptionHeader;
     body?: IOptionBody;
     page?: IOptionPage;
@@ -202,14 +201,11 @@ export namespace IDataGrid {
   }
 
   export interface IStyles {
-    calculatedHeight?: number | null;
     asidePanelWidth?: number;
     frozenPanelWidth?: number;
     bodyTrHeight?: number;
     elWidth?: number;
     elHeight?: number;
-    CTInnerWidth?: number;
-    CTInnerHeight?: number;
     rightPanelWidth?: number;
     headerHeight?: number;
     bodyHeight?: number;
@@ -231,11 +227,57 @@ export namespace IDataGrid {
     pageButtonsContainerWidth?: number;
   }
 
-  export interface IStoreState {
-    mounted?: boolean;
+  export interface IStoreProps {
     loading?: boolean;
     loadingData?: boolean;
-    calculatedStyles?: boolean;
+    data?: any[];
+    selection?: ISelection;
+    rowSelector?: IRowSelector;
+    width?: number;
+    height?: number;
+    scrollLeft?: number;
+    scrollTop?: number;
+    columnHeight?: number;
+    options?: IOptions;
+
+    headerColGroup?: ICol[];
+    headerTable?: IColumnTableMap;
+    headerData?: IColumnTableMap;
+    asideHeaderData?: IColumnTableMap;
+    leftHeaderData?: IColumnTableMap;
+
+    bodyRowTable?: IColumnTableMap;
+    bodyRowData?: IColumnTableMap;
+    bodyRowMap?: {};
+    asideBodyRowData?: IColumnTableMap;
+    leftBodyRowData?: IColumnTableMap;
+
+    colGroup?: ICol[];
+    colGroupMap?: {};
+    asideColGroup?: ICol[];
+    leftHeaderColGroup?: ICol[];
+
+    footSumColumns?: IColumn[][];
+    footSumTable?: IColumnTableMap;
+    leftFootSumData?: IColumnTableMap;
+    footSumData?: IColumnTableMap;
+
+    rootNode?: React.RefObject<HTMLDivElement>;
+    clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
+
+    rootObject?: any;
+
+    setScrollLeft?: (scrollLeft: number) => void;
+    setScrollTop?: (scrollTop: number) => void;
+    onBeforeEvent?: (param: IonEventParam) => void;
+    onAfterEvent?: (param: IonEventParam) => void;
+    onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
+    onRightClick?: (param: IonRightClickParam) => void;
+  }
+
+  export interface IStoreState {
+    loading?: boolean;
+    loadingData?: boolean;
 
     data?: any[];
     filteredList?: any[];
@@ -246,6 +288,7 @@ export namespace IDataGrid {
     filterInfo?: {};
     width?: number;
     height?: number;
+    columnHeight?: number;
 
     onBeforeEvent?: (param: IonEventParam) => void;
     onAfterEvent?: (param: IonEventParam) => void;
@@ -322,12 +365,7 @@ export namespace IDataGrid {
     predefinedFormatter?: IFormatter;
     predefinedCollector?: ICollector;
     rootObject?: any;
-    setRootState?: (state: IRootState) => void;
-    getRootState?: () => any;
-    setScrollLeft?: (scrollLeft: number) => void;
-    setScrollTop?: (scrollTop: number) => void;
-    // getRootNode?: () => HTMLDivElement;
-    // getClipBoardNode?: () => HTMLTextAreaElement;
+
     rootNode?: React.RefObject<HTMLDivElement>;
     clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
@@ -352,19 +390,20 @@ export namespace IDataGrid {
     height: number;
     style?: any;
     options?: IOptions;
-    onBeforeEvent?: (param: IonEventParam) => void;
-    onAfterEvent?: (param: IonEventParam) => void;
-    onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     loading?: boolean;
     loadingData?: boolean;
     rowSelector?: IRowSelector;
     selection?: ISelection;
+    scrollLeft?: number;
+    scrollTop?: number;
+    onBeforeEvent?: (param: IonEventParam) => void;
+    onAfterEvent?: (param: IonEventParam) => void;
+    onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
 
   export interface IRootState {
-    mounted?: boolean;
-    calculatedHeight?: number;
+    mounted: boolean;
   }
 
   export type DispatchParam = { [key: string]: any };

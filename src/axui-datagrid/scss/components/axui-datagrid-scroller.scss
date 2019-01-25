@@ -6,8 +6,6 @@
 
   [data-scroll-track] {
     transition: background-color 300ms linear;
-    background: $axui-datagrid-scroll-track-bg;
-    box-shadow: inset 0 0 1px 0 $axui-datagrid-scroll-track-shadow;
     box-sizing: border-box;
     position: absolute;
     right: 0;
@@ -41,6 +39,10 @@
     }
   }
 
+  [data-scroll-track='vertical'] {
+    background: $axui-datagrid-scroll-track-bg-blur;
+    // box-shadow: inset 0 0 1px 0 $axui-datagrid-scroll-track-shadow;
+  }
   [data-scroll-track='horizontal'] {
     border-radius: 3px;
     background: $axui-datagrid-scroll-track-bg-blur;

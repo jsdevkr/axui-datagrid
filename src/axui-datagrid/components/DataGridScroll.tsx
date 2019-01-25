@@ -315,9 +315,10 @@ class DatagridScroll extends React.Component<IProps> {
       borderBottom: '0 none',
       borderLeft: 'solid ' + arrowWidth + 'px transparent',
     };
+
     let verticalStyles = {
       width: verticalScrollerWidth,
-      height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize,
+      height: verticalScrollerHeight + scrollerArrowSize + scrollerPadding * 2,
       bottom: pageHeight,
       padding: scrollerPadding,
       paddingTop: scrollerArrowSize / 2 + scrollerPadding,

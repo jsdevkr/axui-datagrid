@@ -28,6 +28,9 @@ export namespace DataGridEnums {
     'UP_ARROW' = 38,
     'RIGHT_ARROW' = 39,
     'DOWN_ARROW' = 40,
+  }
+
+  export enum MetaKeycodes {
     'A' = 65,
     'B' = 66,
     'C' = 67,

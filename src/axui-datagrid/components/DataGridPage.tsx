@@ -175,7 +175,7 @@ class DataGridPage extends React.Component<IProps> {
 
   render() {
     const { options = {}, styles = {} } = this.props;
-    const { pageButtonsContainerWidth } = styles;
+    const { pageButtonsContainerWidth, horizontalScrollerWidth } = styles;
     const { page: optionPage = {} } = options;
     const {
       buttons: pageButtons = [],
@@ -186,7 +186,7 @@ class DataGridPage extends React.Component<IProps> {
       <div className="axui-datagrid-page" style={{ height: styles.pageHeight }}>
         <div
           className="axui-datagrid-page-buttons"
-          style={{ width: pageButtonsContainerWidth }}
+          // style={{ width: pageButtonsContainerWidth }}
         >
           <PageButtons
             pageButtons={pageButtons}
@@ -194,6 +194,7 @@ class DataGridPage extends React.Component<IProps> {
             onClickPageButton={this.onClickPageButton}
           />
         </div>
+        <div style={{ width: horizontalScrollerWidth }} />
       </div>
     );
   }

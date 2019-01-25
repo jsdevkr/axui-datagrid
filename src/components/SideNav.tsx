@@ -190,10 +190,16 @@ class SideNav extends React.Component<IProps, IState> {
             </Col>
           </Row>
 
-          <div className="github-btn-container">
-            <GitHubButton type="stargazers" namespace="axui" repo="datagrid" />{' '}
-            <GitHubButton type="forks" namespace="axui" repo="datagrid" />
-          </div>
+          {window.location.host !== 'localhost:3000' && (
+            <div className="github-btn-container">
+              <GitHubButton
+                type="stargazers"
+                namespace="axui"
+                repo="datagrid"
+              />{' '}
+              <GitHubButton type="forks" namespace="axui" repo="datagrid" />
+            </div>
+          )}
         </div>
 
         <Menu

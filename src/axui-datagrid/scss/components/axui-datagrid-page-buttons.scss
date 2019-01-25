@@ -1,5 +1,9 @@
 .axui-datagrid-page-buttons {
   padding: 1px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   button {
     box-sizing: border-box;
     //border: 1px solid #C9C9C9;

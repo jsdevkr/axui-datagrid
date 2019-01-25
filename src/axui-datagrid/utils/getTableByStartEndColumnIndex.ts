@@ -1,7 +1,7 @@
 import { IDataGrid } from '../common/@types';
 
 function getTableByStartEndColumnIndex(
-  rowTable: IDataGrid.IColumnTableMap,
+  rowTable: IDataGrid.IColumnTableMap = { rows: [{ cols: [] }] },
   startColumnIndex: number,
   endColumnIndex: number,
 ): IDataGrid.IColumnTableMap {

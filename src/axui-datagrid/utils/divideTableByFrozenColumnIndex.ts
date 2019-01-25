@@ -14,7 +14,6 @@ function divideTableByFrozenColumnIndex(
 ): IDataGrid.ColumnDivideTable {
   let asideTable: IDataGrid.IColumnTableMap = { rows: [] };
   let asideColGroup: any[] = [];
-  let asidePanelWidth = 0;
   let tempTableLeft: IDataGrid.IColumnTableMap = { rows: [] };
   let tempTableRight: IDataGrid.IColumnTableMap = { rows: [] };
 
@@ -47,8 +46,6 @@ function divideTableByFrozenColumnIndex(
 
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);
-
-        asidePanelWidth += options.lineNumberColumnWidth || 0;
       }
 
       if (options.showRowSelector) {
@@ -65,7 +62,6 @@ function divideTableByFrozenColumnIndex(
         };
         asideColGroup.push(_col);
         asideTable.rows[i].cols.push(_col);
-        asidePanelWidth += options.rowSelectorColumnWidth || 0;
       }
     }
   }
@@ -109,7 +105,6 @@ function divideTableByFrozenColumnIndex(
   return {
     asideData: asideTable,
     asideColGroup: asideColGroup,
-    asidePanelWidth: asidePanelWidth,
     leftData: tempTableLeft,
     rightData: tempTableRight,
   };

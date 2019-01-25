@@ -2,17 +2,16 @@ import * as React from 'react';
 
 import {
   calculateDimensions,
-  throttle,
-  getScrollPosition,
   getPositionPrintColGroup,
   getTableByStartEndColumnIndex,
-  getNode,
-  getStylesAboutFilteredList,
+  getFilteredList,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
+import setColGroupWidth from 'axui-datagrid/utils/setColGroupWidth';
+import getVisibleColGroup from 'axui-datagrid/utils/getVsibleCoGroup';
 
 export interface IDataGridStore extends IDataGrid.IStoreState {
   setStoreState: (store: IDataGrid.IStoreState) => void;
@@ -23,6 +22,7 @@ export interface IDataGridStore extends IDataGrid.IStoreState {
 }
 
 const store: IDataGridStore = {
+  // 데이터 그리드 내부에서 사용하는 상태의 기본형.
   sortInfo: {},
   isColumnFilter: false,
   scrollLeft: 0,
@@ -42,10 +42,11 @@ const store: IDataGridStore = {
   columnResizing: false,
   columnResizerLeft: 0,
 
-  mounted: false,
   loading: false,
   loadingData: false,
 
+  width: 0,
+  height: 0,
   data: [],
   filteredList: [],
   listSelectedAll: false,
@@ -66,7 +67,7 @@ const store: IDataGridStore = {
   bodyRowMap: {},
   bodyGroupingMap: {},
   options: {},
-  styles: {},
+  styles: undefined,
 
   predefinedFormatter: {},
   predefinedCollector: {},
@@ -76,346 +77,223 @@ const store: IDataGridStore = {
 
 const { Provider, Consumer } = React.createContext(store);
 
-class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
+class StoreProvider extends React.Component<
+  IDataGrid.IStoreProps,
+  IDataGrid.IStoreState
+> {
   state = store;
 
   throttledUpdateDimensions: any;
 
-  static getDerivedStateFromProps(nProps: any, nState: IDataGrid.IStoreState) {
+  static getDerivedStateFromProps(
+    nProps: IDataGrid.IStoreProps,
+    nState: IDataGrid.IStoreState,
+  ) {
+    // console.log('getDerivedStateFromProps ~~');
+
     if (
-      nProps.mounted === nState.mounted &&
       nProps.loading === nState.loading &&
       nProps.loadingData === nState.loadingData &&
-      nProps.setRootState === nState.setRootState &&
-      nProps.getRootState === nState.getRootState &&
+      nProps.data === nState.data &&
+      nProps.selection === nState.selection &&
+      nProps.rowSelector === nState.rowSelector &&
+      nProps.width === nState.width &&
+      nProps.height === nState.height &&
+      nProps.scrollLeft === nState.scrollLeft &&
+      nProps.scrollTop === nState.scrollTop &&
+      nProps.columnHeight === nState.columnHeight &&
+      nProps.options === nState.options &&
+      //
+      nProps.headerColGroup === nState.headerColGroup &&
+      nProps.headerTable === nState.headerTable &&
+      nProps.headerData === nState.headerData &&
+      nProps.asideHeaderData === nState.asideHeaderData &&
+      nProps.leftHeaderData === nState.leftHeaderData &&
+      //
+      nProps.bodyRowTable === nState.bodyRowTable &&
+      nProps.bodyRowData === nState.bodyRowData &&
+      nProps.bodyRowMap === nState.bodyRowMap &&
+      //
+      nProps.asideBodyRowData === nState.asideBodyRowData &&
+      nProps.leftBodyRowData === nState.leftBodyRowData &&
+      //
+      nProps.colGroup === nState.colGroup &&
+      nProps.colGroupMap === nState.colGroupMap &&
+      nProps.asideColGroup === nState.asideColGroup &&
+      nProps.leftHeaderColGroup === nState.leftHeaderColGroup &&
+      //
       nProps.rootNode === nState.rootNode &&
       nProps.clipBoardNode === nState.clipBoardNode &&
+      //
       nProps.rootObject === nState.rootObject &&
-      nProps.data === nState.data &&
-      nProps.options === nState.options &&
-      nProps.height === nState.height &&
       nProps.onBeforeEvent === nState.onBeforeEvent &&
       nProps.onAfterEvent === nState.onAfterEvent &&
       nProps.onScrollEnd === nState.onScrollEnd &&
-      nProps.onRightClick === nState.onRightClick &&
-      nProps.selection === nState.selection &&
-      nProps.rowSelector === nState.rowSelector &&
-      nProps.headerTable === nState.headerTable &&
-      nProps.bodyRowTable === nState.bodyRowTable &&
-      nProps.bodyRowMap === nState.bodyRowMap &&
-      nProps.asideHeaderData === nState.asideHeaderData &&
-      nProps.leftHeaderData === nState.leftHeaderData &&
-      nProps.headerData === nState.headerData &&
-      nProps.asideColGroup === nState.asideColGroup &&
-      nProps.asideBodyRowData === nState.asideBodyRowData &&
-      nProps.leftBodyRowData === nState.leftBodyRowData &&
-      nProps.bodyRowData === nState.bodyRowData &&
-      nProps.colGroup === nState.colGroup &&
-      nProps.colGroupMap === nState.colGroupMap &&
-      nProps.leftHeaderColGroup === nState.leftHeaderColGroup &&
-      nProps.headerColGroup === nState.headerColGroup &&
-      (nState.styles &&
-        nProps.styles.CTInnerWidth === nState.styles.CTInnerWidth &&
-        nProps.styles.CTInnerHeight === nState.styles.CTInnerHeight)
+      nProps.onRightClick === nState.onRightClick
     ) {
       return null;
     } else {
-      let scrollTop = nState.scrollTop;
-      let scrollLeft = nState.scrollLeft;
+      // console.log(`run StoreProvider`);
+      // store state | 현재 state복제
+      const { options = {} } = nProps;
+      const { frozenColumnIndex = 0, body: optionsBody } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
+      const storeState: IDataGrid.IStoreState = {
+        ...nState,
+      };
 
-      let filteredList = nState.filteredList || [];
-      let styles: IDataGrid.IStyles = nState.styles || {};
-      const { sortInfo } = nState;
-      const { data, styles: _styles = {}, options: _options = {} } = nProps;
+      storeState.loading = nProps.loading;
+      storeState.loadingData = nProps.loadingData;
+      storeState.data = nProps.data;
+      storeState.width = nProps.width;
+      storeState.height = nProps.height;
+      storeState.selection = nProps.selection;
+      storeState.rowSelector = nProps.rowSelector;
+      storeState.options = nProps.options;
+      storeState.rootNode = nProps.rootNode;
+      storeState.clipBoardNode = nProps.clipBoardNode;
+      storeState.rootObject = nProps.rootObject;
+      storeState.onBeforeEvent = nProps.onBeforeEvent;
+      storeState.onAfterEvent = nProps.onAfterEvent;
+      storeState.onScrollEnd = nProps.onScrollEnd;
+      storeState.onRightClick = nProps.onRightClick;
+      ///
+      storeState.headerTable = nProps.headerTable;
+      storeState.bodyRowTable = nProps.bodyRowTable;
+      storeState.bodyRowMap = nProps.bodyRowMap;
+      storeState.asideHeaderData = nProps.asideHeaderData;
+      storeState.leftHeaderData = nProps.leftHeaderData;
+      storeState.headerData = nProps.headerData;
+      storeState.asideBodyRowData = nProps.asideBodyRowData;
+      storeState.leftBodyRowData = nProps.leftBodyRowData;
+      storeState.bodyRowData = nProps.bodyRowData;
+      storeState.colGroupMap = nProps.colGroupMap;
+      storeState.asideColGroup = nProps.asideColGroup;
+      storeState.colGroup = nProps.colGroup;
+      storeState.footSumColumns = nProps.footSumColumns;
+      storeState.footSumTable = nProps.footSumTable;
+      storeState.leftFootSumData = nProps.leftFootSumData;
+      storeState.footSumData = nProps.footSumData;
 
-      // 데이터를 정리하는 과정. data > filteredList
-      if (data && nProps.data !== nState.data) {
-        // sort 되었다고 판단됨. filteredList를 sort 해주어야 함.
-        const { options = {} } = nState;
-        const { columnKeys: optionColumnKeys = {} } = options;
+      // nProps의 scrollLeft, scrollTop 변경 되는 경우 나중에 고려
 
-        filteredList = data.filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '_deleted_'];
+      const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
+        storeState.options || {};
+      const changed = {
+        colGroup: false,
+        frozenColumnIndex: false,
+        filteredList: false,
+        styles: false,
+        visibleColGroup: false,
+      };
+
+      // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
+      let {
+        colGroup: _colGroup = [],
+        leftHeaderColGroup: _leftHeaderColGroup,
+        headerColGroup: _headerColGroup,
+        filteredList: _filteredList,
+        styles: _styles,
+        scrollLeft: _scrollLeft = 0,
+        scrollTop: _scrollTop = 0,
+      } = storeState;
+
+      // colGroup들의 너비합을 모르거나 변경된 경우.
+      // colGroup > width 연산
+      if (
+        nProps.colGroup !== nState.colGroup ||
+        nProps.options !== nState.options
+      ) {
+        _colGroup = setColGroupWidth(
+          nProps.colGroup || [],
+          { width: nProps.width || 0 },
+          nProps.options,
+        );
+        changed.colGroup = true;
+      }
+
+      if (changed.colGroup || frozenColumnIndex !== PfrozenColumnIndex) {
+        _leftHeaderColGroup = _colGroup.slice(0, frozenColumnIndex);
+        _headerColGroup = _colGroup.slice(frozenColumnIndex);
+        changed.frozenColumnIndex = true;
+      }
+
+      // 데이터가 변경됨.
+      if (nProps.data !== nState.data) {
+        // 전달받은 data를 filteredList로 치환.
+        _filteredList = getFilteredList(nProps.data || [], {
+          colGroup: _colGroup,
+          sorter: nState.sortInfo,
+          options: nProps.options,
+        });
+        changed.filteredList = true;
+      }
+
+      if (
+        changed.colGroup ||
+        changed.frozenColumnIndex ||
+        changed.filteredList ||
+        !storeState.styles ||
+        nProps.width !== nState.width ||
+        nProps.height !== nState.height
+      ) {
+        // 스타일 초기화 안되어 있음.
+        const dimensions = calculateDimensions(storeState, {
+          headerTable: nProps.headerTable,
+          colGroup: _colGroup,
+          headerColGroup: _headerColGroup,
+          bodyRowTable: nProps.bodyRowTable,
+          footSumColumns: nProps.footSumColumns,
+          filteredList: _filteredList,
+          options: nProps.options,
+        });
+        _styles = dimensions.styles;
+        _scrollLeft = dimensions.scrollLeft;
+        _scrollTop = dimensions.scrollTop;
+
+        console.log(_styles.horizontalScrollerWidth);
+
+        changed.styles = true;
+      }
+
+      // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
+      if (
+        changed.colGroup ||
+        changed.frozenColumnIndex ||
+        !storeState.styles ||
+        nProps.width !== nState.width
+      ) {
+        const visibleData = getVisibleColGroup(_headerColGroup, {
+          scrollLeft: _scrollLeft,
+          bodyRowData: storeState.bodyRowData,
+          footSumData: storeState.footSumData,
+          styles: _styles,
+          options: storeState.options,
         });
 
-        // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
-        if (sortInfo && Object.keys(sortInfo).length) {
-          let sortInfoArray: any[] = [];
-          for (let k in sortInfo) {
-            if (sortInfo[k]) {
-              sortInfoArray[sortInfo[k].seq] = {
-                key: k,
-                order: sortInfo[k].orderBy,
-              };
-            }
-          }
-          sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+        storeState.visibleHeaderColGroup = visibleData.visibleHeaderColGroup;
+        storeState.visibleBodyRowData = visibleData.visibleBodyRowData;
+        storeState.visibleFootSumData = visibleData.visibleFootSumData;
+        storeState.printStartColIndex = visibleData.printStartColIndex;
+        storeState.printEndColIndex = visibleData.printEndColIndex;
 
-          let i = 0,
-            l = sortInfoArray.length,
-            aValue: any,
-            bValue: any;
-
-          const getValueByKey = function(_item: any, _key: string) {
-            return _item[_key] || '';
-          };
-          filteredList = filteredList.sort(
-            (a: any, b: any): any => {
-              for (i = 0; i < l; i++) {
-                aValue = getValueByKey(a, sortInfoArray[i].key);
-                bValue = getValueByKey(b, sortInfoArray[i].key);
-
-                if (typeof aValue !== typeof bValue) {
-                  aValue = '' + aValue;
-                  bValue = '' + bValue;
-                }
-                if (aValue < bValue) {
-                  return sortInfoArray[i].order === 'asc' ? -1 : 1;
-                } else if (aValue > bValue) {
-                  return sortInfoArray[i].order === 'asc' ? 1 : -1;
-                }
-              }
-            },
-          );
-        }
+        changed.colGroup = true;
       }
 
-      if (
-        nState.styles &&
-        nProps.styles &&
-        nProps.styles.CTInnerWidth !== nState.styles.CTInnerWidth
-      ) {
-        if (
-          scrollLeft &&
-          scrollLeft !== 0 &&
-          Number(styles.scrollContentWidth) + scrollLeft <
-            Number(styles.scrollContentContainerWidth)
-        ) {
-          scrollLeft =
-            Number(styles.scrollContentContainerWidth) -
-            Number(styles.scrollContentWidth);
-          if (scrollLeft > 0) {
-            scrollLeft = 0;
-          }
-        }
-      }
+      // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
+      storeState.colGroup = _colGroup;
+      storeState.leftHeaderColGroup = _leftHeaderColGroup;
+      storeState.headerColGroup = _headerColGroup;
+      storeState.filteredList = _filteredList;
+      storeState.styles = _styles;
+      storeState.scrollLeft = _scrollLeft;
+      storeState.scrollTop = _scrollTop;
 
-      if (
-        nState.styles &&
-        nProps.styles &&
-        nProps.styles.CTInnerHeight !== nState.styles.CTInnerHeight
-      ) {
-        if (
-          scrollTop &&
-          scrollTop !== 0 &&
-          Number(styles.scrollContentHeight) + scrollTop <
-            Number(styles.scrollContentContainerHeight)
-        ) {
-          scrollTop =
-            Number(styles.scrollContentContainerHeight) -
-            Number(styles.scrollContentHeight);
-          if (scrollTop > 0) {
-            scrollTop = 0;
-          }
-        }
-      }
-
-      if (nState.styles) {
-        console.log(`ch1 : ${nState.styles.scrollContentWidth}`);
-      }
-
-      // 데이터 길이에 따라 스타일이 조정되어야 하므로
-      // 현재 스타일을 props.styles과 데이터 길이에 따라 계산된 스타일을 머지해 준다.
-      styles = {
-        ..._styles,
-        ...getStylesAboutFilteredList(filteredList, _options, _styles),
-      };
-
-      console.log(`ch2 : ${styles.scrollContentWidth}`);
-
-      // loadingData 상태값이 true 이면
-      // 컨텐츠 스크롤 위치를 맨 끝으로 보내도록 함.
-      if (nProps.loadingData && nProps.loadingData !== nState.loadingData) {
-        const focusRow = filteredList.length - 1;
-        const {
-          bodyTrHeight = 0,
-          scrollContentWidth = 0,
-          scrollContentHeight = 0,
-          scrollContentContainerWidth = 0,
-          scrollContentContainerHeight = 0,
-        } = styles;
-
-        scrollTop = getScrollPosition(0, -focusRow * bodyTrHeight, {
-          scrollWidth: scrollContentWidth,
-          scrollHeight: scrollContentHeight,
-          clientWidth: scrollContentContainerWidth,
-          clientHeight: scrollContentContainerHeight,
-        }).scrollTop;
-      }
-
-      console.log('apply ~ ', styles.scrollContentWidth);
-
-      return {
-        ...nState,
-        ...{
-          scrollLeft,
-          scrollTop,
-          mounted: nProps.mounted,
-          loading: nProps.loading,
-          loadingData: nProps.loadingData,
-          setRootState: nProps.setRootState,
-          getRootState: nProps.getRootState,
-          setScrollLeft: nProps.setScrollLeft,
-          setScrollTop: nProps.setScrollTop,
-          rootNode: nProps.rootNode,
-          clipBoardNode: nProps.clipBoardNode,
-          rootObject: nProps.rootObject,
-          data: nProps.data,
-          filteredList,
-          options: nProps.options,
-          height: nProps.height,
-          onBeforeEvent: nProps.onBeforeEvent,
-          onAfterEvent: nProps.onAfterEvent,
-          onScrollEnd: nProps.onScrollEnd,
-          onRightClick: nProps.onRightClick,
-          selection: nProps.selection,
-          rowSelector: nProps.rowSelector,
-
-          colGroupMap: nProps.colGroupMap,
-          asideColGroup: nProps.asideColGroup,
-          colGroup: nProps.colGroup,
-
-          headerTable: nProps.headerTable,
-          asideHeaderData: nProps.asideHeaderData,
-          leftHeaderData: nProps.leftHeaderData,
-          headerData: nProps.headerData,
-          leftHeaderColGroup: nProps.leftHeaderColGroup,
-          headerColGroup: nProps.headerColGroup,
-
-          bodyRowTable: nProps.bodyRowTable,
-          bodyRowMap: nProps.bodyRowMap,
-          asideBodyRowData: nProps.asideBodyRowData,
-          leftBodyRowData: nProps.leftBodyRowData,
-          bodyRowData: nProps.bodyRowData,
-
-          footSumColumns: nProps.footSumColumns,
-          footSumTable: nProps.footSumTable,
-          leftFootSumData: nProps.leftFootSumData,
-          footSumData: nProps.footSumData,
-
-          styles: styles,
-          printStartColIndex: nProps.printStartColIndex,
-          printEndColIndex: nProps.printEndColIndex,
-          visibleHeaderColGroup: nProps.visibleHeaderColGroup,
-          visibleBodyRowData: nProps.visibleBodyRowData,
-          visibleBodyGroupingData: nProps.visibleBodyGroupingData,
-          visibleFootSumData: nProps.visibleFootSumData,
-        },
-      };
+      return storeState;
     }
   }
 
-  componentDidMount() {
-    this.throttledUpdateDimensions = throttle(
-      this.updateDimensions.bind(this),
-      100,
-    );
-    window.addEventListener('resize', this.throttledUpdateDimensions);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.throttledUpdateDimensions);
-  }
-
-  updateDimensions() {
-    const {
-      scrollLeft = 0,
-      scrollTop = 0,
-      bodyRowData = { rows: [{ cols: [] }] },
-      bodyGroupingData = { rows: [{ cols: [] }] },
-      footSumData = { rows: [{ cols: [] }] },
-      options = {},
-      rootNode,
-    } = this.state;
-    const { frozenColumnIndex = 0 } = options;
-
-    const calculatedObject = calculateDimensions(
-      rootNode && rootNode.current,
-      this.state,
-    );
-
-    const {
-      scrollContentWidth = 0,
-      scrollContentHeight = 0,
-      scrollContentContainerWidth = 0,
-      scrollContentContainerHeight = 0,
-    } = calculatedObject.styles;
-
-    let {
-      scrollLeft: newScrollLeft = 0,
-      scrollTop: newScrollTop = 0,
-    } = getScrollPosition(scrollLeft, scrollTop, {
-      scrollWidth: scrollContentWidth,
-      scrollHeight: scrollContentHeight,
-      clientWidth: scrollContentContainerWidth,
-      clientHeight: scrollContentContainerHeight,
-    });
-
-    const {
-      CTInnerWidth: _CTInnerWidth = 0,
-      frozenPanelWidth: _frozenPanelWidth = 0,
-      asidePanelWidth: _asidePanelWidth = 0,
-      rightPanelWidth: _rightPanelWidth = 0,
-    } = calculatedObject.styles;
-
-    const { printStartColIndex, printEndColIndex } = getPositionPrintColGroup(
-      calculatedObject.headerColGroup,
-      Math.abs(newScrollLeft || 0) + _frozenPanelWidth,
-      Math.abs(newScrollLeft || 0) +
-        _frozenPanelWidth +
-        (_CTInnerWidth -
-          _asidePanelWidth -
-          _frozenPanelWidth -
-          _rightPanelWidth),
-    );
-
-    const visibleHeaderColGroup = calculatedObject.headerColGroup.slice(
-      printStartColIndex,
-      printEndColIndex + 1,
-    );
-
-    const visibleBodyRowData = getTableByStartEndColumnIndex(
-      bodyRowData,
-      printStartColIndex + frozenColumnIndex,
-      printEndColIndex + frozenColumnIndex,
-    );
-    const visibleBodyGroupingData = getTableByStartEndColumnIndex(
-      bodyGroupingData,
-      printStartColIndex + frozenColumnIndex,
-      printEndColIndex + frozenColumnIndex,
-    );
-
-    const visibleFootSumData = getTableByStartEndColumnIndex(
-      footSumData || { rows: [{ cols: [] }] },
-      printStartColIndex + frozenColumnIndex,
-      printEndColIndex + frozenColumnIndex,
-    );
-
-    this.setStoreState({
-      styles: calculatedObject.styles,
-      printStartColIndex,
-      printEndColIndex,
-      visibleHeaderColGroup,
-      visibleBodyRowData,
-      visibleBodyGroupingData,
-      visibleFootSumData,
-      scrollLeft: newScrollLeft,
-      scrollTop: newScrollTop,
-    });
-  }
-
   // state 가 업데이트 되기 전.
-  setStoreState = (newState: IDataGrid.IStoreState, callback?: () => void) => {
+  setStoreState = (newState: IDataGrid.IStoreState) => {
     const {
       filteredList = [],
       scrollLeft = 0,
@@ -424,22 +302,17 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       styles = {},
       headerColGroup = [],
       bodyRowData = { rows: [{ cols: [] }] },
-      bodyGroupingData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
       onScrollEnd,
     } = this.state;
-    const { frozenColumnIndex = 0 } = options;
-    const { CTInnerWidth } = styles;
-
     const {
       scrollLeft: _scrollLeft,
       scrollTop: _scrollTop,
-      styles: _styles = {},
       filteredList: _filteredList,
     } = newState;
 
     if (!newState.styles) {
-      newState.styles = styles;
+      newState.styles = { ...styles };
     }
 
     if (
@@ -447,67 +320,30 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       typeof _scrollTop !== 'undefined'
     ) {
       const {
-        CTInnerWidth: _CTInnerWidth = 0,
-        frozenPanelWidth: _frozenPanelWidth = 0,
-        asidePanelWidth: _asidePanelWidth = 0,
-        rightPanelWidth: _rightPanelWidth = 0,
         scrollContentWidth: scrollWidth = 0,
         scrollContentHeight: scrollHeight = 0,
         scrollContentContainerWidth: clientWidth = 0,
         scrollContentContainerHeight: clientHeight = 0,
-      } = { ...styles, ..._styles };
-
-      if (styles.scrollContentWidth !== scrollWidth) {
-        newState.styles.scrollContentWidth = scrollWidth;
-      }
+      } = newState.styles;
 
       let endOfScrollTop: boolean = false;
       let endOfScrollLeft: boolean = false;
 
       if (typeof _scrollLeft !== 'undefined') {
-        if (CTInnerWidth !== _CTInnerWidth || scrollLeft !== _scrollLeft) {
-          if (this.state.setScrollLeft) {
-            this.state.setScrollLeft(_scrollLeft);
-          }
+        if (scrollLeft !== _scrollLeft) {
+          const visibleData = getVisibleColGroup(headerColGroup, {
+            scrollLeft: _scrollLeft,
+            bodyRowData: bodyRowData,
+            footSumData: footSumData,
+            styles: newState.styles,
+            options: options,
+          });
 
-          const {
-            printStartColIndex,
-            printEndColIndex,
-          } = getPositionPrintColGroup(
-            headerColGroup,
-            Math.abs(_scrollLeft) + _frozenPanelWidth,
-            Math.abs(_scrollLeft) +
-              _frozenPanelWidth +
-              (_CTInnerWidth -
-                _asidePanelWidth -
-                _frozenPanelWidth -
-                _rightPanelWidth),
-          );
-
-          newState.printStartColIndex = printStartColIndex;
-          newState.printEndColIndex = printEndColIndex;
-
-          newState.visibleHeaderColGroup = headerColGroup.slice(
-            printStartColIndex,
-            printEndColIndex + 1,
-          );
-          newState.visibleBodyRowData = getTableByStartEndColumnIndex(
-            bodyRowData,
-            printStartColIndex + frozenColumnIndex,
-            printEndColIndex + frozenColumnIndex,
-          );
-          newState.visibleBodyGroupingData = getTableByStartEndColumnIndex(
-            bodyGroupingData,
-            printStartColIndex + frozenColumnIndex,
-            printEndColIndex + frozenColumnIndex,
-          );
-          newState.visibleFootSumData = getTableByStartEndColumnIndex(
-            footSumData,
-            printStartColIndex + frozenColumnIndex,
-            printEndColIndex + frozenColumnIndex,
-          );
-
-          newState.styles.CTInnerWidth = _CTInnerWidth;
+          newState.visibleHeaderColGroup = visibleData.visibleHeaderColGroup;
+          newState.visibleBodyRowData = visibleData.visibleBodyRowData;
+          newState.visibleFootSumData = visibleData.visibleFootSumData;
+          newState.printStartColIndex = visibleData.printStartColIndex;
+          newState.printEndColIndex = visibleData.printEndColIndex;
         }
         if (
           _scrollLeft !== scrollLeft &&
@@ -518,9 +354,6 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       }
 
       if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
-        if (this.state.setScrollTop) {
-          this.state.setScrollTop(_scrollTop);
-        }
         if (clientHeight >= scrollHeight + _scrollTop) {
           endOfScrollTop = true;
         }
@@ -535,25 +368,22 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
     }
 
     if (_filteredList && filteredList.length !== _filteredList.length) {
-      newState.styles = calculateDimensions(
-        this.state.rootNode && this.state.rootNode.current,
-        newState,
-        _filteredList,
-      ).styles;
-    } else {
-      console.log('request ~ ', newState.styles.scrollContentWidth);
+      const dimensions = calculateDimensions(newState, {
+        headerTable: newState.headerTable || this.state.headerTable,
+        colGroup: newState.colGroup || this.state.colGroup,
+        headerColGroup: newState.headerColGroup || this.state.headerColGroup,
+        bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
+        footSumColumns: newState.footSumColumns || this.state.footSumColumns,
+        filteredList: _filteredList,
+        options: newState.options || this.state.options,
+      });
+
+      newState.styles = dimensions.styles;
+      newState.scrollLeft = dimensions.scrollLeft;
+      newState.scrollTop = dimensions.scrollTop;
     }
 
-    this.setState(
-      prevState => {
-        return { ...newState };
-      },
-      () => {
-        if (callback) {
-          callback();
-        }
-      },
-    );
+    this.setState(newState);
   };
 
   dispatch = (
@@ -763,34 +593,16 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
       },
       [DataGridEnums.DispatchTypes.RESIZE_COL]: () => {
         const { col, newWidth } = param;
-
-        let newState: IDataGridStore = { ...this.state };
-        if (newState.colGroup) {
-          newState.colGroup[col.colIndex]._width = newState.colGroup[
-            col.colIndex
-          ].width = newWidth;
-        }
-
-        this.updateDimensions();
+        const { styles = {}, options = {} } = this.state;
+        let _colGroup = [...this.state.colGroup];
+        _colGroup[col.colIndex]._width = _colGroup[
+          col.colIndex
+        ].width = newWidth;
 
         this.setStoreState({
+          colGroup: _colGroup,
           columnResizing: false,
         });
-
-        // const {
-        //   styles,
-        //   leftHeaderColGroup,
-        //   headerColGroup,
-        // } = calculateDimensions(rootNode && rootNode.current, newState);
-
-        // this.setStoreState({
-        //   scrollLeft,
-        //   colGroup: colGroup,
-        //   leftHeaderColGroup: leftHeaderColGroup,
-        //   headerColGroup: headerColGroup,
-        //   styles: styles,
-        //   columnResizing: false,
-        // });
       },
       [DataGridEnums.DispatchTypes.SELECT]: () => {
         const { rowIndex, checked } = param;
@@ -902,6 +714,25 @@ class StoreProvider extends React.Component<any, IDataGrid.IStoreState> {
         {this.props.children}
       </Provider>
     );
+  }
+
+  componentDidMount() {
+    // console.log('store did mount');
+    // this.throttledUpdateDimensions = throttle(this.updateDimensions, 100);
+    // window.addEventListener('resize', this.throttledUpdateDimensions);
+  }
+
+  componentDidUpdate(
+    pProps: IDataGrid.IStoreProps,
+    pState: IDataGrid.IStoreState,
+  ) {
+    // set visibleBodyRowData (스크롤된 영역을 계산하여 표시해야할 영역의 colGroup을 구하여 visible변수에 담아줌.)
+    // console.log('store did update');
+  }
+
+  componentWillUnmount() {
+    // window.removeEventListener('resize', this.throttledUpdateDimensions);
+    // console.log('store unMount');
   }
 }
 

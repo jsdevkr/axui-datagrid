@@ -9,11 +9,11 @@ import { IDataGrid } from '../common/@types';
  * @return {DataGridCol[]}
  */
 function setColGroupWidth(
-  colGroup: IDataGrid.ICol[],
+  colGroup: IDataGrid.ICol[] = [],
   container: IDataGrid.IRect,
-  options: IDataGrid.IOptions,
+  options?: IDataGrid.IOptions,
 ) {
-  const { columnMinWidth = 0 } = options;
+  const { columnMinWidth = 0 } = options || {};
   let totalWidth = 0;
   let computedWidth: number;
   let autoWidthColGroupIndexes: number[] = [];

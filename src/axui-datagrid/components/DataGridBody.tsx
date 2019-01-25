@@ -6,7 +6,6 @@ import {
   getScrollPosition,
   arrayFromRange,
   throttle,
-  getNode,
 } from '../utils';
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
@@ -48,7 +47,7 @@ class DataGridBody extends React.Component<IProps> {
       frozenPanelHeight = 0,
       headerHeight = 0,
       bodyHeight = 0,
-      CTInnerWidth = 0,
+      elWidth = 0,
       verticalScrollerWidth = 0,
       bodyTrHeight = 0,
       asidePanelWidth = 0,
@@ -57,6 +56,7 @@ class DataGridBody extends React.Component<IProps> {
       scrollContentContainerWidth = 0,
       scrollContentContainerHeight = 0,
     } = styles;
+    const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
 
     const startMousePosition = getMousePosition(e);
     const spanType = (e.target as any).getAttribute('data-span');
@@ -246,7 +246,7 @@ class DataGridBody extends React.Component<IProps> {
         if (p1X < asidePanelWidth) {
           moving.active = true;
           moving.left = true;
-        } else if (p2X > CTInnerWidth - verticalScrollerWidth) {
+        } else if (p2X > elWidth - scrollPanelRightMargin) {
           moving.active = true;
           moving.right = true;
         }
@@ -468,7 +468,7 @@ class DataGridBody extends React.Component<IProps> {
     } = this.props;
     const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
     const {
-      CTInnerWidth = 0,
+      elWidth = 0,
       bodyHeight = 0,
       bodyTrHeight = 1,
       asidePanelWidth = 0,
@@ -482,6 +482,7 @@ class DataGridBody extends React.Component<IProps> {
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
     const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
+    const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
 
     const topBodyScrollConfig = {
       frozenRowIndex: 0,
@@ -509,11 +510,11 @@ class DataGridBody extends React.Component<IProps> {
     const topBodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
-        CTInnerWidth -
+        elWidth -
         asidePanelWidth -
         frozenPanelWidth -
         rightPanelWidth -
-        verticalScrollerWidth,
+        scrollPanelRightMargin,
       top: 0,
       height: frozenPanelHeight,
     };
@@ -534,11 +535,11 @@ class DataGridBody extends React.Component<IProps> {
     const bodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
-        CTInnerWidth -
+        elWidth -
         asidePanelWidth -
         frozenPanelWidth -
         rightPanelWidth -
-        verticalScrollerWidth,
+        scrollPanelRightMargin,
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
@@ -558,11 +559,11 @@ class DataGridBody extends React.Component<IProps> {
     const bottomBodyPanelStyle = {
       left: frozenPanelWidth + asidePanelWidth,
       width:
-        CTInnerWidth -
+        elWidth -
         asidePanelWidth -
         frozenPanelWidth -
         rightPanelWidth -
-        verticalScrollerWidth,
+        scrollPanelRightMargin,
       top: bodyHeight - footSumHeight - 1,
       height: footSumHeight,
     };
