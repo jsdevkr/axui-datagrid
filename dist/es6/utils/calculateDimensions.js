@@ -1,36 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const setColGroupWidth_1 = require("./setColGroupWidth");
-function calculateDimensions(containerDOM, state, toBeFilteredList) {
-    const { filteredList = [], colGroup = [], headerTable, footSumColumns, options = {}, styles = {}, height = 0, width = 0, } = state;
-    let { scrollLeft = 0, scrollTop = 0 } = state;
-    let list = toBeFilteredList || filteredList;
-    const { header: optionsHeader = {}, scroller: optionsScroller = {}, page: optionsPage = {}, frozenColumnIndex = 0, frozenRowIndex = 0, } = options;
+function calculateDimensions(storeState, { headerTable = { rows: [] }, colGroup = [], headerColGroup = [], bodyRowTable = { rows: [] }, footSumColumns, filteredList = [], options = {}, }) {
+    const { width = 0, height = 0 } = storeState;
+    let { scrollLeft = 0, scrollTop = 0 } = storeState;
+    const { header: optionsHeader = {}, body: optionsBody = {}, scroller: optionsScroller = {}, page: optionsPage = {}, frozenColumnIndex = 0, frozenRowIndex = 0, lineNumberColumnWidth = 0, rowSelectorColumnWidth = 0, showLineNumber, showRowSelector, } = options;
     const { display: optionsHeaderDisplay = true, columnHeight: optionsHeaderColumnHeight = 0, } = optionsHeader;
-    const { height: optionsPageHeight = 0, buttonsContainerWidth: optionsPageButtonsContainerWidth = 0, } = optionsPage;
-    const { size: optionsScrollerSize = 0, disabledVerticalScroll: optionsScrollerDisabledVerticalScroll, padding: optionsScrollerPadding = 0, arrowSize: optionsScrollerArrowSize = 0, barMinSize: optionsScrollerBarMinSize = 0, } = optionsScroller;
-    const headerTableRowsLength = headerTable ? headerTable.rows.length || 0 : 0;
-    const dataLength = list ? list.length : 0;
-    let currentStyles = Object.assign({}, styles);
-    let currentColGroup = [];
-    let currentHeaderColGroup = [];
-    currentStyles.calculatedHeight = null; // props에의해 정해진 height가 아닌 내부에서 계산된 높이를 사용하고 싶은 경우 숫자로 값 지정
-    currentStyles.CTInnerWidth = currentStyles.elWidth = width;
-    currentStyles.CTInnerHeight = currentStyles.elHeight = height;
+    const { columnHeight: optionsBodyColumnHeight = 0 } = optionsBody;
+    const { height: optionsPageHeight = 0 } = optionsPage;
+    const { size: optionsScrollerSize = 0, padding: optionsScrollerPadding = 0, arrowSize: optionsScrollerArrowSize = 0, barMinSize: optionsScrollerBarMinSize = 0, horizontalScrollerWidth = 0, } = optionsScroller;
+    const headerTableRowsLength = headerTable.rows.length;
+    const bodyTablsRowsLength = bodyRowTable.rows.length;
+    const dataLength = filteredList.length;
+    let currentStyles = {};
+    currentStyles.elWidth = width;
+    currentStyles.elHeight = height;
     currentStyles.rightPanelWidth = 0;
     currentStyles.pageHeight = 0;
-    currentStyles.asidePanelWidth = currentStyles.asidePanelWidth || 0;
-    currentStyles.bodyTrHeight = currentStyles.bodyTrHeight || 0;
-    currentStyles.horizontalScrollerHeight =
-        currentStyles.horizontalScrollerHeight || 0;
-    currentStyles.pageButtonsContainerWidth =
-        currentStyles.pageButtonsContainerWidth || 0;
-    currentColGroup = setColGroupWidth_1.default(colGroup, {
-        width: currentStyles.elWidth -
-            currentStyles.asidePanelWidth +
-            optionsScrollerSize,
-    }, options);
-    currentHeaderColGroup = currentColGroup.slice(frozenColumnIndex);
+    currentStyles.asidePanelWidth =
+        (showLineNumber ? lineNumberColumnWidth : 0) +
+            (showRowSelector ? rowSelectorColumnWidth : 0);
+    currentStyles.bodyTrHeight = bodyTablsRowsLength * optionsBodyColumnHeight;
+    currentStyles.horizontalScrollerHeight = 0;
+    currentStyles.pageButtonsContainerWidth = 0;
     currentStyles.frozenPanelWidth = ((_colGroup, endIndex) => {
         let width = 0;
         for (let i = 0, l = endIndex; i < l; i++) {
@@ -39,7 +30,7 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
             }
         }
         return width;
-    })(currentColGroup, frozenColumnIndex);
+    })(colGroup, frozenColumnIndex);
     currentStyles.headerHeight = optionsHeaderDisplay
         ? headerTableRowsLength * optionsHeaderColumnHeight
         : 0;
@@ -47,7 +38,7 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     currentStyles.footSumHeight =
         (footSumColumns ? footSumColumns.length : 0) * currentStyles.bodyTrHeight;
     currentStyles.pageHeight = optionsPageHeight;
-    currentStyles.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
+    // currentStyles.pageButtonsContainerWidth = optionsPageButtonsContainerWidth;
     currentStyles.verticalScrollerWidth = 0;
     if (currentStyles.elHeight -
         currentStyles.headerHeight -
@@ -57,8 +48,8 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
         currentStyles.verticalScrollerWidth = optionsScrollerSize;
     }
     currentStyles.horizontalScrollerHeight = (() => {
-        if (currentColGroup) {
-            let totalColGroupWidth = currentColGroup.reduce((prev, curr) => {
+        if (colGroup) {
+            let totalColGroupWidth = colGroup.reduce((prev, curr) => {
                 return prev + (curr._width || 0);
             }, 0);
             // aside 빼고, 수직 스크롤이 있으면 또 빼고 비교
@@ -72,15 +63,14 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
         }
     })();
     // scroll content width
-    currentStyles.scrollContentWidth = currentHeaderColGroup.reduce((prev, curr) => {
+    currentStyles.scrollContentWidth = headerColGroup.reduce((prev, curr) => {
         return prev + (curr._width || 0);
     }, 0);
     currentStyles.scrollContentContainerWidth =
-        currentStyles.CTInnerWidth -
+        currentStyles.elWidth -
             currentStyles.asidePanelWidth -
             currentStyles.frozenPanelWidth -
-            currentStyles.rightPanelWidth -
-            currentStyles.verticalScrollerWidth;
+            currentStyles.rightPanelWidth;
     if (currentStyles.horizontalScrollerHeight > 0 &&
         currentStyles.elHeight -
             currentStyles.headerHeight -
@@ -90,11 +80,11 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
             dataLength * currentStyles.bodyTrHeight) {
         currentStyles.verticalScrollerWidth = optionsScrollerSize;
     }
-    currentStyles.CTInnerHeight =
-        currentStyles.elHeight - currentStyles.pageHeight;
     // get bodyHeight
     currentStyles.bodyHeight =
-        currentStyles.CTInnerHeight - currentStyles.headerHeight;
+        currentStyles.elHeight -
+            currentStyles.headerHeight -
+            currentStyles.pageHeight;
     // 스크롤컨텐츠의 컨테이너 높이.
     currentStyles.scrollContentContainerHeight =
         currentStyles.bodyHeight -
@@ -103,38 +93,20 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
     currentStyles.scrollContentHeight =
         currentStyles.bodyTrHeight *
             (dataLength > frozenRowIndex ? dataLength - frozenRowIndex : 0);
-    if (optionsScrollerDisabledVerticalScroll) {
-        currentStyles.calculatedHeight =
-            dataLength * currentStyles.bodyTrHeight +
-                currentStyles.headerHeight +
-                currentStyles.pageHeight;
-        currentStyles.bodyHeight =
-            currentStyles.calculatedHeight -
-                currentStyles.headerHeight -
-                currentStyles.pageHeight;
-        currentStyles.verticalScrollerWidth = 0;
-        currentStyles.CTInnerWidth = currentStyles.elWidth;
-        currentStyles.scrollContentContainerWidth =
-            currentStyles.CTInnerWidth -
-                currentStyles.asidePanelWidth -
-                currentStyles.frozenPanelWidth -
-                currentStyles.rightPanelWidth;
-        currentStyles.scrollContentContainerHeight =
-            currentStyles.scrollContentHeight;
-    }
     currentStyles.verticalScrollerHeight =
         currentStyles.elHeight -
+            currentStyles.headerHeight -
             currentStyles.pageHeight -
             optionsScrollerPadding * 2 -
-            optionsScrollerArrowSize;
+            optionsScrollerArrowSize -
+            2;
     currentStyles.horizontalScrollerWidth =
-        currentStyles.elWidth -
-            currentStyles.verticalScrollerWidth -
-            currentStyles.pageButtonsContainerWidth -
-            optionsScrollerPadding * 2 -
-            optionsScrollerArrowSize;
+        (horizontalScrollerWidth / 100) * currentStyles.elWidth;
     currentStyles.scrollerPadding = optionsScrollerPadding;
     currentStyles.scrollerArrowSize = optionsScrollerArrowSize;
+    // console.log(
+    //   `optionsScrollerPadding : ${optionsScrollerPadding}, optionsScrollerArrowSize: ${optionsScrollerArrowSize}`,
+    // );
     currentStyles.verticalScrollBarHeight = currentStyles.scrollContentHeight
         ? (currentStyles.scrollContentContainerHeight *
             currentStyles.verticalScrollerHeight) /
@@ -182,9 +154,6 @@ function calculateDimensions(containerDOM, state, toBeFilteredList) {
         scrollLeft,
         scrollTop,
         styles: currentStyles,
-        colGroup: currentColGroup,
-        leftHeaderColGroup: currentColGroup.slice(0, frozenColumnIndex),
-        headerColGroup: currentHeaderColGroup,
     };
 }
 exports.default = calculateDimensions;

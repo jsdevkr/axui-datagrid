@@ -76,7 +76,7 @@ class DatagridColumnFilter extends React.Component {
         const { isColumnFilter = false, colGroup = [], options = {}, styles = {}, scrollLeft = 0, filterInfo = {}, data = [], predefinedFormatter, } = this.props;
         const { columnKeys: optionColumnKeys = {} } = options;
         const { bodyHeight = 0 } = styles;
-        const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;
+        const { elWidth = 0, headerHeight = 0, asidePanelWidth = 0 } = styles;
         const optionItemHeight = 20;
         const filterWidth = 180;
         if (isColumnFilter === false || !utils_1.isNumber(isColumnFilter)) {
@@ -152,7 +152,7 @@ class DatagridColumnFilter extends React.Component {
                 (colGroup[isColumnFilter]._sx || 0) -
                 2 +
                 scrollLeft;
-        if (filterStyles.left + filterWidth > CTInnerWidth) {
+        if (filterStyles.left + filterWidth > elWidth) {
             filterStyles.left =
                 asidePanelWidth +
                     (colGroup[isColumnFilter]._ex || 0) -

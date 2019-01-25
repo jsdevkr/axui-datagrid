@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 function getTableByStartEndColumnIndex(rowTable, startColumnIndex, endColumnIndex) {
+    if (rowTable === void 0) { rowTable = { rows: [{ cols: [] }] }; }
     var tempTable = { rows: [] };
     if ('rows' in rowTable) {
         rowTable.rows.forEach(function (row, r) {

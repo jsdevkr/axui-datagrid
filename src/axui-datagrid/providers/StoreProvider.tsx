@@ -592,7 +592,7 @@ class StoreProvider extends React.Component<
       [DataGridEnums.DispatchTypes.RESIZE_COL]: () => {
         const { col, newWidth } = param;
         const { styles = {}, options = {} } = this.state;
-        let _colGroup = [...this.state.colGroup];
+        let _colGroup = [...(this.state.colGroup || [])];
         _colGroup[col.colIndex]._width = _colGroup[
           col.colIndex
         ].width = newWidth;

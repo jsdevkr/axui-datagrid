@@ -8,8 +8,8 @@ const common_1 = require("./common");
  * @param {DataGridOptions} options
  * @return {DataGridCol[]}
  */
-function setColGroupWidth(colGroup, container, options) {
-    const { columnMinWidth = 0 } = options;
+function setColGroupWidth(colGroup = [], container, options) {
+    const { columnMinWidth = 0 } = options || {};
     let totalWidth = 0;
     let computedWidth;
     let autoWidthColGroupIndexes = [];

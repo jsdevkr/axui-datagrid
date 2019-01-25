@@ -190,7 +190,7 @@ var DatagridScroll = /** @class */ (function (_super) {
         };
         var verticalStyles = {
             width: verticalScrollerWidth,
-            height: verticalScrollerHeight + scrollerPadding * 2 + scrollerArrowSize,
+            height: verticalScrollerHeight + scrollerArrowSize + scrollerPadding * 2,
             bottom: pageHeight,
             padding: scrollerPadding,
             paddingTop: scrollerArrowSize / 2 + scrollerPadding,

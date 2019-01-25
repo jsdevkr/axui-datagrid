@@ -53,8 +53,8 @@ $axui-datagrid-page-status-color: #222 !default;
 //== scroll
 $axui-datagrid-scroll-track-shadow: #ccc !default;
 $axui-datagrid-scroll-track-border: 1px solid #ccc !default;
-$axui-datagrid-scroll-track-bg-blur: transparent !default;
-$axui-datagrid-scroll-track-bg: #f9f9f9 !default;
+$axui-datagrid-scroll-track-bg-blur: rgba(220, 220, 220, 0) !default;
+$axui-datagrid-scroll-track-bg: rgba(220, 220, 220, 0.7) !default;
 
 $axui-datagrid-scroll-bar-border-radius: 10px !default;
 $axui-datagrid-scroll-bar-border: 0px solid #fff !default;

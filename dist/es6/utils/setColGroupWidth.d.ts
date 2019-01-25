@@ -6,5 +6,5 @@ import { IDataGrid } from '../common/@types';
  * @param {DataGridOptions} options
  * @return {DataGridCol[]}
  */
-declare function setColGroupWidth(colGroup: IDataGrid.ICol[], container: IDataGrid.IRect, options: IDataGrid.IOptions): IDataGrid.ICol[];
+declare function setColGroupWidth(colGroup: IDataGrid.ICol[] | undefined, container: IDataGrid.IRect, options?: IDataGrid.IOptions): IDataGrid.ICol[];
 export default setColGroupWidth;

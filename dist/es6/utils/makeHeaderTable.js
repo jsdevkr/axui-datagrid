@@ -36,7 +36,7 @@ function makeHeaderTable(headerColumns, options) {
                     colSpan = makeRows(field.columns, depth + 1, field);
                 }
                 else {
-                    field.width = 'width' in field ? field.width : options.columnMinWidth;
+                    field.width = 'width' in field ? field.width : options.columnMinWidth; // columns로부터 전달받은 width 값.
                 }
                 field.colSpan = colSpan;
                 row.cols.push(field);

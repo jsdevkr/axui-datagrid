@@ -84,7 +84,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         _this.onKeyDown = function (e) {
             var _a, _b;
             var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, rootNode = _c.rootNode, clipBoardNode = _c.clipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
-            var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length : _s;
+            var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length - 1 : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
             var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
@@ -150,9 +150,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                 return _scrollLeft;
             };
             var metaProc = (_a = {},
-                _a[_enums_1.DataGridEnums.KeyCodes.C] = function () {
+                _a[_enums_1.DataGridEnums.MetaKeycodes.C] = function () {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var copySuccess = false;
                     var copiedString = '';
                     for (var rk in selectionRows) {
@@ -177,9 +177,9 @@ var DataGridEvents = /** @class */ (function (_super) {
                     rootNode && rootNode.current && rootNode.current.focus();
                     return copySuccess;
                 },
-                _a[_enums_1.DataGridEnums.KeyCodes.A] = function () {
+                _a[_enums_1.DataGridEnums.MetaKeycodes.A] = function () {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var state = {
                         dragging: false,
                         selectionRows: {},
@@ -220,7 +220,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.HOME] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = 0;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -233,7 +233,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.END] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = filteredList.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -246,7 +246,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.PAGE_UP] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -259,7 +259,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.PAGE_DOWN] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + pRowSize;
@@ -274,7 +274,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.UP_ARROW] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -287,7 +287,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.DOWN_ARROW] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + 1;
@@ -302,7 +302,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.LEFT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
                     setStoreState({
                         scrollLeft: getAvailScrollLeft(focusCol),
@@ -315,7 +315,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                 _b[_enums_1.DataGridEnums.KeyCodes.RIGHT_ARROW] = function () {
                     var _a;
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     var focusCol = focusedCol + 1 >= colGroup.length
                         ? colGroup.length - 1
                         : focusedCol + 1;
@@ -364,11 +364,14 @@ var DataGridEvents = /** @class */ (function (_super) {
                     }
                     else {
                         e.preventDefault();
-                        e.stopPropagation();
+                        // e.stopPropagation();
                     }
                 },
                 _a[_enums_1.DataGridEnums.EventNames.KEYDOWN] = function () {
                     if (!loadingData && !isInlineEditing) {
+                        if (Object.values(_enums_1.DataGridEnums.KeyCodes).includes(e.which)) {
+                            e.preventDefault();
+                        }
                         _this.onKeyDown(e);
                     }
                 },
@@ -396,15 +399,14 @@ var DataGridEvents = /** @class */ (function (_super) {
         return _this;
     }
     DataGridEvents.prototype.render = function () {
-        return React.createElement("div", null, this.props.children);
+        return React.createElement("div", { onWheel: this.onFireEvent }, this.props.children);
     };
-    DataGridEvents.prototype.componentWillMount = function () {
+    DataGridEvents.prototype.componentDidMount = function () {
         var rootNode = this.props.rootNode;
         if (rootNode && rootNode.current) {
-            rootNode.current.addEventListener('keydown', this.onFireEvent);
-            rootNode.current.addEventListener('keyup', this.onFireEvent);
-            rootNode.current.addEventListener('contextmenu', this.onFireEvent);
-            rootNode.current.addEventListener('wheel', this.onFireEvent);
+            rootNode.current.addEventListener('keydown', this.onFireEvent, false);
+            rootNode.current.addEventListener('keyup', this.onFireEvent, false);
+            rootNode.current.addEventListener('contextmenu', this.onFireEvent, false);
         }
     };
     DataGridEvents.prototype.componentWillUnmount = function () {
@@ -413,7 +415,6 @@ var DataGridEvents = /** @class */ (function (_super) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
             rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
-            rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     };
     return DataGridEvents;

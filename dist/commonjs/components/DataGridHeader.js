@@ -29,7 +29,7 @@ var DataGridHeader = /** @class */ (function (_super) {
     }
     DataGridHeader.prototype.render = function () {
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, columnResizing = _a.columnResizing, columnResizerLeft = _a.columnResizerLeft, _c = _a.styles, styles = _c === void 0 ? {} : _c;
-        var _d = styles.CTInnerWidth, CTInnerWidth = _d === void 0 ? 0 : _d, _e = styles.headerHeight, headerHeight = _e === void 0 ? 0 : _e, _f = styles.asidePanelWidth, asidePanelWidth = _f === void 0 ? 0 : _f, _g = styles.frozenPanelWidth, frozenPanelWidth = _g === void 0 ? 0 : _g, _h = styles.rightPanelWidth, rightPanelWidth = _h === void 0 ? 0 : _h;
+        var _d = styles.elWidth, elWidth = _d === void 0 ? 0 : _d, _e = styles.headerHeight, headerHeight = _e === void 0 ? 0 : _e, _f = styles.asidePanelWidth, asidePanelWidth = _f === void 0 ? 0 : _f, _g = styles.frozenPanelWidth, frozenPanelWidth = _g === void 0 ? 0 : _g, _h = styles.rightPanelWidth, rightPanelWidth = _h === void 0 ? 0 : _h;
         var asideHeaderPanelStyle = {
             left: 0,
             width: asidePanelWidth,
@@ -42,7 +42,7 @@ var DataGridHeader = /** @class */ (function (_super) {
         };
         var headerPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: elWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
             height: headerHeight,
         };
         var headerScrollStyle = {

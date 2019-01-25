@@ -149,12 +149,13 @@ var DataGridPage = /** @class */ (function (_super) {
     }
     DataGridPage.prototype.render = function () {
         var _a = this.props, _b = _a.options, options = _b === void 0 ? {} : _b, _c = _a.styles, styles = _c === void 0 ? {} : _c;
-        var pageButtonsContainerWidth = styles.pageButtonsContainerWidth;
+        var pageButtonsContainerWidth = styles.pageButtonsContainerWidth, horizontalScrollerWidth = styles.horizontalScrollerWidth;
         var _d = options.page, optionPage = _d === void 0 ? {} : _d;
         var _e = optionPage.buttons, pageButtons = _e === void 0 ? [] : _e, _f = optionPage.buttonHeight, pageButtonHeight = _f === void 0 ? 0 : _f;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-buttons", style: { width: pageButtonsContainerWidth } },
-                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton }))));
+            React.createElement("div", { className: "axui-datagrid-page-buttons" },
+                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton })),
+            React.createElement("div", { style: { width: horizontalScrollerWidth } })));
     };
     return DataGridPage;
 }(React.Component));

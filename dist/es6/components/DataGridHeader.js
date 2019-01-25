@@ -14,7 +14,7 @@ class DataGridHeader extends React.Component {
     }
     render() {
         const { scrollLeft = 0, columnResizing, columnResizerLeft, styles = {}, } = this.props;
-        const { CTInnerWidth = 0, headerHeight = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, } = styles;
+        const { elWidth = 0, headerHeight = 0, asidePanelWidth = 0, frozenPanelWidth = 0, rightPanelWidth = 0, } = styles;
         let asideHeaderPanelStyle = {
             left: 0,
             width: asidePanelWidth,
@@ -27,7 +27,7 @@ class DataGridHeader extends React.Component {
         };
         let headerPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
+            width: elWidth - asidePanelWidth - frozenPanelWidth - rightPanelWidth,
             height: headerHeight,
         };
         let headerScrollStyle = {

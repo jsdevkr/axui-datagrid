@@ -16,7 +16,8 @@ class DataGridBody extends React.Component {
             if (loading || loadingData) {
                 return false;
             }
-            const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, CTInnerWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+            const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, elWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+            const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
             const { x: leftPadding = 0, y: topPadding = 0 } = rootNode &&
@@ -159,7 +160,7 @@ class DataGridBody extends React.Component {
                         moving.active = true;
                         moving.left = true;
                     }
-                    else if (p2X > CTInnerWidth - verticalScrollerWidth) {
+                    else if (p2X > elWidth - scrollPanelRightMargin) {
                         moving.active = true;
                         moving.right = true;
                     }
@@ -351,9 +352,10 @@ class DataGridBody extends React.Component {
     render() {
         const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, } = this.props;
         const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
-        const { CTInnerWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, footSumHeight = 0, } = styles;
+        const { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, footSumHeight = 0, } = styles;
         const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
         const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
+        const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
         const topBodyScrollConfig = {
             frozenRowIndex: 0,
             sRowIndex: 0,
@@ -378,11 +380,11 @@ class DataGridBody extends React.Component {
         };
         const topBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: 0,
             height: frozenPanelHeight,
         };
@@ -400,11 +402,11 @@ class DataGridBody extends React.Component {
         };
         const bodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: frozenPanelHeight - loadingDataHeight,
             height: bodyHeight - frozenPanelHeight - footSumHeight,
         };
@@ -422,11 +424,11 @@ class DataGridBody extends React.Component {
         };
         const bottomBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };

@@ -115,7 +115,6 @@ export declare namespace IDataGrid {
     type ColumnDivideTable = {
         asideData: IColumnTableMap;
         asideColGroup: any[];
-        asidePanelWidth: number;
         leftData: IColumnTableMap;
         rightData: IColumnTableMap;
     };
@@ -145,7 +144,6 @@ export declare namespace IDataGrid {
         width?: number;
     }
     interface IOptionPage {
-        buttonsContainerWidth?: number;
         buttons?: IOptionPageButton[];
         buttonHeight?: number;
         height?: number;
@@ -155,7 +153,7 @@ export declare namespace IDataGrid {
         arrowSize?: number;
         barMinSize?: number;
         padding?: number;
-        disabledVerticalScroll?: boolean;
+        horizontalScrollerWidth?: number;
     }
     interface IOptions {
         frozenColumnIndex?: number;
@@ -167,7 +165,6 @@ export declare namespace IDataGrid {
         lineNumberColumnWidth?: number;
         rowSelectorColumnWidth?: number;
         remoteSort?: boolean;
-        asidePanelWidth?: number;
         header?: IOptionHeader;
         body?: IOptionBody;
         page?: IOptionPage;
@@ -177,14 +174,11 @@ export declare namespace IDataGrid {
         bodyLoaderHeight?: number;
     }
     interface IStyles {
-        calculatedHeight?: number | null;
         asidePanelWidth?: number;
         frozenPanelWidth?: number;
         bodyTrHeight?: number;
         elWidth?: number;
         elHeight?: number;
-        CTInnerWidth?: number;
-        CTInnerHeight?: number;
         rightPanelWidth?: number;
         headerHeight?: number;
         bodyHeight?: number;
@@ -205,11 +199,49 @@ export declare namespace IDataGrid {
         scrollerArrowSize?: number;
         pageButtonsContainerWidth?: number;
     }
-    interface IStoreState {
-        mounted?: boolean;
+    interface IStoreProps {
         loading?: boolean;
         loadingData?: boolean;
-        calculatedStyles?: boolean;
+        data?: any[];
+        selection?: ISelection;
+        rowSelector?: IRowSelector;
+        width?: number;
+        height?: number;
+        scrollLeft?: number;
+        scrollTop?: number;
+        columnHeight?: number;
+        options?: IOptions;
+        headerColGroup?: ICol[];
+        headerTable?: IColumnTableMap;
+        headerData?: IColumnTableMap;
+        asideHeaderData?: IColumnTableMap;
+        leftHeaderData?: IColumnTableMap;
+        bodyRowTable?: IColumnTableMap;
+        bodyRowData?: IColumnTableMap;
+        bodyRowMap?: {};
+        asideBodyRowData?: IColumnTableMap;
+        leftBodyRowData?: IColumnTableMap;
+        colGroup?: ICol[];
+        colGroupMap?: {};
+        asideColGroup?: ICol[];
+        leftHeaderColGroup?: ICol[];
+        footSumColumns?: IColumn[][];
+        footSumTable?: IColumnTableMap;
+        leftFootSumData?: IColumnTableMap;
+        footSumData?: IColumnTableMap;
+        rootNode?: React.RefObject<HTMLDivElement>;
+        clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
+        rootObject?: any;
+        setScrollLeft?: (scrollLeft: number) => void;
+        setScrollTop?: (scrollTop: number) => void;
+        onBeforeEvent?: (param: IonEventParam) => void;
+        onAfterEvent?: (param: IonEventParam) => void;
+        onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
+        onRightClick?: (param: IonRightClickParam) => void;
+    }
+    interface IStoreState {
+        loading?: boolean;
+        loadingData?: boolean;
         data?: any[];
         filteredList?: any[];
         listSelectedAll?: boolean;
@@ -219,6 +251,7 @@ export declare namespace IDataGrid {
         filterInfo?: {};
         width?: number;
         height?: number;
+        columnHeight?: number;
         onBeforeEvent?: (param: IonEventParam) => void;
         onAfterEvent?: (param: IonEventParam) => void;
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
@@ -283,10 +316,6 @@ export declare namespace IDataGrid {
         predefinedFormatter?: IFormatter;
         predefinedCollector?: ICollector;
         rootObject?: any;
-        setRootState?: (state: IRootState) => void;
-        getRootState?: () => any;
-        setScrollLeft?: (scrollLeft: number) => void;
-        setScrollTop?: (scrollTop: number) => void;
         rootNode?: React.RefObject<HTMLDivElement>;
         clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
     }
@@ -309,18 +338,19 @@ export declare namespace IDataGrid {
         height: number;
         style?: any;
         options?: IOptions;
-        onBeforeEvent?: (param: IonEventParam) => void;
-        onAfterEvent?: (param: IonEventParam) => void;
-        onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         loading?: boolean;
         loadingData?: boolean;
         rowSelector?: IRowSelector;
         selection?: ISelection;
+        scrollLeft?: number;
+        scrollTop?: number;
+        onBeforeEvent?: (param: IonEventParam) => void;
+        onAfterEvent?: (param: IonEventParam) => void;
+        onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
     interface IRootState {
-        mounted?: boolean;
-        calculatedHeight?: number;
+        mounted: boolean;
     }
     type DispatchParam = {
         [key: string]: any;

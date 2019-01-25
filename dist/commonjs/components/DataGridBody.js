@@ -30,7 +30,8 @@ var DataGridBody = /** @class */ (function (_super) {
             if (loading || loadingData) {
                 return false;
             }
-            var _m = styles.frozenPanelWidth, frozenPanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelHeight, frozenPanelHeight = _o === void 0 ? 0 : _o, _p = styles.headerHeight, headerHeight = _p === void 0 ? 0 : _p, _q = styles.bodyHeight, bodyHeight = _q === void 0 ? 0 : _q, _r = styles.CTInnerWidth, CTInnerWidth = _r === void 0 ? 0 : _r, _s = styles.verticalScrollerWidth, verticalScrollerWidth = _s === void 0 ? 0 : _s, _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.asidePanelWidth, asidePanelWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y;
+            var _m = styles.frozenPanelWidth, frozenPanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelHeight, frozenPanelHeight = _o === void 0 ? 0 : _o, _p = styles.headerHeight, headerHeight = _p === void 0 ? 0 : _p, _q = styles.bodyHeight, bodyHeight = _q === void 0 ? 0 : _q, _r = styles.elWidth, elWidth = _r === void 0 ? 0 : _r, _s = styles.verticalScrollerWidth, verticalScrollerWidth = _s === void 0 ? 0 : _s, _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.asidePanelWidth, asidePanelWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentWidth, scrollContentWidth = _v === void 0 ? 0 : _v, _w = styles.scrollContentHeight, scrollContentHeight = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerWidth, scrollContentContainerWidth = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerHeight, scrollContentContainerHeight = _y === void 0 ? 0 : _y;
+            var scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
             var startMousePosition = utils_1.getMousePosition(e);
             var spanType = e.target.getAttribute('data-span');
             var _z = rootNode &&
@@ -174,7 +175,7 @@ var DataGridBody = /** @class */ (function (_super) {
                         moving.active = true;
                         moving.left = true;
                     }
-                    else if (p2X > CTInnerWidth - verticalScrollerWidth) {
+                    else if (p2X > elWidth - scrollPanelRightMargin) {
                         moving.active = true;
                         moving.right = true;
                     }
@@ -369,9 +370,10 @@ var DataGridBody = /** @class */ (function (_super) {
     DataGridBody.prototype.render = function () {
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.loadingData, loadingData = _f === void 0 ? false : _f;
         var _g = options.frozenRowIndex, frozenRowIndex = _g === void 0 ? 0 : _g, _h = options.bodyLoaderHeight, bodyLoaderHeight = _h === void 0 ? 0 : _h;
-        var _j = styles.CTInnerWidth, CTInnerWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 1 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.verticalScrollerWidth, verticalScrollerWidth = _r === void 0 ? 0 : _r, _s = styles.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s;
+        var _j = styles.elWidth, elWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 1 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.verticalScrollerWidth, verticalScrollerWidth = _r === void 0 ? 0 : _r, _s = styles.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s;
         var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
         var loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
+        var scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
         var topBodyScrollConfig = {
             frozenRowIndex: 0,
             sRowIndex: 0,
@@ -396,11 +398,11 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         var topBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: 0,
             height: frozenPanelHeight,
         };
@@ -418,11 +420,11 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         var bodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: frozenPanelHeight - loadingDataHeight,
             height: bodyHeight - frozenPanelHeight - footSumHeight,
         };
@@ -440,11 +442,11 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         var bottomBodyPanelStyle = {
             left: frozenPanelWidth + asidePanelWidth,
-            width: CTInnerWidth -
+            width: elWidth -
                 asidePanelWidth -
                 frozenPanelWidth -
                 rightPanelWidth -
-                verticalScrollerWidth,
+                scrollPanelRightMargin,
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };

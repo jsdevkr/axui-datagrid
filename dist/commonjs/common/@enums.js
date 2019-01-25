@@ -32,10 +32,13 @@ var DataGridEnums;
         KeyCodes[KeyCodes["UP_ARROW"] = 38] = "UP_ARROW";
         KeyCodes[KeyCodes["RIGHT_ARROW"] = 39] = "RIGHT_ARROW";
         KeyCodes[KeyCodes["DOWN_ARROW"] = 40] = "DOWN_ARROW";
-        KeyCodes[KeyCodes["A"] = 65] = "A";
-        KeyCodes[KeyCodes["B"] = 66] = "B";
-        KeyCodes[KeyCodes["C"] = 67] = "C";
     })(KeyCodes = DataGridEnums.KeyCodes || (DataGridEnums.KeyCodes = {}));
+    var MetaKeycodes;
+    (function (MetaKeycodes) {
+        MetaKeycodes[MetaKeycodes["A"] = 65] = "A";
+        MetaKeycodes[MetaKeycodes["B"] = 66] = "B";
+        MetaKeycodes[MetaKeycodes["C"] = 67] = "C";
+    })(MetaKeycodes = DataGridEnums.MetaKeycodes || (DataGridEnums.MetaKeycodes = {}));
     var ScrollTypes;
     (function (ScrollTypes) {
         ScrollTypes[ScrollTypes["HORIZONTAL"] = 0] = "HORIZONTAL";

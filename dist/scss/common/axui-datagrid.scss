@@ -64,7 +64,7 @@
 
   // mergeCells 대상 컬럼 배경생 통일.
   td.merged {
-    // background: $axui-datagrid-row-bg-1;
+    background: $axui-datagrid-row-bg-1;
   }
 }
 
@@ -203,8 +203,6 @@
     }
   }
   &.axui-datagrid-row-selector {
-    [data-span] {
-    }
     &.focused {
       background: $axui-datagrid-aside-bg;
     }
@@ -474,15 +472,19 @@
   &:focus {
     outline: $axui-datagrid-outline;
   }
-  &:hover {
+  &:hover,
+  &:focus {
     .axui-datagrid-scroll-bar {
       background: $axui-datagrid-scroll-bar-bg;
     }
-
     .axui-datagrid-scroller {
-      [data-scroll-track] {
+      [data-scroll-track='vertical'] {
         background: $axui-datagrid-scroll-track-bg;
       }
+      [data-scroll-track='horizontal'] {
+        background: $axui-datagrid-scroll-track-bg;
+      }
+
       [data-scroll-arrow] {
         [data-arrow] {
           border-color: $axui-datagrid-scroll-bar-bg;
@@ -514,7 +516,5 @@
     position: absolute;
     box-sizing: border-box;
     overflow: hidden;
-    [data-panel] {
-    }
   }
 }

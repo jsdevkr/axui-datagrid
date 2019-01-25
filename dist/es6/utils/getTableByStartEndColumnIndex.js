@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function getTableByStartEndColumnIndex(rowTable, startColumnIndex, endColumnIndex) {
+function getTableByStartEndColumnIndex(rowTable = { rows: [{ cols: [] }] }, startColumnIndex, endColumnIndex) {
     let tempTable = { rows: [] };
     if ('rows' in rowTable) {
         rowTable.rows.forEach((row, r) => {

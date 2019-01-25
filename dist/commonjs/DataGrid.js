@@ -57,68 +57,46 @@ var DataGrid = /** @class */ (function (_super) {
         _this.scrollTop = 0;
         _this.state = {
             mounted: false,
-            calculatedHeight: undefined,
-        };
-        /**
-         * You must execute setRootState only once in the child component.
-         * otherwise you will fall into a trap.
-         * @param {DataGridRootState} state
-         */
-        _this.setRootState = function (state) {
-            _this.setState(state);
-        };
-        _this.getRootState = function () {
-            return _this.state;
-        };
-        _this.setScrollLeft = function (scrollLeft) {
-            _this.scrollLeft = scrollLeft;
-        };
-        _this.setScrollTop = function (scrollTop) {
-            _this.scrollTop = scrollTop;
         };
         _this.getOptions = function (options) {
             return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
         };
-        _this.getProviderProps = function (prevState) {
+        _this.getProviderProps = function (storeProps) {
             var _a = _this.props, _b = _a.columns, columns = _b === void 0 ? [] : _b, footSum = _a.footSum;
-            var _c = prevState.options, options = _c === void 0 ? {} : _c;
+            var _c = storeProps.options, options = _c === void 0 ? {} : _c;
             var _d = options.frozenColumnIndex, frozenColumnIndex = _d === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _d, _e = options.body, optionsBody = _e === void 0 ? DataGrid.defaultBody : _e;
             var _f = optionsBody.columnHeight, columnHeight = _f === void 0 ? 0 : _f;
             // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
-            var newState = __assign({}, prevState);
-            var newStyle = {};
-            newState.scrollLeft = _this.scrollLeft;
-            newState.scrollTop = _this.scrollTop;
+            var newStoreProps = __assign({}, storeProps);
             // options.showRowSelector 체크
-            if (newState.rowSelector) {
-                if (typeof newState.rowSelector.show === 'undefined') {
-                    newState.rowSelector.show = true;
+            if (newStoreProps.rowSelector) {
+                if (typeof newStoreProps.rowSelector.show === 'undefined') {
+                    newStoreProps.rowSelector.show = true;
                 }
-                if (newState.options && newState.rowSelector.show) {
-                    newState.options.showRowSelector = true;
+                if (newStoreProps.options && newStoreProps.rowSelector.show) {
+                    newStoreProps.options.showRowSelector = true;
                 }
             }
             // convert colGroup
-            newState.headerTable = utils_1.makeHeaderTable(columns, options);
-            newState.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
-            newState.bodyRowMap = utils_1.makeBodyRowMap(newState.bodyRowTable || { rows: [] }, options);
+            newStoreProps.headerTable = utils_1.makeHeaderTable(columns, options);
+            newStoreProps.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
+            newStoreProps.bodyRowMap = utils_1.makeBodyRowMap(newStoreProps.bodyRowTable || { rows: [] }, options);
             // header를 위한 divide
-            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.headerTable || { rows: [] }, frozenColumnIndex, options);
+            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.headerTable || { rows: [] }, frozenColumnIndex, options);
             // body를 위한 divide
-            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
-            newState.asideHeaderData = headerDividedObj.asideData;
-            newState.leftHeaderData = headerDividedObj.leftData;
-            newState.headerData = headerDividedObj.rightData;
-            newState.asideColGroup = headerDividedObj.asideColGroup;
-            newState.asideBodyRowData = bodyDividedObj.asideData;
-            newState.leftBodyRowData = bodyDividedObj.leftData;
-            newState.bodyRowData = bodyDividedObj.rightData;
+            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
+            newStoreProps.asideHeaderData = headerDividedObj.asideData;
+            newStoreProps.leftHeaderData = headerDividedObj.leftData;
+            newStoreProps.headerData = headerDividedObj.rightData;
+            newStoreProps.asideBodyRowData = bodyDividedObj.asideData;
+            newStoreProps.leftBodyRowData = bodyDividedObj.leftData;
+            newStoreProps.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-            newState.colGroupMap = {};
-            if (newState.headerTable) {
-                newState.headerTable.rows.forEach(function (row, ridx) {
+            newStoreProps.colGroupMap = {};
+            if (newStoreProps.headerTable) {
+                newStoreProps.headerTable.rows.forEach(function (row, ridx) {
                     row.cols.forEach(function (col, cidx) {
-                        if (newState.colGroupMap) {
+                        if (newStoreProps.colGroupMap) {
                             var currentCol = {
                                 key: col.key,
                                 label: col.label,
@@ -131,110 +109,66 @@ var DataGrid = /** @class */ (function (_super) {
                                 formatter: col.formatter,
                                 editor: col.editor,
                             };
-                            newState.colGroupMap[col.colIndex || 0] = currentCol;
+                            newStoreProps.colGroupMap[col.colIndex || 0] = currentCol;
                         }
                     });
                 });
             }
-            newState.colGroup = Object.values(newState.colGroupMap);
-            newState.leftHeaderColGroup = newState.colGroup.slice(0, frozenColumnIndex);
-            newState.headerColGroup = newState.colGroup.slice(frozenColumnIndex);
+            newStoreProps.asideColGroup = headerDividedObj.asideColGroup;
+            newStoreProps.colGroup = Object.values(newStoreProps.colGroupMap);
             // colGroup이 정의되면 footSum
             if (footSum) {
-                newState.footSumColumns = __spread(footSum);
-                newState.footSumTable = utils_1.makeFootSumTable(footSum, newState.colGroup, options);
-                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newState.footSumTable || { rows: [] }, frozenColumnIndex, options);
-                newState.leftFootSumData = footSumDividedObj.leftData;
-                newState.footSumData = footSumDividedObj.rightData;
+                newStoreProps.footSumColumns = __spread(footSum);
+                newStoreProps.footSumTable = utils_1.makeFootSumTable(footSum, newStoreProps.colGroup, options);
+                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.footSumTable || { rows: [] }, frozenColumnIndex, options);
+                newStoreProps.leftFootSumData = footSumDividedObj.leftData;
+                newStoreProps.footSumData = footSumDividedObj.rightData;
             }
-            // styles
-            newStyle.asidePanelWidth = headerDividedObj.asidePanelWidth;
-            newStyle.bodyTrHeight = newState.bodyRowTable
-                ? newState.bodyRowTable.rows.length * columnHeight
-                : 20;
-            newState.styles = newStyle;
-            // 초기 스타일 생성.
-            var calculatedObject = utils_1.calculateDimensions(newState.rootNode && newState.rootNode.current, newState);
-            newState.scrollLeft = calculatedObject.scrollLeft;
-            newState.scrollTop = calculatedObject.scrollTop;
-            newState.styles = calculatedObject.styles;
-            newState.colGroup = calculatedObject.colGroup;
-            newState.leftHeaderColGroup = calculatedObject.leftHeaderColGroup;
-            newState.headerColGroup = calculatedObject.headerColGroup;
-            var _g = newState.styles, _h = _g.CTInnerWidth, _CTInnerWidth = _h === void 0 ? 0 : _h, _j = _g.frozenPanelWidth, _frozenPanelWidth = _j === void 0 ? 0 : _j, _k = _g.asidePanelWidth, _asidePanelWidth = _k === void 0 ? 0 : _k, _l = _g.rightPanelWidth, _rightPanelWidth = _l === void 0 ? 0 : _l;
-            var _m = utils_1.getPositionPrintColGroup(newState.headerColGroup, Math.abs(newState.scrollLeft || 0) + _frozenPanelWidth, Math.abs(newState.scrollLeft || 0) +
-                _frozenPanelWidth +
-                (_CTInnerWidth -
-                    _asidePanelWidth -
-                    _frozenPanelWidth -
-                    _rightPanelWidth)), printStartColIndex = _m.printStartColIndex, printEndColIndex = _m.printEndColIndex;
-            newState.printStartColIndex = printStartColIndex;
-            newState.printEndColIndex = printEndColIndex;
-            newState.visibleHeaderColGroup = newState.headerColGroup.slice(printStartColIndex, printEndColIndex + 1);
-            newState.visibleBodyRowData = utils_1.getTableByStartEndColumnIndex(newState.bodyRowData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-            newState.visibleBodyGroupingData = utils_1.getTableByStartEndColumnIndex(newState.bodyGroupingData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-            if (footSum) {
-                newState.visibleFootSumData = utils_1.getTableByStartEndColumnIndex(newState.footSumData || { rows: [{ cols: [] }] }, printStartColIndex + frozenColumnIndex, printEndColIndex + frozenColumnIndex);
-            }
-            return newState;
+            // provider props에서 styles 속성 제외 styles는 내부 state에 의해 관리 되도록 변경
+            return newStoreProps;
         };
         _this.rootNode = React.createRef();
         _this.clipBoardNode = React.createRef();
         return _this;
     }
     DataGrid.prototype.render = function () {
-        var mounted = this.state.mounted;
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, width = _a.width, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector;
-        var providerProps = {};
-        var gridRootStyle = utils_1.mergeAll({
-            height: this.state.calculatedHeight || height,
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, width = _a.width, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector, scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
+        var gridRootStyle = __assign({
+            height: height,
             width: width,
         }, style);
-        if (mounted) {
-            providerProps = this.getProviderProps({
-                mounted: mounted,
-                loading: loading,
-                loadingData: loadingData,
-                setRootState: this.setRootState,
-                getRootState: this.getRootState,
-                rootNode: this.rootNode,
-                clipBoardNode: this.clipBoardNode,
-                rootObject: this.rootObject,
-                setScrollLeft: this.setScrollLeft,
-                setScrollTop: this.setScrollTop,
-                data: data,
-                width: width,
-                height: height,
-                onBeforeEvent: onBeforeEvent,
-                onAfterEvent: onAfterEvent,
-                onScrollEnd: onScrollEnd,
-                onRightClick: onRightClick,
-                selection: selection,
-                rowSelector: rowSelector,
-                options: this.getOptions(options),
-            });
-            if (providerProps.scrollLeft &&
-                this.scrollLeft !== providerProps.scrollLeft) {
-                this.scrollLeft = providerProps.scrollLeft;
-            }
-            if (providerProps.scrollTop &&
-                this.scrollTop !== providerProps.scrollTop) {
-                this.scrollTop = providerProps.scrollTop;
-            }
-        }
-        return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
+        return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, this.getProviderProps({
+            loading: loading,
+            loadingData: loadingData,
+            data: data,
+            width: width,
+            height: height,
+            selection: selection,
+            rowSelector: rowSelector,
+            options: this.getOptions(options),
+            scrollLeft: scrollLeft,
+            scrollTop: scrollTop,
+            rootNode: this.rootNode,
+            clipBoardNode: this.clipBoardNode,
+            rootObject: this.rootObject,
+            onBeforeEvent: onBeforeEvent,
+            onAfterEvent: onAfterEvent,
+            onScrollEnd: onScrollEnd,
+            onRightClick: onRightClick,
+        })),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },
                     React.createElement("textarea", { ref: this.clipBoardNode })),
-                mounted ? (React.createElement(components_1.DataGridEvents, null,
+                this.state.mounted && (React.createElement(components_1.DataGridEvents, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
-                    React.createElement(components_1.DataGridLoader, { loading: loading }))) : null)));
+                    React.createElement(components_1.DataGridLoader, { loading: loading }))))));
     };
     DataGrid.prototype.componentDidMount = function () {
+        // console.log(this.rootNode);
         this.setState({
             mounted: true,
         });
@@ -275,7 +209,6 @@ var DataGrid = /** @class */ (function (_super) {
         { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
     ];
     DataGrid.defaultPage = {
-        buttonsContainerWidth: 240,
         buttons: DataGrid.defaultPageButtons,
         buttonHeight: 16,
         height: 20,
@@ -285,7 +218,7 @@ var DataGrid = /** @class */ (function (_super) {
         arrowSize: 14,
         barMinSize: 12,
         padding: 3,
-        disabledVerticalScroll: false,
+        horizontalScrollerWidth: 30,
     };
     DataGrid.defaultOptions = {
         frozenColumnIndex: 0,
@@ -296,7 +229,6 @@ var DataGrid = /** @class */ (function (_super) {
         lineNumberColumnWidth: 60,
         rowSelectorColumnWidth: 28,
         remoteSort: false,
-        asidePanelWidth: 0,
         header: DataGrid.defaultHeader,
         body: DataGrid.defaultBody,
         page: DataGrid.defaultPage,
@@ -305,14 +237,11 @@ var DataGrid = /** @class */ (function (_super) {
         bodyLoaderHeight: 100,
     };
     DataGrid.defaultStyles = {
-        calculatedHeight: null,
         asidePanelWidth: 0,
         frozenPanelWidth: 0,
         bodyTrHeight: 0,
         elWidth: 0,
         elHeight: 0,
-        CTInnerWidth: 0,
-        CTInnerHeight: 0,
         rightPanelWidth: 0,
         headerHeight: 0,
         bodyHeight: 0,

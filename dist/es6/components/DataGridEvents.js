@@ -68,7 +68,7 @@ class DataGridEvents extends React.Component {
         };
         this.onKeyDown = (e) => {
             const { filteredList = [], rootNode, clipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
-            const { printStartColIndex = 0, printEndColIndex = colGroup.length, } = this.props;
+            const { printStartColIndex = 0, printEndColIndex = colGroup.length - 1, } = this.props;
             const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
             const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
             const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
@@ -134,9 +134,9 @@ class DataGridEvents extends React.Component {
                 return _scrollLeft;
             };
             const metaProc = {
-                [_enums_1.DataGridEnums.KeyCodes.C]: () => {
+                [_enums_1.DataGridEnums.MetaKeycodes.C]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let copySuccess = false;
                     let copiedString = '';
                     for (let rk in selectionRows) {
@@ -161,9 +161,9 @@ class DataGridEvents extends React.Component {
                     rootNode && rootNode.current && rootNode.current.focus();
                     return copySuccess;
                 },
-                [_enums_1.DataGridEnums.KeyCodes.A]: () => {
+                [_enums_1.DataGridEnums.MetaKeycodes.A]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let state = {
                         dragging: false,
                         selectionRows: {},
@@ -202,7 +202,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.HOME]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     const focusRow = 0;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -214,7 +214,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.END]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     const focusRow = filteredList.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -226,7 +226,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.PAGE_UP]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     const focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -238,7 +238,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.PAGE_DOWN]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let focusRow = focusedRow + pRowSize >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + pRowSize;
@@ -252,7 +252,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.UP_ARROW]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -264,7 +264,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.DOWN_ARROW]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let focusRow = focusedRow + 1 >= filteredList.length
                         ? filteredList.length - 1
                         : focusedRow + 1;
@@ -278,7 +278,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.LEFT_ARROW]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
                     setStoreState({
                         scrollLeft: getAvailScrollLeft(focusCol),
@@ -290,7 +290,7 @@ class DataGridEvents extends React.Component {
                 },
                 [_enums_1.DataGridEnums.KeyCodes.RIGHT_ARROW]: () => {
                     e.preventDefault();
-                    e.stopPropagation();
+                    // e.stopPropagation();
                     let focusCol = focusedCol + 1 >= colGroup.length
                         ? colGroup.length - 1
                         : focusedCol + 1;
@@ -338,11 +338,14 @@ class DataGridEvents extends React.Component {
                     }
                     else {
                         e.preventDefault();
-                        e.stopPropagation();
+                        // e.stopPropagation();
                     }
                 },
                 [_enums_1.DataGridEnums.EventNames.KEYDOWN]: () => {
                     if (!loadingData && !isInlineEditing) {
+                        if (Object.values(_enums_1.DataGridEnums.KeyCodes).includes(e.which)) {
+                            e.preventDefault();
+                        }
                         this.onKeyDown(e);
                     }
                 },
@@ -369,15 +372,14 @@ class DataGridEvents extends React.Component {
         };
     }
     render() {
-        return React.createElement("div", null, this.props.children);
+        return React.createElement("div", { onWheel: this.onFireEvent }, this.props.children);
     }
-    componentWillMount() {
+    componentDidMount() {
         const { rootNode } = this.props;
         if (rootNode && rootNode.current) {
-            rootNode.current.addEventListener('keydown', this.onFireEvent);
-            rootNode.current.addEventListener('keyup', this.onFireEvent);
-            rootNode.current.addEventListener('contextmenu', this.onFireEvent);
-            rootNode.current.addEventListener('wheel', this.onFireEvent);
+            rootNode.current.addEventListener('keydown', this.onFireEvent, false);
+            rootNode.current.addEventListener('keyup', this.onFireEvent, false);
+            rootNode.current.addEventListener('contextmenu', this.onFireEvent, false);
         }
     }
     componentWillUnmount() {
@@ -386,7 +388,6 @@ class DataGridEvents extends React.Component {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
             rootNode.current.removeEventListener('keyup', this.onFireEvent);
             rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
-            rootNode.current.removeEventListener('wheel', this.onFireEvent);
         }
     }
 }

@@ -124,12 +124,13 @@ class DataGridPage extends React.Component {
     }
     render() {
         const { options = {}, styles = {} } = this.props;
-        const { pageButtonsContainerWidth } = styles;
+        const { pageButtonsContainerWidth, horizontalScrollerWidth } = styles;
         const { page: optionPage = {} } = options;
         const { buttons: pageButtons = [], buttonHeight: pageButtonHeight = 0, } = optionPage;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-buttons", style: { width: pageButtonsContainerWidth } },
-                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton }))));
+            React.createElement("div", { className: "axui-datagrid-page-buttons" },
+                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton })),
+            React.createElement("div", { style: { width: horizontalScrollerWidth } })));
     }
 }
 exports.default = hoc_1.connectStore(DataGridPage);

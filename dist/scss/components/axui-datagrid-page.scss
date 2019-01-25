@@ -11,4 +11,8 @@
   @include axui-background(to bottom, $axui-datagrid-page-bg-colors);
   border: 0 none;
   border-top: $axui-datagrid-page-border;
+
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
 }

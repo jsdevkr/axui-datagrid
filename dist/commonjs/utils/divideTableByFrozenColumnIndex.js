@@ -21,7 +21,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
     var asideTable = { rows: [] };
     var asideColGroup = [];
-    var asidePanelWidth = 0;
     var tempTableLeft = { rows: [] };
     var tempTableRight = { rows: [] };
     // make asideTable
@@ -46,7 +45,6 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
                 });
                 asideColGroup.push(_col);
                 asideTable.rows[i].cols.push(_col);
-                asidePanelWidth += options.lineNumberColumnWidth || 0;
             }
             if (options.showRowSelector) {
                 _col = __assign({}, col, {
@@ -59,7 +57,6 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
                 });
                 asideColGroup.push(_col);
                 asideTable.rows[i].cols.push(_col);
-                asidePanelWidth += options.rowSelectorColumnWidth || 0;
             }
         }
     }
@@ -96,7 +93,6 @@ function divideTableByFrozenColumnIndex(rowTable, frozenColumnIndex, options) {
     return {
         asideData: asideTable,
         asideColGroup: asideColGroup,
-        asidePanelWidth: asidePanelWidth,
         leftData: tempTableLeft,
         rightData: tempTableRight,
     };

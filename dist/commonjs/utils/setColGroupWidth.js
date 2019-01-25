@@ -9,7 +9,8 @@ var common_1 = require("./common");
  * @return {DataGridCol[]}
  */
 function setColGroupWidth(colGroup, container, options) {
-    var _a = options.columnMinWidth, columnMinWidth = _a === void 0 ? 0 : _a;
+    if (colGroup === void 0) { colGroup = []; }
+    var _a = (options || {}).columnMinWidth, columnMinWidth = _a === void 0 ? 0 : _a;
     var totalWidth = 0;
     var computedWidth;
     var autoWidthColGroupIndexes = [];
