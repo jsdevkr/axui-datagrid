@@ -76,7 +76,9 @@
   border: 0 none;
   border-right: $axui-datagrid-column-border;
   border-bottom: $axui-datagrid-column-border;
-
+  &:last-child {
+    border-right: none;
+  }
   &.axui-datagrid-header-column {
     cursor: default;
 
@@ -170,7 +172,6 @@
       }
     }
   }
-
   &.axui-datagrid-line-number {
     [data-span] {
       cursor: e-resize;
@@ -207,7 +208,6 @@
       background: $axui-datagrid-aside-bg;
     }
   }
-
   &.selected {
     background: $axui-datagrid-cell-selected-bg;
   }

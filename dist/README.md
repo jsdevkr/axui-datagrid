@@ -263,3 +263,4 @@ export default Formatter;
 - v0.7.0 - Modify scrollbar style
 - v0.7.1 - Minor patch - scrollbar style
 - v0.8.0 - Refactoring storeProvider & Modify scrollBar style
+- v0.8.1 ~ 0.8.3 - minor patch & fixed bug
