@@ -595,15 +595,11 @@ var StoreProvider = /** @class */ (function (_super) {
     };
     StoreProvider.prototype.componentDidMount = function () {
         // console.log('store did mount');
-        // this.throttledUpdateDimensions = throttle(this.updateDimensions, 100);
-        // window.addEventListener('resize', this.throttledUpdateDimensions);
     };
     StoreProvider.prototype.componentDidUpdate = function (pProps, pState) {
-        // set visibleBodyRowData (스크롤된 영역을 계산하여 표시해야할 영역의 colGroup을 구하여 visible변수에 담아줌.)
         // console.log('store did update');
     };
     StoreProvider.prototype.componentWillUnmount = function () {
-        // window.removeEventListener('resize', this.throttledUpdateDimensions);
         // console.log('store unMount');
     };
     return StoreProvider;

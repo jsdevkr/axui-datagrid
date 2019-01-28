@@ -7,7 +7,6 @@ export interface IDataGridStore extends IDataGrid.IStoreState {
 }
 declare class StoreProvider extends React.Component<IDataGrid.IStoreProps, IDataGrid.IStoreState> {
     state: IDataGridStore;
-    throttledUpdateDimensions: any;
     static getDerivedStateFromProps(nProps: IDataGrid.IStoreProps, nState: IDataGrid.IStoreState): IDataGrid.IStoreState | null;
     setStoreState: (newState: IDataGrid.IStoreState) => void;
     dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
