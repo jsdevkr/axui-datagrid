@@ -1,5 +1,3 @@
-import { number } from 'prop-types';
-
 export namespace IDataGrid {
   export interface IPosition {
     x?: number;
