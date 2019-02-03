@@ -12,7 +12,6 @@
   "keywords": [
     "datagrid, react-datagrid, react-component, typescript"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.9.4",
@@ -50,6 +49,7 @@
     "react-scripts-ts": "^3.1.0",
     "react-syntax-highlighter": "^8.0.1",
     "react-test-renderer": "^16.4.1",
+    "rimraf": "^2.6.3",
     "sass-loader": "^7.0.1",
     "styled-components": "^4.1.2",
     "tslint-config-prettier": "^1.15.0",
@@ -59,7 +59,7 @@
   "scripts": {
     "start": "react-app-rewired start --scripts-version react-scripts-ts",
     "build": "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
-    "docs": "react-app-rewired build --scripts-version react-scripts-ts && rm -rf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME && cp ./src/404.html ./docs/404.html  && git add -A",
+    "docs": "react-app-rewired build --scripts-version react-scripts-ts && rimraf ./docs && mv build ./docs && cp ./src/CNAME ./docs/CNAME && cp ./src/404.html ./docs/404.html  && git add -A",
     "test": "NODE_ENV=test jest",
     "test-watch": "NODE_ENV=test jest --watch",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
@@ -68,9 +68,9 @@
     "publish:minor": "cd dist && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
   },
   "betterScripts": {
-    "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css --output-style compressed && rm -rf ./dist/scss && cp ./src/axui-datagrid/style.scss ./dist/style.scss && cp -R ./src/axui-datagrid/scss ./dist/scss && cp ./README.md ./dist/README.md",
-    "build:es5": "rm -rf ./dist/commonjs && tsc --p tsconfig.es5.json",
-    "build:es6": "rm -rf ./dist/es6 && tsc --p tsconfig.es6.json"
+    "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css --output-style compressed && rimraf ./dist/scss && cp ./src/axui-datagrid/style.scss ./dist/style.scss && cp -R ./src/axui-datagrid/scss ./dist/scss && cp ./README.md ./dist/README.md",
+    "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfig.es5.json",
+    "build:es6": "rimraf ./dist/es6 && tsc --p tsconfig.es6.json"
   },
   "jest": {
     "globals": {
