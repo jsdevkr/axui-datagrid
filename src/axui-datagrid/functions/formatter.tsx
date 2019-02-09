@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { printDate, formatCurrency } from '../utils';
 import { IDataGrid } from '../common/@types';
 
@@ -28,4 +29,18 @@ function datetime(formatterData: IDataGrid.IFormatterData) {
   }
 }
 
-export default { money, date, datetime };
+function html(formatterData: IDataGrid.IFormatterData) {
+  if (typeof formatterData.value !== 'undefined') {
+    return (
+      <span
+        dangerouslySetInnerHTML={(() => ({
+          __html: formatterData.value,
+        }))()}
+      />
+    );
+  } else {
+    return '';
+  }
+}
+
+export default { money, date, datetime, html };

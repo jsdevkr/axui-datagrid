@@ -70,11 +70,11 @@ class Etc extends React.Component<any, any> {
           displaySize: 50,
           index: 2,
           key: '2',
-          label: 'country_id',
-          name: 'country_id',
+          label: 'html',
           nullable: false,
           type: 'VARCHAR',
           width: 120,
+          formatter: 'html',
         },
         {
           autoIncrement: false,
@@ -88,7 +88,11 @@ class Etc extends React.Component<any, any> {
           width: 120,
         },
       ],
-      data: [['A', 'B'], ['A', 'B'], ['A', 'B']],
+      data: [
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+      ],
     };
 
     return (
@@ -106,6 +110,7 @@ class Etc extends React.Component<any, any> {
               columns={grid.columns}
               data={grid.data}
               options={{ lineNumberColumnWidth: 50 }}
+              status={<div>{`Total Record ${grid.data.length}`}</div>}
             />
           </MyBox>
         </Segment>
