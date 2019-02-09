@@ -68,7 +68,6 @@ export default function calculateDimensions(
     (showRowSelector ? rowSelectorColumnWidth : 0);
   currentStyles.bodyTrHeight = bodyTablsRowsLength * optionsBodyColumnHeight;
   currentStyles.horizontalScrollerHeight = 0;
-  currentStyles.pageButtonsContainerWidth = 0;
 
   currentStyles.frozenPanelWidth = ((_colGroup, endIndex) => {
     let width = 0;

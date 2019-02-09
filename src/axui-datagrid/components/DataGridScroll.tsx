@@ -104,7 +104,6 @@ class DatagridScroll extends React.Component<IProps> {
       verticalScrollBarHeight = 0,
       scrollContentHeight = 0,
       scrollContentContainerHeight = 0,
-      pageButtonsContainerWidth = 0,
     } = styles;
 
     const currScrollBarLeft: number =
@@ -140,10 +139,7 @@ class DatagridScroll extends React.Component<IProps> {
           scrollLeft: currScrollLeft = 0,
           scrollTop: currScrollTop = 0,
         } = getScrollPositionByScrollBar(
-          mouseX -
-            grx -
-            pageButtonsContainerWidth -
-            horizontalScrollBarWidth / 2,
+          mouseX - grx - horizontalScrollBarWidth / 2,
           currScrollBarTop,
           styles,
         );

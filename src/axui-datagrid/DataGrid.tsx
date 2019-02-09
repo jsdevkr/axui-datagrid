@@ -52,17 +52,15 @@ class DataGrid extends React.Component<IProps, IState> {
     grouping: false,
     mergeCells: false,
   };
-  static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
-    { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-    { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-    { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-    { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-    { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-    { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-  ];
+  // static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
+  //   { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+  //   { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+  //   { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+  //   { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+  //   { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+  //   { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
+  // ];
   static defaultPage: IDataGrid.IOptionPage = {
-    buttons: DataGrid.defaultPageButtons,
-    buttonHeight: 16,
     height: 20,
   };
   static defaultScroller: IDataGrid.IOptionScroller = {
@@ -112,7 +110,6 @@ class DataGrid extends React.Component<IProps, IState> {
     horizontalScrollBarWidth: 0,
     scrollerPadding: 0,
     scrollerArrowSize: 0,
-    pageButtonsContainerWidth: 0,
   };
   static defaultThrottleWait = 100;
 
@@ -242,6 +239,7 @@ class DataGrid extends React.Component<IProps, IState> {
   public render() {
     const {
       data = [],
+      status,
       options = {},
       style = {},
       onBeforeEvent,
@@ -276,6 +274,7 @@ class DataGrid extends React.Component<IProps, IState> {
           height,
           selection,
           rowSelector,
+          status,
           options: this.getOptions(options),
           scrollLeft,
           scrollTop,

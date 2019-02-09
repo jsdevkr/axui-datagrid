@@ -166,8 +166,8 @@ export namespace IDataGrid {
   }
 
   export interface IOptionPage {
-    buttons?: IOptionPageButton[];
-    buttonHeight?: number;
+    // buttons?: IOptionPageButton[];
+    // buttonHeight?: number;
     height?: number;
   }
 
@@ -222,7 +222,6 @@ export namespace IDataGrid {
     horizontalScrollBarWidth?: number;
     scrollerPadding?: number;
     scrollerArrowSize?: number;
-    pageButtonsContainerWidth?: number;
   }
 
   export interface IStoreProps {
@@ -237,6 +236,7 @@ export namespace IDataGrid {
     scrollTop?: number;
     columnHeight?: number;
     options?: IOptions;
+    status?: React.ReactNode;
 
     headerColGroup?: ICol[];
     headerTable?: IColumnTableMap;
@@ -351,6 +351,7 @@ export namespace IDataGrid {
     footSumData?: IColumnTableMap;
     styles?: IStyles;
     options?: IOptions;
+    status?: React.ReactNode;
 
     visibleHeaderColGroup?: ICol[];
     visibleBodyRowData?: IColumnTableMap;
@@ -388,6 +389,7 @@ export namespace IDataGrid {
     height: number;
     style?: any;
     options?: IOptions;
+    status?: React.ReactNode;
     loading?: boolean;
     loadingData?: boolean;
     rowSelector?: IRowSelector;

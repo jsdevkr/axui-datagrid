@@ -4,34 +4,7 @@ import { connectStore } from '../hoc';
 import { classNames as CX, isFunction, getScrollPosition } from '../utils';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
-
-const PageButtons: React.SFC<{
-  pageButtons: IDataGrid.IOptionPageButton[];
-  pageButtonHeight: number;
-  onClickPageButton: (
-    e: React.MouseEvent<HTMLElement>,
-    userFunction: string | IDataGrid.userCallBackFunction,
-  ) => void;
-}> = ({ pageButtons, pageButtonHeight, onClickPageButton }) => (
-  <>
-    {pageButtons.map((button, bi) => {
-      return (
-        <button
-          key={bi}
-          style={{
-            height: pageButtonHeight,
-            width: button.width || pageButtonHeight,
-          }}
-          onClick={(e: React.MouseEvent<HTMLElement>) => {
-            onClickPageButton(e, button.onClick);
-          }}
-        >
-          <div data-button-svg className={CX(button.className)} />
-        </button>
-      );
-    })}
-  </>
-);
+import PageButtons from './DataGridPageButtons';
 
 interface IProps extends IDataGridStore {}
 
@@ -174,26 +147,14 @@ class DataGridPage extends React.Component<IProps> {
   };
 
   render() {
-    const { options = {}, styles = {} } = this.props;
-    const { pageButtonsContainerWidth, horizontalScrollerWidth } = styles;
+    const { options = {}, styles = {}, status } = this.props;
+    const { horizontalScrollerWidth } = styles;
     const { page: optionPage = {} } = options;
-    const {
-      buttons: pageButtons = [],
-      buttonHeight: pageButtonHeight = 0,
-    } = optionPage;
+    const { height } = optionPage;
 
     return (
       <div className="axui-datagrid-page" style={{ height: styles.pageHeight }}>
-        <div
-          className="axui-datagrid-page-buttons"
-          // style={{ width: pageButtonsContainerWidth }}
-        >
-          <PageButtons
-            pageButtons={pageButtons}
-            pageButtonHeight={pageButtonHeight}
-            onClickPageButton={this.onClickPageButton}
-          />
-        </div>
+        <div className="axui-datagrid-page-status">{status}</div>
         <div style={{ width: horizontalScrollerWidth }} />
       </div>
     );
