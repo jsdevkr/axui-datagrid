@@ -55,7 +55,7 @@ class DatagridScroll extends React.Component {
                 return false;
             }
             e.preventDefault();
-            const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, pageButtonsContainerWidth = 0, } = styles;
+            const { horizontalScrollerWidth = 0, horizontalScrollBarWidth = 0, scrollContentWidth = 0, scrollContentContainerWidth = 0, verticalScrollerHeight = 0, verticalScrollBarHeight = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             const currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
                 (scrollContentWidth - scrollContentContainerWidth) || 1;
             const currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
@@ -73,10 +73,7 @@ class DatagridScroll extends React.Component {
                     });
                 },
                 [_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL]: () => {
-                    let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(mouseX -
-                        grx -
-                        pageButtonsContainerWidth -
-                        horizontalScrollBarWidth / 2, currScrollBarTop, styles);
+                    let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(mouseX - grx - horizontalScrollBarWidth / 2, currScrollBarTop, styles);
                     setStoreState({
                         scrollLeft: currScrollLeft,
                         scrollTop: currScrollTop,

@@ -78,6 +78,8 @@ export interface IDataGridColumn extends ICol {
 
 ## options?: DataGridOptions = defaultOptions;
 
+## status?: React.ReactNode;
+
 _defaultOptions_
 
 ```typescript jsx
@@ -106,18 +108,7 @@ static defaultBody: types.DataGridOptionBody = {
     grouping: false,
     mergeCells: false,
 };
-static defaultPageButtons: types.DataGridOptionPageButton[] = [
-    { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-    { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-    { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-    { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-    { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-    { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-];
 static defaultPage: types.DataGridOptionPage = {
-    buttonsContainerWidth: 150,
-    buttons: DataGrid.defaultPageButtons,
-    buttonHeight: 16,
     height: 20,
 };
 static defaultScroller: types.DataGridOptionScroller = {
@@ -204,7 +195,7 @@ class Formatter extends React.Component<any, any> {
             return ' * ' + args.value;
           },
         },
-        { key: 'writer', label: 'Writer', align: 'center' },
+        { key: 'writer', label: 'Writer', align: 'center', formatter: 'html' },
         { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
         { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
       ],
@@ -264,3 +255,4 @@ export default Formatter;
 - v0.7.1 - Minor patch - scrollbar style
 - v0.8.0 - Refactoring storeProvider & Modify scrollBar style
 - v0.8.1 ~ 0.8.3 - minor patch & fixed bug
+- v0.9.0 - Add a new props status & formatter support HTML

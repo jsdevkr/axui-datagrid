@@ -71,15 +71,15 @@ var DatagridScroll = /** @class */ (function (_super) {
                 return false;
             }
             e.preventDefault();
-            var _f = styles.horizontalScrollerWidth, horizontalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerWidth, scrollContentContainerWidth = _j === void 0 ? 0 : _j, _k = styles.verticalScrollerHeight, verticalScrollerHeight = _k === void 0 ? 0 : _k, _l = styles.verticalScrollBarHeight, verticalScrollBarHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o, _p = styles.pageButtonsContainerWidth, pageButtonsContainerWidth = _p === void 0 ? 0 : _p;
+            var _f = styles.horizontalScrollerWidth, horizontalScrollerWidth = _f === void 0 ? 0 : _f, _g = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerWidth, scrollContentContainerWidth = _j === void 0 ? 0 : _j, _k = styles.verticalScrollerHeight, verticalScrollerHeight = _k === void 0 ? 0 : _k, _l = styles.verticalScrollBarHeight, verticalScrollBarHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentHeight, scrollContentHeight = _m === void 0 ? 0 : _m, _o = styles.scrollContentContainerHeight, scrollContentContainerHeight = _o === void 0 ? 0 : _o;
             var currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
                 (scrollContentWidth - scrollContentContainerWidth) || 1;
             var currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
                 (scrollContentHeight - scrollContentContainerHeight) || 1;
-            var _q = utils_1.getMousePosition(e), mouseX = _q.x, mouseY = _q.y;
-            var _r = rootNode && rootNode.current
+            var _p = utils_1.getMousePosition(e), mouseX = _p.x, mouseY = _p.y;
+            var _q = rootNode && rootNode.current
                 ? rootNode.current.getBoundingClientRect()
-                : {}, _s = _r.x, grx = _s === void 0 ? 0 : _s, _t = _r.y, gry = _t === void 0 ? 0 : _t;
+                : {}, _r = _q.x, grx = _r === void 0 ? 0 : _r, _s = _q.y, gry = _s === void 0 ? 0 : _s;
             var processor = (_a = {},
                 _a[_enums_1.DataGridEnums.ScrollTypes.VERTICAL] = function () {
                     var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft, mouseY - gry - verticalScrollBarHeight / 2, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
@@ -89,10 +89,7 @@ var DatagridScroll = /** @class */ (function (_super) {
                     });
                 },
                 _a[_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL] = function () {
-                    var _a = utils_1.getScrollPositionByScrollBar(mouseX -
-                        grx -
-                        pageButtonsContainerWidth -
-                        horizontalScrollBarWidth / 2, currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
+                    var _a = utils_1.getScrollPositionByScrollBar(mouseX - grx - horizontalScrollBarWidth / 2, currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                     setStoreState({
                         scrollLeft: currScrollLeft,
                         scrollTop: currScrollTop,

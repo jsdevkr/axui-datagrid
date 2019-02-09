@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
 var utils_1 = require("../utils");
 function money(formatterData) {
     if (typeof formatterData.value !== 'undefined') {
@@ -26,4 +27,14 @@ function datetime(formatterData) {
         return '';
     }
 }
-exports.default = { money: money, date: date, datetime: datetime };
+function html(formatterData) {
+    if (typeof formatterData.value !== 'undefined') {
+        return (React.createElement("span", { dangerouslySetInnerHTML: (function () { return ({
+                __html: formatterData.value,
+            }); })() }));
+    }
+    else {
+        return '';
+    }
+}
+exports.default = { money: money, date: date, datetime: datetime, html: html };

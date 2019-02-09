@@ -22,7 +22,6 @@ function calculateDimensions(storeState, _a) {
             (showRowSelector ? rowSelectorColumnWidth : 0);
     currentStyles.bodyTrHeight = bodyTablsRowsLength * optionsBodyColumnHeight;
     currentStyles.horizontalScrollerHeight = 0;
-    currentStyles.pageButtonsContainerWidth = 0;
     currentStyles.frozenPanelWidth = (function (_colGroup, endIndex) {
         var width = 0;
         for (var i = 0, l = endIndex; i < l; i++) {

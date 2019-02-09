@@ -49,6 +49,7 @@ const store = {
     bodyRowMap: {},
     bodyGroupingMap: {},
     options: {},
+    status: '',
     styles: undefined,
     predefinedFormatter: {},
     predefinedCollector: {},
@@ -386,6 +387,7 @@ class StoreProvider extends React.Component {
             nProps.scrollTop === nState.scrollTop &&
             nProps.columnHeight === nState.columnHeight &&
             nProps.options === nState.options &&
+            nProps.status === nState.status &&
             //
             nProps.headerColGroup === nState.headerColGroup &&
             nProps.headerTable === nState.headerTable &&
@@ -429,6 +431,7 @@ class StoreProvider extends React.Component {
             storeState.selection = nProps.selection;
             storeState.rowSelector = nProps.rowSelector;
             storeState.options = nProps.options;
+            storeState.status = nProps.status;
             storeState.rootNode = nProps.rootNode;
             storeState.clipBoardNode = nProps.clipBoardNode;
             storeState.rootObject = nProps.rootObject;

@@ -9,7 +9,6 @@ declare class DataGrid extends React.Component<IProps, IState> {
     static defaultColumnKeys: IDataGrid.IColumnKeys;
     static defaultHeader: IDataGrid.IOptionHeader;
     static defaultBody: IDataGrid.IOptionBody;
-    static defaultPageButtons: IDataGrid.IOptionPageButton[];
     static defaultPage: IDataGrid.IOptionPage;
     static defaultScroller: IDataGrid.IOptionScroller;
     static defaultOptions: IDataGrid.IOptions;

@@ -132,7 +132,7 @@ var DataGrid = /** @class */ (function (_super) {
         return _this;
     }
     DataGrid.prototype.render = function () {
-        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, width = _a.width, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector, scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
+        var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, status = _a.status, _c = _a.options, options = _c === void 0 ? {} : _c, _d = _a.style, style = _d === void 0 ? {} : _d, onBeforeEvent = _a.onBeforeEvent, onAfterEvent = _a.onAfterEvent, onScrollEnd = _a.onScrollEnd, onRightClick = _a.onRightClick, _e = _a.height, height = _e === void 0 ? DataGrid.defaultHeight : _e, width = _a.width, _f = _a.loading, loading = _f === void 0 ? false : _f, _g = _a.loadingData, loadingData = _g === void 0 ? false : _g, selection = _a.selection, rowSelector = _a.rowSelector, scrollLeft = _a.scrollLeft, scrollTop = _a.scrollTop;
         var gridRootStyle = __assign({
             height: height,
             width: width,
@@ -145,6 +145,7 @@ var DataGrid = /** @class */ (function (_super) {
             height: height,
             selection: selection,
             rowSelector: rowSelector,
+            status: status,
             options: this.getOptions(options),
             scrollLeft: scrollLeft,
             scrollTop: scrollTop,
@@ -200,17 +201,15 @@ var DataGrid = /** @class */ (function (_super) {
         grouping: false,
         mergeCells: false,
     };
-    DataGrid.defaultPageButtons = [
-        { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-        { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-        { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-        { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-        { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-        { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-    ];
+    // static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
+    //   { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+    //   { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+    //   { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+    //   { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+    //   { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+    //   { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
+    // ];
     DataGrid.defaultPage = {
-        buttons: DataGrid.defaultPageButtons,
-        buttonHeight: 16,
         height: 20,
     };
     DataGrid.defaultScroller = {
@@ -260,7 +259,6 @@ var DataGrid = /** @class */ (function (_super) {
         horizontalScrollBarWidth: 0,
         scrollerPadding: 0,
         scrollerArrowSize: 0,
-        pageButtonsContainerWidth: 0,
     };
     DataGrid.defaultThrottleWait = 100;
     return DataGrid;

@@ -93,6 +93,7 @@ var store = {
     bodyRowMap: {},
     bodyGroupingMap: {},
     options: {},
+    status: '',
     styles: undefined,
     predefinedFormatter: {},
     predefinedCollector: {},
@@ -434,6 +435,7 @@ var StoreProvider = /** @class */ (function (_super) {
             nProps.scrollTop === nState.scrollTop &&
             nProps.columnHeight === nState.columnHeight &&
             nProps.options === nState.options &&
+            nProps.status === nState.status &&
             //
             nProps.headerColGroup === nState.headerColGroup &&
             nProps.headerTable === nState.headerTable &&
@@ -477,6 +479,7 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.selection = nProps.selection;
             storeState.rowSelector = nProps.rowSelector;
             storeState.options = nProps.options;
+            storeState.status = nProps.status;
             storeState.rootNode = nProps.rootNode;
             storeState.clipBoardNode = nProps.clipBoardNode;
             storeState.rootObject = nProps.rootObject;

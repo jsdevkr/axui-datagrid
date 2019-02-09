@@ -86,7 +86,7 @@ class DataGrid extends React.Component {
         this.clipBoardNode = React.createRef();
     }
     render() {
-        const { data = [], options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
+        const { data = [], status, options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
         let gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -99,6 +99,7 @@ class DataGrid extends React.Component {
             height,
             selection,
             rowSelector,
+            status,
             options: this.getOptions(options),
             scrollLeft,
             scrollTop,
@@ -155,17 +156,15 @@ DataGrid.defaultBody = {
     grouping: false,
     mergeCells: false,
 };
-DataGrid.defaultPageButtons = [
-    { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-    { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-    { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-    { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-    { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-    { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-];
+// static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
+//   { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
+//   { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
+//   { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
+//   { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
+//   { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
+//   { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
+// ];
 DataGrid.defaultPage = {
-    buttons: DataGrid.defaultPageButtons,
-    buttonHeight: 16,
     height: 20,
 };
 DataGrid.defaultScroller = {
@@ -215,7 +214,6 @@ DataGrid.defaultStyles = {
     horizontalScrollBarWidth: 0,
     scrollerPadding: 0,
     scrollerArrowSize: 0,
-    pageButtonsContainerWidth: 0,
 };
 DataGrid.defaultThrottleWait = 100;
 exports.default = DataGrid;

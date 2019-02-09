@@ -4,15 +4,6 @@ const React = require("react");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const _enums_1 = require("../common/@enums");
-const PageButtons = ({ pageButtons, pageButtonHeight, onClickPageButton }) => (React.createElement(React.Fragment, null, pageButtons.map((button, bi) => {
-    return (React.createElement("button", { key: bi, style: {
-            height: pageButtonHeight,
-            width: button.width || pageButtonHeight,
-        }, onClick: (e) => {
-            onClickPageButton(e, button.onClick);
-        } },
-        React.createElement("div", { "data-button-svg": true, className: utils_1.classNames(button.className) })));
-})));
 class DataGridPage extends React.Component {
     constructor() {
         super(...arguments);
@@ -123,13 +114,12 @@ class DataGridPage extends React.Component {
         };
     }
     render() {
-        const { options = {}, styles = {} } = this.props;
-        const { pageButtonsContainerWidth, horizontalScrollerWidth } = styles;
+        const { options = {}, styles = {}, status } = this.props;
+        const { horizontalScrollerWidth } = styles;
         const { page: optionPage = {} } = options;
-        const { buttons: pageButtons = [], buttonHeight: pageButtonHeight = 0, } = optionPage;
+        const { height } = optionPage;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-buttons" },
-                React.createElement(PageButtons, { pageButtons: pageButtons, pageButtonHeight: pageButtonHeight, onClickPageButton: this.onClickPageButton })),
+            React.createElement("div", { className: "axui-datagrid-page-status" }, status),
             React.createElement("div", { style: { width: horizontalScrollerWidth } })));
     }
 }
