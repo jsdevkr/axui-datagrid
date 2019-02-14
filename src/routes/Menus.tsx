@@ -34,7 +34,9 @@ export const Menus = {
       { to: '/examples/FootSum', label: 'Foot summary' },
       { to: '/examples/AlignHeader', label: 'Align Header' },
       { to: '/examples/Resizing', label: 'Resizing' },
+      { to: '/examples/AutofitColumnWidth', label: 'Autofit Column Width' },
       { to: '/examples/Etc', label: 'etc.' },
+
       // { to: '/examples/BodyGrouping', label: 'Body grouping' },
     ],
   },
