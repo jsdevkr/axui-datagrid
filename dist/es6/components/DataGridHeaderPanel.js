@@ -212,29 +212,14 @@ class DataGridHeaderPanel extends React.Component {
         };
         this.onDoubleClickColumnResizer = (e, col) => {
             e.preventDefault();
-            // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
-            // 단, 컬럼 명이 최소길이다.
-            // widthOfOneChar = 한 문자의 너비
-            const widthOfOneChar = 14;
             const { dispatch, filteredList = [], colGroup = [] } = this.props;
-            const longestWordLength = Math.max(...filteredList
-                .filter(item => {
-                let value = item[colGroup[col.colIndex].key || ''];
-                return value !== undefined;
-            })
-                .map(item => {
-                let value = item[colGroup[col.colIndex].key || ''];
-                return String(value).length;
-            }));
-            const columnWordLength = (colGroup[col.colIndex].label || '')
-                .length;
-            const newWidth = (longestWordLength > columnWordLength
-                ? longestWordLength
-                : columnWordLength) * widthOfOneChar;
-            dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
-                col,
-                newWidth,
-            });
+            if (this.props.autofitColGroup) {
+                const newWidth = this.props.autofitColGroup[Number(col.colIndex)].tdWidth;
+                dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
+                    col,
+                    newWidth,
+                });
+            }
         };
     }
     render() {

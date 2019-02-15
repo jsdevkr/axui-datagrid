@@ -23,12 +23,13 @@ declare class DataGrid extends React.Component<IProps, IState> {
         mounted: boolean;
         autofit: boolean;
         doneAutofit: boolean;
+        autofitAsideWidth: number;
         autofitColGroup: never[];
     };
     constructor(props: IProps);
     getOptions: (options: IDataGrid.IOptions) => IDataGrid.IOptions;
     getProviderProps: (storeProps: IDataGrid.IStoreProps) => IDataGrid.IStoreProps;
-    applyAutofit: (colGroup: IDataGrid.IAutofitCol[]) => void;
+    applyAutofit: (params: IDataGrid.IapplyAutofitParam) => void;
     render(): JSX.Element;
     componentDidMount(): void;
     componentDidUpdate(prevProps: IProps): void;

@@ -109,9 +109,9 @@ var DatagridScroll = /** @class */ (function (_super) {
             var _e = styles.horizontalScrollerWidth, horizontalScrollerWidth = _e === void 0 ? 0 : _e, _f = styles.horizontalScrollBarWidth, horizontalScrollBarWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentWidth, scrollContentWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.verticalScrollerHeight, verticalScrollerHeight = _j === void 0 ? 0 : _j, _k = styles.verticalScrollBarHeight, verticalScrollBarHeight = _k === void 0 ? 0 : _k, _l = styles.scrollContentHeight, scrollContentHeight = _l === void 0 ? 0 : _l, _m = styles.scrollContentContainerHeight, scrollContentContainerHeight = _m === void 0 ? 0 : _m;
             e.preventDefault();
             var currScrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-                (scrollContentWidth - scrollContentContainerWidth) || 1;
+                (scrollContentWidth - scrollContentContainerWidth) || 0;
             var currScrollBarTop = (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-                (scrollContentHeight - scrollContentContainerHeight) || 1;
+                (scrollContentHeight - scrollContentContainerHeight) || 0;
             var startMousePosition = utils_1.getMousePosition(e);
             var onMouseMove = function (ee) {
                 var _a;
@@ -126,6 +126,10 @@ var DatagridScroll = /** @class */ (function (_super) {
                     },
                     _a[_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
+                        console.log({
+                            scrollLeft: currScrollLeft,
+                            scrollTop: currScrollTop,
+                        });
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,

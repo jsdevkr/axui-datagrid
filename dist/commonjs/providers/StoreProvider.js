@@ -424,6 +424,7 @@ var StoreProvider = /** @class */ (function (_super) {
     }
     StoreProvider.getDerivedStateFromProps = function (nProps, nState) {
         // console.log('getDerivedStateFromProps ~~');
+        // console.log('nProps.colGroup === nState.colGroup', nState.colGroup);
         if (nProps.loading === nState.loading &&
             nProps.loadingData === nState.loadingData &&
             nProps.data === nState.data &&
@@ -499,6 +500,7 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.bodyRowData = nProps.bodyRowData;
             storeState.colGroupMap = nProps.colGroupMap;
             storeState.asideColGroup = nProps.asideColGroup;
+            storeState.autofitColGroup = nProps.autofitColGroup;
             storeState.colGroup = nProps.colGroup;
             storeState.footSumColumns = nProps.footSumColumns;
             storeState.footSumTable = nProps.footSumTable;

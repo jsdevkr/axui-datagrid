@@ -15,17 +15,21 @@ class DataGrid extends React.Component {
             mounted: false,
             autofit: false,
             doneAutofit: false,
+            autofitAsideWidth: 100,
             autofitColGroup: [],
         };
         this.getOptions = (options) => {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
         this.getProviderProps = (storeProps) => {
-            const { autofit, doneAutofit, autofitColGroup } = this.state;
+            const { autofit, doneAutofit, autofitAsideWidth, autofitColGroup, } = this.state;
             const { columns = [], footSum } = this.props;
             const { options = {} } = storeProps;
             const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
             const { columnHeight = 0 } = optionsBody;
+            if (autofit && doneAutofit) {
+                options.lineNumberColumnWidth = autofitAsideWidth;
+            }
             // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
             let newStoreProps = Object.assign({}, storeProps);
             // options.showRowSelector 체크
@@ -36,6 +40,9 @@ class DataGrid extends React.Component {
                 if (newStoreProps.options && newStoreProps.rowSelector.show) {
                     newStoreProps.options.showRowSelector = true;
                 }
+            }
+            if (doneAutofit) {
+                newStoreProps.autofitColGroup = autofitColGroup;
             }
             // convert colGroup
             newStoreProps.headerTable = utils_1.makeHeaderTable(columns, options);
@@ -57,8 +64,8 @@ class DataGrid extends React.Component {
                 newStoreProps.headerTable.rows.forEach((row, ridx) => {
                     row.cols.forEach((col, cidx) => {
                         if (newStoreProps.colGroupMap) {
-                            let colWidth = col.width;
-                            if (autofit && doneAutofit && autofitColGroup[col.colIndex]) {
+                            let colWidth = col.width; // columns로부터 전달받은 너비값.
+                            if (autofit && doneAutofit) {
                                 if (typeof col.colIndex !== 'undefined') {
                                     // autofitColGroup이 never타입으로 처리 되는 문제 확인 필요
                                     colWidth = autofitColGroup[col.colIndex].width;
@@ -83,6 +90,7 @@ class DataGrid extends React.Component {
             }
             newStoreProps.asideColGroup = headerDividedObj.asideColGroup;
             newStoreProps.colGroup = Object.values(newStoreProps.colGroupMap);
+            // console.log(autofitColGroup, newStoreProps.colGroup);
             // colGroup이 정의되면 footSum
             if (footSum) {
                 newStoreProps.footSumColumns = [...footSum];
@@ -94,10 +102,13 @@ class DataGrid extends React.Component {
             // provider props에서 styles 속성 제외 styles는 내부 state에 의해 관리 되도록 변경
             return newStoreProps;
         };
-        this.applyAutofit = (colGroup) => {
+        this.applyAutofit = (params) => {
+            const autofit = !!(this.props.options && this.props.options.autofitColumns);
             this.setState({
+                autofit,
                 doneAutofit: true,
-                autofitColGroup: colGroup,
+                autofitAsideWidth: params.asideWidth,
+                autofitColGroup: params.colGroup,
             });
             // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
         };
@@ -107,7 +118,6 @@ class DataGrid extends React.Component {
     render() {
         const { mounted, doneAutofit } = this.state;
         const { data = [], status, options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
-        const autofitColumns = this.props.options && this.props.options.autofitColumns;
         let gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -142,7 +152,7 @@ class DataGrid extends React.Component {
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))),
-                autofitColumns && !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
+                !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
     componentDidMount() {
         const newAutofitColumns = this.props.options && this.props.options.autofitColumns;
@@ -220,8 +230,8 @@ DataGrid.defaultOptions = {
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
     autofitColumns: false,
-    autofitColumnWidthMin: 100,
-    autofitColumnWidthMax: 400,
+    autofitColumnWidthMin: 50,
+    autofitColumnWidthMax: 300,
 };
 DataGrid.defaultStyles = {
     asidePanelWidth: 0,

@@ -257,3 +257,4 @@ export default Formatter;
 - v0.8.1 ~ 0.8.3 - minor patch & fixed bug
 - v0.9.0 - Add a new props status & formatter support HTML
 - v0.9.1 - display default status
+- v0.10.0 - Added the options.autofitColumns property, fix problem wrong scroll position

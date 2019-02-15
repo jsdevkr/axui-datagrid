@@ -38,6 +38,10 @@ export declare namespace IDataGrid {
         rows?: number[];
         cols?: number[];
     }
+    interface IapplyAutofitParam {
+        asideWidth: number;
+        colGroup: IAutofitCol[];
+    }
     type formatterFunction = (formatterData: IFormatterData) => any;
     type collectorFunction = (formatterData: ICollectorData) => any;
     type editorFunction = (editorData: IFormatterData) => void;
@@ -102,6 +106,7 @@ export declare namespace IDataGrid {
     interface IAutofitCol {
         colIndex: number;
         width: number;
+        tdWidth: number;
     }
     interface IMoving {
         active?: boolean;
@@ -226,6 +231,7 @@ export declare namespace IDataGrid {
         bodyRowMap?: {};
         asideBodyRowData?: IColumnTableMap;
         leftBodyRowData?: IColumnTableMap;
+        autofitColGroup?: IAutofitCol[];
         colGroup?: ICol[];
         colGroupMap?: {};
         asideColGroup?: ICol[];
@@ -286,6 +292,7 @@ export declare namespace IDataGrid {
         selectionECol?: number;
         printStartColIndex?: number;
         printEndColIndex?: number;
+        autofitColGroup?: IAutofitCol[];
         colGroup?: ICol[];
         colGroupMap?: {};
         asideColGroup?: ICol[];
@@ -360,6 +367,7 @@ export declare namespace IDataGrid {
         mounted: boolean;
         autofit: boolean;
         doneAutofit: boolean;
+        autofitAsideWidth: number;
         autofitColGroup: IAutofitCol[];
     }
     type DispatchParam = {

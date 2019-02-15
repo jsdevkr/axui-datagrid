@@ -12,26 +12,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
@@ -251,29 +231,14 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         };
         _this.onDoubleClickColumnResizer = function (e, col) {
             e.preventDefault();
-            // 가장 긴 문자열의 문자 개수 * 한 문자의 너비 = 더블 클릭 시 auto sizing 될 크기
-            // 단, 컬럼 명이 최소길이다.
-            // widthOfOneChar = 한 문자의 너비
-            var widthOfOneChar = 14;
             var _a = _this.props, dispatch = _a.dispatch, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c;
-            var longestWordLength = Math.max.apply(Math, __spread(filteredList
-                .filter(function (item) {
-                var value = item[colGroup[col.colIndex].key || ''];
-                return value !== undefined;
-            })
-                .map(function (item) {
-                var value = item[colGroup[col.colIndex].key || ''];
-                return String(value).length;
-            })));
-            var columnWordLength = (colGroup[col.colIndex].label || '')
-                .length;
-            var newWidth = (longestWordLength > columnWordLength
-                ? longestWordLength
-                : columnWordLength) * widthOfOneChar;
-            dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
-                col: col,
-                newWidth: newWidth,
-            });
+            if (_this.props.autofitColGroup) {
+                var newWidth = _this.props.autofitColGroup[Number(col.colIndex)].tdWidth;
+                dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
+                    col: col,
+                    newWidth: newWidth,
+                });
+            }
         };
         return _this;
     }

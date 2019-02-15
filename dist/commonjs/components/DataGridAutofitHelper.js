@@ -28,19 +28,24 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
                 var tds = _this.tableRef.current.querySelectorAll('[data-autofit-table-head-row] > td');
                 if (tds && tds.length) {
                     for (var i = 0, l = tds.length; i < l; i++) {
-                        var tdWidth = tds[i].getBoundingClientRect().width;
+                        var tdWidth = tds[i].getBoundingClientRect().width + 10;
+                        var colWidth = autofitColumnWidthMin > tdWidth
+                            ? autofitColumnWidthMin
+                            : autofitColumnWidthMax < tdWidth
+                                ? autofitColumnWidthMax
+                                : tdWidth;
                         colGroup[i] = {
                             colIndex: i,
-                            width: autofitColumnWidthMin > tdWidth
-                                ? autofitColumnWidthMin
-                                : autofitColumnWidthMax < tdWidth
-                                    ? autofitColumnWidthMax
-                                    : tdWidth,
+                            width: i === 0 ? tdWidth + 10 : colWidth,
+                            tdWidth: Math.min(tdWidth + 10, autofitColumnWidthMax + 100),
                         };
                     }
                 }
                 if (colGroup.length) {
-                    _this.props.applyAutofit(colGroup);
+                    _this.props.applyAutofit({
+                        asideWidth: colGroup[0].width,
+                        colGroup: colGroup.slice(1),
+                    });
                 }
             }
         };
@@ -53,12 +58,17 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
         return (React.createElement("div", { className: 'axui-datagrid-autofit-helper' },
             React.createElement("table", { ref: this.tableRef },
                 React.createElement("thead", null,
-                    React.createElement("tr", { "data-autofit-table-head-row": true }, colGroup.map(function (col, ci) { return (React.createElement("td", { key: ci }, col.label)); }))),
+                    React.createElement("tr", { "data-autofit-table-head-row": true },
+                        React.createElement("td", null, filteredList.length),
+                        colGroup.map(function (col, ci) { return (React.createElement("td", { key: ci }, col.label)); }))),
                 React.createElement("tbody", null, filteredList
                     .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
                     .map(function (row, li) {
-                    return (React.createElement("tr", { key: li }, colGroup.map(function (col) { return (React.createElement("td", { key: col.colIndex },
-                        React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter }))); })));
+                    return (React.createElement("tr", { key: li },
+                        React.createElement("td", null, li),
+                        colGroup.map(function (col) { return (React.createElement("td", { key: col.colIndex },
+                            React.createElement("span", { "data-span": true },
+                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter })))); })));
                 })))));
     };
     DataGridAutofitHelper.prototype.componentDidMount = function () {
