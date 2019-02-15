@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { IDataGrid } from '../common/@types';
+import { isFunction } from '../utils';
 import CellLabel from './CellLabel';
 
 interface IProps extends IDataGridStore {
@@ -9,12 +10,12 @@ interface IProps extends IDataGridStore {
 }
 
 class DataGridAutofitHelper extends React.Component<IProps> {
-  tableRef: React.RefObject<HTMLTableElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
 
   constructor(props: IProps) {
     super(props);
 
-    this.tableRef = React.createRef();
+    this.canvasRef = React.createRef();
   }
 
   render() {
@@ -27,64 +28,72 @@ class DataGridAutofitHelper extends React.Component<IProps> {
 
     const { bodyHeight = 0, bodyTrHeight = 1 } = styles;
 
-    return (
-      <div className={'axui-datagrid-autofit-helper'}>
-        <table ref={this.tableRef}>
-          <thead>
-            <tr data-autofit-table-head-row>
-              <td>{filteredList.length}</td>
-              {colGroup.map((col, ci) => (
-                <td key={ci}>{col.label}</td>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredList
-              .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
-              .map((row, li) => {
-                return (
-                  <tr key={li}>
-                    <td>{li}</td>
-                    {colGroup.map(col => (
-                      <td key={col.colIndex}>
-                        <span data-span>
-                          <CellLabel
-                            lineHeight={10}
-                            col={col}
-                            list={filteredList}
-                            li={li}
-                            predefinedFormatter={predefinedFormatter}
-                          />
-                        </span>
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-    );
+    return <canvas ref={this.canvasRef} style={{ fontSize: 'inherit' }} />;
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.getColumnsWidth();
-    });
+    this.getColumnsWidth();
   }
 
   getColumnsWidth = () => {
-    const { options = {} } = this.props;
+    const {
+      options = {},
+      colGroup = [],
+      filteredList = [],
+      predefinedFormatter = {},
+      styles = {},
+    } = this.props;
     const { autofitColumnWidthMin = 0, autofitColumnWidthMax = 0 } = options;
+    const { bodyHeight = 0, bodyTrHeight = 1 } = styles;
 
-    if (this.tableRef.current) {
-      const colGroup: IDataGrid.IAutofitCol[] = [];
-      const tds = this.tableRef.current.querySelectorAll(
-        '[data-autofit-table-head-row] > td',
-      );
-      if (tds && tds.length) {
-        for (let i = 0, l = tds.length; i < l; i++) {
-          const tdWidth = tds[i].getBoundingClientRect().width + 10;
+    if (this.canvasRef.current) {
+      const context = this.canvasRef.current.getContext('2d') as any;
+      context.font =
+        '12px "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif';
+      const cols = colGroup.map((col, ci) => {
+        return context.measureText(col.label).width;
+      });
+
+      filteredList
+        .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
+        .map((row, li) => {
+          colGroup.map((col, ci) => {
+            const { key = '', formatter } = col;
+            const formatterData = {
+              filteredList,
+              item: filteredList[li],
+              index: li,
+              key: col.key,
+              value: filteredList[li][col.key || ''],
+            };
+
+            let labelValue: string;
+
+            if (
+              typeof formatter === 'string' &&
+              formatter in predefinedFormatter
+            ) {
+              labelValue = predefinedFormatter[formatter](formatterData);
+            } else if (isFunction(formatter)) {
+              labelValue = (formatter as IDataGrid.formatterFunction)(
+                formatterData,
+              );
+            } else {
+              labelValue = filteredList[li][key];
+            }
+            const _width = Math.ceil(context.measureText(labelValue).width);
+            cols[ci] = Math.max(cols[ci], _width);
+
+            console.log('col' + ci, _width, labelValue);
+          });
+        });
+
+      console.log(cols);
+
+      this.props.applyAutofit({
+        asideWidth: context.measureText(filteredList.length + '').width + 10,
+        colGroup: cols.map((width, colIndex) => {
+          const tdWidth = width + 12;
           let colWidth =
             autofitColumnWidthMin > tdWidth
               ? autofitColumnWidthMin
@@ -92,19 +101,12 @@ class DataGridAutofitHelper extends React.Component<IProps> {
               ? autofitColumnWidthMax
               : tdWidth;
 
-          colGroup[i] = {
-            colIndex: i,
-            width: i === 0 ? tdWidth + 10 : colWidth,
-            tdWidth: Math.min(tdWidth + 10, autofitColumnWidthMax + 100),
+          return {
+            colIndex,
+            width: colWidth,
           };
-        }
-      }
-      if (colGroup.length) {
-        this.props.applyAutofit({
-          asideWidth: colGroup[0].width,
-          colGroup: colGroup.slice(1),
-        });
-      }
+        }) as IDataGrid.IAutofitCol[],
+      });
     }
   };
 }
