@@ -57,7 +57,9 @@ class DataGridAutofitHelper extends React.Component {
                 })))));
     }
     componentDidMount() {
-        this.getColumnsWidth();
+        setTimeout(() => {
+            this.getColumnsWidth();
+        });
     }
 }
 exports.default = hoc_1.connectStore(DataGridAutofitHelper);

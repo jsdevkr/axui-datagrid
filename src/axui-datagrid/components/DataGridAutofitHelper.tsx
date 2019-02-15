@@ -68,7 +68,9 @@ class DataGridAutofitHelper extends React.Component<IProps> {
   }
 
   componentDidMount() {
-    this.getColumnsWidth();
+    setTimeout(() => {
+      this.getColumnsWidth();
+    });
   }
 
   getColumnsWidth = () => {

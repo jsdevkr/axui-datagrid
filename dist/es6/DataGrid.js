@@ -155,7 +155,6 @@ class DataGrid extends React.Component {
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
     componentDidMount() {
-        const newAutofitColumns = this.props.options && this.props.options.autofitColumns;
         this.setState({
             mounted: true,
         });

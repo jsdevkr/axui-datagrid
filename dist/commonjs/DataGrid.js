@@ -201,7 +201,6 @@ var DataGrid = /** @class */ (function (_super) {
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     };
     DataGrid.prototype.componentDidMount = function () {
-        var newAutofitColumns = this.props.options && this.props.options.autofitColumns;
         this.setState({
             mounted: true,
         });

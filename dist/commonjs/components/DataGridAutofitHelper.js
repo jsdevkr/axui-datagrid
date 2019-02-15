@@ -72,7 +72,10 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
                 })))));
     };
     DataGridAutofitHelper.prototype.componentDidMount = function () {
-        this.getColumnsWidth();
+        var _this = this;
+        setTimeout(function () {
+            _this.getColumnsWidth();
+        });
     };
     return DataGridAutofitHelper;
 }(React.Component));

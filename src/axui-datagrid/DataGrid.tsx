@@ -273,6 +273,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
   applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
     const autofit = !!(this.props.options && this.props.options.autofitColumns);
+
     this.setState({
       autofit,
       doneAutofit: true,
@@ -362,9 +363,6 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    const newAutofitColumns =
-      this.props.options && this.props.options.autofitColumns;
-
     this.setState({
       mounted: true,
     });
