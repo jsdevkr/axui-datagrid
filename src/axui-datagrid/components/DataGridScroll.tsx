@@ -225,11 +225,6 @@ class DatagridScroll extends React.Component<IProps> {
             styles,
           );
 
-          console.log({
-            scrollLeft: currScrollLeft,
-            scrollTop: currScrollTop,
-          });
-
           setStoreState({
             scrollLeft: currScrollLeft,
             scrollTop: currScrollTop,

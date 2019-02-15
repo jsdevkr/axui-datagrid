@@ -126,10 +126,6 @@ var DatagridScroll = /** @class */ (function (_super) {
                     },
                     _a[_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL] = function () {
                         var _a = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles), _b = _a.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
-                        console.log({
-                            scrollLeft: currScrollLeft,
-                            scrollTop: currScrollTop,
-                        });
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,

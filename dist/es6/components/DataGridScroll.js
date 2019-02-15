@@ -109,10 +109,6 @@ class DatagridScroll extends React.Component {
                     },
                     [_enums_1.DataGridEnums.ScrollTypes.HORIZONTAL]: () => {
                         let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPositionByScrollBar(currScrollBarLeft + (x - startMousePosition.x), currScrollBarTop, styles);
-                        console.log({
-                            scrollLeft: currScrollLeft,
-                            scrollTop: currScrollTop,
-                        });
                         setStoreState({
                             scrollLeft: currScrollLeft,
                             scrollTop: currScrollTop,
