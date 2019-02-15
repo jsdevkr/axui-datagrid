@@ -11,3 +11,4 @@ export { default as ChangeColumns } from './ChangeColumns';
 export { default as FootSum } from './FootSum';
 export { default as Resizing } from './Resizing';
 export { default as Etc } from './Etc';
+export { default as AutofitColumnWidth } from './AutofitColumnWidth';

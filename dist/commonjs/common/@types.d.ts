@@ -99,6 +99,10 @@ export declare namespace IDataGrid {
         deleted?: string;
         disableSelection?: string;
     }
+    interface IAutofitCol {
+        colIndex: number;
+        width: number;
+    }
     interface IMoving {
         active?: boolean;
         top?: boolean;
@@ -170,6 +174,9 @@ export declare namespace IDataGrid {
         columnKeys?: IColumnKeys;
         footSum?: boolean;
         bodyLoaderHeight?: number;
+        autofitColumns?: boolean;
+        autofitColumnWidthMax?: number;
+        autofitColumnWidthMin?: number;
     }
     interface IStyles {
         asidePanelWidth?: number;
@@ -351,6 +358,9 @@ export declare namespace IDataGrid {
     }
     interface IRootState {
         mounted: boolean;
+        autofit: boolean;
+        doneAutofit: boolean;
+        autofitColGroup: IAutofitCol[];
     }
     type DispatchParam = {
         [key: string]: any;

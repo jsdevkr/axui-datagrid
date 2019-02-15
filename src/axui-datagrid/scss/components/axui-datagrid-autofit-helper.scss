@@ -1,0 +1,13 @@
+.axui-datagrid-autofit-helper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  table {
+    table-layout: auto;
+    width: auto;
+    td {
+      white-space: nowrap;
+    }
+  }
+}

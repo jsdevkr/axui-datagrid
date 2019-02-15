@@ -20,6 +20,7 @@ import {
   divideTableByFrozenColumnIndex,
 } from './utils';
 import { IDataGrid } from './common/@types';
+import DataGridAutofitHelper from './components/DataGridAutofitHelper';
 
 interface IProps extends IDataGrid.IProps {}
 interface IState extends IDataGrid.IRootState {}
@@ -76,6 +77,7 @@ class DataGrid extends React.Component<IProps, IState> {
     showLineNumber: true,
     multipleSelect: true,
     columnMinWidth: 100,
+
     lineNumberColumnWidth: 60,
     rowSelectorColumnWidth: 28,
     remoteSort: false,
@@ -85,6 +87,9 @@ class DataGrid extends React.Component<IProps, IState> {
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
+    autofitColumns: false,
+    autofitColumnWidthMin: 50,
+    autofitColumnWidthMax: 300,
   };
   static defaultStyles: IDataGrid.IStyles = {
     asidePanelWidth: 0,
@@ -121,6 +126,10 @@ class DataGrid extends React.Component<IProps, IState> {
 
   state = {
     mounted: false,
+    autofit: false,
+    doneAutofit: false,
+    autofitAsideWidth: 100,
+    autofitColGroup: [],
   };
 
   constructor(props: IProps) {
@@ -135,6 +144,12 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   getProviderProps = (storeProps: IDataGrid.IStoreProps) => {
+    const {
+      autofit,
+      doneAutofit,
+      autofitAsideWidth,
+      autofitColGroup,
+    } = this.state;
     const { columns = [], footSum } = this.props;
     const { options = {} } = storeProps;
     const {
@@ -142,6 +157,10 @@ class DataGrid extends React.Component<IProps, IState> {
       body: optionsBody = DataGrid.defaultBody,
     } = options;
     const { columnHeight = 0 } = optionsBody;
+
+    if (autofit && doneAutofit) {
+      options.lineNumberColumnWidth = autofitAsideWidth;
+    }
 
     // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
     let newStoreProps: IDataGrid.IStoreProps = { ...storeProps };
@@ -157,6 +176,9 @@ class DataGrid extends React.Component<IProps, IState> {
       }
     }
 
+    if (doneAutofit) {
+      newStoreProps.autofitColGroup = autofitColGroup;
+    }
     // convert colGroup
     newStoreProps.headerTable = makeHeaderTable(columns, options);
     newStoreProps.bodyRowTable = makeBodyRowTable(columns, options);
@@ -194,10 +216,21 @@ class DataGrid extends React.Component<IProps, IState> {
       newStoreProps.headerTable.rows.forEach((row, ridx) => {
         row.cols.forEach((col, cidx) => {
           if (newStoreProps.colGroupMap) {
+            let colWidth = col.width; // columns로부터 전달받은 너비값.
+
+            if (autofit && doneAutofit) {
+              if (typeof col.colIndex !== 'undefined') {
+                // autofitColGroup이 never타입으로 처리 되는 문제 확인 필요
+                colWidth = (autofitColGroup[
+                  col.colIndex
+                ] as IDataGrid.IAutofitCol).width;
+              }
+            }
+
             const currentCol: IDataGrid.ICol = {
               key: col.key,
               label: col.label,
-              width: col.width, // columns로부터 전달받은 너비값.
+              width: colWidth,
               align: col.align,
               colSpan: col.colSpan,
               rowSpan: col.rowSpan,
@@ -214,6 +247,8 @@ class DataGrid extends React.Component<IProps, IState> {
 
     newStoreProps.asideColGroup = headerDividedObj.asideColGroup;
     newStoreProps.colGroup = Object.values(newStoreProps.colGroupMap);
+
+    // console.log(autofitColGroup, newStoreProps.colGroup);
 
     // colGroup이 정의되면 footSum
     if (footSum) {
@@ -236,7 +271,19 @@ class DataGrid extends React.Component<IProps, IState> {
     return newStoreProps;
   };
 
+  applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
+    const autofit = !!(this.props.options && this.props.options.autofitColumns);
+    this.setState({
+      autofit,
+      doneAutofit: true,
+      autofitAsideWidth: params.asideWidth,
+      autofitColGroup: params.colGroup,
+    });
+    // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+  };
+
   public render() {
+    const { mounted, doneAutofit } = this.state;
     const {
       data = [],
       status,
@@ -296,7 +343,7 @@ class DataGrid extends React.Component<IProps, IState> {
           <div className="axui-datagrid-clip-board">
             <textarea ref={this.clipBoardNode} />
           </div>
-          {this.state.mounted && (
+          {mounted && (
             <DataGridEvents>
               <DataGridHeader />
               <DataGridBody />
@@ -306,17 +353,33 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridLoader loading={loading} />
             </DataGridEvents>
           )}
+          {!doneAutofit && (
+            <DataGridAutofitHelper applyAutofit={this.applyAutofit} />
+          )}
         </div>
       </DataGridStore.Provider>
     );
   }
 
   componentDidMount() {
-    // console.log(this.rootNode);
+    const newAutofitColumns =
+      this.props.options && this.props.options.autofitColumns;
 
     this.setState({
       mounted: true,
     });
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    const autofitColumns =
+      prevProps.options && prevProps.options.autofitColumns;
+    const _autofitColumns =
+      this.props.options && this.props.options.autofitColumns;
+
+    if (autofitColumns !== _autofitColumns) {
+      this.setState({ doneAutofit: false });
+      console.log(autofitColumns);
+    }
   }
 }
 

@@ -4,6 +4,7 @@ const React = require("react");
 const providers_1 = require("./providers");
 const components_1 = require("./components");
 const utils_1 = require("./utils");
+const DataGridAutofitHelper_1 = require("./components/DataGridAutofitHelper");
 class DataGrid extends React.Component {
     constructor(props) {
         super(props);
@@ -12,11 +13,15 @@ class DataGrid extends React.Component {
         this.scrollTop = 0;
         this.state = {
             mounted: false,
+            autofit: false,
+            doneAutofit: false,
+            autofitColGroup: [],
         };
         this.getOptions = (options) => {
             return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
         };
         this.getProviderProps = (storeProps) => {
+            const { autofit, doneAutofit, autofitColGroup } = this.state;
             const { columns = [], footSum } = this.props;
             const { options = {} } = storeProps;
             const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
@@ -52,10 +57,17 @@ class DataGrid extends React.Component {
                 newStoreProps.headerTable.rows.forEach((row, ridx) => {
                     row.cols.forEach((col, cidx) => {
                         if (newStoreProps.colGroupMap) {
+                            let colWidth = col.width;
+                            if (autofit && doneAutofit && autofitColGroup[col.colIndex]) {
+                                if (typeof col.colIndex !== 'undefined') {
+                                    // autofitColGroup이 never타입으로 처리 되는 문제 확인 필요
+                                    colWidth = autofitColGroup[col.colIndex].width;
+                                }
+                            }
                             const currentCol = {
                                 key: col.key,
                                 label: col.label,
-                                width: col.width,
+                                width: colWidth,
                                 align: col.align,
                                 colSpan: col.colSpan,
                                 rowSpan: col.rowSpan,
@@ -82,11 +94,20 @@ class DataGrid extends React.Component {
             // provider props에서 styles 속성 제외 styles는 내부 state에 의해 관리 되도록 변경
             return newStoreProps;
         };
+        this.applyAutofit = (colGroup) => {
+            this.setState({
+                doneAutofit: true,
+                autofitColGroup: colGroup,
+            });
+            // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+        };
         this.rootNode = React.createRef();
         this.clipBoardNode = React.createRef();
     }
     render() {
+        const { mounted, doneAutofit } = this.state;
         const { data = [], status, options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
+        const autofitColumns = this.props.options && this.props.options.autofitColumns;
         let gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -114,19 +135,28 @@ class DataGrid extends React.Component {
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },
                     React.createElement("textarea", { ref: this.clipBoardNode })),
-                this.state.mounted && (React.createElement(components_1.DataGridEvents, null,
+                mounted && (React.createElement(components_1.DataGridEvents, null,
                     React.createElement(components_1.DataGridHeader, null),
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridColumnFilter, null),
-                    React.createElement(components_1.DataGridLoader, { loading: loading }))))));
+                    React.createElement(components_1.DataGridLoader, { loading: loading }))),
+                autofitColumns && !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
     componentDidMount() {
-        // console.log(this.rootNode);
+        const newAutofitColumns = this.props.options && this.props.options.autofitColumns;
         this.setState({
             mounted: true,
         });
+    }
+    componentDidUpdate(prevProps) {
+        const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
+        const _autofitColumns = this.props.options && this.props.options.autofitColumns;
+        if (autofitColumns !== _autofitColumns) {
+            this.setState({ doneAutofit: false });
+            console.log(autofitColumns);
+        }
     }
 }
 DataGrid.defaultHeight = 400;
@@ -189,6 +219,9 @@ DataGrid.defaultOptions = {
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
+    autofitColumns: false,
+    autofitColumnWidthMin: 100,
+    autofitColumnWidthMax: 400,
 };
 DataGrid.defaultStyles = {
     asidePanelWidth: 0,

@@ -189,10 +189,10 @@ class DatagridScroll extends React.Component<IProps> {
 
     const currScrollBarLeft: number =
       (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
-        (scrollContentWidth - scrollContentContainerWidth) || 1;
+        (scrollContentWidth - scrollContentContainerWidth) || 0;
     const currScrollBarTop: number =
       (-scrollTop * (verticalScrollerHeight - verticalScrollBarHeight)) /
-        (scrollContentHeight - scrollContentContainerHeight) || 1;
+        (scrollContentHeight - scrollContentContainerHeight) || 0;
 
     let startMousePosition = getMousePosition(e);
 
@@ -224,6 +224,11 @@ class DatagridScroll extends React.Component<IProps> {
             currScrollBarTop,
             styles,
           );
+
+          console.log({
+            scrollLeft: currScrollLeft,
+            scrollTop: currScrollTop,
+          });
 
           setStoreState({
             scrollLeft: currScrollLeft,
