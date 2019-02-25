@@ -66,9 +66,9 @@ class DataGrid extends React.Component {
                         if (newStoreProps.colGroupMap) {
                             let colWidth = col.width; // columns로부터 전달받은 너비값.
                             if (autofit && doneAutofit) {
-                                if (typeof col.colIndex !== 'undefined') {
-                                    // autofitColGroup이 never타입으로 처리 되는 문제 확인 필요
-                                    colWidth = autofitColGroup[col.colIndex].width;
+                                if (utils_1.isNumber(col.colIndex) &&
+                                    autofitColGroup[Number(col.colIndex)]) {
+                                    colWidth = autofitColGroup[Number(col.colIndex)].width;
                                 }
                             }
                             const currentCol = {
@@ -162,7 +162,8 @@ class DataGrid extends React.Component {
     componentDidUpdate(prevProps) {
         const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
         const _autofitColumns = this.props.options && this.props.options.autofitColumns;
-        if (autofitColumns !== _autofitColumns) {
+        const columnChanged = prevProps.columns !== this.props.columns;
+        if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
             console.log(autofitColumns);
         }

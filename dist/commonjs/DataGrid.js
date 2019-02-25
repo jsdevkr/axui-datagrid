@@ -111,9 +111,9 @@ var DataGrid = /** @class */ (function (_super) {
                         if (newStoreProps.colGroupMap) {
                             var colWidth = col.width; // columns로부터 전달받은 너비값.
                             if (autofit && doneAutofit) {
-                                if (typeof col.colIndex !== 'undefined') {
-                                    // autofitColGroup이 never타입으로 처리 되는 문제 확인 필요
-                                    colWidth = autofitColGroup[col.colIndex].width;
+                                if (utils_1.isNumber(col.colIndex) &&
+                                    autofitColGroup[Number(col.colIndex)]) {
+                                    colWidth = autofitColGroup[Number(col.colIndex)].width;
                                 }
                             }
                             var currentCol = {
@@ -208,7 +208,8 @@ var DataGrid = /** @class */ (function (_super) {
     DataGrid.prototype.componentDidUpdate = function (prevProps) {
         var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
         var _autofitColumns = this.props.options && this.props.options.autofitColumns;
-        if (autofitColumns !== _autofitColumns) {
+        var columnChanged = prevProps.columns !== this.props.columns;
+        if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
             console.log(autofitColumns);
         }

@@ -231,9 +231,9 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         };
         _this.onDoubleClickColumnResizer = function (e, col) {
             e.preventDefault();
-            var _a = _this.props, dispatch = _a.dispatch, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c;
-            if (_this.props.autofitColGroup) {
-                var newWidth = _this.props.autofitColGroup[Number(col.colIndex)].tdWidth;
+            var _a = _this.props, dispatch = _a.dispatch, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, autofitColGroup = _a.autofitColGroup;
+            if (autofitColGroup && autofitColGroup[Number(col.colIndex)]) {
+                var newWidth = autofitColGroup[Number(col.colIndex)].tdWidth;
                 dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
                     col: col,
                     newWidth: newWidth,

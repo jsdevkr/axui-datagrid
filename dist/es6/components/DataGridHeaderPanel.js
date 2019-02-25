@@ -212,9 +212,9 @@ class DataGridHeaderPanel extends React.Component {
         };
         this.onDoubleClickColumnResizer = (e, col) => {
             e.preventDefault();
-            const { dispatch, filteredList = [], colGroup = [] } = this.props;
-            if (this.props.autofitColGroup) {
-                const newWidth = this.props.autofitColGroup[Number(col.colIndex)].tdWidth;
+            const { dispatch, filteredList = [], colGroup = [], autofitColGroup, } = this.props;
+            if (autofitColGroup && autofitColGroup[Number(col.colIndex)]) {
+                const newWidth = autofitColGroup[Number(col.colIndex)].tdWidth;
                 dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {
                     col,
                     newWidth,

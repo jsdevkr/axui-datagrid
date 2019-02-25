@@ -19,13 +19,7 @@ declare class DataGrid extends React.Component<IProps, IState> {
     clipBoardNode: React.RefObject<HTMLTextAreaElement>;
     scrollLeft: number;
     scrollTop: number;
-    state: {
-        mounted: boolean;
-        autofit: boolean;
-        doneAutofit: boolean;
-        autofitAsideWidth: number;
-        autofitColGroup: never[];
-    };
+    state: IState;
     constructor(props: IProps);
     getOptions: (options: IDataGrid.IOptions) => IDataGrid.IOptions;
     getProviderProps: (storeProps: IDataGrid.IStoreProps) => IDataGrid.IStoreProps;
