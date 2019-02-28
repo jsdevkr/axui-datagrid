@@ -249,7 +249,12 @@ class DatagridScroll extends React.Component<IProps> {
   };
 
   render() {
-    const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      styles = {},
+      options = {},
+    } = this.props;
 
     const {
       pageHeight = 0,
@@ -260,14 +265,18 @@ class DatagridScroll extends React.Component<IProps> {
 
       verticalScrollBarHeight = 0,
       horizontalScrollBarWidth = 0,
-      scrollerArrowSize = 0,
+
       scrollerPadding = 0,
+      scrollerArrowSize = 0,
 
       scrollContentContainerWidth = 1,
       scrollContentContainerHeight = 1,
       scrollContentWidth = 0,
       scrollContentHeight = 0,
     } = styles;
+
+    const { scroller = {} } = options;
+    const { theme = 'default' } = scroller;
 
     let scrollBarLeft: number =
       (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
@@ -360,15 +369,17 @@ class DatagridScroll extends React.Component<IProps> {
       <div className="axui-datagrid-scroller">
         {verticalScrollerWidth ? (
           <div data-scroll-track="vertical" style={verticalStyles}>
-            <div data-scroll-arrow="up" style={verticalArrowStyles}>
-              <div
-                data-arrow
-                style={verticalTopArrowStyles}
-                onClick={e =>
-                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.UP)
-                }
-              />
-            </div>
+            {theme === 'default' && (
+              <div data-scroll-arrow="up" style={verticalArrowStyles}>
+                <div
+                  data-arrow
+                  style={verticalTopArrowStyles}
+                  onClick={e =>
+                    this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.UP)
+                  }
+                />
+              </div>
+            )}
             <div
               data-scroll="vertical"
               onClick={e =>
@@ -386,28 +397,38 @@ class DatagridScroll extends React.Component<IProps> {
                 }
               />
             </div>
-            <div data-scroll-arrow="down" style={verticalArrowStyles}>
-              <div
-                data-arrow
-                style={verticalBottomArrowStyles}
-                onClick={e =>
-                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.DOWN)
-                }
-              />
-            </div>
+            {theme === 'default' && (
+              <div data-scroll-arrow="down" style={verticalArrowStyles}>
+                <div
+                  data-arrow
+                  style={verticalBottomArrowStyles}
+                  onClick={e =>
+                    this.onClickScrollArrow(
+                      e,
+                      DataGridEnums.DirectionTypes.DOWN,
+                    )
+                  }
+                />
+              </div>
+            )}
           </div>
         ) : null}
         {horizontalScrollerHeight ? (
           <div data-scroll-track="horizontal" style={horizontalStyles}>
-            <div data-scroll-arrow="left" style={horizontalArrowStyles}>
-              <div
-                data-arrow
-                style={horizontalLeftArrowStyles}
-                onClick={e =>
-                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.LEFT)
-                }
-              />
-            </div>
+            {theme === 'default' && (
+              <div data-scroll-arrow="left" style={horizontalArrowStyles}>
+                <div
+                  data-arrow
+                  style={horizontalLeftArrowStyles}
+                  onClick={e =>
+                    this.onClickScrollArrow(
+                      e,
+                      DataGridEnums.DirectionTypes.LEFT,
+                    )
+                  }
+                />
+              </div>
+            )}
             <div
               data-scroll="horizontal"
               onClick={e =>
@@ -425,15 +446,21 @@ class DatagridScroll extends React.Component<IProps> {
                 }
               />
             </div>
-            <div data-scroll-arrow="right" style={horizontalArrowStyles}>
-              <div
-                data-arrow
-                style={horizontalRightArrowStyles}
-                onClick={e =>
-                  this.onClickScrollArrow(e, DataGridEnums.DirectionTypes.RIGHT)
-                }
-              />
-            </div>
+
+            {theme === 'default' && (
+              <div data-scroll-arrow="right" style={horizontalArrowStyles}>
+                <div
+                  data-arrow
+                  style={horizontalRightArrowStyles}
+                  onClick={e =>
+                    this.onClickScrollArrow(
+                      e,
+                      DataGridEnums.DirectionTypes.RIGHT,
+                    )
+                  }
+                />
+              </div>
+            )}
           </div>
         ) : null}
       </div>

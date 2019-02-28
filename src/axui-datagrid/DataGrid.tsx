@@ -66,7 +66,9 @@ class DataGrid extends React.Component<IProps, IState> {
     height: 20,
   };
   static defaultScroller: IDataGrid.IOptionScroller = {
-    size: 14,
+    theme: 'default',
+    width: 14,
+    height: 14,
     arrowSize: 14,
     barMinSize: 12,
     padding: 3,
@@ -378,7 +380,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
     if (autofitColumns !== _autofitColumns || columnChanged) {
       this.setState({ doneAutofit: false });
-      console.log(autofitColumns);
     }
   }
 }

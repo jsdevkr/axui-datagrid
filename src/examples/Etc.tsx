@@ -73,7 +73,7 @@ class Etc extends React.Component<any, any> {
           label: 'html',
           nullable: false,
           type: 'VARCHAR',
-          width: 120,
+          width: 800,
           formatter: 'html',
         },
         {
@@ -89,6 +89,16 @@ class Etc extends React.Component<any, any> {
         },
       ],
       data: [
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
@@ -109,7 +119,16 @@ class Etc extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={grid.columns}
               data={grid.data}
-              options={{ lineNumberColumnWidth: 50 }}
+              options={{
+                lineNumberColumnWidth: 50,
+                scroller: {
+                  theme: 'solid',
+                  horizontalScrollerWidth: 50,
+                  padding: 0,
+                  width: 3,
+                  height: 5,
+                },
+              }}
               status={<div>{`Total Record ${grid.data.length}`}</div>}
             />
           </MyBox>

@@ -46,16 +46,22 @@ export default function calculateDimensions(
   } = optionsHeader;
   const { columnHeight: optionsBodyColumnHeight = 0 } = optionsBody;
   const { height: optionsPageHeight = 0 } = optionsPage;
-  const {
-    size: optionsScrollerSize = 0,
+  const headerTableRowsLength = headerTable.rows.length;
+  const bodyTablsRowsLength = bodyRowTable.rows.length;
+  const dataLength = filteredList.length;
+  let {
+    theme: optionsScrollerTheme = 'default',
+    width: optionsScrollerWidth = 0,
+    height: optionsScrollerHeight = 0,
     padding: optionsScrollerPadding = 0,
     arrowSize: optionsScrollerArrowSize = 0,
     barMinSize: optionsScrollerBarMinSize = 0,
     horizontalScrollerWidth = 0,
   } = optionsScroller;
-  const headerTableRowsLength = headerTable.rows.length;
-  const bodyTablsRowsLength = bodyRowTable.rows.length;
-  const dataLength = filteredList.length;
+
+  if (optionsScrollerTheme === 'solid') {
+    optionsScrollerArrowSize = 0;
+  }
 
   let currentStyles: IDataGrid.IStyles = {};
 
@@ -99,7 +105,7 @@ export default function calculateDimensions(
       currentStyles.footSumHeight <
     dataLength * currentStyles.bodyTrHeight
   ) {
-    currentStyles.verticalScrollerWidth = optionsScrollerSize;
+    currentStyles.verticalScrollerWidth = optionsScrollerWidth;
   }
 
   currentStyles.horizontalScrollerHeight = (() => {
@@ -113,7 +119,7 @@ export default function calculateDimensions(
         currentStyles.elWidth -
         currentStyles.asidePanelWidth -
         currentStyles.verticalScrollerWidth;
-      return totalColGroupWidth > bodyWidth ? optionsScrollerSize : 0;
+      return totalColGroupWidth > bodyWidth ? optionsScrollerHeight : 0;
     } else {
       return 0;
     }
@@ -142,7 +148,7 @@ export default function calculateDimensions(
       currentStyles.horizontalScrollerHeight <
       dataLength * currentStyles.bodyTrHeight
   ) {
-    currentStyles.verticalScrollerWidth = optionsScrollerSize;
+    currentStyles.verticalScrollerWidth = optionsScrollerWidth;
   }
 
   // get bodyHeight
