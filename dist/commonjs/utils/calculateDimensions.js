@@ -8,10 +8,13 @@ function calculateDimensions(storeState, _a) {
     var _v = optionsHeader.display, optionsHeaderDisplay = _v === void 0 ? true : _v, _w = optionsHeader.columnHeight, optionsHeaderColumnHeight = _w === void 0 ? 0 : _w;
     var _x = optionsBody.columnHeight, optionsBodyColumnHeight = _x === void 0 ? 0 : _x;
     var _y = optionsPage.height, optionsPageHeight = _y === void 0 ? 0 : _y;
-    var _z = optionsScroller.size, optionsScrollerSize = _z === void 0 ? 0 : _z, _0 = optionsScroller.padding, optionsScrollerPadding = _0 === void 0 ? 0 : _0, _1 = optionsScroller.arrowSize, optionsScrollerArrowSize = _1 === void 0 ? 0 : _1, _2 = optionsScroller.barMinSize, optionsScrollerBarMinSize = _2 === void 0 ? 0 : _2, _3 = optionsScroller.horizontalScrollerWidth, horizontalScrollerWidth = _3 === void 0 ? 0 : _3;
     var headerTableRowsLength = headerTable.rows.length;
     var bodyTablsRowsLength = bodyRowTable.rows.length;
     var dataLength = filteredList.length;
+    var _z = optionsScroller.theme, optionsScrollerTheme = _z === void 0 ? 'default' : _z, _0 = optionsScroller.width, optionsScrollerWidth = _0 === void 0 ? 0 : _0, _1 = optionsScroller.height, optionsScrollerHeight = _1 === void 0 ? 0 : _1, _2 = optionsScroller.padding, optionsScrollerPadding = _2 === void 0 ? 0 : _2, _3 = optionsScroller.arrowSize, optionsScrollerArrowSize = _3 === void 0 ? 0 : _3, _4 = optionsScroller.barMinSize, optionsScrollerBarMinSize = _4 === void 0 ? 0 : _4, _5 = optionsScroller.horizontalScrollerWidth, horizontalScrollerWidth = _5 === void 0 ? 0 : _5;
+    if (optionsScrollerTheme === 'solid') {
+        optionsScrollerArrowSize = 0;
+    }
     var currentStyles = {};
     currentStyles.elWidth = width;
     currentStyles.elHeight = height;
@@ -45,7 +48,7 @@ function calculateDimensions(storeState, _a) {
         optionsPageHeight -
         currentStyles.footSumHeight <
         dataLength * currentStyles.bodyTrHeight) {
-        currentStyles.verticalScrollerWidth = optionsScrollerSize;
+        currentStyles.verticalScrollerWidth = optionsScrollerWidth;
     }
     currentStyles.horizontalScrollerHeight = (function () {
         if (colGroup) {
@@ -56,7 +59,7 @@ function calculateDimensions(storeState, _a) {
             var bodyWidth = currentStyles.elWidth -
                 currentStyles.asidePanelWidth -
                 currentStyles.verticalScrollerWidth;
-            return totalColGroupWidth > bodyWidth ? optionsScrollerSize : 0;
+            return totalColGroupWidth > bodyWidth ? optionsScrollerHeight : 0;
         }
         else {
             return 0;
@@ -78,7 +81,7 @@ function calculateDimensions(storeState, _a) {
             currentStyles.footSumHeight -
             currentStyles.horizontalScrollerHeight <
             dataLength * currentStyles.bodyTrHeight) {
-        currentStyles.verticalScrollerWidth = optionsScrollerSize;
+        currentStyles.verticalScrollerWidth = optionsScrollerWidth;
     }
     // get bodyHeight
     currentStyles.bodyHeight =

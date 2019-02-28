@@ -156,7 +156,9 @@ export declare namespace IDataGrid {
         height?: number;
     }
     interface IOptionScroller {
-        size?: number;
+        theme?: string;
+        width?: number;
+        height?: number;
         arrowSize?: number;
         barMinSize?: number;
         padding?: number;

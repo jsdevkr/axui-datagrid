@@ -165,7 +165,6 @@ class DataGrid extends React.Component {
         const columnChanged = prevProps.columns !== this.props.columns;
         if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
-            console.log(autofitColumns);
         }
     }
 }
@@ -208,7 +207,9 @@ DataGrid.defaultPage = {
     height: 20,
 };
 DataGrid.defaultScroller = {
-    size: 14,
+    theme: 'default',
+    width: 14,
+    height: 14,
     arrowSize: 14,
     barMinSize: 12,
     padding: 3,

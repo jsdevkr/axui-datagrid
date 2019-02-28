@@ -130,8 +130,10 @@ class DatagridScroll extends React.Component {
         };
     }
     render() {
-        const { scrollLeft = 0, scrollTop = 0, styles = {} } = this.props;
-        const { pageHeight = 0, verticalScrollerWidth = 0, verticalScrollerHeight = 0, horizontalScrollerWidth = 0, horizontalScrollerHeight = 0, verticalScrollBarHeight = 0, horizontalScrollBarWidth = 0, scrollerArrowSize = 0, scrollerPadding = 0, scrollContentContainerWidth = 1, scrollContentContainerHeight = 1, scrollContentWidth = 0, scrollContentHeight = 0, } = styles;
+        const { scrollLeft = 0, scrollTop = 0, styles = {}, options = {}, } = this.props;
+        const { pageHeight = 0, verticalScrollerWidth = 0, verticalScrollerHeight = 0, horizontalScrollerWidth = 0, horizontalScrollerHeight = 0, verticalScrollBarHeight = 0, horizontalScrollBarWidth = 0, scrollerPadding = 0, scrollerArrowSize = 0, scrollContentContainerWidth = 1, scrollContentContainerHeight = 1, scrollContentWidth = 0, scrollContentHeight = 0, } = styles;
+        const { scroller = {} } = options;
+        const { theme = 'default' } = scroller;
         let scrollBarLeft = (-scrollLeft * (horizontalScrollerWidth - horizontalScrollBarWidth)) /
             (scrollContentWidth - scrollContentContainerWidth) || 1;
         if (horizontalScrollBarWidth + scrollBarLeft > horizontalScrollerWidth) {
@@ -211,19 +213,19 @@ class DatagridScroll extends React.Component {
         };
         return (React.createElement("div", { className: "axui-datagrid-scroller" },
             verticalScrollerWidth ? (React.createElement("div", { "data-scroll-track": "vertical", style: verticalStyles },
-                React.createElement("div", { "data-scroll-arrow": "up", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.UP) })),
+                theme === 'default' && (React.createElement("div", { "data-scroll-arrow": "up", style: verticalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: verticalTopArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.UP) }))),
                 React.createElement("div", { "data-scroll": "vertical", onClick: e => this.onClickScrollTrack(e, _enums_1.DataGridEnums.ScrollTypes.VERTICAL) },
                     React.createElement("div", { className: "axui-datagrid-scroll-bar", style: verticalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, _enums_1.DataGridEnums.ScrollTypes.VERTICAL) })),
-                React.createElement("div", { "data-scroll-arrow": "down", style: verticalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.DOWN) })))) : null,
+                theme === 'default' && (React.createElement("div", { "data-scroll-arrow": "down", style: verticalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: verticalBottomArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.DOWN) }))))) : null,
             horizontalScrollerHeight ? (React.createElement("div", { "data-scroll-track": "horizontal", style: horizontalStyles },
-                React.createElement("div", { "data-scroll-arrow": "left", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.LEFT) })),
+                theme === 'default' && (React.createElement("div", { "data-scroll-arrow": "left", style: horizontalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: horizontalLeftArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.LEFT) }))),
                 React.createElement("div", { "data-scroll": "horizontal", onClick: e => this.onClickScrollTrack(e, _enums_1.DataGridEnums.ScrollTypes.HORIZONTAL) },
                     React.createElement("div", { className: "axui-datagrid-scroll-bar", style: horizontalBarStyles, onMouseDown: e => this.onMouseDownScrollBar(e, _enums_1.DataGridEnums.ScrollTypes.HORIZONTAL) })),
-                React.createElement("div", { "data-scroll-arrow": "right", style: horizontalArrowStyles },
-                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.RIGHT) })))) : null));
+                theme === 'default' && (React.createElement("div", { "data-scroll-arrow": "right", style: horizontalArrowStyles },
+                    React.createElement("div", { "data-arrow": true, style: horizontalRightArrowStyles, onClick: e => this.onClickScrollArrow(e, _enums_1.DataGridEnums.DirectionTypes.RIGHT) }))))) : null));
     }
 }
 exports.default = hoc_1.connectStore(DatagridScroll);
