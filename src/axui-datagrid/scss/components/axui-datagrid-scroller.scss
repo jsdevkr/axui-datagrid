@@ -44,7 +44,7 @@
     // box-shadow: inset 0 0 1px 0 $axui-datagrid-scroll-track-shadow;
   }
   [data-scroll-track='horizontal'] {
-    border-radius: 3px;
+    border-radius: $axui-datagrid-scroll-bar-border-radius;
     background: $axui-datagrid-scroll-track-bg-blur;
     box-shadow: none;
   }

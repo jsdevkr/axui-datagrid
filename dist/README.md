@@ -259,3 +259,4 @@ export default Formatter;
 - v0.9.1 - display default status
 - v0.10.0 - Added the options.autofitColumns property, fix problem wrong scroll position
 - v0.10.1 - autofitColumns Timing Adjustments
+- v0.11.0 - Added the options.scroller.width, height, theme
