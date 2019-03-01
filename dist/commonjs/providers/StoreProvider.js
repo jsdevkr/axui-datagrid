@@ -182,14 +182,16 @@ var StoreProvider = /** @class */ (function (_super) {
                         filteredList =
                             data &&
                                 data.filter(function (n) {
-                                    return !n[optionColumnKeys.deleted || '_deleted_'];
+                                    return (typeof n === 'undefined' ||
+                                        !n[optionColumnKeys.deleted || '_deleted_']);
                                 });
                     }
                     else {
                         filteredList = data.filter(function (n) {
                             if (n) {
-                                var value = n[colGroup[colIndex].key || ''];
-                                if (n[optionColumnKeys.deleted || '_deleted_']) {
+                                var value = n && n[colGroup[colIndex].key || ''];
+                                if (typeof n === 'undefined' ||
+                                    n[optionColumnKeys.deleted || '_deleted_']) {
                                     return false;
                                 }
                                 if (typeof value === 'undefined') {

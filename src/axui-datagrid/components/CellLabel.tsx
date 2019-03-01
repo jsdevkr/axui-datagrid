@@ -16,7 +16,7 @@ const CellLabel: React.SFC<{
     item: data[li],
     index: li,
     key: col.key,
-    value: data[li][col.key || ''],
+    value: data[li] && data[li][col.key || ''],
   };
 
   switch (key) {
@@ -27,7 +27,7 @@ const CellLabel: React.SFC<{
         <div
           className="axui-datagrid-check-box"
           data-span={columnAttr}
-          data-checked={data[li]._selected_}
+          data-checked={data[li] && data[li]._selected_}
           style={{
             maxHeight: lineHeight + 'px',
             minHeight: lineHeight + 'px',
@@ -42,7 +42,7 @@ const CellLabel: React.SFC<{
       } else if (isFunction(formatter)) {
         labelValue = (formatter as IDataGrid.formatterFunction)(formatterData);
       } else {
-        labelValue = data[li][key];
+        labelValue = data[li] && data[li][key];
       }
 
       return <>{labelValue}</>;

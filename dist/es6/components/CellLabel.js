@@ -10,13 +10,13 @@ const CellLabel = props => {
         item: data[li],
         index: li,
         key: col.key,
-        value: data[li][col.key || ''],
+        value: data[li] && data[li][col.key || ''],
     };
     switch (key) {
         case '_line_number_':
             return React.createElement(React.Fragment, null, li + 1);
         case '_row_selector_':
-            return (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": data[li]._selected_, style: {
+            return (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": data[li] && data[li]._selected_, style: {
                     maxHeight: lineHeight + 'px',
                     minHeight: lineHeight + 'px',
                 } }));
@@ -29,7 +29,7 @@ const CellLabel = props => {
                 labelValue = formatter(formatterData);
             }
             else {
-                labelValue = data[li][key];
+                labelValue = data[li] && data[li][key];
             }
             return React.createElement(React.Fragment, null, labelValue);
     }

@@ -113,7 +113,8 @@ var DatagridColumnFilter = /** @class */ (function (_super) {
         var columnFilterInfo = filterInfo[isColumnFilter];
         var filterOptions = utils_1.uniqBy(data
             .filter(function (n) {
-            return !n[optionColumnKeys.deleted || '_deleted_'];
+            return (typeof n === 'undefined' ||
+                !n[optionColumnKeys.deleted || '_deleted_']);
         })
             .map(function (item) {
             var value = item[colGroup[isColumnFilter].key || ''];

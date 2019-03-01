@@ -136,14 +136,16 @@ class StoreProvider extends React.Component {
                         filteredList =
                             data &&
                                 data.filter((n) => {
-                                    return !n[optionColumnKeys.deleted || '_deleted_'];
+                                    return (typeof n === 'undefined' ||
+                                        !n[optionColumnKeys.deleted || '_deleted_']);
                                 });
                     }
                     else {
                         filteredList = data.filter((n) => {
                             if (n) {
-                                const value = n[colGroup[colIndex].key || ''];
-                                if (n[optionColumnKeys.deleted || '_deleted_']) {
+                                const value = n && n[colGroup[colIndex].key || ''];
+                                if (typeof n === 'undefined' ||
+                                    n[optionColumnKeys.deleted || '_deleted_']) {
                                     return false;
                                 }
                                 if (typeof value === 'undefined') {

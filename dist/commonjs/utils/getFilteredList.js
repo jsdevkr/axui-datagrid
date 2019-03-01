@@ -11,14 +11,16 @@ function getFilteredList(data, _a) {
             filteredList =
                 data &&
                     data.filter(function (n) {
-                        return !n[optionColumnKeys.deleted || '_deleted_'];
+                        return (typeof n === 'undefined' ||
+                            !n[optionColumnKeys.deleted || '_deleted_']);
                     });
         }
         else {
             filteredList = data.filter(function (n) {
                 if (n) {
-                    var value = n[colGroup[colIndex_1].key || ''];
-                    if (n[optionColumnKeys.deleted || '_deleted_']) {
+                    var value = n && n[colGroup[colIndex_1].key || ''];
+                    if (typeof n === 'undefined' ||
+                        n[optionColumnKeys.deleted || '_deleted_']) {
                         return false;
                     }
                     if (typeof value === 'undefined') {
@@ -39,7 +41,7 @@ function getFilteredList(data, _a) {
     }
     else {
         filteredList = data.filter(function (n) {
-            return !n[optionColumnKeys.deleted || '_deleted_'];
+            return (typeof n === 'undefined' || !n[optionColumnKeys.deleted || '_deleted_']);
         });
     }
     // 정렬 오브젝트가 있다면 정렬 프로세스 적용하여 새로운 데이터 정렬
