@@ -31,7 +31,7 @@ class LargeData extends React.Component<any, any> {
       ],
       data: [],
       options: {
-        lineNumberColumnWidth: 60,
+        autofitColumns: true,
         header: {
           align: 'center',
         },
@@ -149,7 +149,7 @@ class LargeData extends React.Component<any, any> {
                 height={height}
                 style={{ fontSize: '12px' }}
                 columns={columns}
-                data={data}
+                data={[...data]}
                 options={options}
               />
             ) : (
