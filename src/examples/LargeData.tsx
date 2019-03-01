@@ -59,8 +59,11 @@ class LargeData extends React.Component<any, any> {
     }
   };
 
-  getData = () => {
-    console.log('start getData');
+  getData = (len: number) => {
+    console.log(
+      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+      'start getData',
+    );
 
     let gridData: any = [];
 
@@ -98,7 +101,7 @@ class LargeData extends React.Component<any, any> {
       return types[Math.floor(Math.random() * types.length)];
     };
 
-    for (let i = 1; i < 5000000; i++) {
+    for (let i = 1; i < len; i++) {
       const price = getTypes('priceTypes');
       const amount = getTypes('amountTypes');
 
@@ -115,13 +118,21 @@ class LargeData extends React.Component<any, any> {
       });
     }
 
-    console.log('make getData done!');
+    this.setState({ data: [] });
+
+    console.log(
+      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+      'make getData done!',
+    );
     this.setState(
       () => ({
         data: gridData,
       }),
       () => {
-        console.log('state changed');
+        console.log(
+          `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+          'state changed',
+        );
       },
     );
   };
@@ -179,8 +190,14 @@ class LargeData extends React.Component<any, any> {
           >
             height : 500
           </Button>
+        </Segment>
 
-          <Button onClick={() => this.getData()}>Get data</Button>
+        <Segment>
+          <Button onClick={() => this.getData(5000000)}>
+            Get data 5,000,000
+          </Button>
+          <Button onClick={() => this.getData(500000)}>Get data 500,000</Button>
+          <Button onClick={() => this.getData(50000)}>Get data 50,000</Button>
         </Segment>
       </Wrapper>
     );
