@@ -25,14 +25,20 @@ export default function getFilteredList(
       filteredList =
         data &&
         data.filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '_deleted_'];
+          return (
+            typeof n === 'undefined' ||
+            !n[optionColumnKeys.deleted || '_deleted_']
+          );
         });
     } else {
       filteredList = data.filter((n: any) => {
         if (n) {
-          const value = n[colGroup[colIndex].key || ''];
+          const value = n && n[colGroup[colIndex].key || ''];
 
-          if (n[optionColumnKeys.deleted || '_deleted_']) {
+          if (
+            typeof n === 'undefined' ||
+            n[optionColumnKeys.deleted || '_deleted_']
+          ) {
             return false;
           }
 
@@ -53,7 +59,9 @@ export default function getFilteredList(
     }
   } else {
     filteredList = data.filter((n: any) => {
-      return !n[optionColumnKeys.deleted || '_deleted_'];
+      return (
+        typeof n === 'undefined' || !n[optionColumnKeys.deleted || '_deleted_']
+      );
     });
   }
 

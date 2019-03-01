@@ -106,7 +106,10 @@ class DatagridColumnFilter extends React.Component<IProps, IState> {
     let filterOptions = uniqBy(
       data
         .filter((n: any) => {
-          return !n[optionColumnKeys.deleted || '_deleted_'];
+          return (
+            typeof n === 'undefined' ||
+            !n[optionColumnKeys.deleted || '_deleted_']
+          );
         })
         .map(item => {
           let value = item[colGroup[isColumnFilter as number].key || ''];
