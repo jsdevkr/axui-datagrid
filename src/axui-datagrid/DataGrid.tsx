@@ -137,6 +137,8 @@ class DataGrid extends React.Component<IProps, IState> {
 
     this.rootNode = React.createRef();
     this.clipBoardNode = React.createRef();
+
+    console.log(new Date(), 'datagrid constructor');
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
@@ -362,12 +364,15 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
+    console.log(new Date(), 'datagrid componentDidMount');
     this.setState({
       mounted: true,
     });
   }
 
   componentDidUpdate(prevProps: IProps) {
+    console.log(new Date(), 'datagrid componentDidUpdate');
+
     const autofitColumns =
       prevProps.options && prevProps.options.autofitColumns;
     const _autofitColumns =

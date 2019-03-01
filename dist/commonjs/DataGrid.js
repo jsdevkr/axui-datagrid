@@ -159,6 +159,7 @@ var DataGrid = /** @class */ (function (_super) {
         };
         _this.rootNode = React.createRef();
         _this.clipBoardNode = React.createRef();
+        console.log(new Date(), 'datagrid constructor');
         return _this;
     }
     DataGrid.prototype.render = function () {
@@ -200,11 +201,13 @@ var DataGrid = /** @class */ (function (_super) {
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     };
     DataGrid.prototype.componentDidMount = function () {
+        console.log(new Date(), 'datagrid componentDidMount');
         this.setState({
             mounted: true,
         });
     };
     DataGrid.prototype.componentDidUpdate = function (prevProps) {
+        console.log(new Date(), 'datagrid componentDidUpdate');
         var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
         var _autofitColumns = this.props.options && this.props.options.autofitColumns;
         var columnChanged = prevProps.columns !== this.props.columns;

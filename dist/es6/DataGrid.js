@@ -114,6 +114,7 @@ class DataGrid extends React.Component {
         };
         this.rootNode = React.createRef();
         this.clipBoardNode = React.createRef();
+        console.log(new Date(), 'datagrid constructor');
     }
     render() {
         const { mounted, doneAutofit } = this.state;
@@ -154,11 +155,13 @@ class DataGrid extends React.Component {
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
     componentDidMount() {
+        console.log(new Date(), 'datagrid componentDidMount');
         this.setState({
             mounted: true,
         });
     }
     componentDidUpdate(prevProps) {
+        console.log(new Date(), 'datagrid componentDidUpdate');
         const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
         const _autofitColumns = this.props.options && this.props.options.autofitColumns;
         const columnChanged = prevProps.columns !== this.props.columns;
