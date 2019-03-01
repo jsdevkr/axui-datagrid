@@ -10,7 +10,59 @@ class LargeData extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    let gridData = [];
+    this.state = {
+      width: 300,
+      height: 300,
+      columns: [
+        {
+          key: 'a',
+          label: 'Field A',
+          width: 80,
+          align: 'center',
+        },
+        { key: 'b', label: 'Field B', align: 'center' },
+        { key: 'c', label: 'Field C', align: 'center' },
+        { key: 'price', label: 'Price', formatter: 'money', align: 'right' },
+        { key: 'amount', label: 'Qty', formatter: 'money', align: 'right' },
+        { key: 'cost', label: 'Sum', align: 'right', formatter: 'money' },
+        { key: 'saleDt', label: 'Sale Date', align: 'center' },
+        { key: 'customer', label: 'Customer', align: 'center' },
+        { key: 'saleType', label: 'Sale Type', align: 'center' },
+      ],
+      data: [],
+      options: {
+        lineNumberColumnWidth: 60,
+        header: {
+          align: 'center',
+        },
+        showLineNumber: true,
+        showRowSelector: false,
+      },
+    };
+
+    this.dataGridContainerRef = React.createRef();
+  }
+
+  changeConfig = (props: any, value: any) => {
+    const processor = {
+      setHeight: () => {
+        this.setState({
+          height: value,
+        });
+      },
+    };
+
+    if (props in processor) {
+      processor[props].call(this);
+    } else {
+      this.setState(value);
+    }
+  };
+
+  getData = () => {
+    console.log('start getData');
+
+    let gridData: any = [];
 
     const typeGroup = {
       aTypes: ['A', 'B', 'C', 'D'],
@@ -46,7 +98,7 @@ class LargeData extends React.Component<any, any> {
       return types[Math.floor(Math.random() * types.length)];
     };
 
-    for (let i = 1; i < 10000; i++) {
+    for (let i = 1; i < 5000000; i++) {
       const price = getTypes('priceTypes');
       const amount = getTypes('amountTypes');
 
@@ -63,53 +115,15 @@ class LargeData extends React.Component<any, any> {
       });
     }
 
-    this.state = {
-      width: 300,
-      height: 300,
-      columns: [
-        {
-          key: 'a',
-          label: 'Field A',
-          width: 80,
-          align: 'center',
-        },
-        { key: 'b', label: 'Field B', align: 'center' },
-        { key: 'c', label: 'Field C', align: 'center' },
-        { key: 'price', label: 'Price', formatter: 'money', align: 'right' },
-        { key: 'amount', label: 'Qty', formatter: 'money', align: 'right' },
-        { key: 'cost', label: 'Sum', align: 'right', formatter: 'money' },
-        { key: 'saleDt', label: 'Sale Date', align: 'center' },
-        { key: 'customer', label: 'Customer', align: 'center' },
-        { key: 'saleType', label: 'Sale Type', align: 'center' },
-      ],
-      data: gridData,
-      options: {
-        lineNumberColumnWidth: 60,
-        header: {
-          align: 'center',
-        },
-        showLineNumber: true,
-        showRowSelector: false,
+    console.log('make getData done!');
+    this.setState(
+      () => ({
+        data: gridData,
+      }),
+      () => {
+        console.log('state changed');
       },
-    };
-
-    this.dataGridContainerRef = React.createRef();
-  }
-
-  changeConfig = (props: any, value: any) => {
-    const processor = {
-      setHeight: () => {
-        this.setState({
-          height: value,
-        });
-      },
-    };
-
-    if (props in processor) {
-      processor[props].call(this);
-    } else {
-      this.setState(value);
-    }
+    );
   };
 
   render() {
@@ -129,14 +143,18 @@ class LargeData extends React.Component<any, any> {
           </p>
 
           <div ref={this.dataGridContainerRef}>
-            <DataGrid
-              width={width}
-              height={height}
-              style={{ fontSize: '12px' }}
-              columns={columns}
-              data={data}
-              options={options}
-            />
+            {data.length > 0 ? (
+              <DataGrid
+                width={width}
+                height={height}
+                style={{ fontSize: '12px' }}
+                columns={columns}
+                data={data}
+                options={options}
+              />
+            ) : (
+              'no data'
+            )}
           </div>
 
           <Divider />
@@ -161,6 +179,8 @@ class LargeData extends React.Component<any, any> {
           >
             height : 500
           </Button>
+
+          <Button onClick={() => this.getData()}>Get data</Button>
         </Segment>
       </Wrapper>
     );

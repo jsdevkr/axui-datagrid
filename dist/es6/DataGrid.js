@@ -114,7 +114,7 @@ class DataGrid extends React.Component {
         };
         this.rootNode = React.createRef();
         this.clipBoardNode = React.createRef();
-        console.log(new Date(), 'datagrid constructor');
+        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid constructor');
     }
     render() {
         const { mounted, doneAutofit } = this.state;
@@ -155,19 +155,19 @@ class DataGrid extends React.Component {
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
     componentDidMount() {
-        console.log(new Date(), 'datagrid componentDidMount');
         this.setState({
             mounted: true,
         });
+        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid componentDidMount');
     }
     componentDidUpdate(prevProps) {
-        console.log(new Date(), 'datagrid componentDidUpdate');
         const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
         const _autofitColumns = this.props.options && this.props.options.autofitColumns;
         const columnChanged = prevProps.columns !== this.props.columns;
         if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
         }
+        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid componentDidUpdate');
     }
 }
 DataGrid.defaultHeight = 400;
