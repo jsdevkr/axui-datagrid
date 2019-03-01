@@ -138,7 +138,10 @@ class DataGrid extends React.Component<IProps, IState> {
     this.rootNode = React.createRef();
     this.clipBoardNode = React.createRef();
 
-    console.log(new Date(), 'datagrid constructor');
+    console.log(
+      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+      'datagrid constructor',
+    );
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
@@ -364,15 +367,17 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    console.log(new Date(), 'datagrid componentDidMount');
     this.setState({
       mounted: true,
     });
+
+    console.log(
+      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+      'datagrid componentDidMount',
+    );
   }
 
   componentDidUpdate(prevProps: IProps) {
-    console.log(new Date(), 'datagrid componentDidUpdate');
-
     const autofitColumns =
       prevProps.options && prevProps.options.autofitColumns;
     const _autofitColumns =
@@ -382,6 +387,11 @@ class DataGrid extends React.Component<IProps, IState> {
     if (autofitColumns !== _autofitColumns || columnChanged) {
       this.setState({ doneAutofit: false });
     }
+
+    console.log(
+      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+      'datagrid componentDidUpdate',
+    );
   }
 }
 
