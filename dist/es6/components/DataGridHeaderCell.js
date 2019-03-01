@@ -22,7 +22,7 @@ const CellLabel = ({ col, lineHeight, optionsHeader, listSelectedAll }) => {
 };
 const CellSorter = ({ show, colIndex, orderBy }) => show ? React.createElement("span", { "data-sorter": colIndex, "data-sorter-order": orderBy }) : null;
 const CellFilter = ({ show, colIndex, isFiltered }) => show ? React.createElement("span", { "data-filter": isFiltered, "data-filter-index": colIndex }) : null;
-const DatagridHeaderCell = ({ listSelectedAll = false, options = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, onClick, filterInfo = {}, }) => {
+const DatagridHeaderCell = ({ listSelectedAll = false, options = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, onClick, }) => {
     const { header: optionsHeader = {} } = options;
     const { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = '', } = optionsHeader;
     const { align: colAlign = headerAlign || '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, } = col;
@@ -50,7 +50,6 @@ const DatagridHeaderCell = ({ listSelectedAll = false, options = {}, focusedCol 
                 lineHeight: lineHeight + 'px',
             } },
             React.createElement(CellSorter, { show: colKey && sortInfo[colKey], colIndex: colIndex, orderBy: sortInfo[colKey] ? sortInfo[colKey].orderBy : '' }),
-            React.createElement(CellLabel, { col: col, lineHeight: lineHeight, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll })),
-        React.createElement(CellFilter, { show: (optionsHeader.enableFilter && colKey && colIndex > -1), colIndex: colIndex, isFiltered: !!filterInfo[colIndex] })));
+            React.createElement(CellLabel, { col: col, lineHeight: lineHeight, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll }))));
 };
 exports.default = hoc_1.connectStore(DatagridHeaderCell);

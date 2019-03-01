@@ -94,7 +94,7 @@ class DataGridBodyCell extends React.Component {
         }
     }
     render() {
-        const { filteredList = [], focusedRow, focusedCol, selectionRows = [], selectionCols = [], li, col = {}, ci, value, options = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, } = this.props;
+        const { data = [], focusedRow, focusedCol, selectionRows = [], selectionCols = [], li, col = {}, ci, value, options = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, } = this.props;
         const { body: optionsBody = {} } = options;
         const { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = optionsBody;
         const { rowSpan = 0, colSpan = 0, colIndex = 0, rowIndex = 0, align: colAlign = bodyAlign, columnAttr = '', } = col;
@@ -147,7 +147,7 @@ class DataGridBodyCell extends React.Component {
                         lineHeight: lineHeight + 'px',
                         textAlign: colAlign,
                     } },
-                    React.createElement(CellLabel_1.default, { lineHeight: lineHeight, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter }))));
+                    React.createElement(CellLabel_1.default, { lineHeight: lineHeight, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter }))));
         }
     }
 }

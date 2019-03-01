@@ -9,12 +9,12 @@ import { IDataGrid } from '../common/@types';
 const TableBody: React.SFC<{
   sRowIndex: number;
   eRowIndex: number;
-  filteredList: any[];
+  data: any[];
   bodyRow: IDataGrid.IColumnTableMap;
-}> = ({ sRowIndex, eRowIndex, filteredList, bodyRow }) => (
+}> = ({ sRowIndex, eRowIndex, data, bodyRow }) => (
   <tbody>
     {arrayFromRange(sRowIndex, eRowIndex).map(li => {
-      const item = filteredList[li];
+      const item = data[li];
       const trClassNames = {
         ['odded-line']: li % 2 !== 0,
       };
@@ -27,7 +27,7 @@ const TableBody: React.SFC<{
                 li={li}
                 ci={ci}
                 col={col}
-                value={filteredList[li][col.key || '']}
+                value={data[li][col.key || '']}
               />
             ))}
             <td />
@@ -49,7 +49,7 @@ interface IProps extends IDataGridStore {
 }
 const DataGridBodyPanel: React.SFC<IProps> = props => {
   const {
-    filteredList = [],
+    data = [],
     asideColGroup = [],
     leftHeaderColGroup = [],
     visibleHeaderColGroup = [],
@@ -130,7 +130,7 @@ const DataGridBodyPanel: React.SFC<IProps> = props => {
           <TableBody
             sRowIndex={sRowIndex}
             eRowIndex={eRowIndex}
-            filteredList={filteredList}
+            data={data}
             bodyRow={panelBodyRow}
           />
         </table>

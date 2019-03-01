@@ -113,7 +113,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     DataGridBodyCell.prototype.render = function () {
         var _this = this;
         var _a;
-        var _b = this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, focusedRow = _b.focusedRow, focusedCol = _b.focusedCol, _d = _b.selectionRows, selectionRows = _d === void 0 ? [] : _d, _e = _b.selectionCols, selectionCols = _e === void 0 ? [] : _e, li = _b.li, _f = _b.col, col = _f === void 0 ? {} : _f, ci = _b.ci, value = _b.value, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.isInlineEditing, isInlineEditing = _h === void 0 ? false : _h, _j = _b.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _b.predefinedFormatter, predefinedFormatter = _k === void 0 ? {} : _k;
+        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, focusedRow = _b.focusedRow, focusedCol = _b.focusedCol, _d = _b.selectionRows, selectionRows = _d === void 0 ? [] : _d, _e = _b.selectionCols, selectionCols = _e === void 0 ? [] : _e, li = _b.li, _f = _b.col, col = _f === void 0 ? {} : _f, ci = _b.ci, value = _b.value, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.isInlineEditing, isInlineEditing = _h === void 0 ? false : _h, _j = _b.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _b.predefinedFormatter, predefinedFormatter = _k === void 0 ? {} : _k;
         var _l = options.body, optionsBody = _l === void 0 ? {} : _l;
         var _m = optionsBody.columnHeight, columnHeight = _m === void 0 ? 0 : _m, _o = optionsBody.columnPadding, columnPadding = _o === void 0 ? 0 : _o, _p = optionsBody.columnBorderWidth, columnBorderWidth = _p === void 0 ? 0 : _p, _q = optionsBody.align, bodyAlign = _q === void 0 ? 'left' : _q;
         var _r = col.rowSpan, rowSpan = _r === void 0 ? 0 : _r, _s = col.colSpan, colSpan = _s === void 0 ? 0 : _s, _t = col.colIndex, colIndex = _t === void 0 ? 0 : _t, _u = col.rowIndex, rowIndex = _u === void 0 ? 0 : _u, _v = col.align, colAlign = _v === void 0 ? bodyAlign : _v, _w = col.columnAttr, columnAttr = _w === void 0 ? '' : _w;
@@ -166,7 +166,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
                         lineHeight: lineHeight + 'px',
                         textAlign: colAlign,
                     } },
-                    React.createElement(CellLabel_1.default, { lineHeight: lineHeight, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter }))));
+                    React.createElement(CellLabel_1.default, { lineHeight: lineHeight, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter }))));
         }
     };
     return DataGridBodyCell;

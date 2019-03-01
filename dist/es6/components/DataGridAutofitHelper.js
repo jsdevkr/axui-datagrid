@@ -38,22 +38,22 @@ class DataGridAutofitHelper extends React.Component {
         this.tableRef = React.createRef();
     }
     render() {
-        const { colGroup = [], filteredList = [], predefinedFormatter = {}, styles = {}, } = this.props;
+        const { colGroup = [], data = [], predefinedFormatter = {}, styles = {}, } = this.props;
         const { bodyHeight = 0, bodyTrHeight = 1 } = styles;
         return (React.createElement("div", { className: 'axui-datagrid-autofit-helper' },
             React.createElement("table", { ref: this.tableRef },
                 React.createElement("thead", null,
                     React.createElement("tr", { "data-autofit-table-head-row": true },
-                        React.createElement("td", null, filteredList.length),
+                        React.createElement("td", null, data.length),
                         colGroup.map((col, ci) => (React.createElement("td", { key: ci }, col.label))))),
-                React.createElement("tbody", null, filteredList
+                React.createElement("tbody", null, data
                     .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
                     .map((row, li) => {
                     return (React.createElement("tr", { key: li },
                         React.createElement("td", null, li),
                         colGroup.map(col => (React.createElement("td", { key: col.colIndex },
                             React.createElement("span", { "data-span": true },
-                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter })))))));
+                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter })))))));
                 })))));
     }
     componentDidMount() {

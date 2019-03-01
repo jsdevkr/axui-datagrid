@@ -32,134 +32,78 @@ class DataGridHeaderPanel extends React.Component {
         super(...arguments);
         this.state = {};
         this.onHandleClick = (e, col) => {
-            const { filteredList = [], colGroup = [], scrollLeft = 0, focusedCol = 0, isColumnFilter = false, options = {}, styles = {}, setStoreState, dispatch, } = this.props;
+            const { data = [], colGroup = [], focusedCol = 0, options = {}, styles = {}, setStoreState, dispatch, } = this.props;
             const { header: optionsHeader = {} } = options;
             const { key, colIndex = 0 } = col;
             const { asidePanelWidth = 0 } = styles;
-            if (e.target.getAttribute('data-filter')) {
-                const closeEvent = (ee) => {
-                    const { isColumnFilter: _isColumnFilter } = this.props;
-                    if (ee.target &&
-                        ee.target.getAttribute &&
-                        '' + _isColumnFilter === ee.target.getAttribute('data-filter-index')) {
-                        return false;
+            let state = {
+                dragging: false,
+                selectionRows: {},
+                selectionCols: {},
+                focusedRow: 0,
+                focusedCol: focusedCol,
+            };
+            switch (key) {
+                case '_line_number_':
+                    {
+                        state.selectionRows = (() => {
+                            let rows = {};
+                            data.forEach((item, i) => {
+                                rows[i] = true;
+                            });
+                            return rows;
+                        })();
+                        state.selectionCols = (() => {
+                            let cols = {};
+                            colGroup.forEach(_col => {
+                                cols[_col.colIndex || 0] = true;
+                            });
+                            return cols;
+                        })();
+                        state.focusedCol = 0;
+                        setStoreState(state);
                     }
-                    let downedElement = false;
-                    if (ee.target) {
-                        downedElement = utils_1.findParentNode(ee.target, element => {
-                            return element && element.getAttribute
-                                ? element.getAttribute('data-column-filter') === 'true'
-                                : false;
-                        });
-                    }
-                    if (downedElement === false) {
-                        ee.preventDefault();
-                        setStoreState({
-                            isColumnFilter: false,
-                        });
-                        document.removeEventListener('mouseup', closeEvent);
-                        document.removeEventListener('mouseleave', closeEvent);
-                        document.removeEventListener('keydown', keyDown);
-                    }
-                    return;
-                };
-                const keyDown = (ee) => {
-                    if (ee.which === 27) {
-                        closeEvent(ee);
-                    }
-                };
-                if (isColumnFilter === colIndex) {
-                    setStoreState({
-                        isColumnFilter: false,
-                    });
-                    document.removeEventListener('mouseup', closeEvent);
-                    document.removeEventListener('mouseleave', closeEvent);
-                    document.removeEventListener('keydown', keyDown);
-                }
-                else {
-                    let columnFilterLeft = asidePanelWidth + (colGroup[colIndex]._sx || 0) - 2 + scrollLeft;
-                    setStoreState({
-                        scrollLeft: columnFilterLeft < 0 ? scrollLeft - columnFilterLeft : scrollLeft,
-                        isColumnFilter: colIndex,
-                    });
-                    document.removeEventListener('mouseup', closeEvent);
-                    document.removeEventListener('mouseleave', closeEvent);
-                    document.removeEventListener('keydown', keyDown);
-                    document.addEventListener('mouseup', closeEvent);
-                    document.addEventListener('mouseleave', closeEvent);
-                    document.addEventListener('keydown', keyDown);
-                }
-            }
-            else {
-                let state = {
-                    dragging: false,
-                    selectionRows: {},
-                    selectionCols: {},
-                    focusedRow: 0,
-                    focusedCol: focusedCol,
-                };
-                switch (key) {
-                    case '_line_number_':
-                        {
+                    break;
+                case '_row_selector_':
+                    dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL, {});
+                    break;
+                default:
+                    {
+                        if (optionsHeader.clickAction === 'select') {
                             state.selectionRows = (() => {
                                 let rows = {};
-                                filteredList.forEach((item, i) => {
+                                data.forEach((item, i) => {
                                     rows[i] = true;
                                 });
                                 return rows;
                             })();
-                            state.selectionCols = (() => {
-                                let cols = {};
-                                colGroup.forEach(_col => {
-                                    cols[_col.colIndex || 0] = true;
-                                });
-                                return cols;
-                            })();
-                            state.focusedCol = 0;
+                            if (e.shiftKey) {
+                                state.selectionCols = (() => {
+                                    let cols = {};
+                                    utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(i => {
+                                        cols[i] = true;
+                                    });
+                                    return cols;
+                                })();
+                            }
+                            else {
+                                state.selectionCols = {
+                                    [colIndex]: true,
+                                };
+                                state.focusedCol = colIndex;
+                            }
                             setStoreState(state);
                         }
-                        break;
-                    case '_row_selector_':
-                        dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL, {});
-                        break;
-                    default:
-                        {
-                            if (optionsHeader.clickAction === 'select') {
-                                state.selectionRows = (() => {
-                                    let rows = {};
-                                    filteredList.forEach((item, i) => {
-                                        rows[i] = true;
-                                    });
-                                    return rows;
-                                })();
-                                if (e.shiftKey) {
-                                    state.selectionCols = (() => {
-                                        let cols = {};
-                                        utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(i => {
-                                            cols[i] = true;
-                                        });
-                                        return cols;
-                                    })();
-                                }
-                                else {
-                                    state.selectionCols = {
-                                        [colIndex]: true,
-                                    };
-                                    state.focusedCol = colIndex;
-                                }
-                                setStoreState(state);
-                            }
-                            else if (optionsHeader.clickAction === 'sort' &&
-                                optionsHeader.sortable) {
-                                dispatch(_enums_1.DataGridEnums.DispatchTypes.SORT, { colIndex });
-                            }
+                        else if (optionsHeader.clickAction === 'sort' &&
+                            optionsHeader.sortable) {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.SORT, { colIndex });
                         }
-                        break;
-                }
-                if (key === '_line_number_') {
-                }
-                else {
-                }
+                    }
+                    break;
+            }
+            if (key === '_line_number_') {
+            }
+            else {
             }
         };
         this.onMouseDownColumnResizer = (e, col) => {
@@ -212,7 +156,7 @@ class DataGridHeaderPanel extends React.Component {
         };
         this.onDoubleClickColumnResizer = (e, col) => {
             e.preventDefault();
-            const { dispatch, filteredList = [], colGroup = [], autofitColGroup, } = this.props;
+            const { dispatch, autofitColGroup } = this.props;
             if (autofitColGroup && autofitColGroup[Number(col.colIndex)]) {
                 const newWidth = autofitColGroup[Number(col.colIndex)].tdWidth;
                 dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {

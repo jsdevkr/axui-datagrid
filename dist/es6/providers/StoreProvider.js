@@ -8,7 +8,6 @@ const _enums_1 = require("../common/@enums");
 const store = {
     // 데이터 그리드 내부에서 사용하는 상태의 기본형.
     sortInfo: {},
-    isColumnFilter: false,
     scrollLeft: 0,
     scrollTop: 0,
     selectionRows: {},
@@ -30,7 +29,6 @@ const store = {
     width: 0,
     height: 0,
     data: [],
-    filteredList: [],
     listSelectedAll: false,
     colGroup: [],
     asideColGroup: [],
@@ -63,8 +61,8 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState) => {
-            const { filteredList = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
-            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop, filteredList: _filteredList, } = newState;
+            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
+            const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
             if (!newState.styles) {
                 newState.styles = Object.assign({}, styles);
             }
@@ -105,74 +103,76 @@ class StoreProvider extends React.Component {
                     });
                 }
             }
-            if (_filteredList && filteredList.length !== _filteredList.length) {
-                const dimensions = utils_1.calculateDimensions(newState, {
-                    headerTable: newState.headerTable || this.state.headerTable,
-                    colGroup: newState.colGroup || this.state.colGroup,
-                    headerColGroup: newState.headerColGroup || this.state.headerColGroup,
-                    bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
-                    footSumColumns: newState.footSumColumns || this.state.footSumColumns,
-                    filteredList: _filteredList,
-                    options: newState.options || this.state.options,
-                });
-                newState.styles = dimensions.styles;
-                newState.scrollLeft = dimensions.scrollLeft;
-                newState.scrollTop = dimensions.scrollTop;
-            }
+            // if (_filteredList && filteredList.length !== _filteredList.length) {
+            //   const dimensions = calculateDimensions(newState, {
+            //     headerTable: newState.headerTable || this.state.headerTable,
+            //     colGroup: newState.colGroup || this.state.colGroup,
+            //     headerColGroup: newState.headerColGroup || this.state.headerColGroup,
+            //     bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
+            //     footSumColumns: newState.footSumColumns || this.state.footSumColumns,
+            //     filteredList: _filteredList,
+            //     options: newState.options || this.state.options,
+            //   });
+            //   newState.styles = dimensions.styles;
+            //   newState.scrollLeft = dimensions.scrollLeft;
+            //   newState.scrollTop = dimensions.scrollTop;
+            // }
             this.setState(newState);
         };
         this.dispatch = (dispatchType, param) => {
             const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, } = this.state;
             const onChangeSelected = rowSelector && rowSelector.onChange;
             const { columnKeys: optionColumnKeys = {} } = options;
-            let { filteredList = [] } = this.state;
             const proc = {
                 [_enums_1.DataGridEnums.DispatchTypes.FILTER]: () => {
-                    const { colIndex, filterInfo } = param;
-                    const checkAll = filterInfo[colIndex] === false
-                        ? true
-                        : filterInfo[colIndex]._check_all_;
-                    if (checkAll) {
-                        filteredList =
-                            data &&
-                                data.filter((n) => {
-                                    return (typeof n === 'undefined' ||
-                                        !n[optionColumnKeys.deleted || '_deleted_']);
-                                });
-                    }
-                    else {
-                        filteredList = data.filter((n) => {
-                            if (n) {
-                                const value = n && n[colGroup[colIndex].key || ''];
-                                if (typeof n === 'undefined' ||
-                                    n[optionColumnKeys.deleted || '_deleted_']) {
-                                    return false;
-                                }
-                                if (typeof value === 'undefined') {
-                                    if (!filterInfo[colIndex]._UNDEFINED_) {
-                                        return false;
-                                    }
-                                }
-                                else {
-                                    if (!filterInfo[colIndex][value]) {
-                                        return false;
-                                    }
-                                }
-                                return true;
-                            }
-                            return false;
-                        });
-                    }
-                    this.setStoreState({
-                        filteredList,
-                        filterInfo,
-                        scrollTop: 0,
-                    });
-                    if (onChangeSelected) {
-                        onChangeSelected({
-                            filteredList,
-                        });
-                    }
+                    // const { colIndex, filterInfo } = param;
+                    // const checkAll =
+                    //   filterInfo[colIndex] === false
+                    //     ? true
+                    //     : filterInfo[colIndex]._check_all_;
+                    // if (checkAll) {
+                    //   filteredList =
+                    //     data &&
+                    //     data.filter((n: any) => {
+                    //       return (
+                    //         typeof n === 'undefined' ||
+                    //         !n[optionColumnKeys.deleted || '_deleted_']
+                    //       );
+                    //     });
+                    // } else {
+                    //   filteredList = data.filter((n: any) => {
+                    //     if (n) {
+                    //       const value = n && n[colGroup[colIndex].key || ''];
+                    //       if (
+                    //         typeof n === 'undefined' ||
+                    //         n[optionColumnKeys.deleted || '_deleted_']
+                    //       ) {
+                    //         return false;
+                    //       }
+                    //       if (typeof value === 'undefined') {
+                    //         if (!filterInfo[colIndex]._UNDEFINED_) {
+                    //           return false;
+                    //         }
+                    //       } else {
+                    //         if (!filterInfo[colIndex][value]) {
+                    //           return false;
+                    //         }
+                    //       }
+                    //       return true;
+                    //     }
+                    //     return false;
+                    //   });
+                    // }
+                    // this.setStoreState({
+                    //   filteredList,
+                    //   filterInfo,
+                    //   scrollTop: 0,
+                    // });
+                    // if (onChangeSelected) {
+                    //   onChangeSelected({
+                    //     filteredList,
+                    //   });
+                    // }
                 },
                 [_enums_1.DataGridEnums.DispatchTypes.SORT]: () => {
                     const { colIndex } = param;
@@ -214,7 +214,7 @@ class StoreProvider extends React.Component {
                         }
                         sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
                         let i = 0, l = sortInfoArray.length, aValue, bValue;
-                        const sortedList = filteredList.sort((a, b) => {
+                        const sortedList = data.sort((a, b) => {
                             for (i = 0; i < l; i++) {
                                 aValue = getValueByKey(a, sortInfoArray[i].key);
                                 bValue = getValueByKey(b, sortInfoArray[i].key);
@@ -232,13 +232,13 @@ class StoreProvider extends React.Component {
                         });
                         this.setStoreState({
                             sortInfo: Object.assign({}, currentSortInfo),
-                            filteredList: sortedList,
+                            data: sortedList,
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
                         if (onChangeSelected) {
                             onChangeSelected({
-                                filteredList: filteredList,
+                                data: sortedList,
                             });
                         }
                     }
@@ -248,7 +248,7 @@ class StoreProvider extends React.Component {
                     const key = colGroup[colIndex].key;
                     let focusRow = focusedRow;
                     if (key) {
-                        filteredList[row][key] = value;
+                        data[row][key] = value;
                         // update filteredList
                     }
                     if (eventWhichKey) {
@@ -258,8 +258,8 @@ class StoreProvider extends React.Component {
                                 break;
                             case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                                 focusRow =
-                                    focusedRow + 1 >= filteredList.length
-                                        ? filteredList.length - 1
+                                    focusedRow + 1 >= data.length
+                                        ? data.length - 1
                                         : focusedRow + 1;
                                 break;
                             default:
@@ -267,7 +267,7 @@ class StoreProvider extends React.Component {
                         }
                     }
                     this.setStoreState({
-                        filteredList: [...filteredList],
+                        data: [...data],
                         isInlineEditing: false,
                         inlineEditingCell: {},
                         selectionRows: {
@@ -277,7 +277,7 @@ class StoreProvider extends React.Component {
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                     if (rootNode && rootNode.current) {
@@ -305,21 +305,21 @@ class StoreProvider extends React.Component {
                         rowSelected = false;
                     }
                     else {
-                        rowSelected = !filteredList[rowIndex]._selected_;
+                        rowSelected = !data[rowIndex]._selected_;
                     }
                     if (!rowSelected) {
                         selectedAll = false;
                     }
-                    filteredList[rowIndex]._selected_ = rowSelected;
+                    data[rowIndex]._selected_ = rowSelected;
                     this.setStoreState({
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
                         selectedRowIndexSelected: rowSelected,
-                        filteredList: [...filteredList],
+                        data: [...data],
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                 },
@@ -335,16 +335,16 @@ class StoreProvider extends React.Component {
                     else {
                         selectedAll = !selectedAll;
                     }
-                    for (let i = 0, l = filteredList.length; i < l; i++) {
-                        filteredList[i]._selected_ = selectedAll;
+                    for (let i = 0, l = data.length; i < l; i++) {
+                        data[i]._selected_ = selectedAll;
                     }
                     this.setStoreState({
                         listSelectedAll: selectedAll,
-                        filteredList: [...filteredList],
+                        data: [...data],
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                 },
@@ -465,12 +465,11 @@ class StoreProvider extends React.Component {
             const changed = {
                 colGroup: false,
                 frozenColumnIndex: false,
-                filteredList: false,
                 styles: false,
                 visibleColGroup: false,
             };
             // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
-            let { colGroup: _colGroup = [], leftHeaderColGroup: _leftHeaderColGroup, headerColGroup: _headerColGroup, filteredList: _filteredList, styles: _styles, scrollLeft: _scrollLeft = 0, scrollTop: _scrollTop = 0, } = storeState;
+            let { colGroup: _colGroup = [], leftHeaderColGroup: _leftHeaderColGroup, headerColGroup: _headerColGroup, styles: _styles, scrollLeft: _scrollLeft = 0, scrollTop: _scrollTop = 0, } = storeState;
             // colGroup들의 너비합을 모르거나 변경된 경우.
             // colGroup > width 연산
             if (nProps.colGroup !== nState.colGroup ||
@@ -483,19 +482,18 @@ class StoreProvider extends React.Component {
                 _headerColGroup = _colGroup.slice(frozenColumnIndex);
                 changed.frozenColumnIndex = true;
             }
-            // 데이터가 변경됨.
-            if (nProps.data !== nState.data) {
-                // 전달받은 data를 filteredList로 치환.
-                _filteredList = utils_1.getFilteredList(nProps.data || [], {
-                    colGroup: _colGroup,
-                    sorter: nState.sortInfo,
-                    options: nProps.options,
-                });
-                changed.filteredList = true;
-            }
+            // // 데이터가 변경됨.
+            // if (nProps.data !== nState.data) {
+            //   // 전달받은 data를 filteredList로 치환.
+            //   _filteredList = getFilteredList(nProps.data || [], {
+            //     colGroup: _colGroup,
+            //     sorter: nState.sortInfo,
+            //     options: nProps.options,
+            //   });
+            //   changed.filteredList = true;
+            // }
             if (changed.colGroup ||
                 changed.frozenColumnIndex ||
-                changed.filteredList ||
                 !storeState.styles ||
                 nProps.width !== nState.width ||
                 nProps.height !== nState.height) {
@@ -506,7 +504,7 @@ class StoreProvider extends React.Component {
                     headerColGroup: _headerColGroup,
                     bodyRowTable: nProps.bodyRowTable,
                     footSumColumns: nProps.footSumColumns,
-                    filteredList: _filteredList,
+                    data: nProps.data,
                     options: nProps.options,
                 });
                 _styles = dimensions.styles;
@@ -537,7 +535,6 @@ class StoreProvider extends React.Component {
             storeState.colGroup = _colGroup;
             storeState.leftHeaderColGroup = _leftHeaderColGroup;
             storeState.headerColGroup = _headerColGroup;
-            storeState.filteredList = _filteredList;
             storeState.styles = _styles;
             storeState.scrollLeft = _scrollLeft;
             storeState.scrollTop = _scrollTop;

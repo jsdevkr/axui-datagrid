@@ -53,22 +53,22 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
         return _this;
     }
     DataGridAutofitHelper.prototype.render = function () {
-        var _a = this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.filteredList, filteredList = _c === void 0 ? [] : _c, _d = _a.predefinedFormatter, predefinedFormatter = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e;
+        var _a = this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.data, data = _c === void 0 ? [] : _c, _d = _a.predefinedFormatter, predefinedFormatter = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e;
         var _f = styles.bodyHeight, bodyHeight = _f === void 0 ? 0 : _f, _g = styles.bodyTrHeight, bodyTrHeight = _g === void 0 ? 1 : _g;
         return (React.createElement("div", { className: 'axui-datagrid-autofit-helper' },
             React.createElement("table", { ref: this.tableRef },
                 React.createElement("thead", null,
                     React.createElement("tr", { "data-autofit-table-head-row": true },
-                        React.createElement("td", null, filteredList.length),
+                        React.createElement("td", null, data.length),
                         colGroup.map(function (col, ci) { return (React.createElement("td", { key: ci }, col.label)); }))),
-                React.createElement("tbody", null, filteredList
+                React.createElement("tbody", null, data
                     .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
                     .map(function (row, li) {
                     return (React.createElement("tr", { key: li },
                         React.createElement("td", null, li),
                         colGroup.map(function (col) { return (React.createElement("td", { key: col.colIndex },
                             React.createElement("span", { "data-span": true },
-                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: filteredList, li: li, predefinedFormatter: predefinedFormatter })))); })));
+                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter })))); })));
                 })))));
     };
     DataGridAutofitHelper.prototype.componentDidMount = function () {

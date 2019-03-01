@@ -150,7 +150,6 @@ class DataGrid extends React.Component {
                     React.createElement(components_1.DataGridBody, null),
                     React.createElement(components_1.DataGridPage, null),
                     React.createElement(components_1.DataGridScroll, null),
-                    React.createElement(components_1.DataGridColumnFilter, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))),
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
     }
@@ -183,9 +182,7 @@ DataGrid.defaultHeader = {
     columnBorderWidth: 1,
     selector: true,
     sortable: true,
-    enableFilter: true,
     clickAction: 'sort',
-    filterIconClassName: 'datagridIcon-filter',
 };
 DataGrid.defaultBody = {
     align: 'left',

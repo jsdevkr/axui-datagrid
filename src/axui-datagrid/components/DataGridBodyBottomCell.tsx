@@ -77,7 +77,7 @@ interface IProps extends IDataGridStore {
 
 const DataGridBodyBottomCell: React.SFC<IProps> = props => {
   const {
-    filteredList = [],
+    data = [],
     col = {},
     ci,
     options = {},
@@ -126,7 +126,7 @@ const DataGridBodyBottomCell: React.SFC<IProps> = props => {
       >
         <CellLabel
           col={col}
-          list={filteredList}
+          list={data}
           lineHeight={lineHeight}
           predefinedFormatter={predefinedFormatter}
           predefinedCollector={predefinedCollector}

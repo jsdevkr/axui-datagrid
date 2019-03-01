@@ -13,7 +13,7 @@ class DataGridPage extends React.Component {
     //   userFunction: string | IDataGrid.userCallBackFunction,
     // ) => {
     //   const {
-    //     filteredList = [],
+    //     data = [],
     //     scrollLeft = 0,
     //     scrollTop = 0,
     //     focusedRow = 0,
@@ -89,8 +89,8 @@ class DataGridPage extends React.Component {
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_PLAY]: () => {
     //       let focusRow =
-    //         focusedRow + 1 >= filteredList.length
-    //           ? filteredList.length - 1
+    //         focusedRow + 1 >= data.length
+    //           ? data.length - 1
     //           : focusedRow + 1;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
@@ -102,8 +102,8 @@ class DataGridPage extends React.Component {
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_NEXT]: () => {
     //       let focusRow =
-    //         focusedRow + pRowSize >= filteredList.length
-    //           ? filteredList.length - 1
+    //         focusedRow + pRowSize >= data.length
+    //           ? data.length - 1
     //           : focusedRow + pRowSize;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
@@ -114,7 +114,7 @@ class DataGridPage extends React.Component {
     //       });
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_LAST]: () => {
-    //       const focusRow = filteredList.length - 1;
+    //       const focusRow = data.length - 1;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
     //         selectionRows: {
@@ -131,14 +131,12 @@ class DataGridPage extends React.Component {
     //   }
     // };
     render() {
-        const { options = {}, styles = {}, status, filteredList = [] } = this.props;
+        const { options = {}, styles = {}, status, data = [] } = this.props;
         const { horizontalScrollerWidth } = styles;
         const { page: optionPage = {} } = options;
         const { height } = optionPage;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-status" }, status
-                ? status
-                : `Total ${utils_1.formatCurrency(filteredList.length)} Items`),
+            React.createElement("div", { className: "axui-datagrid-page-status" }, status ? status : `Total ${utils_1.formatCurrency(data.length)} Items`),
             React.createElement("div", { style: { width: horizontalScrollerWidth } })));
     }
 }

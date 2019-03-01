@@ -130,7 +130,7 @@ class DataGridBodyCell extends React.Component<IProps> {
 
   render() {
     const {
-      filteredList = [],
+      data = [],
       focusedRow,
       focusedCol,
       selectionRows = [],
@@ -246,7 +246,7 @@ class DataGridBodyCell extends React.Component<IProps> {
             <CellLabel
               lineHeight={lineHeight}
               col={col}
-              list={filteredList}
+              list={data}
               li={li}
               predefinedFormatter={predefinedFormatter}
             />

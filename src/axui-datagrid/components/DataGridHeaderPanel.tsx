@@ -92,11 +92,9 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
   state = {};
   onHandleClick = (e: any, col: IDataGrid.ICol) => {
     const {
-      filteredList = [],
+      data = [],
       colGroup = [],
-      scrollLeft = 0,
       focusedCol = 0,
-      isColumnFilter = false,
       options = {},
       styles = {},
       setStoreState,
@@ -107,149 +105,80 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     const { key, colIndex = 0 } = col;
     const { asidePanelWidth = 0 } = styles;
 
-    if (e.target.getAttribute('data-filter')) {
-      const closeEvent = (ee: any) => {
-        const { isColumnFilter: _isColumnFilter } = this.props;
-        if (
-          ee.target &&
-          ee.target.getAttribute &&
-          '' + _isColumnFilter === ee.target.getAttribute('data-filter-index')
-        ) {
-          return false;
+    let state = {
+      dragging: false,
+      selectionRows: {},
+      selectionCols: {},
+      focusedRow: 0,
+      focusedCol: focusedCol,
+    };
+
+    switch (key) {
+      case '_line_number_':
+        {
+          state.selectionRows = (() => {
+            let rows = {};
+            data.forEach((item, i) => {
+              rows[i] = true;
+            });
+            return rows;
+          })();
+
+          state.selectionCols = (() => {
+            let cols = {};
+            colGroup.forEach(_col => {
+              cols[_col.colIndex || 0] = true;
+            });
+            return cols;
+          })();
+          state.focusedCol = 0;
+          setStoreState(state);
         }
-
-        let downedElement: any = false;
-
-        if (ee.target) {
-          downedElement = findParentNode(ee.target, element => {
-            return element && element.getAttribute
-              ? element.getAttribute('data-column-filter') === 'true'
-              : false;
-          });
-        }
-
-        if (downedElement === false) {
-          ee.preventDefault();
-
-          setStoreState({
-            isColumnFilter: false,
-          });
-
-          document.removeEventListener('mouseup', closeEvent);
-          document.removeEventListener('mouseleave', closeEvent);
-          document.removeEventListener('keydown', keyDown);
-        }
-
-        return;
-      };
-      const keyDown = (ee: any) => {
-        if (ee.which === 27) {
-          closeEvent(ee);
-        }
-      };
-
-      if (isColumnFilter === colIndex) {
-        setStoreState({
-          isColumnFilter: false,
-        });
-
-        document.removeEventListener('mouseup', closeEvent);
-        document.removeEventListener('mouseleave', closeEvent);
-        document.removeEventListener('keydown', keyDown);
-      } else {
-        let columnFilterLeft: number =
-          asidePanelWidth + (colGroup[colIndex]._sx || 0) - 2 + scrollLeft;
-
-        setStoreState({
-          scrollLeft:
-            columnFilterLeft < 0 ? scrollLeft - columnFilterLeft : scrollLeft,
-          isColumnFilter: colIndex,
-        });
-
-        document.removeEventListener('mouseup', closeEvent);
-        document.removeEventListener('mouseleave', closeEvent);
-        document.removeEventListener('keydown', keyDown);
-
-        document.addEventListener('mouseup', closeEvent);
-        document.addEventListener('mouseleave', closeEvent);
-        document.addEventListener('keydown', keyDown);
-      }
-    } else {
-      let state = {
-        dragging: false,
-        selectionRows: {},
-        selectionCols: {},
-        focusedRow: 0,
-        focusedCol: focusedCol,
-      };
-
-      switch (key) {
-        case '_line_number_':
-          {
+        break;
+      case '_row_selector_':
+        dispatch(DataGridEnums.DispatchTypes.SELECT_ALL, {});
+        break;
+      default:
+        {
+          if (optionsHeader.clickAction === 'select') {
             state.selectionRows = (() => {
               let rows = {};
-              filteredList.forEach((item, i) => {
+              data.forEach((item, i) => {
                 rows[i] = true;
               });
               return rows;
             })();
 
-            state.selectionCols = (() => {
-              let cols = {};
-              colGroup.forEach(_col => {
-                cols[_col.colIndex || 0] = true;
-              });
-              return cols;
-            })();
-            state.focusedCol = 0;
-            setStoreState(state);
-          }
-          break;
-        case '_row_selector_':
-          dispatch(DataGridEnums.DispatchTypes.SELECT_ALL, {});
-          break;
-        default:
-          {
-            if (optionsHeader.clickAction === 'select') {
-              state.selectionRows = (() => {
-                let rows = {};
-                filteredList.forEach((item, i) => {
-                  rows[i] = true;
+            if (e.shiftKey) {
+              state.selectionCols = (() => {
+                let cols = {};
+                arrayFromRange(
+                  Math.min(focusedCol, colIndex),
+                  Math.max(focusedCol, colIndex) + 1,
+                ).forEach(i => {
+                  cols[i] = true;
                 });
-                return rows;
+                return cols;
               })();
-
-              if (e.shiftKey) {
-                state.selectionCols = (() => {
-                  let cols = {};
-                  arrayFromRange(
-                    Math.min(focusedCol, colIndex),
-                    Math.max(focusedCol, colIndex) + 1,
-                  ).forEach(i => {
-                    cols[i] = true;
-                  });
-                  return cols;
-                })();
-              } else {
-                state.selectionCols = {
-                  [colIndex]: true,
-                };
-                state.focusedCol = colIndex;
-              }
-              setStoreState(state);
-            } else if (
-              optionsHeader.clickAction === 'sort' &&
-              optionsHeader.sortable
-            ) {
-              dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
+            } else {
+              state.selectionCols = {
+                [colIndex]: true,
+              };
+              state.focusedCol = colIndex;
             }
+            setStoreState(state);
+          } else if (
+            optionsHeader.clickAction === 'sort' &&
+            optionsHeader.sortable
+          ) {
+            dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
           }
-          break;
-      }
+        }
+        break;
+    }
 
-      if (key === '_line_number_') {
-      } else {
-      }
+    if (key === '_line_number_') {
+    } else {
     }
   };
 
@@ -312,12 +241,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
   onDoubleClickColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
-    const {
-      dispatch,
-      filteredList = [],
-      colGroup = [],
-      autofitColGroup,
-    } = this.props;
+    const { dispatch, autofitColGroup } = this.props;
 
     if (autofitColGroup && autofitColGroup[Number(col.colIndex)]) {
       const newWidth = autofitColGroup[Number(col.colIndex)].tdWidth;

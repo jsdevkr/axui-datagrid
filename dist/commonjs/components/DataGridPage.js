@@ -28,7 +28,7 @@ var DataGridPage = /** @class */ (function (_super) {
     //   userFunction: string | IDataGrid.userCallBackFunction,
     // ) => {
     //   const {
-    //     filteredList = [],
+    //     data = [],
     //     scrollLeft = 0,
     //     scrollTop = 0,
     //     focusedRow = 0,
@@ -104,8 +104,8 @@ var DataGridPage = /** @class */ (function (_super) {
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_PLAY]: () => {
     //       let focusRow =
-    //         focusedRow + 1 >= filteredList.length
-    //           ? filteredList.length - 1
+    //         focusedRow + 1 >= data.length
+    //           ? data.length - 1
     //           : focusedRow + 1;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
@@ -117,8 +117,8 @@ var DataGridPage = /** @class */ (function (_super) {
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_NEXT]: () => {
     //       let focusRow =
-    //         focusedRow + pRowSize >= filteredList.length
-    //           ? filteredList.length - 1
+    //         focusedRow + pRowSize >= data.length
+    //           ? data.length - 1
     //           : focusedRow + pRowSize;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
@@ -129,7 +129,7 @@ var DataGridPage = /** @class */ (function (_super) {
     //       });
     //     },
     //     [DataGridEnums.PageButtonActions.PAGE_LAST]: () => {
-    //       const focusRow = filteredList.length - 1;
+    //       const focusRow = data.length - 1;
     //       setStoreState({
     //         scrollTop: getAvailScrollTop(focusRow),
     //         selectionRows: {
@@ -146,14 +146,12 @@ var DataGridPage = /** @class */ (function (_super) {
     //   }
     // };
     DataGridPage.prototype.render = function () {
-        var _a = this.props, _b = _a.options, options = _b === void 0 ? {} : _b, _c = _a.styles, styles = _c === void 0 ? {} : _c, status = _a.status, _d = _a.filteredList, filteredList = _d === void 0 ? [] : _d;
+        var _a = this.props, _b = _a.options, options = _b === void 0 ? {} : _b, _c = _a.styles, styles = _c === void 0 ? {} : _c, status = _a.status, _d = _a.data, data = _d === void 0 ? [] : _d;
         var horizontalScrollerWidth = styles.horizontalScrollerWidth;
         var _e = options.page, optionPage = _e === void 0 ? {} : _e;
         var height = optionPage.height;
         return (React.createElement("div", { className: "axui-datagrid-page", style: { height: styles.pageHeight } },
-            React.createElement("div", { className: "axui-datagrid-page-status" }, status
-                ? status
-                : "Total " + utils_1.formatCurrency(filteredList.length) + " Items"),
+            React.createElement("div", { className: "axui-datagrid-page-status" }, status ? status : "Total " + utils_1.formatCurrency(data.length) + " Items"),
             React.createElement("div", { style: { width: horizontalScrollerWidth } })));
     };
     return DataGridPage;

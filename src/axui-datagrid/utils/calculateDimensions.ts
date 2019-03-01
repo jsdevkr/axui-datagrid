@@ -6,7 +6,7 @@ export interface ICalculateDimensionsParam {
   headerColGroup?: IDataGrid.ICol[];
   bodyRowTable?: IDataGrid.IColumnTableMap;
   footSumColumns?: IDataGrid.IColumn[][];
-  filteredList?: any[];
+  data?: any[];
   options?: IDataGrid.IOptions;
 }
 
@@ -18,7 +18,7 @@ export default function calculateDimensions(
     headerColGroup = [],
     bodyRowTable = { rows: [] },
     footSumColumns,
-    filteredList = [],
+    data = [],
     options = {},
   }: ICalculateDimensionsParam,
 ): {
@@ -48,7 +48,7 @@ export default function calculateDimensions(
   const { height: optionsPageHeight = 0 } = optionsPage;
   const headerTableRowsLength = headerTable.rows.length;
   const bodyTablsRowsLength = bodyRowTable.rows.length;
-  const dataLength = filteredList.length;
+  const dataLength = data.length;
   let {
     theme: optionsScrollerTheme = 'default',
     width: optionsScrollerWidth = 0,

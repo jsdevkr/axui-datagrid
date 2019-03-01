@@ -51,134 +51,78 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         _this.state = {};
         _this.onHandleClick = function (e, col) {
             var _a;
-            var _b = _this.props, _c = _b.filteredList, filteredList = _c === void 0 ? [] : _c, _d = _b.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.focusedCol, focusedCol = _f === void 0 ? 0 : _f, _g = _b.isColumnFilter, isColumnFilter = _g === void 0 ? false : _g, _h = _b.options, options = _h === void 0 ? {} : _h, _j = _b.styles, styles = _j === void 0 ? {} : _j, setStoreState = _b.setStoreState, dispatch = _b.dispatch;
-            var _k = options.header, optionsHeader = _k === void 0 ? {} : _k;
-            var key = col.key, _l = col.colIndex, colIndex = _l === void 0 ? 0 : _l;
-            var _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m;
-            if (e.target.getAttribute('data-filter')) {
-                var closeEvent_1 = function (ee) {
-                    var _isColumnFilter = _this.props.isColumnFilter;
-                    if (ee.target &&
-                        ee.target.getAttribute &&
-                        '' + _isColumnFilter === ee.target.getAttribute('data-filter-index')) {
-                        return false;
+            var _b = _this.props, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, _f = _b.options, options = _f === void 0 ? {} : _f, _g = _b.styles, styles = _g === void 0 ? {} : _g, setStoreState = _b.setStoreState, dispatch = _b.dispatch;
+            var _h = options.header, optionsHeader = _h === void 0 ? {} : _h;
+            var key = col.key, _j = col.colIndex, colIndex = _j === void 0 ? 0 : _j;
+            var _k = styles.asidePanelWidth, asidePanelWidth = _k === void 0 ? 0 : _k;
+            var state = {
+                dragging: false,
+                selectionRows: {},
+                selectionCols: {},
+                focusedRow: 0,
+                focusedCol: focusedCol,
+            };
+            switch (key) {
+                case '_line_number_':
+                    {
+                        state.selectionRows = (function () {
+                            var rows = {};
+                            data.forEach(function (item, i) {
+                                rows[i] = true;
+                            });
+                            return rows;
+                        })();
+                        state.selectionCols = (function () {
+                            var cols = {};
+                            colGroup.forEach(function (_col) {
+                                cols[_col.colIndex || 0] = true;
+                            });
+                            return cols;
+                        })();
+                        state.focusedCol = 0;
+                        setStoreState(state);
                     }
-                    var downedElement = false;
-                    if (ee.target) {
-                        downedElement = utils_1.findParentNode(ee.target, function (element) {
-                            return element && element.getAttribute
-                                ? element.getAttribute('data-column-filter') === 'true'
-                                : false;
-                        });
-                    }
-                    if (downedElement === false) {
-                        ee.preventDefault();
-                        setStoreState({
-                            isColumnFilter: false,
-                        });
-                        document.removeEventListener('mouseup', closeEvent_1);
-                        document.removeEventListener('mouseleave', closeEvent_1);
-                        document.removeEventListener('keydown', keyDown_1);
-                    }
-                    return;
-                };
-                var keyDown_1 = function (ee) {
-                    if (ee.which === 27) {
-                        closeEvent_1(ee);
-                    }
-                };
-                if (isColumnFilter === colIndex) {
-                    setStoreState({
-                        isColumnFilter: false,
-                    });
-                    document.removeEventListener('mouseup', closeEvent_1);
-                    document.removeEventListener('mouseleave', closeEvent_1);
-                    document.removeEventListener('keydown', keyDown_1);
-                }
-                else {
-                    var columnFilterLeft = asidePanelWidth + (colGroup[colIndex]._sx || 0) - 2 + scrollLeft;
-                    setStoreState({
-                        scrollLeft: columnFilterLeft < 0 ? scrollLeft - columnFilterLeft : scrollLeft,
-                        isColumnFilter: colIndex,
-                    });
-                    document.removeEventListener('mouseup', closeEvent_1);
-                    document.removeEventListener('mouseleave', closeEvent_1);
-                    document.removeEventListener('keydown', keyDown_1);
-                    document.addEventListener('mouseup', closeEvent_1);
-                    document.addEventListener('mouseleave', closeEvent_1);
-                    document.addEventListener('keydown', keyDown_1);
-                }
-            }
-            else {
-                var state = {
-                    dragging: false,
-                    selectionRows: {},
-                    selectionCols: {},
-                    focusedRow: 0,
-                    focusedCol: focusedCol,
-                };
-                switch (key) {
-                    case '_line_number_':
-                        {
+                    break;
+                case '_row_selector_':
+                    dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL, {});
+                    break;
+                default:
+                    {
+                        if (optionsHeader.clickAction === 'select') {
                             state.selectionRows = (function () {
                                 var rows = {};
-                                filteredList.forEach(function (item, i) {
+                                data.forEach(function (item, i) {
                                     rows[i] = true;
                                 });
                                 return rows;
                             })();
-                            state.selectionCols = (function () {
-                                var cols = {};
-                                colGroup.forEach(function (_col) {
-                                    cols[_col.colIndex || 0] = true;
-                                });
-                                return cols;
-                            })();
-                            state.focusedCol = 0;
+                            if (e.shiftKey) {
+                                state.selectionCols = (function () {
+                                    var cols = {};
+                                    utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(function (i) {
+                                        cols[i] = true;
+                                    });
+                                    return cols;
+                                })();
+                            }
+                            else {
+                                state.selectionCols = (_a = {},
+                                    _a[colIndex] = true,
+                                    _a);
+                                state.focusedCol = colIndex;
+                            }
                             setStoreState(state);
                         }
-                        break;
-                    case '_row_selector_':
-                        dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL, {});
-                        break;
-                    default:
-                        {
-                            if (optionsHeader.clickAction === 'select') {
-                                state.selectionRows = (function () {
-                                    var rows = {};
-                                    filteredList.forEach(function (item, i) {
-                                        rows[i] = true;
-                                    });
-                                    return rows;
-                                })();
-                                if (e.shiftKey) {
-                                    state.selectionCols = (function () {
-                                        var cols = {};
-                                        utils_1.arrayFromRange(Math.min(focusedCol, colIndex), Math.max(focusedCol, colIndex) + 1).forEach(function (i) {
-                                            cols[i] = true;
-                                        });
-                                        return cols;
-                                    })();
-                                }
-                                else {
-                                    state.selectionCols = (_a = {},
-                                        _a[colIndex] = true,
-                                        _a);
-                                    state.focusedCol = colIndex;
-                                }
-                                setStoreState(state);
-                            }
-                            else if (optionsHeader.clickAction === 'sort' &&
-                                optionsHeader.sortable) {
-                                dispatch(_enums_1.DataGridEnums.DispatchTypes.SORT, { colIndex: colIndex });
-                            }
+                        else if (optionsHeader.clickAction === 'sort' &&
+                            optionsHeader.sortable) {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.SORT, { colIndex: colIndex });
                         }
-                        break;
-                }
-                if (key === '_line_number_') {
-                }
-                else {
-                }
+                    }
+                    break;
+            }
+            if (key === '_line_number_') {
+            }
+            else {
             }
         };
         _this.onMouseDownColumnResizer = function (e, col) {
@@ -231,7 +175,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         };
         _this.onDoubleClickColumnResizer = function (e, col) {
             e.preventDefault();
-            var _a = _this.props, dispatch = _a.dispatch, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, autofitColGroup = _a.autofitColGroup;
+            var _a = _this.props, dispatch = _a.dispatch, autofitColGroup = _a.autofitColGroup;
             if (autofitColGroup && autofitColGroup[Number(col.colIndex)]) {
                 var newWidth = autofitColGroup[Number(col.colIndex)].tdWidth;
                 dispatch(_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL, {

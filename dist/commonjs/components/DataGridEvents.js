@@ -23,13 +23,9 @@ var DataGridEvents = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {};
         _this.onWheel = function (e) {
-            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState, _e = _a.isColumnFilter, isColumnFilter = _e === void 0 ? false : _e;
-            var _f = styles.scrollContentWidth, scrollContentWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentContainerWidth, scrollContentContainerWidth = _g === void 0 ? 0 : _g, _h = styles.scrollContentHeight, scrollContentHeight = _h === void 0 ? 0 : _h, _j = styles.scrollContentContainerHeight, scrollContentContainerHeight = _j === void 0 ? 0 : _j;
+            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
+            var _e = styles.scrollContentWidth, scrollContentWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h;
             var delta = { x: 0, y: 0 };
-            // 컬럼필터 활성화 상태라면 구문 실행 안함.
-            if (isColumnFilter) {
-                return true;
-            }
             if (e.detail) {
                 delta.y = e.detail * 10;
             }
@@ -43,12 +39,12 @@ var DataGridEvents = /** @class */ (function (_super) {
                     delta.x = e.deltaX;
                 }
             }
-            var _k = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
+            var _j = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
                 scrollWidth: scrollContentWidth,
                 scrollHeight: scrollContentHeight,
                 clientWidth: scrollContentContainerWidth,
                 clientHeight: scrollContentContainerHeight,
-            }), _l = _k.scrollLeft, currScrollLeft = _l === void 0 ? 0 : _l, _m = _k.scrollTop, currScrollTop = _m === void 0 ? 0 : _m, endOfScrollTop = _k.endOfScrollTop;
+            }), _k = _j.scrollLeft, currScrollLeft = _k === void 0 ? 0 : _k, _l = _j.scrollTop, currScrollTop = _l === void 0 ? 0 : _l, endOfScrollTop = _j.endOfScrollTop;
             setStoreState({
                 scrollLeft: currScrollLeft,
                 scrollTop: currScrollTop,
@@ -83,7 +79,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         };
         _this.onKeyDown = function (e) {
             var _a, _b;
-            var _c = _this.props, _d = _c.filteredList, filteredList = _d === void 0 ? [] : _d, rootNode = _c.rootNode, clipBoardNode = _c.clipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
+            var _c = _this.props, _d = _c.data, data = _d === void 0 ? [] : _d, rootNode = _c.rootNode, clipBoardNode = _c.clipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
             var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length - 1 : _s;
             var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
             var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
@@ -157,7 +153,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     var copiedString = '';
                     for (var rk in selectionRows) {
                         if (selectionRows[rk]) {
-                            var item = filteredList[rk];
+                            var item = data[rk];
                             for (var ck in selectionCols) {
                                 if (selectionCols[ck]) {
                                     copiedString += (item[headerColGroup[ck].key] || '') + '\t';
@@ -189,7 +185,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     };
                     state.selectionRows = (function () {
                         var rows = {};
-                        filteredList.forEach(function (item, i) {
+                        data.forEach(function (item, i) {
                             rows[i] = true;
                         });
                         return rows;
@@ -234,7 +230,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     var _a;
                     e.preventDefault();
                     // e.stopPropagation();
-                    var focusRow = filteredList.length - 1;
+                    var focusRow = data.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
                         selectionRows: (_a = {},
@@ -260,8 +256,8 @@ var DataGridEvents = /** @class */ (function (_super) {
                     var _a;
                     e.preventDefault();
                     // e.stopPropagation();
-                    var focusRow = focusedRow + pRowSize >= filteredList.length
-                        ? filteredList.length - 1
+                    var focusRow = focusedRow + pRowSize >= data.length
+                        ? data.length - 1
                         : focusedRow + pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -288,9 +284,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                     var _a;
                     e.preventDefault();
                     // e.stopPropagation();
-                    var focusRow = focusedRow + 1 >= filteredList.length
-                        ? filteredList.length - 1
-                        : focusedRow + 1;
+                    var focusRow = focusedRow + 1 >= data.length ? data.length - 1 : focusedRow + 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
                         selectionRows: (_a = {},
@@ -338,17 +332,17 @@ var DataGridEvents = /** @class */ (function (_super) {
             }
         };
         _this.onContextmenu = function (e) {
-            var _a = _this.props, onRightClick = _a.onRightClick, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, filteredList = _a.filteredList, colGroup = _a.colGroup;
+            var _a = _this.props, onRightClick = _a.onRightClick, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, data = _a.data, colGroup = _a.colGroup;
             if (onRightClick &&
-                filteredList &&
+                data &&
                 typeof focusedRow !== 'undefined' &&
                 typeof focusedCol !== 'undefined' &&
                 colGroup) {
                 var _b = colGroup[focusedCol].key, itemKey = _b === void 0 ? '' : _b;
                 onRightClick({
                     e: e,
-                    item: filteredList[focusedRow],
-                    value: filteredList[focusedRow][itemKey],
+                    item: data[focusedRow],
+                    value: data[focusedRow][itemKey],
                     focusedRow: focusedRow,
                     focusedCol: focusedCol,
                 });

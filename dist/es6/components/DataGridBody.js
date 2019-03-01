@@ -12,11 +12,11 @@ class DataGridBody extends React.Component {
         super(...arguments);
         this.state = {};
         this.onMouseDownBody = (e) => {
-            const { filteredList = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, rootNode, rootObject = {}, loading, loadingData, } = this.props;
+            const { data = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, rootNode, rootObject = {}, loading, loadingData, } = this.props;
             if (loading || loadingData) {
                 return false;
             }
-            const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, elWidth = 0, verticalScrollerWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
+            const { frozenPanelWidth = 0, frozenPanelHeight = 0, headerHeight = 0, bodyHeight = 0, elWidth = 0, bodyTrHeight = 0, asidePanelWidth = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = styles;
             const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
             const startMousePosition = utils_1.getMousePosition(e);
             const spanType = e.target.getAttribute('data-span');
@@ -32,11 +32,7 @@ class DataGridBody extends React.Component {
                     headerHeight -
                     (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
                     bodyTrHeight);
-                return i < 0
-                    ? 0
-                    : i >= filteredList.length - 1
-                        ? filteredList.length - 1
-                        : i;
+                return i < 0 ? 0 : i >= data.length - 1 ? data.length - 1 : i;
             };
             const getColIndex = (x, _scrollLeft) => {
                 const p = x -
@@ -352,7 +348,7 @@ class DataGridBody extends React.Component {
     render() {
         const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, } = this.props;
         const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
-        const { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, footSumHeight = 0, } = styles;
+        const { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = styles;
         const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
         const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
         const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입

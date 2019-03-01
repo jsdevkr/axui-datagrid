@@ -21,7 +21,7 @@ class DataGridPage extends React.Component<IProps> {
   //   userFunction: string | IDataGrid.userCallBackFunction,
   // ) => {
   //   const {
-  //     filteredList = [],
+  //     data = [],
   //     scrollLeft = 0,
   //     scrollTop = 0,
   //     focusedRow = 0,
@@ -105,8 +105,8 @@ class DataGridPage extends React.Component<IProps> {
   //     },
   //     [DataGridEnums.PageButtonActions.PAGE_PLAY]: () => {
   //       let focusRow =
-  //         focusedRow + 1 >= filteredList.length
-  //           ? filteredList.length - 1
+  //         focusedRow + 1 >= data.length
+  //           ? data.length - 1
   //           : focusedRow + 1;
 
   //       setStoreState({
@@ -119,8 +119,8 @@ class DataGridPage extends React.Component<IProps> {
   //     },
   //     [DataGridEnums.PageButtonActions.PAGE_NEXT]: () => {
   //       let focusRow =
-  //         focusedRow + pRowSize >= filteredList.length
-  //           ? filteredList.length - 1
+  //         focusedRow + pRowSize >= data.length
+  //           ? data.length - 1
   //           : focusedRow + pRowSize;
 
   //       setStoreState({
@@ -132,7 +132,7 @@ class DataGridPage extends React.Component<IProps> {
   //       });
   //     },
   //     [DataGridEnums.PageButtonActions.PAGE_LAST]: () => {
-  //       const focusRow = filteredList.length - 1;
+  //       const focusRow = data.length - 1;
 
   //       setStoreState({
   //         scrollTop: getAvailScrollTop(focusRow),
@@ -152,7 +152,7 @@ class DataGridPage extends React.Component<IProps> {
   // };
 
   render() {
-    const { options = {}, styles = {}, status, filteredList = [] } = this.props;
+    const { options = {}, styles = {}, status, data = [] } = this.props;
     const { horizontalScrollerWidth } = styles;
     const { page: optionPage = {} } = options;
     const { height } = optionPage;
@@ -160,9 +160,7 @@ class DataGridPage extends React.Component<IProps> {
     return (
       <div className="axui-datagrid-page" style={{ height: styles.pageHeight }}>
         <div className="axui-datagrid-page-status">
-          {status
-            ? status
-            : `Total ${formatCurrency(filteredList.length)} Items`}
+          {status ? status : `Total ${formatCurrency(data.length)} Items`}
         </div>
         <div style={{ width: horizontalScrollerWidth }} />
       </div>

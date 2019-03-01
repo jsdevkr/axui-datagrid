@@ -20,7 +20,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
   render() {
     const {
       colGroup = [],
-      filteredList = [],
+      data = [],
       predefinedFormatter = {},
       styles = {},
     } = this.props;
@@ -32,14 +32,14 @@ class DataGridAutofitHelper extends React.Component<IProps> {
         <table ref={this.tableRef}>
           <thead>
             <tr data-autofit-table-head-row>
-              <td>{filteredList.length}</td>
+              <td>{data.length}</td>
               {colGroup.map((col, ci) => (
                 <td key={ci}>{col.label}</td>
               ))}
             </tr>
           </thead>
           <tbody>
-            {filteredList
+            {data
               .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
               .map((row, li) => {
                 return (
@@ -51,7 +51,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
                           <CellLabel
                             lineHeight={10}
                             col={col}
-                            list={filteredList}
+                            list={data}
                             li={li}
                             predefinedFormatter={predefinedFormatter}
                           />

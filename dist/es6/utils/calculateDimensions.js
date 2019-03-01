@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function calculateDimensions(storeState, { headerTable = { rows: [] }, colGroup = [], headerColGroup = [], bodyRowTable = { rows: [] }, footSumColumns, filteredList = [], options = {}, }) {
+function calculateDimensions(storeState, { headerTable = { rows: [] }, colGroup = [], headerColGroup = [], bodyRowTable = { rows: [] }, footSumColumns, data = [], options = {}, }) {
     const { width = 0, height = 0 } = storeState;
     let { scrollLeft = 0, scrollTop = 0 } = storeState;
     const { header: optionsHeader = {}, body: optionsBody = {}, scroller: optionsScroller = {}, page: optionsPage = {}, frozenColumnIndex = 0, frozenRowIndex = 0, lineNumberColumnWidth = 0, rowSelectorColumnWidth = 0, showLineNumber, showRowSelector, } = options;
@@ -9,7 +9,7 @@ function calculateDimensions(storeState, { headerTable = { rows: [] }, colGroup 
     const { height: optionsPageHeight = 0 } = optionsPage;
     const headerTableRowsLength = headerTable.rows.length;
     const bodyTablsRowsLength = bodyRowTable.rows.length;
-    const dataLength = filteredList.length;
+    const dataLength = data.length;
     let { theme: optionsScrollerTheme = 'default', width: optionsScrollerWidth = 0, height: optionsScrollerHeight = 0, padding: optionsScrollerPadding = 0, arrowSize: optionsScrollerArrowSize = 0, barMinSize: optionsScrollerBarMinSize = 0, horizontalScrollerWidth = 0, } = optionsScroller;
     if (optionsScrollerTheme === 'solid') {
         optionsScrollerArrowSize = 0;

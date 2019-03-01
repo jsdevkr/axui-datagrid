@@ -46,7 +46,7 @@ const CellLabel = props => {
     }
 };
 const DataGridBodyBottomCell = props => {
-    const { filteredList = [], col = {}, ci, options = {}, predefinedFormatter = {}, predefinedCollector = {}, } = props;
+    const { data = [], col = {}, ci, options = {}, predefinedFormatter = {}, predefinedCollector = {}, } = props;
     const { body: optionsBody = {} } = options;
     const { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = optionsBody;
     const { rowSpan: colRowSpan = 0, colIndex: colColIndex = 0, align: colAlign = bodyAlign || '', columnAttr = '', colSpan = 1, rowSpan = 1, } = col;
@@ -61,6 +61,6 @@ const DataGridBodyBottomCell = props => {
                 lineHeight: lineHeight + 'px',
                 textAlign: colAlign,
             } },
-            React.createElement(CellLabel, { col: col, list: filteredList, lineHeight: lineHeight, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }))));
+            React.createElement(CellLabel, { col: col, list: data, lineHeight: lineHeight, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }))));
 };
 exports.default = hoc_1.connectStore(DataGridBodyBottomCell);

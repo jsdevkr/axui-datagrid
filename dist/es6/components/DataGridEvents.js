@@ -9,13 +9,9 @@ class DataGridEvents extends React.Component {
         super(...arguments);
         this.state = {};
         this.onWheel = (e) => {
-            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, isColumnFilter = false, } = this.props;
+            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
             const { scrollContentWidth = 0, scrollContentContainerWidth = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
             let delta = { x: 0, y: 0 };
-            // 컬럼필터 활성화 상태라면 구문 실행 안함.
-            if (isColumnFilter) {
-                return true;
-            }
             if (e.detail) {
                 delta.y = e.detail * 10;
             }
@@ -67,7 +63,7 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onKeyDown = (e) => {
-            const { filteredList = [], rootNode, clipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
+            const { data = [], rootNode, clipBoardNode, colGroup = [], headerColGroup = [], selectionRows = {}, selectionCols = {}, focusedCol = 0, setStoreState, scrollLeft = 0, scrollTop = 0, focusedRow = 0, options = {}, styles = {}, } = this.props;
             const { printStartColIndex = 0, printEndColIndex = colGroup.length - 1, } = this.props;
             const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
             const { bodyTrHeight = 0, scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, frozenPanelWidth = 0, rightPanelWidth = 0, verticalScrollerWidth = 0, } = styles;
@@ -141,7 +137,7 @@ class DataGridEvents extends React.Component {
                     let copiedString = '';
                     for (let rk in selectionRows) {
                         if (selectionRows[rk]) {
-                            const item = filteredList[rk];
+                            const item = data[rk];
                             for (let ck in selectionCols) {
                                 if (selectionCols[ck]) {
                                     copiedString += (item[headerColGroup[ck].key] || '') + '\t';
@@ -173,7 +169,7 @@ class DataGridEvents extends React.Component {
                     };
                     state.selectionRows = (() => {
                         let rows = {};
-                        filteredList.forEach((item, i) => {
+                        data.forEach((item, i) => {
                             rows[i] = true;
                         });
                         return rows;
@@ -215,7 +211,7 @@ class DataGridEvents extends React.Component {
                 [_enums_1.DataGridEnums.KeyCodes.END]: () => {
                     e.preventDefault();
                     // e.stopPropagation();
-                    const focusRow = filteredList.length - 1;
+                    const focusRow = data.length - 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
                         selectionRows: {
@@ -239,8 +235,8 @@ class DataGridEvents extends React.Component {
                 [_enums_1.DataGridEnums.KeyCodes.PAGE_DOWN]: () => {
                     e.preventDefault();
                     // e.stopPropagation();
-                    let focusRow = focusedRow + pRowSize >= filteredList.length
-                        ? filteredList.length - 1
+                    let focusRow = focusedRow + pRowSize >= data.length
+                        ? data.length - 1
                         : focusedRow + pRowSize;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
@@ -265,9 +261,7 @@ class DataGridEvents extends React.Component {
                 [_enums_1.DataGridEnums.KeyCodes.DOWN_ARROW]: () => {
                     e.preventDefault();
                     // e.stopPropagation();
-                    let focusRow = focusedRow + 1 >= filteredList.length
-                        ? filteredList.length - 1
-                        : focusedRow + 1;
+                    let focusRow = focusedRow + 1 >= data.length ? data.length - 1 : focusedRow + 1;
                     setStoreState({
                         scrollTop: getAvailScrollTop(focusRow),
                         selectionRows: {
@@ -313,17 +307,17 @@ class DataGridEvents extends React.Component {
             }
         };
         this.onContextmenu = (e) => {
-            const { onRightClick, focusedRow, focusedCol, filteredList, colGroup, } = this.props;
+            const { onRightClick, focusedRow, focusedCol, data, colGroup } = this.props;
             if (onRightClick &&
-                filteredList &&
+                data &&
                 typeof focusedRow !== 'undefined' &&
                 typeof focusedCol !== 'undefined' &&
                 colGroup) {
                 const { key: itemKey = '' } = colGroup[focusedCol];
                 onRightClick({
                     e,
-                    item: filteredList[focusedRow],
-                    value: filteredList[focusedRow][itemKey],
+                    item: data[focusedRow],
+                    value: data[focusedRow][itemKey],
                     focusedRow,
                     focusedCol,
                 });

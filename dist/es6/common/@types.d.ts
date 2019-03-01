@@ -32,7 +32,7 @@ export declare namespace IDataGrid {
         endOfScrollLeft?: boolean;
     }
     interface IonChangeSelectedParam {
-        filteredList?: any[];
+        data?: any[];
     }
     interface IonChangeSelectionParam {
         rows?: number[];
@@ -135,9 +135,7 @@ export declare namespace IDataGrid {
         columnBorderWidth?: number;
         selector?: boolean;
         sortable?: boolean;
-        enableFilter?: boolean;
         clickAction?: 'select' | 'sort' | undefined;
-        filterIconClassName?: string;
     }
     interface IOptionBody {
         align?: 'left' | 'center' | 'right' | undefined;
@@ -256,12 +254,10 @@ export declare namespace IDataGrid {
         loading?: boolean;
         loadingData?: boolean;
         data?: any[];
-        filteredList?: any[];
         listSelectedAll?: boolean;
         selectedRowIndex?: number;
         selectedRowIndexSelected?: boolean;
         sortInfo?: {};
-        filterInfo?: {};
         width?: number;
         height?: number;
         columnHeight?: number;
@@ -275,7 +271,6 @@ export declare namespace IDataGrid {
         inlineEditingCell?: IEditingCell;
         columnResizing?: boolean;
         columnResizerLeft?: number;
-        isColumnFilter?: boolean | number;
         scrollLeft?: number;
         scrollTop?: number;
         endOfScrollTop?: boolean;

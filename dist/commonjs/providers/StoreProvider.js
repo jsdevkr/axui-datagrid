@@ -52,7 +52,6 @@ var _enums_1 = require("../common/@enums");
 var store = {
     // 데이터 그리드 내부에서 사용하는 상태의 기본형.
     sortInfo: {},
-    isColumnFilter: false,
     scrollLeft: 0,
     scrollTop: 0,
     selectionRows: {},
@@ -74,7 +73,6 @@ var store = {
     width: 0,
     height: 0,
     data: [],
-    filteredList: [],
     listSelectedAll: false,
     colGroup: [],
     asideColGroup: [],
@@ -108,8 +106,8 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.filteredList, filteredList = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
-            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop, _filteredList = newState.filteredList;
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
+            var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop;
             if (!newState.styles) {
                 newState.styles = __assign({}, styles);
             }
@@ -150,20 +148,20 @@ var StoreProvider = /** @class */ (function (_super) {
                     });
                 }
             }
-            if (_filteredList && filteredList.length !== _filteredList.length) {
-                var dimensions = utils_1.calculateDimensions(newState, {
-                    headerTable: newState.headerTable || _this.state.headerTable,
-                    colGroup: newState.colGroup || _this.state.colGroup,
-                    headerColGroup: newState.headerColGroup || _this.state.headerColGroup,
-                    bodyRowTable: newState.bodyRowTable || _this.state.bodyRowTable,
-                    footSumColumns: newState.footSumColumns || _this.state.footSumColumns,
-                    filteredList: _filteredList,
-                    options: newState.options || _this.state.options,
-                });
-                newState.styles = dimensions.styles;
-                newState.scrollLeft = dimensions.scrollLeft;
-                newState.scrollTop = dimensions.scrollTop;
-            }
+            // if (_filteredList && filteredList.length !== _filteredList.length) {
+            //   const dimensions = calculateDimensions(newState, {
+            //     headerTable: newState.headerTable || this.state.headerTable,
+            //     colGroup: newState.colGroup || this.state.colGroup,
+            //     headerColGroup: newState.headerColGroup || this.state.headerColGroup,
+            //     bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
+            //     footSumColumns: newState.footSumColumns || this.state.footSumColumns,
+            //     filteredList: _filteredList,
+            //     options: newState.options || this.state.options,
+            //   });
+            //   newState.styles = dimensions.styles;
+            //   newState.scrollLeft = dimensions.scrollLeft;
+            //   newState.scrollTop = dimensions.scrollTop;
+            // }
             _this.setState(newState);
         };
         _this.dispatch = function (dispatchType, param) {
@@ -171,54 +169,56 @@ var StoreProvider = /** @class */ (function (_super) {
             var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, rootNode = _b.rootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j, rowSelector = _b.rowSelector, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection;
             var onChangeSelected = rowSelector && rowSelector.onChange;
             var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
-            var _l = _this.state.filteredList, filteredList = _l === void 0 ? [] : _l;
             var proc = (_a = {},
                 _a[_enums_1.DataGridEnums.DispatchTypes.FILTER] = function () {
-                    var colIndex = param.colIndex, filterInfo = param.filterInfo;
-                    var checkAll = filterInfo[colIndex] === false
-                        ? true
-                        : filterInfo[colIndex]._check_all_;
-                    if (checkAll) {
-                        filteredList =
-                            data &&
-                                data.filter(function (n) {
-                                    return (typeof n === 'undefined' ||
-                                        !n[optionColumnKeys.deleted || '_deleted_']);
-                                });
-                    }
-                    else {
-                        filteredList = data.filter(function (n) {
-                            if (n) {
-                                var value = n && n[colGroup[colIndex].key || ''];
-                                if (typeof n === 'undefined' ||
-                                    n[optionColumnKeys.deleted || '_deleted_']) {
-                                    return false;
-                                }
-                                if (typeof value === 'undefined') {
-                                    if (!filterInfo[colIndex]._UNDEFINED_) {
-                                        return false;
-                                    }
-                                }
-                                else {
-                                    if (!filterInfo[colIndex][value]) {
-                                        return false;
-                                    }
-                                }
-                                return true;
-                            }
-                            return false;
-                        });
-                    }
-                    _this.setStoreState({
-                        filteredList: filteredList,
-                        filterInfo: filterInfo,
-                        scrollTop: 0,
-                    });
-                    if (onChangeSelected) {
-                        onChangeSelected({
-                            filteredList: filteredList,
-                        });
-                    }
+                    // const { colIndex, filterInfo } = param;
+                    // const checkAll =
+                    //   filterInfo[colIndex] === false
+                    //     ? true
+                    //     : filterInfo[colIndex]._check_all_;
+                    // if (checkAll) {
+                    //   filteredList =
+                    //     data &&
+                    //     data.filter((n: any) => {
+                    //       return (
+                    //         typeof n === 'undefined' ||
+                    //         !n[optionColumnKeys.deleted || '_deleted_']
+                    //       );
+                    //     });
+                    // } else {
+                    //   filteredList = data.filter((n: any) => {
+                    //     if (n) {
+                    //       const value = n && n[colGroup[colIndex].key || ''];
+                    //       if (
+                    //         typeof n === 'undefined' ||
+                    //         n[optionColumnKeys.deleted || '_deleted_']
+                    //       ) {
+                    //         return false;
+                    //       }
+                    //       if (typeof value === 'undefined') {
+                    //         if (!filterInfo[colIndex]._UNDEFINED_) {
+                    //           return false;
+                    //         }
+                    //       } else {
+                    //         if (!filterInfo[colIndex][value]) {
+                    //           return false;
+                    //         }
+                    //       }
+                    //       return true;
+                    //     }
+                    //     return false;
+                    //   });
+                    // }
+                    // this.setStoreState({
+                    //   filteredList,
+                    //   filterInfo,
+                    //   scrollTop: 0,
+                    // });
+                    // if (onChangeSelected) {
+                    //   onChangeSelected({
+                    //     filteredList,
+                    //   });
+                    // }
                 },
                 _a[_enums_1.DataGridEnums.DispatchTypes.SORT] = function () {
                     var colIndex = param.colIndex;
@@ -260,7 +260,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         }
                         sortInfoArray_1 = sortInfoArray_1.filter(function (o) { return typeof o !== 'undefined'; });
                         var i_1 = 0, l_1 = sortInfoArray_1.length, aValue_1, bValue_1;
-                        var sortedList = filteredList.sort(function (a, b) {
+                        var sortedList = data.sort(function (a, b) {
                             for (i_1 = 0; i_1 < l_1; i_1++) {
                                 aValue_1 = getValueByKey_1(a, sortInfoArray_1[i_1].key);
                                 bValue_1 = getValueByKey_1(b, sortInfoArray_1[i_1].key);
@@ -278,13 +278,13 @@ var StoreProvider = /** @class */ (function (_super) {
                         });
                         _this.setStoreState({
                             sortInfo: __assign({}, currentSortInfo),
-                            filteredList: sortedList,
+                            data: sortedList,
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
                         if (onChangeSelected) {
                             onChangeSelected({
-                                filteredList: filteredList,
+                                data: sortedList,
                             });
                         }
                     }
@@ -295,7 +295,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     var key = colGroup[colIndex].key;
                     var focusRow = focusedRow;
                     if (key) {
-                        filteredList[row][key] = value;
+                        data[row][key] = value;
                         // update filteredList
                     }
                     if (eventWhichKey) {
@@ -305,8 +305,8 @@ var StoreProvider = /** @class */ (function (_super) {
                                 break;
                             case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                                 focusRow =
-                                    focusedRow + 1 >= filteredList.length
-                                        ? filteredList.length - 1
+                                    focusedRow + 1 >= data.length
+                                        ? data.length - 1
                                         : focusedRow + 1;
                                 break;
                             default:
@@ -314,7 +314,7 @@ var StoreProvider = /** @class */ (function (_super) {
                         }
                     }
                     _this.setStoreState({
-                        filteredList: __spread(filteredList),
+                        data: __spread(data),
                         isInlineEditing: false,
                         inlineEditingCell: {},
                         selectionRows: (_a = {},
@@ -324,7 +324,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                     if (rootNode && rootNode.current) {
@@ -352,21 +352,21 @@ var StoreProvider = /** @class */ (function (_super) {
                         rowSelected = false;
                     }
                     else {
-                        rowSelected = !filteredList[rowIndex]._selected_;
+                        rowSelected = !data[rowIndex]._selected_;
                     }
                     if (!rowSelected) {
                         selectedAll = false;
                     }
-                    filteredList[rowIndex]._selected_ = rowSelected;
+                    data[rowIndex]._selected_ = rowSelected;
                     _this.setStoreState({
                         listSelectedAll: selectedAll,
                         selectedRowIndex: rowIndex,
                         selectedRowIndexSelected: rowSelected,
-                        filteredList: __spread(filteredList),
+                        data: __spread(data),
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                 },
@@ -382,16 +382,16 @@ var StoreProvider = /** @class */ (function (_super) {
                     else {
                         selectedAll = !selectedAll;
                     }
-                    for (var i = 0, l = filteredList.length; i < l; i++) {
-                        filteredList[i]._selected_ = selectedAll;
+                    for (var i = 0, l = data.length; i < l; i++) {
+                        data[i]._selected_ = selectedAll;
                     }
                     _this.setStoreState({
                         listSelectedAll: selectedAll,
-                        filteredList: __spread(filteredList),
+                        data: __spread(data),
                     });
                     if (onChangeSelected) {
                         onChangeSelected({
-                            filteredList: filteredList,
+                            data: data,
                         });
                     }
                 },
@@ -513,12 +513,11 @@ var StoreProvider = /** @class */ (function (_super) {
             var changed = {
                 colGroup: false,
                 frozenColumnIndex: false,
-                filteredList: false,
                 styles: false,
                 visibleColGroup: false,
             };
             // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
-            var _d = storeState.colGroup, _colGroup = _d === void 0 ? [] : _d, _leftHeaderColGroup = storeState.leftHeaderColGroup, _headerColGroup = storeState.headerColGroup, _filteredList = storeState.filteredList, _styles = storeState.styles, _e = storeState.scrollLeft, _scrollLeft = _e === void 0 ? 0 : _e, _f = storeState.scrollTop, _scrollTop = _f === void 0 ? 0 : _f;
+            var _d = storeState.colGroup, _colGroup = _d === void 0 ? [] : _d, _leftHeaderColGroup = storeState.leftHeaderColGroup, _headerColGroup = storeState.headerColGroup, _styles = storeState.styles, _e = storeState.scrollLeft, _scrollLeft = _e === void 0 ? 0 : _e, _f = storeState.scrollTop, _scrollTop = _f === void 0 ? 0 : _f;
             // colGroup들의 너비합을 모르거나 변경된 경우.
             // colGroup > width 연산
             if (nProps.colGroup !== nState.colGroup ||
@@ -531,19 +530,18 @@ var StoreProvider = /** @class */ (function (_super) {
                 _headerColGroup = _colGroup.slice(frozenColumnIndex);
                 changed.frozenColumnIndex = true;
             }
-            // 데이터가 변경됨.
-            if (nProps.data !== nState.data) {
-                // 전달받은 data를 filteredList로 치환.
-                _filteredList = utils_1.getFilteredList(nProps.data || [], {
-                    colGroup: _colGroup,
-                    sorter: nState.sortInfo,
-                    options: nProps.options,
-                });
-                changed.filteredList = true;
-            }
+            // // 데이터가 변경됨.
+            // if (nProps.data !== nState.data) {
+            //   // 전달받은 data를 filteredList로 치환.
+            //   _filteredList = getFilteredList(nProps.data || [], {
+            //     colGroup: _colGroup,
+            //     sorter: nState.sortInfo,
+            //     options: nProps.options,
+            //   });
+            //   changed.filteredList = true;
+            // }
             if (changed.colGroup ||
                 changed.frozenColumnIndex ||
-                changed.filteredList ||
                 !storeState.styles ||
                 nProps.width !== nState.width ||
                 nProps.height !== nState.height) {
@@ -554,7 +552,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     headerColGroup: _headerColGroup,
                     bodyRowTable: nProps.bodyRowTable,
                     footSumColumns: nProps.footSumColumns,
-                    filteredList: _filteredList,
+                    data: nProps.data,
                     options: nProps.options,
                 });
                 _styles = dimensions.styles;
@@ -585,7 +583,6 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.colGroup = _colGroup;
             storeState.leftHeaderColGroup = _leftHeaderColGroup;
             storeState.headerColGroup = _headerColGroup;
-            storeState.filteredList = _filteredList;
             storeState.styles = _styles;
             storeState.scrollLeft = _scrollLeft;
             storeState.scrollTop = _scrollTop;

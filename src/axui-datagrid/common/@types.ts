@@ -37,7 +37,7 @@ export namespace IDataGrid {
   }
 
   export interface IonChangeSelectedParam {
-    filteredList?: any[];
+    data?: any[];
   }
 
   export interface IonChangeSelectionParam {
@@ -156,9 +156,7 @@ export namespace IDataGrid {
     columnBorderWidth?: number;
     selector?: boolean;
     sortable?: boolean;
-    enableFilter?: boolean;
     clickAction?: 'select' | 'sort' | undefined;
-    filterIconClassName?: string;
   }
 
   export interface IOptionBody {
@@ -295,12 +293,10 @@ export namespace IDataGrid {
     loadingData?: boolean;
 
     data?: any[];
-    filteredList?: any[];
     listSelectedAll?: boolean;
     selectedRowIndex?: number;
     selectedRowIndexSelected?: boolean;
     sortInfo?: {};
-    filterInfo?: {};
     width?: number;
     height?: number;
     columnHeight?: number;
@@ -319,7 +315,6 @@ export namespace IDataGrid {
     columnResizing?: boolean;
     columnResizerLeft?: number;
 
-    isColumnFilter?: boolean | number;
     scrollLeft?: number;
     scrollTop?: number;
     endOfScrollTop?: boolean;

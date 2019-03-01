@@ -20,7 +20,7 @@ class DataGridBody extends React.Component<IProps> {
 
   onMouseDownBody = (e: React.MouseEvent<Element>) => {
     const {
-      filteredList = [],
+      data = [],
       colGroup = [],
       headerColGroup = [],
       scrollLeft = 0,
@@ -48,7 +48,6 @@ class DataGridBody extends React.Component<IProps> {
       headerHeight = 0,
       bodyHeight = 0,
       elWidth = 0,
-      verticalScrollerWidth = 0,
       bodyTrHeight = 0,
       asidePanelWidth = 0,
       scrollContentWidth = 0,
@@ -76,11 +75,7 @@ class DataGridBody extends React.Component<IProps> {
           (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
           bodyTrHeight,
       );
-      return i < 0
-        ? 0
-        : i >= filteredList.length - 1
-        ? filteredList.length - 1
-        : i;
+      return i < 0 ? 0 : i >= data.length - 1 ? data.length - 1 : i;
     };
     const getColIndex: Function = (x: number, _scrollLeft: number): number => {
       const p: number =
@@ -475,7 +470,6 @@ class DataGridBody extends React.Component<IProps> {
       frozenPanelWidth = 0,
       frozenPanelHeight = 0,
       rightPanelWidth = 0,
-      verticalScrollerWidth = 0,
       footSumHeight = 0,
     } = styles;
 

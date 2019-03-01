@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import {
   calculateDimensions,
-  getFilteredList,
   setColGroupWidth,
   getVisibleColGroup,
 } from '../utils';
@@ -22,7 +21,6 @@ export interface IDataGridStore extends IDataGrid.IStoreState {
 const store: IDataGridStore = {
   // 데이터 그리드 내부에서 사용하는 상태의 기본형.
   sortInfo: {},
-  isColumnFilter: false,
   scrollLeft: 0,
   scrollTop: 0,
   selectionRows: {},
@@ -46,7 +44,6 @@ const store: IDataGridStore = {
   width: 0,
   height: 0,
   data: [],
-  filteredList: [],
   listSelectedAll: false,
   colGroup: [],
   asideColGroup: [],
@@ -183,7 +180,6 @@ class StoreProvider extends React.Component<
       const changed = {
         colGroup: false,
         frozenColumnIndex: false,
-        filteredList: false,
         styles: false,
         visibleColGroup: false,
       };
@@ -193,7 +189,6 @@ class StoreProvider extends React.Component<
         colGroup: _colGroup = [],
         leftHeaderColGroup: _leftHeaderColGroup,
         headerColGroup: _headerColGroup,
-        filteredList: _filteredList,
         styles: _styles,
         scrollLeft: _scrollLeft = 0,
         scrollTop: _scrollTop = 0,
@@ -219,21 +214,20 @@ class StoreProvider extends React.Component<
         changed.frozenColumnIndex = true;
       }
 
-      // 데이터가 변경됨.
-      if (nProps.data !== nState.data) {
-        // 전달받은 data를 filteredList로 치환.
-        _filteredList = getFilteredList(nProps.data || [], {
-          colGroup: _colGroup,
-          sorter: nState.sortInfo,
-          options: nProps.options,
-        });
-        changed.filteredList = true;
-      }
+      // // 데이터가 변경됨.
+      // if (nProps.data !== nState.data) {
+      //   // 전달받은 data를 filteredList로 치환.
+      //   _filteredList = getFilteredList(nProps.data || [], {
+      //     colGroup: _colGroup,
+      //     sorter: nState.sortInfo,
+      //     options: nProps.options,
+      //   });
+      //   changed.filteredList = true;
+      // }
 
       if (
         changed.colGroup ||
         changed.frozenColumnIndex ||
-        changed.filteredList ||
         !storeState.styles ||
         nProps.width !== nState.width ||
         nProps.height !== nState.height
@@ -245,7 +239,7 @@ class StoreProvider extends React.Component<
           headerColGroup: _headerColGroup,
           bodyRowTable: nProps.bodyRowTable,
           footSumColumns: nProps.footSumColumns,
-          filteredList: _filteredList,
+          data: nProps.data,
           options: nProps.options,
         });
         _styles = dimensions.styles;
@@ -283,7 +277,6 @@ class StoreProvider extends React.Component<
       storeState.colGroup = _colGroup;
       storeState.leftHeaderColGroup = _leftHeaderColGroup;
       storeState.headerColGroup = _headerColGroup;
-      storeState.filteredList = _filteredList;
       storeState.styles = _styles;
       storeState.scrollLeft = _scrollLeft;
       storeState.scrollTop = _scrollTop;
@@ -295,7 +288,7 @@ class StoreProvider extends React.Component<
   // state 가 업데이트 되기 전.
   setStoreState = (newState: IDataGrid.IStoreState) => {
     const {
-      filteredList = [],
+      data = [],
       scrollLeft = 0,
       scrollTop = 0,
       options = {},
@@ -305,11 +298,7 @@ class StoreProvider extends React.Component<
       footSumData = { rows: [{ cols: [] }] },
       onScrollEnd,
     } = this.state;
-    const {
-      scrollLeft: _scrollLeft,
-      scrollTop: _scrollTop,
-      filteredList: _filteredList,
-    } = newState;
+    const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
 
     if (!newState.styles) {
       newState.styles = { ...styles };
@@ -367,21 +356,21 @@ class StoreProvider extends React.Component<
       }
     }
 
-    if (_filteredList && filteredList.length !== _filteredList.length) {
-      const dimensions = calculateDimensions(newState, {
-        headerTable: newState.headerTable || this.state.headerTable,
-        colGroup: newState.colGroup || this.state.colGroup,
-        headerColGroup: newState.headerColGroup || this.state.headerColGroup,
-        bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
-        footSumColumns: newState.footSumColumns || this.state.footSumColumns,
-        filteredList: _filteredList,
-        options: newState.options || this.state.options,
-      });
+    // if (_filteredList && filteredList.length !== _filteredList.length) {
+    //   const dimensions = calculateDimensions(newState, {
+    //     headerTable: newState.headerTable || this.state.headerTable,
+    //     colGroup: newState.colGroup || this.state.colGroup,
+    //     headerColGroup: newState.headerColGroup || this.state.headerColGroup,
+    //     bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
+    //     footSumColumns: newState.footSumColumns || this.state.footSumColumns,
+    //     filteredList: _filteredList,
+    //     options: newState.options || this.state.options,
+    //   });
 
-      newState.styles = dimensions.styles;
-      newState.scrollLeft = dimensions.scrollLeft;
-      newState.scrollTop = dimensions.scrollTop;
-    }
+    //   newState.styles = dimensions.styles;
+    //   newState.scrollLeft = dimensions.scrollLeft;
+    //   newState.scrollTop = dimensions.scrollTop;
+    // }
 
     this.setState(newState);
   };
@@ -410,64 +399,57 @@ class StoreProvider extends React.Component<
     } = this.state;
     const onChangeSelected = rowSelector && rowSelector.onChange;
     const { columnKeys: optionColumnKeys = {} } = options;
-    let { filteredList = [] } = this.state;
 
     const proc = {
       [DataGridEnums.DispatchTypes.FILTER]: () => {
-        const { colIndex, filterInfo } = param;
-        const checkAll =
-          filterInfo[colIndex] === false
-            ? true
-            : filterInfo[colIndex]._check_all_;
-
-        if (checkAll) {
-          filteredList =
-            data &&
-            data.filter((n: any) => {
-              return (
-                typeof n === 'undefined' ||
-                !n[optionColumnKeys.deleted || '_deleted_']
-              );
-            });
-        } else {
-          filteredList = data.filter((n: any) => {
-            if (n) {
-              const value = n && n[colGroup[colIndex].key || ''];
-
-              if (
-                typeof n === 'undefined' ||
-                n[optionColumnKeys.deleted || '_deleted_']
-              ) {
-                return false;
-              }
-
-              if (typeof value === 'undefined') {
-                if (!filterInfo[colIndex]._UNDEFINED_) {
-                  return false;
-                }
-              } else {
-                if (!filterInfo[colIndex][value]) {
-                  return false;
-                }
-              }
-
-              return true;
-            }
-            return false;
-          });
-        }
-
-        this.setStoreState({
-          filteredList,
-          filterInfo,
-          scrollTop: 0,
-        });
-
-        if (onChangeSelected) {
-          onChangeSelected({
-            filteredList,
-          });
-        }
+        // const { colIndex, filterInfo } = param;
+        // const checkAll =
+        //   filterInfo[colIndex] === false
+        //     ? true
+        //     : filterInfo[colIndex]._check_all_;
+        // if (checkAll) {
+        //   filteredList =
+        //     data &&
+        //     data.filter((n: any) => {
+        //       return (
+        //         typeof n === 'undefined' ||
+        //         !n[optionColumnKeys.deleted || '_deleted_']
+        //       );
+        //     });
+        // } else {
+        //   filteredList = data.filter((n: any) => {
+        //     if (n) {
+        //       const value = n && n[colGroup[colIndex].key || ''];
+        //       if (
+        //         typeof n === 'undefined' ||
+        //         n[optionColumnKeys.deleted || '_deleted_']
+        //       ) {
+        //         return false;
+        //       }
+        //       if (typeof value === 'undefined') {
+        //         if (!filterInfo[colIndex]._UNDEFINED_) {
+        //           return false;
+        //         }
+        //       } else {
+        //         if (!filterInfo[colIndex][value]) {
+        //           return false;
+        //         }
+        //       }
+        //       return true;
+        //     }
+        //     return false;
+        //   });
+        // }
+        // this.setStoreState({
+        //   filteredList,
+        //   filterInfo,
+        //   scrollTop: 0,
+        // });
+        // if (onChangeSelected) {
+        //   onChangeSelected({
+        //     filteredList,
+        //   });
+        // }
       },
       [DataGridEnums.DispatchTypes.SORT]: () => {
         const { colIndex } = param;
@@ -517,7 +499,7 @@ class StoreProvider extends React.Component<
             aValue: any,
             bValue: any;
 
-          const sortedList = filteredList.sort(
+          const sortedList = data.sort(
             (a: any, b: any): any => {
               for (i = 0; i < l; i++) {
                 aValue = getValueByKey(a, sortInfoArray[i].key);
@@ -538,14 +520,14 @@ class StoreProvider extends React.Component<
 
           this.setStoreState({
             sortInfo: { ...currentSortInfo },
-            filteredList: sortedList,
+            data: sortedList,
             isInlineEditing: false,
             inlineEditingCell: {},
           });
 
           if (onChangeSelected) {
             onChangeSelected({
-              filteredList: filteredList,
+              data: sortedList,
             });
           }
         }
@@ -557,7 +539,7 @@ class StoreProvider extends React.Component<
         let focusRow: number = focusedRow;
 
         if (key) {
-          filteredList[row][key] = value;
+          data[row][key] = value;
           // update filteredList
         }
 
@@ -568,8 +550,8 @@ class StoreProvider extends React.Component<
               break;
             case DataGridEnums.KeyCodes.DOWN_ARROW:
               focusRow =
-                focusedRow + 1 >= filteredList.length
-                  ? filteredList.length - 1
+                focusedRow + 1 >= data.length
+                  ? data.length - 1
                   : focusedRow + 1;
               break;
             default:
@@ -578,7 +560,7 @@ class StoreProvider extends React.Component<
         }
 
         this.setStoreState({
-          filteredList: [...filteredList],
+          data: [...data],
           isInlineEditing: false,
           inlineEditingCell: {},
           selectionRows: {
@@ -589,7 +571,7 @@ class StoreProvider extends React.Component<
 
         if (onChangeSelected) {
           onChangeSelected({
-            filteredList: filteredList,
+            data: data,
           });
         }
 
@@ -621,24 +603,24 @@ class StoreProvider extends React.Component<
         } else if (checked === false) {
           rowSelected = false;
         } else {
-          rowSelected = !filteredList[rowIndex]._selected_;
+          rowSelected = !data[rowIndex]._selected_;
         }
 
         if (!rowSelected) {
           selectedAll = false;
         }
-        filteredList[rowIndex]._selected_ = rowSelected;
+        data[rowIndex]._selected_ = rowSelected;
 
         this.setStoreState({
           listSelectedAll: selectedAll,
           selectedRowIndex: rowIndex,
           selectedRowIndexSelected: rowSelected,
-          filteredList: [...filteredList],
+          data: [...data],
         });
 
         if (onChangeSelected) {
           onChangeSelected({
-            filteredList: filteredList,
+            data: data,
           });
         }
       },
@@ -653,18 +635,18 @@ class StoreProvider extends React.Component<
           selectedAll = !selectedAll;
         }
 
-        for (let i = 0, l = filteredList.length; i < l; i++) {
-          filteredList[i]._selected_ = selectedAll;
+        for (let i = 0, l = data.length; i < l; i++) {
+          data[i]._selected_ = selectedAll;
         }
 
         this.setStoreState({
           listSelectedAll: selectedAll,
-          filteredList: [...filteredList],
+          data: [...data],
         });
 
         if (onChangeSelected) {
           onChangeSelected({
-            filteredList: filteredList,
+            data: data,
           });
         }
       },

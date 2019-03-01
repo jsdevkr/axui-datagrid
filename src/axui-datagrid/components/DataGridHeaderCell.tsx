@@ -64,7 +64,6 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
   ri,
   col,
   onClick,
-  filterInfo = {},
 }) => {
   const { header: optionsHeader = {} } = options;
   const {
@@ -132,13 +131,6 @@ const DatagridHeaderCell: React.SFC<IProps> = ({
           listSelectedAll={listSelectedAll}
         />
       </span>
-      <CellFilter
-        show={
-          (optionsHeader.enableFilter && colKey && colIndex > -1) as boolean
-        }
-        colIndex={colIndex}
-        isFiltered={!!filterInfo[colIndex]}
-      />
     </td>
   );
 };

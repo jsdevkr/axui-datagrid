@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function calculateDimensions(storeState, _a) {
-    var _b = _a.headerTable, headerTable = _b === void 0 ? { rows: [] } : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.bodyRowTable, bodyRowTable = _e === void 0 ? { rows: [] } : _e, footSumColumns = _a.footSumColumns, _f = _a.filteredList, filteredList = _f === void 0 ? [] : _f, _g = _a.options, options = _g === void 0 ? {} : _g;
+    var _b = _a.headerTable, headerTable = _b === void 0 ? { rows: [] } : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.bodyRowTable, bodyRowTable = _e === void 0 ? { rows: [] } : _e, footSumColumns = _a.footSumColumns, _f = _a.data, data = _f === void 0 ? [] : _f, _g = _a.options, options = _g === void 0 ? {} : _g;
     var _h = storeState.width, width = _h === void 0 ? 0 : _h, _j = storeState.height, height = _j === void 0 ? 0 : _j;
     var _k = storeState.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = storeState.scrollTop, scrollTop = _l === void 0 ? 0 : _l;
     var _m = options.header, optionsHeader = _m === void 0 ? {} : _m, _o = options.body, optionsBody = _o === void 0 ? {} : _o, _p = options.scroller, optionsScroller = _p === void 0 ? {} : _p, _q = options.page, optionsPage = _q === void 0 ? {} : _q, _r = options.frozenColumnIndex, frozenColumnIndex = _r === void 0 ? 0 : _r, _s = options.frozenRowIndex, frozenRowIndex = _s === void 0 ? 0 : _s, _t = options.lineNumberColumnWidth, lineNumberColumnWidth = _t === void 0 ? 0 : _t, _u = options.rowSelectorColumnWidth, rowSelectorColumnWidth = _u === void 0 ? 0 : _u, showLineNumber = options.showLineNumber, showRowSelector = options.showRowSelector;
@@ -10,7 +10,7 @@ function calculateDimensions(storeState, _a) {
     var _y = optionsPage.height, optionsPageHeight = _y === void 0 ? 0 : _y;
     var headerTableRowsLength = headerTable.rows.length;
     var bodyTablsRowsLength = bodyRowTable.rows.length;
-    var dataLength = filteredList.length;
+    var dataLength = data.length;
     var _z = optionsScroller.theme, optionsScrollerTheme = _z === void 0 ? 'default' : _z, _0 = optionsScroller.width, optionsScrollerWidth = _0 === void 0 ? 0 : _0, _1 = optionsScroller.height, optionsScrollerHeight = _1 === void 0 ? 0 : _1, _2 = optionsScroller.padding, optionsScrollerPadding = _2 === void 0 ? 0 : _2, _3 = optionsScroller.arrowSize, optionsScrollerArrowSize = _3 === void 0 ? 0 : _3, _4 = optionsScroller.barMinSize, optionsScrollerBarMinSize = _4 === void 0 ? 0 : _4, _5 = optionsScroller.horizontalScrollerWidth, horizontalScrollerWidth = _5 === void 0 ? 0 : _5;
     if (optionsScrollerTheme === 'solid') {
         optionsScrollerArrowSize = 0;

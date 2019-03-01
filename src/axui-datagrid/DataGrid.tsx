@@ -5,7 +5,6 @@ import {
   DataGridEvents,
   DataGridHeader,
   DataGridBody,
-  DataGridColumnFilter,
   DataGridScroll,
   DataGridPage,
   DataGridLoader,
@@ -42,9 +41,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnBorderWidth: 1,
     selector: true,
     sortable: true,
-    enableFilter: true,
     clickAction: 'sort',
-    filterIconClassName: 'datagridIcon-filter',
   };
   static defaultBody: IDataGrid.IOptionBody = {
     align: 'left',
@@ -353,7 +350,6 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridBody />
               <DataGridPage />
               <DataGridScroll />
-              <DataGridColumnFilter />
               <DataGridLoader loading={loading} />
             </DataGridEvents>
           )}
