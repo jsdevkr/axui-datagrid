@@ -11,7 +11,7 @@ import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 
 export interface IDataGridStore extends IDataGrid.IStoreState {
-  setStoreState: (store: IDataGrid.IStoreState) => void;
+  setStoreState: (store: IDataGrid.IStoreState, callback?: () => void) => void;
   dispatch: (
     dispatchType: DataGridEnums.DispatchTypes,
     param: IDataGrid.DispatchParam,
@@ -124,7 +124,7 @@ class StoreProvider extends React.Component<
       //
       nProps.rootObject === nState.rootObject &&
       nProps.onBeforeEvent === nState.onBeforeEvent &&
-      nProps.onAfterEvent === nState.onAfterEvent &&
+      nProps.onScroll === nState.onScroll &&
       nProps.onScrollEnd === nState.onScrollEnd &&
       nProps.onRightClick === nState.onRightClick
     ) {
@@ -151,7 +151,7 @@ class StoreProvider extends React.Component<
       storeState.clipBoardNode = nProps.clipBoardNode;
       storeState.rootObject = nProps.rootObject;
       storeState.onBeforeEvent = nProps.onBeforeEvent;
-      storeState.onAfterEvent = nProps.onAfterEvent;
+      storeState.onScroll = nProps.onScroll;
       storeState.onScrollEnd = nProps.onScrollEnd;
       storeState.onRightClick = nProps.onRightClick;
       ///
@@ -286,7 +286,7 @@ class StoreProvider extends React.Component<
   }
 
   // state 가 업데이트 되기 전.
-  setStoreState = (newState: IDataGrid.IStoreState) => {
+  setStoreState = (newState: IDataGrid.IStoreState, callback?: () => void) => {
     const {
       data = [],
       scrollLeft = 0,
@@ -372,7 +372,7 @@ class StoreProvider extends React.Component<
     //   newState.scrollTop = dimensions.scrollTop;
     // }
 
-    this.setState(newState);
+    this.setState(() => newState, callback);
   };
 
   dispatch = (

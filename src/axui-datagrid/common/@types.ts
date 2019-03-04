@@ -36,6 +36,11 @@ export namespace IDataGrid {
     endOfScrollLeft?: boolean;
   }
 
+  export interface IonScrollFunctionParam {
+    endOfScrollTop?: boolean;
+    endOfScrollLeft?: boolean;
+  }
+
   export interface IonChangeSelectedParam {
     data?: any[];
   }
@@ -283,7 +288,7 @@ export namespace IDataGrid {
     setScrollLeft?: (scrollLeft: number) => void;
     setScrollTop?: (scrollTop: number) => void;
     onBeforeEvent?: (param: IonEventParam) => void;
-    onAfterEvent?: (param: IonEventParam) => void;
+    onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
@@ -302,7 +307,7 @@ export namespace IDataGrid {
     columnHeight?: number;
 
     onBeforeEvent?: (param: IonEventParam) => void;
-    onAfterEvent?: (param: IonEventParam) => void;
+    onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
 
@@ -410,7 +415,7 @@ export namespace IDataGrid {
     scrollLeft?: number;
     scrollTop?: number;
     onBeforeEvent?: (param: IonEventParam) => void;
-    onAfterEvent?: (param: IonEventParam) => void;
+    onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }

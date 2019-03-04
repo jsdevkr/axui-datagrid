@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Divider, Form, Select } from 'antd';
+import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 
@@ -97,6 +97,7 @@ class EventReceive extends React.Component<any, any> {
           <textarea
             style={{ width: '100%', height: '400px', padding: '10px' }}
             value={this.state.eventLog.join('\n')}
+            readOnly
           />
 
           <Divider />

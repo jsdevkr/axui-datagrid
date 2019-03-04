@@ -138,10 +138,10 @@ class DataGrid extends React.Component<IProps, IState> {
     this.rootNode = React.createRef();
     this.clipBoardNode = React.createRef();
 
-    console.log(
-      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-      'datagrid constructor',
-    );
+    // console.log(
+    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+    //   'datagrid constructor',
+    // );
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
@@ -296,7 +296,7 @@ class DataGrid extends React.Component<IProps, IState> {
       options = {},
       style = {},
       onBeforeEvent,
-      onAfterEvent,
+      onScroll,
       onScrollEnd,
       onRightClick,
       height = DataGrid.defaultHeight,
@@ -335,7 +335,7 @@ class DataGrid extends React.Component<IProps, IState> {
           clipBoardNode: this.clipBoardNode,
           rootObject: this.rootObject,
           onBeforeEvent,
-          onAfterEvent,
+          onScroll,
           onScrollEnd,
           onRightClick,
         })}
@@ -371,10 +371,10 @@ class DataGrid extends React.Component<IProps, IState> {
       mounted: true,
     });
 
-    console.log(
-      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-      'datagrid componentDidMount',
-    );
+    // console.log(
+    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+    //   'datagrid componentDidMount',
+    // );
   }
 
   componentDidUpdate(prevProps: IProps) {
@@ -388,10 +388,10 @@ class DataGrid extends React.Component<IProps, IState> {
       this.setState({ doneAutofit: false });
     }
 
-    console.log(
-      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-      'datagrid componentDidUpdate',
-    );
+    // console.log(
+    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+    //   'datagrid componentDidUpdate',
+    // );
   }
 }
 
