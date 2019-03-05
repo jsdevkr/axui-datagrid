@@ -4,6 +4,11 @@ export declare namespace IDataGrid {
         x?: number;
         y?: number;
     }
+    interface IScrollConfig {
+        frozenRowIndex?: number;
+        sRowIndex?: number;
+        eRowIndex?: number;
+    }
     interface IRect extends IPosition {
         width: number;
         height?: number;
@@ -30,6 +35,14 @@ export declare namespace IDataGrid {
     interface IonScrollEndFunctionParam {
         endOfScrollTop?: boolean;
         endOfScrollLeft?: boolean;
+    }
+    interface IonScrollFunctionParam {
+        scrollTop: number;
+        scrollLeft: number;
+        sRowIndex: number;
+        eRowIndex: number;
+        sColIndex?: number;
+        eColIndex?: number;
     }
     interface IonChangeSelectedParam {
         data?: any[];
@@ -246,7 +259,7 @@ export declare namespace IDataGrid {
         setScrollLeft?: (scrollLeft: number) => void;
         setScrollTop?: (scrollTop: number) => void;
         onBeforeEvent?: (param: IonEventParam) => void;
-        onAfterEvent?: (param: IonEventParam) => void;
+        onScroll?: (param: IonScrollFunctionParam) => void;
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
@@ -262,7 +275,7 @@ export declare namespace IDataGrid {
         height?: number;
         columnHeight?: number;
         onBeforeEvent?: (param: IonEventParam) => void;
-        onAfterEvent?: (param: IonEventParam) => void;
+        onScroll?: (param: IonScrollFunctionParam) => void;
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
         selection?: ISelection;
@@ -356,7 +369,7 @@ export declare namespace IDataGrid {
         scrollLeft?: number;
         scrollTop?: number;
         onBeforeEvent?: (param: IonEventParam) => void;
-        onAfterEvent?: (param: IonEventParam) => void;
+        onScroll?: (param: IonScrollFunctionParam) => void;
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }

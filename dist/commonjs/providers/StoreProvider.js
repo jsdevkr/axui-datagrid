@@ -105,15 +105,17 @@ var StoreProvider = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = store;
         // state 가 업데이트 되기 전.
-        _this.setStoreState = function (newState) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
+        _this.setStoreState = function (newState, callback) {
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd;
+            var _k = options.frozenRowIndex, frozenRowIndex = _k === void 0 ? 0 : _k;
+            var _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m;
             var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop;
             if (!newState.styles) {
                 newState.styles = __assign({}, styles);
             }
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
-                var _k = newState.styles, _l = _k.scrollContentWidth, scrollWidth = _l === void 0 ? 0 : _l, _m = _k.scrollContentHeight, scrollHeight = _m === void 0 ? 0 : _m, _o = _k.scrollContentContainerWidth, clientWidth = _o === void 0 ? 0 : _o, _p = _k.scrollContentContainerHeight, clientHeight = _p === void 0 ? 0 : _p;
+                var _o = newState.styles, _p = _o.scrollContentWidth, scrollWidth = _p === void 0 ? 0 : _p, _q = _o.scrollContentHeight, scrollHeight = _q === void 0 ? 0 : _q, _r = _o.scrollContentContainerWidth, clientWidth = _r === void 0 ? 0 : _r, _s = _o.scrollContentContainerHeight, clientHeight = _s === void 0 ? 0 : _s;
                 var endOfScrollTop = false;
                 var endOfScrollLeft = false;
                 if (typeof _scrollLeft !== 'undefined') {
@@ -130,13 +132,23 @@ var StoreProvider = /** @class */ (function (_super) {
                         newState.visibleFootSumData = visibleData.visibleFootSumData;
                         newState.printStartColIndex = visibleData.printStartColIndex;
                         newState.printEndColIndex = visibleData.printEndColIndex;
-                    }
-                    if (_scrollLeft !== scrollLeft &&
-                        clientWidth >= scrollWidth + _scrollLeft) {
-                        endOfScrollLeft = true;
+                        // console.log('onscroll left');
+                        if (clientWidth >= scrollWidth + _scrollLeft) {
+                            endOfScrollLeft = true;
+                        }
                     }
                 }
                 if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (onScroll) {
+                        var sRowIndex = Math.floor(-_scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+                        var eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+                        onScroll({
+                            scrollLeft: Number(_scrollLeft),
+                            scrollTop: Number(_scrollTop),
+                            sRowIndex: sRowIndex,
+                            eRowIndex: eRowIndex,
+                        });
+                    }
                     if (clientHeight >= scrollHeight + _scrollTop) {
                         endOfScrollTop = true;
                     }
@@ -162,7 +174,7 @@ var StoreProvider = /** @class */ (function (_super) {
             //   newState.scrollLeft = dimensions.scrollLeft;
             //   newState.scrollTop = dimensions.scrollTop;
             // }
-            _this.setState(newState);
+            _this.setState(function () { return newState; }, callback);
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
@@ -463,7 +475,7 @@ var StoreProvider = /** @class */ (function (_super) {
             //
             nProps.rootObject === nState.rootObject &&
             nProps.onBeforeEvent === nState.onBeforeEvent &&
-            nProps.onAfterEvent === nState.onAfterEvent &&
+            nProps.onScroll === nState.onScroll &&
             nProps.onScrollEnd === nState.onScrollEnd &&
             nProps.onRightClick === nState.onRightClick) {
             return null;
@@ -487,7 +499,7 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.clipBoardNode = nProps.clipBoardNode;
             storeState.rootObject = nProps.rootObject;
             storeState.onBeforeEvent = nProps.onBeforeEvent;
-            storeState.onAfterEvent = nProps.onAfterEvent;
+            storeState.onScroll = nProps.onScroll;
             storeState.onScrollEnd = nProps.onScrollEnd;
             storeState.onRightClick = nProps.onRightClick;
             ///

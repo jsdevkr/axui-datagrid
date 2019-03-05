@@ -2,13 +2,13 @@ import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 export interface IDataGridStore extends IDataGrid.IStoreState {
-    setStoreState: (store: IDataGrid.IStoreState) => void;
+    setStoreState: (store: IDataGrid.IStoreState, callback?: () => void) => void;
     dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
 }
 declare class StoreProvider extends React.Component<IDataGrid.IStoreProps, IDataGrid.IStoreState> {
     state: IDataGridStore;
     static getDerivedStateFromProps(nProps: IDataGrid.IStoreProps, nState: IDataGrid.IStoreState): IDataGrid.IStoreState | null;
-    setStoreState: (newState: IDataGrid.IStoreState) => void;
+    setStoreState: (newState: IDataGrid.IStoreState, callback?: (() => void) | undefined) => void;
     dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
     render(): JSX.Element;
     componentDidMount(): void;

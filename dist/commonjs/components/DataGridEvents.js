@@ -12,6 +12,41 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
@@ -21,6 +56,7 @@ var DataGridEvents = /** @class */ (function (_super) {
     __extends(DataGridEvents, _super);
     function DataGridEvents() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.busy = false;
         _this.state = {};
         _this.onWheel = function (e) {
             var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
@@ -56,33 +92,31 @@ var DataGridEvents = /** @class */ (function (_super) {
             return true;
         };
         _this.onKeyUp = function (e) {
-            var _a;
-            var _b = _this.props, _c = _b.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _b.focusedRow, focusedRow = _d === void 0 ? 0 : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, setStoreState = _b.setStoreState, isInlineEditing = _b.isInlineEditing;
-            var proc = (_a = {},
-                _a[_enums_1.DataGridEnums.KeyCodes.ENTER] = function () {
+            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState;
+            switch (e.which) {
+                case _enums_1.DataGridEnums.KeyCodes.ENTER:
                     var col = colGroup[focusedCol];
-                    if (col.editor) {
-                        setStoreState({
-                            isInlineEditing: true,
-                            inlineEditingCell: {
-                                rowIndex: focusedRow,
-                                colIndex: col.colIndex,
-                                editor: col.editor,
-                            },
-                        });
+                    if (!col.editor) {
+                        return;
                     }
-                },
-                _a);
-            if (!isInlineEditing && e.which in proc) {
-                proc[e.which]();
+                    setStoreState({
+                        isInlineEditing: true,
+                        inlineEditingCell: {
+                            rowIndex: focusedRow,
+                            colIndex: col.colIndex,
+                            editor: col.editor,
+                        },
+                    });
+                    return;
+                default:
+                    return;
             }
         };
         _this.onKeyDown = function (e) {
-            var _a, _b;
-            var _c = _this.props, _d = _c.data, data = _d === void 0 ? [] : _d, rootNode = _c.rootNode, clipBoardNode = _c.clipBoardNode, _e = _c.colGroup, colGroup = _e === void 0 ? [] : _e, _f = _c.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _c.selectionRows, selectionRows = _g === void 0 ? {} : _g, _h = _c.selectionCols, selectionCols = _h === void 0 ? {} : _h, _j = _c.focusedCol, focusedCol = _j === void 0 ? 0 : _j, setStoreState = _c.setStoreState, _k = _c.scrollLeft, scrollLeft = _k === void 0 ? 0 : _k, _l = _c.scrollTop, scrollTop = _l === void 0 ? 0 : _l, _m = _c.focusedRow, focusedRow = _m === void 0 ? 0 : _m, _o = _c.options, options = _o === void 0 ? {} : _o, _p = _c.styles, styles = _p === void 0 ? {} : _p;
-            var _q = _this.props, _r = _q.printStartColIndex, printStartColIndex = _r === void 0 ? 0 : _r, _s = _q.printEndColIndex, printEndColIndex = _s === void 0 ? colGroup.length - 1 : _s;
-            var _t = options.frozenRowIndex, frozenRowIndex = _t === void 0 ? 0 : _t, _u = options.frozenColumnIndex, frozenColumnIndex = _u === void 0 ? 0 : _u;
-            var _v = styles.bodyTrHeight, bodyTrHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentWidth, scrollContentWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentHeight, scrollContentHeight = _x === void 0 ? 0 : _x, _y = styles.scrollContentContainerWidth, scrollContentContainerWidth = _y === void 0 ? 0 : _y, _z = styles.scrollContentContainerHeight, scrollContentContainerHeight = _z === void 0 ? 0 : _z, _0 = styles.frozenPanelWidth, frozenPanelWidth = _0 === void 0 ? 0 : _0, _1 = styles.rightPanelWidth, rightPanelWidth = _1 === void 0 ? 0 : _1, _2 = styles.verticalScrollerWidth, verticalScrollerWidth = _2 === void 0 ? 0 : _2;
+            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, rootNode = _a.rootNode, clipBoardNode = _a.clipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m;
+            var _o = _this.props, _p = _o.printStartColIndex, printStartColIndex = _p === void 0 ? 0 : _p, _q = _o.printEndColIndex, printEndColIndex = _q === void 0 ? colGroup.length - 1 : _q;
+            var _r = options.frozenRowIndex, frozenRowIndex = _r === void 0 ? 0 : _r, _s = options.frozenColumnIndex, frozenColumnIndex = _s === void 0 ? 0 : _s;
+            var _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.scrollContentWidth, scrollContentWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentHeight, scrollContentHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentContainerWidth, scrollContentContainerWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerHeight, scrollContentContainerHeight = _x === void 0 ? 0 : _x, _y = styles.frozenPanelWidth, frozenPanelWidth = _y === void 0 ? 0 : _y, _z = styles.rightPanelWidth, rightPanelWidth = _z === void 0 ? 0 : _z, _0 = styles.verticalScrollerWidth, verticalScrollerWidth = _0 === void 0 ? 0 : _0;
             var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
             var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
                 // frozenRowIndex +
@@ -145,191 +179,212 @@ var DataGridEvents = /** @class */ (function (_super) {
                 }
                 return _scrollLeft;
             };
-            var metaProc = (_a = {},
-                _a[_enums_1.DataGridEnums.MetaKeycodes.C] = function () {
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var copySuccess = false;
-                    var copiedString = '';
-                    for (var rk in selectionRows) {
-                        if (selectionRows[rk]) {
-                            var item = data[rk];
-                            for (var ck in selectionCols) {
-                                if (selectionCols[ck]) {
-                                    copiedString += (item[headerColGroup[ck].key] || '') + '\t';
+            return new Promise(function (resolve, reject) {
+                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+                if (e.metaKey) {
+                    switch (e.which) {
+                        case _enums_1.DataGridEnums.MetaKeycodes.C:
+                            e.preventDefault();
+                            var copySuccess = false;
+                            var copiedString = '';
+                            for (var rk in selectionRows) {
+                                if (selectionRows[rk]) {
+                                    var item = data[rk];
+                                    for (var ck in selectionCols) {
+                                        if (selectionCols[ck]) {
+                                            copiedString += (item[headerColGroup[ck].key] || '') + '\t';
+                                        }
+                                    }
+                                    copiedString += '\n';
                                 }
                             }
-                            copiedString += '\n';
-                        }
+                            if (clipBoardNode && clipBoardNode.current) {
+                                clipBoardNode.current.value = copiedString;
+                                clipBoardNode.current.select();
+                            }
+                            try {
+                                copySuccess = document.execCommand('copy');
+                            }
+                            catch (e) { }
+                            rootNode && rootNode.current && rootNode.current.focus();
+                            if (copySuccess) {
+                                resolve();
+                            }
+                            else {
+                                reject();
+                            }
+                            break;
+                        case _enums_1.DataGridEnums.MetaKeycodes.A:
+                            e.preventDefault();
+                            var state = {
+                                dragging: false,
+                                selectionRows: {},
+                                selectionCols: {},
+                                focusedRow: 0,
+                                focusedCol: focusedCol,
+                            };
+                            state.selectionRows = (function () {
+                                var rows = {};
+                                data.forEach(function (item, i) {
+                                    rows[i] = true;
+                                });
+                                return rows;
+                            })();
+                            state.selectionCols = (function () {
+                                var cols = {};
+                                colGroup.forEach(function (col) {
+                                    cols[col.colIndex || 0] = true;
+                                });
+                                return cols;
+                            })();
+                            state.focusedCol = 0;
+                            setStoreState(state, function () {
+                                resolve();
+                            });
+                            break;
+                        default:
+                            break;
                     }
-                    if (clipBoardNode && clipBoardNode.current) {
-                        clipBoardNode.current.value = copiedString;
-                        clipBoardNode.current.select();
-                    }
-                    try {
-                        copySuccess = document.execCommand('copy');
-                    }
-                    catch (e) { }
-                    rootNode && rootNode.current && rootNode.current.focus();
-                    return copySuccess;
-                },
-                _a[_enums_1.DataGridEnums.MetaKeycodes.A] = function () {
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var state = {
-                        dragging: false,
-                        selectionRows: {},
-                        selectionCols: {},
-                        focusedRow: 0,
-                        focusedCol: focusedCol,
-                    };
-                    state.selectionRows = (function () {
-                        var rows = {};
-                        data.forEach(function (item, i) {
-                            rows[i] = true;
-                        });
-                        return rows;
-                    })();
-                    state.selectionCols = (function () {
-                        var cols = {};
-                        colGroup.forEach(function (col) {
-                            cols[col.colIndex || 0] = true;
-                        });
-                        return cols;
-                    })();
-                    state.focusedCol = 0;
-                    setStoreState(state);
-                },
-                _a);
-            var proc = (_b = {},
-                _b[_enums_1.DataGridEnums.KeyCodes.ESC] = function () {
-                    var _a, _b;
-                    setStoreState({
-                        selectionRows: (_a = {},
-                            _a[focusedRow] = true,
-                            _a),
-                        selectionCols: (_b = {},
-                            _b[focusedCol] = true,
-                            _b),
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.HOME] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = 0;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.END] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = data.length - 1;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.PAGE_UP] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.PAGE_DOWN] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = focusedRow + pRowSize >= data.length
-                        ? data.length - 1
-                        : focusedRow + pRowSize;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.UP_ARROW] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.DOWN_ARROW] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusRow = focusedRow + 1 >= data.length ? data.length - 1 : focusedRow + 1;
-                    setStoreState({
-                        scrollTop: getAvailScrollTop(focusRow),
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.LEFT_ARROW] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
-                    setStoreState({
-                        scrollLeft: getAvailScrollLeft(focusCol),
-                        selectionCols: (_a = {},
-                            _a[focusCol] = true,
-                            _a),
-                        focusedCol: focusCol,
-                    });
-                },
-                _b[_enums_1.DataGridEnums.KeyCodes.RIGHT_ARROW] = function () {
-                    var _a;
-                    e.preventDefault();
-                    // e.stopPropagation();
-                    var focusCol = focusedCol + 1 >= colGroup.length
-                        ? colGroup.length - 1
-                        : focusedCol + 1;
-                    setStoreState({
-                        scrollLeft: getAvailScrollLeft(focusCol),
-                        selectionCols: (_a = {},
-                            _a[focusCol] = true,
-                            _a),
-                        focusedCol: focusCol,
-                    });
-                },
-                _b);
-            if (e.metaKey) {
-                if (e.which in metaProc) {
-                    metaProc[e.which]();
                 }
-            }
-            else {
-                proc[e.which] && proc[e.which]();
-            }
+                else {
+                    var focusRow = void 0;
+                    var focusCol = void 0;
+                    switch (e.which) {
+                        case _enums_1.DataGridEnums.KeyCodes.ESC:
+                            setStoreState({
+                                selectionRows: (_a = {},
+                                    _a[focusedRow] = true,
+                                    _a),
+                                selectionCols: (_b = {},
+                                    _b[focusedCol] = true,
+                                    _b),
+                            }, function () {
+                                resolve();
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.HOME:
+                            focusRow = 0;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_c = {},
+                                    _c[focusRow] = true,
+                                    _c),
+                                focusedRow: focusRow,
+                            }, function () {
+                                resolve();
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.END:
+                            focusRow = data.length - 1;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_d = {},
+                                    _d[focusRow] = true,
+                                    _d),
+                                focusedRow: focusRow,
+                            }, function () {
+                                resolve();
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.PAGE_UP:
+                            e.preventDefault();
+                            focusRow = focusedRow - pRowSize < 1 ? 0 : focusedRow - pRowSize;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_e = {},
+                                    _e[focusRow] = true,
+                                    _e),
+                                focusedRow: focusRow,
+                            }, function () {
+                                resolve();
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.PAGE_DOWN:
+                            e.preventDefault();
+                            focusRow =
+                                focusedRow + pRowSize >= data.length
+                                    ? data.length - 1
+                                    : focusedRow + pRowSize;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_f = {},
+                                    _f[focusRow] = true,
+                                    _f),
+                                focusedRow: focusRow,
+                            }, function () {
+                                resolve();
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                            e.preventDefault();
+                            focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_g = {},
+                                    _g[focusRow] = true,
+                                    _g),
+                                focusedRow: focusRow,
+                            }, function () {
+                                setTimeout(function () {
+                                    resolve();
+                                });
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                            e.preventDefault();
+                            focusRow =
+                                focusedRow + 1 >= data.length ? data.length - 1 : focusedRow + 1;
+                            setStoreState({
+                                scrollTop: getAvailScrollTop(focusRow),
+                                selectionRows: (_h = {},
+                                    _h[focusRow] = true,
+                                    _h),
+                                focusedRow: focusRow,
+                            }, function () {
+                                setTimeout(function () {
+                                    resolve();
+                                });
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.LEFT_ARROW:
+                            e.preventDefault();
+                            focusCol = focusedCol < 1 ? 0 : focusedCol - 1;
+                            setStoreState({
+                                scrollLeft: getAvailScrollLeft(focusCol),
+                                selectionCols: (_j = {},
+                                    _j[focusCol] = true,
+                                    _j),
+                                focusedCol: focusCol,
+                            }, function () {
+                                setTimeout(function () {
+                                    resolve();
+                                });
+                            });
+                            break;
+                        case _enums_1.DataGridEnums.KeyCodes.RIGHT_ARROW:
+                            e.preventDefault();
+                            focusCol =
+                                focusedCol + 1 >= colGroup.length
+                                    ? colGroup.length - 1
+                                    : focusedCol + 1;
+                            setStoreState({
+                                scrollLeft: getAvailScrollLeft(focusCol),
+                                selectionCols: (_k = {},
+                                    _k[focusCol] = true,
+                                    _k),
+                                focusedCol: focusCol,
+                            }, function () {
+                                setTimeout(function () {
+                                    resolve();
+                                });
+                            });
+                            break;
+                        default:
+                            resolve();
+                            break;
+                    }
+                }
+            });
         };
         _this.onContextmenu = function (e) {
             var _a = _this.props, onRightClick = _a.onRightClick, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, data = _a.data, colGroup = _a.colGroup;
@@ -348,48 +403,48 @@ var DataGridEvents = /** @class */ (function (_super) {
                 });
             }
         };
-        _this.onFireEvent = function (e) {
-            var _a;
-            var _b = _this.props, loading = _b.loading, loadingData = _b.loadingData, _c = _b.isInlineEditing, isInlineEditing = _c === void 0 ? false : _c;
-            var proc = (_a = {},
-                _a[_enums_1.DataGridEnums.EventNames.WHEEL] = function () {
-                    if (!loadingData) {
-                        _this.onWheel(e);
-                    }
-                    else {
-                        e.preventDefault();
-                        // e.stopPropagation();
-                    }
-                },
-                _a[_enums_1.DataGridEnums.EventNames.KEYDOWN] = function () {
-                    if (!loadingData && !isInlineEditing) {
-                        if (Object.values(_enums_1.DataGridEnums.KeyCodes).includes(e.which)) {
+        _this.onFireEvent = function (e) { return __awaiter(_this, void 0, void 0, function () {
+            var _a, loading, loadingData, _b, isInlineEditing, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _a = this.props, loading = _a.loading, loadingData = _a.loadingData, _b = _a.isInlineEditing, isInlineEditing = _b === void 0 ? false : _b;
+                        if (this.busy || loadingData || isInlineEditing || loading) {
                             e.preventDefault();
+                            return [2 /*return*/];
                         }
-                        _this.onKeyDown(e);
-                    }
-                },
-                _a[_enums_1.DataGridEnums.EventNames.KEYUP] = function () {
-                    if (!loadingData && !isInlineEditing) {
-                        _this.onKeyUp(e);
-                    }
-                },
-                _a[_enums_1.DataGridEnums.EventNames.CONTEXTMENU] = function () {
-                    if (!loadingData && !isInlineEditing) {
-                        _this.onContextmenu(e);
-                    }
-                },
-                _a);
-            if (e.type in proc && !loading) {
-                if (_this.props.onBeforeEvent && !loadingData) {
-                    _this.props.onBeforeEvent({ e: e, eventName: e.type });
+                        if (this.props.onBeforeEvent) {
+                            this.props.onBeforeEvent({ e: e, eventName: e.type });
+                        }
+                        _c = e.type;
+                        switch (_c) {
+                            case _enums_1.DataGridEnums.EventNames.WHEEL: return [3 /*break*/, 1];
+                            case _enums_1.DataGridEnums.EventNames.KEYDOWN: return [3 /*break*/, 2];
+                            case _enums_1.DataGridEnums.EventNames.KEYUP: return [3 /*break*/, 4];
+                            case _enums_1.DataGridEnums.EventNames.CONTEXTMENU: return [3 /*break*/, 5];
+                        }
+                        return [3 /*break*/, 6];
+                    case 1:
+                        this.onWheel(e);
+                        return [3 /*break*/, 7];
+                    case 2:
+                        this.busy = true;
+                        return [4 /*yield*/, this.onKeyDown(e)];
+                    case 3:
+                        _d.sent();
+                        this.busy = false;
+                        return [3 /*break*/, 7];
+                    case 4:
+                        this.onKeyUp(e);
+                        return [3 /*break*/, 7];
+                    case 5:
+                        this.onContextmenu(e);
+                        return [3 /*break*/, 7];
+                    case 6: return [3 /*break*/, 7];
+                    case 7: return [2 /*return*/];
                 }
-                proc[e.type]();
-                if (_this.props.onAfterEvent && !loadingData) {
-                    _this.props.onAfterEvent({ e: e, eventName: e.type });
-                }
-            }
-        };
+            });
+        }); };
         return _this;
     }
     DataGridEvents.prototype.render = function () {
@@ -407,7 +462,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         var rootNode = this.props.rootNode;
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
-            rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            // rootNode.current.removeEventListener('keyup', this.onFireEvent);
             rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
         }
     };

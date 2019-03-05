@@ -20,7 +20,7 @@ const TableBody = ({ sRowIndex, eRowIndex, data, bodyRow }) => (React.createElem
 const DataGridBodyPanel = props => {
     const { data = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig = {}, panelLeft = 0, panelTop = 0, styles = {}, } = props;
     const { frozenPanelWidth = 0, asidePanelWidth = 0, frozenPanelHeight = 0, bodyTrHeight = 0, } = styles;
-    const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
+    const { sRowIndex = 0, eRowIndex = 0, frozenRowIndex = 0, } = panelScrollConfig;
     // aside-header가 필요하지 않은지 확인
     if ((panelName === 'top-aside-body-scroll' &&
         (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||

@@ -60,8 +60,10 @@ class StoreProvider extends React.Component {
         super(...arguments);
         this.state = store;
         // state 가 업데이트 되기 전.
-        this.setStoreState = (newState) => {
-            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
+        this.setStoreState = (newState, callback) => {
+            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScroll, onScrollEnd, } = this.state;
+            const { frozenRowIndex = 0 } = options;
+            const { bodyHeight = 0, bodyTrHeight = 0 } = styles;
             const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
             if (!newState.styles) {
                 newState.styles = Object.assign({}, styles);
@@ -85,13 +87,23 @@ class StoreProvider extends React.Component {
                         newState.visibleFootSumData = visibleData.visibleFootSumData;
                         newState.printStartColIndex = visibleData.printStartColIndex;
                         newState.printEndColIndex = visibleData.printEndColIndex;
-                    }
-                    if (_scrollLeft !== scrollLeft &&
-                        clientWidth >= scrollWidth + _scrollLeft) {
-                        endOfScrollLeft = true;
+                        // console.log('onscroll left');
+                        if (clientWidth >= scrollWidth + _scrollLeft) {
+                            endOfScrollLeft = true;
+                        }
                     }
                 }
                 if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+                    if (onScroll) {
+                        const sRowIndex = Math.floor(-_scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+                        const eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+                        onScroll({
+                            scrollLeft: Number(_scrollLeft),
+                            scrollTop: Number(_scrollTop),
+                            sRowIndex,
+                            eRowIndex,
+                        });
+                    }
                     if (clientHeight >= scrollHeight + _scrollTop) {
                         endOfScrollTop = true;
                     }
@@ -117,7 +129,7 @@ class StoreProvider extends React.Component {
             //   newState.scrollLeft = dimensions.scrollLeft;
             //   newState.scrollTop = dimensions.scrollTop;
             // }
-            this.setState(newState);
+            this.setState(() => newState, callback);
         };
         this.dispatch = (dispatchType, param) => {
             const { data = [], listSelectedAll = false, scrollLeft = 0, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, } = this.state;
@@ -415,7 +427,7 @@ class StoreProvider extends React.Component {
             //
             nProps.rootObject === nState.rootObject &&
             nProps.onBeforeEvent === nState.onBeforeEvent &&
-            nProps.onAfterEvent === nState.onAfterEvent &&
+            nProps.onScroll === nState.onScroll &&
             nProps.onScrollEnd === nState.onScrollEnd &&
             nProps.onRightClick === nState.onRightClick) {
             return null;
@@ -439,7 +451,7 @@ class StoreProvider extends React.Component {
             storeState.clipBoardNode = nProps.clipBoardNode;
             storeState.rootObject = nProps.rootObject;
             storeState.onBeforeEvent = nProps.onBeforeEvent;
-            storeState.onAfterEvent = nProps.onAfterEvent;
+            storeState.onScroll = nProps.onScroll;
             storeState.onScrollEnd = nProps.onScrollEnd;
             storeState.onRightClick = nProps.onRightClick;
             ///

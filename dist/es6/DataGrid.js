@@ -114,11 +114,14 @@ class DataGrid extends React.Component {
         };
         this.rootNode = React.createRef();
         this.clipBoardNode = React.createRef();
-        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid constructor');
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid constructor',
+        // );
     }
     render() {
         const { mounted, doneAutofit } = this.state;
-        const { data = [], status, options = {}, style = {}, onBeforeEvent, onAfterEvent, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
+        const { data = [], status, options = {}, style = {}, onBeforeEvent, onScroll, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
         let gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -139,7 +142,7 @@ class DataGrid extends React.Component {
             clipBoardNode: this.clipBoardNode,
             rootObject: this.rootObject,
             onBeforeEvent,
-            onAfterEvent,
+            onScroll,
             onScrollEnd,
             onRightClick,
         })),
@@ -158,7 +161,10 @@ class DataGrid extends React.Component {
         this.setState({
             mounted: true,
         });
-        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid componentDidMount');
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid componentDidMount',
+        // );
     }
     componentDidUpdate(prevProps) {
         const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
@@ -167,7 +173,10 @@ class DataGrid extends React.Component {
         if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
         }
-        console.log(`${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`, 'datagrid componentDidUpdate');
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid componentDidUpdate',
+        // );
     }
 }
 DataGrid.defaultHeight = 400;

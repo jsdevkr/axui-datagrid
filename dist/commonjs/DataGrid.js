@@ -159,12 +159,15 @@ var DataGrid = /** @class */ (function (_super) {
         };
         _this.rootNode = React.createRef();
         _this.clipBoardNode = React.createRef();
-        console.log(new Date().toLocaleTimeString() + ":" + new Date().getMilliseconds(), 'datagrid constructor');
         return _this;
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid constructor',
+        // );
     }
     DataGrid.prototype.render = function () {
         var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit;
-        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, status = _b.status, _d = _b.options, options = _d === void 0 ? {} : _d, _e = _b.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _b.onBeforeEvent, onAfterEvent = _b.onAfterEvent, onScrollEnd = _b.onScrollEnd, onRightClick = _b.onRightClick, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, width = _b.width, _g = _b.loading, loading = _g === void 0 ? false : _g, _h = _b.loadingData, loadingData = _h === void 0 ? false : _h, selection = _b.selection, rowSelector = _b.rowSelector, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop;
+        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, status = _b.status, _d = _b.options, options = _d === void 0 ? {} : _d, _e = _b.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onRightClick = _b.onRightClick, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, width = _b.width, _g = _b.loading, loading = _g === void 0 ? false : _g, _h = _b.loadingData, loadingData = _h === void 0 ? false : _h, selection = _b.selection, rowSelector = _b.rowSelector, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop;
         var gridRootStyle = __assign({
             height: height,
             width: width,
@@ -185,7 +188,7 @@ var DataGrid = /** @class */ (function (_super) {
             clipBoardNode: this.clipBoardNode,
             rootObject: this.rootObject,
             onBeforeEvent: onBeforeEvent,
-            onAfterEvent: onAfterEvent,
+            onScroll: onScroll,
             onScrollEnd: onScrollEnd,
             onRightClick: onRightClick,
         })),
@@ -204,7 +207,10 @@ var DataGrid = /** @class */ (function (_super) {
         this.setState({
             mounted: true,
         });
-        console.log(new Date().toLocaleTimeString() + ":" + new Date().getMilliseconds(), 'datagrid componentDidMount');
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid componentDidMount',
+        // );
     };
     DataGrid.prototype.componentDidUpdate = function (prevProps) {
         var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
@@ -213,7 +219,10 @@ var DataGrid = /** @class */ (function (_super) {
         if (autofitColumns !== _autofitColumns || columnChanged) {
             this.setState({ doneAutofit: false });
         }
-        console.log(new Date().toLocaleTimeString() + ":" + new Date().getMilliseconds(), 'datagrid componentDidUpdate');
+        // console.log(
+        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        //   'datagrid componentDidUpdate',
+        // );
     };
     DataGrid.defaultHeight = 400;
     DataGrid.defaultColumnKeys = {
