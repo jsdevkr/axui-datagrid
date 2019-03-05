@@ -43,7 +43,7 @@ interface IProps extends IDataGridStore {
   panelName: string;
   style?: any;
   containerStyle?: any;
-  panelScrollConfig?: any;
+  panelScrollConfig?: IDataGrid.IScrollConfig;
   panelLeft?: number;
   panelTop?: number;
 }
@@ -71,7 +71,11 @@ const DataGridBodyPanel: React.SFC<IProps> = props => {
     bodyTrHeight = 0,
   } = styles;
 
-  const { sRowIndex, eRowIndex, frozenRowIndex } = panelScrollConfig;
+  const {
+    sRowIndex = 0,
+    eRowIndex = 0,
+    frozenRowIndex = 0,
+  } = panelScrollConfig;
 
   // aside-header가 필요하지 않은지 확인
   if (

@@ -478,12 +478,12 @@ class DataGridBody extends React.Component<IProps> {
     const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
     const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
 
-    const topBodyScrollConfig = {
+    const topBodyScrollConfig: IDataGrid.IScrollConfig = {
       frozenRowIndex: 0,
       sRowIndex: 0,
       eRowIndex: frozenRowIndex - 1,
     };
-    const bodyScrollConfig = {
+    const bodyScrollConfig: IDataGrid.IScrollConfig = {
       frozenRowIndex: frozenRowIndex,
       sRowIndex: sRowIndex,
       eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1,

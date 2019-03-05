@@ -296,8 +296,11 @@ class StoreProvider extends React.Component<
       headerColGroup = [],
       bodyRowData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
+      onScroll,
       onScrollEnd,
     } = this.state;
+    const { frozenRowIndex = 0 } = options;
+    const { bodyHeight = 0, bodyTrHeight = 0 } = styles;
     const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
 
     if (!newState.styles) {
@@ -333,16 +336,30 @@ class StoreProvider extends React.Component<
           newState.visibleFootSumData = visibleData.visibleFootSumData;
           newState.printStartColIndex = visibleData.printStartColIndex;
           newState.printEndColIndex = visibleData.printEndColIndex;
-        }
-        if (
-          _scrollLeft !== scrollLeft &&
-          clientWidth >= scrollWidth + _scrollLeft
-        ) {
-          endOfScrollLeft = true;
+
+          // console.log('onscroll left');
+
+          if (clientWidth >= scrollWidth + _scrollLeft) {
+            endOfScrollLeft = true;
+          }
         }
       }
 
       if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
+        if (onScroll) {
+          const sRowIndex =
+            Math.floor(-_scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+          const eRowIndex =
+            sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+
+          onScroll({
+            scrollLeft: Number(_scrollLeft),
+            scrollTop: Number(_scrollTop),
+            sRowIndex,
+            eRowIndex,
+          });
+        }
+
         if (clientHeight >= scrollHeight + _scrollTop) {
           endOfScrollTop = true;
         }

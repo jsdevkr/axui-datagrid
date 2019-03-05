@@ -4,6 +4,12 @@ export namespace IDataGrid {
     y?: number;
   }
 
+  export interface IScrollConfig {
+    frozenRowIndex?: number;
+    sRowIndex?: number;
+    eRowIndex?: number;
+  }
+
   export interface IRect extends IPosition {
     width: number;
     height?: number;
@@ -37,8 +43,12 @@ export namespace IDataGrid {
   }
 
   export interface IonScrollFunctionParam {
-    endOfScrollTop?: boolean;
-    endOfScrollLeft?: boolean;
+    scrollTop: number;
+    scrollLeft: number;
+    sRowIndex: number;
+    eRowIndex: number;
+    sColIndex?: number;
+    eColIndex?: number;
   }
 
   export interface IonChangeSelectedParam {

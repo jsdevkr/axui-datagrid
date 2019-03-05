@@ -36,7 +36,7 @@ class EventReceive extends React.Component<any, any> {
 
   receiveEvent = (eventName: string) => {
     this.setState({
-      eventLog: [eventName].concat(this.state.eventLog),
+      eventLog: [eventName].concat(this.state.eventLog).slice(0, 20),
     });
   };
 
@@ -77,6 +77,11 @@ class EventReceive extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
+              onScroll={({ sRowIndex, eRowIndex }) => {
+                this.receiveEvent(
+                  `onScroll sRowIndex : ${sRowIndex}, eRowIndex : ${eRowIndex}`,
+                );
+              }}
               onBeforeEvent={({ e, eventName }) => {
                 this.receiveEvent(eventName);
               }}
