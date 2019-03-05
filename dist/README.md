@@ -261,3 +261,4 @@ export default Formatter;
 - v0.10.1 - autofitColumns Timing Adjustments
 - v0.11.0 - Added the options.scroller.width, height, theme
 - v0.12.0 - Add a new props onScroll, remove props onAfterEvent, modify keydown scroll action
+- v0.12.1 - update axui-datagrid-header.scss, header text color support
