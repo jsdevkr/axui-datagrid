@@ -53,96 +53,6 @@ class InlineEdit extends React.Component<any, any> {
           money: 18000,
           type: 'B',
         },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
-        {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: '2017-11-10',
-          money: 18000,
-          type: 'B',
-        },
       ],
       options: {
         header: {
@@ -166,20 +76,20 @@ class InlineEdit extends React.Component<any, any> {
     };
     this.setState({
       data: [...this.state.data, ...[newItem]],
+      scrollTop: this.state.scrollContentHeight,
     });
   };
 
   removeItem = () => {};
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
-    console.log(param);
+    // console.log(param);
   };
 
   onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
     // console.log(param);
     this.setState({
       scrollContentHeight: param.scrollContentHeight,
-      scrollTop: param.scrollContentHeight,
     });
   };
 
