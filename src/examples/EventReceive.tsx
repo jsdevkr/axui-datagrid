@@ -92,9 +92,11 @@ class EventReceive extends React.Component<any, any> {
                 console.log(item, value, focusedRow, focusedCol);
               }}
               selection={{
-                onChange: selection => {
-                  console.log(selection);
-                },
+                rows: [],
+                cols: [],
+              }}
+              onChangeSelection={selection => {
+                console.log(selection);
               }}
             />
           </div>

@@ -69,10 +69,9 @@ class LoadingState extends React.Component<any, any> {
                 show: true,
                 rowKey: '',
                 selectedRowKeys: [],
-                onChange: param => {
-                  console.log(param);
-                  this.setState({ filteredList: param.data });
-                },
+              }}
+              onChangeSelectedRow={param => {
+                this.setState({ filteredList: param.data });
               }}
             />
           </div>

@@ -51,7 +51,15 @@ export namespace IDataGrid {
     eColIndex?: number;
   }
 
-  export interface IonChangeSelectedParam {
+  export interface IonChangeScrollSizeFunctionParam {
+    scrollContentContainerHeight?: number;
+    scrollContentHeight?: number;
+    scrollContentContainerWidth?: number;
+    scrollContentWidth?: number;
+    bodyTrHeight?: number;
+  }
+
+  export interface IonChangeSelectedRowParam {
     data?: any[];
   }
 
@@ -301,6 +309,9 @@ export namespace IDataGrid {
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
+    onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
+    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
 
@@ -317,11 +328,6 @@ export namespace IDataGrid {
     height?: number;
     columnHeight?: number;
 
-    onBeforeEvent?: (param: IonEventParam) => void;
-    onScroll?: (param: IonScrollFunctionParam) => void;
-    onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
-    onRightClick?: (param: IonRightClickParam) => void;
-
     selection?: ISelection;
     rowSelector?: IRowSelector;
 
@@ -333,6 +339,9 @@ export namespace IDataGrid {
 
     scrollLeft?: number;
     scrollTop?: number;
+    pScrollLeft?: number;
+    pScrollTop?: number;
+
     endOfScrollTop?: boolean;
     endOfScrollLeft?: boolean;
     selectionRows?: {};
@@ -396,18 +405,24 @@ export namespace IDataGrid {
 
     rootNode?: React.RefObject<HTMLDivElement>;
     clipBoardNode?: React.RefObject<HTMLTextAreaElement>;
+
+    onBeforeEvent?: (param: IonEventParam) => void;
+    onScroll?: (param: IonScrollFunctionParam) => void;
+    onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
+    onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
+    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+    onRightClick?: (param: IonRightClickParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface IRowSelector {
     show: boolean;
     rowKey: string;
     selectedRowKeys?: string[];
-    onChange?: (param: IonChangeSelectedParam) => void;
   }
   export interface ISelection {
     rows?: number[];
     cols?: number[];
-    onChange?: (param: IonChangeSelectionParam) => void;
   }
 
   export interface IProps {
@@ -425,9 +440,13 @@ export namespace IDataGrid {
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
+
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
+    onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
+    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
 

@@ -298,6 +298,32 @@ class DataGrid extends React.Component<IProps, IState> {
     // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
   };
 
+  componentDidMount() {
+    this.setState({
+      mounted: true,
+    });
+
+    // console.log(
+    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+    //   'datagrid componentDidMount',
+    // );
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    const autofitColumns =
+      prevProps.options && prevProps.options.autofitColumns;
+    const _autofitColumns =
+      this.props.options && this.props.options.autofitColumns;
+    const columnChanged = prevProps.columns !== this.props.columns;
+
+    if (autofitColumns !== _autofitColumns || columnChanged) {
+      this.setState({ doneAutofit: false });
+    }
+
+    if (this.props.scrollTop !== prevProps.scrollTop) {
+    }
+  }
+
   public render() {
     const { mounted, doneAutofit } = this.state;
     const {
@@ -308,6 +334,9 @@ class DataGrid extends React.Component<IProps, IState> {
       onBeforeEvent,
       onScroll,
       onScrollEnd,
+      onChangeScrollSize,
+      onChangeSelection,
+      onChangeSelectedRow,
       onRightClick,
       height = DataGrid.defaultHeight,
       width,
@@ -340,13 +369,16 @@ class DataGrid extends React.Component<IProps, IState> {
           status,
           options: this.getOptions(options),
           scrollLeft,
-          scrollTop,
+          scrollTop: scrollTop ? -Number(scrollTop) : 0,
           rootNode: this.rootNode,
           clipBoardNode: this.clipBoardNode,
           rootObject: this.rootObject,
           onBeforeEvent,
           onScroll,
           onScrollEnd,
+          onChangeScrollSize,
+          onChangeSelection,
+          onChangeSelectedRow,
           onRightClick,
         })}
       >
@@ -374,34 +406,6 @@ class DataGrid extends React.Component<IProps, IState> {
         </div>
       </DataGridStore.Provider>
     );
-  }
-
-  componentDidMount() {
-    this.setState({
-      mounted: true,
-    });
-
-    // console.log(
-    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-    //   'datagrid componentDidMount',
-    // );
-  }
-
-  componentDidUpdate(prevProps: IProps) {
-    const autofitColumns =
-      prevProps.options && prevProps.options.autofitColumns;
-    const _autofitColumns =
-      this.props.options && this.props.options.autofitColumns;
-    const columnChanged = prevProps.columns !== this.props.columns;
-
-    if (autofitColumns !== _autofitColumns || columnChanged) {
-      this.setState({ doneAutofit: false });
-    }
-
-    // console.log(
-    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-    //   'datagrid componentDidUpdate',
-    // );
   }
 }
 

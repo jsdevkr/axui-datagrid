@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import { Button, Divider, Form, Select } from 'antd';
+import { Button, Divider, Form, Select, Icon } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -10,21 +11,21 @@ class InlineEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/data/data-basic.json');
-
     this.state = {
       width: 300,
       height: 300,
+      scrollTop: 0,
       columns: [
         { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
         { key: 'title', width: 200, label: 'Title', editor: { type: 'text' } },
-        { key: 'writer', label: 'Writer', editor: { type: 'text' } },
         {
           key: 'date',
           label: 'Date',
           formatter: 'date',
           editor: { type: 'text' },
         },
+
+        { key: 'writer', label: 'search', editor: { type: 'text' } },
         {
           key: 'money',
           label: 'Money',
@@ -32,36 +33,158 @@ class InlineEdit extends React.Component<any, any> {
           align: 'right',
           editor: { type: 'text' },
         },
+        { key: 'type', label: 'select', editor: { type: 'text' } },
       ],
-      data: gridData,
+      data: [
+        {
+          id: 1,
+          title: 'Think like a man of action and act like man of thought.',
+          writer: 'Thomas',
+          date: '2017-12-05',
+          money: 120000,
+          type: 'A',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+        {
+          id: 2,
+          title:
+            'Courage is very important. Like a muscle, it is strengthened by use.',
+          writer: 'Sofia',
+          date: '2017-11-10',
+          money: 18000,
+          type: 'B',
+        },
+      ],
       options: {
         header: {
           align: 'center',
         },
       },
+      scrollContentHeight: 0,
     };
 
     this.dataGridContainerRef = React.createRef();
   }
 
-  changeConfig = (props: any, value: any) => {
-    const processor = {
-      setHeight: () => {
-        this.setState({
-          height: value,
-        });
-      },
+  addItem = () => {
+    const newItem = {
+      id: 999,
+      title: '',
+      writer: '',
+      date: '',
+      money: 0,
+      type: '',
     };
+    this.setState({
+      data: [...this.state.data, ...[newItem]],
+    });
+  };
 
-    if (props in processor) {
-      processor[props].call(this, value);
-    } else {
-      this.setState(value);
-    }
+  removeItem = () => {};
+
+  onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
+    console.log(param);
+  };
+
+  onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
+    // console.log(param);
+    this.setState({
+      scrollContentHeight: param.scrollContentHeight,
+      scrollTop: param.scrollContentHeight,
+    });
   };
 
   public render() {
-    const { width, height, columns, data, options } = this.state;
+    const { width, height, columns, data, options, scrollTop } = this.state;
 
     return (
       <Wrapper>
@@ -87,28 +210,26 @@ class InlineEdit extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
+              selection={{}}
+              onScroll={this.onScroll}
+              onChangeScrollSize={this.onChangeScrollSize}
+              scrollTop={scrollTop}
             />
           </div>
 
-          <Divider />
+          <div style={{ height: 10 }} />
+          <Button size="small" onClick={() => this.addItem()}>
+            <Icon type="plus" />
+            Add item
+          </Button>
 
-          <Button
-            type="primary"
-            onClick={() => this.changeConfig('setHeight', 300)}
-          >
-            height : 300
+          <Button size="small" disabled onClick={() => this.removeItem()}>
+            <Icon type="minus" />
+            Remove item
           </Button>
-          <Button
-            type="primary"
-            onClick={() => this.changeConfig('setHeight', 400)}
-          >
-            height : 400
-          </Button>
-          <Button
-            type="primary"
-            onClick={() => this.changeConfig('setHeight', 500)}
-          >
-            height : 500
+
+          <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
+            scroll top (0)
           </Button>
         </Segment>
       </Wrapper>

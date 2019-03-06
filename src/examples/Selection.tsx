@@ -99,9 +99,6 @@ class FootSum extends React.Component<any, any> {
             selection={{
               rows: [],
               cols: [],
-              onChange: param => {
-                // this.setState({ filteredList: param.filteredList });
-              },
             }}
           />
           <Button
