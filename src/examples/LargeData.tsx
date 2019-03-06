@@ -154,18 +154,14 @@ class LargeData extends React.Component<any, any> {
           </p>
 
           <div ref={this.dataGridContainerRef}>
-            {data.length > 0 ? (
-              <DataGrid
-                width={width}
-                height={height}
-                style={{ fontSize: '12px' }}
-                columns={columns}
-                data={[...data]}
-                options={options}
-              />
-            ) : (
-              'no data'
-            )}
+            <DataGrid
+              width={width}
+              height={height}
+              style={{ fontSize: '12px' }}
+              columns={columns}
+              data={data}
+              options={{ ...options, updateAt: new Date() }}
+            />
           </div>
 
           <Divider />

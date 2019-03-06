@@ -46,7 +46,7 @@ class FrozenColumnRow extends React.Component<any, any> {
       },
       setOptions: () => {
         this.setState({
-          options: utils.mergeAll({}, this.state.options, value),
+          options: { ...this.state.options, ...value },
         });
       },
     };

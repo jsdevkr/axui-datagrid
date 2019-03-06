@@ -11,7 +11,6 @@ import {
 } from './components';
 
 import {
-  mergeAll,
   makeHeaderTable,
   makeBodyRowTable,
   makeBodyRowMap,
@@ -145,7 +144,18 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
-    return mergeAll(true, { ...DataGrid.defaultOptions }, options);
+    return {
+      ...DataGrid.defaultOptions,
+      ...options,
+      header: { ...DataGrid.defaultOptions.header, ...options.header },
+      body: { ...DataGrid.defaultOptions.body, ...options.body },
+      page: { ...DataGrid.defaultOptions.page, ...options.page },
+      scroller: { ...DataGrid.defaultOptions.scroller, ...options.scroller },
+      columnKeys: {
+        ...DataGrid.defaultOptions.columnKeys,
+        ...options.columnKeys,
+      },
+    };
   };
 
   getProviderProps = (storeProps: IDataGrid.IStoreProps) => {
@@ -159,7 +169,7 @@ class DataGrid extends React.Component<IProps, IState> {
     const { options = {} } = storeProps;
     const {
       frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0,
-      body: optionsBody = DataGrid.defaultBody,
+      body: optionsBody = { ...DataGrid.defaultBody },
     } = options;
     const { columnHeight = 0 } = optionsBody;
 

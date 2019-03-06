@@ -206,6 +206,7 @@ export namespace IDataGrid {
   }
 
   export interface IOptions {
+    updateAt?: Date;
     frozenColumnIndex?: number;
     frozenRowIndex?: number;
     showLineNumber?: boolean;
@@ -215,16 +216,16 @@ export namespace IDataGrid {
     lineNumberColumnWidth?: number;
     rowSelectorColumnWidth?: number;
     remoteSort?: boolean;
-    header?: IOptionHeader;
-    body?: IOptionBody;
-    page?: IOptionPage;
-    scroller?: IOptionScroller;
-    columnKeys?: IColumnKeys;
     footSum?: boolean;
     bodyLoaderHeight?: number;
     autofitColumns?: boolean;
     autofitColumnWidthMax?: number;
     autofitColumnWidthMin?: number;
+    header?: IOptionHeader;
+    body?: IOptionBody;
+    page?: IOptionPage;
+    scroller?: IOptionScroller;
+    columnKeys?: IColumnKeys;
   }
 
   export interface IStyles {
