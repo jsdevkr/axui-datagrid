@@ -4,6 +4,7 @@ import { Button, Divider, Form, Select, Icon } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
+import { debounce } from 'axui-datagrid/utils';
 
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -59,6 +60,12 @@ class InlineEdit extends React.Component<any, any> {
           align: 'center',
         },
       },
+      selection: {
+        rows: [],
+        cols: [],
+        focusedRow: -1,
+        focusedCol: -1,
+      },
       scrollContentHeight: 0,
     };
 
@@ -93,8 +100,37 @@ class InlineEdit extends React.Component<any, any> {
     });
   };
 
+  onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
+    console.log(param);
+    // this.setState({ selection: param });
+  };
+
+  handleChangeSelection = () => {
+    const { data, columns } = this.state;
+
+    const r = Math.floor(Math.random() * data.length);
+    const c = Math.floor(Math.random() * columns.length);
+
+    this.setState({
+      selection: {
+        rows: [r],
+        cols: [c],
+        focusedRow: r,
+        focusedCol: c,
+      },
+    });
+  };
+
   public render() {
-    const { width, height, columns, data, options, scrollTop } = this.state;
+    const {
+      width,
+      height,
+      columns,
+      data,
+      options,
+      scrollTop,
+      selection,
+    } = this.state;
 
     return (
       <Wrapper>
@@ -120,14 +156,10 @@ class InlineEdit extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
-              selection={{
-                rows: [0],
-                cols: [0],
-                focusedRow: 0,
-                focusedCol: 0,
-              }}
+              selection={selection}
               onScroll={this.onScroll}
               onChangeScrollSize={this.onChangeScrollSize}
+              onChangeSelection={this.onChangeSelection}
               scrollTop={scrollTop}
             />
           </div>
@@ -145,6 +177,10 @@ class InlineEdit extends React.Component<any, any> {
 
           <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
             scroll top (0)
+          </Button>
+
+          <Button size="small" onClick={this.handleChangeSelection}>
+            change selection
           </Button>
         </Segment>
       </Wrapper>

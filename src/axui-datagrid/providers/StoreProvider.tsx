@@ -180,14 +180,6 @@ class StoreProvider extends React.Component<
       storeState.leftFootSumData = nProps.leftFootSumData;
       storeState.footSumData = nProps.footSumData;
 
-      // console.log(
-      //   storeState.selection,
-      //   storeState.selectionRows,
-      //   storeState.selectionCols,
-      // );
-
-      // nProps의 scrollLeft, scrollTop 변경 되는 경우 나중에 고려
-
       const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
         storeState.options || {};
       const changed = {
@@ -286,6 +278,25 @@ class StoreProvider extends React.Component<
 
         _scrollLeft = currScrollLeft;
         _scrollTop = currScrollTop;
+      }
+
+      if (nProps.selection !== nState.selection) {
+        storeState.selection = nProps.selection;
+
+        const { rows = [], cols = [], focusedRow = -1, focusedCol = -1 } =
+          nProps.selection || {};
+
+        storeState.selectionRows = {};
+        storeState.selectionCols = {};
+        rows.forEach(n => {
+          storeState.selectionRows![n] = true;
+        });
+        cols.forEach(n => {
+          storeState.selectionCols![n] = true;
+        });
+
+        storeState.focusedRow = focusedRow;
+        storeState.focusedCol = focusedCol;
       }
 
       // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
@@ -431,7 +442,7 @@ class StoreProvider extends React.Component<
       listSelectedAll = false,
       colGroup = [],
       rootNode,
-      focusedRow = 0,
+      focusedRow = -1,
       sortInfo = {},
       options = {},
       rowSelector,
@@ -719,7 +730,14 @@ class StoreProvider extends React.Component<
 
       case DataGridEnums.DispatchTypes.CHANGE_SELECTION:
         {
-          const { sRow, sCol, eRow, eCol } = param;
+          const {
+            sRow,
+            sCol,
+            eRow,
+            eCol,
+            focusedRow: fRow,
+            focusedCol: fCol,
+          } = param;
 
           if (
             selectionSRow !== sRow ||
@@ -738,6 +756,8 @@ class StoreProvider extends React.Component<
               onChangeSelection({
                 rows: Object.keys(selectionRows).map(n => Number(n)),
                 cols: Object.keys(selectionCols).map(n => Number(n)),
+                focusedRow: fRow,
+                focusedCol: fCol,
               });
             }
 

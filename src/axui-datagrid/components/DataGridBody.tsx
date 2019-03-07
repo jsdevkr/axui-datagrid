@@ -165,6 +165,8 @@ class DataGridBody extends React.Component<IProps> {
             eRow,
             sCol,
             eCol,
+            focusedRow: selectStartedRow,
+            focusedCol: selectStartedCol,
           });
         };
 
@@ -329,6 +331,8 @@ class DataGridBody extends React.Component<IProps> {
             eRow,
             sCol,
             eCol,
+            focusedRow,
+            focusedCol,
           });
 
           selectStartedRow = focusedRow;
@@ -356,6 +360,8 @@ class DataGridBody extends React.Component<IProps> {
           eRow: selectStartedRow,
           sCol: selectStartedCol,
           eCol: selectStartedCol,
+          focusedRow: selectStartedRow,
+          focusedCol: selectStartedCol,
         });
 
         document.addEventListener('mousemove', throttledOnMouseMove);
