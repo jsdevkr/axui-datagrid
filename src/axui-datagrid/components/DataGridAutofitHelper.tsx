@@ -32,7 +32,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
         <table ref={this.tableRef}>
           <thead>
             <tr data-autofit-table-head-row>
-              <td>{data.length}</td>
+              <td>{data.length + ''}</td>
               {colGroup.map((col, ci) => (
                 <td key={ci}>{col.label}</td>
               ))}
@@ -85,12 +85,13 @@ class DataGridAutofitHelper extends React.Component<IProps> {
       if (tds && tds.length) {
         for (let i = 0, l = tds.length; i < l; i++) {
           const tdWidth = tds[i].getBoundingClientRect().width + 10;
-          let colWidth =
-            autofitColumnWidthMin > tdWidth
-              ? autofitColumnWidthMin
-              : autofitColumnWidthMax < tdWidth
-              ? autofitColumnWidthMax
-              : tdWidth;
+          let colWidth = tdWidth;
+
+          if (autofitColumnWidthMin > colWidth) {
+            colWidth = autofitColumnWidthMin;
+          } else if (autofitColumnWidthMax < colWidth) {
+            colWidth = autofitColumnWidthMax;
+          }
 
           colGroup[i] = {
             colIndex: i,

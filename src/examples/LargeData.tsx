@@ -17,17 +17,35 @@ class LargeData extends React.Component<any, any> {
         {
           key: 'a',
           label: 'Field A',
-          width: 80,
+          width: 50,
           align: 'center',
         },
-        { key: 'b', label: 'Field B', align: 'center' },
-        { key: 'c', label: 'Field C', align: 'center' },
-        { key: 'price', label: 'Price', formatter: 'money', align: 'right' },
-        { key: 'amount', label: 'Qty', formatter: 'money', align: 'right' },
-        { key: 'cost', label: 'Sum', align: 'right', formatter: 'money' },
-        { key: 'saleDt', label: 'Sale Date', align: 'center' },
-        { key: 'customer', label: 'Customer', align: 'center' },
-        { key: 'saleType', label: 'Sale Type', align: 'center' },
+        { key: 'b', label: 'Field B', align: 'center', width: 50 },
+        { key: 'c', label: 'Field C', align: 'center', width: 50 },
+        {
+          key: 'price',
+          label: 'Price',
+          formatter: 'money',
+          align: 'right',
+          width: 50,
+        },
+        {
+          key: 'amount',
+          label: 'Qty',
+          formatter: 'money',
+          align: 'right',
+          width: 50,
+        },
+        {
+          key: 'cost',
+          label: 'Sum',
+          align: 'right',
+          formatter: 'money',
+          width: 50,
+        },
+        { key: 'saleDt', label: 'Sale Date', align: 'center', width: 50 },
+        { key: 'customer', label: 'Customer', align: 'center', width: 50 },
+        { key: 'saleType', label: 'Sale Type', align: 'center', width: 50 },
       ],
       data: [],
       options: {
@@ -126,6 +144,7 @@ class LargeData extends React.Component<any, any> {
     );
     this.setState(
       () => ({
+        columns: [...this.state.columns],
         data: gridData,
       }),
       () => {
