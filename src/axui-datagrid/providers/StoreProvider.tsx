@@ -180,6 +180,12 @@ class StoreProvider extends React.Component<
       storeState.leftFootSumData = nProps.leftFootSumData;
       storeState.footSumData = nProps.footSumData;
 
+      // console.log(
+      //   storeState.selection,
+      //   storeState.selectionRows,
+      //   storeState.selectionCols,
+      // );
+
       // nProps의 scrollLeft, scrollTop 변경 되는 경우 나중에 고려
 
       const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
@@ -442,8 +448,6 @@ class StoreProvider extends React.Component<
       onChangeSelection,
       onChangeSelectedRow,
     } = this.state;
-    // const onChangeSelected = rowSelector && rowSelector.onChange;
-    const { columnKeys: optionColumnKeys = {} } = options;
 
     switch (dispatchType) {
       case DataGridEnums.DispatchTypes.FILTER:

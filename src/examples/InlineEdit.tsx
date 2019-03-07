@@ -120,7 +120,12 @@ class InlineEdit extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
-              selection={{}}
+              selection={{
+                rows: [0],
+                cols: [0],
+                focusedRow: 0,
+                focusedCol: 0,
+              }}
               onScroll={this.onScroll}
               onChangeScrollSize={this.onChangeScrollSize}
               scrollTop={scrollTop}

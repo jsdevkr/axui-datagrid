@@ -214,7 +214,6 @@ export namespace IDataGrid {
   }
 
   export interface IOptions {
-    updateAt?: Date;
     frozenColumnIndex?: number;
     frozenRowIndex?: number;
     showLineNumber?: boolean;
@@ -423,6 +422,8 @@ export namespace IDataGrid {
   export interface ISelection {
     rows?: number[];
     cols?: number[];
+    focusedRow?: number;
+    focusedCol?: number;
   }
 
   export interface IProps {

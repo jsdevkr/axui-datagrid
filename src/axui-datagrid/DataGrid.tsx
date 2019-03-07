@@ -302,11 +302,6 @@ class DataGrid extends React.Component<IProps, IState> {
     this.setState({
       mounted: true,
     });
-
-    // console.log(
-    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-    //   'datagrid componentDidMount',
-    // );
   }
 
   componentDidUpdate(prevProps: IProps) {
@@ -318,9 +313,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
     if (autofitColumns !== _autofitColumns || columnChanged) {
       this.setState({ doneAutofit: false });
-    }
-
-    if (this.props.scrollTop !== prevProps.scrollTop) {
     }
   }
 
