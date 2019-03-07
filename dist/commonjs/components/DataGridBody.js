@@ -113,6 +113,8 @@ var DataGridBody = /** @class */ (function (_super) {
                             eRow: eRow,
                             sCol: sCol,
                             eCol: eCol,
+                            focusedRow: selectStartedRow,
+                            focusedCol: selectStartedCol,
                         });
                     };
                     var scrollMoving = function (_moving) {
@@ -248,6 +250,8 @@ var DataGridBody = /** @class */ (function (_super) {
                             eRow: eRow,
                             sCol: sCol,
                             eCol: eCol,
+                            focusedRow: focusedRow,
+                            focusedCol: focusedCol,
                         });
                         selectStartedRow = focusedRow;
                         selectStartedCol = focusedCol;
@@ -273,6 +277,8 @@ var DataGridBody = /** @class */ (function (_super) {
                         eRow: selectStartedRow,
                         sCol: selectStartedCol,
                         eCol: selectStartedCol,
+                        focusedRow: selectStartedRow,
+                        focusedCol: selectStartedCol,
                     });
                     document.addEventListener('mousemove', throttledOnMouseMove);
                     document.addEventListener('mouseup', offEvent);

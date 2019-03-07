@@ -35,6 +35,7 @@ class InlineEdit extends React.Component<any, any> {
           editor: { type: 'text' },
         },
         { key: 'type', label: 'select', editor: { type: 'text' } },
+        { key: 'check', label: 'checkbox', editor: { type: 'text' } },
       ],
       data: [
         {
@@ -44,6 +45,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2017-12-05',
           money: 120000,
           type: 'A',
+          check: true,
         },
         {
           id: 2,
@@ -53,6 +55,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2017-11-10',
           money: 18000,
           type: 'B',
+          check: false,
         },
       ],
       options: {
@@ -67,6 +70,7 @@ class InlineEdit extends React.Component<any, any> {
         focusedCol: -1,
       },
       scrollContentHeight: 0,
+      bodyTrHeight: 24,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -106,6 +110,7 @@ class InlineEdit extends React.Component<any, any> {
     // console.log(param);
     this.setState({
       scrollContentHeight: param.scrollContentHeight,
+      bodyTrHeight: param.bodyTrHeight,
     });
   };
 
@@ -115,12 +120,15 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   handleChangeSelection = () => {
-    const { data, columns } = this.state;
+    const { data, columns, bodyTrHeight } = this.state;
 
     const r = Math.floor(Math.random() * data.length);
     const c = Math.floor(Math.random() * columns.length);
 
+    const scrollTop = r * bodyTrHeight;
+
     this.setState({
+      scrollTop,
       selection: {
         rows: [r],
         cols: [c],

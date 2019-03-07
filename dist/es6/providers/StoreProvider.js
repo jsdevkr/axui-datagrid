@@ -121,7 +121,7 @@ class StoreProvider extends React.Component {
             this.setState(() => newState, callback);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = 0, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelectedRow, } = this.state;
+            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onChangeSelectedRow, } = this.state;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
                     {
@@ -361,21 +361,12 @@ class StoreProvider extends React.Component {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION:
                     {
-                        const { sRow, sCol, eRow, eCol } = param;
+                        const { sRow, sCol, eRow, eCol, focusedRow: fRow, focusedCol: fCol, } = param;
                         if (selectionSRow !== sRow ||
                             selectionSCol !== sCol ||
                             selectionERow !== eRow ||
                             selectionECol !== eCol) {
                             // console.log(sRow, sCol, eRow, eCol);
-                            if (selection &&
-                                onChangeSelection &&
-                                selectionRows &&
-                                selectionCols) {
-                                onChangeSelection({
-                                    rows: Object.keys(selectionRows).map(n => Number(n)),
-                                    cols: Object.keys(selectionCols).map(n => Number(n)),
-                                });
-                            }
                             this.setStoreState({
                                 selectionSRow: sRow,
                                 selectionSCol: sCol,
@@ -481,12 +472,6 @@ class StoreProvider extends React.Component {
             storeState.footSumTable = nProps.footSumTable;
             storeState.leftFootSumData = nProps.leftFootSumData;
             storeState.footSumData = nProps.footSumData;
-            // console.log(
-            //   storeState.selection,
-            //   storeState.selectionRows,
-            //   storeState.selectionCols,
-            // );
-            // nProps의 scrollLeft, scrollTop 변경 되는 경우 나중에 고려
             const { frozenColumnIndex: PfrozenColumnIndex = 0 } = storeState.options || {};
             const changed = {
                 colGroup: false,
@@ -551,6 +536,20 @@ class StoreProvider extends React.Component {
                 _scrollLeft = currScrollLeft;
                 _scrollTop = currScrollTop;
             }
+            if (nProps.selection !== nState.selection) {
+                storeState.selection = nProps.selection;
+                const { rows = [], cols = [], focusedRow = -1, focusedCol = -1 } = nProps.selection || {};
+                storeState.selectionRows = {};
+                storeState.selectionCols = {};
+                rows.forEach(n => {
+                    storeState.selectionRows[n] = true;
+                });
+                cols.forEach(n => {
+                    storeState.selectionCols[n] = true;
+                });
+                storeState.focusedRow = focusedRow;
+                storeState.focusedCol = focusedCol;
+            }
             // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
             if (changed.colGroup ||
                 changed.frozenColumnIndex ||
@@ -596,9 +595,10 @@ class StoreProvider extends React.Component {
     }
     componentDidUpdate(pProps, pState) {
         const { onScroll } = this.props;
-        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, } = this.state;
+        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, onChangeSelection, } = this.state;
         const { scrollContentContainerHeight = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentWidth = 0, bodyTrHeight = 0, bodyHeight = 0, } = styles;
         const { frozenRowIndex = 0 } = options;
+        // detect change scrollContent
         if (pState.styles) {
             const { scrollContentHeight: _scrollContentHeight, scrollContentWidth: _scrollContentWidth, } = pState.styles;
             if (scrollContentHeight !== _scrollContentHeight ||
@@ -613,6 +613,7 @@ class StoreProvider extends React.Component {
                     });
             }
         }
+        // detect change scrollTop
         if (pState.scrollTop !== this.state.scrollTop) {
             if (onScroll) {
                 const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
@@ -624,6 +625,22 @@ class StoreProvider extends React.Component {
                     eRowIndex,
                 });
             }
+        }
+        // detect change selection
+        if (onChangeSelection &&
+            (pState.focusedRow !== this.state.focusedRow ||
+                pState.focusedCol !== this.state.focusedCol ||
+                pState.selectionSRow !== this.state.selectionSRow ||
+                pState.selectionERow !== this.state.selectionERow ||
+                pState.selectionSCol !== this.state.selectionSCol ||
+                pState.selectionECol !== this.state.selectionECol)) {
+            const { selectionRows = [], selectionCols = [], focusedRow = -1, focusedCol = -1, } = this.state;
+            onChangeSelection({
+                rows: Object.keys(selectionRows).map(n => Number(n)),
+                cols: Object.keys(selectionCols).map(n => Number(n)),
+                focusedRow,
+                focusedCol,
+            });
         }
     }
     componentWillUnmount() {

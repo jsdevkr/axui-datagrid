@@ -98,6 +98,8 @@ class DataGridBody extends React.Component {
                             eRow,
                             sCol,
                             eCol,
+                            focusedRow: selectStartedRow,
+                            focusedCol: selectStartedCol,
                         });
                     };
                     const scrollMoving = (_moving) => {
@@ -233,6 +235,8 @@ class DataGridBody extends React.Component {
                             eRow,
                             sCol,
                             eCol,
+                            focusedRow,
+                            focusedCol,
                         });
                         selectStartedRow = focusedRow;
                         selectStartedCol = focusedCol;
@@ -258,6 +262,8 @@ class DataGridBody extends React.Component {
                         eRow: selectStartedRow,
                         sCol: selectStartedCol,
                         eCol: selectStartedCol,
+                        focusedRow: selectStartedRow,
+                        focusedCol: selectStartedCol,
                     });
                     document.addEventListener('mousemove', throttledOnMouseMove);
                     document.addEventListener('mouseup', offEvent);
