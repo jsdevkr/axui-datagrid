@@ -453,10 +453,6 @@ class StoreProvider extends React.Component<
       selectionRows,
       selectionCols,
       selection,
-      onScroll,
-      onScrollEnd,
-      onChangeScrollSize,
-      onChangeSelection,
       onChangeSelectedRow,
     } = this.state;
 
@@ -746,21 +742,6 @@ class StoreProvider extends React.Component<
             selectionECol !== eCol
           ) {
             // console.log(sRow, sCol, eRow, eCol);
-
-            if (
-              selection &&
-              onChangeSelection &&
-              selectionRows &&
-              selectionCols
-            ) {
-              onChangeSelection({
-                rows: Object.keys(selectionRows).map(n => Number(n)),
-                cols: Object.keys(selectionCols).map(n => Number(n)),
-                focusedRow: fRow,
-                focusedCol: fCol,
-              });
-            }
-
             this.setStoreState({
               selectionSRow: sRow,
               selectionSCol: sCol,
@@ -808,6 +789,7 @@ class StoreProvider extends React.Component<
       scrollTop = 0,
       options = {},
       styles = {},
+      onChangeSelection,
     } = this.state;
     const {
       scrollContentContainerHeight = 0,
@@ -819,6 +801,7 @@ class StoreProvider extends React.Component<
     } = styles;
     const { frozenRowIndex = 0 } = options;
 
+    // detect change scrollContent
     if (pState.styles) {
       const {
         scrollContentHeight: _scrollContentHeight,
@@ -840,6 +823,7 @@ class StoreProvider extends React.Component<
       }
     }
 
+    // detect change scrollTop
     if (pState.scrollTop !== this.state.scrollTop) {
       if (onScroll) {
         const sRowIndex =
@@ -854,6 +838,30 @@ class StoreProvider extends React.Component<
           eRowIndex,
         });
       }
+    }
+
+    // detect change selection
+    if (
+      onChangeSelection &&
+      (pState.focusedRow !== this.state.focusedRow ||
+        pState.focusedCol !== this.state.focusedCol ||
+        pState.selectionSRow !== this.state.selectionSRow ||
+        pState.selectionERow !== this.state.selectionERow ||
+        pState.selectionSCol !== this.state.selectionSCol ||
+        pState.selectionECol !== this.state.selectionECol)
+    ) {
+      const {
+        selectionRows = [],
+        selectionCols = [],
+        focusedRow = -1,
+        focusedCol = -1,
+      } = this.state;
+      onChangeSelection({
+        rows: Object.keys(selectionRows).map(n => Number(n)),
+        cols: Object.keys(selectionCols).map(n => Number(n)),
+        focusedRow,
+        focusedCol,
+      });
     }
   }
 

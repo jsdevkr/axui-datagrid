@@ -87,7 +87,16 @@ class InlineEdit extends React.Component<any, any> {
     });
   };
 
-  removeItem = () => {};
+  removeItem = () => {
+    const { selection, data } = this.state;
+    if (selection.focusedRow > -1) {
+      data.splice(selection.focusedRow, 1);
+      this.setState({
+        data,
+        selection: {},
+      });
+    }
+  };
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
     // console.log(param);
@@ -101,8 +110,8 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
-    console.log(param);
-    // this.setState({ selection: param });
+    // console.log(param);
+    this.setState({ selection: param });
   };
 
   handleChangeSelection = () => {
@@ -170,7 +179,11 @@ class InlineEdit extends React.Component<any, any> {
             Add item
           </Button>
 
-          <Button size="small" disabled onClick={() => this.removeItem()}>
+          <Button
+            size="small"
+            disabled={selection.focusedRow === -1}
+            onClick={() => this.removeItem()}
+          >
             <Icon type="minus" />
             Remove item
           </Button>
