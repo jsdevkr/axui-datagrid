@@ -106,7 +106,7 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState, callback) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd;
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd, onChangeScrollSize = _a.onChangeScrollSize, onChangeSelection = _a.onChangeSelection, onChangeSelectedRow = _a.onChangeSelectedRow;
             var _k = options.frozenRowIndex, frozenRowIndex = _k === void 0 ? 0 : _k;
             var _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m;
             var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop;
@@ -132,23 +132,12 @@ var StoreProvider = /** @class */ (function (_super) {
                         newState.visibleFootSumData = visibleData.visibleFootSumData;
                         newState.printStartColIndex = visibleData.printStartColIndex;
                         newState.printEndColIndex = visibleData.printEndColIndex;
-                        // console.log('onscroll left');
                         if (clientWidth >= scrollWidth + _scrollLeft) {
                             endOfScrollLeft = true;
                         }
                     }
                 }
                 if (typeof _scrollTop !== 'undefined' && _scrollTop !== scrollTop) {
-                    if (onScroll) {
-                        var sRowIndex = Math.floor(-_scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
-                        var eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
-                        onScroll({
-                            scrollLeft: Number(_scrollLeft),
-                            scrollTop: Number(_scrollTop),
-                            sRowIndex: sRowIndex,
-                            eRowIndex: eRowIndex,
-                        });
-                    }
                     if (clientHeight >= scrollHeight + _scrollTop) {
                         endOfScrollTop = true;
                     }
@@ -178,64 +167,67 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
-            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _b.colGroup, colGroup = _f === void 0 ? [] : _f, rootNode = _b.rootNode, _g = _b.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _b.sortInfo, sortInfo = _h === void 0 ? {} : _h, _j = _b.options, options = _j === void 0 ? {} : _j, rowSelector = _b.rowSelector, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection;
-            var onChangeSelected = rowSelector && rowSelector.onChange;
-            var _k = options.columnKeys, optionColumnKeys = _k === void 0 ? {} : _k;
-            var proc = (_a = {},
-                _a[_enums_1.DataGridEnums.DispatchTypes.FILTER] = function () {
-                    // const { colIndex, filterInfo } = param;
-                    // const checkAll =
-                    //   filterInfo[colIndex] === false
-                    //     ? true
-                    //     : filterInfo[colIndex]._check_all_;
-                    // if (checkAll) {
-                    //   filteredList =
-                    //     data &&
-                    //     data.filter((n: any) => {
-                    //       return (
-                    //         typeof n === 'undefined' ||
-                    //         !n[optionColumnKeys.deleted || '_deleted_']
-                    //       );
-                    //     });
-                    // } else {
-                    //   filteredList = data.filter((n: any) => {
-                    //     if (n) {
-                    //       const value = n && n[colGroup[colIndex].key || ''];
-                    //       if (
-                    //         typeof n === 'undefined' ||
-                    //         n[optionColumnKeys.deleted || '_deleted_']
-                    //       ) {
-                    //         return false;
-                    //       }
-                    //       if (typeof value === 'undefined') {
-                    //         if (!filterInfo[colIndex]._UNDEFINED_) {
-                    //           return false;
-                    //         }
-                    //       } else {
-                    //         if (!filterInfo[colIndex][value]) {
-                    //           return false;
-                    //         }
-                    //       }
-                    //       return true;
-                    //     }
-                    //     return false;
-                    //   });
-                    // }
-                    // this.setStoreState({
-                    //   filteredList,
-                    //   filterInfo,
-                    //   scrollTop: 0,
-                    // });
-                    // if (onChangeSelected) {
-                    //   onChangeSelected({
-                    //     filteredList,
-                    //   });
-                    // }
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.SORT] = function () {
-                    var colIndex = param.colIndex;
-                    if (typeof colIndex !== 'undefined') {
-                        var _a = colGroup[colIndex].key, colKey = _a === void 0 ? '' : _a;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? 0 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _b.options, options = _h === void 0 ? {} : _h, rowSelector = _b.rowSelector, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelectedRow = _b.onChangeSelectedRow;
+            switch (dispatchType) {
+                case _enums_1.DataGridEnums.DispatchTypes.FILTER:
+                    {
+                        // const { colIndex, filterInfo } = param;
+                        // const checkAll =
+                        //   filterInfo[colIndex] === false
+                        //     ? true
+                        //     : filterInfo[colIndex]._check_all_;
+                        // if (checkAll) {
+                        //   filteredList =
+                        //     data &&
+                        //     data.filter((n: any) => {
+                        //       return (
+                        //         typeof n === 'undefined' ||
+                        //         !n[optionColumnKeys.deleted || '_deleted_']
+                        //       );
+                        //     });
+                        // } else {
+                        //   filteredList = data.filter((n: any) => {
+                        //     if (n) {
+                        //       const value = n && n[colGroup[colIndex].key || ''];
+                        //       if (
+                        //         typeof n === 'undefined' ||
+                        //         n[optionColumnKeys.deleted || '_deleted_']
+                        //       ) {
+                        //         return false;
+                        //       }
+                        //       if (typeof value === 'undefined') {
+                        //         if (!filterInfo[colIndex]._UNDEFINED_) {
+                        //           return false;
+                        //         }
+                        //       } else {
+                        //         if (!filterInfo[colIndex][value]) {
+                        //           return false;
+                        //         }
+                        //       }
+                        //       return true;
+                        //     }
+                        //     return false;
+                        //   });
+                        // }
+                        // this.setStoreState({
+                        //   filteredList,
+                        //   filterInfo,
+                        //   scrollTop: 0,
+                        // });
+                        // if (onChangeSelected) {
+                        //   onChangeSelected({
+                        //     filteredList,
+                        //   });
+                        // }
+                    }
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.SORT:
+                    {
+                        var colIndex = param.colIndex;
+                        if (typeof colIndex === 'undefined') {
+                            return;
+                        }
+                        var _j = colGroup[colIndex].key, colKey = _j === void 0 ? '' : _j;
                         var currentSortInfo = {};
                         var seq = 0;
                         var sortInfoArray_1 = [];
@@ -294,145 +286,154 @@ var StoreProvider = /** @class */ (function (_super) {
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
-                        if (onChangeSelected) {
-                            onChangeSelected({
+                        if (onChangeSelectedRow) {
+                            onChangeSelectedRow({
                                 data: sortedList,
                             });
                         }
                     }
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.UPDATE] = function () {
-                    var _a;
-                    var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
-                    var key = colGroup[colIndex].key;
-                    var focusRow = focusedRow;
-                    if (key) {
-                        data[row][key] = value;
-                        // update filteredList
-                    }
-                    if (eventWhichKey) {
-                        switch (eventWhichKey) {
-                            case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
-                                focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-                                break;
-                            case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
-                                focusRow =
-                                    focusedRow + 1 >= data.length
-                                        ? data.length - 1
-                                        : focusedRow + 1;
-                                break;
-                            default:
-                                break;
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
+                    {
+                        var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
+                        var key = colGroup[colIndex].key;
+                        var focusRow = focusedRow;
+                        if (key) {
+                            data[row][key] = value;
+                            // update filteredList
                         }
-                    }
-                    _this.setStoreState({
-                        data: __spread(data),
-                        isInlineEditing: false,
-                        inlineEditingCell: {},
-                        selectionRows: (_a = {},
-                            _a[focusRow] = true,
-                            _a),
-                        focusedRow: focusRow,
-                    });
-                    if (onChangeSelected) {
-                        onChangeSelected({
-                            data: data,
-                        });
-                    }
-                    if (rootNode && rootNode.current) {
-                        rootNode.current.focus();
-                    }
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.RESIZE_COL] = function () {
-                    var col = param.col, newWidth = param.newWidth;
-                    var _a = _this.state, _b = _a.styles, styles = _b === void 0 ? {} : _b, _c = _a.options, options = _c === void 0 ? {} : _c;
-                    var _colGroup = __spread((_this.state.colGroup || []));
-                    _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
-                    _this.setStoreState({
-                        colGroup: _colGroup,
-                        columnResizing: false,
-                    });
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.SELECT] = function () {
-                    var rowIndex = param.rowIndex, checked = param.checked;
-                    var rowSelected = false;
-                    var selectedAll = listSelectedAll;
-                    if (checked === true) {
-                        rowSelected = true;
-                    }
-                    else if (checked === false) {
-                        rowSelected = false;
-                    }
-                    else {
-                        rowSelected = !data[rowIndex]._selected_;
-                    }
-                    if (!rowSelected) {
-                        selectedAll = false;
-                    }
-                    data[rowIndex]._selected_ = rowSelected;
-                    _this.setStoreState({
-                        listSelectedAll: selectedAll,
-                        selectedRowIndex: rowIndex,
-                        selectedRowIndexSelected: rowSelected,
-                        data: __spread(data),
-                    });
-                    if (onChangeSelected) {
-                        onChangeSelected({
-                            data: data,
-                        });
-                    }
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.SELECT_ALL] = function () {
-                    var checked = param.checked;
-                    var selectedAll = listSelectedAll;
-                    if (checked === true) {
-                        selectedAll = true;
-                    }
-                    else if (checked === false) {
-                        selectedAll = false;
-                    }
-                    else {
-                        selectedAll = !selectedAll;
-                    }
-                    for (var i = 0, l = data.length; i < l; i++) {
-                        data[i]._selected_ = selectedAll;
-                    }
-                    _this.setStoreState({
-                        listSelectedAll: selectedAll,
-                        data: __spread(data),
-                    });
-                    if (onChangeSelected) {
-                        onChangeSelected({
-                            data: data,
-                        });
-                    }
-                },
-                _a[_enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION] = function () {
-                    var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
-                    if (selectionSRow !== sRow ||
-                        selectionSCol !== sCol ||
-                        selectionERow !== eRow ||
-                        selectionECol !== eCol) {
-                        // console.log(sRow, sCol, eRow, eCol);
-                        if (selection &&
-                            selection.onChange &&
-                            selectionRows &&
-                            selectionCols) {
-                            selection.onChange({
-                                rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
-                                cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),
-                            });
+                        if (eventWhichKey) {
+                            switch (eventWhichKey) {
+                                case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                                    focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+                                    break;
+                                case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                                    focusRow =
+                                        focusedRow + 1 >= data.length
+                                            ? data.length - 1
+                                            : focusedRow + 1;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         _this.setStoreState({
-                            selectionSRow: sRow,
-                            selectionSCol: sCol,
-                            selectionERow: eRow,
-                            selectionECol: eCol,
+                            data: __spread(data),
+                            isInlineEditing: false,
+                            inlineEditingCell: {},
+                            selectionRows: (_a = {},
+                                _a[focusRow] = true,
+                                _a),
+                            focusedRow: focusRow,
+                        });
+                        if (onChangeSelectedRow) {
+                            onChangeSelectedRow({
+                                data: data,
+                            });
+                        }
+                        if (rootNode && rootNode.current) {
+                            rootNode.current.focus();
+                        }
+                    }
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
+                    {
+                        var col = param.col, newWidth = param.newWidth;
+                        var _colGroup = __spread((_this.state.colGroup || []));
+                        _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
+                        _this.setStoreState({
+                            colGroup: _colGroup,
+                            columnResizing: false,
                         });
                     }
-                },
-                _a);
-            proc[dispatchType]();
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.SELECT:
+                    {
+                        var rowIndex = param.rowIndex, checked = param.checked;
+                        var rowSelected = false;
+                        var selectedAll = listSelectedAll;
+                        if (checked === true) {
+                            rowSelected = true;
+                        }
+                        else if (checked === false) {
+                            rowSelected = false;
+                        }
+                        else {
+                            rowSelected = !data[rowIndex]._selected_;
+                        }
+                        if (!rowSelected) {
+                            selectedAll = false;
+                        }
+                        data[rowIndex]._selected_ = rowSelected;
+                        _this.setStoreState({
+                            listSelectedAll: selectedAll,
+                            selectedRowIndex: rowIndex,
+                            selectedRowIndexSelected: rowSelected,
+                            data: __spread(data),
+                        });
+                        if (onChangeSelectedRow) {
+                            onChangeSelectedRow({
+                                data: data,
+                            });
+                        }
+                    }
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.SELECT_ALL:
+                    {
+                        var checked = param.checked;
+                        var selectedAll = listSelectedAll;
+                        if (checked === true) {
+                            selectedAll = true;
+                        }
+                        else if (checked === false) {
+                            selectedAll = false;
+                        }
+                        else {
+                            selectedAll = !selectedAll;
+                        }
+                        for (var i = 0, l = data.length; i < l; i++) {
+                            data[i]._selected_ = selectedAll;
+                        }
+                        _this.setStoreState({
+                            listSelectedAll: selectedAll,
+                            data: __spread(data),
+                        });
+                        if (onChangeSelectedRow) {
+                            onChangeSelectedRow({
+                                data: data,
+                            });
+                        }
+                    }
+                    break;
+                case _enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION:
+                    {
+                        var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
+                        if (selectionSRow !== sRow ||
+                            selectionSCol !== sCol ||
+                            selectionERow !== eRow ||
+                            selectionECol !== eCol) {
+                            // console.log(sRow, sCol, eRow, eCol);
+                            if (selection &&
+                                onChangeSelection &&
+                                selectionRows &&
+                                selectionCols) {
+                                onChangeSelection({
+                                    rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
+                                    cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),
+                                });
+                            }
+                            _this.setStoreState({
+                                selectionSRow: sRow,
+                                selectionSCol: sCol,
+                                selectionERow: eRow,
+                                selectionECol: eCol,
+                            });
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         };
         return _this;
     }
@@ -477,6 +478,9 @@ var StoreProvider = /** @class */ (function (_super) {
             nProps.onBeforeEvent === nState.onBeforeEvent &&
             nProps.onScroll === nState.onScroll &&
             nProps.onScrollEnd === nState.onScrollEnd &&
+            nProps.onChangeScrollSize === nState.onChangeScrollSize &&
+            nProps.onChangeSelection === nState.onChangeSelection &&
+            nProps.onChangeSelectedRow === nState.onChangeSelectedRow &&
             nProps.onRightClick === nState.onRightClick) {
             return null;
         }
@@ -486,6 +490,7 @@ var StoreProvider = /** @class */ (function (_super) {
             var _a = nProps.options, options = _a === void 0 ? {} : _a;
             var _b = options.frozenColumnIndex, frozenColumnIndex = _b === void 0 ? 0 : _b, optionsBody = options.body; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
             var storeState = __assign({}, nState);
+            storeState.pScrollTop = nProps.scrollTop;
             storeState.loading = nProps.loading;
             storeState.loadingData = nProps.loadingData;
             storeState.data = nProps.data;
@@ -501,6 +506,9 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.onBeforeEvent = nProps.onBeforeEvent;
             storeState.onScroll = nProps.onScroll;
             storeState.onScrollEnd = nProps.onScrollEnd;
+            storeState.onChangeScrollSize = nProps.onChangeScrollSize;
+            storeState.onChangeSelection = nProps.onChangeSelection;
+            storeState.onChangeSelectedRow = nProps.onChangeSelectedRow;
             storeState.onRightClick = nProps.onRightClick;
             ///
             storeState.headerTable = nProps.headerTable;
@@ -520,6 +528,11 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState.footSumTable = nProps.footSumTable;
             storeState.leftFootSumData = nProps.leftFootSumData;
             storeState.footSumData = nProps.footSumData;
+            // console.log(
+            //   storeState.selection,
+            //   storeState.selectionRows,
+            //   storeState.selectionCols,
+            // );
             // nProps의 scrollLeft, scrollTop 변경 되는 경우 나중에 고려
             var _c = (storeState.options || {}).frozenColumnIndex, PfrozenColumnIndex = _c === void 0 ? 0 : _c;
             var changed = {
@@ -572,6 +585,19 @@ var StoreProvider = /** @class */ (function (_super) {
                 _scrollTop = dimensions.scrollTop;
                 changed.styles = true;
             }
+            if (nProps.scrollTop !== nState.pScrollTop ||
+                nProps.scrollLeft !== nState.pScrollLeft) {
+                // console.log('change scrollTop, left by prop', nProps.scrollTop, nProps.scrollLeft);
+                var _g = _styles || {}, _h = _g.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentContainerHeight, scrollContentContainerHeight = _l === void 0 ? 0 : _l;
+                var _m = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+                    scrollWidth: scrollContentWidth,
+                    scrollHeight: scrollContentHeight,
+                    clientWidth: scrollContentContainerWidth,
+                    clientHeight: scrollContentContainerHeight,
+                }), _o = _m.scrollLeft, currScrollLeft = _o === void 0 ? 0 : _o, _p = _m.scrollTop, currScrollTop = _p === void 0 ? 0 : _p, endOfScrollTop = _m.endOfScrollTop;
+                _scrollLeft = currScrollLeft;
+                _scrollTop = currScrollTop;
+            }
             // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
             if (changed.colGroup ||
                 changed.frozenColumnIndex ||
@@ -591,6 +617,9 @@ var StoreProvider = /** @class */ (function (_super) {
                 storeState.printEndColIndex = visibleData.printEndColIndex;
                 changed.colGroup = true;
             }
+            // scrollTop prop 저장
+            storeState.pScrollTop = nProps.scrollTop;
+            storeState.pScrollLeft = nProps.scrollLeft;
             // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
             storeState.colGroup = _colGroup;
             storeState.leftHeaderColGroup = _leftHeaderColGroup;
@@ -613,7 +642,36 @@ var StoreProvider = /** @class */ (function (_super) {
         // console.log('store did mount');
     };
     StoreProvider.prototype.componentDidUpdate = function (pProps, pState) {
-        // console.log('store did update');
+        var onScroll = this.props.onScroll;
+        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e;
+        var _f = styles.scrollContentContainerHeight, scrollContentContainerHeight = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentWidth, scrollContentWidth = _j === void 0 ? 0 : _j, _k = styles.bodyTrHeight, bodyTrHeight = _k === void 0 ? 0 : _k, _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l;
+        var _m = options.frozenRowIndex, frozenRowIndex = _m === void 0 ? 0 : _m;
+        if (pState.styles) {
+            var _o = pState.styles, _scrollContentHeight = _o.scrollContentHeight, _scrollContentWidth = _o.scrollContentWidth;
+            if (scrollContentHeight !== _scrollContentHeight ||
+                scrollContentWidth !== _scrollContentWidth) {
+                this.props.onChangeScrollSize &&
+                    this.props.onChangeScrollSize({
+                        scrollContentContainerHeight: scrollContentContainerHeight,
+                        scrollContentHeight: scrollContentHeight,
+                        scrollContentContainerWidth: scrollContentContainerWidth,
+                        scrollContentWidth: scrollContentWidth,
+                        bodyTrHeight: bodyTrHeight,
+                    });
+            }
+        }
+        if (pState.scrollTop !== this.state.scrollTop) {
+            if (onScroll) {
+                var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+                var eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+                onScroll({
+                    scrollLeft: Number(scrollLeft),
+                    scrollTop: Number(scrollTop),
+                    sRowIndex: sRowIndex,
+                    eRowIndex: eRowIndex,
+                });
+            }
+        }
     };
     StoreProvider.prototype.componentWillUnmount = function () {
         // console.log('store unMount');

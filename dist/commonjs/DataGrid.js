@@ -64,13 +64,13 @@ var DataGrid = /** @class */ (function (_super) {
             autofitColGroup: [],
         };
         _this.getOptions = function (options) {
-            return utils_1.mergeAll(true, __assign({}, DataGrid.defaultOptions), options);
+            return __assign({}, DataGrid.defaultOptions, options, { header: __assign({}, DataGrid.defaultOptions.header, options.header), body: __assign({}, DataGrid.defaultOptions.body, options.body), page: __assign({}, DataGrid.defaultOptions.page, options.page), scroller: __assign({}, DataGrid.defaultOptions.scroller, options.scroller), columnKeys: __assign({}, DataGrid.defaultOptions.columnKeys, options.columnKeys) });
         };
         _this.getProviderProps = function (storeProps) {
             var _a = _this.state, autofit = _a.autofit, doneAutofit = _a.doneAutofit, autofitAsideWidth = _a.autofitAsideWidth, autofitColGroup = _a.autofitColGroup;
             var _b = _this.props, _c = _b.columns, columns = _c === void 0 ? [] : _c, footSum = _b.footSum;
             var _d = storeProps.options, options = _d === void 0 ? {} : _d;
-            var _e = options.frozenColumnIndex, frozenColumnIndex = _e === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _e, _f = options.body, optionsBody = _f === void 0 ? DataGrid.defaultBody : _f;
+            var _e = options.frozenColumnIndex, frozenColumnIndex = _e === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _e, _f = options.body, optionsBody = _f === void 0 ? __assign({}, DataGrid.defaultBody) : _f;
             var _g = optionsBody.columnHeight, columnHeight = _g === void 0 ? 0 : _g;
             if (autofit && doneAutofit) {
                 options.lineNumberColumnWidth = autofitAsideWidth;
@@ -165,9 +165,22 @@ var DataGrid = /** @class */ (function (_super) {
         //   'datagrid constructor',
         // );
     }
+    DataGrid.prototype.componentDidMount = function () {
+        this.setState({
+            mounted: true,
+        });
+    };
+    DataGrid.prototype.componentDidUpdate = function (prevProps) {
+        var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
+        var _autofitColumns = this.props.options && this.props.options.autofitColumns;
+        var columnChanged = prevProps.columns !== this.props.columns;
+        if (autofitColumns !== _autofitColumns || columnChanged) {
+            this.setState({ doneAutofit: false });
+        }
+    };
     DataGrid.prototype.render = function () {
         var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit;
-        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, status = _b.status, _d = _b.options, options = _d === void 0 ? {} : _d, _e = _b.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onRightClick = _b.onRightClick, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, width = _b.width, _g = _b.loading, loading = _g === void 0 ? false : _g, _h = _b.loadingData, loadingData = _h === void 0 ? false : _h, selection = _b.selection, rowSelector = _b.rowSelector, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop;
+        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, status = _b.status, _d = _b.options, options = _d === void 0 ? {} : _d, _e = _b.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelectedRow = _b.onChangeSelectedRow, onRightClick = _b.onRightClick, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, width = _b.width, _g = _b.loading, loading = _g === void 0 ? false : _g, _h = _b.loadingData, loadingData = _h === void 0 ? false : _h, selection = _b.selection, rowSelector = _b.rowSelector, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop;
         var gridRootStyle = __assign({
             height: height,
             width: width,
@@ -183,13 +196,16 @@ var DataGrid = /** @class */ (function (_super) {
             status: status,
             options: this.getOptions(options),
             scrollLeft: scrollLeft,
-            scrollTop: scrollTop,
+            scrollTop: scrollTop ? -Number(scrollTop) : 0,
             rootNode: this.rootNode,
             clipBoardNode: this.clipBoardNode,
             rootObject: this.rootObject,
             onBeforeEvent: onBeforeEvent,
             onScroll: onScroll,
             onScrollEnd: onScrollEnd,
+            onChangeScrollSize: onChangeScrollSize,
+            onChangeSelection: onChangeSelection,
+            onChangeSelectedRow: onChangeSelectedRow,
             onRightClick: onRightClick,
         })),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
@@ -202,27 +218,6 @@ var DataGrid = /** @class */ (function (_super) {
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))),
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
-    };
-    DataGrid.prototype.componentDidMount = function () {
-        this.setState({
-            mounted: true,
-        });
-        // console.log(
-        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-        //   'datagrid componentDidMount',
-        // );
-    };
-    DataGrid.prototype.componentDidUpdate = function (prevProps) {
-        var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
-        var _autofitColumns = this.props.options && this.props.options.autofitColumns;
-        var columnChanged = prevProps.columns !== this.props.columns;
-        if (autofitColumns !== _autofitColumns || columnChanged) {
-            this.setState({ doneAutofit: false });
-        }
-        // console.log(
-        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-        //   'datagrid componentDidUpdate',
-        // );
     };
     DataGrid.defaultHeight = 400;
     DataGrid.defaultColumnKeys = {

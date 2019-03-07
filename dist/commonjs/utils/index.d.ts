@@ -8,7 +8,6 @@ export { default as calculateDimensions } from './calculateDimensions';
 export { default as findParentNode } from './findParentNode';
 export { default as formatCurrency } from './formatCurrency';
 export { default as getPathValue } from './getPathValue';
-export { default as mergeAll } from './mergeAll';
 export { default as classNames } from './classNames';
 export { default as arrayFromRange } from './arrayFromRange';
 export { PrintDate, printDate } from './printDate';

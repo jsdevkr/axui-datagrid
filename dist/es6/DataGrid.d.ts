@@ -24,8 +24,8 @@ declare class DataGrid extends React.Component<IProps, IState> {
     getOptions: (options: IDataGrid.IOptions) => IDataGrid.IOptions;
     getProviderProps: (storeProps: IDataGrid.IStoreProps) => IDataGrid.IStoreProps;
     applyAutofit: (params: IDataGrid.IapplyAutofitParam) => void;
-    render(): JSX.Element;
     componentDidMount(): void;
     componentDidUpdate(prevProps: IProps): void;
+    render(): JSX.Element;
 }
 export default DataGrid;

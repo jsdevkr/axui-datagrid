@@ -19,13 +19,13 @@ class DataGrid extends React.Component {
             autofitColGroup: [],
         };
         this.getOptions = (options) => {
-            return utils_1.mergeAll(true, Object.assign({}, DataGrid.defaultOptions), options);
+            return Object.assign({}, DataGrid.defaultOptions, options, { header: Object.assign({}, DataGrid.defaultOptions.header, options.header), body: Object.assign({}, DataGrid.defaultOptions.body, options.body), page: Object.assign({}, DataGrid.defaultOptions.page, options.page), scroller: Object.assign({}, DataGrid.defaultOptions.scroller, options.scroller), columnKeys: Object.assign({}, DataGrid.defaultOptions.columnKeys, options.columnKeys) });
         };
         this.getProviderProps = (storeProps) => {
             const { autofit, doneAutofit, autofitAsideWidth, autofitColGroup, } = this.state;
             const { columns = [], footSum } = this.props;
             const { options = {} } = storeProps;
-            const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = DataGrid.defaultBody, } = options;
+            const { frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0, body: optionsBody = Object.assign({}, DataGrid.defaultBody), } = options;
             const { columnHeight = 0 } = optionsBody;
             if (autofit && doneAutofit) {
                 options.lineNumberColumnWidth = autofitAsideWidth;
@@ -119,9 +119,22 @@ class DataGrid extends React.Component {
         //   'datagrid constructor',
         // );
     }
+    componentDidMount() {
+        this.setState({
+            mounted: true,
+        });
+    }
+    componentDidUpdate(prevProps) {
+        const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
+        const _autofitColumns = this.props.options && this.props.options.autofitColumns;
+        const columnChanged = prevProps.columns !== this.props.columns;
+        if (autofitColumns !== _autofitColumns || columnChanged) {
+            this.setState({ doneAutofit: false });
+        }
+    }
     render() {
         const { mounted, doneAutofit } = this.state;
-        const { data = [], status, options = {}, style = {}, onBeforeEvent, onScroll, onScrollEnd, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
+        const { data = [], status, options = {}, style = {}, onBeforeEvent, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelectedRow, onRightClick, height = DataGrid.defaultHeight, width, loading = false, loadingData = false, selection, rowSelector, scrollLeft, scrollTop, } = this.props;
         let gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -137,13 +150,16 @@ class DataGrid extends React.Component {
             status,
             options: this.getOptions(options),
             scrollLeft,
-            scrollTop,
+            scrollTop: scrollTop ? -Number(scrollTop) : 0,
             rootNode: this.rootNode,
             clipBoardNode: this.clipBoardNode,
             rootObject: this.rootObject,
             onBeforeEvent,
             onScroll,
             onScrollEnd,
+            onChangeScrollSize,
+            onChangeSelection,
+            onChangeSelectedRow,
             onRightClick,
         })),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
@@ -156,27 +172,6 @@ class DataGrid extends React.Component {
                     React.createElement(components_1.DataGridScroll, null),
                     React.createElement(components_1.DataGridLoader, { loading: loading }))),
                 !doneAutofit && (React.createElement(DataGridAutofitHelper_1.default, { applyAutofit: this.applyAutofit })))));
-    }
-    componentDidMount() {
-        this.setState({
-            mounted: true,
-        });
-        // console.log(
-        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-        //   'datagrid componentDidMount',
-        // );
-    }
-    componentDidUpdate(prevProps) {
-        const autofitColumns = prevProps.options && prevProps.options.autofitColumns;
-        const _autofitColumns = this.props.options && this.props.options.autofitColumns;
-        const columnChanged = prevProps.columns !== this.props.columns;
-        if (autofitColumns !== _autofitColumns || columnChanged) {
-            this.setState({ doneAutofit: false });
-        }
-        // console.log(
-        //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-        //   'datagrid componentDidUpdate',
-        // );
     }
 }
 DataGrid.defaultHeight = 400;
