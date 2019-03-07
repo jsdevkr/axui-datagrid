@@ -77,14 +77,19 @@ export namespace IDataGrid {
 
   export type collectorFunction = (formatterData: ICollectorData) => any;
 
-  export type editorFunction = (editorData: IFormatterData) => void;
-
   export type userCallBackFunction = (param?: any) => void;
+
+  export type cellEditorFunction = (param: any) => string | React.ReactNode;
+
+  export interface IColEditor {
+    type?: string;
+    render?: cellEditorFunction;
+  }
 
   export interface IEditingCell {
     rowIndex?: number;
     colIndex?: number;
-    editor?: any;
+    editor?: string | IColEditor;
   }
 
   export interface IFormatterData {
@@ -116,7 +121,7 @@ export namespace IDataGrid {
     rowIndex?: number;
     formatter?: formatterFunction | string;
     collector?: collectorFunction | string;
-    editor?: editorFunction | string | { type?: string };
+    editor?: string | IColEditor;
     _ex?: number;
     _sx?: number;
     _width?: number;
@@ -128,7 +133,7 @@ export namespace IDataGrid {
     rowIndex?: number;
     formatter?: formatterFunction | string;
     collector?: collectorFunction | string;
-    editor?: editorFunction | string | { type?: string };
+    editor?: string | IColEditor;
     hidden?: boolean;
     columns?: IColumn[];
     depth?: number;

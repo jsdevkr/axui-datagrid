@@ -486,8 +486,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
   onFireEvent = async (e: any) => {
     const { loading, loadingData, isInlineEditing = false } = this.props;
 
-    if (this.busy || loadingData || isInlineEditing || loading) {
+    if (this.busy || loadingData || loading) {
       e.preventDefault();
+      return;
+    }
+
+    if (isInlineEditing) {
       return;
     }
 
