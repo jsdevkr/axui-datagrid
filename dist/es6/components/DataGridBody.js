@@ -352,10 +352,32 @@ class DataGridBody extends React.Component {
             return true;
         };
     }
+    shouldComponentUpdate(pProps) {
+        const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {}, styles: { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = {}, loadingData = false, data = [], colGroup = [], } = this.props;
+        const { scrollLeft: _scrollLeft = 0, scrollTop: _scrollTop = 0, options: { frozenRowIndex: _frozenRowIndex = 0, bodyLoaderHeight: _bodyLoaderHeight = 0, } = {}, styles: { elWidth: _elWidth = 0, bodyHeight: _bodyHeight = 0, bodyTrHeight: _bodyTrHeight = 1, asidePanelWidth: _asidePanelWidth = 0, frozenPanelWidth: _frozenPanelWidth = 0, frozenPanelHeight: _frozenPanelHeight = 0, rightPanelWidth: _rightPanelWidth = 0, footSumHeight: _footSumHeight = 0, } = {}, loadingData: _loadingData = false, data: _data = [], colGroup: _colGroup = [], } = pProps;
+        if (data !== _data || colGroup !== _colGroup) {
+            return true;
+        }
+        if (scrollTop !== _scrollTop || scrollLeft !== _scrollLeft) {
+            return true;
+        }
+        if (frozenRowIndex !== _frozenRowIndex ||
+            bodyLoaderHeight !== _bodyLoaderHeight ||
+            elWidth !== _elWidth ||
+            bodyHeight !== _bodyHeight ||
+            bodyTrHeight !== _bodyTrHeight ||
+            asidePanelWidth !== _asidePanelWidth ||
+            frozenPanelWidth !== _frozenPanelWidth ||
+            frozenPanelHeight !== _frozenPanelHeight ||
+            rightPanelWidth !== _rightPanelWidth ||
+            footSumHeight !== _footSumHeight ||
+            loadingData !== _loadingData) {
+            return true;
+        }
+        return false;
+    }
     render() {
-        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, loadingData = false, } = this.props;
-        const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
-        const { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = styles;
+        const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {}, styles: { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = {}, loadingData = false, } = this.props;
         const sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
         const loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
         const scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
@@ -435,7 +457,7 @@ class DataGridBody extends React.Component {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: styles.bodyHeight }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: bodyHeight }, onMouseDown: this.onMouseDownBody },
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-aside-body-scroll", containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-left-body-scroll", containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-body-scroll", containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft }),

@@ -27,9 +27,23 @@ var DataGridHeader = /** @class */ (function (_super) {
         };
         return _this;
     }
+    DataGridHeader.prototype.shouldComponentUpdate = function (pProps) {
+        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, columnResizing = _a.columnResizing, columnResizerLeft = _a.columnResizerLeft, _c = _a.styles, _d = _c === void 0 ? {} : _c, _e = _d.elWidth, elWidth = _e === void 0 ? 0 : _e, _f = _d.headerHeight, headerHeight = _f === void 0 ? 0 : _f, _g = _d.asidePanelWidth, asidePanelWidth = _g === void 0 ? 0 : _g, _h = _d.frozenPanelWidth, frozenPanelWidth = _h === void 0 ? 0 : _h, _j = _d.rightPanelWidth, rightPanelWidth = _j === void 0 ? 0 : _j;
+        var _k = pProps.scrollLeft, _scrollLeft = _k === void 0 ? 0 : _k, _columnResizing = pProps.columnResizing, _columnResizerLeft = pProps.columnResizerLeft, _l = pProps.styles, _m = _l === void 0 ? {} : _l, _o = _m.elWidth, _elWidth = _o === void 0 ? 0 : _o, _p = _m.headerHeight, _headerHeight = _p === void 0 ? 0 : _p, _q = _m.asidePanelWidth, _asidePanelWidth = _q === void 0 ? 0 : _q, _r = _m.frozenPanelWidth, _frozenPanelWidth = _r === void 0 ? 0 : _r, _s = _m.rightPanelWidth, _rightPanelWidth = _s === void 0 ? 0 : _s;
+        if (scrollLeft !== _scrollLeft ||
+            columnResizing !== _columnResizing ||
+            columnResizerLeft !== _columnResizerLeft ||
+            elWidth !== _elWidth ||
+            headerHeight !== _headerHeight ||
+            asidePanelWidth !== _asidePanelWidth ||
+            frozenPanelWidth !== _frozenPanelWidth ||
+            rightPanelWidth !== _rightPanelWidth) {
+            return true;
+        }
+        return false;
+    };
     DataGridHeader.prototype.render = function () {
-        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, columnResizing = _a.columnResizing, columnResizerLeft = _a.columnResizerLeft, _c = _a.styles, styles = _c === void 0 ? {} : _c;
-        var _d = styles.elWidth, elWidth = _d === void 0 ? 0 : _d, _e = styles.headerHeight, headerHeight = _e === void 0 ? 0 : _e, _f = styles.asidePanelWidth, asidePanelWidth = _f === void 0 ? 0 : _f, _g = styles.frozenPanelWidth, frozenPanelWidth = _g === void 0 ? 0 : _g, _h = styles.rightPanelWidth, rightPanelWidth = _h === void 0 ? 0 : _h;
+        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, columnResizing = _a.columnResizing, columnResizerLeft = _a.columnResizerLeft, _c = _a.styles, _d = _c === void 0 ? {} : _c, _e = _d.elWidth, elWidth = _e === void 0 ? 0 : _e, _f = _d.headerHeight, headerHeight = _f === void 0 ? 0 : _f, _g = _d.asidePanelWidth, asidePanelWidth = _g === void 0 ? 0 : _g, _h = _d.frozenPanelWidth, frozenPanelWidth = _h === void 0 ? 0 : _h, _j = _d.rightPanelWidth, rightPanelWidth = _j === void 0 ? 0 : _j;
         var asideHeaderPanelStyle = {
             left: 0,
             width: asidePanelWidth,

@@ -370,10 +370,32 @@ var DataGridBody = /** @class */ (function (_super) {
         };
         return _this;
     }
+    DataGridBody.prototype.shouldComponentUpdate = function (pProps) {
+        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = _d === void 0 ? {} : _d, _f = _e.frozenRowIndex, frozenRowIndex = _f === void 0 ? 0 : _f, _g = _e.bodyLoaderHeight, bodyLoaderHeight = _g === void 0 ? 0 : _g, _h = _a.styles, _j = _h === void 0 ? {} : _h, _k = _j.elWidth, elWidth = _k === void 0 ? 0 : _k, _l = _j.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = _j.bodyTrHeight, bodyTrHeight = _m === void 0 ? 1 : _m, _o = _j.asidePanelWidth, asidePanelWidth = _o === void 0 ? 0 : _o, _p = _j.frozenPanelWidth, frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _j.frozenPanelHeight, frozenPanelHeight = _q === void 0 ? 0 : _q, _r = _j.rightPanelWidth, rightPanelWidth = _r === void 0 ? 0 : _r, _s = _j.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s, _t = _a.loadingData, loadingData = _t === void 0 ? false : _t, _u = _a.data, data = _u === void 0 ? [] : _u, _v = _a.colGroup, colGroup = _v === void 0 ? [] : _v;
+        var _w = pProps.scrollLeft, _scrollLeft = _w === void 0 ? 0 : _w, _x = pProps.scrollTop, _scrollTop = _x === void 0 ? 0 : _x, _y = pProps.options, _z = _y === void 0 ? {} : _y, _0 = _z.frozenRowIndex, _frozenRowIndex = _0 === void 0 ? 0 : _0, _1 = _z.bodyLoaderHeight, _bodyLoaderHeight = _1 === void 0 ? 0 : _1, _2 = pProps.styles, _3 = _2 === void 0 ? {} : _2, _4 = _3.elWidth, _elWidth = _4 === void 0 ? 0 : _4, _5 = _3.bodyHeight, _bodyHeight = _5 === void 0 ? 0 : _5, _6 = _3.bodyTrHeight, _bodyTrHeight = _6 === void 0 ? 1 : _6, _7 = _3.asidePanelWidth, _asidePanelWidth = _7 === void 0 ? 0 : _7, _8 = _3.frozenPanelWidth, _frozenPanelWidth = _8 === void 0 ? 0 : _8, _9 = _3.frozenPanelHeight, _frozenPanelHeight = _9 === void 0 ? 0 : _9, _10 = _3.rightPanelWidth, _rightPanelWidth = _10 === void 0 ? 0 : _10, _11 = _3.footSumHeight, _footSumHeight = _11 === void 0 ? 0 : _11, _12 = pProps.loadingData, _loadingData = _12 === void 0 ? false : _12, _13 = pProps.data, _data = _13 === void 0 ? [] : _13, _14 = pProps.colGroup, _colGroup = _14 === void 0 ? [] : _14;
+        if (data !== _data || colGroup !== _colGroup) {
+            return true;
+        }
+        if (scrollTop !== _scrollTop || scrollLeft !== _scrollLeft) {
+            return true;
+        }
+        if (frozenRowIndex !== _frozenRowIndex ||
+            bodyLoaderHeight !== _bodyLoaderHeight ||
+            elWidth !== _elWidth ||
+            bodyHeight !== _bodyHeight ||
+            bodyTrHeight !== _bodyTrHeight ||
+            asidePanelWidth !== _asidePanelWidth ||
+            frozenPanelWidth !== _frozenPanelWidth ||
+            frozenPanelHeight !== _frozenPanelHeight ||
+            rightPanelWidth !== _rightPanelWidth ||
+            footSumHeight !== _footSumHeight ||
+            loadingData !== _loadingData) {
+            return true;
+        }
+        return false;
+    };
     DataGridBody.prototype.render = function () {
-        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, _f = _a.loadingData, loadingData = _f === void 0 ? false : _f;
-        var _g = options.frozenRowIndex, frozenRowIndex = _g === void 0 ? 0 : _g, _h = options.bodyLoaderHeight, bodyLoaderHeight = _h === void 0 ? 0 : _h;
-        var _j = styles.elWidth, elWidth = _j === void 0 ? 0 : _j, _k = styles.bodyHeight, bodyHeight = _k === void 0 ? 0 : _k, _l = styles.bodyTrHeight, bodyTrHeight = _l === void 0 ? 1 : _l, _m = styles.asidePanelWidth, asidePanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelWidth, frozenPanelWidth = _o === void 0 ? 0 : _o, _p = styles.frozenPanelHeight, frozenPanelHeight = _p === void 0 ? 0 : _p, _q = styles.rightPanelWidth, rightPanelWidth = _q === void 0 ? 0 : _q, _r = styles.footSumHeight, footSumHeight = _r === void 0 ? 0 : _r;
+        var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = _d === void 0 ? {} : _d, _f = _e.frozenRowIndex, frozenRowIndex = _f === void 0 ? 0 : _f, _g = _e.bodyLoaderHeight, bodyLoaderHeight = _g === void 0 ? 0 : _g, _h = _a.styles, _j = _h === void 0 ? {} : _h, _k = _j.elWidth, elWidth = _k === void 0 ? 0 : _k, _l = _j.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = _j.bodyTrHeight, bodyTrHeight = _m === void 0 ? 1 : _m, _o = _j.asidePanelWidth, asidePanelWidth = _o === void 0 ? 0 : _o, _p = _j.frozenPanelWidth, frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _j.frozenPanelHeight, frozenPanelHeight = _q === void 0 ? 0 : _q, _r = _j.rightPanelWidth, rightPanelWidth = _r === void 0 ? 0 : _r, _s = _j.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s, _t = _a.loadingData, loadingData = _t === void 0 ? false : _t;
         var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
         var loadingDataHeight = loadingData ? bodyLoaderHeight : 0;
         var scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
@@ -453,7 +475,7 @@ var DataGridBody = /** @class */ (function (_super) {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: styles.bodyHeight }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: bodyHeight }, onMouseDown: this.onMouseDownBody },
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-aside-body-scroll", containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-left-body-scroll", containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig }),
             React.createElement(DataGridBodyPanel_1.default, { panelName: "top-body-scroll", containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft }),

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
-const _enums_1 = require("axui-datagrid/common/@enums");
+const _enums_1 = require("../common/@enums");
 class CellEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -119,8 +119,14 @@ class CellEditor extends React.Component {
         }
     }
     shouldComponentUpdate(nextProps) {
-        return (this.props.data !== nextProps.data ||
-            this.props.colGroup !== this.props.colGroup);
+        const { li, col: { colIndex }, } = nextProps;
+        if (this.props.focusedRow === nextProps.focusedRow &&
+            nextProps.focusedRow === li &&
+            this.props.focusedCol === nextProps.focusedCol &&
+            nextProps.focusedCol === colIndex) {
+            return true;
+        }
+        return this.props.value !== nextProps.value;
     }
     render() {
         const { data = [], col, li } = this.props;

@@ -345,9 +345,11 @@ var StoreProvider = /** @class */ (function (_super) {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
                     {
+                        console.log(param);
                         var col = param.col, newWidth = param.newWidth;
                         var _colGroup = __spread((_this.state.colGroup || []));
                         _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
+                        console.log(_this.state.colGroup[col.colIndex], _colGroup[col.colIndex]);
                         _this.setStoreState({
                             colGroup: _colGroup,
                             columnResizing: false,

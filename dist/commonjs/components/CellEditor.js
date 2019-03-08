@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
-var _enums_1 = require("axui-datagrid/common/@enums");
+var _enums_1 = require("../common/@enums");
 var CellEditor = /** @class */ (function (_super) {
     __extends(CellEditor, _super);
     function CellEditor(props) {
@@ -134,8 +134,14 @@ var CellEditor = /** @class */ (function (_super) {
         }
     };
     CellEditor.prototype.shouldComponentUpdate = function (nextProps) {
-        return (this.props.data !== nextProps.data ||
-            this.props.colGroup !== this.props.colGroup);
+        var li = nextProps.li, colIndex = nextProps.col.colIndex;
+        if (this.props.focusedRow === nextProps.focusedRow &&
+            nextProps.focusedRow === li &&
+            this.props.focusedCol === nextProps.focusedCol &&
+            nextProps.focusedCol === colIndex) {
+            return true;
+        }
+        return this.props.value !== nextProps.value;
     };
     CellEditor.prototype.render = function () {
         var _a = this.props, _b = _a.data, data = _b === void 0 ? [] : _b, col = _a.col, li = _a.li;

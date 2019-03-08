@@ -147,6 +147,37 @@ var DatagridScroll = /** @class */ (function (_super) {
         };
         return _this;
     }
+    DatagridScroll.prototype.shouldComponentUpdate = function (nextPros) {
+        var _a = this.props, _b = _a.styles, styles = _b === void 0 ? {} : _b, _c = _a.options, options = _c === void 0 ? {} : _c;
+        var _d = options.scroller, scroller = _d === void 0 ? {} : _d;
+        var _e = nextPros.styles, _styles = _e === void 0 ? {} : _e, _f = nextPros.options, _options = _f === void 0 ? {} : _f;
+        var _g = _options.scroller, _scroller = _g === void 0 ? {} : _g;
+        if (this.props.scrollTop !== nextPros.scrollTop ||
+            this.props.scrollLeft !== nextPros.scrollLeft) {
+            return true;
+        }
+        if (styles.pageHeight !== _styles.pageHeight ||
+            styles.verticalScrollerWidth !== _styles.verticalScrollerWidth ||
+            styles.verticalScrollerHeight !== _styles.verticalScrollerHeight ||
+            styles.horizontalScrollerWidth !== _styles.horizontalScrollerWidth ||
+            styles.horizontalScrollerHeight !== _styles.horizontalScrollerHeight ||
+            styles.verticalScrollBarHeight !== _styles.verticalScrollBarHeight ||
+            styles.horizontalScrollBarWidth !== _styles.horizontalScrollBarWidth ||
+            styles.scrollerPadding !== _styles.scrollerPadding ||
+            styles.scrollerArrowSize !== _styles.scrollerArrowSize ||
+            styles.scrollContentContainerWidth !==
+                _styles.scrollContentContainerWidth ||
+            styles.scrollContentContainerHeight !==
+                _styles.scrollContentContainerHeight ||
+            styles.scrollContentWidth !== _styles.scrollContentWidth ||
+            styles.scrollContentHeight !== _styles.scrollContentHeight) {
+            return true;
+        }
+        if (scroller.theme !== _scroller.theme) {
+            return true;
+        }
+        return false;
+    };
     DatagridScroll.prototype.render = function () {
         var _this = this;
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, _e = _a.options, options = _e === void 0 ? {} : _e;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { IDataGrid } from '../common/@types';
-import { DataGridEnums } from 'axui-datagrid/common/@enums';
+import { DataGridEnums } from '../common/@enums';
 
 interface IProps extends IDataGridStore {
   col: IDataGrid.ICol;
