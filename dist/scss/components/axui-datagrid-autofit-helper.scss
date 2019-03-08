@@ -6,8 +6,11 @@
   table {
     table-layout: auto;
     width: auto;
-    td {
-      white-space: nowrap;
+    tr {
+      td {
+        white-space: nowrap;
+        padding: 3px;
+      }
     }
   }
 }

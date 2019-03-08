@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const utils_1 = require("../utils");
-const CellLabel = props => {
-    const { col, list: data, li, lineHeight, predefinedFormatter } = props;
+const CellLabel = ({ columnHeight, lineHeight, columnBorderWidth, colAlign, col, list: data, li, predefinedFormatter, }) => {
     const { key = '', columnAttr = '', formatter } = col;
     const formatterData = {
         data,
@@ -12,16 +11,18 @@ const CellLabel = props => {
         key: col.key,
         value: data[li] && data[li][col.key || ''],
     };
+    let labelValue = '';
     switch (key) {
         case '_line_number_':
-            return React.createElement(React.Fragment, null, li + 1);
+            labelValue = li + 1 + '';
+            break;
         case '_row_selector_':
-            return (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": data[li] && data[li]._selected_, style: {
+            labelValue = (React.createElement("div", { className: "axui-datagrid-check-box", "data-span": columnAttr, "data-checked": data[li] && data[li]._selected_, style: {
                     maxHeight: lineHeight + 'px',
                     minHeight: lineHeight + 'px',
                 } }));
+            break;
         default:
-            let labelValue;
             if (typeof formatter === 'string' && formatter in predefinedFormatter) {
                 labelValue = predefinedFormatter[formatter](formatterData);
             }
@@ -31,7 +32,13 @@ const CellLabel = props => {
             else {
                 labelValue = data[li] && data[li][key];
             }
-            return React.createElement(React.Fragment, null, labelValue);
     }
+    return (React.createElement("span", { "data-span": columnAttr, 
+        // data-pos={colIndex + ',' + rowIndex + ',' + li}
+        style: {
+            height: columnHeight - columnBorderWidth + 'px',
+            lineHeight: lineHeight + 'px',
+            textAlign: colAlign,
+        } }, labelValue));
 };
 exports.default = CellLabel;

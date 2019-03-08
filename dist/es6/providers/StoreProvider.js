@@ -249,7 +249,7 @@ class StoreProvider extends React.Component {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
                     {
-                        const { row, colIndex, value, eventWhichKey } = param;
+                        const { row, colIndex, value, eventWhichKey, keepEditing = false, } = param;
                         const key = colGroup[colIndex].key;
                         let focusRow = focusedRow;
                         if (key) {
@@ -271,22 +271,29 @@ class StoreProvider extends React.Component {
                                     break;
                             }
                         }
-                        this.setStoreState({
-                            data: [...data],
-                            isInlineEditing: false,
-                            inlineEditingCell: {},
-                            selectionRows: {
-                                [focusRow]: true,
-                            },
-                            focusedRow: focusRow,
-                        });
-                        if (onChangeSelectedRow) {
-                            onChangeSelectedRow({
-                                data,
+                        if (!keepEditing) {
+                            this.setStoreState({
+                                data: [...data],
+                                isInlineEditing: false,
+                                inlineEditingCell: {},
+                                selectionRows: {
+                                    [focusRow]: true,
+                                },
+                                focusedRow: focusRow,
                             });
+                            if (onChangeSelectedRow) {
+                                onChangeSelectedRow({
+                                    data,
+                                });
+                            }
+                            if (rootNode && rootNode.current) {
+                                rootNode.current.focus();
+                            }
                         }
-                        if (rootNode && rootNode.current) {
-                            rootNode.current.focus();
+                        else {
+                            this.setStoreState({
+                                data: [...data],
+                            });
                         }
                     }
                     break;

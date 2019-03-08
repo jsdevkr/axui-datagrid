@@ -295,7 +295,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
                     {
-                        var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey;
+                        var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey, _k = param.keepEditing, keepEditing = _k === void 0 ? false : _k;
                         var key = colGroup[colIndex].key;
                         var focusRow = focusedRow;
                         if (key) {
@@ -317,22 +317,29 @@ var StoreProvider = /** @class */ (function (_super) {
                                     break;
                             }
                         }
-                        _this.setStoreState({
-                            data: __spread(data),
-                            isInlineEditing: false,
-                            inlineEditingCell: {},
-                            selectionRows: (_a = {},
-                                _a[focusRow] = true,
-                                _a),
-                            focusedRow: focusRow,
-                        });
-                        if (onChangeSelectedRow) {
-                            onChangeSelectedRow({
-                                data: data,
+                        if (!keepEditing) {
+                            _this.setStoreState({
+                                data: __spread(data),
+                                isInlineEditing: false,
+                                inlineEditingCell: {},
+                                selectionRows: (_a = {},
+                                    _a[focusRow] = true,
+                                    _a),
+                                focusedRow: focusRow,
                             });
+                            if (onChangeSelectedRow) {
+                                onChangeSelectedRow({
+                                    data: data,
+                                });
+                            }
+                            if (rootNode && rootNode.current) {
+                                rootNode.current.focus();
+                            }
                         }
-                        if (rootNode && rootNode.current) {
-                            rootNode.current.focus();
+                        else {
+                            _this.setStoreState({
+                                data: __spread(data),
+                            });
                         }
                     }
                     break;

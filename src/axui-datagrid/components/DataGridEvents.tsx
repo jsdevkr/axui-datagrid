@@ -94,108 +94,108 @@ class DataGridEvents extends React.Component<IProps, IState> {
   };
 
   onKeyDown = (e: React.KeyboardEvent<any>) => {
-    const {
-      data = [],
-      rootNode,
-      clipBoardNode,
-      colGroup = [],
-      headerColGroup = [],
-      selectionRows = {},
-      selectionCols = {},
-      focusedCol = 0,
-      setStoreState,
-      scrollLeft = 0,
-      scrollTop = 0,
-      focusedRow = 0,
-      options = {},
-      styles = {},
-    } = this.props;
-    const {
-      printStartColIndex = 0,
-      printEndColIndex = colGroup.length - 1,
-    } = this.props;
-    const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
-    const {
-      bodyTrHeight = 0,
-      scrollContentWidth = 0,
-      scrollContentHeight = 0,
-      scrollContentContainerWidth = 0,
-      scrollContentContainerHeight = 0,
-      frozenPanelWidth = 0,
-      rightPanelWidth = 0,
-      verticalScrollerWidth = 0,
-    } = styles;
-    const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
-    const eRowIndex =
-      Math.floor(-scrollTop / bodyTrHeight) +
-      // frozenRowIndex +
-      Math.floor(scrollContentContainerHeight / bodyTrHeight);
-
-    const sColIndex = printStartColIndex;
-    const eColIndex = printEndColIndex;
-    const pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
-
-    const getAvailScrollTop = (rowIndex: number): number | undefined => {
-      let _scrollTop: number | undefined = undefined;
-
-      if (frozenRowIndex >= rowIndex) {
-        return;
-      }
-
-      if (sRowIndex >= rowIndex) {
-        _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
-      } else if (eRowIndex <= rowIndex) {
-        _scrollTop =
-          -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
-      }
-
-      if (typeof _scrollTop !== 'undefined') {
-        _scrollTop = getScrollPosition(scrollLeft, _scrollTop, {
-          scrollWidth: scrollContentWidth,
-          scrollHeight: scrollContentHeight,
-          clientWidth: scrollContentContainerWidth,
-          clientHeight: scrollContentContainerHeight,
-        }).scrollTop;
-      } else {
-        _scrollTop = scrollTop;
-      }
-
-      return _scrollTop;
-    };
-    const getAvailScrollLeft = (colIndex: number): number | undefined => {
-      let _scrollLeft: number | undefined = undefined;
-
-      if (frozenColumnIndex > colIndex) {
-        return;
-      }
-
-      if (sColIndex >= colIndex - frozenColumnIndex) {
-        _scrollLeft = -(colGroup[colIndex]._sx as number) + frozenPanelWidth;
-      } else if (eColIndex <= colIndex - frozenColumnIndex) {
-        // 끝점 계산
-        _scrollLeft =
-          scrollContentContainerWidth -
-          (colGroup[colIndex]._ex as number) +
-          frozenPanelWidth -
-          verticalScrollerWidth -
-          rightPanelWidth;
-      }
-
-      if (typeof _scrollLeft !== 'undefined') {
-        _scrollLeft = getScrollPosition(_scrollLeft as number, scrollTop, {
-          scrollWidth: scrollContentWidth,
-          scrollHeight: scrollContentHeight,
-          clientWidth: scrollContentContainerWidth,
-          clientHeight: scrollContentContainerHeight,
-        }).scrollLeft;
-      } else {
-        _scrollLeft = scrollLeft;
-      }
-
-      return _scrollLeft;
-    };
-
     return new Promise((resolve, reject) => {
+      const {
+        data = [],
+        rootNode,
+        clipBoardNode,
+        colGroup = [],
+        headerColGroup = [],
+        selectionRows = {},
+        selectionCols = {},
+        focusedCol = 0,
+        setStoreState,
+        scrollLeft = 0,
+        scrollTop = 0,
+        focusedRow = 0,
+        options = {},
+        styles = {},
+      } = this.props;
+      const {
+        printStartColIndex = 0,
+        printEndColIndex = colGroup.length - 1,
+      } = this.props;
+      const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
+      const {
+        bodyTrHeight = 0,
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+        frozenPanelWidth = 0,
+        rightPanelWidth = 0,
+        verticalScrollerWidth = 0,
+      } = styles;
+      const sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
+      const eRowIndex =
+        Math.floor(-scrollTop / bodyTrHeight) +
+        // frozenRowIndex +
+        Math.floor(scrollContentContainerHeight / bodyTrHeight);
+
+      const sColIndex = printStartColIndex;
+      const eColIndex = printEndColIndex;
+      const pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
+
+      const getAvailScrollTop = (rowIndex: number): number | undefined => {
+        let _scrollTop: number | undefined = undefined;
+
+        if (frozenRowIndex >= rowIndex) {
+          return;
+        }
+
+        if (sRowIndex >= rowIndex) {
+          _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
+        } else if (eRowIndex <= rowIndex) {
+          _scrollTop =
+            -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
+        }
+
+        if (typeof _scrollTop !== 'undefined') {
+          _scrollTop = getScrollPosition(scrollLeft, _scrollTop, {
+            scrollWidth: scrollContentWidth,
+            scrollHeight: scrollContentHeight,
+            clientWidth: scrollContentContainerWidth,
+            clientHeight: scrollContentContainerHeight,
+          }).scrollTop;
+        } else {
+          _scrollTop = scrollTop;
+        }
+
+        return _scrollTop;
+      };
+      const getAvailScrollLeft = (colIndex: number): number | undefined => {
+        let _scrollLeft: number | undefined = undefined;
+
+        if (frozenColumnIndex > colIndex) {
+          return;
+        }
+
+        if (sColIndex >= colIndex - frozenColumnIndex) {
+          _scrollLeft = -(colGroup[colIndex]._sx as number) + frozenPanelWidth;
+        } else if (eColIndex <= colIndex - frozenColumnIndex) {
+          // 끝점 계산
+          _scrollLeft =
+            scrollContentContainerWidth -
+            (colGroup[colIndex]._ex as number) +
+            frozenPanelWidth -
+            verticalScrollerWidth -
+            rightPanelWidth;
+        }
+
+        if (typeof _scrollLeft !== 'undefined') {
+          _scrollLeft = getScrollPosition(_scrollLeft as number, scrollTop, {
+            scrollWidth: scrollContentWidth,
+            scrollHeight: scrollContentHeight,
+            clientWidth: scrollContentContainerWidth,
+            clientHeight: scrollContentContainerHeight,
+          }).scrollLeft;
+        } else {
+          _scrollLeft = scrollLeft;
+        }
+
+        return _scrollLeft;
+      };
+
       if (e.metaKey) {
         switch (e.which) {
           case DataGridEnums.MetaKeycodes.C:
@@ -267,6 +267,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             break;
           default:
+            resolve();
             break;
         }
       } else {
@@ -505,7 +506,11 @@ class DataGridEvents extends React.Component<IProps, IState> {
         break;
       case DataGridEnums.EventNames.KEYDOWN:
         this.busy = true;
-        await this.onKeyDown(e);
+        try {
+          await this.onKeyDown(e);
+        } catch (err) {
+          console.log(err);
+        }
         this.busy = false;
         break;
       case DataGridEnums.EventNames.KEYUP:

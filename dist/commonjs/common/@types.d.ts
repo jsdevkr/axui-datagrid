@@ -64,12 +64,28 @@ export declare namespace IDataGrid {
     }
     type formatterFunction = (formatterData: IFormatterData) => any;
     type collectorFunction = (formatterData: ICollectorData) => any;
-    type editorFunction = (editorData: IFormatterData) => void;
     type userCallBackFunction = (param?: any) => void;
+    interface ICellEditorData {
+        col: ICol;
+        rowIndex: number;
+        colIndex: number;
+        value: any;
+        update: (value: any, keepEditing?: boolean) => void;
+        cancel: () => void;
+        focus: () => void;
+        blur: () => void;
+    }
+    type cellEditorFunction = (param: ICellEditorData) => string | React.ReactNode;
+    interface IColEditor {
+        type?: string;
+        activeType?: 'always' | 'dblclick';
+        width?: number;
+        render?: cellEditorFunction;
+    }
     interface IEditingCell {
         rowIndex?: number;
         colIndex?: number;
-        editor?: any;
+        editor?: string | IColEditor;
     }
     interface IFormatterData {
         data?: any;
@@ -96,9 +112,7 @@ export declare namespace IDataGrid {
         rowIndex?: number;
         formatter?: formatterFunction | string;
         collector?: collectorFunction | string;
-        editor?: editorFunction | string | {
-            type?: string;
-        };
+        editor?: string | IColEditor;
         _ex?: number;
         _sx?: number;
         _width?: number;
@@ -109,9 +123,7 @@ export declare namespace IDataGrid {
         rowIndex?: number;
         formatter?: formatterFunction | string;
         collector?: collectorFunction | string;
-        editor?: editorFunction | string | {
-            type?: string;
-        };
+        editor?: string | IColEditor;
         hidden?: boolean;
         columns?: IColumn[];
         depth?: number;

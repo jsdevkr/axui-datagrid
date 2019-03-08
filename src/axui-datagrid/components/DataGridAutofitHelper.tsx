@@ -45,19 +45,33 @@ class DataGridAutofitHelper extends React.Component<IProps> {
                 return (
                   <tr key={li}>
                     <td>{li}</td>
-                    {colGroup.map(col => (
-                      <td key={col.colIndex}>
-                        <span data-span>
+                    {colGroup.map(col => {
+                      const colEditor: IDataGrid.IColEditor =
+                        col.editor === 'string'
+                          ? { type: '' + col.editor }
+                          : (col.editor as IDataGrid.IColEditor);
+                      const inlineEditingActiveAlways =
+                        colEditor && colEditor.activeType === 'always';
+
+                      return inlineEditingActiveAlways && colEditor.width ? (
+                        <td key={col.colIndex}>
+                          <div style={{ width: colEditor.width }} />
+                        </td>
+                      ) : (
+                        <td key={col.colIndex}>
                           <CellLabel
-                            lineHeight={10}
+                            columnHeight={12}
+                            lineHeight={12}
+                            columnBorderWidth={0}
+                            colAlign={'left'}
                             col={col}
                             list={data}
                             li={li}
                             predefinedFormatter={predefinedFormatter}
                           />
-                        </span>
-                      </td>
-                    ))}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}

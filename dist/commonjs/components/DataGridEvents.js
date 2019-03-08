@@ -113,74 +113,74 @@ var DataGridEvents = /** @class */ (function (_super) {
             }
         };
         _this.onKeyDown = function (e) {
-            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, rootNode = _a.rootNode, clipBoardNode = _a.clipBoardNode, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.selectionRows, selectionRows = _e === void 0 ? {} : _e, _f = _a.selectionCols, selectionCols = _f === void 0 ? {} : _f, _g = _a.focusedCol, focusedCol = _g === void 0 ? 0 : _g, setStoreState = _a.setStoreState, _h = _a.scrollLeft, scrollLeft = _h === void 0 ? 0 : _h, _j = _a.scrollTop, scrollTop = _j === void 0 ? 0 : _j, _k = _a.focusedRow, focusedRow = _k === void 0 ? 0 : _k, _l = _a.options, options = _l === void 0 ? {} : _l, _m = _a.styles, styles = _m === void 0 ? {} : _m;
-            var _o = _this.props, _p = _o.printStartColIndex, printStartColIndex = _p === void 0 ? 0 : _p, _q = _o.printEndColIndex, printEndColIndex = _q === void 0 ? colGroup.length - 1 : _q;
-            var _r = options.frozenRowIndex, frozenRowIndex = _r === void 0 ? 0 : _r, _s = options.frozenColumnIndex, frozenColumnIndex = _s === void 0 ? 0 : _s;
-            var _t = styles.bodyTrHeight, bodyTrHeight = _t === void 0 ? 0 : _t, _u = styles.scrollContentWidth, scrollContentWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentHeight, scrollContentHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentContainerWidth, scrollContentContainerWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerHeight, scrollContentContainerHeight = _x === void 0 ? 0 : _x, _y = styles.frozenPanelWidth, frozenPanelWidth = _y === void 0 ? 0 : _y, _z = styles.rightPanelWidth, rightPanelWidth = _z === void 0 ? 0 : _z, _0 = styles.verticalScrollerWidth, verticalScrollerWidth = _0 === void 0 ? 0 : _0;
-            var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
-            var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
-                // frozenRowIndex +
-                Math.floor(scrollContentContainerHeight / bodyTrHeight);
-            var sColIndex = printStartColIndex;
-            var eColIndex = printEndColIndex;
-            var pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
-            var getAvailScrollTop = function (rowIndex) {
-                var _scrollTop = undefined;
-                if (frozenRowIndex >= rowIndex) {
-                    return;
-                }
-                if (sRowIndex >= rowIndex) {
-                    _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
-                }
-                else if (eRowIndex <= rowIndex) {
-                    _scrollTop =
-                        -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
-                }
-                if (typeof _scrollTop !== 'undefined') {
-                    _scrollTop = utils_1.getScrollPosition(scrollLeft, _scrollTop, {
-                        scrollWidth: scrollContentWidth,
-                        scrollHeight: scrollContentHeight,
-                        clientWidth: scrollContentContainerWidth,
-                        clientHeight: scrollContentContainerHeight,
-                    }).scrollTop;
-                }
-                else {
-                    _scrollTop = scrollTop;
-                }
-                return _scrollTop;
-            };
-            var getAvailScrollLeft = function (colIndex) {
-                var _scrollLeft = undefined;
-                if (frozenColumnIndex > colIndex) {
-                    return;
-                }
-                if (sColIndex >= colIndex - frozenColumnIndex) {
-                    _scrollLeft = -colGroup[colIndex]._sx + frozenPanelWidth;
-                }
-                else if (eColIndex <= colIndex - frozenColumnIndex) {
-                    // 끝점 계산
-                    _scrollLeft =
-                        scrollContentContainerWidth -
-                            colGroup[colIndex]._ex +
-                            frozenPanelWidth -
-                            verticalScrollerWidth -
-                            rightPanelWidth;
-                }
-                if (typeof _scrollLeft !== 'undefined') {
-                    _scrollLeft = utils_1.getScrollPosition(_scrollLeft, scrollTop, {
-                        scrollWidth: scrollContentWidth,
-                        scrollHeight: scrollContentHeight,
-                        clientWidth: scrollContentContainerWidth,
-                        clientHeight: scrollContentContainerHeight,
-                    }).scrollLeft;
-                }
-                else {
-                    _scrollLeft = scrollLeft;
-                }
-                return _scrollLeft;
-            };
             return new Promise(function (resolve, reject) {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+                var _l = _this.props, _m = _l.data, data = _m === void 0 ? [] : _m, rootNode = _l.rootNode, clipBoardNode = _l.clipBoardNode, _o = _l.colGroup, colGroup = _o === void 0 ? [] : _o, _p = _l.headerColGroup, headerColGroup = _p === void 0 ? [] : _p, _q = _l.selectionRows, selectionRows = _q === void 0 ? {} : _q, _r = _l.selectionCols, selectionCols = _r === void 0 ? {} : _r, _s = _l.focusedCol, focusedCol = _s === void 0 ? 0 : _s, setStoreState = _l.setStoreState, _t = _l.scrollLeft, scrollLeft = _t === void 0 ? 0 : _t, _u = _l.scrollTop, scrollTop = _u === void 0 ? 0 : _u, _v = _l.focusedRow, focusedRow = _v === void 0 ? 0 : _v, _w = _l.options, options = _w === void 0 ? {} : _w, _x = _l.styles, styles = _x === void 0 ? {} : _x;
+                var _y = _this.props, _z = _y.printStartColIndex, printStartColIndex = _z === void 0 ? 0 : _z, _0 = _y.printEndColIndex, printEndColIndex = _0 === void 0 ? colGroup.length - 1 : _0;
+                var _1 = options.frozenRowIndex, frozenRowIndex = _1 === void 0 ? 0 : _1, _2 = options.frozenColumnIndex, frozenColumnIndex = _2 === void 0 ? 0 : _2;
+                var _3 = styles.bodyTrHeight, bodyTrHeight = _3 === void 0 ? 0 : _3, _4 = styles.scrollContentWidth, scrollContentWidth = _4 === void 0 ? 0 : _4, _5 = styles.scrollContentHeight, scrollContentHeight = _5 === void 0 ? 0 : _5, _6 = styles.scrollContentContainerWidth, scrollContentContainerWidth = _6 === void 0 ? 0 : _6, _7 = styles.scrollContentContainerHeight, scrollContentContainerHeight = _7 === void 0 ? 0 : _7, _8 = styles.frozenPanelWidth, frozenPanelWidth = _8 === void 0 ? 0 : _8, _9 = styles.rightPanelWidth, rightPanelWidth = _9 === void 0 ? 0 : _9, _10 = styles.verticalScrollerWidth, verticalScrollerWidth = _10 === void 0 ? 0 : _10;
+                var sRowIndex = Math.floor(-scrollTop / bodyTrHeight) + frozenRowIndex;
+                var eRowIndex = Math.floor(-scrollTop / bodyTrHeight) +
+                    // frozenRowIndex +
+                    Math.floor(scrollContentContainerHeight / bodyTrHeight);
+                var sColIndex = printStartColIndex;
+                var eColIndex = printEndColIndex;
+                var pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
+                var getAvailScrollTop = function (rowIndex) {
+                    var _scrollTop = undefined;
+                    if (frozenRowIndex >= rowIndex) {
+                        return;
+                    }
+                    if (sRowIndex >= rowIndex) {
+                        _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
+                    }
+                    else if (eRowIndex <= rowIndex) {
+                        _scrollTop =
+                            -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
+                    }
+                    if (typeof _scrollTop !== 'undefined') {
+                        _scrollTop = utils_1.getScrollPosition(scrollLeft, _scrollTop, {
+                            scrollWidth: scrollContentWidth,
+                            scrollHeight: scrollContentHeight,
+                            clientWidth: scrollContentContainerWidth,
+                            clientHeight: scrollContentContainerHeight,
+                        }).scrollTop;
+                    }
+                    else {
+                        _scrollTop = scrollTop;
+                    }
+                    return _scrollTop;
+                };
+                var getAvailScrollLeft = function (colIndex) {
+                    var _scrollLeft = undefined;
+                    if (frozenColumnIndex > colIndex) {
+                        return;
+                    }
+                    if (sColIndex >= colIndex - frozenColumnIndex) {
+                        _scrollLeft = -colGroup[colIndex]._sx + frozenPanelWidth;
+                    }
+                    else if (eColIndex <= colIndex - frozenColumnIndex) {
+                        // 끝점 계산
+                        _scrollLeft =
+                            scrollContentContainerWidth -
+                                colGroup[colIndex]._ex +
+                                frozenPanelWidth -
+                                verticalScrollerWidth -
+                                rightPanelWidth;
+                    }
+                    if (typeof _scrollLeft !== 'undefined') {
+                        _scrollLeft = utils_1.getScrollPosition(_scrollLeft, scrollTop, {
+                            scrollWidth: scrollContentWidth,
+                            scrollHeight: scrollContentHeight,
+                            clientWidth: scrollContentContainerWidth,
+                            clientHeight: scrollContentContainerHeight,
+                        }).scrollLeft;
+                    }
+                    else {
+                        _scrollLeft = scrollLeft;
+                    }
+                    return _scrollLeft;
+                };
                 if (e.metaKey) {
                     switch (e.which) {
                         case _enums_1.DataGridEnums.MetaKeycodes.C:
@@ -243,6 +243,7 @@ var DataGridEvents = /** @class */ (function (_super) {
                             });
                             break;
                         default:
+                            resolve();
                             break;
                     }
                 }
@@ -404,13 +405,16 @@ var DataGridEvents = /** @class */ (function (_super) {
             }
         };
         _this.onFireEvent = function (e) { return __awaiter(_this, void 0, void 0, function () {
-            var _a, loading, loadingData, _b, isInlineEditing, _c;
+            var _a, loading, loadingData, _b, isInlineEditing, _c, err_1;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
                         _a = this.props, loading = _a.loading, loadingData = _a.loadingData, _b = _a.isInlineEditing, isInlineEditing = _b === void 0 ? false : _b;
-                        if (this.busy || loadingData || isInlineEditing || loading) {
+                        if (this.busy || loadingData || loading) {
                             e.preventDefault();
+                            return [2 /*return*/];
+                        }
+                        if (isInlineEditing) {
                             return [2 /*return*/];
                         }
                         if (this.props.onBeforeEvent) {
@@ -420,28 +424,37 @@ var DataGridEvents = /** @class */ (function (_super) {
                         switch (_c) {
                             case _enums_1.DataGridEnums.EventNames.WHEEL: return [3 /*break*/, 1];
                             case _enums_1.DataGridEnums.EventNames.KEYDOWN: return [3 /*break*/, 2];
-                            case _enums_1.DataGridEnums.EventNames.KEYUP: return [3 /*break*/, 4];
-                            case _enums_1.DataGridEnums.EventNames.CONTEXTMENU: return [3 /*break*/, 5];
+                            case _enums_1.DataGridEnums.EventNames.KEYUP: return [3 /*break*/, 7];
+                            case _enums_1.DataGridEnums.EventNames.CONTEXTMENU: return [3 /*break*/, 8];
                         }
-                        return [3 /*break*/, 6];
+                        return [3 /*break*/, 9];
                     case 1:
                         this.onWheel(e);
-                        return [3 /*break*/, 7];
+                        return [3 /*break*/, 10];
                     case 2:
                         this.busy = true;
-                        return [4 /*yield*/, this.onKeyDown(e)];
+                        _d.label = 3;
                     case 3:
-                        _d.sent();
-                        this.busy = false;
-                        return [3 /*break*/, 7];
+                        _d.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, this.onKeyDown(e)];
                     case 4:
-                        this.onKeyUp(e);
-                        return [3 /*break*/, 7];
+                        _d.sent();
+                        return [3 /*break*/, 6];
                     case 5:
+                        err_1 = _d.sent();
+                        console.log(err_1);
+                        return [3 /*break*/, 6];
+                    case 6:
+                        this.busy = false;
+                        return [3 /*break*/, 10];
+                    case 7:
+                        this.onKeyUp(e);
+                        return [3 /*break*/, 10];
+                    case 8:
                         this.onContextmenu(e);
-                        return [3 /*break*/, 7];
-                    case 6: return [3 /*break*/, 7];
-                    case 7: return [2 /*return*/];
+                        return [3 /*break*/, 10];
+                    case 9: return [3 /*break*/, 10];
+                    case 10: return [2 /*return*/];
                 }
             });
         }); };

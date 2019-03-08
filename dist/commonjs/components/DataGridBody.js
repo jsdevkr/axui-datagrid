@@ -46,7 +46,7 @@ var DataGridBody = /** @class */ (function (_super) {
                     headerHeight -
                     (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
                     bodyTrHeight);
-                return i < 0 ? 0 : i >= data.length - 1 ? data.length - 1 : i;
+                return i >= data.length ? -1 : i;
             };
             var getColIndex = function (x, _scrollLeft) {
                 var p = x -
@@ -341,7 +341,8 @@ var DataGridBody = /** @class */ (function (_super) {
             };
             // 선택이 시작된 row / col
             var selectStartedRow = getRowIndex(startY, startScrollTop);
-            var selectStartedCol = getColIndex(startX, startScrollLeft);
+            // row값이 없다면 선택 안되야 함.
+            var selectStartedCol = selectStartedRow === -1 ? -1 : getColIndex(startX, startScrollLeft);
             if (isInlineEditing &&
                 inlineEditingCell.rowIndex === selectStartedRow &&
                 inlineEditingCell.colIndex === selectStartedCol) {

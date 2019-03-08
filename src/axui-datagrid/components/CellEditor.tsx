@@ -26,7 +26,6 @@ class CellEditor extends React.Component<IProps> {
     }
   }
   componentDidUpdate(prevProps: IProps) {
-    console.log('componentDidUpdate ~');
     if (this.inputTextRef.current) {
       this.activeComposition = false;
       this.inputTextRef.current.select();
@@ -90,10 +89,56 @@ class CellEditor extends React.Component<IProps> {
     }
   };
 
-  renderInputText = () => {
-    const { data = [], col, li } = this.props;
-    const value = data[li] && data[li][col.key || ''];
+  handleUpdateValue = (value: any, keepEditing?: boolean) => {
+    const { dispatch, li, col } = this.props;
 
+    dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+      row: li,
+      colIndex: col.colIndex,
+      value: value,
+      eventWhichKey: 'custom-editor-action',
+      keepEditing,
+    });
+  };
+
+  handleCancelEdit = () => {
+    const { setStoreState, rootNode } = this.props;
+
+    setStoreState({
+      isInlineEditing: false,
+      inlineEditingCell: {},
+    });
+
+    if (rootNode && rootNode.current) {
+      rootNode.current.focus();
+    }
+  };
+
+  handleCustomEditorFocus = () => {
+    const { setStoreState, li, col } = this.props;
+    setStoreState({
+      isInlineEditing: true,
+      inlineEditingCell: {
+        rowIndex: li,
+        colIndex: col.colIndex,
+        editor: col.editor,
+      },
+    });
+  };
+  handleCustomEditorBlur = () => {
+    const { setStoreState, rootNode } = this.props;
+
+    setStoreState({
+      isInlineEditing: false,
+      inlineEditingCell: {},
+    });
+
+    if (rootNode && rootNode.current) {
+      rootNode.current.focus();
+    }
+  };
+
+  renderInputText = (value: any) => {
     return (
       <input
         type="text"
@@ -118,8 +163,17 @@ class CellEditor extends React.Component<IProps> {
     );
   };
 
+  shouldComponentUpdate(nextProps: IProps) {
+    return (
+      this.props.data !== nextProps.data ||
+      this.props.colGroup !== this.props.colGroup
+    );
+  }
+
   render() {
-    const { col } = this.props;
+    const { data = [], col, li } = this.props;
+    const value = data[li] && data[li][col.key || ''];
+
     const editor: IDataGrid.IColEditor =
       col.editor === 'text'
         ? { type: 'text' }
@@ -127,10 +181,22 @@ class CellEditor extends React.Component<IProps> {
 
     switch (editor.type) {
       case 'text':
-        return this.renderInputText();
-
+        return this.renderInputText(value);
       default:
-        return '';
+        if (!editor.render) {
+          return this.renderInputText(value);
+        }
+
+        return editor.render({
+          col: col,
+          rowIndex: li,
+          colIndex: col.colIndex || 0,
+          value,
+          update: this.handleUpdateValue,
+          cancel: this.handleCancelEdit,
+          focus: this.handleCustomEditorFocus,
+          blur: this.handleCustomEditorBlur,
+        });
     }
   }
 }

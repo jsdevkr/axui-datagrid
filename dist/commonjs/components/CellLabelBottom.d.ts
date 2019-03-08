@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
-declare const CellLabel: React.SFC<{
+declare const CellLabelBottom: React.SFC<{
     columnHeight: number;
     lineHeight: number;
     columnBorderWidth: number;
     colAlign: string;
     col: IDataGrid.ICol;
     list: any[];
-    li: number;
     predefinedFormatter: IDataGrid.IFormatter;
+    predefinedCollector: IDataGrid.ICollector;
 }>;
-export default CellLabel;
+export default CellLabelBottom;

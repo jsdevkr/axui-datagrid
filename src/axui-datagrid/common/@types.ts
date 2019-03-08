@@ -79,10 +79,24 @@ export namespace IDataGrid {
 
   export type userCallBackFunction = (param?: any) => void;
 
-  export type cellEditorFunction = (param: any) => string | React.ReactNode;
+  export interface ICellEditorData {
+    col: ICol;
+    rowIndex: number;
+    colIndex: number;
+    value: any;
+    update: (value: any, keepEditing?: boolean) => void;
+    cancel: () => void;
+    focus: () => void;
+    blur: () => void;
+  }
+  export type cellEditorFunction = (
+    param: ICellEditorData,
+  ) => string | React.ReactNode;
 
   export interface IColEditor {
     type?: string;
+    activeType?: 'always' | 'dblclick';
+    width?: number;
     render?: cellEditorFunction;
   }
 

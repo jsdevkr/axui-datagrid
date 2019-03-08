@@ -597,7 +597,13 @@ class StoreProvider extends React.Component<
 
       case DataGridEnums.DispatchTypes.UPDATE:
         {
-          const { row, colIndex, value, eventWhichKey } = param;
+          const {
+            row,
+            colIndex,
+            value,
+            eventWhichKey,
+            keepEditing = false,
+          } = param;
           const key = colGroup[colIndex].key;
 
           let focusRow: number = focusedRow;
@@ -623,24 +629,30 @@ class StoreProvider extends React.Component<
             }
           }
 
-          this.setStoreState({
-            data: [...data],
-            isInlineEditing: false,
-            inlineEditingCell: {},
-            selectionRows: {
-              [focusRow]: true,
-            },
-            focusedRow: focusRow,
-          });
-
-          if (onChangeSelectedRow) {
-            onChangeSelectedRow({
-              data,
+          if (!keepEditing) {
+            this.setStoreState({
+              data: [...data],
+              isInlineEditing: false,
+              inlineEditingCell: {},
+              selectionRows: {
+                [focusRow]: true,
+              },
+              focusedRow: focusRow,
             });
-          }
 
-          if (rootNode && rootNode.current) {
-            rootNode.current.focus();
+            if (onChangeSelectedRow) {
+              onChangeSelectedRow({
+                data,
+              });
+            }
+
+            if (rootNode && rootNode.current) {
+              rootNode.current.focus();
+            }
+          } else {
+            this.setStoreState({
+              data: [...data],
+            });
           }
         }
         break;

@@ -15,11 +15,13 @@ class DataGridAutofitHelper extends React.Component {
                 if (tds && tds.length) {
                     for (let i = 0, l = tds.length; i < l; i++) {
                         const tdWidth = tds[i].getBoundingClientRect().width + 10;
-                        let colWidth = autofitColumnWidthMin > tdWidth
-                            ? autofitColumnWidthMin
-                            : autofitColumnWidthMax < tdWidth
-                                ? autofitColumnWidthMax
-                                : tdWidth;
+                        let colWidth = tdWidth;
+                        if (autofitColumnWidthMin > colWidth) {
+                            colWidth = autofitColumnWidthMin;
+                        }
+                        else if (autofitColumnWidthMax < colWidth) {
+                            colWidth = autofitColumnWidthMax;
+                        }
                         colGroup[i] = {
                             colIndex: i,
                             width: i === 0 ? tdWidth + 10 : colWidth,
@@ -44,16 +46,22 @@ class DataGridAutofitHelper extends React.Component {
             React.createElement("table", { ref: this.tableRef },
                 React.createElement("thead", null,
                     React.createElement("tr", { "data-autofit-table-head-row": true },
-                        React.createElement("td", null, data.length),
+                        React.createElement("td", null, data.length + ''),
                         colGroup.map((col, ci) => (React.createElement("td", { key: ci }, col.label))))),
                 React.createElement("tbody", null, data
                     .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
                     .map((row, li) => {
                     return (React.createElement("tr", { key: li },
                         React.createElement("td", null, li),
-                        colGroup.map(col => (React.createElement("td", { key: col.colIndex },
-                            React.createElement("span", { "data-span": true },
-                                React.createElement(CellLabel_1.default, { lineHeight: 10, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter })))))));
+                        colGroup.map(col => {
+                            const colEditor = col.editor === 'string'
+                                ? { type: '' + col.editor }
+                                : col.editor;
+                            const inlineEditingActiveAlways = colEditor && colEditor.activeType === 'always';
+                            return inlineEditingActiveAlways && colEditor.width ? (React.createElement("td", { key: col.colIndex },
+                                React.createElement("div", { style: { width: colEditor.width } }))) : (React.createElement("td", { key: col.colIndex },
+                                React.createElement(CellLabel_1.default, { columnHeight: 12, lineHeight: 12, columnBorderWidth: 0, colAlign: 'left', col: col, list: data, li: li, predefinedFormatter: predefinedFormatter })));
+                        })));
                 })))));
     }
     componentDidMount() {

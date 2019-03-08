@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Divider } from 'antd';
+import { Divider, Checkbox } from 'antd';
 import * as Examples from 'examples';
 import { CodeViewer, Wrapper, Segment } from 'components';
 
@@ -19,28 +19,37 @@ function getPathValue(
   return typeof targetObject === 'undefined' ? defaultValue : targetObject;
 }
 
-export const ExampleRoot = (props: any) => {
-  const name = getPathValue(props, ['match', 'params', 'name']);
-  const Example = Examples[name];
-  const sourceCode = require('!raw-loader!examples/' + name + '.tsx');
+class ExampleRoot extends React.Component<any, any> {
+  state = {
+    showCode: false,
+  };
 
-  return (
-    <div>
-      {Example ? <Example /> : null}
-      <Divider />
+  render() {
+    const name = getPathValue(this.props, ['match', 'params', 'name']);
+    const Example = Examples[name];
+    const sourceCode = require('!raw-loader!examples/' + name + '.tsx');
 
-      <Wrapper>
-        <Segment padded>
-          <h4>Source Code </h4>
-          <CodeViewer code={sourceCode} />
-        </Segment>
-      </Wrapper>
-    </div>
-  );
+    return (
+      <div>
+        {Example ? <Example /> : null}
+        <Divider />
 
-  /*
-
-   */
-};
+        <Wrapper>
+          <Segment padded>
+            <h4>
+              <Checkbox
+                checked={this.state.showCode}
+                onChange={e => this.setState({ showCode: e.target.checked })}
+              >
+                Source Code
+              </Checkbox>
+            </h4>
+            {this.state.showCode && <CodeViewer code={sourceCode} />}
+          </Segment>
+        </Wrapper>
+      </div>
+    );
+  }
+}
 
 export default ExampleRoot;

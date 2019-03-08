@@ -32,7 +32,7 @@ class DataGridBody extends React.Component {
                     headerHeight -
                     (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
                     bodyTrHeight);
-                return i < 0 ? 0 : i >= data.length - 1 ? data.length - 1 : i;
+                return i >= data.length ? -1 : i;
             };
             const getColIndex = (x, _scrollLeft) => {
                 const p = x -
@@ -324,7 +324,8 @@ class DataGridBody extends React.Component {
             };
             // 선택이 시작된 row / col
             let selectStartedRow = getRowIndex(startY, startScrollTop);
-            let selectStartedCol = getColIndex(startX, startScrollLeft);
+            // row값이 없다면 선택 안되야 함.
+            let selectStartedCol = selectStartedRow === -1 ? -1 : getColIndex(startX, startScrollLeft);
             if (isInlineEditing &&
                 inlineEditingCell.rowIndex === selectStartedRow &&
                 inlineEditingCell.colIndex === selectStartedCol) {
