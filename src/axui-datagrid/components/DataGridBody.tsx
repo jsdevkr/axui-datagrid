@@ -461,25 +461,91 @@ class DataGridBody extends React.Component<IProps> {
     return true;
   };
 
+  shouldComponentUpdate(pProps: IProps) {
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {},
+      styles: {
+        elWidth = 0,
+        bodyHeight = 0,
+        bodyTrHeight = 1,
+        asidePanelWidth = 0,
+        frozenPanelWidth = 0,
+        frozenPanelHeight = 0,
+        rightPanelWidth = 0,
+        footSumHeight = 0,
+      } = {},
+      loadingData = false,
+      data = [],
+      colGroup = [],
+    } = this.props;
+
+    const {
+      scrollLeft: _scrollLeft = 0,
+      scrollTop: _scrollTop = 0,
+      options: {
+        frozenRowIndex: _frozenRowIndex = 0,
+        bodyLoaderHeight: _bodyLoaderHeight = 0,
+      } = {},
+      styles: {
+        elWidth: _elWidth = 0,
+        bodyHeight: _bodyHeight = 0,
+        bodyTrHeight: _bodyTrHeight = 1,
+        asidePanelWidth: _asidePanelWidth = 0,
+        frozenPanelWidth: _frozenPanelWidth = 0,
+        frozenPanelHeight: _frozenPanelHeight = 0,
+        rightPanelWidth: _rightPanelWidth = 0,
+        footSumHeight: _footSumHeight = 0,
+      } = {},
+      loadingData: _loadingData = false,
+      data: _data = [],
+      colGroup: _colGroup = [],
+    } = pProps;
+
+    if (data !== _data || colGroup !== _colGroup) {
+      return true;
+    }
+    if (scrollTop !== _scrollTop || scrollLeft !== _scrollLeft) {
+      return true;
+    }
+
+    if (
+      frozenRowIndex !== _frozenRowIndex ||
+      bodyLoaderHeight !== _bodyLoaderHeight ||
+      elWidth !== _elWidth ||
+      bodyHeight !== _bodyHeight ||
+      bodyTrHeight !== _bodyTrHeight ||
+      asidePanelWidth !== _asidePanelWidth ||
+      frozenPanelWidth !== _frozenPanelWidth ||
+      frozenPanelHeight !== _frozenPanelHeight ||
+      rightPanelWidth !== _rightPanelWidth ||
+      footSumHeight !== _footSumHeight ||
+      loadingData !== _loadingData
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const {
       scrollLeft = 0,
       scrollTop = 0,
-      options = {},
-      styles = {},
+      options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {},
+      styles: {
+        elWidth = 0,
+        bodyHeight = 0,
+        bodyTrHeight = 1,
+        asidePanelWidth = 0,
+        frozenPanelWidth = 0,
+        frozenPanelHeight = 0,
+        rightPanelWidth = 0,
+        footSumHeight = 0,
+      } = {},
       loadingData = false,
     } = this.props;
-    const { frozenRowIndex = 0, bodyLoaderHeight = 0 } = options;
-    const {
-      elWidth = 0,
-      bodyHeight = 0,
-      bodyTrHeight = 1,
-      asidePanelWidth = 0,
-      frozenPanelWidth = 0,
-      frozenPanelHeight = 0,
-      rightPanelWidth = 0,
-      footSumHeight = 0,
-    } = styles;
 
     const sRowIndex =
       Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
@@ -520,7 +586,6 @@ class DataGridBody extends React.Component<IProps> {
       top: 0,
       height: frozenPanelHeight,
     };
-
     const asideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
@@ -545,7 +610,6 @@ class DataGridBody extends React.Component<IProps> {
       top: frozenPanelHeight - loadingDataHeight,
       height: bodyHeight - frozenPanelHeight - footSumHeight,
     };
-
     const bottomAsideBodyPanelStyle = {
       left: 0,
       width: asidePanelWidth,
@@ -573,7 +637,7 @@ class DataGridBody extends React.Component<IProps> {
     return (
       <div
         className={'axui-datagrid-body'}
-        style={{ height: styles.bodyHeight }}
+        style={{ height: bodyHeight }}
         onMouseDown={this.onMouseDownBody}
       >
         <DataGridBodyPanel

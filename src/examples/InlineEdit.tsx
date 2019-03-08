@@ -42,6 +42,9 @@ const DatagridContainer = styled.div`
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
+  scrollContentHeight: number = 0;
+  bodyTrHeight: number = 24;
+
   constructor(props: any) {
     super(props);
 
@@ -262,8 +265,6 @@ class InlineEdit extends React.Component<any, any> {
       ],
       options,
       selection,
-      scrollContentHeight: 0,
-      bodyTrHeight: 24,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -281,7 +282,7 @@ class InlineEdit extends React.Component<any, any> {
     };
     this.setState({
       data: [...this.state.data, ...[newItem]],
-      scrollTop: this.state.scrollContentHeight,
+      scrollTop: this.scrollContentHeight,
     });
   };
 
@@ -302,10 +303,8 @@ class InlineEdit extends React.Component<any, any> {
 
   onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
     // console.log(param);
-    this.setState({
-      scrollContentHeight: param.scrollContentHeight,
-      bodyTrHeight: param.bodyTrHeight,
-    });
+    this.scrollContentHeight = param.scrollContentHeight || 0;
+    this.bodyTrHeight = param.bodyTrHeight || 0;
   };
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
@@ -314,20 +313,18 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   handleChangeSelection = () => {
-    const { data, columns, bodyTrHeight } = this.state;
-
+    const { data } = this.state;
     const r = Math.floor(Math.random() * data.length);
-    const c = Math.floor(Math.random() * columns.length);
 
-    const scrollTop = r * bodyTrHeight;
+    const scrollTop = r * this.bodyTrHeight;
 
     this.setState({
       scrollTop,
       selection: {
         rows: [r],
-        cols: [c],
+        cols: [0],
         focusedRow: r,
-        focusedCol: c,
+        focusedCol: 0,
       },
     });
   };

@@ -36,6 +36,83 @@ class DataGridBodyCell extends React.Component<IProps> {
     }
   };
 
+  shouldComponentUpdate(nextProps: IProps) {
+    const {
+      li,
+      col = {},
+      selectionRows = [],
+      selectionCols = [],
+      inlineEditingCell = {},
+      data = [],
+    } = this.props;
+    const { colIndex = 0 } = col;
+    const {
+      rowIndex: editRowIndex,
+      colIndex: editColIndex,
+    } = inlineEditingCell;
+    const {
+      selectionRows: _selectionRows = [],
+      selectionCols: _selectionCols = [],
+      inlineEditingCell: _inlineEditingCell = {},
+      data: _data = [],
+    } = nextProps;
+    const {
+      rowIndex: _editRowIndex,
+      colIndex: _editColIndex,
+    } = _inlineEditingCell;
+
+    if (
+      this.props.data !== nextProps.data ||
+      this.props.colGroup !== nextProps.colGroup
+    ) {
+      return true;
+    }
+
+    if (
+      _selectionRows[li] !== selectionRows[li] ||
+      selectionCols[colIndex] !== _selectionCols[colIndex]
+    ) {
+      return true;
+    }
+
+    if (
+      this.props.isInlineEditing !== nextProps.isInlineEditing &&
+      ((editRowIndex === li && editColIndex === colIndex) ||
+        (_editRowIndex === li && _editColIndex === colIndex))
+    ) {
+      return true;
+    }
+
+    if (
+      this.props.scrollTop !== nextProps.scrollTop ||
+      this.props.scrollLeft !== nextProps.scrollLeft
+    ) {
+      return true;
+    }
+
+    // if (li === 5 && colIndex === 6) {
+    //   console.log(
+    //     data[li][col.key || ''],
+    //     nextProps.data![li][col.key || ''],
+    //     col,
+    //   );
+    // }
+
+    // if (data[li][col.key || ''] !== nextProps.data![li][col.key || '']) {
+    //   return true;
+    // }
+
+    // return (
+
+    //   ((this.props.isInlineEditing !== nextProps.isInlineEditing &&
+    //     this.props.inlineEditingCell &&
+    //     this.props.inlineEditingCell.rowIndex === li) ||
+    //     this.props.inlineEditingCell.colIndex === li)
+    // );
+
+    return false;
+  }
+
   render() {
     const {
       data = [],
@@ -52,6 +129,7 @@ class DataGridBodyCell extends React.Component<IProps> {
       predefinedFormatter = {},
     } = this.props;
 
+    // console.log('render');
     const { body: optionsBody = {} } = options;
     const {
       columnHeight = 0,
@@ -120,7 +198,7 @@ class DataGridBodyCell extends React.Component<IProps> {
         }}
       >
         {inlineEditingActiveAlways || inlineEditingActive ? (
-          <CellEditor col={col} li={li} />
+          <CellEditor col={col} li={li} value={data[li][col.key || '']} />
         ) : (
           <CellLabel
             columnHeight={columnHeight}

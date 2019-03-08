@@ -7,6 +7,7 @@ import { DataGridEnums } from 'axui-datagrid/common/@enums';
 interface IProps extends IDataGridStore {
   col: IDataGrid.ICol;
   li: number;
+  value: any;
 }
 
 class CellEditor extends React.Component<IProps> {
@@ -164,10 +165,21 @@ class CellEditor extends React.Component<IProps> {
   };
 
   shouldComponentUpdate(nextProps: IProps) {
-    return (
-      this.props.data !== nextProps.data ||
-      this.props.colGroup !== this.props.colGroup
-    );
+    const {
+      li,
+      col: { colIndex },
+    } = nextProps;
+
+    if (
+      this.props.focusedRow === nextProps.focusedRow &&
+      nextProps.focusedRow === li &&
+      this.props.focusedCol === nextProps.focusedCol &&
+      nextProps.focusedCol === colIndex
+    ) {
+      return true;
+    }
+
+    return this.props.value !== nextProps.value;
   }
 
   render() {

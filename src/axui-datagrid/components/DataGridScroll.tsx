@@ -248,6 +248,46 @@ class DatagridScroll extends React.Component<IProps> {
     return true;
   };
 
+  shouldComponentUpdate(nextPros: IProps) {
+    const { styles = {}, options = {} } = this.props;
+    const { scroller = {} } = options;
+    const { styles: _styles = {}, options: _options = {} } = nextPros;
+    const { scroller: _scroller = {} } = _options;
+
+    if (
+      this.props.scrollTop !== nextPros.scrollTop ||
+      this.props.scrollLeft !== nextPros.scrollLeft
+    ) {
+      return true;
+    }
+
+    if (
+      styles.pageHeight !== _styles.pageHeight ||
+      styles.verticalScrollerWidth !== _styles.verticalScrollerWidth ||
+      styles.verticalScrollerHeight !== _styles.verticalScrollerHeight ||
+      styles.horizontalScrollerWidth !== _styles.horizontalScrollerWidth ||
+      styles.horizontalScrollerHeight !== _styles.horizontalScrollerHeight ||
+      styles.verticalScrollBarHeight !== _styles.verticalScrollBarHeight ||
+      styles.horizontalScrollBarWidth !== _styles.horizontalScrollBarWidth ||
+      styles.scrollerPadding !== _styles.scrollerPadding ||
+      styles.scrollerArrowSize !== _styles.scrollerArrowSize ||
+      styles.scrollContentContainerWidth !==
+        _styles.scrollContentContainerWidth ||
+      styles.scrollContentContainerHeight !==
+        _styles.scrollContentContainerHeight ||
+      styles.scrollContentWidth !== _styles.scrollContentWidth ||
+      styles.scrollContentHeight !== _styles.scrollContentHeight
+    ) {
+      return true;
+    }
+
+    if (scroller.theme !== _scroller.theme) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const {
       scrollLeft = 0,
