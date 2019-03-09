@@ -61,6 +61,7 @@ var DataGridEnums;
         DispatchTypes[DispatchTypes["SELECT"] = 5] = "SELECT";
         DispatchTypes[DispatchTypes["SELECT_ALL"] = 6] = "SELECT_ALL";
         DispatchTypes[DispatchTypes["CHANGE_SELECTION"] = 7] = "CHANGE_SELECTION";
+        DispatchTypes[DispatchTypes["FOCUS_ROOT"] = 8] = "FOCUS_ROOT";
     })(DispatchTypes = DataGridEnums.DispatchTypes || (DataGridEnums.DispatchTypes = {}));
     let PageButtonActions;
     (function (PageButtonActions) {

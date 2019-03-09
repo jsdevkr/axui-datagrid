@@ -24,6 +24,7 @@ declare class DataGrid extends React.Component<IProps, IState> {
     getColumnData: (columns: IDataGrid.IColumn[], footSum: IDataGrid.IColumn[][], options: IDataGrid.IOptions) => IState;
     componentDidMount(): void;
     componentDidUpdate(prevProps: IProps): void;
+    shouldComponentUpdate(prevProps: IProps): boolean;
     render(): JSX.Element;
 }
 export default DataGrid;

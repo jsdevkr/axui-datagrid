@@ -126,37 +126,34 @@ class DataGrid extends React.Component {
             this.setState(Object.assign({}, columnData, { options: newOptions, doneAutofit: false }));
         }
     }
-    // shouldComponentUpdate(prevProps: IProps) {
-    //   if (
-    //     prevProps.data === this.props.data &&
-    //     prevProps.columns === this.props.columns &&
-    //     prevProps.footSum === this.props.footSum &&
-    //     prevProps.width === this.props.width &&
-    //     prevProps.height === this.props.height &&
-    //     prevProps.style === this.props.style &&
-    //     prevProps.options === this.props.options &&
-    //     prevProps.status === this.props.status &&
-    //     prevProps.loading === this.props.loading &&
-    //     prevProps.loadingData === this.props.loadingData &&
-    //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
-    //     prevProps.selection === this.props.selection &&
-    //     prevProps.scrollLeft === this.props.scrollLeft &&
-    //     prevProps.scrollTop === this.props.scrollTop &&
-    //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
-    //     prevProps.onScroll === this.props.onScroll &&
-    //     prevProps.onScrollEnd === this.props.onScrollEnd &&
-    //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
-    //     prevProps.onChangeSelection === this.props.onChangeSelection &&
-    //     prevProps.onChangeSelectedRow === this.props.onChangeSelectedRow &&
-    //     prevProps.onRightClick === this.props.onRightClick
-    //   ) {
-    //     return false;
-    //   }
-    //   return true;
-    // }
+    shouldComponentUpdate(prevProps) {
+        if (prevProps.data === this.props.data &&
+            prevProps.columns === this.props.columns &&
+            prevProps.footSum === this.props.footSum &&
+            prevProps.width === this.props.width &&
+            prevProps.height === this.props.height &&
+            prevProps.style === this.props.style &&
+            prevProps.options === this.props.options &&
+            prevProps.status === this.props.status &&
+            prevProps.loading === this.props.loading &&
+            prevProps.loadingData === this.props.loadingData &&
+            prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+            prevProps.selection === this.props.selection &&
+            prevProps.scrollLeft === this.props.scrollLeft &&
+            prevProps.scrollTop === this.props.scrollTop &&
+            prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+            prevProps.onScroll === this.props.onScroll &&
+            prevProps.onScrollEnd === this.props.onScrollEnd &&
+            prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+            prevProps.onChangeSelection === this.props.onChangeSelection &&
+            prevProps.onRightClick === this.props.onRightClick) {
+            return false;
+        }
+        return true;
+    }
     render() {
         const { mounted, doneAutofit, autofitAsideWidth, autofitColGroup, headerTable, bodyRowTable, bodyRowMap, asideHeaderData, leftHeaderData, headerData, asideBodyRowData, leftBodyRowData, bodyRowData, colGroupMap, asideColGroup, colGroup, footSumColumns, footSumTable, leftFootSumData, footSumData, options, } = this.state;
-        const { loading = false, loadingData = false, data = [], width, height = DataGrid.defaultHeight, selectedRowKeys, selection, status, scrollLeft, scrollTop, onBeforeEvent, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelectedRow, onRightClick, style = {}, } = this.props;
+        const { loading = false, loadingData = false, data = [], width, height = DataGrid.defaultHeight, selectedRowKeys, selection, status, scrollLeft, scrollTop, onBeforeEvent, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelected, onRightClick, style = {}, } = this.props;
         const gridRootStyle = Object.assign({
             height: height,
             width: width,
@@ -171,7 +168,7 @@ class DataGrid extends React.Component {
             selection,
             status,
             scrollLeft,
-            scrollTop: scrollTop ? -Number(scrollTop) : 0,
+            scrollTop,
             autofitColGroup,
             headerTable,
             bodyRowTable,
@@ -197,10 +194,11 @@ class DataGrid extends React.Component {
             onScrollEnd,
             onChangeScrollSize,
             onChangeSelection,
-            onChangeSelectedRow,
+            onChangeSelected,
             onRightClick,
             options,
         };
+        // console.log('datagrid render');
         return (React.createElement(providers_1.DataGridStore.Provider, Object.assign({}, providerProps),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },

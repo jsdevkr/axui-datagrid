@@ -51,7 +51,8 @@ export declare namespace DataGridEnums {
         RESIZE_COL = 4,
         SELECT = 5,
         SELECT_ALL = 6,
-        CHANGE_SELECTION = 7
+        CHANGE_SELECTION = 7,
+        FOCUS_ROOT = 8
     }
     enum PageButtonActions {
         PAGE_FIRST = "PAGE_FIRST",

@@ -12,6 +12,8 @@ declare class StoreProvider extends React.Component<IDataGrid.IStoreProps, IData
     dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
     render(): JSX.Element;
     componentDidMount(): void;
+    lazyTimer: any;
+    lazyComponentDidUpdate: (pState: IDataGrid.IStoreState) => void;
     componentDidUpdate(pProps: IDataGrid.IStoreProps, pState: IDataGrid.IStoreState): void;
     componentWillUnmount(): void;
 }

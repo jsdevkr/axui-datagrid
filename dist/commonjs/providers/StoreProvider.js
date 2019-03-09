@@ -106,7 +106,7 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState, callback) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd, onChangeScrollSize = _a.onChangeScrollSize, onChangeSelection = _a.onChangeSelection, onChangeSelectedRow = _a.onChangeSelectedRow;
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd, onChangeScrollSize = _a.onChangeScrollSize, onChangeSelection = _a.onChangeSelection, onChangeSelected = _a.onChangeSelected;
             var _k = options.frozenRowIndex, frozenRowIndex = _k === void 0 ? 0 : _k;
             var _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m;
             var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop;
@@ -167,7 +167,7 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
-            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? -1 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _b.options, options = _h === void 0 ? {} : _h, selectedRowKeys = _b.selectedRowKeys, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection, onChangeSelectedRow = _b.onChangeSelectedRow;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? -1 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _b.options, options = _h === void 0 ? {} : _h, selectedRowKeys = _b.selectedRowKeys, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection, onChangeSelected = _b.onChangeSelected;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
                     {
@@ -286,11 +286,6 @@ var StoreProvider = /** @class */ (function (_super) {
                             isInlineEditing: false,
                             inlineEditingCell: {},
                         });
-                        if (onChangeSelectedRow) {
-                            onChangeSelectedRow({
-                                data: sortedList,
-                            });
-                        }
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
@@ -327,11 +322,6 @@ var StoreProvider = /** @class */ (function (_super) {
                                     _a),
                                 focusedRow: focusRow,
                             });
-                            if (onChangeSelectedRow) {
-                                onChangeSelectedRow({
-                                    data: data,
-                                });
-                            }
                             if (rootNode && rootNode.current) {
                                 rootNode.current.focus();
                             }
@@ -374,13 +364,19 @@ var StoreProvider = /** @class */ (function (_super) {
                         data[rowIndex]._selected_ = rowSelected;
                         _this.setStoreState({
                             listSelectedAll: selectedAll,
-                            selectedRowIndex: rowIndex,
-                            selectedRowIndexSelected: rowSelected,
                             data: __spread(data),
                         });
-                        if (onChangeSelectedRow) {
-                            onChangeSelectedRow({
-                                data: data,
+                        if (onChangeSelected) {
+                            var selectedIndexes_1 = [];
+                            var selectedList = data.filter(function (n, i) {
+                                if (n._selected_) {
+                                    selectedIndexes_1.push(i);
+                                }
+                                return n._selected_;
+                            });
+                            onChangeSelected({
+                                selectedList: selectedList,
+                                selectedIndexes: selectedIndexes_1,
                             });
                         }
                     }
@@ -405,9 +401,17 @@ var StoreProvider = /** @class */ (function (_super) {
                             listSelectedAll: selectedAll,
                             data: __spread(data),
                         });
-                        if (onChangeSelectedRow) {
-                            onChangeSelectedRow({
-                                data: data,
+                        if (onChangeSelected) {
+                            var selectedIndexes_2 = [];
+                            var selectedList = data.filter(function (n, i) {
+                                if (n._selected_) {
+                                    selectedIndexes_2.push(i);
+                                }
+                                return n._selected_;
+                            });
+                            onChangeSelected({
+                                selectedList: selectedList,
+                                selectedIndexes: selectedIndexes_2,
                             });
                         }
                     }
@@ -429,8 +433,62 @@ var StoreProvider = /** @class */ (function (_super) {
                         }
                     }
                     break;
+                case _enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT:
+                    if (rootNode && rootNode.current) {
+                        rootNode.current.focus();
+                    }
+                    break;
                 default:
                     break;
+            }
+        };
+        // tslint:disable-next-line: member-ordering
+        _this.lazyComponentDidUpdate = function (pState) {
+            var onScroll = _this.props.onScroll;
+            var _a = _this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = (_d === void 0 ? {} : _d).frozenRowIndex, frozenRowIndex = _e === void 0 ? 0 : _e, _f = _a.styles, _g = _f === void 0 ? {} : _f, _h = _g.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = _g.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m, _o = _g.bodyHeight, bodyHeight = _o === void 0 ? 0 : _o, onChangeSelection = _a.onChangeSelection;
+            // detect change scrollContent
+            if (pState.styles) {
+                var _p = pState.styles, _scrollContentHeight = _p.scrollContentHeight, _scrollContentWidth = _p.scrollContentWidth;
+                if (scrollContentHeight !== _scrollContentHeight ||
+                    scrollContentWidth !== _scrollContentWidth) {
+                    _this.props.onChangeScrollSize &&
+                        _this.props.onChangeScrollSize({
+                            scrollContentContainerHeight: scrollContentContainerHeight,
+                            scrollContentHeight: scrollContentHeight,
+                            scrollContentContainerWidth: scrollContentContainerWidth,
+                            scrollContentWidth: scrollContentWidth,
+                            bodyTrHeight: bodyTrHeight,
+                        });
+                }
+            }
+            // detect change scrollTop
+            if (pState.scrollTop !== _this.state.scrollTop) {
+                if (onScroll) {
+                    var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+                    var eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+                    onScroll({
+                        scrollLeft: Number(scrollLeft),
+                        scrollTop: Number(scrollTop),
+                        sRowIndex: sRowIndex,
+                        eRowIndex: eRowIndex,
+                    });
+                }
+            }
+            // detect change selection
+            if (onChangeSelection &&
+                (pState.focusedRow !== _this.state.focusedRow ||
+                    pState.focusedCol !== _this.state.focusedCol ||
+                    pState.selectionSRow !== _this.state.selectionSRow ||
+                    pState.selectionERow !== _this.state.selectionERow ||
+                    pState.selectionSCol !== _this.state.selectionSCol ||
+                    pState.selectionECol !== _this.state.selectionECol)) {
+                var _q = _this.state, _r = _q.selectionRows, selectionRows = _r === void 0 ? [] : _r, _s = _q.selectionCols, selectionCols = _s === void 0 ? [] : _s, _t = _q.focusedRow, focusedRow = _t === void 0 ? -1 : _t, _u = _q.focusedCol, focusedCol = _u === void 0 ? -1 : _u;
+                onChangeSelection({
+                    rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
+                    cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),
+                    focusedRow: focusedRow,
+                    focusedCol: focusedCol,
+                });
             }
         };
         return _this;
@@ -478,16 +536,21 @@ var StoreProvider = /** @class */ (function (_super) {
             nProps.onScrollEnd === nState.onScrollEnd &&
             nProps.onChangeScrollSize === nState.onChangeScrollSize &&
             nProps.onChangeSelection === nState.onChangeSelection &&
-            nProps.onChangeSelectedRow === nState.onChangeSelectedRow &&
+            nProps.onChangeSelected === nState.onChangeSelected &&
             nProps.onRightClick === nState.onRightClick) {
             return null;
+            // } else if (nState.pScrollTop && nProps.scrollTop === nState.pScrollTop) {
+            //   console.log('????????');
+            //   return null;
         }
         else {
             // store state | 현재 state복제
             var _a = nProps.options, options = _a === void 0 ? {} : _a;
             var _b = options.frozenColumnIndex, frozenColumnIndex = _b === void 0 ? 0 : _b, optionsBody = options.body; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
             var storeState_1 = __assign({}, nState);
+            // scrollTop prop 저장
             storeState_1.pScrollTop = nProps.scrollTop;
+            storeState_1.pScrollLeft = nProps.scrollLeft;
             storeState_1.loading = nProps.loading;
             storeState_1.loadingData = nProps.loadingData;
             storeState_1.width = nProps.width;
@@ -504,7 +567,7 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState_1.onScrollEnd = nProps.onScrollEnd;
             storeState_1.onChangeScrollSize = nProps.onChangeScrollSize;
             storeState_1.onChangeSelection = nProps.onChangeSelection;
-            storeState_1.onChangeSelectedRow = nProps.onChangeSelectedRow;
+            storeState_1.onChangeSelected = nProps.onChangeSelected;
             storeState_1.onRightClick = nProps.onRightClick;
             ///
             storeState_1.headerTable = nProps.headerTable;
@@ -568,27 +631,44 @@ var StoreProvider = /** @class */ (function (_super) {
                     options: nProps.options,
                 });
                 _styles = dimensions.styles;
-                _scrollLeft = dimensions.scrollLeft;
                 _scrollTop = dimensions.scrollTop;
+                _scrollLeft = dimensions.scrollLeft;
                 changed.styles = true;
             }
-            if (changed.data ||
-                nProps.scrollTop !== nState.pScrollTop ||
-                nProps.scrollLeft !== nState.pScrollLeft) {
-                // console.log('change scrollTop, left by prop', nProps.scrollTop, nProps.scrollLeft);
+            if (changed.styles) {
                 var _g = _styles || {}, _h = _g.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentContainerHeight, scrollContentContainerHeight = _l === void 0 ? 0 : _l;
                 var _m = utils_1.getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
                     scrollWidth: scrollContentWidth,
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
                     clientHeight: scrollContentContainerHeight,
-                }), _o = _m.scrollLeft, currScrollLeft = _o === void 0 ? 0 : _o, _p = _m.scrollTop, currScrollTop = _p === void 0 ? 0 : _p, endOfScrollTop = _m.endOfScrollTop;
+                }), _o = _m.scrollTop, currScrollTop = _o === void 0 ? 0 : _o, _p = _m.scrollLeft, currScrollLeft = _p === void 0 ? 0 : _p;
+                _scrollTop = currScrollTop;
+                _scrollLeft = currScrollLeft;
+            }
+            if (nProps.scrollTop !== nState.pScrollTop ||
+                nProps.scrollLeft !== nState.pScrollLeft) {
+                // console.log(
+                //   'change scrollTop, left by prop',
+                //   nProps.scrollTop,
+                //   nState.pScrollTop,
+                //   nState.scrollTop,
+                // );
+                var _q = _styles || {}, _r = _q.scrollContentWidth, scrollContentWidth = _r === void 0 ? 0 : _r, _s = _q.scrollContentHeight, scrollContentHeight = _s === void 0 ? 0 : _s, _t = _q.scrollContentContainerWidth, scrollContentContainerWidth = _t === void 0 ? 0 : _t, _u = _q.scrollContentContainerHeight, scrollContentContainerHeight = _u === void 0 ? 0 : _u;
+                var _v = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+                    scrollWidth: scrollContentWidth,
+                    scrollHeight: scrollContentHeight,
+                    clientWidth: scrollContentContainerWidth,
+                    clientHeight: scrollContentContainerHeight,
+                }), _w = _v.scrollLeft, currScrollLeft = _w === void 0 ? 0 : _w, _x = _v.scrollTop, currScrollTop = _x === void 0 ? 0 : _x;
                 _scrollLeft = currScrollLeft;
                 _scrollTop = currScrollTop;
+                // _scrollLeft = nProps.scrollLeft || 0;
+                // _scrollTop = nProps.scrollTop || 0;
             }
             if (nProps.selection !== nState.selection) {
                 storeState_1.selection = nProps.selection;
-                var _q = nProps.selection || {}, _r = _q.rows, rows = _r === void 0 ? [] : _r, _s = _q.cols, cols = _s === void 0 ? [] : _s, _t = _q.focusedRow, focusedRow = _t === void 0 ? -1 : _t, _u = _q.focusedCol, focusedCol = _u === void 0 ? -1 : _u;
+                var _y = nProps.selection || {}, _z = _y.rows, rows = _z === void 0 ? [] : _z, _0 = _y.cols, cols = _0 === void 0 ? [] : _0, _1 = _y.focusedRow, focusedRow = _1 === void 0 ? -1 : _1, _2 = _y.focusedCol, focusedCol = _2 === void 0 ? -1 : _2;
                 storeState_1.selectionRows = {};
                 storeState_1.selectionCols = {};
                 rows.forEach(function (n) {
@@ -619,9 +699,6 @@ var StoreProvider = /** @class */ (function (_super) {
                 storeState_1.printEndColIndex = visibleData.printEndColIndex;
                 changed.colGroup = true;
             }
-            // scrollTop prop 저장
-            storeState_1.pScrollTop = nProps.scrollTop;
-            storeState_1.pScrollLeft = nProps.scrollLeft;
             // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
             storeState_1.colGroup = _colGroup;
             storeState_1.leftHeaderColGroup = _leftHeaderColGroup;
@@ -644,52 +721,14 @@ var StoreProvider = /** @class */ (function (_super) {
         // console.log('store did mount');
     };
     StoreProvider.prototype.componentDidUpdate = function (pProps, pState) {
-        var onScroll = this.props.onScroll;
-        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = (_d === void 0 ? {} : _d).frozenRowIndex, frozenRowIndex = _e === void 0 ? 0 : _e, _f = _a.styles, _g = _f === void 0 ? {} : _f, _h = _g.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = _g.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m, _o = _g.bodyHeight, bodyHeight = _o === void 0 ? 0 : _o, onChangeSelection = _a.onChangeSelection;
-        // detect change scrollContent
-        if (pState.styles) {
-            var _p = pState.styles, _scrollContentHeight = _p.scrollContentHeight, _scrollContentWidth = _p.scrollContentWidth;
-            if (scrollContentHeight !== _scrollContentHeight ||
-                scrollContentWidth !== _scrollContentWidth) {
-                this.props.onChangeScrollSize &&
-                    this.props.onChangeScrollSize({
-                        scrollContentContainerHeight: scrollContentContainerHeight,
-                        scrollContentHeight: scrollContentHeight,
-                        scrollContentContainerWidth: scrollContentContainerWidth,
-                        scrollContentWidth: scrollContentWidth,
-                        bodyTrHeight: bodyTrHeight,
-                    });
-            }
+        // this.lazyComponentDidUpdate(pProps, pState);
+        var _this = this;
+        if (this.lazyTimer) {
+            clearTimeout(this.lazyTimer);
         }
-        // detect change scrollTop
-        if (pState.scrollTop !== this.state.scrollTop) {
-            if (onScroll) {
-                var sRowIndex = Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
-                var eRowIndex = sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
-                onScroll({
-                    scrollLeft: Number(scrollLeft),
-                    scrollTop: Number(scrollTop),
-                    sRowIndex: sRowIndex,
-                    eRowIndex: eRowIndex,
-                });
-            }
-        }
-        // detect change selection
-        if (onChangeSelection &&
-            (pState.focusedRow !== this.state.focusedRow ||
-                pState.focusedCol !== this.state.focusedCol ||
-                pState.selectionSRow !== this.state.selectionSRow ||
-                pState.selectionERow !== this.state.selectionERow ||
-                pState.selectionSCol !== this.state.selectionSCol ||
-                pState.selectionECol !== this.state.selectionECol)) {
-            var _q = this.state, _r = _q.selectionRows, selectionRows = _r === void 0 ? [] : _r, _s = _q.selectionCols, selectionCols = _s === void 0 ? [] : _s, _t = _q.focusedRow, focusedRow = _t === void 0 ? -1 : _t, _u = _q.focusedCol, focusedCol = _u === void 0 ? -1 : _u;
-            onChangeSelection({
-                rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
-                cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),
-                focusedRow: focusedRow,
-                focusedCol: focusedCol,
-            });
-        }
+        setTimeout(function () {
+            _this.lazyComponentDidUpdate(pState);
+        }, 200);
     };
     StoreProvider.prototype.componentWillUnmount = function () {
         // console.log('store unMount');

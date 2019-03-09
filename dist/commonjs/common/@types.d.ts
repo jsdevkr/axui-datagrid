@@ -52,8 +52,9 @@ export declare namespace IDataGrid {
         scrollContentWidth?: number;
         bodyTrHeight?: number;
     }
-    interface IonChangeSelectedRowParam {
-        data?: any[];
+    interface IonChangeSelectedParam {
+        selectedList?: any[];
+        selectedIndexes?: number[];
     }
     interface IonChangeSelectionParam {
         rows?: number[];
@@ -202,7 +203,6 @@ export declare namespace IDataGrid {
         frozenRowIndex?: number;
         showLineNumber?: boolean;
         showRowSelector?: boolean;
-        rowSelectorKey?: string;
         multipleSelect?: boolean;
         columnMinWidth?: number;
         lineNumberColumnWidth?: number;
@@ -286,7 +286,7 @@ export declare namespace IDataGrid {
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
         onChangeSelection?: (param: ISelection) => void;
-        onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+        onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
     interface IStoreState {
@@ -294,8 +294,6 @@ export declare namespace IDataGrid {
         loadingData?: boolean;
         data?: any[];
         listSelectedAll?: boolean;
-        selectedRowIndex?: number;
-        selectedRowIndexSelected?: boolean;
         sortInfo?: {};
         width?: number;
         height?: number;
@@ -370,7 +368,7 @@ export declare namespace IDataGrid {
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
         onChangeSelection?: (param: ISelection) => void;
-        onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+        onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
     interface ISelection {
@@ -399,7 +397,7 @@ export declare namespace IDataGrid {
         onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
         onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
         onChangeSelection?: (param: ISelection) => void;
-        onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+        onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
     interface IRootState {

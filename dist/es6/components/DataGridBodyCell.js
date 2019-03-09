@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const CellLabel_1 = require("./CellLabel");
 const CellEditor_1 = require("./CellEditor");
-class DataGridBodyCell extends React.PureComponent {
+class DataGridBodyCell extends React.Component {
     constructor() {
         super(...arguments);
         this.onDoubleClickCell = (e, col, li) => {
@@ -21,7 +21,7 @@ class DataGridBodyCell extends React.PureComponent {
         };
     }
     render() {
-        const { li, col = {}, col: { rowSpan = 0, colSpan = 0, colIndex = 0, rowIndex = 0, columnAttr = '', } = {}, ci, data = [], selected, focusedRow, focusedCol, selectionRows = [], selectionCols = [], options: { body: { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = {}, } = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, } = this.props;
+        const { li, col = {}, col: { rowSpan = 0, colSpan = 0, colIndex = 0, rowIndex = 0, columnAttr = '', } = {}, ci, data = [], selected, focusedRow, focusedCol, selectionRows = [], selectionCols = [], options: { body: { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = {}, } = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, setStoreState, dispatch, } = this.props;
         const editor = col.editor;
         const colAlign = col.align || bodyAlign;
         const value = data[li] && data[li][col.key || ''];
@@ -61,7 +61,7 @@ class DataGridBodyCell extends React.PureComponent {
                 if (!inlineEditingActive) {
                     this.onDoubleClickCell(e, col, li);
                 }
-            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, value: value })) : (React.createElement(CellLabel_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, li: li, data: data, selected: selected, predefinedFormatter: predefinedFormatter }))));
+            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, value: value, setStoreState: setStoreState, dispatch: dispatch, inlineEditingCell: inlineEditingCell, focusedRow: focusedRow, focusedCol: focusedCol })) : (React.createElement(CellLabel_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, li: li, data: data, selected: selected, predefinedFormatter: predefinedFormatter }))));
     }
 }
 exports.default = DataGridBodyCell;

@@ -3,7 +3,7 @@ export declare function isObject(value: any): boolean;
 export declare function isPlainObject(obj: any): boolean;
 export declare function isFunction(value: any): boolean;
 export declare function isNumber(value: any): boolean;
-export declare function debounce(func: any, wait: any, options: any): any;
+export declare function debounce(func: any, wait: any, options?: any): any;
 export declare function throttle(func: any, wait: any, options?: any): any;
 export declare const isDate: (value: any) => boolean;
 /**
