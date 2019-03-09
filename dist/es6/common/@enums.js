@@ -71,4 +71,16 @@ var DataGridEnums;
         PageButtonActions["PAGE_NEXT"] = "PAGE_NEXT";
         PageButtonActions["PAGE_LAST"] = "PAGE_LAST";
     })(PageButtonActions = DataGridEnums.PageButtonActions || (DataGridEnums.PageButtonActions = {}));
+    let PanelNames;
+    (function (PanelNames) {
+        PanelNames["TOP_ASIDE_BODY_SCROLL"] = "top-aside-body-scroll";
+        PanelNames["TOP_LEFT_BODY_SCROLL"] = "top-left-body-scroll";
+        PanelNames["TOP_BODY_SCROLL"] = "top-body-scroll";
+        PanelNames["ASIDE_BODY_SCROLL"] = "aside-body-scroll";
+        PanelNames["LEFT_BODY_SCROLL"] = "left-body-scroll";
+        PanelNames["BODY_SCROLL"] = "body-scroll";
+        PanelNames["BOTTOM_ASIDE_BODY_SCROLL"] = "bottom-aside-body-scroll";
+        PanelNames["BOTTOM_LEFT_BODY_SCROLL"] = "bottom-left-body-scroll";
+        PanelNames["BOTTOM_BODY_SCROLL"] = "bottom-body-scroll";
+    })(PanelNames = DataGridEnums.PanelNames || (DataGridEnums.PanelNames = {}));
 })(DataGridEnums = exports.DataGridEnums || (exports.DataGridEnums = {}));

@@ -121,7 +121,7 @@ class StoreProvider extends React.Component {
             this.setState(() => newState, callback);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, options = {}, rowSelector, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onChangeSelectedRow, } = this.state;
+            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, options = {}, selectedRowKeys, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onChangeSelectedRow, } = this.state;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
                     {
@@ -299,11 +299,9 @@ class StoreProvider extends React.Component {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
                     {
-                        console.log(param);
                         const { col, newWidth } = param;
                         let _colGroup = [...(this.state.colGroup || [])];
                         _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
-                        console.log(this.state.colGroup[col.colIndex], _colGroup[col.colIndex]);
                         this.setStoreState({
                             colGroup: _colGroup,
                             columnResizing: false,
@@ -397,7 +395,7 @@ class StoreProvider extends React.Component {
             nProps.loadingData === nState.loadingData &&
             nProps.data === nState.data &&
             nProps.selection === nState.selection &&
-            nProps.rowSelector === nState.rowSelector &&
+            nProps.selectedRowKeys === nState.selectedRowKeys &&
             nProps.width === nState.width &&
             nProps.height === nState.height &&
             nProps.scrollLeft === nState.scrollLeft &&
@@ -438,7 +436,6 @@ class StoreProvider extends React.Component {
             return null;
         }
         else {
-            // console.log(`run StoreProvider`);
             // store state | 현재 state복제
             const { options = {} } = nProps;
             const { frozenColumnIndex = 0, body: optionsBody } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
@@ -446,11 +443,10 @@ class StoreProvider extends React.Component {
             storeState.pScrollTop = nProps.scrollTop;
             storeState.loading = nProps.loading;
             storeState.loadingData = nProps.loadingData;
-            storeState.data = nProps.data;
             storeState.width = nProps.width;
             storeState.height = nProps.height;
             storeState.selection = nProps.selection;
-            storeState.rowSelector = nProps.rowSelector;
+            storeState.selectedRowKeys = nProps.selectedRowKeys;
             storeState.options = nProps.options;
             storeState.status = nProps.status;
             storeState.rootNode = nProps.rootNode;
@@ -487,6 +483,7 @@ class StoreProvider extends React.Component {
                 frozenColumnIndex: false,
                 styles: false,
                 visibleColGroup: false,
+                data: false,
             };
             // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
             let { colGroup: _colGroup = [], leftHeaderColGroup: _leftHeaderColGroup, headerColGroup: _headerColGroup, styles: _styles, scrollLeft: _scrollLeft = 0, scrollTop: _scrollTop = 0, } = storeState;
@@ -502,22 +499,18 @@ class StoreProvider extends React.Component {
                 _headerColGroup = _colGroup.slice(frozenColumnIndex);
                 changed.frozenColumnIndex = true;
             }
-            // // 데이터가 변경됨.
-            // if (nProps.data !== nState.data) {
-            //   // 전달받은 data를 filteredList로 치환.
-            //   _filteredList = getFilteredList(nProps.data || [], {
-            //     colGroup: _colGroup,
-            //     sorter: nState.sortInfo,
-            //     options: nProps.options,
-            //   });
-            //   changed.filteredList = true;
-            // }
-            if (changed.colGroup ||
+            // case of change datalength
+            if (nProps.data !== nState.data) {
+                changed.data = true;
+                storeState.data = nProps.data;
+            }
+            if (changed.data ||
+                changed.colGroup ||
                 changed.frozenColumnIndex ||
                 !storeState.styles ||
                 nProps.width !== nState.width ||
                 nProps.height !== nState.height) {
-                // 스타일 초기화 안되어 있음.
+                // 스타일 초기화 안되어 있거나 크기를 다시 결정해야 하는 경우.
                 const dimensions = utils_1.calculateDimensions(storeState, {
                     headerTable: nProps.headerTable,
                     colGroup: _colGroup,
@@ -532,11 +525,12 @@ class StoreProvider extends React.Component {
                 _scrollTop = dimensions.scrollTop;
                 changed.styles = true;
             }
-            if (nProps.scrollTop !== nState.pScrollTop ||
+            if (changed.data ||
+                nProps.scrollTop !== nState.pScrollTop ||
                 nProps.scrollLeft !== nState.pScrollLeft) {
                 // console.log('change scrollTop, left by prop', nProps.scrollTop, nProps.scrollLeft);
                 const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = _styles || {};
-                let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, endOfScrollTop, } = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+                let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, endOfScrollTop, } = utils_1.getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
                     scrollWidth: scrollContentWidth,
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
@@ -604,9 +598,7 @@ class StoreProvider extends React.Component {
     }
     componentDidUpdate(pProps, pState) {
         const { onScroll } = this.props;
-        const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, onChangeSelection, } = this.state;
-        const { scrollContentContainerHeight = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentWidth = 0, bodyTrHeight = 0, bodyHeight = 0, } = styles;
-        const { frozenRowIndex = 0 } = options;
+        const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0 } = {}, styles: { scrollContentContainerHeight = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentWidth = 0, bodyTrHeight = 0, bodyHeight = 0, } = {}, onChangeSelection, } = this.state;
         // detect change scrollContent
         if (pState.styles) {
             const { scrollContentHeight: _scrollContentHeight, scrollContentWidth: _scrollContentWidth, } = pState.styles;

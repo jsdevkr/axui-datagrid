@@ -16,6 +16,6 @@ var DataGridBodyBottomCell = function (props) {
         _a);
     var lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
     return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: utils_1.classNames(tdClassNames), style: { height: columnHeight * colRowSpan, minHeight: '1px' } },
-        React.createElement(CellLabelBottom_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, list: data, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector })));
+        React.createElement(CellLabelBottom_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, data: data, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector })));
 };
 exports.default = hoc_1.connectStore(DataGridBodyBottomCell);

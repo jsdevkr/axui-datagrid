@@ -2,8 +2,8 @@ import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 export interface IDataGridStore extends IDataGrid.IStoreState {
-    setStoreState: (store: IDataGrid.IStoreState, callback?: () => void) => void;
-    dispatch: (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
+    setStoreState: IDataGrid.setStoreState;
+    dispatch: IDataGrid.dispatch;
 }
 declare class StoreProvider extends React.Component<IDataGrid.IStoreProps, IDataGrid.IStoreState> {
     state: IDataGridStore;

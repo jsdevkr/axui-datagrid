@@ -19,31 +19,45 @@ var utils_1 = require("../utils");
 var DataGridHeaderCell_1 = require("./DataGridHeaderCell");
 var DataGridTableColGroup_1 = require("./DataGridTableColGroup");
 var _enums_1 = require("../common/@enums");
-var TableBody = function (_a) {
-    var bodyRow = _a.bodyRow, onClick = _a.onClick;
-    return (React.createElement("tbody", null, bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri },
-        row.cols.map(function (col, ci) { return (React.createElement(DataGridHeaderCell_1.default, { key: ci, bodyRow: bodyRow, ri: ri, col: col, onClick: onClick })); }),
-        React.createElement("td", null))); })));
-};
-var ColumnResizer = function (_a) {
-    var colGroup = _a.colGroup, resizerHeight = _a.resizerHeight, onMouseDownColumnResizer = _a.onMouseDownColumnResizer, onDoubleClickColumnResizer = _a.onDoubleClickColumnResizer;
-    var resizerLeft = 0;
-    var resizerWidth = 4;
-    return (React.createElement(React.Fragment, null, colGroup.map(function (col, ci) {
-        if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
-            var prevResizerLeft = resizerLeft;
-            resizerLeft += col._width || 0;
-            return (React.createElement("div", { key: ci, "data-column-resizer": col.colIndex, "data-prev-left": prevResizerLeft, "data-left": resizerLeft, style: {
-                    width: resizerWidth,
-                    height: resizerHeight + 'px',
-                    left: resizerLeft - resizerWidth / 2 + 'px',
-                }, onMouseDown: function (e) { return onMouseDownColumnResizer(e, col); }, onDoubleClick: function (e) { return onDoubleClickColumnResizer(e, col); } }));
-        }
-        else {
-            return null;
-        }
-    })));
-};
+var TableBody = /** @class */ (function (_super) {
+    __extends(TableBody, _super);
+    function TableBody() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TableBody.prototype.render = function () {
+        var _a = this.props, bodyRow = _a.bodyRow, listSelectedAll = _a.listSelectedAll, options = _a.options, focusedCol = _a.focusedCol, selectionCols = _a.selectionCols, sortInfo = _a.sortInfo, onClick = _a.onClick;
+        return (React.createElement("tbody", null, bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri },
+            row.cols.map(function (col, ci) { return (React.createElement(DataGridHeaderCell_1.default, { key: ci, listSelectedAll: listSelectedAll, options: options, focusedCol: focusedCol, selectionCols: selectionCols, sortInfo: sortInfo, bodyRow: bodyRow, ri: ri, col: col, onClick: onClick })); }),
+            React.createElement("td", null))); })));
+    };
+    return TableBody;
+}(React.PureComponent));
+var ColumnResizer = /** @class */ (function (_super) {
+    __extends(ColumnResizer, _super);
+    function ColumnResizer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ColumnResizer.prototype.render = function () {
+        var _a = this.props, colGroup = _a.colGroup, resizerHeight = _a.resizerHeight, onMouseDownColumnResizer = _a.onMouseDownColumnResizer, onDoubleClickColumnResizer = _a.onDoubleClickColumnResizer;
+        var resizerLeft = 0;
+        var resizerWidth = 4;
+        return (React.createElement(React.Fragment, null, colGroup.map(function (col, ci) {
+            if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
+                var prevResizerLeft = resizerLeft;
+                resizerLeft += col._width || 0;
+                return (React.createElement("div", { key: ci, "data-column-resizer": col.colIndex, "data-prev-left": prevResizerLeft, "data-left": resizerLeft, style: {
+                        width: resizerWidth,
+                        height: resizerHeight + 'px',
+                        left: resizerLeft - resizerWidth / 2 + 'px',
+                    }, onMouseDown: function (e) { return onMouseDownColumnResizer(e, col); }, onDoubleClick: function (e) { return onDoubleClickColumnResizer(e, col); } }));
+            }
+            else {
+                return null;
+            }
+        })));
+    };
+    return ColumnResizer;
+}(React.PureComponent));
 var DataGridHeaderPanel = /** @class */ (function (_super) {
     __extends(DataGridHeaderPanel, _super);
     function DataGridHeaderPanel() {
@@ -187,7 +201,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         return _this;
     }
     DataGridHeaderPanel.prototype.render = function () {
-        var _a = this.props, panelName = _a.panelName, style = _a.style, _b = _a.asideColGroup, asideColGroup = _b === void 0 ? [] : _b, _c = _a.asideHeaderData, asideHeaderData = _c === void 0 ? { rows: [{ cols: [] }] } : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.leftHeaderData, leftHeaderData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _a.headerData, headerData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.options, options = _h === void 0 ? {} : _h, _j = _a.styles, styles = _j === void 0 ? {} : _j;
+        var _a = this.props, panelName = _a.panelName, style = _a.style, _b = _a.asideColGroup, asideColGroup = _b === void 0 ? [] : _b, _c = _a.asideHeaderData, asideHeaderData = _c === void 0 ? { rows: [{ cols: [] }] } : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.leftHeaderData, leftHeaderData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _a.headerData, headerData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.options, options = _h === void 0 ? {} : _h, _j = _a.styles, styles = _j === void 0 ? {} : _j, _k = _a.listSelectedAll, listSelectedAll = _k === void 0 ? false : _k, _l = _a.focusedCol, focusedCol = _l === void 0 ? -1 : _l, _m = _a.selectionCols, selectionCols = _m === void 0 ? {} : _m, _o = _a.sortInfo, sortInfo = _o === void 0 ? {} : _o;
         // aside-header가 필요하지 않은지 확인
         if (panelName === 'aside-header' &&
             styles &&
@@ -200,8 +214,8 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
             options.frozenColumnIndex === 0) {
             return null;
         }
-        var _k = options.header, optionsHeader = _k === void 0 ? {} : _k;
-        var _l = optionsHeader.columnHeight, optionsHeaderColumnHeight = _l === void 0 ? 0 : _l, _m = optionsHeader.columnBorderWidth, optionsHeaderColumnBorderWidth = _m === void 0 ? 0 : _m;
+        var _p = options.header, optionsHeader = _p === void 0 ? {} : _p;
+        var _q = optionsHeader.columnHeight, optionsHeaderColumnHeight = _q === void 0 ? 0 : _q, _r = optionsHeader.columnBorderWidth, optionsHeaderColumnBorderWidth = _r === void 0 ? 0 : _r;
         var colGroup = (function () {
             switch (panelName) {
                 case 'aside-header':
@@ -227,7 +241,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         return (React.createElement("div", { "data-panel": panelName, style: style },
             React.createElement("table", { style: { height: '100%' } },
                 React.createElement(DataGridTableColGroup_1.default, { panelColGroup: colGroup }),
-                React.createElement(TableBody, { bodyRow: bodyRow, onClick: this.onHandleClick })),
+                React.createElement(TableBody, { listSelectedAll: listSelectedAll, options: options, focusedCol: focusedCol, selectionCols: selectionCols, sortInfo: sortInfo, bodyRow: bodyRow, onClick: this.onHandleClick })),
             panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
     };
     return DataGridHeaderPanel;

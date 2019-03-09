@@ -1,5 +1,7 @@
 import * as React from 'react';
-declare const DataGridLoader: React.SFC<{
+declare class DataGridLoader extends React.PureComponent<{
     loading: boolean;
-}>;
+}> {
+    render(): JSX.Element | null;
+}
 export default DataGridLoader;

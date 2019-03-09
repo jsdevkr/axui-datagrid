@@ -54,63 +54,69 @@ var DataGrid = /** @class */ (function (_super) {
     function DataGrid(props) {
         var _this = _super.call(this, props) || this;
         _this.rootObject = {};
-        _this.scrollLeft = 0;
-        _this.scrollTop = 0;
         _this.state = {
             mounted: false,
             autofit: false,
             doneAutofit: false,
             autofitAsideWidth: 100,
             autofitColGroup: [],
+            headerTable: { rows: [] },
+            bodyRowTable: { rows: [] },
+            bodyRowMap: {},
+            asideHeaderData: { rows: [] },
+            leftHeaderData: { rows: [] },
+            headerData: { rows: [] },
+            asideBodyRowData: { rows: [] },
+            leftBodyRowData: { rows: [] },
+            bodyRowData: { rows: [] },
+            colGroupMap: {},
+            asideColGroup: [],
+            colGroup: [],
+            footSumColumns: [],
+            footSumTable: { rows: [] },
+            leftFootSumData: { rows: [] },
+            footSumData: { rows: [] },
         };
         _this.getOptions = function (options) {
+            // todo
+            // options.lineNumberColumnWidth = autofitAsideWidth;
             return __assign({}, DataGrid.defaultOptions, options, { header: __assign({}, DataGrid.defaultOptions.header, options.header), body: __assign({}, DataGrid.defaultOptions.body, options.body), page: __assign({}, DataGrid.defaultOptions.page, options.page), scroller: __assign({}, DataGrid.defaultOptions.scroller, options.scroller), columnKeys: __assign({}, DataGrid.defaultOptions.columnKeys, options.columnKeys) });
         };
-        _this.getProviderProps = function (storeProps) {
-            var _a = _this.state, autofit = _a.autofit, doneAutofit = _a.doneAutofit, autofitAsideWidth = _a.autofitAsideWidth, autofitColGroup = _a.autofitColGroup;
-            var _b = _this.props, _c = _b.columns, columns = _c === void 0 ? [] : _c, footSum = _b.footSum;
-            var _d = storeProps.options, options = _d === void 0 ? {} : _d;
-            var _e = options.frozenColumnIndex, frozenColumnIndex = _e === void 0 ? DataGrid.defaultOptions.frozenColumnIndex || 0 : _e, _f = options.body, optionsBody = _f === void 0 ? __assign({}, DataGrid.defaultBody) : _f;
-            var _g = optionsBody.columnHeight, columnHeight = _g === void 0 ? 0 : _g;
-            if (autofit && doneAutofit) {
-                options.lineNumberColumnWidth = autofitAsideWidth;
-            }
-            // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
-            var newStoreProps = __assign({}, storeProps);
-            // options.showRowSelector 체크
-            if (newStoreProps.rowSelector) {
-                if (typeof newStoreProps.rowSelector.show === 'undefined') {
-                    newStoreProps.rowSelector.show = true;
-                }
-                if (newStoreProps.options && newStoreProps.rowSelector.show) {
-                    newStoreProps.options.showRowSelector = true;
-                }
-            }
-            if (doneAutofit) {
-                newStoreProps.autofitColGroup = autofitColGroup;
-            }
-            // convert colGroup
-            newStoreProps.headerTable = utils_1.makeHeaderTable(columns, options);
-            newStoreProps.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
-            newStoreProps.bodyRowMap = utils_1.makeBodyRowMap(newStoreProps.bodyRowTable || { rows: [] }, options);
+        _this.applyAutofit = function (params) {
+            var autofit = !!(_this.props.options && _this.props.options.autofitColumns);
+            _this.setState({
+                autofit: autofit,
+                doneAutofit: true,
+                autofitAsideWidth: params.asideWidth,
+                autofitColGroup: params.colGroup,
+            });
+            // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+        };
+        _this.getColumnData = function (columns, footSum, options) {
+            var _a = options.frozenColumnIndex, frozenColumnIndex = _a === void 0 ? 0 : _a;
+            var _b = _this.state, autofit = _b.autofit, doneAutofit = _b.doneAutofit, autofitColGroup = _b.autofitColGroup;
+            var data = {};
+            data.headerTable = utils_1.makeHeaderTable(columns, options);
+            data.bodyRowTable = utils_1.makeBodyRowTable(columns, options);
+            data.bodyRowMap = utils_1.makeBodyRowMap(data.bodyRowTable || { rows: [] }, options);
             // header를 위한 divide
-            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.headerTable || { rows: [] }, frozenColumnIndex, options);
+            var headerDividedObj = utils_1.divideTableByFrozenColumnIndex(data.headerTable || { rows: [] }, frozenColumnIndex, options);
             // body를 위한 divide
-            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
-            newStoreProps.asideHeaderData = headerDividedObj.asideData;
-            newStoreProps.leftHeaderData = headerDividedObj.leftData;
-            newStoreProps.headerData = headerDividedObj.rightData;
-            newStoreProps.asideBodyRowData = bodyDividedObj.asideData;
-            newStoreProps.leftBodyRowData = bodyDividedObj.leftData;
-            newStoreProps.bodyRowData = bodyDividedObj.rightData;
+            var bodyDividedObj = utils_1.divideTableByFrozenColumnIndex(data.bodyRowTable || { rows: [] }, frozenColumnIndex, options);
+            data.asideHeaderData = headerDividedObj.asideData;
+            data.leftHeaderData = headerDividedObj.leftData;
+            data.headerData = headerDividedObj.rightData;
+            data.asideBodyRowData = bodyDividedObj.asideData;
+            data.leftBodyRowData = bodyDividedObj.leftData;
+            data.bodyRowData = bodyDividedObj.rightData;
             // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
-            newStoreProps.colGroupMap = {};
-            if (newStoreProps.headerTable) {
-                newStoreProps.headerTable.rows.forEach(function (row, ridx) {
+            data.colGroupMap = {};
+            if (data.headerTable) {
+                data.headerTable.rows.forEach(function (row, ridx) {
                     row.cols.forEach(function (col, cidx) {
-                        if (newStoreProps.colGroupMap) {
+                        if (data.colGroupMap) {
                             var colWidth = col.width; // columns로부터 전달받은 너비값.
-                            if (autofit && doneAutofit) {
+                            if (autofit && doneAutofit && autofitColGroup) {
                                 if (utils_1.isNumber(col.colIndex) &&
                                     autofitColGroup[Number(col.colIndex)]) {
                                     colWidth = autofitColGroup[Number(col.colIndex)].width;
@@ -128,34 +134,20 @@ var DataGrid = /** @class */ (function (_super) {
                                 formatter: col.formatter,
                                 editor: col.editor,
                             };
-                            newStoreProps.colGroupMap[col.colIndex || 0] = currentCol;
+                            data.colGroupMap[col.colIndex || 0] = currentCol;
                         }
                     });
                 });
             }
-            newStoreProps.asideColGroup = headerDividedObj.asideColGroup;
-            newStoreProps.colGroup = Object.values(newStoreProps.colGroupMap);
-            // console.log(autofitColGroup, newStoreProps.colGroup);
+            data.asideColGroup = headerDividedObj.asideColGroup;
+            data.colGroup = Object.values(data.colGroupMap);
             // colGroup이 정의되면 footSum
-            if (footSum) {
-                newStoreProps.footSumColumns = __spread(footSum);
-                newStoreProps.footSumTable = utils_1.makeFootSumTable(footSum, newStoreProps.colGroup, options);
-                var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(newStoreProps.footSumTable || { rows: [] }, frozenColumnIndex, options);
-                newStoreProps.leftFootSumData = footSumDividedObj.leftData;
-                newStoreProps.footSumData = footSumDividedObj.rightData;
-            }
-            // provider props에서 styles 속성 제외 styles는 내부 state에 의해 관리 되도록 변경
-            return newStoreProps;
-        };
-        _this.applyAutofit = function (params) {
-            var autofit = !!(_this.props.options && _this.props.options.autofitColumns);
-            _this.setState({
-                autofit: autofit,
-                doneAutofit: true,
-                autofitAsideWidth: params.asideWidth,
-                autofitColGroup: params.colGroup,
-            });
-            // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+            data.footSumColumns = __spread(footSum);
+            data.footSumTable = utils_1.makeFootSumTable(footSum, data.colGroup, options);
+            var footSumDividedObj = utils_1.divideTableByFrozenColumnIndex(data.footSumTable || { rows: [] }, frozenColumnIndex, options);
+            data.leftFootSumData = footSumDividedObj.leftData;
+            data.footSumData = footSumDividedObj.rightData;
+            return data;
         };
         _this.rootNode = React.createRef();
         _this.clipBoardNode = React.createRef();
@@ -166,37 +158,83 @@ var DataGrid = /** @class */ (function (_super) {
         // );
     }
     DataGrid.prototype.componentDidMount = function () {
-        this.setState({
-            mounted: true,
-        });
+        var _a = this.props, columns = _a.columns, _b = _a.footSum, footSum = _b === void 0 ? [] : _b, _c = _a.options, options = _c === void 0 ? {} : _c;
+        var newOptions = this.getOptions(options);
+        var columnData = this.getColumnData(columns, footSum, newOptions);
+        this.setState(__assign({ mounted: true }, columnData, { options: newOptions }));
     };
     DataGrid.prototype.componentDidUpdate = function (prevProps) {
-        var autofitColumns = prevProps.options && prevProps.options.autofitColumns;
-        var _autofitColumns = this.props.options && this.props.options.autofitColumns;
-        var columnChanged = prevProps.columns !== this.props.columns;
-        if (autofitColumns !== _autofitColumns || columnChanged) {
-            this.setState({ doneAutofit: false });
+        var _columns = prevProps.columns, _footSum = prevProps.footSum, _options = prevProps.options;
+        var _a = this.props, columns = _a.columns, footSum = _a.footSum, options = _a.options;
+        if (_columns !== columns || _footSum !== footSum || _options !== options) {
+            var newOptions = this.getOptions(options || {});
+            var columnData = this.getColumnData(columns, footSum || [], newOptions);
+            this.setState(__assign({}, columnData, { options: newOptions, doneAutofit: false }));
         }
     };
+    // shouldComponentUpdate(prevProps: IProps) {
+    //   if (
+    //     prevProps.data === this.props.data &&
+    //     prevProps.columns === this.props.columns &&
+    //     prevProps.footSum === this.props.footSum &&
+    //     prevProps.width === this.props.width &&
+    //     prevProps.height === this.props.height &&
+    //     prevProps.style === this.props.style &&
+    //     prevProps.options === this.props.options &&
+    //     prevProps.status === this.props.status &&
+    //     prevProps.loading === this.props.loading &&
+    //     prevProps.loadingData === this.props.loadingData &&
+    //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+    //     prevProps.selection === this.props.selection &&
+    //     prevProps.scrollLeft === this.props.scrollLeft &&
+    //     prevProps.scrollTop === this.props.scrollTop &&
+    //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+    //     prevProps.onScroll === this.props.onScroll &&
+    //     prevProps.onScrollEnd === this.props.onScrollEnd &&
+    //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+    //     prevProps.onChangeSelection === this.props.onChangeSelection &&
+    //     prevProps.onChangeSelectedRow === this.props.onChangeSelectedRow &&
+    //     prevProps.onRightClick === this.props.onRightClick
+    //   ) {
+    //     return false;
+    //   }
+    //   return true;
+    // }
     DataGrid.prototype.render = function () {
-        var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit;
-        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, status = _b.status, _d = _b.options, options = _d === void 0 ? {} : _d, _e = _b.style, style = _e === void 0 ? {} : _e, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelectedRow = _b.onChangeSelectedRow, onRightClick = _b.onRightClick, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, width = _b.width, _g = _b.loading, loading = _g === void 0 ? false : _g, _h = _b.loadingData, loadingData = _h === void 0 ? false : _h, selection = _b.selection, rowSelector = _b.rowSelector, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop;
+        var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit, autofitAsideWidth = _a.autofitAsideWidth, autofitColGroup = _a.autofitColGroup, headerTable = _a.headerTable, bodyRowTable = _a.bodyRowTable, bodyRowMap = _a.bodyRowMap, asideHeaderData = _a.asideHeaderData, leftHeaderData = _a.leftHeaderData, headerData = _a.headerData, asideBodyRowData = _a.asideBodyRowData, leftBodyRowData = _a.leftBodyRowData, bodyRowData = _a.bodyRowData, colGroupMap = _a.colGroupMap, asideColGroup = _a.asideColGroup, colGroup = _a.colGroup, footSumColumns = _a.footSumColumns, footSumTable = _a.footSumTable, leftFootSumData = _a.leftFootSumData, footSumData = _a.footSumData, options = _a.options;
+        var _b = this.props, _c = _b.loading, loading = _c === void 0 ? false : _c, _d = _b.loadingData, loadingData = _d === void 0 ? false : _d, _e = _b.data, data = _e === void 0 ? [] : _e, width = _b.width, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, selectedRowKeys = _b.selectedRowKeys, selection = _b.selection, status = _b.status, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelectedRow = _b.onChangeSelectedRow, onRightClick = _b.onRightClick, _g = _b.style, style = _g === void 0 ? {} : _g;
         var gridRootStyle = __assign({
             height: height,
             width: width,
         }, style);
-        return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, this.getProviderProps({
+        var providerProps = {
             loading: loading,
             loadingData: loadingData,
             data: data,
             width: width,
             height: height,
+            selectedRowKeys: selectedRowKeys,
             selection: selection,
-            rowSelector: rowSelector,
             status: status,
-            options: this.getOptions(options),
             scrollLeft: scrollLeft,
             scrollTop: scrollTop ? -Number(scrollTop) : 0,
+            autofitColGroup: autofitColGroup,
+            headerTable: headerTable,
+            bodyRowTable: bodyRowTable,
+            bodyRowMap: bodyRowMap,
+            asideHeaderData: asideHeaderData,
+            leftHeaderData: leftHeaderData,
+            headerData: headerData,
+            asideBodyRowData: asideBodyRowData,
+            leftBodyRowData: leftBodyRowData,
+            bodyRowData: bodyRowData,
+            colGroupMap: colGroupMap,
+            asideColGroup: asideColGroup,
+            colGroup: colGroup,
+            footSumColumns: footSumColumns,
+            footSumTable: footSumTable,
+            leftFootSumData: leftFootSumData,
+            footSumData: footSumData,
             rootNode: this.rootNode,
             clipBoardNode: this.clipBoardNode,
             rootObject: this.rootObject,
@@ -207,7 +245,9 @@ var DataGrid = /** @class */ (function (_super) {
             onChangeSelection: onChangeSelection,
             onChangeSelectedRow: onChangeSelectedRow,
             onRightClick: onRightClick,
-        })),
+            options: options,
+        };
+        return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },
                     React.createElement("textarea", { ref: this.clipBoardNode })),
@@ -244,14 +284,6 @@ var DataGrid = /** @class */ (function (_super) {
         grouping: false,
         mergeCells: false,
     };
-    // static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
-    //   { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-    //   { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-    //   { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-    //   { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-    //   { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-    //   { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-    // ];
     DataGrid.defaultPage = {
         height: 20,
     };

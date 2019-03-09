@@ -1,6 +1,8 @@
 import * as React from 'react';
-declare const DataGridBodyLoader: React.SFC<{
+declare class DataGridBodyLoader extends React.PureComponent<{
     loadingData: boolean;
     bodyLoaderHeight: number;
-}>;
+}> {
+    render(): JSX.Element | null;
+}
 export default DataGridBodyLoader;

@@ -1,4 +1,5 @@
 /// <reference types="react" />
+import { DataGridEnums } from './@enums';
 export declare namespace IDataGrid {
     interface IPosition {
         x?: number;
@@ -65,6 +66,8 @@ export declare namespace IDataGrid {
     type formatterFunction = (formatterData: IFormatterData) => any;
     type collectorFunction = (formatterData: ICollectorData) => any;
     type userCallBackFunction = (param?: any) => void;
+    type setStoreState = (store: IDataGrid.IStoreState, callback?: () => void) => void;
+    type dispatch = (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
     interface ICellEditorData {
         col: ICol;
         rowIndex: number;
@@ -199,6 +202,7 @@ export declare namespace IDataGrid {
         frozenRowIndex?: number;
         showLineNumber?: boolean;
         showRowSelector?: boolean;
+        rowSelectorKey?: string;
         multipleSelect?: boolean;
         columnMinWidth?: number;
         lineNumberColumnWidth?: number;
@@ -244,8 +248,8 @@ export declare namespace IDataGrid {
         loading?: boolean;
         loadingData?: boolean;
         data?: any[];
+        selectedRowKeys?: string[];
         selection?: ISelection;
-        rowSelector?: IRowSelector;
         width?: number;
         height?: number;
         scrollLeft?: number;
@@ -296,8 +300,8 @@ export declare namespace IDataGrid {
         width?: number;
         height?: number;
         columnHeight?: number;
+        selectedRowKeys?: string[];
         selection?: ISelection;
-        rowSelector?: IRowSelector;
         isInlineEditing?: boolean;
         inlineEditingCell?: IEditingCell;
         columnResizing?: boolean;
@@ -369,18 +373,13 @@ export declare namespace IDataGrid {
         onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
     }
-    interface IRowSelector {
-        show: boolean;
-        rowKey: string;
-        selectedRowKeys?: string[];
-    }
     interface ISelection {
         rows?: number[];
         cols?: number[];
         focusedRow?: number;
         focusedCol?: number;
     }
-    interface IProps {
+    interface IRootProps {
         data?: any[];
         columns: IColumn[];
         footSum?: IColumn[][];
@@ -391,7 +390,7 @@ export declare namespace IDataGrid {
         status?: React.ReactNode;
         loading?: boolean;
         loadingData?: boolean;
-        rowSelector?: IRowSelector;
+        selectedRowKeys?: string[];
         selection?: ISelection;
         scrollLeft?: number;
         scrollTop?: number;
@@ -404,11 +403,28 @@ export declare namespace IDataGrid {
         onRightClick?: (param: IonRightClickParam) => void;
     }
     interface IRootState {
-        mounted: boolean;
-        autofit: boolean;
-        doneAutofit: boolean;
-        autofitAsideWidth: number;
-        autofitColGroup: IAutofitCol[];
+        mounted?: boolean;
+        autofit?: boolean;
+        doneAutofit?: boolean;
+        autofitAsideWidth?: number;
+        autofitColGroup?: IAutofitCol[];
+        headerTable?: IColumnTableMap;
+        bodyRowTable?: IColumnTableMap;
+        bodyRowMap?: {};
+        asideHeaderData?: IColumnTableMap;
+        leftHeaderData?: IColumnTableMap;
+        headerData?: IColumnTableMap;
+        asideBodyRowData?: IColumnTableMap;
+        leftBodyRowData?: IColumnTableMap;
+        bodyRowData?: IColumnTableMap;
+        colGroupMap?: {};
+        asideColGroup?: ICol[];
+        colGroup?: ICol[];
+        footSumColumns?: IColumn[][];
+        footSumTable?: IColumnTableMap;
+        leftFootSumData?: IColumnTableMap;
+        footSumData?: IColumnTableMap;
+        options?: IOptions;
     }
     type DispatchParam = {
         [key: string]: any;

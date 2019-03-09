@@ -14,15 +14,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var hoc_1 = require("../hoc");
-var utils_1 = require("../utils");
 var CellLabel_1 = require("./CellLabel");
 var CellEditor_1 = require("./CellEditor");
 var DataGridBodyCell = /** @class */ (function (_super) {
     __extends(DataGridBodyCell, _super);
     function DataGridBodyCell() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = {};
         _this.onDoubleClickCell = function (e, col, li) {
             var setStoreState = _this.props.setStoreState;
             if (col.editor) {
@@ -38,78 +35,35 @@ var DataGridBodyCell = /** @class */ (function (_super) {
         };
         return _this;
     }
-    DataGridBodyCell.prototype.shouldComponentUpdate = function (nextProps) {
-        var _a = this.props, li = _a.li, _b = _a.col, col = _b === void 0 ? {} : _b, _c = _a.selectionRows, selectionRows = _c === void 0 ? [] : _c, _d = _a.selectionCols, selectionCols = _d === void 0 ? [] : _d, _e = _a.inlineEditingCell, inlineEditingCell = _e === void 0 ? {} : _e, _f = _a.data, data = _f === void 0 ? [] : _f;
-        var _g = col.colIndex, colIndex = _g === void 0 ? 0 : _g;
-        var editRowIndex = inlineEditingCell.rowIndex, editColIndex = inlineEditingCell.colIndex;
-        var _h = nextProps.selectionRows, _selectionRows = _h === void 0 ? [] : _h, _j = nextProps.selectionCols, _selectionCols = _j === void 0 ? [] : _j, _k = nextProps.inlineEditingCell, _inlineEditingCell = _k === void 0 ? {} : _k, _l = nextProps.data, _data = _l === void 0 ? [] : _l;
-        var _editRowIndex = _inlineEditingCell.rowIndex, _editColIndex = _inlineEditingCell.colIndex;
-        if (this.props.data !== nextProps.data ||
-            this.props.colGroup !== nextProps.colGroup) {
-            return true;
-        }
-        if (_selectionRows[li] !== selectionRows[li] ||
-            selectionCols[colIndex] !== _selectionCols[colIndex]) {
-            return true;
-        }
-        if (this.props.isInlineEditing !== nextProps.isInlineEditing &&
-            ((editRowIndex === li && editColIndex === colIndex) ||
-                (_editRowIndex === li && _editColIndex === colIndex))) {
-            return true;
-        }
-        if (this.props.scrollTop !== nextProps.scrollTop ||
-            this.props.scrollLeft !== nextProps.scrollLeft) {
-            return true;
-        }
-        // if (li === 5 && colIndex === 6) {
-        //   console.log(
-        //     data[li][col.key || ''],
-        //     nextProps.data![li][col.key || ''],
-        //     col,
-        //   );
-        // }
-        // if (data[li][col.key || ''] !== nextProps.data![li][col.key || '']) {
-        //   return true;
-        // }
-        // return (
-        //   ((this.props.isInlineEditing !== nextProps.isInlineEditing &&
-        //     this.props.inlineEditingCell &&
-        //     this.props.inlineEditingCell.rowIndex === li) ||
-        //     this.props.inlineEditingCell.colIndex === li)
-        // );
-        return false;
-    };
     DataGridBodyCell.prototype.render = function () {
         var _this = this;
-        var _a;
-        var _b = this.props, _c = _b.data, data = _c === void 0 ? [] : _c, focusedRow = _b.focusedRow, focusedCol = _b.focusedCol, _d = _b.selectionRows, selectionRows = _d === void 0 ? [] : _d, _e = _b.selectionCols, selectionCols = _e === void 0 ? [] : _e, li = _b.li, _f = _b.col, col = _f === void 0 ? {} : _f, ci = _b.ci, _g = _b.options, options = _g === void 0 ? {} : _g, _h = _b.isInlineEditing, isInlineEditing = _h === void 0 ? false : _h, _j = _b.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _b.predefinedFormatter, predefinedFormatter = _k === void 0 ? {} : _k;
-        // console.log('render');
-        var _l = options.body, optionsBody = _l === void 0 ? {} : _l;
-        var _m = optionsBody.columnHeight, columnHeight = _m === void 0 ? 0 : _m, _o = optionsBody.columnPadding, columnPadding = _o === void 0 ? 0 : _o, _p = optionsBody.columnBorderWidth, columnBorderWidth = _p === void 0 ? 0 : _p, _q = optionsBody.align, bodyAlign = _q === void 0 ? 'left' : _q;
-        var _r = col.rowSpan, rowSpan = _r === void 0 ? 0 : _r, _s = col.colSpan, colSpan = _s === void 0 ? 0 : _s, _t = col.colIndex, colIndex = _t === void 0 ? 0 : _t, _u = col.rowIndex, rowIndex = _u === void 0 ? 0 : _u, _v = col.align, colAlign = _v === void 0 ? bodyAlign : _v, _w = col.columnAttr, columnAttr = _w === void 0 ? '' : _w, editor = col.editor;
+        var _a = this.props, li = _a.li, _b = _a.col, col = _b === void 0 ? {} : _b, _c = _a.col, _d = _c === void 0 ? {} : _c, _e = _d.rowSpan, rowSpan = _e === void 0 ? 0 : _e, _f = _d.colSpan, colSpan = _f === void 0 ? 0 : _f, _g = _d.colIndex, colIndex = _g === void 0 ? 0 : _g, _h = _d.rowIndex, rowIndex = _h === void 0 ? 0 : _h, _j = _d.columnAttr, columnAttr = _j === void 0 ? '' : _j, ci = _a.ci, _k = _a.data, data = _k === void 0 ? [] : _k, selected = _a.selected, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, _l = _a.selectionRows, selectionRows = _l === void 0 ? [] : _l, _m = _a.selectionCols, selectionCols = _m === void 0 ? [] : _m, _o = _a.options, _p = (_o === void 0 ? {} : _o).body, _q = _p === void 0 ? {} : _p, _r = _q.columnHeight, columnHeight = _r === void 0 ? 0 : _r, _s = _q.columnPadding, columnPadding = _s === void 0 ? 0 : _s, _t = _q.columnBorderWidth, columnBorderWidth = _t === void 0 ? 0 : _t, _u = _q.align, bodyAlign = _u === void 0 ? 'left' : _u, _v = _a.isInlineEditing, isInlineEditing = _v === void 0 ? false : _v, _w = _a.inlineEditingCell, inlineEditingCell = _w === void 0 ? {} : _w, _x = _a.predefinedFormatter, predefinedFormatter = _x === void 0 ? {} : _x;
+        var editor = col.editor;
+        var colAlign = col.align || bodyAlign;
+        var value = data[li] && data[li][col.key || ''];
         var cellHeight = columnHeight * rowSpan;
         var lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
-        var tdClassNames = (_a = {},
-            _a['axui-datagrid-line-number'] = columnAttr === 'lineNumber',
-            _a['axui-datagrid-row-selector'] = columnAttr === 'rowSelector',
-            _a);
+        var tdClassNames = [
+            "" + (columnAttr === 'lineNumber' && 'axui-datagrid-line-number'),
+            "" + (columnAttr === 'rowSelector' && 'axui-datagrid-row-selector'),
+        ];
         switch (columnAttr) {
             case 'lineNumber':
                 if (focusedRow === li) {
-                    tdClassNames.focused = true;
+                    tdClassNames.push('focused');
                 }
                 if (selectionRows[li]) {
-                    tdClassNames.selected = true;
+                    tdClassNames.push('selected');
                 }
                 break;
             case 'rowSelector':
                 break;
             default:
                 if (selectionRows[li] && selectionCols[colIndex]) {
-                    tdClassNames.selected = true;
+                    tdClassNames.push('selected');
                 }
                 if (focusedRow === li && focusedCol === colIndex) {
-                    tdClassNames.focused = true;
+                    tdClassNames.push('focused');
                 }
         }
         var colEditor = editor === 'string'
@@ -119,12 +73,12 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             inlineEditingCell.rowIndex === li &&
             inlineEditingCell.colIndex === colIndex;
         var inlineEditingActiveAlways = colEditor && colEditor.activeType === 'always';
-        return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: utils_1.classNames(tdClassNames), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: function (e) {
+        return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: tdClassNames.join(' '), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: function (e) {
                 if (!inlineEditingActive) {
                     _this.onDoubleClickCell(e, col, li);
                 }
-            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, value: data[li][col.key || ''] })) : (React.createElement(CellLabel_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, list: data, li: li, predefinedFormatter: predefinedFormatter }))));
+            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, value: value })) : (React.createElement(CellLabel_1.default, { columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, col: col, li: li, data: data, selected: selected, predefinedFormatter: predefinedFormatter }))));
     };
     return DataGridBodyCell;
-}(React.Component));
-exports.default = hoc_1.connectStore(DataGridBodyCell);
+}(React.PureComponent));
+exports.default = DataGridBodyCell;

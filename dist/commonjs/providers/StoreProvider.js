@@ -167,7 +167,7 @@ var StoreProvider = /** @class */ (function (_super) {
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
-            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? -1 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _b.options, options = _h === void 0 ? {} : _h, rowSelector = _b.rowSelector, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection, onChangeSelectedRow = _b.onChangeSelectedRow;
+            var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? -1 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, _h = _b.options, options = _h === void 0 ? {} : _h, selectedRowKeys = _b.selectedRowKeys, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, selectionRows = _b.selectionRows, selectionCols = _b.selectionCols, selection = _b.selection, onChangeSelectedRow = _b.onChangeSelectedRow;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
                     {
@@ -345,11 +345,9 @@ var StoreProvider = /** @class */ (function (_super) {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
                     {
-                        console.log(param);
                         var col = param.col, newWidth = param.newWidth;
                         var _colGroup = __spread((_this.state.colGroup || []));
                         _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
-                        console.log(_this.state.colGroup[col.colIndex], _colGroup[col.colIndex]);
                         _this.setStoreState({
                             colGroup: _colGroup,
                             columnResizing: false,
@@ -444,7 +442,7 @@ var StoreProvider = /** @class */ (function (_super) {
             nProps.loadingData === nState.loadingData &&
             nProps.data === nState.data &&
             nProps.selection === nState.selection &&
-            nProps.rowSelector === nState.rowSelector &&
+            nProps.selectedRowKeys === nState.selectedRowKeys &&
             nProps.width === nState.width &&
             nProps.height === nState.height &&
             nProps.scrollLeft === nState.scrollLeft &&
@@ -485,7 +483,6 @@ var StoreProvider = /** @class */ (function (_super) {
             return null;
         }
         else {
-            // console.log(`run StoreProvider`);
             // store state | 현재 state복제
             var _a = nProps.options, options = _a === void 0 ? {} : _a;
             var _b = options.frozenColumnIndex, frozenColumnIndex = _b === void 0 ? 0 : _b, optionsBody = options.body; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
@@ -493,11 +490,10 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState_1.pScrollTop = nProps.scrollTop;
             storeState_1.loading = nProps.loading;
             storeState_1.loadingData = nProps.loadingData;
-            storeState_1.data = nProps.data;
             storeState_1.width = nProps.width;
             storeState_1.height = nProps.height;
             storeState_1.selection = nProps.selection;
-            storeState_1.rowSelector = nProps.rowSelector;
+            storeState_1.selectedRowKeys = nProps.selectedRowKeys;
             storeState_1.options = nProps.options;
             storeState_1.status = nProps.status;
             storeState_1.rootNode = nProps.rootNode;
@@ -534,6 +530,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 frozenColumnIndex: false,
                 styles: false,
                 visibleColGroup: false,
+                data: false,
             };
             // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
             var _d = storeState_1.colGroup, _colGroup = _d === void 0 ? [] : _d, _leftHeaderColGroup = storeState_1.leftHeaderColGroup, _headerColGroup = storeState_1.headerColGroup, _styles = storeState_1.styles, _e = storeState_1.scrollLeft, _scrollLeft = _e === void 0 ? 0 : _e, _f = storeState_1.scrollTop, _scrollTop = _f === void 0 ? 0 : _f;
@@ -549,22 +546,18 @@ var StoreProvider = /** @class */ (function (_super) {
                 _headerColGroup = _colGroup.slice(frozenColumnIndex);
                 changed.frozenColumnIndex = true;
             }
-            // // 데이터가 변경됨.
-            // if (nProps.data !== nState.data) {
-            //   // 전달받은 data를 filteredList로 치환.
-            //   _filteredList = getFilteredList(nProps.data || [], {
-            //     colGroup: _colGroup,
-            //     sorter: nState.sortInfo,
-            //     options: nProps.options,
-            //   });
-            //   changed.filteredList = true;
-            // }
-            if (changed.colGroup ||
+            // case of change datalength
+            if (nProps.data !== nState.data) {
+                changed.data = true;
+                storeState_1.data = nProps.data;
+            }
+            if (changed.data ||
+                changed.colGroup ||
                 changed.frozenColumnIndex ||
                 !storeState_1.styles ||
                 nProps.width !== nState.width ||
                 nProps.height !== nState.height) {
-                // 스타일 초기화 안되어 있음.
+                // 스타일 초기화 안되어 있거나 크기를 다시 결정해야 하는 경우.
                 var dimensions = utils_1.calculateDimensions(storeState_1, {
                     headerTable: nProps.headerTable,
                     colGroup: _colGroup,
@@ -579,11 +572,12 @@ var StoreProvider = /** @class */ (function (_super) {
                 _scrollTop = dimensions.scrollTop;
                 changed.styles = true;
             }
-            if (nProps.scrollTop !== nState.pScrollTop ||
+            if (changed.data ||
+                nProps.scrollTop !== nState.pScrollTop ||
                 nProps.scrollLeft !== nState.pScrollLeft) {
                 // console.log('change scrollTop, left by prop', nProps.scrollTop, nProps.scrollLeft);
                 var _g = _styles || {}, _h = _g.scrollContentWidth, scrollContentWidth = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentContainerHeight, scrollContentContainerHeight = _l === void 0 ? 0 : _l;
-                var _m = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+                var _m = utils_1.getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
                     scrollWidth: scrollContentWidth,
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
@@ -651,12 +645,10 @@ var StoreProvider = /** @class */ (function (_super) {
     };
     StoreProvider.prototype.componentDidUpdate = function (pProps, pState) {
         var onScroll = this.props.onScroll;
-        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, options = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e, onChangeSelection = _a.onChangeSelection;
-        var _f = styles.scrollContentContainerHeight, scrollContentContainerHeight = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerWidth, scrollContentContainerWidth = _h === void 0 ? 0 : _h, _j = styles.scrollContentWidth, scrollContentWidth = _j === void 0 ? 0 : _j, _k = styles.bodyTrHeight, bodyTrHeight = _k === void 0 ? 0 : _k, _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l;
-        var _m = options.frozenRowIndex, frozenRowIndex = _m === void 0 ? 0 : _m;
+        var _a = this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = (_d === void 0 ? {} : _d).frozenRowIndex, frozenRowIndex = _e === void 0 ? 0 : _e, _f = _a.styles, _g = _f === void 0 ? {} : _f, _h = _g.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = _g.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m, _o = _g.bodyHeight, bodyHeight = _o === void 0 ? 0 : _o, onChangeSelection = _a.onChangeSelection;
         // detect change scrollContent
         if (pState.styles) {
-            var _o = pState.styles, _scrollContentHeight = _o.scrollContentHeight, _scrollContentWidth = _o.scrollContentWidth;
+            var _p = pState.styles, _scrollContentHeight = _p.scrollContentHeight, _scrollContentWidth = _p.scrollContentWidth;
             if (scrollContentHeight !== _scrollContentHeight ||
                 scrollContentWidth !== _scrollContentWidth) {
                 this.props.onChangeScrollSize &&
@@ -690,7 +682,7 @@ var StoreProvider = /** @class */ (function (_super) {
                 pState.selectionERow !== this.state.selectionERow ||
                 pState.selectionSCol !== this.state.selectionSCol ||
                 pState.selectionECol !== this.state.selectionECol)) {
-            var _p = this.state, _q = _p.selectionRows, selectionRows = _q === void 0 ? [] : _q, _r = _p.selectionCols, selectionCols = _r === void 0 ? [] : _r, _s = _p.focusedRow, focusedRow = _s === void 0 ? -1 : _s, _t = _p.focusedCol, focusedCol = _t === void 0 ? -1 : _t;
+            var _q = this.state, _r = _q.selectionRows, selectionRows = _r === void 0 ? [] : _r, _s = _q.selectionCols, selectionCols = _s === void 0 ? [] : _s, _t = _q.focusedRow, focusedRow = _t === void 0 ? -1 : _t, _u = _q.focusedCol, focusedCol = _u === void 0 ? -1 : _u;
             onChangeSelection({
                 rows: Object.keys(selectionRows).map(function (n) { return Number(n); }),
                 cols: Object.keys(selectionCols).map(function (n) { return Number(n); }),

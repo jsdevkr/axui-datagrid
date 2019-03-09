@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IDataGrid } from './common/@types';
-interface IProps extends IDataGrid.IProps {
+interface IProps extends IDataGrid.IRootProps {
 }
 interface IState extends IDataGrid.IRootState {
 }
@@ -17,13 +17,11 @@ declare class DataGrid extends React.Component<IProps, IState> {
     rootObject: any;
     rootNode: React.RefObject<HTMLDivElement>;
     clipBoardNode: React.RefObject<HTMLTextAreaElement>;
-    scrollLeft: number;
-    scrollTop: number;
     state: IState;
     constructor(props: IProps);
     getOptions: (options: IDataGrid.IOptions) => IDataGrid.IOptions;
-    getProviderProps: (storeProps: IDataGrid.IStoreProps) => IDataGrid.IStoreProps;
     applyAutofit: (params: IDataGrid.IapplyAutofitParam) => void;
+    getColumnData: (columns: IDataGrid.IColumn[], footSum: IDataGrid.IColumn[][], options: IDataGrid.IOptions) => IState;
     componentDidMount(): void;
     componentDidUpdate(prevProps: IProps): void;
     render(): JSX.Element;

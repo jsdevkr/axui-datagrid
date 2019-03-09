@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from 'axui-datagrid/common/@enums';
 interface IProps extends IDataGridStore {
-    panelName: string;
+    panelName: DataGridEnums.PanelNames;
     style?: any;
     containerStyle?: any;
     panelScrollConfig?: IDataGrid.IScrollConfig;
