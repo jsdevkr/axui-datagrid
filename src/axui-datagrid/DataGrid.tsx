@@ -21,7 +21,7 @@ import {
 import { IDataGrid } from './common/@types';
 import DataGridAutofitHelper from './components/DataGridAutofitHelper';
 
-interface IProps extends IDataGrid.IProps {}
+interface IProps extends IDataGrid.IRootProps {}
 interface IState extends IDataGrid.IRootState {}
 
 class DataGrid extends React.Component<IProps, IState> {
@@ -50,14 +50,6 @@ class DataGrid extends React.Component<IProps, IState> {
     grouping: false,
     mergeCells: false,
   };
-  // static defaultPageButtons: IDataGrid.IOptionPageButton[] = [
-  //   { className: 'datagridIcon-first', onClick: 'PAGE_FIRST' },
-  //   { className: 'datagridIcon-prev', onClick: 'PAGE_PREV' },
-  //   { className: 'datagridIcon-back', onClick: 'PAGE_BACK' },
-  //   { className: 'datagridIcon-play', onClick: 'PAGE_PLAY' },
-  //   { className: 'datagridIcon-next', onClick: 'PAGE_NEXT' },
-  //   { className: 'datagridIcon-last', onClick: 'PAGE_LAST' },
-  // ];
   static defaultPage: IDataGrid.IOptionPage = {
     height: 20,
   };
@@ -120,8 +112,6 @@ class DataGrid extends React.Component<IProps, IState> {
   rootObject: any = {};
   rootNode: React.RefObject<HTMLDivElement>;
   clipBoardNode: React.RefObject<HTMLTextAreaElement>;
-  scrollLeft: number = 0;
-  scrollTop: number = 0;
 
   state: IState = {
     mounted: false,
@@ -129,6 +119,22 @@ class DataGrid extends React.Component<IProps, IState> {
     doneAutofit: false,
     autofitAsideWidth: 100,
     autofitColGroup: [],
+    headerTable: { rows: [] },
+    bodyRowTable: { rows: [] },
+    bodyRowMap: {},
+    asideHeaderData: { rows: [] },
+    leftHeaderData: { rows: [] },
+    headerData: { rows: [] },
+    asideBodyRowData: { rows: [] },
+    leftBodyRowData: { rows: [] },
+    bodyRowData: { rows: [] },
+    colGroupMap: {},
+    asideColGroup: [],
+    colGroup: [],
+    footSumColumns: [],
+    footSumTable: { rows: [] },
+    leftFootSumData: { rows: [] },
+    footSumData: { rows: [] },
   };
 
   constructor(props: IProps) {
@@ -144,6 +150,9 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
+    // todo
+    // options.lineNumberColumnWidth = autofitAsideWidth;
+
     return {
       ...DataGrid.defaultOptions,
       ...options,
@@ -158,82 +167,66 @@ class DataGrid extends React.Component<IProps, IState> {
     };
   };
 
-  getProviderProps = (storeProps: IDataGrid.IStoreProps) => {
-    const {
+  applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
+    const autofit = !!(this.props.options && this.props.options.autofitColumns);
+
+    this.setState({
       autofit,
-      doneAutofit,
-      autofitAsideWidth,
-      autofitColGroup,
-    } = this.state;
-    const { columns = [], footSum } = this.props;
-    const { options = {} } = storeProps;
-    const {
-      frozenColumnIndex = DataGrid.defaultOptions.frozenColumnIndex || 0,
-      body: optionsBody = { ...DataGrid.defaultBody },
-    } = options;
-    const { columnHeight = 0 } = optionsBody;
+      doneAutofit: true,
+      autofitAsideWidth: params.asideWidth,
+      autofitColGroup: params.colGroup,
+    });
+    // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+  };
 
-    if (autofit && doneAutofit) {
-      options.lineNumberColumnWidth = autofitAsideWidth;
-    }
+  getColumnData = (
+    columns: IDataGrid.IColumn[],
+    footSum: IDataGrid.IColumn[][],
+    options: IDataGrid.IOptions,
+  ): IState => {
+    const { frozenColumnIndex = 0 } = options;
+    const { autofit, doneAutofit, autofitColGroup } = this.state;
 
-    // StoreProvider에 전달해야 하는 상태를 newState에 담는 작업을 시작합니다.
-    let newStoreProps: IDataGrid.IStoreProps = { ...storeProps };
-
-    // options.showRowSelector 체크
-    if (newStoreProps.rowSelector) {
-      if (typeof newStoreProps.rowSelector.show === 'undefined') {
-        newStoreProps.rowSelector.show = true;
-      }
-
-      if (newStoreProps.options && newStoreProps.rowSelector.show) {
-        newStoreProps.options.showRowSelector = true;
-      }
-    }
-
-    if (doneAutofit) {
-      newStoreProps.autofitColGroup = autofitColGroup;
-    }
-    // convert colGroup
-    newStoreProps.headerTable = makeHeaderTable(columns, options);
-    newStoreProps.bodyRowTable = makeBodyRowTable(columns, options);
-    newStoreProps.bodyRowMap = makeBodyRowMap(
-      newStoreProps.bodyRowTable || { rows: [] },
+    const data: IState = {};
+    data.headerTable = makeHeaderTable(columns, options);
+    data.bodyRowTable = makeBodyRowTable(columns, options);
+    data.bodyRowMap = makeBodyRowMap(
+      data.bodyRowTable || { rows: [] },
       options,
     );
 
     // header를 위한 divide
     const headerDividedObj = divideTableByFrozenColumnIndex(
-      newStoreProps.headerTable || { rows: [] },
+      data.headerTable || { rows: [] },
       frozenColumnIndex,
       options,
     );
 
     // body를 위한 divide
     const bodyDividedObj = divideTableByFrozenColumnIndex(
-      newStoreProps.bodyRowTable || { rows: [] },
+      data.bodyRowTable || { rows: [] },
       frozenColumnIndex,
       options,
     );
 
-    newStoreProps.asideHeaderData = headerDividedObj.asideData;
-    newStoreProps.leftHeaderData = headerDividedObj.leftData;
-    newStoreProps.headerData = headerDividedObj.rightData;
+    data.asideHeaderData = headerDividedObj.asideData;
+    data.leftHeaderData = headerDividedObj.leftData;
+    data.headerData = headerDividedObj.rightData;
 
-    newStoreProps.asideBodyRowData = bodyDividedObj.asideData;
-    newStoreProps.leftBodyRowData = bodyDividedObj.leftData;
-    newStoreProps.bodyRowData = bodyDividedObj.rightData;
+    data.asideBodyRowData = bodyDividedObj.asideData;
+    data.leftBodyRowData = bodyDividedObj.leftData;
+    data.bodyRowData = bodyDividedObj.rightData;
 
     // colGroupMap, colGroup을 만들고 틀고정 값을 기준으로 나누어 left와 나머지에 저장
 
-    newStoreProps.colGroupMap = {};
-    if (newStoreProps.headerTable) {
-      newStoreProps.headerTable.rows.forEach((row, ridx) => {
+    data.colGroupMap = {};
+    if (data.headerTable) {
+      data.headerTable.rows.forEach((row, ridx) => {
         row.cols.forEach((col, cidx) => {
-          if (newStoreProps.colGroupMap) {
+          if (data.colGroupMap) {
             let colWidth = col.width; // columns로부터 전달받은 너비값.
 
-            if (autofit && doneAutofit) {
+            if (autofit && doneAutofit && autofitColGroup) {
               if (
                 isNumber(col.colIndex) &&
                 autofitColGroup[Number(col.colIndex)]
@@ -254,75 +247,126 @@ class DataGrid extends React.Component<IProps, IState> {
               formatter: col.formatter,
               editor: col.editor,
             };
-            newStoreProps.colGroupMap[col.colIndex || 0] = currentCol;
+            data.colGroupMap[col.colIndex || 0] = currentCol;
           }
         });
       });
     }
 
-    newStoreProps.asideColGroup = headerDividedObj.asideColGroup;
-    newStoreProps.colGroup = Object.values(newStoreProps.colGroupMap);
-
-    // console.log(autofitColGroup, newStoreProps.colGroup);
-
+    data.asideColGroup = headerDividedObj.asideColGroup;
+    data.colGroup = Object.values(data.colGroupMap);
     // colGroup이 정의되면 footSum
-    if (footSum) {
-      newStoreProps.footSumColumns = [...footSum];
-      newStoreProps.footSumTable = makeFootSumTable(
-        footSum,
-        newStoreProps.colGroup,
-        options,
-      );
-      const footSumDividedObj = divideTableByFrozenColumnIndex(
-        newStoreProps.footSumTable || { rows: [] },
-        frozenColumnIndex,
-        options,
-      );
-      newStoreProps.leftFootSumData = footSumDividedObj.leftData;
-      newStoreProps.footSumData = footSumDividedObj.rightData;
-    }
 
-    // provider props에서 styles 속성 제외 styles는 내부 state에 의해 관리 되도록 변경
-    return newStoreProps;
-  };
+    data.footSumColumns = [...footSum];
+    data.footSumTable = makeFootSumTable(footSum, data.colGroup, options);
+    const footSumDividedObj = divideTableByFrozenColumnIndex(
+      data.footSumTable || { rows: [] },
+      frozenColumnIndex,
+      options,
+    );
+    data.leftFootSumData = footSumDividedObj.leftData;
+    data.footSumData = footSumDividedObj.rightData;
 
-  applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
-    const autofit = !!(this.props.options && this.props.options.autofitColumns);
-
-    this.setState({
-      autofit,
-      doneAutofit: true,
-      autofitAsideWidth: params.asideWidth,
-      autofitColGroup: params.colGroup,
-    });
-    // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
+    return data;
   };
 
   componentDidMount() {
+    const { columns, footSum = [], options = {} } = this.props;
+    const newOptions = this.getOptions(options);
+    const columnData = this.getColumnData(columns, footSum, newOptions);
+
     this.setState({
       mounted: true,
+      ...columnData,
+      options: newOptions,
     });
   }
 
   componentDidUpdate(prevProps: IProps) {
-    const autofitColumns =
-      prevProps.options && prevProps.options.autofitColumns;
-    const _autofitColumns =
-      this.props.options && this.props.options.autofitColumns;
-    const columnChanged = prevProps.columns !== this.props.columns;
+    const {
+      columns: _columns,
+      footSum: _footSum,
+      options: _options,
+    } = prevProps;
+    const { columns, footSum, options } = this.props;
 
-    if (autofitColumns !== _autofitColumns || columnChanged) {
-      this.setState({ doneAutofit: false });
+    if (_columns !== columns || _footSum !== footSum || _options !== options) {
+      const newOptions = this.getOptions(options || {});
+      const columnData = this.getColumnData(columns, footSum || [], newOptions);
+      this.setState({
+        ...columnData,
+        options: newOptions,
+        doneAutofit: false,
+      });
     }
   }
 
+  // shouldComponentUpdate(prevProps: IProps) {
+  //   if (
+  //     prevProps.data === this.props.data &&
+  //     prevProps.columns === this.props.columns &&
+  //     prevProps.footSum === this.props.footSum &&
+  //     prevProps.width === this.props.width &&
+  //     prevProps.height === this.props.height &&
+  //     prevProps.style === this.props.style &&
+  //     prevProps.options === this.props.options &&
+  //     prevProps.status === this.props.status &&
+  //     prevProps.loading === this.props.loading &&
+  //     prevProps.loadingData === this.props.loadingData &&
+  //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+  //     prevProps.selection === this.props.selection &&
+  //     prevProps.scrollLeft === this.props.scrollLeft &&
+  //     prevProps.scrollTop === this.props.scrollTop &&
+  //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+  //     prevProps.onScroll === this.props.onScroll &&
+  //     prevProps.onScrollEnd === this.props.onScrollEnd &&
+  //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+  //     prevProps.onChangeSelection === this.props.onChangeSelection &&
+  //     prevProps.onChangeSelectedRow === this.props.onChangeSelectedRow &&
+  //     prevProps.onRightClick === this.props.onRightClick
+  //   ) {
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+
   public render() {
-    const { mounted, doneAutofit } = this.state;
     const {
+      mounted,
+      doneAutofit,
+      autofitAsideWidth,
+      autofitColGroup,
+      headerTable,
+      bodyRowTable,
+      bodyRowMap,
+      asideHeaderData,
+      leftHeaderData,
+      headerData,
+      asideBodyRowData,
+      leftBodyRowData,
+      bodyRowData,
+      colGroupMap,
+      asideColGroup,
+      colGroup,
+      footSumColumns,
+      footSumTable,
+      leftFootSumData,
+      footSumData,
+      options,
+    } = this.state;
+    const {
+      loading = false,
+      loadingData = false,
       data = [],
+      width,
+      height = DataGrid.defaultHeight,
+      selectedRowKeys,
+      selection,
       status,
-      options = {},
-      style = {},
+      scrollLeft,
+      scrollTop,
+
       onBeforeEvent,
       onScroll,
       onScrollEnd,
@@ -330,17 +374,11 @@ class DataGrid extends React.Component<IProps, IState> {
       onChangeSelection,
       onChangeSelectedRow,
       onRightClick,
-      height = DataGrid.defaultHeight,
-      width,
-      loading = false,
-      loadingData = false,
-      selection,
-      rowSelector,
-      scrollLeft,
-      scrollTop,
+
+      style = {},
     } = this.props;
 
-    let gridRootStyle = {
+    const gridRootStyle = {
       ...{
         height: height,
         width: width,
@@ -348,32 +386,52 @@ class DataGrid extends React.Component<IProps, IState> {
       ...style,
     };
 
+    const providerProps = {
+      loading,
+      loadingData,
+      data,
+      width,
+      height,
+      selectedRowKeys,
+      selection,
+      status,
+      scrollLeft,
+      scrollTop: scrollTop ? -Number(scrollTop) : 0,
+
+      autofitColGroup,
+      headerTable,
+      bodyRowTable,
+      bodyRowMap,
+      asideHeaderData,
+      leftHeaderData,
+      headerData,
+      asideBodyRowData,
+      leftBodyRowData,
+      bodyRowData,
+      colGroupMap,
+      asideColGroup,
+      colGroup,
+      footSumColumns,
+      footSumTable,
+      leftFootSumData,
+      footSumData,
+
+      rootNode: this.rootNode,
+      clipBoardNode: this.clipBoardNode,
+      rootObject: this.rootObject,
+      onBeforeEvent,
+      onScroll,
+      onScrollEnd,
+      onChangeScrollSize,
+      onChangeSelection,
+      onChangeSelectedRow,
+      onRightClick,
+
+      options,
+    };
+
     return (
-      <DataGridStore.Provider
-        {...this.getProviderProps({
-          loading,
-          loadingData,
-          data,
-          width,
-          height,
-          selection,
-          rowSelector,
-          status,
-          options: this.getOptions(options),
-          scrollLeft,
-          scrollTop: scrollTop ? -Number(scrollTop) : 0,
-          rootNode: this.rootNode,
-          clipBoardNode: this.clipBoardNode,
-          rootObject: this.rootObject,
-          onBeforeEvent,
-          onScroll,
-          onScrollEnd,
-          onChangeScrollSize,
-          onChangeSelection,
-          onChangeSelectedRow,
-          onRightClick,
-        })}
-      >
+      <DataGridStore.Provider {...providerProps}>
         <div
           tabIndex={-1}
           ref={this.rootNode}

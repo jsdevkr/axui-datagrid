@@ -1,41 +1,59 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import {
-  getMousePosition,
-  arrayFromRange,
-  findParentNode,
-  getNode,
-} from '../utils';
+import { getMousePosition, arrayFromRange } from '../utils';
 import DataGridHeaderCell from './DataGridHeaderCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 
-interface ITableBody {
+class TableBody extends React.PureComponent<{
   bodyRow: IDataGrid.IColumnTableMap;
+  listSelectedAll: boolean;
+  options: IDataGrid.IOptions;
+  focusedCol: number;
+  selectionCols: {};
+  sortInfo: {};
   onClick: (e: any, col: IDataGrid.ICol) => void;
-}
-const TableBody: React.SFC<ITableBody> = ({ bodyRow, onClick }) => (
-  <tbody>
-    {bodyRow.rows.map((row, ri) => (
-      <tr key={ri}>
-        {row.cols.map((col, ci) => (
-          <DataGridHeaderCell
-            key={ci}
-            bodyRow={bodyRow}
-            ri={ri}
-            col={col}
-            onClick={onClick}
-          />
-        ))}
-        <td />
-      </tr>
-    ))}
-  </tbody>
-);
+}> {
+  render() {
+    const {
+      bodyRow,
+      listSelectedAll,
+      options,
+      focusedCol,
+      selectionCols,
+      sortInfo,
+      onClick,
+    } = this.props;
 
-interface IColumnResizer {
+    return (
+      <tbody>
+        {bodyRow.rows.map((row, ri) => (
+          <tr key={ri}>
+            {row.cols.map((col, ci) => (
+              <DataGridHeaderCell
+                key={ci}
+                listSelectedAll={listSelectedAll}
+                options={options}
+                focusedCol={focusedCol}
+                selectionCols={selectionCols}
+                sortInfo={sortInfo}
+                bodyRow={bodyRow}
+                ri={ri}
+                col={col}
+                onClick={onClick}
+              />
+            ))}
+            <td />
+          </tr>
+        ))}
+      </tbody>
+    );
+  }
+}
+
+class ColumnResizer extends React.PureComponent<{
   colGroup: IDataGrid.ICol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
@@ -46,43 +64,46 @@ interface IColumnResizer {
     e: React.SyntheticEvent<Element>,
     col: IDataGrid.ICol,
   ) => void;
+}> {
+  render() {
+    const {
+      colGroup,
+      resizerHeight,
+      onMouseDownColumnResizer,
+      onDoubleClickColumnResizer,
+    } = this.props;
+    let resizerLeft = 0;
+    let resizerWidth = 4;
+
+    return (
+      <>
+        {colGroup.map((col, ci) => {
+          if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
+            let prevResizerLeft = resizerLeft;
+            resizerLeft += col._width || 0;
+            return (
+              <div
+                key={ci}
+                data-column-resizer={col.colIndex}
+                data-prev-left={prevResizerLeft}
+                data-left={resizerLeft}
+                style={{
+                  width: resizerWidth,
+                  height: resizerHeight + 'px',
+                  left: resizerLeft - resizerWidth / 2 + 'px',
+                }}
+                onMouseDown={e => onMouseDownColumnResizer(e, col)}
+                onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
+              />
+            );
+          } else {
+            return null;
+          }
+        })}
+      </>
+    );
+  }
 }
-const ColumnResizer: React.SFC<IColumnResizer> = ({
-  colGroup,
-  resizerHeight,
-  onMouseDownColumnResizer,
-  onDoubleClickColumnResizer,
-}) => {
-  let resizerLeft = 0;
-  let resizerWidth = 4;
-  return (
-    <>
-      {colGroup.map((col, ci) => {
-        if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
-          let prevResizerLeft = resizerLeft;
-          resizerLeft += col._width || 0;
-          return (
-            <div
-              key={ci}
-              data-column-resizer={col.colIndex}
-              data-prev-left={prevResizerLeft}
-              data-left={resizerLeft}
-              style={{
-                width: resizerWidth,
-                height: resizerHeight + 'px',
-                left: resizerLeft - resizerWidth / 2 + 'px',
-              }}
-              onMouseDown={e => onMouseDownColumnResizer(e, col)}
-              onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
-            />
-          );
-        } else {
-          return null;
-        }
-      })}
-    </>
-  );
-};
 
 interface IDataGridHeaderPanel extends IDataGridStore {
   panelName: string;
@@ -263,6 +284,11 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       headerData = { rows: [{ cols: [] }] },
       options = {},
       styles = {},
+
+      listSelectedAll = false,
+      focusedCol = -1,
+      selectionCols = {},
+      sortInfo = {},
     } = this.props;
 
     // aside-header가 필요하지 않은지 확인
@@ -316,7 +342,15 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       <div data-panel={panelName} style={style}>
         <table style={{ height: '100%' }}>
           <DataGridTableColGroup panelColGroup={colGroup} />
-          <TableBody bodyRow={bodyRow} onClick={this.onHandleClick} />
+          <TableBody
+            listSelectedAll={listSelectedAll}
+            options={options}
+            focusedCol={focusedCol}
+            selectionCols={selectionCols}
+            sortInfo={sortInfo}
+            bodyRow={bodyRow}
+            onClick={this.onHandleClick}
+          />
         </table>
 
         {panelName === 'aside-header' ? null : (

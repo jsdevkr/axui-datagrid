@@ -1,22 +1,24 @@
 import * as React from 'react';
-import { connectStore } from '../hoc';
-import { IDataGridStore } from '../providers';
-import { classNames as CX, isFunction, getNode } from '../utils';
 import { IDataGrid } from '../common/@types';
-import { DataGridEnums } from '../common/@enums';
 import CellLabel from './CellLabel';
 import CellEditor from './CellEditor';
 
-interface IProps extends IDataGridStore {
+class DataGridBodyCell extends React.PureComponent<{
   li: number;
   ci: number;
   col?: IDataGrid.ICol;
-  value?: any;
-}
-
-class DataGridBodyCell extends React.Component<IProps> {
-  state = {};
-
+  data?: any[];
+  selected?: boolean;
+  setStoreState: IDataGrid.setStoreState;
+  focusedRow: number;
+  focusedCol: number;
+  selectionRows: {};
+  selectionCols: {};
+  options: IDataGrid.IOptions;
+  isInlineEditing: boolean;
+  inlineEditingCell: IDataGrid.IEditingCell;
+  predefinedFormatter?: IDataGrid.IFormatter;
+}> {
   onDoubleClickCell = (
     e: React.KeyboardEvent<HTMLInputElement>,
     col: IDataGrid.IColumn,
@@ -36,140 +38,64 @@ class DataGridBodyCell extends React.Component<IProps> {
     }
   };
 
-  shouldComponentUpdate(nextProps: IProps) {
+  render() {
     const {
       li,
       col = {},
-      selectionRows = [],
-      selectionCols = [],
-      inlineEditingCell = {},
+      col: {
+        rowSpan = 0,
+        colSpan = 0,
+        colIndex = 0,
+        rowIndex = 0,
+        columnAttr = '',
+      } = {},
+      ci,
       data = [],
-    } = this.props;
-    const { colIndex = 0 } = col;
-    const {
-      rowIndex: editRowIndex,
-      colIndex: editColIndex,
-    } = inlineEditingCell;
-    const {
-      selectionRows: _selectionRows = [],
-      selectionCols: _selectionCols = [],
-      inlineEditingCell: _inlineEditingCell = {},
-      data: _data = [],
-    } = nextProps;
-    const {
-      rowIndex: _editRowIndex,
-      colIndex: _editColIndex,
-    } = _inlineEditingCell;
-
-    if (
-      this.props.data !== nextProps.data ||
-      this.props.colGroup !== nextProps.colGroup
-    ) {
-      return true;
-    }
-
-    if (
-      _selectionRows[li] !== selectionRows[li] ||
-      selectionCols[colIndex] !== _selectionCols[colIndex]
-    ) {
-      return true;
-    }
-
-    if (
-      this.props.isInlineEditing !== nextProps.isInlineEditing &&
-      ((editRowIndex === li && editColIndex === colIndex) ||
-        (_editRowIndex === li && _editColIndex === colIndex))
-    ) {
-      return true;
-    }
-
-    if (
-      this.props.scrollTop !== nextProps.scrollTop ||
-      this.props.scrollLeft !== nextProps.scrollLeft
-    ) {
-      return true;
-    }
-
-    // if (li === 5 && colIndex === 6) {
-    //   console.log(
-    //     data[li][col.key || ''],
-    //     nextProps.data![li][col.key || ''],
-    //     col,
-    //   );
-    // }
-
-    // if (data[li][col.key || ''] !== nextProps.data![li][col.key || '']) {
-    //   return true;
-    // }
-
-    // return (
-
-    //   ((this.props.isInlineEditing !== nextProps.isInlineEditing &&
-    //     this.props.inlineEditingCell &&
-    //     this.props.inlineEditingCell.rowIndex === li) ||
-    //     this.props.inlineEditingCell.colIndex === li)
-    // );
-
-    return false;
-  }
-
-  render() {
-    const {
-      data = [],
+      selected,
       focusedRow,
       focusedCol,
       selectionRows = [],
       selectionCols = [],
-      li,
-      col = {},
-      ci,
-      options = {},
+      options: {
+        body: {
+          columnHeight = 0,
+          columnPadding = 0,
+          columnBorderWidth = 0,
+          align: bodyAlign = 'left',
+        } = {},
+      } = {},
       isInlineEditing = false,
       inlineEditingCell = {},
       predefinedFormatter = {},
     } = this.props;
 
-    // console.log('render');
-    const { body: optionsBody = {} } = options;
-    const {
-      columnHeight = 0,
-      columnPadding = 0,
-      columnBorderWidth = 0,
-      align: bodyAlign = 'left',
-    } = optionsBody;
-    const {
-      rowSpan = 0,
-      colSpan = 0,
-      colIndex = 0,
-      rowIndex = 0,
-      align: colAlign = bodyAlign,
-      columnAttr = '',
-      editor,
-    } = col;
+    const editor = col.editor;
+    const colAlign = col.align || bodyAlign;
+    const value = data[li] && data[li][col.key || ''];
     const cellHeight = columnHeight * rowSpan;
     const lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
-    const tdClassNames: { [key: string]: any } = {
-      ['axui-datagrid-line-number']: columnAttr === 'lineNumber',
-      ['axui-datagrid-row-selector']: columnAttr === 'rowSelector',
-    };
+    const tdClassNames: string[] = [
+      `${columnAttr === 'lineNumber' && 'axui-datagrid-line-number'}`,
+      `${columnAttr === 'rowSelector' && 'axui-datagrid-row-selector'}`,
+    ];
 
     switch (columnAttr) {
       case 'lineNumber':
         if (focusedRow === li) {
-          tdClassNames.focused = true;
+          tdClassNames.push('focused');
         }
         if (selectionRows[li]) {
-          tdClassNames.selected = true;
+          tdClassNames.push('selected');
         }
         break;
       case 'rowSelector':
         break;
       default:
         if (selectionRows[li] && selectionCols[colIndex]) {
-          tdClassNames.selected = true;
+          tdClassNames.push('selected');
         }
         if (focusedRow === li && focusedCol === colIndex) {
-          tdClassNames.focused = true;
+          tdClassNames.push('focused');
         }
     }
 
@@ -189,7 +115,7 @@ class DataGridBodyCell extends React.Component<IProps> {
         key={ci}
         colSpan={colSpan}
         rowSpan={rowSpan}
-        className={CX(tdClassNames)}
+        className={tdClassNames.join(' ')}
         style={{ height: cellHeight, minHeight: '1px' }}
         onDoubleClick={(e: any) => {
           if (!inlineEditingActive) {
@@ -198,7 +124,7 @@ class DataGridBodyCell extends React.Component<IProps> {
         }}
       >
         {inlineEditingActiveAlways || inlineEditingActive ? (
-          <CellEditor col={col} li={li} value={data[li][col.key || '']} />
+          <CellEditor col={col} li={li} value={value} />
         ) : (
           <CellLabel
             columnHeight={columnHeight}
@@ -206,8 +132,9 @@ class DataGridBodyCell extends React.Component<IProps> {
             columnBorderWidth={columnBorderWidth}
             colAlign={colAlign}
             col={col}
-            list={data}
             li={li}
+            data={data}
+            selected={selected}
             predefinedFormatter={predefinedFormatter}
           />
         )}
@@ -216,4 +143,4 @@ class DataGridBodyCell extends React.Component<IProps> {
   }
 }
 
-export default connectStore(DataGridBodyCell);
+export default DataGridBodyCell;

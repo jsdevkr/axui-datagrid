@@ -1,3 +1,5 @@
+import { DataGridEnums } from './@enums';
+
 export namespace IDataGrid {
   export interface IPosition {
     x?: number;
@@ -78,6 +80,15 @@ export namespace IDataGrid {
   export type collectorFunction = (formatterData: ICollectorData) => any;
 
   export type userCallBackFunction = (param?: any) => void;
+
+  export type setStoreState = (
+    store: IDataGrid.IStoreState,
+    callback?: () => void,
+  ) => void;
+  export type dispatch = (
+    dispatchType: DataGridEnums.DispatchTypes,
+    param: IDataGrid.DispatchParam,
+  ) => void;
 
   export interface ICellEditorData {
     col: ICol;
@@ -237,6 +248,7 @@ export namespace IDataGrid {
     frozenRowIndex?: number;
     showLineNumber?: boolean;
     showRowSelector?: boolean;
+    rowSelectorKey?: string;
     multipleSelect?: boolean;
     columnMinWidth?: number;
     lineNumberColumnWidth?: number;
@@ -284,8 +296,8 @@ export namespace IDataGrid {
     loading?: boolean;
     loadingData?: boolean;
     data?: any[];
+    selectedRowKeys?: string[];
     selection?: ISelection;
-    rowSelector?: IRowSelector;
     width?: number;
     height?: number;
     scrollLeft?: number;
@@ -346,8 +358,8 @@ export namespace IDataGrid {
     height?: number;
     columnHeight?: number;
 
+    selectedRowKeys?: string[];
     selection?: ISelection;
-    rowSelector?: IRowSelector;
 
     isInlineEditing?: boolean;
     inlineEditingCell?: IEditingCell;
@@ -433,11 +445,6 @@ export namespace IDataGrid {
     onRightClick?: (param: IonRightClickParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
-  export interface IRowSelector {
-    show: boolean;
-    rowKey: string;
-    selectedRowKeys?: string[];
-  }
   export interface ISelection {
     rows?: number[];
     cols?: number[];
@@ -445,7 +452,7 @@ export namespace IDataGrid {
     focusedCol?: number;
   }
 
-  export interface IProps {
+  export interface IRootProps {
     data?: any[];
     columns: IColumn[];
     footSum?: IColumn[][];
@@ -456,11 +463,10 @@ export namespace IDataGrid {
     status?: React.ReactNode;
     loading?: boolean;
     loadingData?: boolean;
-    rowSelector?: IRowSelector;
+    selectedRowKeys?: string[];
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
-
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
@@ -471,11 +477,30 @@ export namespace IDataGrid {
   }
 
   export interface IRootState {
-    mounted: boolean;
-    autofit: boolean;
-    doneAutofit: boolean;
-    autofitAsideWidth: number;
-    autofitColGroup: IAutofitCol[];
+    mounted?: boolean;
+    autofit?: boolean;
+    doneAutofit?: boolean;
+    autofitAsideWidth?: number;
+    autofitColGroup?: IAutofitCol[];
+
+    headerTable?: IColumnTableMap;
+    bodyRowTable?: IColumnTableMap;
+    bodyRowMap?: {};
+    asideHeaderData?: IColumnTableMap;
+    leftHeaderData?: IColumnTableMap;
+    headerData?: IColumnTableMap;
+    asideBodyRowData?: IColumnTableMap;
+    leftBodyRowData?: IColumnTableMap;
+    bodyRowData?: IColumnTableMap;
+    colGroupMap?: {};
+    asideColGroup?: ICol[];
+    colGroup?: ICol[];
+    footSumColumns?: IColumn[][];
+    footSumTable?: IColumnTableMap;
+    leftFootSumData?: IColumnTableMap;
+    footSumData?: IColumnTableMap;
+
+    options?: IOptions;
   }
 
   export type DispatchParam = { [key: string]: any };

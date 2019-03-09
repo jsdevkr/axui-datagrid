@@ -57,7 +57,7 @@ const DataGridBodyBottomCell: React.SFC<IProps> = props => {
         columnBorderWidth={columnBorderWidth}
         colAlign={colAlign}
         col={col}
-        list={data}
+        data={data}
         predefinedFormatter={predefinedFormatter}
         predefinedCollector={predefinedCollector}
       />

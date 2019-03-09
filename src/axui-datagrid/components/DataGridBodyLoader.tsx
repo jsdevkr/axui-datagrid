@@ -1,26 +1,28 @@
 import * as React from 'react';
 
-const DataGridBodyLoader: React.SFC<{
+class DataGridBodyLoader extends React.PureComponent<{
   loadingData: boolean;
   bodyLoaderHeight: number;
-}> = props => {
-  const { loadingData, bodyLoaderHeight } = props;
+}> {
+  render() {
+    const { loadingData, bodyLoaderHeight } = this.props;
 
-  if (!loadingData) {
-    return null;
+    if (!loadingData) {
+      return null;
+    }
+
+    return (
+      <div
+        className="axui-datagrid-body-loader"
+        style={{
+          height: bodyLoaderHeight,
+        }}
+      >
+        <div data-loader-spinner="" />
+        <div data-loader-text="">Loading</div>
+      </div>
+    );
   }
-
-  return (
-    <div
-      className="axui-datagrid-body-loader"
-      style={{
-        height: bodyLoaderHeight,
-      }}
-    >
-      <div data-loader-spinner="" />
-      <div data-loader-text="">Loading</div>
-    </div>
-  );
-};
+}
 
 export default DataGridBodyLoader;

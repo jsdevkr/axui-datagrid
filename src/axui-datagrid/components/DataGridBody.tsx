@@ -641,50 +641,50 @@ class DataGridBody extends React.Component<IProps> {
         onMouseDown={this.onMouseDownBody}
       >
         <DataGridBodyPanel
-          panelName="top-aside-body-scroll"
+          panelName={DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL}
           containerStyle={topAsideBodyPanelStyle}
           panelScrollConfig={topBodyScrollConfig}
         />
         <DataGridBodyPanel
-          panelName="top-left-body-scroll"
+          panelName={DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL}
           containerStyle={topLeftBodyPanelStyle}
           panelScrollConfig={topBodyScrollConfig}
         />
         <DataGridBodyPanel
-          panelName="top-body-scroll"
+          panelName={DataGridEnums.PanelNames.TOP_BODY_SCROLL}
           containerStyle={topBodyPanelStyle}
           panelScrollConfig={topBodyScrollConfig}
           panelLeft={scrollLeft}
         />
         <DataGridBodyPanel
-          panelName="aside-body-scroll"
+          panelName={DataGridEnums.PanelNames.ASIDE_BODY_SCROLL}
           containerStyle={asideBodyPanelStyle}
           panelScrollConfig={bodyScrollConfig}
           panelTop={scrollTop}
         />
         <DataGridBodyPanel
-          panelName="left-body-scroll"
+          panelName={DataGridEnums.PanelNames.LEFT_BODY_SCROLL}
           containerStyle={leftBodyPanelStyle}
           panelScrollConfig={bodyScrollConfig}
           panelTop={scrollTop}
         />
         <DataGridBodyPanel
-          panelName="body-scroll"
+          panelName={DataGridEnums.PanelNames.BODY_SCROLL}
           containerStyle={bodyPanelStyle}
           panelScrollConfig={bodyScrollConfig}
           panelLeft={scrollLeft}
           panelTop={scrollTop}
         />
         <DataGridBodyBottomPanel
-          panelName="bottom-aside-body-scroll"
+          panelName={DataGridEnums.PanelNames.BOTTOM_ASIDE_BODY_SCROLL}
           containerStyle={bottomAsideBodyPanelStyle}
         />
         <DataGridBodyBottomPanel
-          panelName="bottom-left-body-scroll"
+          panelName={DataGridEnums.PanelNames.BOTTOM_LEFT_BODY_SCROLL}
           containerStyle={bottomLeftBodyPanelStyle}
         />
         <DataGridBodyBottomPanel
-          panelName="bottom-body-scroll"
+          panelName={DataGridEnums.PanelNames.BOTTOM_BODY_SCROLL}
           containerStyle={bottomBodyPanelStyle}
           panelLeft={scrollLeft}
         />

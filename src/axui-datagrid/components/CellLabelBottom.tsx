@@ -2,90 +2,96 @@ import * as React from 'react';
 import { isFunction } from '../utils';
 import { IDataGrid } from '../common/@types';
 
-const CellLabelBottom: React.SFC<{
+class CellLabelBottom extends React.PureComponent<{
   columnHeight: number;
   lineHeight: number;
   columnBorderWidth: number;
   colAlign: string;
   col: IDataGrid.ICol;
-  list: any[];
+  data: any[];
   predefinedFormatter: IDataGrid.IFormatter;
   predefinedCollector: IDataGrid.ICollector;
-}> = ({
-  columnHeight,
-  lineHeight,
-  columnBorderWidth,
-  colAlign,
-  col,
-  list: data,
-  predefinedFormatter,
-  predefinedCollector,
-}) => {
-  const { key, label = '', columnAttr = '', collector, formatter } = col;
-  let collectorData: IDataGrid.ICollectorData = {
-    data,
-    key,
-  };
-  let formatterData: IDataGrid.IFormatterData = {
-    data,
-    key,
-    value: '',
-  };
+}> {
+  render() {
+    const {
+      columnHeight,
+      lineHeight,
+      columnBorderWidth,
+      colAlign,
+      col,
+      col: { key, label = '', columnAttr = '', collector, formatter },
+      data,
+      predefinedFormatter,
+      predefinedCollector,
+    } = this.props;
 
-  let labelValue: string | React.ReactNode = '';
-  switch (key) {
-    case '_line_number_':
-      labelValue = '';
-      break;
+    let collectorData: IDataGrid.ICollectorData = {
+      data,
+      key,
+    };
+    let formatterData: IDataGrid.IFormatterData = {
+      data,
+      key,
+      value: '',
+    };
 
-    case '_row_selector_':
-      labelValue = (
-        <div
-          className="axui-datagrid-check-box"
-          data-span={columnAttr}
-          data-checked={false}
-          style={{
-            maxHeight: lineHeight + 'px',
-            minHeight: lineHeight + 'px',
-          }}
-        />
-      );
-      break;
+    let labelValue: string | React.ReactNode = '';
+    switch (key) {
+      case '_line_number_':
+        labelValue = '';
+        break;
 
-    default:
-      if (typeof collector === 'string' && collector in predefinedCollector) {
-        labelValue = predefinedCollector[collector](collectorData);
-      } else if (isFunction(collector)) {
-        labelValue = (collector as IDataGrid.collectorFunction)(collectorData);
-      } else {
-        labelValue = label;
-      }
-
-      // set formatterData.value by collector value
-      formatterData.value = labelValue;
-
-      if (typeof formatter === 'string' && formatter in predefinedFormatter) {
-        labelValue = predefinedFormatter[formatter](formatterData);
-      } else if (isFunction(col.formatter)) {
-        labelValue = (col.formatter as IDataGrid.formatterFunction)(
-          formatterData,
+      case '_row_selector_':
+        labelValue = (
+          <div
+            className="axui-datagrid-check-box"
+            data-span={columnAttr}
+            data-checked={false}
+            style={{
+              maxHeight: lineHeight + 'px',
+              minHeight: lineHeight + 'px',
+            }}
+          />
         );
-      }
-  }
+        break;
 
-  return (
-    <span
-      data-span={columnAttr}
-      // data-pos={colColIndex}
-      style={{
-        height: columnHeight - columnBorderWidth + 'px',
-        lineHeight: lineHeight + 'px',
-        textAlign: colAlign as any,
-      }}
-    >
-      {labelValue}
-    </span>
-  );
-};
+      default:
+        if (typeof collector === 'string' && collector in predefinedCollector) {
+          labelValue = predefinedCollector[collector](collectorData);
+        } else if (isFunction(collector)) {
+          labelValue = (collector as IDataGrid.collectorFunction)(
+            collectorData,
+          );
+        } else {
+          labelValue = label;
+        }
+
+        // set formatterData.value by collector value
+        formatterData.value = labelValue;
+
+        if (typeof formatter === 'string' && formatter in predefinedFormatter) {
+          labelValue = predefinedFormatter[formatter](formatterData);
+        } else if (isFunction(col.formatter)) {
+          labelValue = (col.formatter as IDataGrid.formatterFunction)(
+            formatterData,
+          );
+        }
+    }
+
+    return (
+      <span
+        data-span={columnAttr}
+        // data-pos={colColIndex}
+        style={{
+          height: columnHeight - columnBorderWidth + 'px',
+          lineHeight: lineHeight + 'px',
+          textAlign: colAlign as any,
+        }}
+      >
+        {labelValue}
+      </span>
+    );
+  }
+}
 
 export default CellLabelBottom;

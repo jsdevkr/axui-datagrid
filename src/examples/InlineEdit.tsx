@@ -42,6 +42,7 @@ const DatagridContainer = styled.div`
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
+  scrollTop: number = 0;
   scrollContentHeight: number = 0;
   bodyTrHeight: number = 24;
 
@@ -264,7 +265,7 @@ class InlineEdit extends React.Component<any, any> {
         },
       ],
       options,
-      selection,
+      // selection,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -288,13 +289,13 @@ class InlineEdit extends React.Component<any, any> {
 
   removeItem = () => {
     const { selection, data } = this.state;
-    if (selection.focusedRow > -1) {
-      data.splice(selection.focusedRow, 1);
-      this.setState({
-        data,
-        selection: {},
-      });
-    }
+    // if (selection.focusedRow > -1) {
+    //   data.splice(selection.focusedRow, 1);
+    //   this.setState({
+    //     data: [...data],
+    //     selection: {},
+    //   });
+    // }
   };
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
@@ -309,7 +310,7 @@ class InlineEdit extends React.Component<any, any> {
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
     // console.log(param);
-    this.setState({ selection: param });
+    // this.setState({ selection: param });
   };
 
   handleChangeSelection = () => {
@@ -359,16 +360,17 @@ class InlineEdit extends React.Component<any, any> {
           <div ref={this.dataGridContainerRef}>
             <DatagridContainer>
               <DataGrid
+                style={{ fontSize: '12px' }}
                 width={width}
                 height={height}
-                style={{ fontSize: '12px' }}
                 columns={columns}
                 data={data}
                 options={options}
-                selection={selection}
+                // selection={selection}
+                // onChangeSelection={this.onChangeSelection}
+
                 onScroll={this.onScroll}
                 onChangeScrollSize={this.onChangeScrollSize}
-                onChangeSelection={this.onChangeSelection}
                 scrollTop={scrollTop}
               />
             </DatagridContainer>
@@ -382,7 +384,7 @@ class InlineEdit extends React.Component<any, any> {
 
           <Button
             size="small"
-            disabled={selection.focusedRow === -1}
+            // disabled={selection.focusedRow === -1}
             onClick={() => this.removeItem()}
           >
             <Icon type="minus" />

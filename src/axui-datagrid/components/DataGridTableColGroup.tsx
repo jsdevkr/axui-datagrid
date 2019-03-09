@@ -1,15 +1,19 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 
-const DataGridTableColGroup: React.SFC<{
+class DataGridTableColGroup extends React.PureComponent<{
   panelColGroup: IDataGrid.ICol[];
-}> = ({ panelColGroup }) => (
-  <colgroup>
-    {panelColGroup.map((col, ci) => (
-      <col key={ci} style={{ width: col._width + 'px' }} />
-    ))}
-    <col />
-  </colgroup>
-);
+}> {
+  render() {
+    return (
+      <colgroup>
+        {this.props.panelColGroup.map((col, ci) => (
+          <col key={ci} style={{ width: col._width + 'px' }} />
+        ))}
+        <col />
+      </colgroup>
+    );
+  }
+}
 
 export default DataGridTableColGroup;

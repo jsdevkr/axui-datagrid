@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Divider, Form, Select, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 class LoadingState extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -10,6 +11,10 @@ class LoadingState extends React.Component<any, any> {
     super(props);
 
     let gridData = require('examples/data/data-basic.json');
+
+    const options: IDataGrid.IOptions = {
+      showRowSelector: true,
+    };
 
     this.state = {
       width: 300,
@@ -23,7 +28,7 @@ class LoadingState extends React.Component<any, any> {
       ],
       data: [...gridData],
       filteredList: [...gridData],
-      options: {},
+      options,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -65,11 +70,7 @@ class LoadingState extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
-              rowSelector={{
-                show: true,
-                rowKey: '',
-                selectedRowKeys: [],
-              }}
+              selectedRowKeys={[]}
               onChangeSelectedRow={param => {
                 this.setState({ filteredList: param.data });
               }}
