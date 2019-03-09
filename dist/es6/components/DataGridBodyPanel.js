@@ -5,7 +5,7 @@ const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
 const DataGridBodyCell_1 = require("./DataGridBodyCell");
 const DataGridTableColGroup_1 = require("./DataGridTableColGroup");
-const _enums_1 = require("axui-datagrid/common/@enums");
+const _enums_1 = require("../common/@enums");
 class TableBody extends React.PureComponent {
     render() {
         const { sRowIndex, eRowIndex, data, bodyRow, setStoreState, focusedRow, focusedCol, selectionRows, selectionCols, options, isInlineEditing, inlineEditingCell, predefinedFormatter, } = this.props;

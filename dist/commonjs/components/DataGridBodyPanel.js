@@ -18,7 +18,7 @@ var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
 var DataGridBodyCell_1 = require("./DataGridBodyCell");
 var DataGridTableColGroup_1 = require("./DataGridTableColGroup");
-var _enums_1 = require("axui-datagrid/common/@enums");
+var _enums_1 = require("../common/@enums");
 var TableBody = /** @class */ (function (_super) {
     __extends(TableBody, _super);
     function TableBody() {

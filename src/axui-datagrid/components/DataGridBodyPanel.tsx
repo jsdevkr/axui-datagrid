@@ -5,7 +5,7 @@ import { arrayFromRange, classNames as CX } from '../utils';
 import DataGridBodyCell from './DataGridBodyCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
-import { DataGridEnums } from 'axui-datagrid/common/@enums';
+import { DataGridEnums } from '../common/@enums';
 
 class TableBody extends React.PureComponent<{
   sRowIndex: number;
