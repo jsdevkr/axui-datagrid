@@ -13,6 +13,7 @@ class TableBody extends React.PureComponent<{
   data: any[];
   bodyRow: IDataGrid.IColumnTableMap;
   setStoreState: IDataGrid.setStoreState;
+  dispatch: IDataGrid.dispatch;
   focusedRow: number;
   focusedCol: number;
   selectionRows: {};
@@ -29,6 +30,7 @@ class TableBody extends React.PureComponent<{
       data,
       bodyRow,
       setStoreState,
+      dispatch,
       focusedRow,
       focusedCol,
       selectionRows,
@@ -54,6 +56,7 @@ class TableBody extends React.PureComponent<{
                     data={data}
                     selected={data[li]._selected_}
                     setStoreState={setStoreState}
+                    dispatch={dispatch}
                     focusedRow={focusedRow}
                     focusedCol={focusedCol}
                     selectionRows={selectionRows}
@@ -120,6 +123,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
       inlineEditingCell,
       predefinedFormatter,
       setStoreState,
+      dispatch,
     } = this.props;
 
     // aside-header가 필요하지 않은지 확인
@@ -185,6 +189,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
               data={data}
               bodyRow={panelBodyRow}
               setStoreState={setStoreState}
+              dispatch={dispatch}
               focusedRow={focusedRow || 0}
               focusedCol={focusedCol || 0}
               selectionRows={selectionRows || {}}

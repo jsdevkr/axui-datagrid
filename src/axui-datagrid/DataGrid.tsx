@@ -301,35 +301,34 @@ class DataGrid extends React.Component<IProps, IState> {
     }
   }
 
-  // shouldComponentUpdate(prevProps: IProps) {
-  //   if (
-  //     prevProps.data === this.props.data &&
-  //     prevProps.columns === this.props.columns &&
-  //     prevProps.footSum === this.props.footSum &&
-  //     prevProps.width === this.props.width &&
-  //     prevProps.height === this.props.height &&
-  //     prevProps.style === this.props.style &&
-  //     prevProps.options === this.props.options &&
-  //     prevProps.status === this.props.status &&
-  //     prevProps.loading === this.props.loading &&
-  //     prevProps.loadingData === this.props.loadingData &&
-  //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
-  //     prevProps.selection === this.props.selection &&
-  //     prevProps.scrollLeft === this.props.scrollLeft &&
-  //     prevProps.scrollTop === this.props.scrollTop &&
-  //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
-  //     prevProps.onScroll === this.props.onScroll &&
-  //     prevProps.onScrollEnd === this.props.onScrollEnd &&
-  //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
-  //     prevProps.onChangeSelection === this.props.onChangeSelection &&
-  //     prevProps.onChangeSelectedRow === this.props.onChangeSelectedRow &&
-  //     prevProps.onRightClick === this.props.onRightClick
-  //   ) {
-  //     return false;
-  //   }
+  shouldComponentUpdate(prevProps: IProps) {
+    if (
+      prevProps.data === this.props.data &&
+      prevProps.columns === this.props.columns &&
+      prevProps.footSum === this.props.footSum &&
+      prevProps.width === this.props.width &&
+      prevProps.height === this.props.height &&
+      prevProps.style === this.props.style &&
+      prevProps.options === this.props.options &&
+      prevProps.status === this.props.status &&
+      prevProps.loading === this.props.loading &&
+      prevProps.loadingData === this.props.loadingData &&
+      prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+      prevProps.selection === this.props.selection &&
+      prevProps.scrollLeft === this.props.scrollLeft &&
+      prevProps.scrollTop === this.props.scrollTop &&
+      prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+      prevProps.onScroll === this.props.onScroll &&
+      prevProps.onScrollEnd === this.props.onScrollEnd &&
+      prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+      prevProps.onChangeSelection === this.props.onChangeSelection &&
+      prevProps.onRightClick === this.props.onRightClick
+    ) {
+      return false;
+    }
 
-  //   return true;
-  // }
+    return true;
+  }
 
   public render() {
     const {
@@ -372,7 +371,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onScrollEnd,
       onChangeScrollSize,
       onChangeSelection,
-      onChangeSelectedRow,
+      onChangeSelected,
       onRightClick,
 
       style = {},
@@ -396,7 +395,7 @@ class DataGrid extends React.Component<IProps, IState> {
       selection,
       status,
       scrollLeft,
-      scrollTop: scrollTop ? -Number(scrollTop) : 0,
+      scrollTop,
 
       autofitColGroup,
       headerTable,
@@ -424,11 +423,13 @@ class DataGrid extends React.Component<IProps, IState> {
       onScrollEnd,
       onChangeScrollSize,
       onChangeSelection,
-      onChangeSelectedRow,
+      onChangeSelected,
       onRightClick,
 
       options,
     };
+
+    // console.log('datagrid render');
 
     return (
       <DataGridStore.Provider {...providerProps}>

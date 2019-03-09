@@ -29,6 +29,7 @@ class EventReceive extends React.Component<any, any> {
         },
       },
       eventLog: [],
+      scrollTop: 0,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -77,7 +78,9 @@ class EventReceive extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
-              onScroll={({ sRowIndex, eRowIndex }) => {
+              scrollTop={screenTop}
+              onScroll={({ sRowIndex, eRowIndex, scrollTop }) => {
+                this.setState({ scrollTop });
                 this.receiveEvent(
                   `onScroll sRowIndex : ${sRowIndex}, eRowIndex : ${eRowIndex}`,
                 );

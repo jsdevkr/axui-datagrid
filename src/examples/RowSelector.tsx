@@ -12,10 +12,6 @@ class LoadingState extends React.Component<any, any> {
 
     let gridData = require('examples/data/data-basic.json');
 
-    const options: IDataGrid.IOptions = {
-      showRowSelector: true,
-    };
-
     this.state = {
       width: 300,
       height: 300,
@@ -27,8 +23,8 @@ class LoadingState extends React.Component<any, any> {
         { key: 'money', label: 'Money', formatter: 'money', align: 'right' },
       ],
       data: [...gridData],
-      filteredList: [...gridData],
-      options,
+      selectedList: [],
+      selectedIndexes: [],
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -51,7 +47,7 @@ class LoadingState extends React.Component<any, any> {
   };
 
   render() {
-    const { width, height, columns, data, options } = this.state;
+    const { width, height, columns, data } = this.state;
 
     return (
       <Wrapper>
@@ -69,10 +65,15 @@ class LoadingState extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
-              options={options}
+              options={{
+                showRowSelector: true,
+              }}
               selectedRowKeys={[]}
-              onChangeSelectedRow={param => {
-                this.setState({ filteredList: param.data });
+              onChangeSelected={param => {
+                this.setState({
+                  selectedList: param.selectedList,
+                  selectedIndexes: param.selectedIndexes,
+                });
               }}
             />
           </div>
@@ -81,7 +82,9 @@ class LoadingState extends React.Component<any, any> {
           <h2>Data</h2>
           <textarea
             style={{ width: '100%', height: '400px', padding: '10px' }}
-            value={JSON.stringify(this.state.filteredList)}
+            value={`selectedList : ${JSON.stringify(
+              this.state.selectedList,
+            )}\nselectedIndexes: ${this.state.selectedIndexes}`}
             readOnly
           />
           <Divider />

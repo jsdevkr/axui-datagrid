@@ -3,13 +3,14 @@ import { IDataGrid } from '../common/@types';
 import CellLabel from './CellLabel';
 import CellEditor from './CellEditor';
 
-class DataGridBodyCell extends React.PureComponent<{
+class DataGridBodyCell extends React.Component<{
   li: number;
   ci: number;
   col?: IDataGrid.ICol;
   data?: any[];
   selected?: boolean;
   setStoreState: IDataGrid.setStoreState;
+  dispatch: IDataGrid.dispatch;
   focusedRow: number;
   focusedCol: number;
   selectionRows: {};
@@ -67,6 +68,8 @@ class DataGridBodyCell extends React.PureComponent<{
       isInlineEditing = false,
       inlineEditingCell = {},
       predefinedFormatter = {},
+      setStoreState,
+      dispatch,
     } = this.props;
 
     const editor = col.editor;
@@ -124,7 +127,16 @@ class DataGridBodyCell extends React.PureComponent<{
         }}
       >
         {inlineEditingActiveAlways || inlineEditingActive ? (
-          <CellEditor col={col} li={li} value={value} />
+          <CellEditor
+            col={col}
+            li={li}
+            value={value}
+            setStoreState={setStoreState}
+            dispatch={dispatch}
+            inlineEditingCell={inlineEditingCell}
+            focusedRow={focusedRow}
+            focusedCol={focusedCol}
+          />
         ) : (
           <CellLabel
             columnHeight={columnHeight}

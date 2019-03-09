@@ -39,12 +39,129 @@ const DatagridContainer = styled.div`
   }
 `;
 
+const inputNumberEditor: IDataGrid.cellEditorFunction = ({
+  value,
+  update,
+  cancel,
+}) => {
+  return (
+    <InputNumber
+      style={{ width: '100%' }}
+      autoFocus
+      defaultValue={value}
+      onChange={val => {
+        update(val, true);
+      }}
+      onBlur={cancel}
+      onKeyUp={e => {
+        if (e.which === 13) {
+          update(e.currentTarget.value);
+        }
+      }}
+    />
+  );
+};
+
+const searchSelectEditor: IDataGrid.cellEditorFunction = ({
+  value,
+  update,
+  focus,
+  blur,
+}) => {
+  return (
+    <Select
+      style={{ width: '100%' }}
+      showSearch
+      optionFilterProp="children"
+      onFocus={() => focus()}
+      onBlur={() => blur()}
+      onInputKeyDown={e => {
+        if (e.which !== 13 && e.which !== 27) {
+          update(e.currentTarget.value, true);
+        }
+      }}
+      onChange={val => {
+        update(val);
+      }}
+      onDropdownVisibleChange={open => {
+        if (open) {
+          focus();
+        } else {
+          blur();
+        }
+      }}
+      value={value}
+      dropdownClassName="axui-datagrid-select-dropdown"
+    >
+      <Select.Option value="Jack">Jack</Select.Option>
+      <Select.Option value="Sofia">Sofia</Select.Option>
+      <Select.Option value="Thomas">Thomas</Select.Option>
+    </Select>
+  );
+};
+
+const selectEditor: IDataGrid.cellEditorFunction = ({
+  value,
+  update,
+  cancel,
+  focus,
+  blur,
+}) => {
+  return (
+    <Select
+      style={{ width: '100%' }}
+      onChange={val => {
+        update(val);
+      }}
+      value={value}
+      onDropdownVisibleChange={open => {
+        if (open) {
+          focus();
+        } else {
+          blur();
+        }
+      }}
+      dropdownClassName="axui-datagrid-select-dropdown"
+    >
+      <Select.Option value="A">A</Select.Option>
+      <Select.Option value="B">B</Select.Option>
+      <Select.Option value="C">C</Select.Option>
+    </Select>
+  );
+};
+
+const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
+  return (
+    <DatePicker
+      value={value ? moment(value, 'YYYY/MM/DD') : moment()}
+      onChange={(date, dateString) => {
+        update(dateString);
+      }}
+    />
+  );
+};
+
+const checkboxEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
+  return (
+    <Checkbox
+      style={{ justifyContent: 'center' }}
+      checked={value}
+      onChange={e => {
+        update(e.target.checked);
+      }}
+    >
+      Active
+    </Checkbox>
+  );
+};
+
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   scrollTop: number = 0;
   scrollContentHeight: number = 0;
   bodyTrHeight: number = 24;
+  selectedIndexes: number[] = [];
 
   constructor(props: any) {
     super(props);
@@ -60,16 +177,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           activeType: 'always',
           width: 105, // need when autofitColumns
-          render: ({ value, update }) => {
-            return (
-              <DatePicker
-                value={value ? moment(value, 'YYYY/MM/DD') : moment()}
-                onChange={(date, dateString) => {
-                  update(dateString);
-                }}
-              />
-            );
-          },
+          render: inputDateEditor,
         },
       },
       {
@@ -77,29 +185,7 @@ class InlineEdit extends React.Component<any, any> {
         label: 'select',
         editor: {
           activeType: 'always',
-          render: ({ value, update, cancel, focus, blur }) => {
-            return (
-              <Select
-                style={{ width: '100%' }}
-                onChange={val => {
-                  update(val);
-                }}
-                value={value}
-                onDropdownVisibleChange={open => {
-                  if (open) {
-                    focus();
-                  } else {
-                    blur();
-                  }
-                }}
-                dropdownClassName="axui-datagrid-select-dropdown"
-              >
-                <Select.Option value="A">A</Select.Option>
-                <Select.Option value="B">B</Select.Option>
-                <Select.Option value="C">C</Select.Option>
-              </Select>
-            );
-          },
+          render: selectEditor,
         },
       },
       {
@@ -108,38 +194,7 @@ class InlineEdit extends React.Component<any, any> {
         width: 120,
         editor: {
           activeType: 'always',
-          render: ({ value, update, focus, blur }) => {
-            return (
-              <Select
-                style={{ width: '100%' }}
-                showSearch
-                optionFilterProp="children"
-                onFocus={() => focus()}
-                onBlur={() => blur()}
-                onInputKeyDown={e => {
-                  if (e.which !== 13 && e.which !== 27) {
-                    update(e.currentTarget.value, true);
-                  }
-                }}
-                onChange={val => {
-                  update(val);
-                }}
-                onDropdownVisibleChange={open => {
-                  if (open) {
-                    focus();
-                  } else {
-                    blur();
-                  }
-                }}
-                value={value}
-                dropdownClassName="axui-datagrid-select-dropdown"
-              >
-                <Select.Option value="Jack">Jack</Select.Option>
-                <Select.Option value="Sofia">Sofia</Select.Option>
-                <Select.Option value="Thomas">Thomas</Select.Option>
-              </Select>
-            );
-          },
+          render: searchSelectEditor,
         },
       },
       {
@@ -148,24 +203,7 @@ class InlineEdit extends React.Component<any, any> {
         formatter: 'money',
         align: 'right',
         editor: {
-          render: ({ value, update, cancel }) => {
-            return (
-              <InputNumber
-                style={{ width: '100%' }}
-                autoFocus
-                defaultValue={value}
-                onChange={val => {
-                  update(val, true);
-                }}
-                onBlur={cancel}
-                onKeyUp={e => {
-                  if (e.which === 13) {
-                    update(e.currentTarget.value);
-                  }
-                }}
-              />
-            );
-          },
+          render: inputNumberEditor,
         },
       },
       {
@@ -173,27 +211,11 @@ class InlineEdit extends React.Component<any, any> {
         label: 'checkbox',
         editor: {
           activeType: 'always',
-          render: ({ value, update }) => {
-            return (
-              <Checkbox
-                style={{ justifyContent: 'center' }}
-                checked={value}
-                onChange={e => {
-                  update(e.target.checked);
-                }}
-              >
-                Active
-              </Checkbox>
-            );
-          },
+          render: checkboxEditor,
         },
       },
     ];
-    const options: IDataGrid.IOptions = {
-      header: {
-        align: 'center',
-      },
-    };
+
     const selection: IDataGrid.ISelection = {
       rows: [],
       cols: [],
@@ -264,8 +286,7 @@ class InlineEdit extends React.Component<any, any> {
           check: false,
         },
       ],
-      options,
-      // selection,
+      selection,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -281,25 +302,37 @@ class InlineEdit extends React.Component<any, any> {
       type: 'B',
       check: true,
     };
+
+    // console.log(this.scrollContentHeight);
+
     this.setState({
       data: [...this.state.data, ...[newItem]],
-      scrollTop: this.scrollContentHeight,
+      scrollTop: -this.scrollContentHeight,
+      selection: {
+        rows: [this.state.data.length],
+        cols: [1],
+        focusedRow: this.state.data.length,
+        focusedCol: 1,
+      },
     });
   };
 
   removeItem = () => {
-    const { selection, data } = this.state;
-    // if (selection.focusedRow > -1) {
-    //   data.splice(selection.focusedRow, 1);
-    //   this.setState({
-    //     data: [...data],
-    //     selection: {},
-    //   });
-    // }
+    console.log(this.selectedIndexes);
+    if (this.selectedIndexes.length) {
+      const data: any[] = this.state.data;
+      const _data = data.filter((n, i) => {
+        return !this.selectedIndexes.includes(i);
+      });
+      this.setState({ data: _data });
+    }
   };
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
     // console.log(param);
+    this.setState({
+      scrollTop: param.scrollTop,
+    });
   };
 
   onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
@@ -310,24 +343,7 @@ class InlineEdit extends React.Component<any, any> {
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
     // console.log(param);
-    // this.setState({ selection: param });
-  };
-
-  handleChangeSelection = () => {
-    const { data } = this.state;
-    const r = Math.floor(Math.random() * data.length);
-
-    const scrollTop = r * this.bodyTrHeight;
-
-    this.setState({
-      scrollTop,
-      selection: {
-        rows: [r],
-        cols: [0],
-        focusedRow: r,
-        focusedCol: 0,
-      },
-    });
+    this.setState({ selection: param });
   };
 
   public render() {
@@ -365,13 +381,22 @@ class InlineEdit extends React.Component<any, any> {
                 height={height}
                 columns={columns}
                 data={data}
-                options={options}
+                options={{
+                  showRowSelector: true,
+                  header: {
+                    align: 'center',
+                  },
+                }}
                 // selection={selection}
                 // onChangeSelection={this.onChangeSelection}
-
+                // selectedRowKeys={this.selectedRowKeys}
+                onChangeSelected={param => {
+                  // console.log(param);
+                  this.selectedIndexes = param.selectedIndexes || [];
+                }}
                 onScroll={this.onScroll}
-                onChangeScrollSize={this.onChangeScrollSize}
                 scrollTop={scrollTop}
+                onChangeScrollSize={this.onChangeScrollSize}
               />
             </DatagridContainer>
           </div>
@@ -382,21 +407,13 @@ class InlineEdit extends React.Component<any, any> {
             Add item
           </Button>
 
-          <Button
-            size="small"
-            // disabled={selection.focusedRow === -1}
-            onClick={() => this.removeItem()}
-          >
+          <Button size="small" onClick={() => this.removeItem()}>
             <Icon type="minus" />
             Remove item
           </Button>
 
           <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
             scroll top (0)
-          </Button>
-
-          <Button size="small" onClick={this.handleChangeSelection}>
-            change selection
           </Button>
         </Segment>
       </Wrapper>

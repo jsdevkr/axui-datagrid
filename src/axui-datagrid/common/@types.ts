@@ -61,8 +61,9 @@ export namespace IDataGrid {
     bodyTrHeight?: number;
   }
 
-  export interface IonChangeSelectedRowParam {
-    data?: any[];
+  export interface IonChangeSelectedParam {
+    selectedList?: any[];
+    selectedIndexes?: number[];
   }
 
   export interface IonChangeSelectionParam {
@@ -248,7 +249,6 @@ export namespace IDataGrid {
     frozenRowIndex?: number;
     showLineNumber?: boolean;
     showRowSelector?: boolean;
-    rowSelectorKey?: string;
     multipleSelect?: boolean;
     columnMinWidth?: number;
     lineNumberColumnWidth?: number;
@@ -341,7 +341,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+    onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
 
@@ -351,8 +351,6 @@ export namespace IDataGrid {
 
     data?: any[];
     listSelectedAll?: boolean;
-    selectedRowIndex?: number;
-    selectedRowIndexSelected?: boolean;
     sortInfo?: {};
     width?: number;
     height?: number;
@@ -441,7 +439,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+    onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
@@ -472,7 +470,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelectedRow?: (param: IonChangeSelectedRowParam) => void;
+    onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
   }
 

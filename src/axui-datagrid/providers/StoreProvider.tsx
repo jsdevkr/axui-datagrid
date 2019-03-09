@@ -5,6 +5,8 @@ import {
   setColGroupWidth,
   getVisibleColGroup,
   getScrollPosition,
+  throttle,
+  debounce,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
@@ -125,10 +127,13 @@ class StoreProvider extends React.Component<
       nProps.onScrollEnd === nState.onScrollEnd &&
       nProps.onChangeScrollSize === nState.onChangeScrollSize &&
       nProps.onChangeSelection === nState.onChangeSelection &&
-      nProps.onChangeSelectedRow === nState.onChangeSelectedRow &&
+      nProps.onChangeSelected === nState.onChangeSelected &&
       nProps.onRightClick === nState.onRightClick
     ) {
       return null;
+      // } else if (nState.pScrollTop && nProps.scrollTop === nState.pScrollTop) {
+      //   console.log('????????');
+      //   return null;
     } else {
       // store state | 현재 state복제
       const { options = {} } = nProps;
@@ -137,7 +142,9 @@ class StoreProvider extends React.Component<
         ...nState,
       };
 
+      // scrollTop prop 저장
       storeState.pScrollTop = nProps.scrollTop;
+      storeState.pScrollLeft = nProps.scrollLeft;
       storeState.loading = nProps.loading;
       storeState.loadingData = nProps.loadingData;
 
@@ -155,7 +162,7 @@ class StoreProvider extends React.Component<
       storeState.onScrollEnd = nProps.onScrollEnd;
       storeState.onChangeScrollSize = nProps.onChangeScrollSize;
       storeState.onChangeSelection = nProps.onChangeSelection;
-      storeState.onChangeSelectedRow = nProps.onChangeSelectedRow;
+      storeState.onChangeSelected = nProps.onChangeSelected;
       storeState.onRightClick = nProps.onRightClick;
       ///
       storeState.headerTable = nProps.headerTable;
@@ -241,18 +248,43 @@ class StoreProvider extends React.Component<
           options: nProps.options,
         });
         _styles = dimensions.styles;
-        _scrollLeft = dimensions.scrollLeft;
         _scrollTop = dimensions.scrollTop;
+        _scrollLeft = dimensions.scrollLeft;
 
         changed.styles = true;
       }
 
+      if (changed.styles) {
+        const {
+          scrollContentWidth = 0,
+          scrollContentHeight = 0,
+          scrollContentContainerWidth = 0,
+          scrollContentContainerHeight = 0,
+        } = _styles || {};
+        const {
+          scrollTop: currScrollTop = 0,
+          scrollLeft: currScrollLeft = 0,
+        } = getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
+          scrollWidth: scrollContentWidth,
+          scrollHeight: scrollContentHeight,
+          clientWidth: scrollContentContainerWidth,
+          clientHeight: scrollContentContainerHeight,
+        });
+
+        _scrollTop = currScrollTop;
+        _scrollLeft = currScrollLeft;
+      }
+
       if (
-        changed.data ||
         nProps.scrollTop !== nState.pScrollTop ||
         nProps.scrollLeft !== nState.pScrollLeft
       ) {
-        // console.log('change scrollTop, left by prop', nProps.scrollTop, nProps.scrollLeft);
+        // console.log(
+        //   'change scrollTop, left by prop',
+        //   nProps.scrollTop,
+        //   nState.pScrollTop,
+        //   nState.scrollTop,
+        // );
         const {
           scrollContentWidth = 0,
           scrollContentHeight = 0,
@@ -262,16 +294,17 @@ class StoreProvider extends React.Component<
         let {
           scrollLeft: currScrollLeft = 0,
           scrollTop: currScrollTop = 0,
-          endOfScrollTop,
-        } = getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
+        } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
           scrollWidth: scrollContentWidth,
           scrollHeight: scrollContentHeight,
           clientWidth: scrollContentContainerWidth,
           clientHeight: scrollContentContainerHeight,
         });
-
         _scrollLeft = currScrollLeft;
         _scrollTop = currScrollTop;
+
+        // _scrollLeft = nProps.scrollLeft || 0;
+        // _scrollTop = nProps.scrollTop || 0;
       }
 
       if (nProps.selection !== nState.selection) {
@@ -317,10 +350,6 @@ class StoreProvider extends React.Component<
         changed.colGroup = true;
       }
 
-      // scrollTop prop 저장
-      storeState.pScrollTop = nProps.scrollTop;
-      storeState.pScrollLeft = nProps.scrollLeft;
-
       // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
       storeState.colGroup = _colGroup;
       storeState.leftHeaderColGroup = _leftHeaderColGroup;
@@ -348,7 +377,7 @@ class StoreProvider extends React.Component<
       onScrollEnd,
       onChangeScrollSize,
       onChangeSelection,
-      onChangeSelectedRow,
+      onChangeSelected,
     } = this.state;
     const { frozenRowIndex = 0 } = options;
     const { bodyHeight = 0, bodyTrHeight = 0 } = styles;
@@ -447,7 +476,7 @@ class StoreProvider extends React.Component<
       selectionRows,
       selectionCols,
       selection,
-      onChangeSelectedRow,
+      onChangeSelected,
     } = this.state;
 
     switch (dispatchType) {
@@ -580,12 +609,6 @@ class StoreProvider extends React.Component<
             isInlineEditing: false,
             inlineEditingCell: {},
           });
-
-          if (onChangeSelectedRow) {
-            onChangeSelectedRow({
-              data: sortedList,
-            });
-          }
         }
         break;
 
@@ -633,12 +656,6 @@ class StoreProvider extends React.Component<
               },
               focusedRow: focusRow,
             });
-
-            if (onChangeSelectedRow) {
-              onChangeSelectedRow({
-                data,
-              });
-            }
 
             if (rootNode && rootNode.current) {
               rootNode.current.focus();
@@ -688,14 +705,21 @@ class StoreProvider extends React.Component<
 
           this.setStoreState({
             listSelectedAll: selectedAll,
-            selectedRowIndex: rowIndex,
-            selectedRowIndexSelected: rowSelected,
             data: [...data],
           });
 
-          if (onChangeSelectedRow) {
-            onChangeSelectedRow({
-              data,
+          if (onChangeSelected) {
+            const selectedIndexes: number[] = [];
+            const selectedList = data.filter((n, i) => {
+              if (n._selected_) {
+                selectedIndexes.push(i);
+              }
+              return n._selected_;
+            });
+
+            onChangeSelected({
+              selectedList,
+              selectedIndexes,
             });
           }
         }
@@ -722,9 +746,18 @@ class StoreProvider extends React.Component<
             data: [...data],
           });
 
-          if (onChangeSelectedRow) {
-            onChangeSelectedRow({
-              data,
+          if (onChangeSelected) {
+            const selectedIndexes: number[] = [];
+            const selectedList = data.filter((n, i) => {
+              if (n._selected_) {
+                selectedIndexes.push(i);
+              }
+              return n._selected_;
+            });
+
+            onChangeSelected({
+              selectedList,
+              selectedIndexes,
             });
           }
         }
@@ -758,6 +791,12 @@ class StoreProvider extends React.Component<
         }
         break;
 
+      case DataGridEnums.DispatchTypes.FOCUS_ROOT:
+        if (rootNode && rootNode.current) {
+          rootNode.current.focus();
+        }
+        break;
+
       default:
         break;
     }
@@ -785,10 +824,11 @@ class StoreProvider extends React.Component<
     // console.log('store did mount');
   }
 
-  componentDidUpdate(
-    pProps: IDataGrid.IStoreProps,
-    pState: IDataGrid.IStoreState,
-  ) {
+  // tslint:disable-next-line: member-ordering
+  lazyTimer: any;
+
+  // tslint:disable-next-line: member-ordering
+  lazyComponentDidUpdate = (pState: IDataGrid.IStoreState) => {
     const { onScroll } = this.props;
     const {
       scrollLeft = 0,
@@ -867,6 +907,20 @@ class StoreProvider extends React.Component<
         focusedCol,
       });
     }
+  };
+
+  componentDidUpdate(
+    pProps: IDataGrid.IStoreProps,
+    pState: IDataGrid.IStoreState,
+  ) {
+    // this.lazyComponentDidUpdate(pProps, pState);
+
+    if (this.lazyTimer) {
+      clearTimeout(this.lazyTimer);
+    }
+    setTimeout(() => {
+      this.lazyComponentDidUpdate(pState);
+    }, 200);
   }
 
   componentWillUnmount() {

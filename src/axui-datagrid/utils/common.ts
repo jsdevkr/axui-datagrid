@@ -106,7 +106,7 @@ export function isNumber(value: any) {
   );
 }
 
-export function debounce(func: any, wait: any, options: any) {
+export function debounce(func: any, wait: any, options?: any) {
   let lastArgs: any,
     lastThis: any,
     maxWait: any,

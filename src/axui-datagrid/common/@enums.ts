@@ -56,6 +56,7 @@ export namespace DataGridEnums {
     SELECT,
     SELECT_ALL,
     CHANGE_SELECTION,
+    FOCUS_ROOT,
   }
 
   export enum PageButtonActions {
