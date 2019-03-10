@@ -12,12 +12,6 @@ const feature05 = require('assets/datagrid-feature-05.jpg');
 const feature06 = require('assets/datagrid-feature-06.jpg');
 const feature07 = require('assets/datagrid-feature-07.jpg');
 const feature08 = require('assets/datagrid-feature-08.png');
-const feature091 = require('assets/datagrid-feature-09-1.png');
-const feature092 = require('assets/datagrid-feature-09-2.png');
-const feature10 = require('assets/datagrid-feature-10.png');
-const feature111 = require('assets/datagrid-feature-11-1.png');
-const feature112 = require('assets/datagrid-feature-11-2.png');
-const feature113 = require('assets/datagrid-feature-11-3.png');
 
 interface IProps {}
 interface IState {}
@@ -73,11 +67,13 @@ class Introduction extends React.Component<IProps, IState> {
           {/* Formatting of data  */}
           <h3>Formatting of data</h3>
           <p>
-            Users can change the values using 'date', 'money' predefined in 'columns>col.formatter',
-            or the values as desired using a user-defined function and apply the formula to the data in the column.
-            The results are then displayed accoding to the function. 
-            For example, if you defined the formatter of the 'money' column as a function(args: any) &#123; return args.value*2 &#125;,
-            you can see the money columns update doubled.{' '}
+            Users can change the values using 'date', 'money' predefined in
+            'columns>col.formatter', or the values as desired using a
+            user-defined function and apply the formula to the data in the
+            column. The results are then displayed accoding to the function. For
+            example, if you defined the formatter of the 'money' column as a
+            function(args: any) &#123; return args.value*2 &#125;, you can see
+            the money columns update doubled.{' '}
           </p>
           <NavLink to={'examples/Formatter'}>
             <Button type={'primary'} size={'small'} ghost>
@@ -97,9 +93,6 @@ class Introduction extends React.Component<IProps, IState> {
             <Button type={'primary'} size={'small'} ghost>
               View Examples
             </Button>
-            <br />
-            <img src={feature091} width={'50%'} style={{ maxWidth: 800 }} />
-            <img src={feature092} width={'50%'} style={{ maxWidth: 800 }} />
           </NavLink>
 
           <Divider />
@@ -162,7 +155,7 @@ class Introduction extends React.Component<IProps, IState> {
           <Divider />
 
           {/* Event */}
-          <h3>Event</h3>
+          <h3>Receive Event</h3>
           <p>
             onBeforeEvent, onAfterEvent props을 이용하면 keydown, click등의
             이벤트가 발생될때 callback을 받을 수 있습니다.
@@ -171,8 +164,6 @@ class Introduction extends React.Component<IProps, IState> {
             <Button type={'primary'} size={'small'} ghost>
               View Examples
             </Button>
-            <br />
-            <img src={feature10} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
           <Divider />
 
@@ -228,10 +219,6 @@ class Introduction extends React.Component<IProps, IState> {
             <Button type={'primary'} size={'small'} ghost>
               View Examples
             </Button>
-            <br />
-            <img src={feature111} width={'100%'} style={{ maxWidth: 800 }} />
-            <img src={feature112} width={'100%'} style={{ maxWidth: 800 }} />
-            <img src={feature113} width={'100%'} style={{ maxWidth: 800 }} />
           </NavLink>
 
           <Divider />
