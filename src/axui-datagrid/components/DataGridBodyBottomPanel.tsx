@@ -4,7 +4,7 @@ import { connectStore } from '../hoc';
 import DataGridBodyBottomCell from './DataGridBodyBottomCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
-import { DataGridEnums } from 'axui-datagrid/common/@enums';
+import { DataGridEnums } from '../common/@enums';
 
 class TableBody extends React.PureComponent<{
   bodyRow: IDataGrid.IColumnTableMap;
