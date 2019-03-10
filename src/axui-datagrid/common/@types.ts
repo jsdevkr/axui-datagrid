@@ -109,6 +109,7 @@ export namespace IDataGrid {
     type?: string;
     activeType?: 'always' | 'dblclick';
     width?: number;
+    label?: React.ReactDOM | string;
     render?: cellEditorFunction;
   }
 

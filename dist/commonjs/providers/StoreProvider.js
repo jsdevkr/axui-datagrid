@@ -106,16 +106,14 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.state = store;
         // state 가 업데이트 되기 전.
         _this.setStoreState = function (newState, callback) {
-            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScroll = _a.onScroll, onScrollEnd = _a.onScrollEnd, onChangeScrollSize = _a.onChangeScrollSize, onChangeSelection = _a.onChangeSelection, onChangeSelected = _a.onChangeSelected;
-            var _k = options.frozenRowIndex, frozenRowIndex = _k === void 0 ? 0 : _k;
-            var _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m;
+            var _a = _this.state, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.options, options = _e === void 0 ? {} : _e, _f = _a.styles, styles = _f === void 0 ? {} : _f, _g = _a.headerColGroup, headerColGroup = _g === void 0 ? [] : _g, _h = _a.bodyRowData, bodyRowData = _h === void 0 ? { rows: [{ cols: [] }] } : _h, _j = _a.footSumData, footSumData = _j === void 0 ? { rows: [{ cols: [] }] } : _j, onScrollEnd = _a.onScrollEnd;
             var _scrollLeft = newState.scrollLeft, _scrollTop = newState.scrollTop;
             if (!newState.styles) {
                 newState.styles = __assign({}, styles);
             }
             if (typeof _scrollLeft !== 'undefined' ||
                 typeof _scrollTop !== 'undefined') {
-                var _o = newState.styles, _p = _o.scrollContentWidth, scrollWidth = _p === void 0 ? 0 : _p, _q = _o.scrollContentHeight, scrollHeight = _q === void 0 ? 0 : _q, _r = _o.scrollContentContainerWidth, clientWidth = _r === void 0 ? 0 : _r, _s = _o.scrollContentContainerHeight, clientHeight = _s === void 0 ? 0 : _s;
+                var _k = newState.styles, _l = _k.scrollContentWidth, scrollWidth = _l === void 0 ? 0 : _l, _m = _k.scrollContentHeight, scrollHeight = _m === void 0 ? 0 : _m, _o = _k.scrollContentContainerWidth, clientWidth = _o === void 0 ? 0 : _o, _p = _k.scrollContentContainerHeight, clientHeight = _p === void 0 ? 0 : _p;
                 var endOfScrollTop = false;
                 var endOfScrollLeft = false;
                 if (typeof _scrollLeft !== 'undefined') {
@@ -163,7 +161,7 @@ var StoreProvider = /** @class */ (function (_super) {
             //   newState.scrollLeft = dimensions.scrollLeft;
             //   newState.scrollTop = dimensions.scrollTop;
             // }
-            _this.setState(function () { return newState; }, callback);
+            _this.setState(newState, callback);
         };
         _this.dispatch = function (dispatchType, param) {
             var _a;
@@ -443,7 +441,7 @@ var StoreProvider = /** @class */ (function (_super) {
             }
         };
         // tslint:disable-next-line: member-ordering
-        _this.lazyComponentDidUpdate = function (pState) {
+        _this.lazyComponentDidUpdate = utils_1.throttle(function (pState) {
             var onScroll = _this.props.onScroll;
             var _a = _this.state, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = (_d === void 0 ? {} : _d).frozenRowIndex, frozenRowIndex = _e === void 0 ? 0 : _e, _f = _a.styles, _g = _f === void 0 ? {} : _f, _h = _g.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h, _j = _g.scrollContentHeight, scrollContentHeight = _j === void 0 ? 0 : _j, _k = _g.scrollContentContainerWidth, scrollContentContainerWidth = _k === void 0 ? 0 : _k, _l = _g.scrollContentWidth, scrollContentWidth = _l === void 0 ? 0 : _l, _m = _g.bodyTrHeight, bodyTrHeight = _m === void 0 ? 0 : _m, _o = _g.bodyHeight, bodyHeight = _o === void 0 ? 0 : _o, onChangeSelection = _a.onChangeSelection;
             // detect change scrollContent
@@ -490,7 +488,7 @@ var StoreProvider = /** @class */ (function (_super) {
                     focusedCol: focusedCol,
                 });
             }
-        };
+        }, 200);
         return _this;
     }
     StoreProvider.getDerivedStateFromProps = function (nProps, nState) {
@@ -721,14 +719,14 @@ var StoreProvider = /** @class */ (function (_super) {
         // console.log('store did mount');
     };
     StoreProvider.prototype.componentDidUpdate = function (pProps, pState) {
-        // this.lazyComponentDidUpdate(pProps, pState);
-        var _this = this;
-        if (this.lazyTimer) {
-            clearTimeout(this.lazyTimer);
-        }
-        setTimeout(function () {
-            _this.lazyComponentDidUpdate(pState);
-        }, 200);
+        this.lazyComponentDidUpdate(pState);
+        // if (this.lazyTimer) {
+        //   clearTimeout(this.lazyTimer);
+        // }
+        // this.lazyTimer = setTimeout(() => {
+        //   this.lazyComponentDidUpdate(pState);
+        //   clearTimeout(this.lazyTimer);
+        // }, 200);
     };
     StoreProvider.prototype.componentWillUnmount = function () {
         // console.log('store unMount');

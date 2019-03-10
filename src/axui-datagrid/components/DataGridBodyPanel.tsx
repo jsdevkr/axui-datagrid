@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { arrayFromRange, classNames as CX } from '../utils';
+import { arrayFromRange } from '../utils';
 import DataGridBodyCell from './DataGridBodyCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
@@ -125,22 +125,6 @@ class DataGridBodyPanel extends React.Component<IProps> {
       setStoreState,
       dispatch,
     } = this.props;
-
-    // aside-header가 필요하지 않은지 확인
-    if (
-      (panelName === DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL &&
-        (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||
-      (panelName === DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL &&
-        (frozenPanelWidth === 0 || frozenPanelHeight === 0)) ||
-      (panelName === DataGridEnums.PanelNames.TOP_BODY_SCROLL &&
-        frozenPanelHeight === 0) ||
-      (panelName === DataGridEnums.PanelNames.ASIDE_BODY_SCROLL &&
-        asidePanelWidth === 0) ||
-      (panelName === DataGridEnums.PanelNames.LEFT_BODY_SCROLL &&
-        frozenPanelWidth === 0)
-    ) {
-      return null;
-    }
 
     let panelColGroup: IDataGrid.ICol[];
     let panelBodyRow: IDataGrid.IColumnTableMap;

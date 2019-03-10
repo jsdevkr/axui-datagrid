@@ -373,14 +373,8 @@ class StoreProvider extends React.Component<
       headerColGroup = [],
       bodyRowData = { rows: [{ cols: [] }] },
       footSumData = { rows: [{ cols: [] }] },
-      onScroll,
       onScrollEnd,
-      onChangeScrollSize,
-      onChangeSelection,
-      onChangeSelected,
     } = this.state;
-    const { frozenRowIndex = 0 } = options;
-    const { bodyHeight = 0, bodyTrHeight = 0 } = styles;
     const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
 
     if (!newState.styles) {
@@ -453,7 +447,7 @@ class StoreProvider extends React.Component<
     //   newState.scrollTop = dimensions.scrollTop;
     // }
 
-    this.setState(() => newState, callback);
+    this.setState(newState, callback);
   };
 
   dispatch = (
@@ -825,10 +819,7 @@ class StoreProvider extends React.Component<
   }
 
   // tslint:disable-next-line: member-ordering
-  lazyTimer: any;
-
-  // tslint:disable-next-line: member-ordering
-  lazyComponentDidUpdate = (pState: IDataGrid.IStoreState) => {
+  lazyComponentDidUpdate = throttle((pState: IDataGrid.IStoreState) => {
     const { onScroll } = this.props;
     const {
       scrollLeft = 0,
@@ -907,20 +898,21 @@ class StoreProvider extends React.Component<
         focusedCol,
       });
     }
-  };
+  }, 200);
 
   componentDidUpdate(
     pProps: IDataGrid.IStoreProps,
     pState: IDataGrid.IStoreState,
   ) {
-    // this.lazyComponentDidUpdate(pProps, pState);
+    this.lazyComponentDidUpdate(pState);
 
-    if (this.lazyTimer) {
-      clearTimeout(this.lazyTimer);
-    }
-    setTimeout(() => {
-      this.lazyComponentDidUpdate(pState);
-    }, 200);
+    // if (this.lazyTimer) {
+    //   clearTimeout(this.lazyTimer);
+    // }
+    // this.lazyTimer = setTimeout(() => {
+    //   this.lazyComponentDidUpdate(pState);
+    //   clearTimeout(this.lazyTimer);
+    // }, 200);
   }
 
   componentWillUnmount() {

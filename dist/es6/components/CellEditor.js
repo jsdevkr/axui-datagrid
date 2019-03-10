@@ -82,7 +82,7 @@ class CellEditor extends React.Component {
             });
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
-        this.renderInputText = (value) => {
+        this.inputTextRender = (value) => {
             return (React.createElement("input", { type: "text", ref: this.inputTextRef, onCompositionUpdate: (e) => {
                     this.activeComposition = true;
                 }, onCompositionEnd: (e) => {
@@ -95,8 +95,55 @@ class CellEditor extends React.Component {
                     this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
                 }, "data-inline-edit": true, defaultValue: value }));
         };
+        this.handleCheckboxValue = (value) => {
+            const { dispatch, li, col } = this.props;
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+                row: li,
+                colIndex: col.colIndex,
+                value: value,
+                eventWhichKey: 'click-checkbox',
+            });
+        };
+        this.checkboxRender = (value, label) => {
+            const { columnHeight, lineHeight, columnBorderWidth, colAlign, col: { columnAttr = '', editor }, } = this.props;
+            let justifyContent = '';
+            switch (colAlign) {
+                case 'center':
+                    justifyContent = 'center';
+                    break;
+                case 'right':
+                    justifyContent = 'flex-end';
+                    break;
+                default:
+            }
+            return (React.createElement("span", { "data-span": 'checkbox-editor', style: {
+                    height: columnHeight - columnBorderWidth + 'px',
+                    lineHeight: lineHeight + 'px',
+                    justifyContent,
+                }, onClick: () => {
+                    this.handleCheckboxValue(!value);
+                } },
+                React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": value, style: {
+                        width: lineHeight + 'px',
+                        height: lineHeight + 'px',
+                    } }),
+                React.createElement("label", { style: {
+                        height: lineHeight + 'px',
+                        lineHeight: lineHeight + 'px',
+                    } }, label)));
+        };
         this.inputTextRef = React.createRef();
         this.editorTargetRef = React.createRef();
+    }
+    shouldComponentUpdate(nextProps) {
+        const { li, col: { colIndex }, } = nextProps;
+        if (this.props.focusedRow === nextProps.focusedRow &&
+            nextProps.focusedRow === li &&
+            this.props.focusedCol === nextProps.focusedCol &&
+            nextProps.focusedCol === colIndex) {
+            return true;
+        }
+        return this.props.value !== nextProps.value;
     }
     componentDidMount() {
         if (this.inputTextRef.current) {
@@ -131,28 +178,19 @@ class CellEditor extends React.Component {
             this.inputTextRef.current.select();
         }
     }
-    shouldComponentUpdate(nextProps) {
-        const { li, col: { colIndex }, } = nextProps;
-        if (this.props.focusedRow === nextProps.focusedRow &&
-            nextProps.focusedRow === li &&
-            this.props.focusedCol === nextProps.focusedCol &&
-            nextProps.focusedCol === colIndex) {
-            return true;
-        }
-        return this.props.value !== nextProps.value;
-    }
     render() {
         const { value, col, li } = this.props;
-        // const value = data[li] && data[li][col.key || ''];
         const editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
         switch (editor.type) {
             case 'text':
-                return this.renderInputText(value);
+                return this.inputTextRender(value);
+            case 'checkbox':
+                return this.checkboxRender(value, editor.label);
             default:
                 if (!editor.render) {
-                    return this.renderInputText(value);
+                    return this.inputTextRender(value);
                 }
                 // return <div ref={this.editorTargetRef} />;
                 return editor.render({

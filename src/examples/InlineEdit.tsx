@@ -209,9 +209,10 @@ class InlineEdit extends React.Component<any, any> {
       {
         key: 'check',
         label: 'checkbox',
+        align: 'center',
         editor: {
-          activeType: 'always',
-          render: checkboxEditor,
+          type: 'checkbox',
+          label: 'useYn',
         },
       },
     ];

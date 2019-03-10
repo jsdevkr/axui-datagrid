@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { resolve } from 'path';
 
 class LargeData extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -56,6 +57,7 @@ class LargeData extends React.Component<any, any> {
         showLineNumber: true,
         showRowSelector: false,
       },
+      loading: false,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -77,87 +79,99 @@ class LargeData extends React.Component<any, any> {
     }
   };
 
-  getData = (len: number) => {
+  makeData = (len: number) => {
+    return new Promise((resolve, reject) => {
+      let gridData: any = [];
+
+      const typeGroup = {
+        aTypes: ['A', 'B', 'C', 'D'],
+        bTypes: ['A01', 'A02', 'B01', 'B02', 'C01', 'C02'],
+        cTypes: ['Thomas', 'Brant', 'Ben', 'Woo'],
+        priceTypes: [500, 1000, 1500, 2000],
+        amountTypes: [1, 2, 4, 5, 10, 20],
+        saleTypes: ['T', 'B', 'H', 'W'],
+        saleDtTypes: [
+          '2018-01-20',
+          '2018-01-21',
+          '2018-02-01',
+          '2018-02-02',
+          '2018-02-03',
+        ],
+        customerTypes: [
+          'TOM',
+          'BRANT',
+          'BENJAMIN',
+          'BILL',
+          'KELLY',
+          'CIA',
+          'ALAIN',
+          'ROBB',
+          'ISSAC',
+          'ELLIE',
+          'PAUL',
+        ],
+      };
+
+      const getTypes = (typeName: string) => {
+        const types = typeGroup[typeName];
+        return types[Math.floor(Math.random() * types.length)];
+      };
+
+      for (let i = 1; i < len; i++) {
+        const price = getTypes('priceTypes');
+        const amount = getTypes('amountTypes');
+
+        gridData.push({
+          a: getTypes('aTypes'),
+          b: getTypes('bTypes'),
+          c: getTypes('cTypes'),
+          saleDt: getTypes('saleDtTypes'),
+          customer: getTypes('customerTypes'),
+          saleType: getTypes('saleTypes'),
+          price: price,
+          amount: amount,
+          cost: price * amount,
+        });
+      }
+
+      setTimeout(() => {
+        resolve(gridData);
+      });
+    });
+  };
+
+  getData = async (len: number) => {
+    this.setState({ data: [], loading: true });
     console.log(
       `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
       'start getData',
     );
 
-    let gridData: any = [];
+    setTimeout(async () => {
+      const gridData = await this.makeData(len);
 
-    const typeGroup = {
-      aTypes: ['A', 'B', 'C', 'D'],
-      bTypes: ['A01', 'A02', 'B01', 'B02', 'C01', 'C02'],
-      cTypes: ['Thomas', 'Brant', 'Ben', 'Woo'],
-      priceTypes: [500, 1000, 1500, 2000],
-      amountTypes: [1, 2, 4, 5, 10, 20],
-      saleTypes: ['T', 'B', 'H', 'W'],
-      saleDtTypes: [
-        '2018-01-20',
-        '2018-01-21',
-        '2018-02-01',
-        '2018-02-02',
-        '2018-02-03',
-      ],
-      customerTypes: [
-        'TOM',
-        'BRANT',
-        'BENJAMIN',
-        'BILL',
-        'KELLY',
-        'CIA',
-        'ALAIN',
-        'ROBB',
-        'ISSAC',
-        'ELLIE',
-        'PAUL',
-      ],
-    };
-
-    const getTypes = (typeName: string) => {
-      const types = typeGroup[typeName];
-      return types[Math.floor(Math.random() * types.length)];
-    };
-
-    for (let i = 1; i < len; i++) {
-      const price = getTypes('priceTypes');
-      const amount = getTypes('amountTypes');
-
-      gridData.push({
-        a: getTypes('aTypes'),
-        b: getTypes('bTypes'),
-        c: getTypes('cTypes'),
-        saleDt: getTypes('saleDtTypes'),
-        customer: getTypes('customerTypes'),
-        saleType: getTypes('saleTypes'),
-        price: price,
-        amount: amount,
-        cost: price * amount,
-      });
-    }
-
-    this.setState({ data: [] });
-
-    console.log(
-      `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-      'make getData done!',
-    );
-    this.setState(
-      () => ({
-        columns: [...this.state.columns],
-        data: gridData,
-      }),
-      () => {
-        console.log(
-          `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-          'state changed',
-        );
-      },
-    );
+      console.log(
+        `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+        'make getData done!',
+      );
+      this.setState(
+        () => ({
+          columns: [...this.state.columns],
+          data: gridData,
+          loading: false,
+        }),
+        () => {
+          console.log(
+            `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
+            'state changed',
+          );
+        },
+      );
+    });
   };
 
   render() {
-    const { width, height, columns, data, options } = this.state;
+    const { width, height, columns, data, options, loading } = this.state;
 
     return (
       <Wrapper>
@@ -180,6 +194,7 @@ class LargeData extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={{ ...options, updateAt: new Date() }}
+              loading={loading}
             />
           </div>
 

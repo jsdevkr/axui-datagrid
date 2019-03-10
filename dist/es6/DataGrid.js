@@ -13,7 +13,7 @@ class DataGrid extends React.Component {
             mounted: false,
             autofit: false,
             doneAutofit: false,
-            autofitAsideWidth: 100,
+            autofitAsideWidth: DataGrid.defaultOptions.lineNumberColumnWidth,
             autofitColGroup: [],
             headerTable: { rows: [] },
             bodyRowTable: { rows: [] },
@@ -33,8 +33,6 @@ class DataGrid extends React.Component {
             footSumData: { rows: [] },
         };
         this.getOptions = (options) => {
-            // todo
-            // options.lineNumberColumnWidth = autofitAsideWidth;
             return Object.assign({}, DataGrid.defaultOptions, options, { header: Object.assign({}, DataGrid.defaultOptions.header, options.header), body: Object.assign({}, DataGrid.defaultOptions.body, options.body), page: Object.assign({}, DataGrid.defaultOptions.page, options.page), scroller: Object.assign({}, DataGrid.defaultOptions.scroller, options.scroller), columnKeys: Object.assign({}, DataGrid.defaultOptions.columnKeys, options.columnKeys) });
         };
         this.applyAutofit = (params) => {
@@ -117,40 +115,53 @@ class DataGrid extends React.Component {
         const columnData = this.getColumnData(columns, footSum, newOptions);
         this.setState(Object.assign({ mounted: true }, columnData, { options: newOptions }));
     }
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const { columns: _columns, footSum: _footSum, options: _options, } = prevProps;
         const { columns, footSum, options } = this.props;
+        const { autofitAsideWidth: _autofitAsideWidth } = prevState;
+        const { autofit, autofitAsideWidth } = this.state;
         if (_columns !== columns || _footSum !== footSum || _options !== options) {
             const newOptions = this.getOptions(options || {});
             const columnData = this.getColumnData(columns, footSum || [], newOptions);
             this.setState(Object.assign({}, columnData, { options: newOptions, doneAutofit: false }));
         }
-    }
-    shouldComponentUpdate(prevProps) {
-        if (prevProps.data === this.props.data &&
-            prevProps.columns === this.props.columns &&
-            prevProps.footSum === this.props.footSum &&
-            prevProps.width === this.props.width &&
-            prevProps.height === this.props.height &&
-            prevProps.style === this.props.style &&
-            prevProps.options === this.props.options &&
-            prevProps.status === this.props.status &&
-            prevProps.loading === this.props.loading &&
-            prevProps.loadingData === this.props.loadingData &&
-            prevProps.selectedRowKeys === this.props.selectedRowKeys &&
-            prevProps.selection === this.props.selection &&
-            prevProps.scrollLeft === this.props.scrollLeft &&
-            prevProps.scrollTop === this.props.scrollTop &&
-            prevProps.onBeforeEvent === this.props.onBeforeEvent &&
-            prevProps.onScroll === this.props.onScroll &&
-            prevProps.onScrollEnd === this.props.onScrollEnd &&
-            prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
-            prevProps.onChangeSelection === this.props.onChangeSelection &&
-            prevProps.onRightClick === this.props.onRightClick) {
-            return false;
+        else if (autofit && _autofitAsideWidth !== autofitAsideWidth) {
+            const newOptions = this.getOptions(options || {});
+            newOptions.lineNumberColumnWidth = autofitAsideWidth;
+            const columnData = this.getColumnData(columns, footSum || [], newOptions);
+            this.setState(Object.assign({}, columnData, { options: newOptions }));
         }
-        return true;
     }
+    // todo : history change 변경에 대응 안됨.
+    // shouldComponentUpdate(prevProps: IProps) {
+    //   if (
+    //     prevProps.data === this.props.data &&
+    //     prevProps.columns === this.props.columns &&
+    //     prevProps.footSum === this.props.footSum &&
+    //     prevProps.width === this.props.width &&
+    //     prevProps.height === this.props.height &&
+    //     prevProps.style === this.props.style &&
+    //     prevProps.options === this.props.options &&
+    //     prevProps.status === this.props.status &&
+    //     prevProps.loading === this.props.loading &&
+    //     prevProps.loadingData === this.props.loadingData &&
+    //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+    //     prevProps.selection === this.props.selection &&
+    //     prevProps.scrollLeft === this.props.scrollLeft &&
+    //     prevProps.scrollTop === this.props.scrollTop &&
+    //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+    //     prevProps.onScroll === this.props.onScroll &&
+    //     prevProps.onScrollEnd === this.props.onScrollEnd &&
+    //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+    //     prevProps.onChangeSelection === this.props.onChangeSelection &&
+    //     prevProps.onRightClick === this.props.onRightClick
+    //   ) {
+    //     debugger;
+    //     console.log('here');
+    //     return false;
+    //   }
+    //   return true;
+    // }
     render() {
         const { mounted, doneAutofit, autofitAsideWidth, autofitColGroup, headerTable, bodyRowTable, bodyRowMap, asideHeaderData, leftHeaderData, headerData, asideBodyRowData, leftBodyRowData, bodyRowData, colGroupMap, asideColGroup, colGroup, footSumColumns, footSumTable, leftFootSumData, footSumData, options, } = this.state;
         const { loading = false, loadingData = false, data = [], width, height = DataGrid.defaultHeight, selectedRowKeys, selection, status, scrollLeft, scrollTop, onBeforeEvent, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelected, onRightClick, style = {}, } = this.props;

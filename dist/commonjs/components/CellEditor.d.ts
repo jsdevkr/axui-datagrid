@@ -5,6 +5,10 @@ interface IProps {
     col: IDataGrid.ICol;
     li: number;
     value: any;
+    columnHeight: number;
+    lineHeight: number;
+    columnBorderWidth: number;
+    colAlign: string;
     setStoreState: IDataGrid.setStoreState;
     dispatch: IDataGrid.dispatch;
     inlineEditingCell: IDataGrid.IEditingCell;
@@ -16,15 +20,17 @@ declare class CellEditor extends React.Component<IProps> {
     editorTargetRef: React.RefObject<HTMLDivElement>;
     activeComposition: boolean;
     constructor(props: IProps);
-    componentDidMount(): void;
-    componentDidUpdate(prevProps: IProps): void;
     onEventInput: (eventName: DataGridEnums.EventNames, e: React.KeyboardEvent<HTMLInputElement>) => void;
     handleUpdateValue: (value: any, keepEditing?: boolean | undefined) => void;
     handleCancelEdit: () => void;
     handleCustomEditorFocus: () => void;
     handleCustomEditorBlur: () => void;
-    renderInputText: (value: any) => JSX.Element;
+    inputTextRender: (value: any) => JSX.Element;
+    handleCheckboxValue: (value: boolean) => void;
+    checkboxRender: (value: any, label?: React.ReactNode) => JSX.Element;
     shouldComponentUpdate(nextProps: IProps): boolean;
+    componentDidMount(): void;
+    componentDidUpdate(prevProps: IProps): void;
     render(): {} | null | undefined;
 }
 export default CellEditor;

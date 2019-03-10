@@ -9,10 +9,7 @@ export { default as makeBodyRowTable } from './makeBodyRowTable';
 export { default as makeHeaderTable } from './makeHeaderTable';
 export { default as makeFootSumTable } from './makeFootSumTable';
 export { default as calculateDimensions } from './calculateDimensions';
-export { default as findParentNode } from './findParentNode';
 export { default as formatCurrency } from './formatCurrency';
-export { default as getPathValue } from './getPathValue';
-export { default as classNames } from './classNames';
 export { default as arrayFromRange } from './arrayFromRange';
 export { PrintDate, printDate } from './printDate';
 export { default as getScrollPosition } from './getScrollPosition';
@@ -25,14 +22,7 @@ export {
 export {
   default as getPositionPrintColGroup,
 } from './getPositionPrintColGroup';
-export { default as getNode } from './getNode';
 export { default as uniqBy } from './uniqBy';
-export {
-  getInnerHeight,
-  getInnerWidth,
-  getOuterHeight,
-  getOuterWidth,
-} from './getWidthHeight';
 export {
   debounce,
   throttle,

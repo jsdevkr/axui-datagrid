@@ -91,7 +91,7 @@ class FootSum extends React.Component<any, any> {
   };
 
   public render() {
-    const { width, height, columns, data, options } = this.state;
+    const { width, height, columns, data, footSum, options } = this.state;
 
     return (
       <Wrapper>
@@ -110,6 +110,7 @@ class FootSum extends React.Component<any, any> {
               height={height}
               style={{ fontSize: '12px' }}
               columns={columns}
+              footSum={footSum}
               data={data}
               options={options}
             />

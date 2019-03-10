@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
-const utils_1 = require("../utils");
 class CellLabel extends React.PureComponent {
     render() {
         const { col: { key = '', label = '' }, lineHeight, optionsHeader, listSelectedAll, } = this.props;
@@ -27,7 +26,6 @@ class CellSorter extends React.PureComponent {
         return show ? (React.createElement("span", { "data-sorter": colIndex, "data-sorter-order": orderBy })) : null;
     }
 }
-const CellFilter = ({ show, colIndex, isFiltered }) => show ? React.createElement("span", { "data-filter": isFiltered, "data-filter-index": colIndex }) : null;
 class DatagridHeaderCell extends React.PureComponent {
     render() {
         const { listSelectedAll = false, options, options: { header: { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = 'left', } = {}, } = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, col: { align: colAlign = '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, } = {}, onClick, } = this.props;
@@ -35,16 +33,21 @@ class DatagridHeaderCell extends React.PureComponent {
         const lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
             optionsHeaderColumnBorderWidth;
-        return (React.createElement("td", { colSpan: colCowSpan, rowSpan: colRowSpan, className: utils_1.classNames({
-                ['axui-datagrid-header-column']: true,
-                ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
-                ['focused']: focusedCol > -1 &&
-                    colIndex === focusedCol &&
-                    bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-                ['selected']: selectionCols &&
-                    selectionCols[colIndex] &&
-                    bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-            }), style: {
+        const classNames = ['axui-datagrid-header-column'];
+        if (col.columnAttr === 'lineNumber') {
+            classNames.push('axui-datagrid-header-corner');
+        }
+        if (focusedCol > -1 &&
+            colIndex === focusedCol &&
+            bodyRow.rows.length - 1 === ri + colRowSpan - 1) {
+            classNames.push('focused');
+        }
+        if (selectionCols &&
+            selectionCols[colIndex] &&
+            bodyRow.rows.length - 1 === ri + colRowSpan - 1) {
+            classNames.push('selected');
+        }
+        return (React.createElement("td", { colSpan: colCowSpan, rowSpan: colRowSpan, className: classNames.join(' '), style: {
                 height: optionsHeaderColumnHeight * colRowSpan -
                     optionsHeaderColumnBorderWidth,
                 minHeight: '1px',

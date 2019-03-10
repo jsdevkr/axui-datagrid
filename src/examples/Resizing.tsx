@@ -257,49 +257,6 @@ class Resizing extends React.Component<any, any> {
           date: '2017-04-01',
           money: 45000,
         },
-        {
-          id: 25,
-          title: 'A poet is the painter of the soul.',
-          writer: 'Tiffany',
-          date: '2017-05-21',
-          money: 6000,
-        },
-        {
-          id: 26,
-          title: 'Error is the discipline through which we advance.',
-          writer: 'Benjamin',
-          date: '2017-10-24',
-          money: 990000,
-        },
-        {
-          id: 27,
-          title: 'Faith without deeds is useless.',
-          writer: 'June',
-          date: '2017-11-07',
-          money: 100000,
-        },
-        {
-          id: 28,
-          title: 'Weak things united become strong.',
-          writer: 'Cherry',
-          date: '2017-10-06',
-          money: 50000,
-        },
-        {
-          id: 29,
-          title: 'We give advice, but we cannot give conduct.',
-          writer: 'Bell',
-          date: '2017-05-01',
-          money: 28000,
-        },
-        {
-          id: 30,
-          title:
-            'Nature never deceives us; it is always we who deceive ourselves.',
-          writer: 'Julia',
-          date: '2017-03-24',
-          money: 360000,
-        },
       ],
       options: {},
     };
@@ -322,7 +279,7 @@ class Resizing extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={grid.columns}
               data={grid.data}
-              options={grid.options}
+              options={{}}
             />
             <div
               className="resizer"

@@ -640,34 +640,44 @@ class DataGridBody extends React.Component<IProps> {
         style={{ height: bodyHeight }}
         onMouseDown={this.onMouseDownBody}
       >
-        <DataGridBodyPanel
-          panelName={DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL}
-          containerStyle={topAsideBodyPanelStyle}
-          panelScrollConfig={topBodyScrollConfig}
-        />
-        <DataGridBodyPanel
-          panelName={DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL}
-          containerStyle={topLeftBodyPanelStyle}
-          panelScrollConfig={topBodyScrollConfig}
-        />
-        <DataGridBodyPanel
-          panelName={DataGridEnums.PanelNames.TOP_BODY_SCROLL}
-          containerStyle={topBodyPanelStyle}
-          panelScrollConfig={topBodyScrollConfig}
-          panelLeft={scrollLeft}
-        />
-        <DataGridBodyPanel
-          panelName={DataGridEnums.PanelNames.ASIDE_BODY_SCROLL}
-          containerStyle={asideBodyPanelStyle}
-          panelScrollConfig={bodyScrollConfig}
-          panelTop={scrollTop}
-        />
-        <DataGridBodyPanel
-          panelName={DataGridEnums.PanelNames.LEFT_BODY_SCROLL}
-          containerStyle={leftBodyPanelStyle}
-          panelScrollConfig={bodyScrollConfig}
-          panelTop={scrollTop}
-        />
+        {asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (
+          <DataGridBodyPanel
+            panelName={DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL}
+            containerStyle={topAsideBodyPanelStyle}
+            panelScrollConfig={topBodyScrollConfig}
+          />
+        )}
+        {frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (
+          <DataGridBodyPanel
+            panelName={DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL}
+            containerStyle={topLeftBodyPanelStyle}
+            panelScrollConfig={topBodyScrollConfig}
+          />
+        )}
+        {frozenPanelHeight !== 0 && (
+          <DataGridBodyPanel
+            panelName={DataGridEnums.PanelNames.TOP_BODY_SCROLL}
+            containerStyle={topBodyPanelStyle}
+            panelScrollConfig={topBodyScrollConfig}
+            panelLeft={scrollLeft}
+          />
+        )}
+        {asidePanelWidth !== 0 && (
+          <DataGridBodyPanel
+            panelName={DataGridEnums.PanelNames.ASIDE_BODY_SCROLL}
+            containerStyle={asideBodyPanelStyle}
+            panelScrollConfig={bodyScrollConfig}
+            panelTop={scrollTop}
+          />
+        )}
+        {frozenPanelWidth !== 0 && (
+          <DataGridBodyPanel
+            panelName={DataGridEnums.PanelNames.LEFT_BODY_SCROLL}
+            containerStyle={leftBodyPanelStyle}
+            panelScrollConfig={bodyScrollConfig}
+            panelTop={scrollTop}
+          />
+        )}
         <DataGridBodyPanel
           panelName={DataGridEnums.PanelNames.BODY_SCROLL}
           containerStyle={bodyPanelStyle}
@@ -675,19 +685,25 @@ class DataGridBody extends React.Component<IProps> {
           panelLeft={scrollLeft}
           panelTop={scrollTop}
         />
-        <DataGridBodyBottomPanel
-          panelName={DataGridEnums.PanelNames.BOTTOM_ASIDE_BODY_SCROLL}
-          containerStyle={bottomAsideBodyPanelStyle}
-        />
-        <DataGridBodyBottomPanel
-          panelName={DataGridEnums.PanelNames.BOTTOM_LEFT_BODY_SCROLL}
-          containerStyle={bottomLeftBodyPanelStyle}
-        />
-        <DataGridBodyBottomPanel
-          panelName={DataGridEnums.PanelNames.BOTTOM_BODY_SCROLL}
-          containerStyle={bottomBodyPanelStyle}
-          panelLeft={scrollLeft}
-        />
+        {footSumHeight !== 0 && asidePanelWidth !== 0 && (
+          <DataGridBodyBottomPanel
+            panelName={DataGridEnums.PanelNames.BOTTOM_ASIDE_BODY_SCROLL}
+            containerStyle={bottomAsideBodyPanelStyle}
+          />
+        )}
+        {footSumHeight !== 0 && frozenPanelHeight !== 0 && (
+          <DataGridBodyBottomPanel
+            panelName={DataGridEnums.PanelNames.BOTTOM_LEFT_BODY_SCROLL}
+            containerStyle={bottomLeftBodyPanelStyle}
+          />
+        )}
+        {footSumHeight !== 0 && (
+          <DataGridBodyBottomPanel
+            panelName={DataGridEnums.PanelNames.BOTTOM_BODY_SCROLL}
+            containerStyle={bottomBodyPanelStyle}
+            panelLeft={scrollLeft}
+          />
+        )}
         <DataGridBodyLoader
           loadingData={loadingData}
           bodyLoaderHeight={bodyLoaderHeight}

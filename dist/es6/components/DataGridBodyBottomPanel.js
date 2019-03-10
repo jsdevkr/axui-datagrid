@@ -4,51 +4,53 @@ const React = require("react");
 const hoc_1 = require("../hoc");
 const DataGridBodyBottomCell_1 = require("./DataGridBodyBottomCell");
 const DataGridTableColGroup_1 = require("./DataGridTableColGroup");
-const TableBody = ({ bodyRow }) => (React.createElement("tbody", null, bodyRow.rows.map((row, ri) => {
-    return (React.createElement("tr", { key: ri, className: '' },
-        row.cols.map((col, ci) => {
-            return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, value: '' }));
-        }),
-        React.createElement("td", null)));
-})));
-const DataGridBodyBottomPanel = props => {
-    const { asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftFootSumData = { rows: [{ cols: [] }] }, visibleFootSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles = {}, } = props;
-    const { frozenPanelWidth = 0, asidePanelWidth = 0, bodyTrHeight = 0, } = styles;
-    // aside또는 left가 필요 없는 상황
-    if ((panelName === 'bottom-aside-body-scroll' && asidePanelWidth === 0) ||
-        (panelName === 'bottom-left-body-scroll' && frozenPanelWidth === 0)) {
-        return null;
+const _enums_1 = require("axui-datagrid/common/@enums");
+class TableBody extends React.PureComponent {
+    render() {
+        const { data, options, predefinedFormatter, predefinedCollector, } = this.props;
+        return (React.createElement("tbody", null, this.props.bodyRow.rows.map((row, ri) => {
+            return (React.createElement("tr", { key: ri, className: '' },
+                row.cols.map((col, ci) => {
+                    return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, data: data, options: options, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }));
+                }),
+                React.createElement("td", null)));
+        })));
     }
-    let panelColGroup = [];
-    let panelBodyRow = { rows: [{ cols: [] }] };
-    let panelPaddingLeft = 0;
-    switch (panelName) {
-        case 'bottom-aside-body-scroll':
-            panelColGroup = asideColGroup;
-            panelBodyRow = asideBodyRowData;
-            break;
-        case 'bottom-left-body-scroll':
-            panelColGroup = leftHeaderColGroup;
-            panelBodyRow = leftFootSumData;
-            break;
-        case 'bottom-body-scroll':
-        default:
-            panelColGroup = visibleHeaderColGroup;
-            panelBodyRow = visibleFootSumData;
-            panelPaddingLeft = panelColGroup[0]
-                ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
-                : 0;
+}
+class DataGridBodyBottomPanel extends React.Component {
+    render() {
+        const { asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftFootSumData = { rows: [{ cols: [] }] }, visibleFootSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0, asidePanelWidth = 0 } = {}, data, options, predefinedFormatter, predefinedCollector, } = this.props;
+        let panelColGroup = [];
+        let panelBodyRow = { rows: [{ cols: [] }] };
+        let panelPaddingLeft = 0;
+        switch (panelName) {
+            case _enums_1.DataGridEnums.PanelNames.BOTTOM_ASIDE_BODY_SCROLL:
+                panelColGroup = asideColGroup;
+                panelBodyRow = asideBodyRowData;
+                break;
+            case _enums_1.DataGridEnums.PanelNames.BOTTOM_LEFT_BODY_SCROLL:
+                panelColGroup = leftHeaderColGroup;
+                panelBodyRow = leftFootSumData;
+                break;
+            case _enums_1.DataGridEnums.PanelNames.BOTTOM_BODY_SCROLL:
+            default:
+                panelColGroup = visibleHeaderColGroup;
+                panelBodyRow = visibleFootSumData;
+                panelPaddingLeft = panelColGroup[0]
+                    ? (panelColGroup[0]._sx || 0) - frozenPanelWidth
+                    : 0;
+        }
+        const panelStyle = {
+            left: panelLeft,
+            top: panelTop,
+            paddingTop: 0,
+            paddingLeft: panelPaddingLeft,
+        };
+        return (React.createElement("div", { "data-scroll-container": `${panelName}-container`, style: containerStyle },
+            React.createElement("div", { "data-panel": panelName, style: panelStyle },
+                React.createElement("table", { style: { height: '100%' } },
+                    React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
+                    React.createElement(TableBody, { bodyRow: panelBodyRow, data: data || [], options: options || {}, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector })))));
     }
-    const panelStyle = {
-        left: panelLeft,
-        top: panelTop,
-        paddingTop: 0,
-        paddingLeft: panelPaddingLeft,
-    };
-    return (React.createElement("div", { "data-scroll-container": `${panelName}-container`, style: containerStyle },
-        React.createElement("div", { "data-panel": panelName, style: panelStyle },
-            React.createElement("table", { style: { height: '100%' } },
-                React.createElement(DataGridTableColGroup_1.default, { panelColGroup: panelColGroup }),
-                React.createElement(TableBody, { bodyRow: panelBodyRow })))));
-};
+}
 exports.default = hoc_1.connectStore(DataGridBodyBottomPanel);

@@ -14,7 +14,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var utils_1 = require("../utils");
 var CellLabel = /** @class */ (function (_super) {
     __extends(CellLabel, _super);
     function CellLabel() {
@@ -50,32 +49,32 @@ var CellSorter = /** @class */ (function (_super) {
     };
     return CellSorter;
 }(React.PureComponent));
-var CellFilter = function (_a) {
-    var show = _a.show, colIndex = _a.colIndex, isFiltered = _a.isFiltered;
-    return show ? React.createElement("span", { "data-filter": isFiltered, "data-filter-index": colIndex }) : null;
-};
 var DatagridHeaderCell = /** @class */ (function (_super) {
     __extends(DatagridHeaderCell, _super);
     function DatagridHeaderCell() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DatagridHeaderCell.prototype.render = function () {
-        var _a;
-        var _b = this.props, _c = _b.listSelectedAll, listSelectedAll = _c === void 0 ? false : _c, options = _b.options, _d = _b.options, _e = (_d === void 0 ? {} : _d).header, _f = _e === void 0 ? {} : _e, _g = _f.columnHeight, optionsHeaderColumnHeight = _g === void 0 ? 0 : _g, _h = _f.columnPadding, optionsHeaderColumnPadding = _h === void 0 ? 0 : _h, _j = _f.columnBorderWidth, optionsHeaderColumnBorderWidth = _j === void 0 ? 0 : _j, _k = _f.align, headerAlign = _k === void 0 ? 'left' : _k, _l = _b.focusedCol, focusedCol = _l === void 0 ? -1 : _l, selectionCols = _b.selectionCols, _m = _b.sortInfo, sortInfo = _m === void 0 ? {} : _m, bodyRow = _b.bodyRow, ri = _b.ri, col = _b.col, _o = _b.col, _p = _o === void 0 ? {} : _o, _q = _p.align, colAlign = _q === void 0 ? '' : _q, _r = _p.colIndex, colIndex = _r === void 0 ? 0 : _r, _s = _p.key, colKey = _s === void 0 ? '' : _s, _t = _p.rowSpan, colRowSpan = _t === void 0 ? 1 : _t, _u = _p.colSpan, colCowSpan = _u === void 0 ? 1 : _u, onClick = _b.onClick;
+        var _a = this.props, _b = _a.listSelectedAll, listSelectedAll = _b === void 0 ? false : _b, options = _a.options, _c = _a.options, _d = (_c === void 0 ? {} : _c).header, _e = _d === void 0 ? {} : _d, _f = _e.columnHeight, optionsHeaderColumnHeight = _f === void 0 ? 0 : _f, _g = _e.columnPadding, optionsHeaderColumnPadding = _g === void 0 ? 0 : _g, _h = _e.columnBorderWidth, optionsHeaderColumnBorderWidth = _h === void 0 ? 0 : _h, _j = _e.align, headerAlign = _j === void 0 ? 'left' : _j, _k = _a.focusedCol, focusedCol = _k === void 0 ? -1 : _k, selectionCols = _a.selectionCols, _l = _a.sortInfo, sortInfo = _l === void 0 ? {} : _l, bodyRow = _a.bodyRow, ri = _a.ri, col = _a.col, _m = _a.col, _o = _m === void 0 ? {} : _m, _p = _o.align, colAlign = _p === void 0 ? '' : _p, _q = _o.colIndex, colIndex = _q === void 0 ? 0 : _q, _r = _o.key, colKey = _r === void 0 ? '' : _r, _s = _o.rowSpan, colRowSpan = _s === void 0 ? 1 : _s, _t = _o.colSpan, colCowSpan = _t === void 0 ? 1 : _t, onClick = _a.onClick;
         var optionsHeader = options.header || {};
         var lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
             optionsHeaderColumnBorderWidth;
-        return (React.createElement("td", { colSpan: colCowSpan, rowSpan: colRowSpan, className: utils_1.classNames((_a = {},
-                _a['axui-datagrid-header-column'] = true,
-                _a['axui-datagrid-header-corner'] = col.columnAttr === 'lineNumber',
-                _a['focused'] = focusedCol > -1 &&
-                    colIndex === focusedCol &&
-                    bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-                _a['selected'] = selectionCols &&
-                    selectionCols[colIndex] &&
-                    bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-                _a)), style: {
+        var classNames = ['axui-datagrid-header-column'];
+        if (col.columnAttr === 'lineNumber') {
+            classNames.push('axui-datagrid-header-corner');
+        }
+        if (focusedCol > -1 &&
+            colIndex === focusedCol &&
+            bodyRow.rows.length - 1 === ri + colRowSpan - 1) {
+            classNames.push('focused');
+        }
+        if (selectionCols &&
+            selectionCols[colIndex] &&
+            bodyRow.rows.length - 1 === ri + colRowSpan - 1) {
+            classNames.push('selected');
+        }
+        return (React.createElement("td", { colSpan: colCowSpan, rowSpan: colRowSpan, className: classNames.join(' '), style: {
                 height: optionsHeaderColumnHeight * colRowSpan -
                     optionsHeaderColumnBorderWidth,
                 minHeight: '1px',

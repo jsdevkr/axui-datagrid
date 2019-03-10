@@ -61,9 +61,7 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState, callback) => {
-            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelected, } = this.state;
-            const { frozenRowIndex = 0 } = options;
-            const { bodyHeight = 0, bodyTrHeight = 0 } = styles;
+            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
             const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
             if (!newState.styles) {
                 newState.styles = Object.assign({}, styles);
@@ -118,7 +116,7 @@ class StoreProvider extends React.Component {
             //   newState.scrollLeft = dimensions.scrollLeft;
             //   newState.scrollTop = dimensions.scrollTop;
             // }
-            this.setState(() => newState, callback);
+            this.setState(newState, callback);
         };
         this.dispatch = (dispatchType, param) => {
             const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, options = {}, selectedRowKeys, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onChangeSelected, } = this.state;
@@ -397,7 +395,7 @@ class StoreProvider extends React.Component {
             }
         };
         // tslint:disable-next-line: member-ordering
-        this.lazyComponentDidUpdate = (pState) => {
+        this.lazyComponentDidUpdate = utils_1.throttle((pState) => {
             const { onScroll } = this.props;
             const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0 } = {}, styles: { scrollContentContainerHeight = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentWidth = 0, bodyTrHeight = 0, bodyHeight = 0, } = {}, onChangeSelection, } = this.state;
             // detect change scrollContent
@@ -444,7 +442,7 @@ class StoreProvider extends React.Component {
                     focusedCol,
                 });
             }
-        };
+        }, 200);
     }
     static getDerivedStateFromProps(nProps, nState) {
         // console.log('getDerivedStateFromProps ~~');
@@ -674,13 +672,14 @@ class StoreProvider extends React.Component {
         // console.log('store did mount');
     }
     componentDidUpdate(pProps, pState) {
-        // this.lazyComponentDidUpdate(pProps, pState);
-        if (this.lazyTimer) {
-            clearTimeout(this.lazyTimer);
-        }
-        setTimeout(() => {
-            this.lazyComponentDidUpdate(pState);
-        }, 200);
+        this.lazyComponentDidUpdate(pState);
+        // if (this.lazyTimer) {
+        //   clearTimeout(this.lazyTimer);
+        // }
+        // this.lazyTimer = setTimeout(() => {
+        //   this.lazyComponentDidUpdate(pState);
+        //   clearTimeout(this.lazyTimer);
+        // }, 200);
     }
     componentWillUnmount() {
         // console.log('store unMount');

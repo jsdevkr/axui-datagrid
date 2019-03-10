@@ -58,7 +58,7 @@ var DataGrid = /** @class */ (function (_super) {
             mounted: false,
             autofit: false,
             doneAutofit: false,
-            autofitAsideWidth: 100,
+            autofitAsideWidth: DataGrid.defaultOptions.lineNumberColumnWidth,
             autofitColGroup: [],
             headerTable: { rows: [] },
             bodyRowTable: { rows: [] },
@@ -78,8 +78,6 @@ var DataGrid = /** @class */ (function (_super) {
             footSumData: { rows: [] },
         };
         _this.getOptions = function (options) {
-            // todo
-            // options.lineNumberColumnWidth = autofitAsideWidth;
             return __assign({}, DataGrid.defaultOptions, options, { header: __assign({}, DataGrid.defaultOptions.header, options.header), body: __assign({}, DataGrid.defaultOptions.body, options.body), page: __assign({}, DataGrid.defaultOptions.page, options.page), scroller: __assign({}, DataGrid.defaultOptions.scroller, options.scroller), columnKeys: __assign({}, DataGrid.defaultOptions.columnKeys, options.columnKeys) });
         };
         _this.applyAutofit = function (params) {
@@ -163,40 +161,53 @@ var DataGrid = /** @class */ (function (_super) {
         var columnData = this.getColumnData(columns, footSum, newOptions);
         this.setState(__assign({ mounted: true }, columnData, { options: newOptions }));
     };
-    DataGrid.prototype.componentDidUpdate = function (prevProps) {
+    DataGrid.prototype.componentDidUpdate = function (prevProps, prevState) {
         var _columns = prevProps.columns, _footSum = prevProps.footSum, _options = prevProps.options;
         var _a = this.props, columns = _a.columns, footSum = _a.footSum, options = _a.options;
+        var _autofitAsideWidth = prevState.autofitAsideWidth;
+        var _b = this.state, autofit = _b.autofit, autofitAsideWidth = _b.autofitAsideWidth;
         if (_columns !== columns || _footSum !== footSum || _options !== options) {
             var newOptions = this.getOptions(options || {});
             var columnData = this.getColumnData(columns, footSum || [], newOptions);
             this.setState(__assign({}, columnData, { options: newOptions, doneAutofit: false }));
         }
-    };
-    DataGrid.prototype.shouldComponentUpdate = function (prevProps) {
-        if (prevProps.data === this.props.data &&
-            prevProps.columns === this.props.columns &&
-            prevProps.footSum === this.props.footSum &&
-            prevProps.width === this.props.width &&
-            prevProps.height === this.props.height &&
-            prevProps.style === this.props.style &&
-            prevProps.options === this.props.options &&
-            prevProps.status === this.props.status &&
-            prevProps.loading === this.props.loading &&
-            prevProps.loadingData === this.props.loadingData &&
-            prevProps.selectedRowKeys === this.props.selectedRowKeys &&
-            prevProps.selection === this.props.selection &&
-            prevProps.scrollLeft === this.props.scrollLeft &&
-            prevProps.scrollTop === this.props.scrollTop &&
-            prevProps.onBeforeEvent === this.props.onBeforeEvent &&
-            prevProps.onScroll === this.props.onScroll &&
-            prevProps.onScrollEnd === this.props.onScrollEnd &&
-            prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
-            prevProps.onChangeSelection === this.props.onChangeSelection &&
-            prevProps.onRightClick === this.props.onRightClick) {
-            return false;
+        else if (autofit && _autofitAsideWidth !== autofitAsideWidth) {
+            var newOptions = this.getOptions(options || {});
+            newOptions.lineNumberColumnWidth = autofitAsideWidth;
+            var columnData = this.getColumnData(columns, footSum || [], newOptions);
+            this.setState(__assign({}, columnData, { options: newOptions }));
         }
-        return true;
     };
+    // todo : history change 변경에 대응 안됨.
+    // shouldComponentUpdate(prevProps: IProps) {
+    //   if (
+    //     prevProps.data === this.props.data &&
+    //     prevProps.columns === this.props.columns &&
+    //     prevProps.footSum === this.props.footSum &&
+    //     prevProps.width === this.props.width &&
+    //     prevProps.height === this.props.height &&
+    //     prevProps.style === this.props.style &&
+    //     prevProps.options === this.props.options &&
+    //     prevProps.status === this.props.status &&
+    //     prevProps.loading === this.props.loading &&
+    //     prevProps.loadingData === this.props.loadingData &&
+    //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+    //     prevProps.selection === this.props.selection &&
+    //     prevProps.scrollLeft === this.props.scrollLeft &&
+    //     prevProps.scrollTop === this.props.scrollTop &&
+    //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
+    //     prevProps.onScroll === this.props.onScroll &&
+    //     prevProps.onScrollEnd === this.props.onScrollEnd &&
+    //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
+    //     prevProps.onChangeSelection === this.props.onChangeSelection &&
+    //     prevProps.onRightClick === this.props.onRightClick
+    //   ) {
+    //     debugger;
+    //     console.log('here');
+    //     return false;
+    //   }
+    //   return true;
+    // }
     DataGrid.prototype.render = function () {
         var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit, autofitAsideWidth = _a.autofitAsideWidth, autofitColGroup = _a.autofitColGroup, headerTable = _a.headerTable, bodyRowTable = _a.bodyRowTable, bodyRowMap = _a.bodyRowMap, asideHeaderData = _a.asideHeaderData, leftHeaderData = _a.leftHeaderData, headerData = _a.headerData, asideBodyRowData = _a.asideBodyRowData, leftBodyRowData = _a.leftBodyRowData, bodyRowData = _a.bodyRowData, colGroupMap = _a.colGroupMap, asideColGroup = _a.asideColGroup, colGroup = _a.colGroup, footSumColumns = _a.footSumColumns, footSumTable = _a.footSumTable, leftFootSumData = _a.leftFootSumData, footSumData = _a.footSumData, options = _a.options;
         var _b = this.props, _c = _b.loading, loading = _c === void 0 ? false : _c, _d = _b.loadingData, loadingData = _d === void 0 ? false : _d, _e = _b.data, data = _e === void 0 ? [] : _e, width = _b.width, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, selectedRowKeys = _b.selectedRowKeys, selection = _b.selection, status = _b.status, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelected = _b.onChangeSelected, onRightClick = _b.onRightClick, _g = _b.style, style = _g === void 0 ? {} : _g;

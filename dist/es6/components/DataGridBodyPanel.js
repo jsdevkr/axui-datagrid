@@ -22,19 +22,6 @@ class TableBody extends React.PureComponent {
 class DataGridBodyPanel extends React.Component {
     render() {
         const { data = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig: { sRowIndex = 0, eRowIndex = 0, frozenRowIndex = 0, } = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0, asidePanelWidth = 0, frozenPanelHeight = 0, bodyTrHeight = 0, } = {}, focusedRow, focusedCol, selectionRows, selectionCols, options, isInlineEditing, inlineEditingCell, predefinedFormatter, setStoreState, dispatch, } = this.props;
-        // aside-header가 필요하지 않은지 확인
-        if ((panelName === _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL &&
-            (asidePanelWidth === 0 || frozenPanelHeight === 0)) ||
-            (panelName === _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL &&
-                (frozenPanelWidth === 0 || frozenPanelHeight === 0)) ||
-            (panelName === _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL &&
-                frozenPanelHeight === 0) ||
-            (panelName === _enums_1.DataGridEnums.PanelNames.ASIDE_BODY_SCROLL &&
-                asidePanelWidth === 0) ||
-            (panelName === _enums_1.DataGridEnums.PanelNames.LEFT_BODY_SCROLL &&
-                frozenPanelWidth === 0)) {
-            return null;
-        }
         let panelColGroup;
         let panelBodyRow;
         let panelPaddingLeft = 0;

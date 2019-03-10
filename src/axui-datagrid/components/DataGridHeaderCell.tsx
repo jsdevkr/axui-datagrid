@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { connectStore } from '../hoc';
-import { IDataGridStore } from '../providers';
-import { classNames as CX } from '../utils';
 import { IDataGrid } from '../common/@types';
 
 class CellLabel extends React.PureComponent<{
@@ -52,12 +49,12 @@ class CellSorter extends React.PureComponent<{
   }
 }
 
-const CellFilter: React.SFC<{
-  show: boolean;
-  colIndex: number;
-  isFiltered: boolean;
-}> = ({ show, colIndex, isFiltered }) =>
-  show ? <span data-filter={isFiltered} data-filter-index={colIndex} /> : null;
+// const CellFilter: React.SFC<{
+//   show: boolean;
+//   colIndex: number;
+//   isFiltered: boolean;
+// }> = ({ show, colIndex, isFiltered }) =>
+//   show ? <span data-filter={isFiltered} data-filter-index={colIndex} /> : null;
 
 interface IProps {
   listSelectedAll: boolean;
@@ -105,22 +102,31 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
       optionsHeaderColumnPadding * 2 -
       optionsHeaderColumnBorderWidth;
 
+    const classNames: string[] = ['axui-datagrid-header-column'];
+
+    if (col.columnAttr === 'lineNumber') {
+      classNames.push('axui-datagrid-header-corner');
+    }
+    if (
+      focusedCol > -1 &&
+      colIndex === focusedCol &&
+      bodyRow.rows.length - 1 === ri + colRowSpan - 1
+    ) {
+      classNames.push('focused');
+    }
+    if (
+      selectionCols &&
+      selectionCols[colIndex] &&
+      bodyRow.rows.length - 1 === ri + colRowSpan - 1
+    ) {
+      classNames.push('selected');
+    }
+
     return (
       <td
         colSpan={colCowSpan}
         rowSpan={colRowSpan}
-        className={CX({
-          ['axui-datagrid-header-column']: true,
-          ['axui-datagrid-header-corner']: col.columnAttr === 'lineNumber',
-          ['focused']:
-            focusedCol > -1 &&
-            colIndex === focusedCol &&
-            bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-          ['selected']:
-            selectionCols &&
-            selectionCols[colIndex] &&
-            bodyRow.rows.length - 1 === ri + colRowSpan - 1,
-        })}
+        className={classNames.join(' ')}
         style={{
           height:
             optionsHeaderColumnHeight * colRowSpan -

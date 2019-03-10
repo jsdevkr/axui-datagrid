@@ -78,8 +78,8 @@ class DataGridBodyCell extends React.Component<{
     const cellHeight = columnHeight * rowSpan;
     const lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
     const tdClassNames: string[] = [
-      `${columnAttr === 'lineNumber' && 'axui-datagrid-line-number'}`,
-      `${columnAttr === 'rowSelector' && 'axui-datagrid-row-selector'}`,
+      `${columnAttr === 'lineNumber' ? 'axui-datagrid-line-number' : ''}`,
+      `${columnAttr === 'rowSelector' ? 'axui-datagrid-row-selector' : ''}`,
     ];
 
     switch (columnAttr) {
@@ -92,7 +92,6 @@ class DataGridBodyCell extends React.Component<{
         }
         break;
       case 'rowSelector':
-        break;
       default:
         if (selectionRows[li] && selectionCols[colIndex]) {
           tdClassNames.push('selected');
@@ -111,7 +110,8 @@ class DataGridBodyCell extends React.Component<{
       inlineEditingCell.rowIndex === li &&
       inlineEditingCell.colIndex === colIndex;
     const inlineEditingActiveAlways =
-      colEditor && colEditor.activeType === 'always';
+      (colEditor && colEditor.activeType === 'always') ||
+      (colEditor && colEditor.type === 'checkbox');
 
     return (
       <td
@@ -131,21 +131,25 @@ class DataGridBodyCell extends React.Component<{
             col={col}
             li={li}
             value={value}
-            setStoreState={setStoreState}
-            dispatch={dispatch}
-            inlineEditingCell={inlineEditingCell}
-            focusedRow={focusedRow}
-            focusedCol={focusedCol}
-          />
-        ) : (
-          <CellLabel
             columnHeight={columnHeight}
             lineHeight={lineHeight}
             columnBorderWidth={columnBorderWidth}
             colAlign={colAlign}
+            inlineEditingCell={inlineEditingCell}
+            focusedRow={focusedRow}
+            focusedCol={focusedCol}
+            dispatch={dispatch}
+            setStoreState={setStoreState}
+          />
+        ) : (
+          <CellLabel
             col={col}
             li={li}
             data={data}
+            columnHeight={columnHeight}
+            lineHeight={lineHeight}
+            columnBorderWidth={columnBorderWidth}
+            colAlign={colAlign}
             selected={selected}
             predefinedFormatter={predefinedFormatter}
           />

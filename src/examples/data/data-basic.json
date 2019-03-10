@@ -1,4 +1,5 @@
-[{
+[
+  {
     "id": 1,
     "title": "Think like a man of action and act like man of thought.",
     "writer": "Thomas",
@@ -31,7 +32,7 @@
     "title": "A man that hath no virtue in himself, ever envieth virtue in others.",
     "writer": "Louis",
     "date": "2017-09-28",
-    "money" : 100000
+    "money": 100000
   },
   {
     "id": 6,
@@ -59,14 +60,14 @@
     "title": "Painless poverty is better than embittered wealth.",
     "writer": "Paul",
     "date": "2017-04-28",
-    "money" : 90000
+    "money": 90000
   },
   {
     "id": 10,
     "title": "A poet is the painter of the soul.",
     "writer": "Tiffany",
     "date": "2017-06-06",
-    "money" : 500000
+    "money": 500000
   },
   {
     "id": 11,
@@ -81,7 +82,6 @@
     "writer": "June",
     "date": "2017-11-14",
     "money": 78000
-
   },
   {
     "id": 13,
@@ -96,7 +96,6 @@
     "writer": "Bell",
     "date": "2017-02-28",
     "money": 1200000
-
   },
   {
     "id": 15,
@@ -124,90 +123,90 @@
     "title": "Life is the art of drawing sufficient conclusions from insufficient premises.",
     "writer": "Mondo",
     "date": "2017-04-23",
-    "money" : 67000
+    "money": 67000
   },
   {
     "id": 19,
     "title": "By doubting we come at the truth.",
     "writer": "Brant",
     "date": "2017-09-03",
-    "money" : 180000
+    "money": 180000
   },
   {
     "id": 20,
     "title": "A man that hath no virtue in himself, ever envieth virtue in others.",
     "writer": "Louis",
     "date": "2017-07-02",
-    "money" : 570000
-    },
+    "money": 570000
+  },
   {
     "id": 21,
     "title": "When money speaks, the truth keeps silent.",
     "writer": "Paul",
     "date": "2017-08-17",
-    "money" : 210000
+    "money": 210000
   },
   {
     "id": 22,
     "title": "Better the last smile than the first laughter.",
     "writer": "Tiffany",
     "date": "2017-07-10",
-    "money" : 16000
+    "money": 16000
   },
   {
     "id": 23,
     "title": "In the morning of life, work; in the midday, give counsel; in the evening, pray.",
     "writer": "Louis",
     "date": "2017-08-12",
-    "money" : 89000
+    "money": 89000
   },
   {
     "id": 24,
     "title": "Painless poverty is better than embittered wealth.",
     "writer": "Paul",
     "date": "2017-04-01",
-    "money" : 45000
+    "money": 45000
   },
   {
     "id": 25,
     "title": "A poet is the painter of the soul.",
     "writer": "Tiffany",
     "date": "2017-05-21",
-    "money" : 6000
+    "money": 6000
   },
   {
     "id": 26,
     "title": "Error is the discipline through which we advance.",
     "writer": "Benjamin",
     "date": "2017-10-24",
-    "money" : 990000
+    "money": 990000
   },
   {
     "id": 27,
     "title": "Faith without deeds is useless.",
     "writer": "June",
     "date": "2017-11-07",
-    "money" : 100000
+    "money": 100000
   },
   {
     "id": 28,
     "title": "Weak things united become strong.",
     "writer": "Cherry",
     "date": "2017-10-06",
-    "money" : 50000
+    "money": 50000
   },
   {
     "id": 29,
     "title": "We give advice, but we cannot give conduct.",
     "writer": "Bell",
     "date": "2017-05-01",
-    "money" : 28000
+    "money": 28000
   },
   {
     "id": 30,
     "title": "Nature never deceives us; it is always we who deceive ourselves.",
     "writer": "Julia",
     "date": "2017-03-24",
-    "money" : 360000
+    "money": 360000
   }
 ]

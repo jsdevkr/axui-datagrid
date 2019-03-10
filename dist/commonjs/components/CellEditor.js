@@ -96,7 +96,7 @@ var CellEditor = /** @class */ (function (_super) {
             });
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
-        _this.renderInputText = function (value) {
+        _this.inputTextRender = function (value) {
             return (React.createElement("input", { type: "text", ref: _this.inputTextRef, onCompositionUpdate: function (e) {
                     _this.activeComposition = true;
                 }, onCompositionEnd: function (e) {
@@ -109,10 +109,57 @@ var CellEditor = /** @class */ (function (_super) {
                     _this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
                 }, "data-inline-edit": true, defaultValue: value }));
         };
+        _this.handleCheckboxValue = function (value) {
+            var _a = _this.props, dispatch = _a.dispatch, li = _a.li, col = _a.col;
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+                row: li,
+                colIndex: col.colIndex,
+                value: value,
+                eventWhichKey: 'click-checkbox',
+            });
+        };
+        _this.checkboxRender = function (value, label) {
+            var _a = _this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, colAlign = _a.colAlign, _b = _a.col, _c = _b.columnAttr, columnAttr = _c === void 0 ? '' : _c, editor = _b.editor;
+            var justifyContent = '';
+            switch (colAlign) {
+                case 'center':
+                    justifyContent = 'center';
+                    break;
+                case 'right':
+                    justifyContent = 'flex-end';
+                    break;
+                default:
+            }
+            return (React.createElement("span", { "data-span": 'checkbox-editor', style: {
+                    height: columnHeight - columnBorderWidth + 'px',
+                    lineHeight: lineHeight + 'px',
+                    justifyContent: justifyContent,
+                }, onClick: function () {
+                    _this.handleCheckboxValue(!value);
+                } },
+                React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": value, style: {
+                        width: lineHeight + 'px',
+                        height: lineHeight + 'px',
+                    } }),
+                React.createElement("label", { style: {
+                        height: lineHeight + 'px',
+                        lineHeight: lineHeight + 'px',
+                    } }, label)));
+        };
         _this.inputTextRef = React.createRef();
         _this.editorTargetRef = React.createRef();
         return _this;
     }
+    CellEditor.prototype.shouldComponentUpdate = function (nextProps) {
+        var li = nextProps.li, colIndex = nextProps.col.colIndex;
+        if (this.props.focusedRow === nextProps.focusedRow &&
+            nextProps.focusedRow === li &&
+            this.props.focusedCol === nextProps.focusedCol &&
+            nextProps.focusedCol === colIndex) {
+            return true;
+        }
+        return this.props.value !== nextProps.value;
+    };
     CellEditor.prototype.componentDidMount = function () {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
@@ -146,28 +193,19 @@ var CellEditor = /** @class */ (function (_super) {
             this.inputTextRef.current.select();
         }
     };
-    CellEditor.prototype.shouldComponentUpdate = function (nextProps) {
-        var li = nextProps.li, colIndex = nextProps.col.colIndex;
-        if (this.props.focusedRow === nextProps.focusedRow &&
-            nextProps.focusedRow === li &&
-            this.props.focusedCol === nextProps.focusedCol &&
-            nextProps.focusedCol === colIndex) {
-            return true;
-        }
-        return this.props.value !== nextProps.value;
-    };
     CellEditor.prototype.render = function () {
         var _a = this.props, value = _a.value, col = _a.col, li = _a.li;
-        // const value = data[li] && data[li][col.key || ''];
         var editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
         switch (editor.type) {
             case 'text':
-                return this.renderInputText(value);
+                return this.inputTextRender(value);
+            case 'checkbox':
+                return this.checkboxRender(value, editor.label);
             default:
                 if (!editor.render) {
-                    return this.renderInputText(value);
+                    return this.inputTextRender(value);
                 }
                 // return <div ref={this.editorTargetRef} />;
                 return editor.render({
