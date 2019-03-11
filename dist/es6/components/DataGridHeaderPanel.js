@@ -38,12 +38,10 @@ class ColumnResizer extends React.PureComponent {
 class DataGridHeaderPanel extends React.Component {
     constructor() {
         super(...arguments);
-        this.state = {};
         this.onHandleClick = (e, col) => {
-            const { data = [], colGroup = [], focusedCol = 0, options = {}, styles = {}, setStoreState, dispatch, } = this.props;
+            const { data = [], colGroup = [], focusedCol = 0, options = {}, setStoreState, dispatch, } = this.props;
             const { header: optionsHeader = {} } = options;
             const { key, colIndex = 0 } = col;
-            const { asidePanelWidth = 0 } = styles;
             let state = {
                 dragging: false,
                 selectionRows: {},
@@ -175,26 +173,14 @@ class DataGridHeaderPanel extends React.Component {
         };
     }
     render() {
-        const { panelName, style, asideColGroup = [], asideHeaderData = { rows: [{ cols: [] }] }, leftHeaderColGroup = [], leftHeaderData = { rows: [{ cols: [] }] }, headerColGroup = [], headerData = { rows: [{ cols: [] }] }, options = {}, styles = {}, listSelectedAll = false, focusedCol = -1, selectionCols = {}, sortInfo = {}, } = this.props;
-        // aside-header가 필요하지 않은지 확인
-        if (panelName === 'aside-header' &&
-            styles &&
-            styles.asidePanelWidth === 0) {
-            return null;
-        }
-        // left-header가 필요하지 않은지 확인
-        if (panelName === 'left-header' &&
-            options &&
-            options.frozenColumnIndex === 0) {
-            return null;
-        }
+        const { panelName, style, asideColGroup = [], asideHeaderData = { rows: [{ cols: [] }] }, leftHeaderColGroup = [], leftHeaderData = { rows: [{ cols: [] }] }, headerColGroup = [], headerData = { rows: [{ cols: [] }] }, options = {}, listSelectedAll = false, focusedCol = -1, selectionCols = {}, sortInfo = {}, } = this.props;
         const { header: optionsHeader = {} } = options;
         const { columnHeight: optionsHeaderColumnHeight = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, } = optionsHeader;
         const colGroup = (() => {
             switch (panelName) {
-                case 'aside-header':
+                case _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER:
                     return asideColGroup;
-                case 'left-header':
+                case _enums_1.DataGridEnums.PanelNames.LEFT_HEADER:
                     return leftHeaderColGroup;
                 default:
                     return headerColGroup;
@@ -202,9 +188,9 @@ class DataGridHeaderPanel extends React.Component {
         })();
         const bodyRow = (() => {
             switch (panelName) {
-                case 'aside-header':
+                case _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER:
                     return asideHeaderData;
-                case 'left-header':
+                case _enums_1.DataGridEnums.PanelNames.LEFT_HEADER:
                     return leftHeaderData;
                 default:
                     return headerData;
@@ -216,7 +202,7 @@ class DataGridHeaderPanel extends React.Component {
             React.createElement("table", { style: { height: '100%' } },
                 React.createElement(DataGridTableColGroup_1.default, { panelColGroup: colGroup }),
                 React.createElement(TableBody, { listSelectedAll: listSelectedAll, options: options, focusedCol: focusedCol, selectionCols: selectionCols, sortInfo: sortInfo, bodyRow: bodyRow, onClick: this.onHandleClick })),
-            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
+            panelName !== _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER && (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
     }
 }
 exports.default = hoc_1.connectStore(DataGridHeaderPanel);

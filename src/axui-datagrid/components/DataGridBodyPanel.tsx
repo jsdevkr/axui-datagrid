@@ -107,12 +107,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
       } = {},
       panelLeft = 0,
       panelTop = 0,
-      styles: {
-        frozenPanelWidth = 0,
-        asidePanelWidth = 0,
-        frozenPanelHeight = 0,
-        bodyTrHeight = 0,
-      } = {},
+      styles: { frozenPanelWidth = 0, bodyTrHeight = 0 } = {},
 
       focusedRow,
       focusedCol,

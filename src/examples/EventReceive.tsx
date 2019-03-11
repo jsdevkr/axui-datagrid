@@ -135,7 +135,6 @@ class EventReceive extends React.Component<any, any> {
     if (this.dataGridContainerRef.current) {
       const {
         width,
-        height,
       } = this.dataGridContainerRef.current.getBoundingClientRect();
       this.setState({ width });
     }

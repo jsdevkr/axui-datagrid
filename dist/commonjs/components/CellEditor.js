@@ -97,9 +97,9 @@ var CellEditor = /** @class */ (function (_super) {
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
         _this.inputTextRender = function (value) {
-            return (React.createElement("input", { type: "text", ref: _this.inputTextRef, onCompositionUpdate: function (e) {
+            return (React.createElement("input", { type: "text", ref: _this.inputTextRef, onCompositionUpdate: function () {
                     _this.activeComposition = true;
-                }, onCompositionEnd: function (e) {
+                }, onCompositionEnd: function () {
                     setTimeout(function () {
                         _this.activeComposition = false;
                     });
@@ -119,7 +119,7 @@ var CellEditor = /** @class */ (function (_super) {
             });
         };
         _this.checkboxRender = function (value, label) {
-            var _a = _this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, colAlign = _a.colAlign, _b = _a.col, _c = _b.columnAttr, columnAttr = _c === void 0 ? '' : _c, editor = _b.editor;
+            var _a = _this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, colAlign = _a.colAlign;
             var justifyContent = '';
             switch (colAlign) {
                 case 'center':
@@ -187,7 +187,7 @@ var CellEditor = /** @class */ (function (_super) {
         //   }
         // }
     };
-    CellEditor.prototype.componentDidUpdate = function (prevProps) {
+    CellEditor.prototype.componentDidUpdate = function () {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
             this.inputTextRef.current.select();

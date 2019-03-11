@@ -163,7 +163,7 @@ class DataGrid extends React.Component {
     //   return true;
     // }
     render() {
-        const { mounted, doneAutofit, autofitAsideWidth, autofitColGroup, headerTable, bodyRowTable, bodyRowMap, asideHeaderData, leftHeaderData, headerData, asideBodyRowData, leftBodyRowData, bodyRowData, colGroupMap, asideColGroup, colGroup, footSumColumns, footSumTable, leftFootSumData, footSumData, options, } = this.state;
+        const { mounted, doneAutofit, autofitColGroup, headerTable, bodyRowTable, bodyRowMap, asideHeaderData, leftHeaderData, headerData, asideBodyRowData, leftBodyRowData, bodyRowData, colGroupMap, asideColGroup, colGroup, footSumColumns, footSumTable, leftFootSumData, footSumData, options, } = this.state;
         const { loading = false, loadingData = false, data = [], width, height = DataGrid.defaultHeight, selectedRowKeys, selection, status, scrollLeft, scrollTop, onBeforeEvent, onScroll, onScrollEnd, onChangeScrollSize, onChangeSelection, onChangeSelected, onRightClick, style = {}, } = this.props;
         const gridRootStyle = Object.assign({
             height: height,

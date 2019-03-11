@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
-import { resolve } from 'path';
 
 class LargeData extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -237,7 +236,6 @@ class LargeData extends React.Component<any, any> {
     if (this.dataGridContainerRef.current) {
       const {
         width,
-        height,
       } = this.dataGridContainerRef.current.getBoundingClientRect();
       this.setState({ width });
     }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
-import { DataGrid, utils } from '../src/axui-datagrid';
+import { DataGrid } from '../src/axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
 
 it('renders DataGrid has data', () => {

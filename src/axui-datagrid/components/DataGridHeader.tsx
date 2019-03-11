@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
+import { DataGridEnums } from '../common/@enums';
 import DataGridHeaderPanel from './DataGridHeaderPanel';
 import DataGridHeaderColumnResizer from './DataGridHeaderColumnResizer';
 
@@ -90,28 +91,35 @@ class DataGridHeader extends React.Component<IProps> {
 
     return (
       <div className={'axui-datagrid-header'} style={{ height: headerHeight }}>
-        <DataGridHeaderPanel
-          panelName="aside-header"
-          style={asideHeaderPanelStyle}
-        />
-        <DataGridHeaderPanel
-          panelName="left-header"
-          style={leftHeaderPanelStyle}
-        />
+        {asidePanelWidth !== 0 && (
+          <DataGridHeaderPanel
+            panelName={DataGridEnums.PanelNames.ASIDE_HEADER}
+            style={asideHeaderPanelStyle}
+          />
+        )}
+
+        {frozenPanelWidth !== 0 && (
+          <DataGridHeaderPanel
+            panelName={DataGridEnums.PanelNames.LEFT_HEADER}
+            style={leftHeaderPanelStyle}
+          />
+        )}
         <div
           data-scroll-container="header-scroll-container"
           style={headerPanelStyle}
         >
           <DataGridHeaderPanel
-            panelName="header-scroll"
+            panelName={DataGridEnums.PanelNames.HEADER_SCROLL}
             style={headerScrollStyle}
           />
         </div>
 
-        <DataGridHeaderColumnResizer
-          columnResizing={columnResizing}
-          columnResizerLeft={columnResizerLeft}
-        />
+        {columnResizing && (
+          <DataGridHeaderColumnResizer
+            columnResizing={columnResizing}
+            columnResizerLeft={columnResizerLeft}
+          />
+        )}
       </div>
     );
   }

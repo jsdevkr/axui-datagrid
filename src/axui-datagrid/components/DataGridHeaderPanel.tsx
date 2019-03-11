@@ -110,21 +110,17 @@ interface IDataGridHeaderPanel extends IDataGridStore {
   style?: any;
 }
 class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
-  state = {};
   onHandleClick = (e: any, col: IDataGrid.ICol) => {
     const {
       data = [],
       colGroup = [],
       focusedCol = 0,
       options = {},
-      styles = {},
       setStoreState,
       dispatch,
     } = this.props;
-
     const { header: optionsHeader = {} } = options;
     const { key, colIndex = 0 } = col;
-    const { asidePanelWidth = 0 } = styles;
 
     let state = {
       dragging: false,
@@ -202,7 +198,6 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     } else {
     }
   };
-
   onMouseDownColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
@@ -258,7 +253,6 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
   };
-
   onDoubleClickColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
@@ -283,7 +277,6 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       headerColGroup = [],
       headerData = { rows: [{ cols: [] }] },
       options = {},
-      styles = {},
 
       listSelectedAll = false,
       focusedCol = -1,
@@ -291,34 +284,17 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       sortInfo = {},
     } = this.props;
 
-    // aside-header가 필요하지 않은지 확인
-    if (
-      panelName === 'aside-header' &&
-      styles &&
-      styles.asidePanelWidth === 0
-    ) {
-      return null;
-    }
-
-    // left-header가 필요하지 않은지 확인
-    if (
-      panelName === 'left-header' &&
-      options &&
-      options.frozenColumnIndex === 0
-    ) {
-      return null;
-    }
-
     const { header: optionsHeader = {} } = options;
     const {
       columnHeight: optionsHeaderColumnHeight = 0,
       columnBorderWidth: optionsHeaderColumnBorderWidth = 0,
     } = optionsHeader;
+
     const colGroup: IDataGrid.ICol[] = (() => {
       switch (panelName) {
-        case 'aside-header':
+        case DataGridEnums.PanelNames.ASIDE_HEADER:
           return asideColGroup;
-        case 'left-header':
+        case DataGridEnums.PanelNames.LEFT_HEADER:
           return leftHeaderColGroup;
         default:
           return headerColGroup;
@@ -326,9 +302,9 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     })();
     const bodyRow: IDataGrid.IColumnTableMap = (() => {
       switch (panelName) {
-        case 'aside-header':
+        case DataGridEnums.PanelNames.ASIDE_HEADER:
           return asideHeaderData;
-        case 'left-header':
+        case DataGridEnums.PanelNames.LEFT_HEADER:
           return leftHeaderData;
         default:
           return headerData;
@@ -353,7 +329,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           />
         </table>
 
-        {panelName === 'aside-header' ? null : (
+        {panelName !== DataGridEnums.PanelNames.ASIDE_HEADER && (
           <ColumnResizer
             colGroup={colGroup}
             resizerHeight={resizerHeight}

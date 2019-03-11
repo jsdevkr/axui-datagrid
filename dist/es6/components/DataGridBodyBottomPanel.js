@@ -19,7 +19,7 @@ class TableBody extends React.PureComponent {
 }
 class DataGridBodyBottomPanel extends React.Component {
     render() {
-        const { asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftFootSumData = { rows: [{ cols: [] }] }, visibleFootSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0, asidePanelWidth = 0 } = {}, data, options, predefinedFormatter, predefinedCollector, } = this.props;
+        const { asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftFootSumData = { rows: [{ cols: [] }] }, visibleFootSumData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0 } = {}, data, options, predefinedFormatter, predefinedCollector, } = this.props;
         let panelColGroup = [];
         let panelBodyRow = { rows: [{ cols: [] }] };
         let panelPaddingLeft = 0;

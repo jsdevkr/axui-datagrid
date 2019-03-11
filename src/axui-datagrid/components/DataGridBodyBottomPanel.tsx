@@ -67,7 +67,7 @@ class DataGridBodyBottomPanel extends React.Component<IProps> {
       containerStyle = {},
       panelLeft = 0,
       panelTop = 0,
-      styles: { frozenPanelWidth = 0, asidePanelWidth = 0 } = {},
+      styles: { frozenPanelWidth = 0 } = {},
       data,
       options,
       predefinedFormatter,

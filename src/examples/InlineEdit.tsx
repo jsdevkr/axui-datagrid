@@ -1,19 +1,10 @@
 import * as React from 'react';
 
-import {
-  Button,
-  Divider,
-  Form,
-  Select,
-  Icon,
-  DatePicker,
-  InputNumber,
-  Checkbox,
-} from 'antd';
+import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
-import { debounce } from 'axui-datagrid/utils';
+
 import styled from 'styled-components';
 import moment = require('moment');
 
@@ -141,19 +132,19 @@ const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
   );
 };
 
-const checkboxEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
-  return (
-    <Checkbox
-      style={{ justifyContent: 'center' }}
-      checked={value}
-      onChange={e => {
-        update(e.target.checked);
-      }}
-    >
-      Active
-    </Checkbox>
-  );
-};
+// const checkboxEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
+//   return (
+//     <Checkbox
+//       style={{ justifyContent: 'center' }}
+//       checked={value}
+//       onChange={e => {
+//         update(e.target.checked);
+//       }}
+//     >
+//       Active
+//     </Checkbox>
+//   );
+// };
 
 class InlineEdit extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
@@ -348,15 +339,7 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   public render() {
-    const {
-      width,
-      height,
-      columns,
-      data,
-      options,
-      scrollTop,
-      selection,
-    } = this.state;
+    const { width, height, columns, data, scrollTop } = this.state;
 
     return (
       <Wrapper>
@@ -425,7 +408,6 @@ class InlineEdit extends React.Component<any, any> {
     if (this.dataGridContainerRef.current) {
       const {
         width,
-        height,
       } = this.dataGridContainerRef.current.getBoundingClientRect();
       this.setState({ width });
     }

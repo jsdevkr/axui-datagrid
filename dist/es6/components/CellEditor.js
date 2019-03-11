@@ -83,9 +83,9 @@ class CellEditor extends React.Component {
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
         this.inputTextRender = (value) => {
-            return (React.createElement("input", { type: "text", ref: this.inputTextRef, onCompositionUpdate: (e) => {
+            return (React.createElement("input", { type: "text", ref: this.inputTextRef, onCompositionUpdate: () => {
                     this.activeComposition = true;
-                }, onCompositionEnd: (e) => {
+                }, onCompositionEnd: () => {
                     setTimeout(() => {
                         this.activeComposition = false;
                     });
@@ -105,7 +105,7 @@ class CellEditor extends React.Component {
             });
         };
         this.checkboxRender = (value, label) => {
-            const { columnHeight, lineHeight, columnBorderWidth, colAlign, col: { columnAttr = '', editor }, } = this.props;
+            const { columnHeight, lineHeight, columnBorderWidth, colAlign, } = this.props;
             let justifyContent = '';
             switch (colAlign) {
                 case 'center':
@@ -172,7 +172,7 @@ class CellEditor extends React.Component {
         //   }
         // }
     }
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
             this.inputTextRef.current.select();

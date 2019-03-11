@@ -21,7 +21,7 @@ class TableBody extends React.PureComponent {
 }
 class DataGridBodyPanel extends React.Component {
     render() {
-        const { data = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig: { sRowIndex = 0, eRowIndex = 0, frozenRowIndex = 0, } = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0, asidePanelWidth = 0, frozenPanelHeight = 0, bodyTrHeight = 0, } = {}, focusedRow, focusedCol, selectionRows, selectionCols, options, isInlineEditing, inlineEditingCell, predefinedFormatter, setStoreState, dispatch, } = this.props;
+        const { data = [], asideColGroup = [], leftHeaderColGroup = [], visibleHeaderColGroup = [], asideBodyRowData = { rows: [{ cols: [] }] }, leftBodyRowData = { rows: [{ cols: [] }] }, visibleBodyRowData = { rows: [{ cols: [] }] }, panelName, containerStyle = {}, panelScrollConfig: { sRowIndex = 0, eRowIndex = 0, frozenRowIndex = 0, } = {}, panelLeft = 0, panelTop = 0, styles: { frozenPanelWidth = 0, bodyTrHeight = 0 } = {}, focusedRow, focusedCol, selectionRows, selectionCols, options, isInlineEditing, inlineEditingCell, predefinedFormatter, setStoreState, dispatch, } = this.props;
         let panelColGroup;
         let panelBodyRow;
         let panelPaddingLeft = 0;

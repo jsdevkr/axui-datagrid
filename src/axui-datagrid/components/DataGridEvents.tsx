@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition, throttle } from '../utils';
+import { getScrollPosition } from '../utils';
 import { DataGridEnums } from '../common/@enums';
-import { resolve } from 'dns';
 
 interface IProps extends IDataGridStore {}
 interface IState {}

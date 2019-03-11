@@ -6,7 +6,6 @@ import {
   getVisibleColGroup,
   getScrollPosition,
   throttle,
-  debounce,
 } from '../utils';
 import dataGridFormatter from '../functions/formatter';
 import dataGridCollector from '../functions/collector';
@@ -131,13 +130,10 @@ class StoreProvider extends React.Component<
       nProps.onRightClick === nState.onRightClick
     ) {
       return null;
-      // } else if (nState.pScrollTop && nProps.scrollTop === nState.pScrollTop) {
-      //   console.log('????????');
-      //   return null;
     } else {
       // store state | 현재 state복제
       const { options = {} } = nProps;
-      const { frozenColumnIndex = 0, body: optionsBody } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
+      const { frozenColumnIndex = 0 } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
       const storeState: IDataGrid.IStoreState = {
         ...nState,
       };
@@ -227,6 +223,10 @@ class StoreProvider extends React.Component<
       if (nProps.data !== nState.data) {
         changed.data = true;
         storeState.data = nProps.data;
+        // listSelectedAll is false when data empty
+        if (storeState.data && storeState.data.length === 0) {
+          storeState.listSelectedAll = false;
+        }
       }
 
       if (
@@ -279,12 +279,6 @@ class StoreProvider extends React.Component<
         nProps.scrollTop !== nState.pScrollTop ||
         nProps.scrollLeft !== nState.pScrollLeft
       ) {
-        // console.log(
-        //   'change scrollTop, left by prop',
-        //   nProps.scrollTop,
-        //   nState.pScrollTop,
-        //   nState.scrollTop,
-        // );
         const {
           scrollContentWidth = 0,
           scrollContentHeight = 0,
@@ -302,9 +296,6 @@ class StoreProvider extends React.Component<
         });
         _scrollLeft = currScrollLeft;
         _scrollTop = currScrollTop;
-
-        // _scrollLeft = nProps.scrollLeft || 0;
-        // _scrollTop = nProps.scrollTop || 0;
       }
 
       if (nProps.selection !== nState.selection) {
@@ -365,7 +356,6 @@ class StoreProvider extends React.Component<
   // state 가 업데이트 되기 전.
   setStoreState = (newState: IDataGrid.IStoreState, callback?: () => void) => {
     const {
-      data = [],
       scrollLeft = 0,
       scrollTop = 0,
       options = {},
@@ -461,15 +451,10 @@ class StoreProvider extends React.Component<
       rootNode,
       focusedRow = -1,
       sortInfo = {},
-      options = {},
-      selectedRowKeys,
       selectionSRow,
       selectionSCol,
       selectionERow,
       selectionECol,
-      selectionRows,
-      selectionCols,
-      selection,
       onChangeSelected,
     } = this.state;
 
@@ -759,14 +744,7 @@ class StoreProvider extends React.Component<
 
       case DataGridEnums.DispatchTypes.CHANGE_SELECTION:
         {
-          const {
-            sRow,
-            sCol,
-            eRow,
-            eCol,
-            focusedRow: fRow,
-            focusedCol: fCol,
-          } = param;
+          const { sRow, sCol, eRow, eCol } = param;
 
           if (
             selectionSRow !== sRow ||
@@ -898,7 +876,7 @@ class StoreProvider extends React.Component<
         focusedCol,
       });
     }
-  }, 200);
+  }, 100);
 
   componentDidUpdate(
     pProps: IDataGrid.IStoreProps,

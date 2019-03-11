@@ -153,14 +153,7 @@ class SideNav extends React.Component<IProps, IState> {
 
   render() {
     const { leftMenuWidth } = this.props;
-    const {
-      menus,
-      mounted,
-      defaultOpenKeys,
-      defaultSelectedKeys,
-      openKeys,
-      selectedKeys,
-    } = this.state;
+    const { menus, mounted, openKeys, selectedKeys } = this.state;
 
     if (!mounted) {
       return null;

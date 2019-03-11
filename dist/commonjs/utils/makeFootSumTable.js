@@ -4,7 +4,6 @@ function makeFootSumTable(footSumColumns, colGroup, options) {
     var footSumTable = {
         rows: [],
     };
-    var colIndex = 0;
     for (var r = 0, rl = footSumColumns.length; r < rl; r++) {
         var footSumRow = footSumColumns[r] || [], addC = 0;
         footSumTable.rows[r] = { cols: [] };

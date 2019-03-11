@@ -78,5 +78,8 @@ export namespace DataGridEnums {
     BOTTOM_ASIDE_BODY_SCROLL = 'bottom-aside-body-scroll',
     BOTTOM_LEFT_BODY_SCROLL = 'bottom-left-body-scroll',
     BOTTOM_BODY_SCROLL = 'bottom-body-scroll',
+    ASIDE_HEADER = 'aside-header',
+    LEFT_HEADER = 'left-header',
+    HEADER_SCROLL = 'header-scroll',
   }
 }

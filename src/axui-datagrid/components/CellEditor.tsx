@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { IDataGridStore } from '../providers';
-import { connectStore } from '../hoc';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
-import ReactDOM = require('react-dom');
 
 interface IProps {
   col: IDataGrid.ICol;
@@ -130,10 +127,10 @@ class CellEditor extends React.Component<IProps> {
       <input
         type="text"
         ref={this.inputTextRef}
-        onCompositionUpdate={(e: any) => {
+        onCompositionUpdate={() => {
           this.activeComposition = true;
         }}
-        onCompositionEnd={(e: any) => {
+        onCompositionEnd={() => {
           setTimeout(() => {
             this.activeComposition = false;
           });
@@ -167,7 +164,6 @@ class CellEditor extends React.Component<IProps> {
       lineHeight,
       columnBorderWidth,
       colAlign,
-      col: { columnAttr = '', editor },
     } = this.props;
 
     let justifyContent: string = '';
@@ -262,7 +258,7 @@ class CellEditor extends React.Component<IProps> {
     //   }
     // }
   }
-  componentDidUpdate(prevProps: IProps) {
+  componentDidUpdate() {
     if (this.inputTextRef.current) {
       this.activeComposition = false;
       this.inputTextRef.current.select();

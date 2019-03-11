@@ -61,7 +61,7 @@ class StoreProvider extends React.Component {
         this.state = store;
         // state 가 업데이트 되기 전.
         this.setStoreState = (newState, callback) => {
-            const { data = [], scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
+            const { scrollLeft = 0, scrollTop = 0, options = {}, styles = {}, headerColGroup = [], bodyRowData = { rows: [{ cols: [] }] }, footSumData = { rows: [{ cols: [] }] }, onScrollEnd, } = this.state;
             const { scrollLeft: _scrollLeft, scrollTop: _scrollTop } = newState;
             if (!newState.styles) {
                 newState.styles = Object.assign({}, styles);
@@ -119,7 +119,7 @@ class StoreProvider extends React.Component {
             this.setState(newState, callback);
         };
         this.dispatch = (dispatchType, param) => {
-            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, options = {}, selectedRowKeys, selectionSRow, selectionSCol, selectionERow, selectionECol, selectionRows, selectionCols, selection, onChangeSelected, } = this.state;
+            const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, selectionSRow, selectionSCol, selectionERow, selectionECol, onChangeSelected, } = this.state;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
                     {
@@ -370,7 +370,7 @@ class StoreProvider extends React.Component {
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION:
                     {
-                        const { sRow, sCol, eRow, eCol, focusedRow: fRow, focusedCol: fCol, } = param;
+                        const { sRow, sCol, eRow, eCol } = param;
                         if (selectionSRow !== sRow ||
                             selectionSCol !== sCol ||
                             selectionERow !== eRow ||
@@ -442,7 +442,7 @@ class StoreProvider extends React.Component {
                     focusedCol,
                 });
             }
-        }, 200);
+        }, 100);
     }
     static getDerivedStateFromProps(nProps, nState) {
         // console.log('getDerivedStateFromProps ~~');
@@ -490,14 +490,11 @@ class StoreProvider extends React.Component {
             nProps.onChangeSelected === nState.onChangeSelected &&
             nProps.onRightClick === nState.onRightClick) {
             return null;
-            // } else if (nState.pScrollTop && nProps.scrollTop === nState.pScrollTop) {
-            //   console.log('????????');
-            //   return null;
         }
         else {
             // store state | 현재 state복제
             const { options = {} } = nProps;
-            const { frozenColumnIndex = 0, body: optionsBody } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
+            const { frozenColumnIndex = 0 } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
             const storeState = Object.assign({}, nState);
             // scrollTop prop 저장
             storeState.pScrollTop = nProps.scrollTop;
@@ -564,6 +561,10 @@ class StoreProvider extends React.Component {
             if (nProps.data !== nState.data) {
                 changed.data = true;
                 storeState.data = nProps.data;
+                // listSelectedAll is false when data empty
+                if (storeState.data && storeState.data.length === 0) {
+                    storeState.listSelectedAll = false;
+                }
             }
             if (changed.data ||
                 changed.colGroup ||
@@ -599,12 +600,6 @@ class StoreProvider extends React.Component {
             }
             if (nProps.scrollTop !== nState.pScrollTop ||
                 nProps.scrollLeft !== nState.pScrollLeft) {
-                // console.log(
-                //   'change scrollTop, left by prop',
-                //   nProps.scrollTop,
-                //   nState.pScrollTop,
-                //   nState.scrollTop,
-                // );
                 const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = _styles || {};
                 let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
                     scrollWidth: scrollContentWidth,
@@ -614,8 +609,6 @@ class StoreProvider extends React.Component {
                 });
                 _scrollLeft = currScrollLeft;
                 _scrollTop = currScrollTop;
-                // _scrollLeft = nProps.scrollLeft || 0;
-                // _scrollTop = nProps.scrollTop || 0;
             }
             if (nProps.selection !== nState.selection) {
                 storeState.selection = nProps.selection;

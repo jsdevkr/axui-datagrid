@@ -62,13 +62,11 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
     __extends(DataGridHeaderPanel, _super);
     function DataGridHeaderPanel() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.state = {};
         _this.onHandleClick = function (e, col) {
             var _a;
-            var _b = _this.props, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, _f = _b.options, options = _f === void 0 ? {} : _f, _g = _b.styles, styles = _g === void 0 ? {} : _g, setStoreState = _b.setStoreState, dispatch = _b.dispatch;
-            var _h = options.header, optionsHeader = _h === void 0 ? {} : _h;
-            var key = col.key, _j = col.colIndex, colIndex = _j === void 0 ? 0 : _j;
-            var _k = styles.asidePanelWidth, asidePanelWidth = _k === void 0 ? 0 : _k;
+            var _b = _this.props, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _b.focusedCol, focusedCol = _e === void 0 ? 0 : _e, _f = _b.options, options = _f === void 0 ? {} : _f, setStoreState = _b.setStoreState, dispatch = _b.dispatch;
+            var _g = options.header, optionsHeader = _g === void 0 ? {} : _g;
+            var key = col.key, _h = col.colIndex, colIndex = _h === void 0 ? 0 : _h;
             var state = {
                 dragging: false,
                 selectionRows: {},
@@ -201,26 +199,14 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         return _this;
     }
     DataGridHeaderPanel.prototype.render = function () {
-        var _a = this.props, panelName = _a.panelName, style = _a.style, _b = _a.asideColGroup, asideColGroup = _b === void 0 ? [] : _b, _c = _a.asideHeaderData, asideHeaderData = _c === void 0 ? { rows: [{ cols: [] }] } : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.leftHeaderData, leftHeaderData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _a.headerData, headerData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.options, options = _h === void 0 ? {} : _h, _j = _a.styles, styles = _j === void 0 ? {} : _j, _k = _a.listSelectedAll, listSelectedAll = _k === void 0 ? false : _k, _l = _a.focusedCol, focusedCol = _l === void 0 ? -1 : _l, _m = _a.selectionCols, selectionCols = _m === void 0 ? {} : _m, _o = _a.sortInfo, sortInfo = _o === void 0 ? {} : _o;
-        // aside-header가 필요하지 않은지 확인
-        if (panelName === 'aside-header' &&
-            styles &&
-            styles.asidePanelWidth === 0) {
-            return null;
-        }
-        // left-header가 필요하지 않은지 확인
-        if (panelName === 'left-header' &&
-            options &&
-            options.frozenColumnIndex === 0) {
-            return null;
-        }
-        var _p = options.header, optionsHeader = _p === void 0 ? {} : _p;
-        var _q = optionsHeader.columnHeight, optionsHeaderColumnHeight = _q === void 0 ? 0 : _q, _r = optionsHeader.columnBorderWidth, optionsHeaderColumnBorderWidth = _r === void 0 ? 0 : _r;
+        var _a = this.props, panelName = _a.panelName, style = _a.style, _b = _a.asideColGroup, asideColGroup = _b === void 0 ? [] : _b, _c = _a.asideHeaderData, asideHeaderData = _c === void 0 ? { rows: [{ cols: [] }] } : _c, _d = _a.leftHeaderColGroup, leftHeaderColGroup = _d === void 0 ? [] : _d, _e = _a.leftHeaderData, leftHeaderData = _e === void 0 ? { rows: [{ cols: [] }] } : _e, _f = _a.headerColGroup, headerColGroup = _f === void 0 ? [] : _f, _g = _a.headerData, headerData = _g === void 0 ? { rows: [{ cols: [] }] } : _g, _h = _a.options, options = _h === void 0 ? {} : _h, _j = _a.listSelectedAll, listSelectedAll = _j === void 0 ? false : _j, _k = _a.focusedCol, focusedCol = _k === void 0 ? -1 : _k, _l = _a.selectionCols, selectionCols = _l === void 0 ? {} : _l, _m = _a.sortInfo, sortInfo = _m === void 0 ? {} : _m;
+        var _o = options.header, optionsHeader = _o === void 0 ? {} : _o;
+        var _p = optionsHeader.columnHeight, optionsHeaderColumnHeight = _p === void 0 ? 0 : _p, _q = optionsHeader.columnBorderWidth, optionsHeaderColumnBorderWidth = _q === void 0 ? 0 : _q;
         var colGroup = (function () {
             switch (panelName) {
-                case 'aside-header':
+                case _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER:
                     return asideColGroup;
-                case 'left-header':
+                case _enums_1.DataGridEnums.PanelNames.LEFT_HEADER:
                     return leftHeaderColGroup;
                 default:
                     return headerColGroup;
@@ -228,9 +214,9 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
         })();
         var bodyRow = (function () {
             switch (panelName) {
-                case 'aside-header':
+                case _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER:
                     return asideHeaderData;
-                case 'left-header':
+                case _enums_1.DataGridEnums.PanelNames.LEFT_HEADER:
                     return leftHeaderData;
                 default:
                     return headerData;
@@ -242,7 +228,7 @@ var DataGridHeaderPanel = /** @class */ (function (_super) {
             React.createElement("table", { style: { height: '100%' } },
                 React.createElement(DataGridTableColGroup_1.default, { panelColGroup: colGroup }),
                 React.createElement(TableBody, { listSelectedAll: listSelectedAll, options: options, focusedCol: focusedCol, selectionCols: selectionCols, sortInfo: sortInfo, bodyRow: bodyRow, onClick: this.onHandleClick })),
-            panelName === 'aside-header' ? null : (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
+            panelName !== _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER && (React.createElement(ColumnResizer, { colGroup: colGroup, resizerHeight: resizerHeight, onMouseDownColumnResizer: this.onMouseDownColumnResizer, onDoubleClickColumnResizer: this.onDoubleClickColumnResizer }))));
     };
     return DataGridHeaderPanel;
 }(React.Component));

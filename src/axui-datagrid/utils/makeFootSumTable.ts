@@ -8,7 +8,6 @@ function makeFootSumTable(
   let footSumTable: IDataGrid.IColumnTableMap = {
     rows: [],
   };
-  let colIndex = 0;
 
   for (let r = 0, rl = footSumColumns.length; r < rl; r++) {
     let footSumRow = footSumColumns[r] || [],

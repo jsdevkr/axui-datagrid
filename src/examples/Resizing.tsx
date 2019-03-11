@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import mouseEventSubscribe, {
   IMousePosition,
 } from '../utils/mouseEventSubscribe';
-import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 

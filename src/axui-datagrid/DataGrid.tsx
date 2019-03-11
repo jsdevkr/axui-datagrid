@@ -345,7 +345,6 @@ class DataGrid extends React.Component<IProps, IState> {
     const {
       mounted,
       doneAutofit,
-      autofitAsideWidth,
       autofitColGroup,
       headerTable,
       bodyRowTable,

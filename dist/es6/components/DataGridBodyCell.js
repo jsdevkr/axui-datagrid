@@ -21,7 +21,7 @@ class DataGridBodyCell extends React.Component {
         };
     }
     render() {
-        const { li, col = {}, col: { rowSpan = 0, colSpan = 0, colIndex = 0, rowIndex = 0, columnAttr = '', } = {}, ci, data = [], selected, focusedRow, focusedCol, selectionRows = [], selectionCols = [], options: { body: { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = {}, } = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, setStoreState, dispatch, } = this.props;
+        const { li, col = {}, col: { rowSpan = 0, colSpan = 0, colIndex = 0, columnAttr = '' } = {}, ci, data = [], selected, focusedRow, focusedCol, selectionRows = [], selectionCols = [], options: { body: { columnHeight = 0, columnPadding = 0, columnBorderWidth = 0, align: bodyAlign = 'left', } = {}, } = {}, isInlineEditing = false, inlineEditingCell = {}, predefinedFormatter = {}, setStoreState, dispatch, } = this.props;
         const editor = col.editor;
         const colAlign = col.align || bodyAlign;
         const value = data[li] && data[li][col.key || ''];

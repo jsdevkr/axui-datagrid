@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Button, Divider } from 'antd';
+import { Button } from 'antd';
 import { Wrapper, Segment } from 'components';
-import { DataGrid, utils } from 'axui-datagrid';
+import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
 
 class FootSum extends React.Component<any, any> {

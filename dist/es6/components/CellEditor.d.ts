@@ -30,7 +30,7 @@ declare class CellEditor extends React.Component<IProps> {
     checkboxRender: (value: any, label?: React.ReactNode) => JSX.Element;
     shouldComponentUpdate(nextProps: IProps): boolean;
     componentDidMount(): void;
-    componentDidUpdate(prevProps: IProps): void;
+    componentDidUpdate(): void;
     render(): {} | null | undefined;
 }
 export default CellEditor;

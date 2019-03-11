@@ -264,3 +264,4 @@ export default Formatter;
 - v0.12.1 - update axui-datagrid-header.scss, header text color support
 - v0.13.0 - support custom editor in column, add new props (onChangeSelected, onScroll, onChangeScrollSize)
 - v0.13.1 - Modified the style of inline editing text.
+- v0.13.2 - minor fix.

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
+const _enums_1 = require("../common/@enums");
 const DataGridHeaderPanel_1 = require("./DataGridHeaderPanel");
 const DataGridHeaderColumnResizer_1 = require("./DataGridHeaderColumnResizer");
 class DataGridHeader extends React.Component {
@@ -49,11 +50,11 @@ class DataGridHeader extends React.Component {
             left: scrollLeft,
         };
         return (React.createElement("div", { className: 'axui-datagrid-header', style: { height: headerHeight } },
-            React.createElement(DataGridHeaderPanel_1.default, { panelName: "aside-header", style: asideHeaderPanelStyle }),
-            React.createElement(DataGridHeaderPanel_1.default, { panelName: "left-header", style: leftHeaderPanelStyle }),
+            asidePanelWidth !== 0 && (React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER, style: asideHeaderPanelStyle })),
+            frozenPanelWidth !== 0 && (React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.LEFT_HEADER, style: leftHeaderPanelStyle })),
             React.createElement("div", { "data-scroll-container": "header-scroll-container", style: headerPanelStyle },
-                React.createElement(DataGridHeaderPanel_1.default, { panelName: "header-scroll", style: headerScrollStyle })),
-            React.createElement(DataGridHeaderColumnResizer_1.default, { columnResizing: columnResizing, columnResizerLeft: columnResizerLeft })));
+                React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.HEADER_SCROLL, style: headerScrollStyle })),
+            columnResizing && (React.createElement(DataGridHeaderColumnResizer_1.default, { columnResizing: columnResizing, columnResizerLeft: columnResizerLeft }))));
     }
 }
 exports.default = hoc_1.connectStore(DataGridHeader);

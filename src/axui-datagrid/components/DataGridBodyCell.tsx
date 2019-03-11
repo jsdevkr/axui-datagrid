@@ -43,13 +43,7 @@ class DataGridBodyCell extends React.Component<{
     const {
       li,
       col = {},
-      col: {
-        rowSpan = 0,
-        colSpan = 0,
-        colIndex = 0,
-        rowIndex = 0,
-        columnAttr = '',
-      } = {},
+      col: { rowSpan = 0, colSpan = 0, colIndex = 0, columnAttr = '' } = {},
       ci,
       data = [],
       selected,

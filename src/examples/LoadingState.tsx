@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider, Checkbox, Button, Form, Select } from 'antd';
+import { Divider, Checkbox, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
@@ -141,7 +141,6 @@ class LoadingState extends React.Component<any, any> {
     if (this.dataGridContainerRef.current) {
       const {
         width,
-        height,
       } = this.dataGridContainerRef.current.getBoundingClientRect();
       this.setState({ width });
     }

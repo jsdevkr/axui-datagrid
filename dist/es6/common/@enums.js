@@ -83,5 +83,8 @@ var DataGridEnums;
         PanelNames["BOTTOM_ASIDE_BODY_SCROLL"] = "bottom-aside-body-scroll";
         PanelNames["BOTTOM_LEFT_BODY_SCROLL"] = "bottom-left-body-scroll";
         PanelNames["BOTTOM_BODY_SCROLL"] = "bottom-body-scroll";
+        PanelNames["ASIDE_HEADER"] = "aside-header";
+        PanelNames["LEFT_HEADER"] = "left-header";
+        PanelNames["HEADER_SCROLL"] = "header-scroll";
     })(PanelNames = DataGridEnums.PanelNames || (DataGridEnums.PanelNames = {}));
 })(DataGridEnums = exports.DataGridEnums || (exports.DataGridEnums = {}));

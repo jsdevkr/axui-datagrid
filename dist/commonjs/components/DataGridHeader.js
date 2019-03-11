@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
+var _enums_1 = require("../common/@enums");
 var DataGridHeaderPanel_1 = require("./DataGridHeaderPanel");
 var DataGridHeaderColumnResizer_1 = require("./DataGridHeaderColumnResizer");
 var DataGridHeader = /** @class */ (function (_super) {
@@ -64,11 +65,11 @@ var DataGridHeader = /** @class */ (function (_super) {
             left: scrollLeft,
         };
         return (React.createElement("div", { className: 'axui-datagrid-header', style: { height: headerHeight } },
-            React.createElement(DataGridHeaderPanel_1.default, { panelName: "aside-header", style: asideHeaderPanelStyle }),
-            React.createElement(DataGridHeaderPanel_1.default, { panelName: "left-header", style: leftHeaderPanelStyle }),
+            asidePanelWidth !== 0 && (React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.ASIDE_HEADER, style: asideHeaderPanelStyle })),
+            frozenPanelWidth !== 0 && (React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.LEFT_HEADER, style: leftHeaderPanelStyle })),
             React.createElement("div", { "data-scroll-container": "header-scroll-container", style: headerPanelStyle },
-                React.createElement(DataGridHeaderPanel_1.default, { panelName: "header-scroll", style: headerScrollStyle })),
-            React.createElement(DataGridHeaderColumnResizer_1.default, { columnResizing: columnResizing, columnResizerLeft: columnResizerLeft })));
+                React.createElement(DataGridHeaderPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.HEADER_SCROLL, style: headerScrollStyle })),
+            columnResizing && (React.createElement(DataGridHeaderColumnResizer_1.default, { columnResizing: columnResizing, columnResizerLeft: columnResizerLeft }))));
     };
     return DataGridHeader;
 }(React.Component));
