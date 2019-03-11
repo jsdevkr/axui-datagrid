@@ -256,6 +256,8 @@ var DataGrid = /** @class */ (function (_super) {
             options: options,
         };
         // console.log('datagrid render');
+        // console.log(`doneAutofit ${doneAutofit}`);
+        // debugger;
         return (React.createElement(providers_1.DataGridStore.Provider, __assign({}, providerProps),
             React.createElement("div", { tabIndex: -1, ref: this.rootNode, className: "axui-datagrid", style: gridRootStyle },
                 React.createElement("div", { className: "axui-datagrid-clip-board" },

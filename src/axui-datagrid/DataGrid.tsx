@@ -440,6 +440,8 @@ class DataGrid extends React.Component<IProps, IState> {
     };
 
     // console.log('datagrid render');
+    // console.log(`doneAutofit ${doneAutofit}`);
+    // debugger;
 
     return (
       <DataGridStore.Provider {...providerProps}>
