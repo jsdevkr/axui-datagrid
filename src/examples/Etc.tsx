@@ -62,7 +62,19 @@ class Etc extends React.Component<any, any> {
           width: 120,
         },
       ],
-      data: [['A', 'B', 'C<b>a</b>'], ['A', 'B', 'C<b>a</b>']],
+      data: [
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+        ['A', 'B', 'C<b>a</b>'],
+      ],
     };
 
     return (
