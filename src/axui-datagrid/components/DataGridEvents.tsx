@@ -11,59 +11,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
   busy: boolean = false;
   state = {};
 
-  onWheel = (e: WheelEvent) => {
-    const {
-      scrollLeft = 0,
-      scrollTop = 0,
-      styles = {},
-      setStoreState,
-    } = this.props;
-
-    const {
-      scrollContentWidth = 0,
-      scrollContentContainerWidth = 0,
-      scrollContentHeight = 0,
-      scrollContentContainerHeight = 0,
-    } = styles;
-
-    let delta = { x: 0, y: 0 };
-
-    if (e.detail) {
-      delta.y = e.detail * 10;
-    } else {
-      if (typeof e.deltaY === 'undefined') {
-        delta.y = -(e as any).wheelDelta;
-        delta.x = 0;
-      } else {
-        delta.y = e.deltaY;
-        delta.x = e.deltaX;
-      }
-    }
-
-    let {
-      scrollLeft: currScrollLeft = 0,
-      scrollTop: currScrollTop = 0,
-      endOfScrollTop,
-    } = getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
-      scrollWidth: scrollContentWidth,
-      scrollHeight: scrollContentHeight,
-      clientWidth: scrollContentContainerWidth,
-      clientHeight: scrollContentContainerHeight,
-    });
-
-    setStoreState({
-      scrollLeft: currScrollLeft,
-      scrollTop: currScrollTop,
-    });
-
-    if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
-      e.preventDefault();
-      // e.stopPropagation();
-    }
-
-    return true;
-  };
-
   onKeyUp = (e: React.KeyboardEvent<any>) => {
     const {
       colGroup = [],
@@ -500,9 +447,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
 
     switch (e.type) {
-      case DataGridEnums.EventNames.WHEEL:
-        this.onWheel(e as WheelEvent);
-        break;
       case DataGridEnums.EventNames.KEYDOWN:
         this.busy = true;
         try {
@@ -524,7 +468,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
   };
 
   render() {
-    return <div onWheel={this.onFireEvent}>{this.props.children}</div>;
+    return <div>{this.props.children}</div>;
   }
 
   componentDidMount() {

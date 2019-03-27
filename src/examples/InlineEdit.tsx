@@ -1,12 +1,17 @@
 import * as React from 'react';
 
-import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
+import {
+  Button,
+  Select,
+  Icon,
+  // DatePicker, InputNumber
+} from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
 
 import styled from 'styled-components';
-import moment = require('moment');
+// import moment = require('moment');
 
 const DatagridContainer = styled.div`
   .ant-input {
@@ -30,119 +35,152 @@ const DatagridContainer = styled.div`
   }
 `;
 
-const inputNumberEditor: IDataGrid.cellEditorFunction = ({
-  value,
-  update,
-  cancel,
-}) => {
-  return (
-    <InputNumber
-      style={{ width: '100%' }}
-      autoFocus
-      defaultValue={value}
-      onChange={val => {
-        update(val, true);
-      }}
-      onBlur={cancel}
-      onKeyUp={e => {
-        if (e.which === 13) {
-          update(e.currentTarget.value);
-        }
-      }}
-    />
-  );
-};
-
-const searchSelectEditor: IDataGrid.cellEditorFunction = ({
-  value,
-  update,
-  focus,
-  blur,
-}) => {
-  return (
-    <Select
-      style={{ width: '100%' }}
-      showSearch
-      optionFilterProp="children"
-      onFocus={() => focus()}
-      onBlur={() => blur()}
-      onInputKeyDown={e => {
-        if (e.which !== 13 && e.which !== 27) {
-          update(e.currentTarget.value, true);
-        }
-      }}
-      onChange={val => {
-        update(val);
-      }}
-      onDropdownVisibleChange={open => {
-        if (open) {
-          focus();
-        } else {
-          blur();
-        }
-      }}
-      value={value}
-      dropdownClassName="axui-datagrid-select-dropdown"
-    >
-      <Select.Option value="Jack">Jack</Select.Option>
-      <Select.Option value="Sofia">Sofia</Select.Option>
-      <Select.Option value="Thomas">Thomas</Select.Option>
-    </Select>
-  );
-};
-
-const selectEditor: IDataGrid.cellEditorFunction = ({
-  value,
-  update,
-  cancel,
-  focus,
-  blur,
-}) => {
-  return (
-    <Select
-      style={{ width: '100%' }}
-      onChange={val => {
-        update(val);
-      }}
-      value={value}
-      onDropdownVisibleChange={open => {
-        if (open) {
-          focus();
-        } else {
-          blur();
-        }
-      }}
-      dropdownClassName="axui-datagrid-select-dropdown"
-    >
-      <Select.Option value="A">A</Select.Option>
-      <Select.Option value="B">B</Select.Option>
-      <Select.Option value="C">C</Select.Option>
-    </Select>
-  );
-};
-
-const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
-  return (
-    <DatePicker
-      value={value ? moment(value, 'YYYY/MM/DD') : moment()}
-      onChange={(date, dateString) => {
-        update(dateString);
-      }}
-    />
-  );
-};
-
-// const checkboxEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
+// const inputNumberEditor: IDataGrid.cellEditorFunction = ({
+//   value,
+//   update,
+//   cancel,
+// }) => {
 //   return (
-//     <Checkbox
-//       style={{ justifyContent: 'center' }}
-//       checked={value}
-//       onChange={e => {
-//         update(e.target.checked);
+//     <InputNumber
+//       style={{ width: '100%' }}
+//       autoFocus
+//       defaultValue={value}
+//       onChange={val => {
+//         update(val, true);
 //       }}
+//       onBlur={cancel}
+//       onKeyUp={e => {
+//         if (e.which === 13) {
+//           update(e.currentTarget.value);
+//         }
+//       }}
+//     />
+//   );
+// };
+
+// const searchSelectEditor: IDataGrid.cellEditorFunction = ({
+//   value,
+//   update,
+//   focus,
+//   blur,
+// }) => {
+//   return (
+//     <Select
+//       style={{ width: '100%' }}
+//       showSearch
+//       optionFilterProp="children"
+//       onFocus={() => focus()}
+//       onBlur={() => blur()}
+//       onInputKeyDown={e => {
+//         if (e.which !== 13 && e.which !== 27) {
+//           update(e.currentTarget.value, true);
+//         }
+//       }}
+//       onChange={val => {
+//         update(val);
+//       }}
+//       onDropdownVisibleChange={open => {
+//         if (open) {
+//           focus();
+//         } else {
+//           blur();
+//         }
+//       }}
+//       value={value}
+//       dropdownClassName="axui-datagrid-select-dropdown"
 //     >
-//       Active
-//     </Checkbox>
+//       <Select.Option value="Jack">Jack</Select.Option>
+//       <Select.Option value="Sofia">Sofia</Select.Option>
+//       <Select.Option value="Thomas">Thomas</Select.Option>
+//     </Select>
+//   );
+// };
+
+const types = ['A', 'B', 'C'];
+const subTypes = [
+  { type: 'A', subType: 'A-1' },
+  { type: 'A', subType: 'A-2' },
+  { type: 'A', subType: 'A-3' },
+  { type: 'B', subType: 'B-1' },
+  { type: 'B', subType: 'B-2' },
+  { type: 'B', subType: 'B-3' },
+  { type: 'C', subType: 'C-1' },
+  { type: 'C', subType: 'C-2' },
+  { type: 'C', subType: 'C-3' },
+];
+
+const selectEditorA: IDataGrid.cellEditorFunction = ({
+  value,
+  update,
+  cancel,
+  focus,
+  blur,
+}) => {
+  return (
+    <Select
+      style={{ width: '100%' }}
+      onChange={val => {
+        update(val);
+      }}
+      value={value}
+      onDropdownVisibleChange={open => {
+        if (open) {
+          focus();
+        } else {
+          blur();
+        }
+      }}
+      dropdownClassName="axui-datagrid-select-dropdown"
+    >
+      {types.map(t => (
+        <Select.Option key={t} value={t}>
+          {t}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+};
+
+const selectEditorB: IDataGrid.cellEditorFunction = ({
+  value,
+  update,
+  cancel,
+  focus,
+  blur,
+}) => {
+  return (
+    <Select
+      style={{ width: '100%' }}
+      onChange={val => {
+        update(val);
+      }}
+      value={value}
+      onDropdownVisibleChange={open => {
+        if (open) {
+          focus();
+        } else {
+          blur();
+        }
+      }}
+      dropdownClassName="axui-datagrid-select-dropdown"
+    >
+      {subTypes.map(t => (
+        <Select.Option key={t.subType} value={t.subType}>
+          {t.subType}
+        </Select.Option>
+      ))}
+    </Select>
+  );
+};
+
+// const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
+//   return (
+//     <DatePicker
+//       value={value ? moment(value, 'YYYY/MM/DD') : moment()}
+//       onChange={(date, dateString) => {
+//         update(dateString);
+//       }}
+//     />
 //   );
 // };
 
@@ -159,53 +197,71 @@ class InlineEdit extends React.Component<any, any> {
 
     const columns: IDataGrid.ICol[] = [
       { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
-      { key: 'title', width: 200, label: 'Title', editor: { type: 'text' } },
       {
-        key: 'date',
-        label: 'Date',
-        formatter: 'date',
-        width: 105,
+        key: 'title',
+        width: 200,
+        label: 'Title',
         editor: {
-          activeType: 'always',
-          width: 105, // need when autofitColumns
-          render: inputDateEditor,
+          // activeType: 'always',
+          type: 'text',
         },
       },
+
       {
         key: 'type',
-        label: 'select',
+        label: 'select A',
         editor: {
           activeType: 'always',
-          render: selectEditor,
+          render: selectEditorA,
         },
       },
       {
-        key: 'writer',
-        label: 'search',
+        key: 'subType',
+        label: 'select B',
         width: 120,
         editor: {
           activeType: 'always',
-          render: searchSelectEditor,
+          render: selectEditorB,
         },
       },
-      {
-        key: 'money',
-        label: 'Money',
-        formatter: 'money',
-        align: 'right',
-        editor: {
-          render: inputNumberEditor,
-        },
-      },
-      {
-        key: 'check',
-        label: 'checkbox',
-        align: 'center',
-        editor: {
-          type: 'checkbox',
-          label: 'useYn',
-        },
-      },
+      // {
+      //   key: 'writer',
+      //   label: 'Writer',
+      //   width: 120,
+      //   editor: {
+      //     activeType: 'always',
+      //     render: searchSelectEditor,
+      //   },
+      // },
+      // {
+      //   key: 'money',
+      //   label: 'Money',
+      //   formatter: 'money',
+      //   align: 'right',
+      //   editor: {
+      //     render: inputNumberEditor,
+      //   },
+      // },
+      // {
+      //   key: 'check',
+      //   label: 'checkbox',
+      //   align: 'center',
+      //   editor: {
+      //     type: 'checkbox',
+      //     label: 'useYn',
+      //   },
+      // },
+      // {
+      //   key: 'date',
+      //   label: 'Date',
+      //   formatter: 'date',
+      //   width: 105,
+      //   editor: {
+      //     activeType: 'always',
+      //     width: 105, // need when autofitColumns
+      //     render: inputDateEditor,
+      //   },
+      // },
     ];
 
     const selection: IDataGrid.ISelection = {
@@ -228,6 +284,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2017/12/05',
           money: 120000,
           type: 'A',
+          subType: 'A-1',
           check: true,
         },
         {
@@ -238,6 +295,7 @@ class InlineEdit extends React.Component<any, any> {
           date: new Date(),
           money: 18000,
           type: 'B',
+          subType: 'B-1',
           check: false,
         },
         {
@@ -247,6 +305,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2018/01/01',
           money: 9000,
           type: 'C',
+          subType: 'C-1',
           check: false,
         },
         {
@@ -256,6 +315,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2017/12/05',
           money: 120000,
           type: 'A',
+          subType: 'A-2',
           check: true,
         },
         {
@@ -266,6 +326,7 @@ class InlineEdit extends React.Component<any, any> {
           date: new Date(),
           money: 18000,
           type: 'B',
+          subType: 'B-2',
           check: false,
         },
         {
@@ -275,6 +336,7 @@ class InlineEdit extends React.Component<any, any> {
           date: '2018/01/01',
           money: 9000,
           type: 'C',
+          subType: 'C-2',
           check: false,
         },
       ],

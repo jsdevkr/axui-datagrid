@@ -16,7 +16,14 @@ import { DataGridEnums } from '../common/@enums';
 interface IProps extends IDataGridStore {}
 
 class DataGridBody extends React.Component<IProps> {
+  bodyRef: React.RefObject<HTMLDivElement>;
   state = {};
+
+  constructor(props: IProps) {
+    super(props);
+
+    this.bodyRef = React.createRef();
+  }
 
   onMouseDownBody = (e: React.MouseEvent<Element>) => {
     const {
@@ -461,6 +468,58 @@ class DataGridBody extends React.Component<IProps> {
     return true;
   };
 
+  onWheel = (e: WheelEvent) => {
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      styles = {},
+      setStoreState,
+    } = this.props;
+
+    const {
+      scrollContentWidth = 0,
+      scrollContentContainerWidth = 0,
+      scrollContentHeight = 0,
+      scrollContentContainerHeight = 0,
+    } = styles;
+
+    let delta = { x: 0, y: 0 };
+
+    if ((e as any).detail) {
+      delta.y = (e as any).detail * 10;
+    } else {
+      if (typeof e.deltaY === 'undefined') {
+        delta.y = -(e as any).wheelDelta;
+        delta.x = 0;
+      } else {
+        delta.y = e.deltaY;
+        delta.x = e.deltaX;
+      }
+    }
+
+    let {
+      scrollLeft: currScrollLeft = 0,
+      scrollTop: currScrollTop = 0,
+      endOfScrollTop,
+    } = getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
+      scrollWidth: scrollContentWidth,
+      scrollHeight: scrollContentHeight,
+      clientWidth: scrollContentContainerWidth,
+      clientHeight: scrollContentContainerHeight,
+    });
+
+    if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
+      e.preventDefault();
+    }
+
+    setStoreState({
+      scrollLeft: currScrollLeft,
+      scrollTop: currScrollTop,
+    });
+
+    return true;
+  };
+
   shouldComponentUpdate(pProps: IProps) {
     const {
       scrollLeft = 0,
@@ -527,6 +586,20 @@ class DataGridBody extends React.Component<IProps> {
     }
 
     return false;
+  }
+
+  componentDidMount() {
+    if (this.bodyRef.current) {
+      this.bodyRef.current.addEventListener('wheel', this.onWheel, {
+        passive: false,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.bodyRef.current) {
+      this.bodyRef.current.removeEventListener('wheel', this.onWheel);
+    }
   }
 
   render() {
@@ -636,8 +709,9 @@ class DataGridBody extends React.Component<IProps> {
 
     return (
       <div
+        ref={this.bodyRef}
         className={'axui-datagrid-body'}
-        style={{ height: bodyHeight }}
+        style={{ height: bodyHeight, touchAction: 'none' }}
         onMouseDown={this.onMouseDownBody}
       >
         {asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (
