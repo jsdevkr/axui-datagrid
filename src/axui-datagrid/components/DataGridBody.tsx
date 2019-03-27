@@ -66,6 +66,7 @@ class DataGridBody extends React.Component<IProps> {
 
     const startMousePosition = getMousePosition(e);
     const spanType = (e.target as any).getAttribute('data-span');
+
     const { x: leftPadding = 0, y: topPadding = 0 } =
       rootNode &&
       rootNode.current &&

@@ -22,8 +22,8 @@ class CellLabel extends React.PureComponent<{
               className="axui-datagrid-check-box"
               data-checked={listSelectedAll}
               style={{
-                maxHeight: lineHeight + 'px',
-                minHeight: lineHeight + 'px',
+                width: lineHeight + 'px',
+                height: lineHeight + 'px',
               }}
             />
           );
@@ -93,6 +93,7 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
         key: colKey = '',
         rowSpan: colRowSpan = 1,
         colSpan: colCowSpan = 1,
+        columnAttr = '',
       } = {},
       onClick,
     } = this.props;
@@ -104,7 +105,7 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
 
     const classNames: string[] = ['axui-datagrid-header-column'];
 
-    if (col.columnAttr === 'lineNumber') {
+    if (columnAttr === 'lineNumber') {
       classNames.push('axui-datagrid-header-corner');
     }
     if (
@@ -138,7 +139,7 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
         }}
       >
         <span
-          data-span
+          data-span={columnAttr}
           data-align={colAlign || headerAlign}
           style={{
             height:

@@ -20,8 +20,8 @@ class DataGridBodyCell extends React.Component<{
   inlineEditingCell: IDataGrid.IEditingCell;
   predefinedFormatter?: IDataGrid.IFormatter;
 }> {
-  onDoubleClickCell = (
-    e: React.KeyboardEvent<HTMLInputElement>,
+  handleActiveInlineEdit = (
+    e: React.MouseEvent<HTMLTableDataCellElement>,
     col: IDataGrid.IColumn,
     li: number,
   ) => {
@@ -99,12 +99,15 @@ class DataGridBodyCell extends React.Component<{
       editor === 'string'
         ? { type: '' + editor }
         : (editor as IDataGrid.IColEditor);
+    const activeType = colEditor
+      ? colEditor.activeType || 'dblclick'
+      : 'dblclick';
     const inlineEditingActive =
       isInlineEditing &&
       inlineEditingCell.rowIndex === li &&
       inlineEditingCell.colIndex === colIndex;
     const inlineEditingActiveAlways =
-      (colEditor && colEditor.activeType === 'always') ||
+      (colEditor && activeType === 'always') ||
       (colEditor && colEditor.type === 'checkbox');
 
     return (
@@ -114,9 +117,14 @@ class DataGridBodyCell extends React.Component<{
         rowSpan={rowSpan}
         className={tdClassNames.join(' ')}
         style={{ height: cellHeight, minHeight: '1px' }}
-        onDoubleClick={(e: any) => {
-          if (!inlineEditingActive) {
-            this.onDoubleClickCell(e, col, li);
+        onDoubleClick={e => {
+          if (!inlineEditingActive && activeType === 'dblclick') {
+            this.handleActiveInlineEdit(e, col, li);
+          }
+        }}
+        onClick={e => {
+          if (!inlineEditingActive && activeType === 'click') {
+            this.handleActiveInlineEdit(e, col, li);
           }
         }}
       >
@@ -124,6 +132,7 @@ class DataGridBodyCell extends React.Component<{
           <CellEditor
             col={col}
             li={li}
+            item={data[li]}
             value={value}
             columnHeight={columnHeight}
             lineHeight={lineHeight}

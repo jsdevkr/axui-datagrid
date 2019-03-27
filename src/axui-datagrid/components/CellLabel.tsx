@@ -44,12 +44,12 @@ class CellLabel extends React.PureComponent<{
       case '_row_selector_':
         labelValue = (
           <div
-            className="axui-datagrid-check-box"
             data-span={columnAttr}
+            className="axui-datagrid-check-box"
             data-checked={selected}
             style={{
-              maxHeight: lineHeight + 'px',
-              minHeight: lineHeight + 'px',
+              width: lineHeight + 'px',
+              height: lineHeight + 'px',
             }}
           />
         );

@@ -86,17 +86,24 @@ export namespace IDataGrid {
     store: IDataGrid.IStoreState,
     callback?: () => void,
   ) => void;
+
   export type dispatch = (
     dispatchType: DataGridEnums.DispatchTypes,
     param: IDataGrid.DispatchParam,
+  ) => void;
+
+  export type CellEditorDataUpdate = (
+    value: any,
+    options?: { keepEditing?: boolean },
   ) => void;
 
   export interface ICellEditorData {
     col: ICol;
     rowIndex: number;
     colIndex: number;
+    item: any;
     value: any;
-    update: (value: any, keepEditing?: boolean) => void;
+    update: CellEditorDataUpdate;
     cancel: () => void;
     focus: () => void;
     blur: () => void;
@@ -107,7 +114,7 @@ export namespace IDataGrid {
 
   export interface IColEditor {
     type?: string;
-    activeType?: 'always' | 'dblclick';
+    activeType?: 'always' | 'dblclick' | 'click';
     width?: number;
     label?: React.ReactDOM | string;
     render?: cellEditorFunction;
