@@ -265,3 +265,4 @@ export default Formatter;
 - v0.13.0 - support custom editor in column, add new props (onChangeSelected, onScroll, onChangeScrollSize)
 - v0.13.1 - Modified the style of inline editing text.
 - v0.13.2 - minor fix.
+- v0.13.3 - Modify Inline editor
