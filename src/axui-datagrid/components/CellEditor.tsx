@@ -162,7 +162,7 @@ class CellEditor extends React.PureComponent<IProps, IState> {
     dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   };
 
-  inputTextRender = (value: any) => {
+  inputTextRender = (value: any, disable: boolean = false) => {
     return (
       <input
         type="text"
@@ -199,7 +199,11 @@ class CellEditor extends React.PureComponent<IProps, IState> {
     });
   };
 
-  checkboxRender = (value: any, label?: React.ReactNode | string) => {
+  checkboxRender = (
+    value: any,
+    label: React.ReactNode | string = '',
+    disabled: boolean = false,
+  ) => {
     const {
       columnHeight,
       lineHeight,
@@ -221,13 +225,16 @@ class CellEditor extends React.PureComponent<IProps, IState> {
     return (
       <span
         data-span={'checkbox-editor'}
+        className={`${disabled ? 'disabled' : ''}`}
         style={{
           height: columnHeight - columnBorderWidth + 'px',
           lineHeight: lineHeight + 'px',
           justifyContent,
         }}
         onClick={() => {
-          this.handleCheckboxValue(!value);
+          if (!disabled) {
+            this.handleCheckboxValue(!value);
+          }
         }}
       >
         <div
@@ -296,11 +303,21 @@ class CellEditor extends React.PureComponent<IProps, IState> {
         ? { type: 'text' }
         : (col.editor as IDataGrid.IColEditor);
 
+    const disabled = editor.disable
+      ? editor.disable({
+          col: col,
+          rowIndex: li,
+          colIndex: col.colIndex || 0,
+          item,
+          value,
+        })
+      : false;
+
     switch (editor.type) {
       case 'text':
         return this.inputTextRender(value);
       case 'checkbox':
-        return this.checkboxRender(value, editor.label);
+        return this.checkboxRender(value, editor.label, disabled);
       default:
         if (!editor.render) {
           return this.inputTextRender(value);

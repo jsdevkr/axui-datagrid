@@ -66,7 +66,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
                             colAlign={'left'}
                             col={col}
                             li={li}
-                            data={data}
+                            item={data[li]}
                             predefinedFormatter={predefinedFormatter}
                           />
                         </td>

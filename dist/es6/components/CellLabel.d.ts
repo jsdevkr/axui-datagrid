@@ -7,7 +7,7 @@ declare class CellLabel extends React.PureComponent<{
     colAlign: string;
     col: IDataGrid.ICol;
     li: number;
-    data: any[];
+    item: any;
     selected?: boolean;
     predefinedFormatter: IDataGrid.IFormatter;
 }> {

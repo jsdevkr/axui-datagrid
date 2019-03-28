@@ -4,13 +4,12 @@ const React = require("react");
 const utils_1 = require("../utils");
 class CellLabel extends React.PureComponent {
     render() {
-        const { columnHeight, lineHeight, columnBorderWidth, colAlign, col, col: { key = '', columnAttr = '', formatter }, li, data, selected = false, predefinedFormatter, } = this.props;
+        const { columnHeight, lineHeight, columnBorderWidth, colAlign, col, col: { key = '', columnAttr = '', formatter }, li, item, selected = false, predefinedFormatter, } = this.props;
         const formatterData = {
-            data,
-            item: data[li],
+            item,
             index: li,
             key: col.key,
-            value: data[li] && data[li][col.key || ''],
+            value: item[col.key || ''],
         };
         let labelValue = '';
         switch (key) {
@@ -31,7 +30,7 @@ class CellLabel extends React.PureComponent {
                     labelValue = formatter(formatterData);
                 }
                 else {
-                    labelValue = data[li] && data[li][key];
+                    labelValue = item[key];
                 }
         }
         return (React.createElement("span", { "data-span": columnAttr, style: {

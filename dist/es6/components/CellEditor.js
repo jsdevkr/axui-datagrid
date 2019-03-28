@@ -110,7 +110,7 @@ class CellEditor extends React.PureComponent {
             });
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
-        this.inputTextRender = (value) => {
+        this.inputTextRender = (value, disable = false) => {
             return (React.createElement("input", { type: "text", ref: this.inputTextRef, onCompositionUpdate: () => {
                     this.activeComposition = true;
                 }, onCompositionEnd: () => {
@@ -132,7 +132,7 @@ class CellEditor extends React.PureComponent {
                 eventWhichKey: 'click-checkbox',
             });
         };
-        this.checkboxRender = (value, label) => {
+        this.checkboxRender = (value, label = '', disabled = false) => {
             const { columnHeight, lineHeight, columnBorderWidth, colAlign, } = this.props;
             let justifyContent = '';
             switch (colAlign) {
@@ -144,12 +144,14 @@ class CellEditor extends React.PureComponent {
                     break;
                 default:
             }
-            return (React.createElement("span", { "data-span": 'checkbox-editor', style: {
+            return (React.createElement("span", { "data-span": 'checkbox-editor', className: `${disabled ? 'disabled' : ''}`, style: {
                     height: columnHeight - columnBorderWidth + 'px',
                     lineHeight: lineHeight + 'px',
                     justifyContent,
                 }, onClick: () => {
-                    this.handleCheckboxValue(!value);
+                    if (!disabled) {
+                        this.handleCheckboxValue(!value);
+                    }
                 } },
                 React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": value, style: {
                         width: lineHeight + 'px',
@@ -200,11 +202,20 @@ class CellEditor extends React.PureComponent {
         const editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
+        const disabled = editor.disable
+            ? editor.disable({
+                col: col,
+                rowIndex: li,
+                colIndex: col.colIndex || 0,
+                item,
+                value,
+            })
+            : false;
         switch (editor.type) {
             case 'text':
                 return this.inputTextRender(value);
             case 'checkbox':
-                return this.checkboxRender(value, editor.label);
+                return this.checkboxRender(value, editor.label, disabled);
             default:
                 if (!editor.render) {
                     return this.inputTextRender(value);

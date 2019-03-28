@@ -10,7 +10,6 @@ class CellLabelBottom extends React.PureComponent {
             key,
         };
         let formatterData = {
-            data,
             key,
             value: '',
         };

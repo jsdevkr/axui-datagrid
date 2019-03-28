@@ -30,7 +30,6 @@ class CellLabelBottom extends React.PureComponent<{
       key,
     };
     let formatterData: IDataGrid.IFormatterData = {
-      data,
       key,
       value: '',
     };

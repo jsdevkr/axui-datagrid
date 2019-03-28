@@ -7,6 +7,7 @@ import { IDataGrid } from 'axui-datagrid/common/@types';
 
 import styled from 'styled-components';
 import moment = require('moment');
+import { debounce } from 'axui-datagrid/utils';
 
 const DatagridContainer = styled.div`
   .ant-input {
@@ -192,6 +193,7 @@ class InlineEdit extends React.Component<any, any> {
   scrollContentHeight: number = 0;
   bodyTrHeight: number = 24;
   selectedIndexes: number[] = [];
+  debouncedOnScroll: any;
 
   constructor(props: any) {
     super(props);
@@ -207,7 +209,6 @@ class InlineEdit extends React.Component<any, any> {
           type: 'text',
         },
       },
-
       {
         key: 'type',
         label: 'select A',
@@ -232,6 +233,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           activeType: 'always',
           render: searchSelectEditor,
+          disable: ({ item }) => item.type === 'A',
         },
       },
       {
@@ -242,6 +244,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           activeType: 'click',
           render: inputNumberEditor,
+          disable: ({ item }) => item.type === 'A',
         },
       },
       {
@@ -251,6 +254,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           type: 'checkbox',
           label: 'useYn',
+          disable: ({ item }) => item.type === 'A',
         },
       },
       {
@@ -346,6 +350,11 @@ class InlineEdit extends React.Component<any, any> {
     };
 
     this.dataGridContainerRef = React.createRef();
+    this.debouncedOnScroll = debounce((scrollTop: number) => {
+      this.setState({
+        scrollTop: scrollTop,
+      });
+    }, 1000);
   }
 
   addItem = () => {
@@ -374,7 +383,7 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   removeItem = () => {
-    console.log(this.selectedIndexes);
+    // console.log(this.selectedIndexes);
     if (this.selectedIndexes.length) {
       const data: any[] = this.state.data;
       const _data = data.filter((n, i) => {
@@ -386,9 +395,7 @@ class InlineEdit extends React.Component<any, any> {
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
     // console.log(param);
-    this.setState({
-      scrollTop: param.scrollTop,
-    });
+    this.debouncedOnScroll(param.scrollTop);
   };
 
   onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
@@ -403,7 +410,7 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   public render() {
-    const { width, height, columns, data } = this.state;
+    const { width, height, columns, data, scrollTop } = this.state;
 
     return (
       <Wrapper>
@@ -440,11 +447,10 @@ class InlineEdit extends React.Component<any, any> {
                 // onChangeSelection={this.onChangeSelection}
                 // selectedRowKeys={this.selectedRowKeys}
                 onChangeSelected={param => {
-                  // console.log(param);
                   this.selectedIndexes = param.selectedIndexes || [];
                 }}
                 // onScroll={this.onScroll}
-                // scrollTop={scrollTop}
+                scrollTop={scrollTop}
                 onChangeScrollSize={this.onChangeScrollSize}
               />
             </DatagridContainer>
@@ -461,9 +467,9 @@ class InlineEdit extends React.Component<any, any> {
             Remove item
           </Button>
 
-          {/* <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
+          <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
             scroll top (0)
-          </Button> */}
+          </Button>
         </Segment>
       </Wrapper>
     );

@@ -27,7 +27,6 @@ var CellLabelBottom = /** @class */ (function (_super) {
             key: key,
         };
         var formatterData = {
-            data: data,
             key: key,
             value: '',
         };

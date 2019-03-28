@@ -28,9 +28,9 @@ declare class CellEditor extends React.PureComponent<IProps, IState> {
     handleCancelEdit: () => void;
     handleCustomEditorFocus: () => void;
     handleCustomEditorBlur: () => void;
-    inputTextRender: (value: any) => JSX.Element;
+    inputTextRender: (value: any, disable?: boolean) => JSX.Element;
     handleCheckboxValue: (value: boolean) => void;
-    checkboxRender: (value: any, label?: React.ReactNode) => JSX.Element;
+    checkboxRender: (value: any, label?: React.ReactNode, disabled?: boolean) => JSX.Element;
     componentDidMount(): void;
     handleInputTextSelect: (inputCurrent: any) => void;
     render(): {} | null | undefined;

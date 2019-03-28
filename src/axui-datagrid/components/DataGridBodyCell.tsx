@@ -110,6 +110,32 @@ class DataGridBodyCell extends React.Component<{
       (colEditor && activeType === 'always') ||
       (colEditor && colEditor.type === 'checkbox');
 
+    const editorDisabled =
+      colEditor && colEditor.disable
+        ? colEditor.disable({
+            col: col,
+            rowIndex: li,
+            colIndex: col.colIndex || 0,
+            item: data[li],
+            value,
+          })
+        : false;
+
+    let displayLabel = true;
+    if (colEditor) {
+      displayLabel = !(inlineEditingActiveAlways || inlineEditingActive);
+
+      if (colEditor.type !== 'checkbox' && editorDisabled) {
+        displayLabel = true;
+      }
+      if (
+        colEditor.type === 'checkbox' &&
+        (inlineEditingActiveAlways || inlineEditingActive)
+      ) {
+        displayLabel = false;
+      }
+    }
+
     return (
       <td
         key={ci}
@@ -118,17 +144,37 @@ class DataGridBodyCell extends React.Component<{
         className={tdClassNames.join(' ')}
         style={{ height: cellHeight, minHeight: '1px' }}
         onDoubleClick={e => {
-          if (!inlineEditingActive && activeType === 'dblclick') {
+          if (
+            !editorDisabled &&
+            !inlineEditingActive &&
+            activeType === 'dblclick'
+          ) {
             this.handleActiveInlineEdit(e, col, li);
           }
         }}
         onClick={e => {
-          if (!inlineEditingActive && activeType === 'click') {
+          if (
+            !editorDisabled &&
+            !inlineEditingActive &&
+            activeType === 'click'
+          ) {
             this.handleActiveInlineEdit(e, col, li);
           }
         }}
       >
-        {inlineEditingActiveAlways || inlineEditingActive ? (
+        {displayLabel ? (
+          <CellLabel
+            col={col}
+            li={li}
+            item={data[li]}
+            columnHeight={columnHeight}
+            lineHeight={lineHeight}
+            columnBorderWidth={columnBorderWidth}
+            colAlign={colAlign}
+            selected={selected}
+            predefinedFormatter={predefinedFormatter}
+          />
+        ) : (
           <CellEditor
             col={col}
             li={li}
@@ -143,18 +189,6 @@ class DataGridBodyCell extends React.Component<{
             focusedCol={focusedCol}
             dispatch={dispatch}
             setStoreState={setStoreState}
-          />
-        ) : (
-          <CellLabel
-            col={col}
-            li={li}
-            data={data}
-            columnHeight={columnHeight}
-            lineHeight={lineHeight}
-            columnBorderWidth={columnBorderWidth}
-            colAlign={colAlign}
-            selected={selected}
-            predefinedFormatter={predefinedFormatter}
           />
         )}
       </td>

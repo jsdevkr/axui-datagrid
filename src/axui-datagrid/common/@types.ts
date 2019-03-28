@@ -108,9 +108,22 @@ export namespace IDataGrid {
     focus: () => void;
     blur: () => void;
   }
+
+  export interface ICellEditorDisableData {
+    col: ICol;
+    rowIndex: number;
+    colIndex: number;
+    item: any;
+    value: any;
+  }
+
   export type cellEditorFunction = (
     param: ICellEditorData,
   ) => string | React.ReactNode;
+
+  export type cellEditorDisableFunction = (
+    param: ICellEditorDisableData,
+  ) => boolean;
 
   export interface IColEditor {
     type?: string;
@@ -118,6 +131,7 @@ export namespace IDataGrid {
     width?: number;
     label?: React.ReactDOM | string;
     render?: cellEditorFunction;
+    disable?: cellEditorDisableFunction;
   }
 
   export interface IEditingCell {
@@ -127,7 +141,6 @@ export namespace IDataGrid {
   }
 
   export interface IFormatterData {
-    data?: any;
     item?: any;
     index?: number;
     key?: string;

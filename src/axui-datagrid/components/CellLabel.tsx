@@ -9,7 +9,7 @@ class CellLabel extends React.PureComponent<{
   colAlign: string;
   col: IDataGrid.ICol;
   li: number;
-  data: any[];
+  item: any;
   selected?: boolean;
   predefinedFormatter: IDataGrid.IFormatter;
 }> {
@@ -22,17 +22,16 @@ class CellLabel extends React.PureComponent<{
       col,
       col: { key = '', columnAttr = '', formatter },
       li,
-      data,
+      item,
       selected = false,
       predefinedFormatter,
     } = this.props;
 
     const formatterData = {
-      data,
-      item: data[li],
+      item,
       index: li,
       key: col.key,
-      value: data[li] && data[li][col.key || ''],
+      value: item[col.key || ''],
     };
 
     let labelValue: string | React.ReactNode = '';
@@ -63,7 +62,7 @@ class CellLabel extends React.PureComponent<{
             formatterData,
           );
         } else {
-          labelValue = data[li] && data[li][key];
+          labelValue = item[key];
         }
     }
 

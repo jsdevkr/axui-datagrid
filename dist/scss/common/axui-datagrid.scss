@@ -324,13 +324,16 @@
     align-items: center;
     flex-wrap: wrap;
     cursor: pointer;
-
     .axui-datagrid-check-box {
       flex: none;
     }
     label {
       display: inline-block;
       padding-left: $axui-datagrid-cell-padding-row-selector;
+    }
+    &.disabled {
+      opacity: 0.5;
+      filter: grayscale(100%);
     }
   }
 

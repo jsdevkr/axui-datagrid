@@ -124,7 +124,8 @@ var CellEditor = /** @class */ (function (_super) {
             });
             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         };
-        _this.inputTextRender = function (value) {
+        _this.inputTextRender = function (value, disable) {
+            if (disable === void 0) { disable = false; }
             return (React.createElement("input", { type: "text", ref: _this.inputTextRef, onCompositionUpdate: function () {
                     _this.activeComposition = true;
                 }, onCompositionEnd: function () {
@@ -146,7 +147,9 @@ var CellEditor = /** @class */ (function (_super) {
                 eventWhichKey: 'click-checkbox',
             });
         };
-        _this.checkboxRender = function (value, label) {
+        _this.checkboxRender = function (value, label, disabled) {
+            if (label === void 0) { label = ''; }
+            if (disabled === void 0) { disabled = false; }
             var _a = _this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, colAlign = _a.colAlign;
             var justifyContent = '';
             switch (colAlign) {
@@ -158,12 +161,14 @@ var CellEditor = /** @class */ (function (_super) {
                     break;
                 default:
             }
-            return (React.createElement("span", { "data-span": 'checkbox-editor', style: {
+            return (React.createElement("span", { "data-span": 'checkbox-editor', className: "" + (disabled ? 'disabled' : ''), style: {
                     height: columnHeight - columnBorderWidth + 'px',
                     lineHeight: lineHeight + 'px',
                     justifyContent: justifyContent,
                 }, onClick: function () {
-                    _this.handleCheckboxValue(!value);
+                    if (!disabled) {
+                        _this.handleCheckboxValue(!value);
+                    }
                 } },
                 React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": value, style: {
                         width: lineHeight + 'px',
@@ -215,11 +220,20 @@ var CellEditor = /** @class */ (function (_super) {
         var editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
+        var disabled = editor.disable
+            ? editor.disable({
+                col: col,
+                rowIndex: li,
+                colIndex: col.colIndex || 0,
+                item: item,
+                value: value,
+            })
+            : false;
         switch (editor.type) {
             case 'text':
                 return this.inputTextRender(value);
             case 'checkbox':
-                return this.checkboxRender(value, editor.label);
+                return this.checkboxRender(value, editor.label, disabled);
             default:
                 if (!editor.render) {
                     return this.inputTextRender(value);
