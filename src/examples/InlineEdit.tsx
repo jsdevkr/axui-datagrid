@@ -240,6 +240,7 @@ class InlineEdit extends React.Component<any, any> {
         formatter: 'money',
         align: 'right',
         editor: {
+          activeType: 'click',
           render: inputNumberEditor,
         },
       },
@@ -402,7 +403,7 @@ class InlineEdit extends React.Component<any, any> {
   };
 
   public render() {
-    const { width, height, columns, data, scrollTop } = this.state;
+    const { width, height, columns, data } = this.state;
 
     return (
       <Wrapper>
@@ -442,8 +443,8 @@ class InlineEdit extends React.Component<any, any> {
                   // console.log(param);
                   this.selectedIndexes = param.selectedIndexes || [];
                 }}
-                onScroll={this.onScroll}
-                scrollTop={scrollTop}
+                // onScroll={this.onScroll}
+                // scrollTop={scrollTop}
                 onChangeScrollSize={this.onChangeScrollSize}
               />
             </DatagridContainer>
@@ -460,9 +461,9 @@ class InlineEdit extends React.Component<any, any> {
             Remove item
           </Button>
 
-          <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
+          {/* <Button size="small" onClick={() => this.setState({ scrollTop: 0 })}>
             scroll top (0)
-          </Button>
+          </Button> */}
         </Segment>
       </Wrapper>
     );

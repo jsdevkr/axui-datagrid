@@ -315,6 +315,7 @@
     border: 0 none;
     display: block;
     outline: 0;
+    padding: $axui-datagrid-cell-padding;
   }
 
   [data-span='checkbox-editor'] {

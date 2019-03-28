@@ -310,7 +310,7 @@ class DataGridBody extends React.Component<IProps> {
         document.removeEventListener('mouseleave', offEvent);
       };
 
-      const throttledOnMouseMove = throttle(onMouseMove, 10);
+      const throttledOnMouseMove = throttle(onMouseMove, 200);
 
       if (e.metaKey || (e.shiftKey && focusedRow > -1 && focusedCol > -1)) {
         if (e.shiftKey) {
@@ -484,7 +484,7 @@ class DataGridBody extends React.Component<IProps> {
       scrollContentContainerHeight = 0,
     } = styles;
 
-    let delta = { x: 0, y: 0 };
+    const delta = { x: 0, y: 0 };
 
     if ((e as any).detail) {
       delta.y = (e as any).detail * 10;
@@ -518,7 +518,7 @@ class DataGridBody extends React.Component<IProps> {
       scrollTop: currScrollTop,
     });
 
-    return true;
+    return;
   };
 
   shouldComponentUpdate(pProps: IProps) {

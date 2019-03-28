@@ -275,6 +275,8 @@ class StoreProvider extends React.Component<
         _scrollLeft = currScrollLeft;
       }
 
+      let currScrollLeft, currScrollTop;
+
       if (
         nProps.scrollTop !== nState.pScrollTop ||
         nProps.scrollLeft !== nState.pScrollLeft
@@ -286,16 +288,29 @@ class StoreProvider extends React.Component<
           scrollContentContainerHeight = 0,
         } = _styles || {};
         let {
-          scrollLeft: currScrollLeft = 0,
-          scrollTop: currScrollTop = 0,
+          scrollLeft: _currScrollLeft = 0,
+          scrollTop: _currScrollTop = 0,
         } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
           scrollWidth: scrollContentWidth,
           scrollHeight: scrollContentHeight,
           clientWidth: scrollContentContainerWidth,
           clientHeight: scrollContentContainerHeight,
         });
-        _scrollLeft = currScrollLeft;
+        currScrollLeft = _currScrollLeft;
+        currScrollTop = _currScrollTop;
+      }
+
+      if (
+        typeof currScrollTop !== 'undefined' &&
+        nProps.scrollTop !== nState.pScrollTop
+      ) {
         _scrollTop = currScrollTop;
+      }
+      if (
+        typeof currScrollLeft !== 'undefined' &&
+        nProps.scrollLeft !== nState.pScrollLeft
+      ) {
+        _scrollLeft = currScrollLeft;
       }
 
       if (nProps.selection !== nState.selection) {

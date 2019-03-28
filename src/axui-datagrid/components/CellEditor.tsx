@@ -21,11 +21,9 @@ interface IState {
   lastEventName: string;
 }
 
-class CellEditor extends React.Component<IProps, IState> {
+class CellEditor extends React.PureComponent<IProps, IState> {
   inputTextRef: React.RefObject<HTMLInputElement>;
-  editorTargetRef: React.RefObject<HTMLDivElement>;
   activeComposition: boolean = false;
-  lazyRenderFn: any;
 
   constructor(props: IProps) {
     super(props);
@@ -34,7 +32,6 @@ class CellEditor extends React.Component<IProps, IState> {
       lastEventName: '',
     };
     this.inputTextRef = React.createRef();
-    this.editorTargetRef = React.createRef();
   }
 
   onEventInput = (
@@ -51,6 +48,7 @@ class CellEditor extends React.Component<IProps, IState> {
 
     switch (eventName) {
       case DataGridEnums.EventNames.BLUR:
+        // console.log('eventInput blur : setStoreState');
         setStoreState({
           isInlineEditing: false,
           inlineEditingCell: {},
@@ -76,6 +74,7 @@ class CellEditor extends React.Component<IProps, IState> {
       case DataGridEnums.EventNames.KEYUP:
         switch (e.which) {
           case DataGridEnums.KeyCodes.ESC:
+            // console.log('eventInput esc : setStoreState');
             setStoreState({
               isInlineEditing: false,
               inlineEditingCell: {},
@@ -90,6 +89,7 @@ class CellEditor extends React.Component<IProps, IState> {
           case DataGridEnums.KeyCodes.DOWN_ARROW:
           case DataGridEnums.KeyCodes.ENTER:
             if (!this.activeComposition) {
+              // console.log('eventInput enter : setStoreState');
               dispatch(DataGridEnums.DispatchTypes.UPDATE, {
                 row: inlineEditingCell.rowIndex,
                 colIndex: inlineEditingCell.colIndex,
@@ -111,12 +111,11 @@ class CellEditor extends React.Component<IProps, IState> {
     }
   };
 
-  handleUpdateValue = (
-    value: any,
-    { keepEditing }: { keepEditing?: boolean },
-  ) => {
+  handleUpdateValue: IDataGrid.CellEditorDataUpdate = (value: any, options) => {
     const { dispatch, li, col } = this.props;
+    const { keepEditing = false } = options || {};
 
+    // console.log('handleUpdateValue UPDATE : dispatch');
     dispatch(DataGridEnums.DispatchTypes.UPDATE, {
       row: li,
       colIndex: col.colIndex,
@@ -128,6 +127,8 @@ class CellEditor extends React.Component<IProps, IState> {
 
   handleCancelEdit = () => {
     const { setStoreState, dispatch } = this.props;
+
+    // console.log('handleCancelEdit : setStoreState');
     setStoreState({
       isInlineEditing: false,
       inlineEditingCell: {},
@@ -138,6 +139,8 @@ class CellEditor extends React.Component<IProps, IState> {
 
   handleCustomEditorFocus = () => {
     const { setStoreState, li, col } = this.props;
+
+    // console.log('handleCustomEditorFocus : setStoreState');
     setStoreState({
       isInlineEditing: true,
       inlineEditingCell: {
@@ -247,34 +250,28 @@ class CellEditor extends React.Component<IProps, IState> {
     );
   };
 
-  shouldComponentUpdate(nextProps: IProps) {
-    const {
-      li,
-      col: { colIndex },
-    } = nextProps;
+  // shouldComponentUpdate(nextProps: IProps) {
+  //   const {
+  //     li,
+  //     col: { colIndex },
+  //   } = nextProps;
 
-    if (
-      this.props.focusedRow === nextProps.focusedRow &&
-      nextProps.focusedRow === li &&
-      this.props.focusedCol === nextProps.focusedCol &&
-      nextProps.focusedCol === colIndex
-    ) {
-      return true;
-    }
+  //   if (
+  //     this.props.focusedRow === nextProps.focusedRow &&
+  //     nextProps.focusedRow === li &&
+  //     this.props.focusedCol === nextProps.focusedCol &&
+  //     nextProps.focusedCol === colIndex
+  //   ) {
+  //     return true;
+  //   }
 
-    return this.props.value !== nextProps.value;
-  }
+  //   return this.props.value !== nextProps.value;
+  // }
 
   componentDidMount() {
     if (this.inputTextRef.current) {
       this.activeComposition = false;
-      this.handleInputTextSelect(this.inputTextRef.current);
-    }
-  }
-  componentDidUpdate() {
-    if (this.inputTextRef.current) {
-      this.activeComposition = false;
-      this.handleInputTextSelect(this.inputTextRef.current);
+      this.inputTextRef.current.focus();
     }
   }
 
@@ -290,33 +287,6 @@ class CellEditor extends React.Component<IProps, IState> {
       inputCurrent.select();
     }
   };
-
-  // renderCustomEditor = () => {
-  //   console.log('render');
-  //   if (this.editorTargetRef.current) {
-  //     const { value, col, li } = this.props;
-
-  //     const editor: IDataGrid.IColEditor =
-  //       col.editor === 'text'
-  //         ? { type: 'text' }
-  //         : (col.editor as IDataGrid.IColEditor);
-
-  //     if (editor && editor.render) {
-  //       const element = editor.render({
-  //         col: col,
-  //         rowIndex: li,
-  //         colIndex: col.colIndex || 0,
-  //         value,
-  //         update: this.handleUpdateValue,
-  //         cancel: this.handleCancelEdit,
-  //         focus: this.handleCustomEditorFocus,
-  //         blur: this.handleCustomEditorBlur,
-  //       });
-
-  //       ReactDOM.render(element as any, this.editorTargetRef.current);
-  //     }
-  //   }
-  // };
 
   render() {
     const { item, value, col, li } = this.props;
@@ -336,7 +306,6 @@ class CellEditor extends React.Component<IProps, IState> {
           return this.inputTextRender(value);
         }
 
-        // return <div ref={this.editorTargetRef} />;
         return editor.render({
           col: col,
           rowIndex: li,
