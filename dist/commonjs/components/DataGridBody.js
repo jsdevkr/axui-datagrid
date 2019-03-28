@@ -22,8 +22,8 @@ var DataGridBodyLoader_1 = require("./DataGridBodyLoader");
 var _enums_1 = require("../common/@enums");
 var DataGridBody = /** @class */ (function (_super) {
     __extends(DataGridBody, _super);
-    function DataGridBody() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function DataGridBody(props) {
+        var _this = _super.call(this, props) || this;
         _this.state = {};
         _this.onMouseDownBody = function (e) {
             var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _a.scrollTop, scrollTop = _f === void 0 ? 0 : _f, _g = _a.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _a.focusedCol, focusedCol = _h === void 0 ? 0 : _h, isInlineEditing = _a.isInlineEditing, _j = _a.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _a.styles, styles = _k === void 0 ? {} : _k, setStoreState = _a.setStoreState, dispatch = _a.dispatch, rootNode = _a.rootNode, _l = _a.rootObject, rootObject = _l === void 0 ? {} : _l, loading = _a.loading, loadingData = _a.loadingData;
@@ -226,7 +226,7 @@ var DataGridBody = /** @class */ (function (_super) {
                     document.removeEventListener('mouseup', offEvent);
                     document.removeEventListener('mouseleave', offEvent);
                 };
-                var throttledOnMouseMove = utils_1.throttle(onMouseMove, 10);
+                var throttledOnMouseMove = utils_1.throttle(onMouseMove, 200);
                 if (e.metaKey || (e.shiftKey && focusedRow > -1 && focusedCol > -1)) {
                     if (e.shiftKey) {
                         var state = {
@@ -368,6 +368,39 @@ var DataGridBody = /** @class */ (function (_super) {
             }
             return true;
         };
+        _this.onWheel = function (e) {
+            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
+            var _e = styles.scrollContentWidth, scrollContentWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h;
+            var delta = { x: 0, y: 0 };
+            if (e.detail) {
+                delta.y = e.detail * 10;
+            }
+            else {
+                if (typeof e.deltaY === 'undefined') {
+                    delta.y = -e.wheelDelta;
+                    delta.x = 0;
+                }
+                else {
+                    delta.y = e.deltaY;
+                    delta.x = e.deltaX;
+                }
+            }
+            var _j = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
+                scrollWidth: scrollContentWidth,
+                scrollHeight: scrollContentHeight,
+                clientWidth: scrollContentContainerWidth,
+                clientHeight: scrollContentContainerHeight,
+            }), _k = _j.scrollLeft, currScrollLeft = _k === void 0 ? 0 : _k, _l = _j.scrollTop, currScrollTop = _l === void 0 ? 0 : _l, endOfScrollTop = _j.endOfScrollTop;
+            if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
+                e.preventDefault();
+            }
+            setStoreState({
+                scrollLeft: currScrollLeft,
+                scrollTop: currScrollTop,
+            });
+            return;
+        };
+        _this.bodyRef = React.createRef();
         return _this;
     }
     DataGridBody.prototype.shouldComponentUpdate = function (pProps) {
@@ -393,6 +426,18 @@ var DataGridBody = /** @class */ (function (_super) {
             return true;
         }
         return false;
+    };
+    DataGridBody.prototype.componentDidMount = function () {
+        if (this.bodyRef.current) {
+            this.bodyRef.current.addEventListener('wheel', this.onWheel, {
+                passive: false,
+            });
+        }
+    };
+    DataGridBody.prototype.componentWillUnmount = function () {
+        if (this.bodyRef.current) {
+            this.bodyRef.current.removeEventListener('wheel', this.onWheel);
+        }
     };
     DataGridBody.prototype.render = function () {
         var _a = this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.options, _e = _d === void 0 ? {} : _d, _f = _e.frozenRowIndex, frozenRowIndex = _f === void 0 ? 0 : _f, _g = _e.bodyLoaderHeight, bodyLoaderHeight = _g === void 0 ? 0 : _g, _h = _a.styles, _j = _h === void 0 ? {} : _h, _k = _j.elWidth, elWidth = _k === void 0 ? 0 : _k, _l = _j.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = _j.bodyTrHeight, bodyTrHeight = _m === void 0 ? 1 : _m, _o = _j.asidePanelWidth, asidePanelWidth = _o === void 0 ? 0 : _o, _p = _j.frozenPanelWidth, frozenPanelWidth = _p === void 0 ? 0 : _p, _q = _j.frozenPanelHeight, frozenPanelHeight = _q === void 0 ? 0 : _q, _r = _j.rightPanelWidth, rightPanelWidth = _r === void 0 ? 0 : _r, _s = _j.footSumHeight, footSumHeight = _s === void 0 ? 0 : _s, _t = _a.loadingData, loadingData = _t === void 0 ? false : _t;
@@ -475,7 +520,7 @@ var DataGridBody = /** @class */ (function (_super) {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: bodyHeight }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDown: this.onMouseDownBody },
             asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL, containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL, containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL, containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft })),

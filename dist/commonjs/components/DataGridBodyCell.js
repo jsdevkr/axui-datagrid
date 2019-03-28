@@ -20,7 +20,7 @@ var DataGridBodyCell = /** @class */ (function (_super) {
     __extends(DataGridBodyCell, _super);
     function DataGridBodyCell() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.onDoubleClickCell = function (e, col, li) {
+        _this.handleActiveInlineEdit = function (e, col, li) {
             var setStoreState = _this.props.setStoreState;
             if (col.editor) {
                 setStoreState({
@@ -68,16 +68,23 @@ var DataGridBodyCell = /** @class */ (function (_super) {
         var colEditor = editor === 'string'
             ? { type: '' + editor }
             : editor;
+        var activeType = colEditor
+            ? colEditor.activeType || 'dblclick'
+            : 'dblclick';
         var inlineEditingActive = isInlineEditing &&
             inlineEditingCell.rowIndex === li &&
             inlineEditingCell.colIndex === colIndex;
-        var inlineEditingActiveAlways = (colEditor && colEditor.activeType === 'always') ||
+        var inlineEditingActiveAlways = (colEditor && activeType === 'always') ||
             (colEditor && colEditor.type === 'checkbox');
         return (React.createElement("td", { key: ci, colSpan: colSpan, rowSpan: rowSpan, className: tdClassNames.join(' '), style: { height: cellHeight, minHeight: '1px' }, onDoubleClick: function (e) {
-                if (!inlineEditingActive) {
-                    _this.onDoubleClickCell(e, col, li);
+                if (!inlineEditingActive && activeType === 'dblclick') {
+                    _this.handleActiveInlineEdit(e, col, li);
                 }
-            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, value: value, columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, inlineEditingCell: inlineEditingCell, focusedRow: focusedRow, focusedCol: focusedCol, dispatch: dispatch, setStoreState: setStoreState })) : (React.createElement(CellLabel_1.default, { col: col, li: li, data: data, columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, selected: selected, predefinedFormatter: predefinedFormatter }))));
+            }, onClick: function (e) {
+                if (!inlineEditingActive && activeType === 'click') {
+                    _this.handleActiveInlineEdit(e, col, li);
+                }
+            } }, inlineEditingActiveAlways || inlineEditingActive ? (React.createElement(CellEditor_1.default, { col: col, li: li, item: data[li], value: value, columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, inlineEditingCell: inlineEditingCell, focusedRow: focusedRow, focusedCol: focusedCol, dispatch: dispatch, setStoreState: setStoreState })) : (React.createElement(CellLabel_1.default, { col: col, li: li, data: data, columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, selected: selected, predefinedFormatter: predefinedFormatter }))));
     };
     return DataGridBodyCell;
 }(React.Component));

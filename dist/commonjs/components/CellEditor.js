@@ -21,21 +21,41 @@ var CellEditor = /** @class */ (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.activeComposition = false;
         _this.onEventInput = function (eventName, e) {
-            var _a = _this.props, setStoreState = _a.setStoreState, dispatch = _a.dispatch, _b = _a.inlineEditingCell, inlineEditingCell = _b === void 0 ? {} : _b;
+            var _a = _this.props, setStoreState = _a.setStoreState, dispatch = _a.dispatch, _b = _a.inlineEditingCell, inlineEditingCell = _b === void 0 ? {} : _b, col = _a.col, li = _a.li;
             switch (eventName) {
                 case _enums_1.DataGridEnums.EventNames.BLUR:
+                    // console.log('eventInput blur : setStoreState');
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
                     });
-                    dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+                    if (!_this.activeComposition) {
+                        if (_this.state.lastEventName === 'update') {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+                                row: li,
+                                colIndex: col.colIndex,
+                                value: e.currentTarget.value,
+                                eventWhichKey: e.which,
+                            });
+                        }
+                        else {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+                        }
+                        _this.setState({
+                            lastEventName: 'blur',
+                        });
+                    }
                     break;
                 case _enums_1.DataGridEnums.EventNames.KEYUP:
                     switch (e.which) {
                         case _enums_1.DataGridEnums.KeyCodes.ESC:
+                            // console.log('eventInput esc : setStoreState');
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
+                            });
+                            _this.setState({
+                                lastEventName: 'esc',
                             });
                             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
                             break;
@@ -43,11 +63,15 @@ var CellEditor = /** @class */ (function (_super) {
                         case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                         case _enums_1.DataGridEnums.KeyCodes.ENTER:
                             if (!_this.activeComposition) {
+                                // console.log('eventInput enter : setStoreState');
                                 dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
                                     eventWhichKey: e.which,
+                                });
+                                _this.setState({
+                                    lastEventName: 'update',
                                 });
                             }
                             break;
@@ -59,8 +83,10 @@ var CellEditor = /** @class */ (function (_super) {
                     break;
             }
         };
-        _this.handleUpdateValue = function (value, keepEditing) {
+        _this.handleUpdateValue = function (value, options) {
             var _a = _this.props, dispatch = _a.dispatch, li = _a.li, col = _a.col;
+            var _b = (options || {}).keepEditing, keepEditing = _b === void 0 ? false : _b;
+            // console.log('handleUpdateValue UPDATE : dispatch');
             dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                 row: li,
                 colIndex: col.colIndex,
@@ -71,6 +97,7 @@ var CellEditor = /** @class */ (function (_super) {
         };
         _this.handleCancelEdit = function () {
             var _a = _this.props, setStoreState = _a.setStoreState, dispatch = _a.dispatch;
+            // console.log('handleCancelEdit : setStoreState');
             setStoreState({
                 isInlineEditing: false,
                 inlineEditingCell: {},
@@ -79,6 +106,7 @@ var CellEditor = /** @class */ (function (_super) {
         };
         _this.handleCustomEditorFocus = function () {
             var _a = _this.props, setStoreState = _a.setStoreState, li = _a.li, col = _a.col;
+            // console.log('handleCustomEditorFocus : setStoreState');
             setStoreState({
                 isInlineEditing: true,
                 inlineEditingCell: {
@@ -103,7 +131,7 @@ var CellEditor = /** @class */ (function (_super) {
                     setTimeout(function () {
                         _this.activeComposition = false;
                     });
-                }, onBlur: function (e) {
+                }, onFocus: function (e) { }, onBlur: function (e) {
                     _this.onEventInput(_enums_1.DataGridEnums.EventNames.BLUR, e);
                 }, onKeyUp: function (e) {
                     _this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
@@ -146,55 +174,44 @@ var CellEditor = /** @class */ (function (_super) {
                         lineHeight: lineHeight + 'px',
                     } }, label)));
         };
+        _this.handleInputTextSelect = function (inputCurrent) {
+            var colEditor = _this.props.col.editor;
+            var editor = colEditor === 'text'
+                ? { type: 'text' }
+                : colEditor;
+            if (editor.activeType !== 'always') {
+                inputCurrent.select();
+            }
+        };
+        _this.state = {
+            lastEventName: '',
+        };
         _this.inputTextRef = React.createRef();
-        _this.editorTargetRef = React.createRef();
         return _this;
     }
-    CellEditor.prototype.shouldComponentUpdate = function (nextProps) {
-        var li = nextProps.li, colIndex = nextProps.col.colIndex;
-        if (this.props.focusedRow === nextProps.focusedRow &&
-            nextProps.focusedRow === li &&
-            this.props.focusedCol === nextProps.focusedCol &&
-            nextProps.focusedCol === colIndex) {
-            return true;
-        }
-        return this.props.value !== nextProps.value;
-    };
+    // shouldComponentUpdate(nextProps: IProps) {
+    //   const {
+    //     li,
+    //     col: { colIndex },
+    //   } = nextProps;
+    //   if (
+    //     this.props.focusedRow === nextProps.focusedRow &&
+    //     nextProps.focusedRow === li &&
+    //     this.props.focusedCol === nextProps.focusedCol &&
+    //     nextProps.focusedCol === colIndex
+    //   ) {
+    //     return true;
+    //   }
+    //   return this.props.value !== nextProps.value;
+    // }
     CellEditor.prototype.componentDidMount = function () {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
-            this.inputTextRef.current.select();
-        }
-        // if (this.editorTargetRef.current) {
-        //   const { data = [], col, li } = this.props;
-        //   const value = data[li] && data[li][col.key || ''];
-        //   const editor: IDataGrid.IColEditor =
-        //     col.editor === 'text'
-        //       ? { type: 'text' }
-        //       : (col.editor as IDataGrid.IColEditor);
-        //   if (editor && editor.render) {
-        //     const element = editor.render({
-        //       col: col,
-        //       rowIndex: li,
-        //       colIndex: col.colIndex || 0,
-        //       value,
-        //       update: this.handleUpdateValue,
-        //       cancel: this.handleCancelEdit,
-        //       focus: this.handleCustomEditorFocus,
-        //       blur: this.handleCustomEditorBlur,
-        //     });
-        //     ReactDOM.render(element as any, this.editorTargetRef.current);
-        //   }
-        // }
-    };
-    CellEditor.prototype.componentDidUpdate = function () {
-        if (this.inputTextRef.current) {
-            this.activeComposition = false;
-            this.inputTextRef.current.select();
+            this.inputTextRef.current.focus();
         }
     };
     CellEditor.prototype.render = function () {
-        var _a = this.props, value = _a.value, col = _a.col, li = _a.li;
+        var _a = this.props, item = _a.item, value = _a.value, col = _a.col, li = _a.li;
         var editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
@@ -207,11 +224,11 @@ var CellEditor = /** @class */ (function (_super) {
                 if (!editor.render) {
                     return this.inputTextRender(value);
                 }
-                // return <div ref={this.editorTargetRef} />;
                 return editor.render({
                     col: col,
                     rowIndex: li,
                     colIndex: col.colIndex || 0,
+                    item: item,
                     value: value,
                     update: this.handleUpdateValue,
                     cancel: this.handleCancelEdit,
@@ -221,5 +238,5 @@ var CellEditor = /** @class */ (function (_super) {
         }
     };
     return CellEditor;
-}(React.Component));
+}(React.PureComponent));
 exports.default = CellEditor;

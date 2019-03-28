@@ -8,8 +8,8 @@ const DataGridBodyBottomPanel_1 = require("./DataGridBodyBottomPanel");
 const DataGridBodyLoader_1 = require("./DataGridBodyLoader");
 const _enums_1 = require("../common/@enums");
 class DataGridBody extends React.Component {
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+        super(props);
         this.state = {};
         this.onMouseDownBody = (e) => {
             const { data = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, rootNode, rootObject = {}, loading, loadingData, } = this.props;
@@ -211,7 +211,7 @@ class DataGridBody extends React.Component {
                     document.removeEventListener('mouseup', offEvent);
                     document.removeEventListener('mouseleave', offEvent);
                 };
-                const throttledOnMouseMove = utils_1.throttle(onMouseMove, 10);
+                const throttledOnMouseMove = utils_1.throttle(onMouseMove, 200);
                 if (e.metaKey || (e.shiftKey && focusedRow > -1 && focusedCol > -1)) {
                     if (e.shiftKey) {
                         let state = {
@@ -351,6 +351,39 @@ class DataGridBody extends React.Component {
             }
             return true;
         };
+        this.onWheel = (e) => {
+            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
+            const { scrollContentWidth = 0, scrollContentContainerWidth = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
+            const delta = { x: 0, y: 0 };
+            if (e.detail) {
+                delta.y = e.detail * 10;
+            }
+            else {
+                if (typeof e.deltaY === 'undefined') {
+                    delta.y = -e.wheelDelta;
+                    delta.x = 0;
+                }
+                else {
+                    delta.y = e.deltaY;
+                    delta.x = e.deltaX;
+                }
+            }
+            let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, endOfScrollTop, } = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
+                scrollWidth: scrollContentWidth,
+                scrollHeight: scrollContentHeight,
+                clientWidth: scrollContentContainerWidth,
+                clientHeight: scrollContentContainerHeight,
+            });
+            if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
+                e.preventDefault();
+            }
+            setStoreState({
+                scrollLeft: currScrollLeft,
+                scrollTop: currScrollTop,
+            });
+            return;
+        };
+        this.bodyRef = React.createRef();
     }
     shouldComponentUpdate(pProps) {
         const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {}, styles: { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = {}, loadingData = false, data = [], colGroup = [], } = this.props;
@@ -375,6 +408,18 @@ class DataGridBody extends React.Component {
             return true;
         }
         return false;
+    }
+    componentDidMount() {
+        if (this.bodyRef.current) {
+            this.bodyRef.current.addEventListener('wheel', this.onWheel, {
+                passive: false,
+            });
+        }
+    }
+    componentWillUnmount() {
+        if (this.bodyRef.current) {
+            this.bodyRef.current.removeEventListener('wheel', this.onWheel);
+        }
     }
     render() {
         const { scrollLeft = 0, scrollTop = 0, options: { frozenRowIndex = 0, bodyLoaderHeight = 0 } = {}, styles: { elWidth = 0, bodyHeight = 0, bodyTrHeight = 1, asidePanelWidth = 0, frozenPanelWidth = 0, frozenPanelHeight = 0, rightPanelWidth = 0, footSumHeight = 0, } = {}, loadingData = false, } = this.props;
@@ -457,7 +502,7 @@ class DataGridBody extends React.Component {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { className: 'axui-datagrid-body', style: { height: bodyHeight }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDown: this.onMouseDownBody },
             asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL, containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL, containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL, containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft })),

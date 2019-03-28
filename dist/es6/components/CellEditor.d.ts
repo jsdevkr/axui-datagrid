@@ -4,6 +4,7 @@ import { DataGridEnums } from '../common/@enums';
 interface IProps {
     col: IDataGrid.ICol;
     li: number;
+    item: any;
     value: any;
     columnHeight: number;
     lineHeight: number;
@@ -15,22 +16,23 @@ interface IProps {
     focusedRow: number;
     focusedCol: number;
 }
-declare class CellEditor extends React.Component<IProps> {
+interface IState {
+    lastEventName: string;
+}
+declare class CellEditor extends React.PureComponent<IProps, IState> {
     inputTextRef: React.RefObject<HTMLInputElement>;
-    editorTargetRef: React.RefObject<HTMLDivElement>;
     activeComposition: boolean;
     constructor(props: IProps);
     onEventInput: (eventName: DataGridEnums.EventNames, e: React.KeyboardEvent<HTMLInputElement>) => void;
-    handleUpdateValue: (value: any, keepEditing?: boolean | undefined) => void;
+    handleUpdateValue: IDataGrid.CellEditorDataUpdate;
     handleCancelEdit: () => void;
     handleCustomEditorFocus: () => void;
     handleCustomEditorBlur: () => void;
     inputTextRender: (value: any) => JSX.Element;
     handleCheckboxValue: (value: boolean) => void;
     checkboxRender: (value: any, label?: React.ReactNode) => JSX.Element;
-    shouldComponentUpdate(nextProps: IProps): boolean;
     componentDidMount(): void;
-    componentDidUpdate(): void;
+    handleInputTextSelect: (inputCurrent: any) => void;
     render(): {} | null | undefined;
 }
 export default CellEditor;

@@ -58,39 +58,6 @@ var DataGridEvents = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.busy = false;
         _this.state = {};
-        _this.onWheel = function (e) {
-            var _a = _this.props, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.styles, styles = _d === void 0 ? {} : _d, setStoreState = _a.setStoreState;
-            var _e = styles.scrollContentWidth, scrollContentWidth = _e === void 0 ? 0 : _e, _f = styles.scrollContentContainerWidth, scrollContentContainerWidth = _f === void 0 ? 0 : _f, _g = styles.scrollContentHeight, scrollContentHeight = _g === void 0 ? 0 : _g, _h = styles.scrollContentContainerHeight, scrollContentContainerHeight = _h === void 0 ? 0 : _h;
-            var delta = { x: 0, y: 0 };
-            if (e.detail) {
-                delta.y = e.detail * 10;
-            }
-            else {
-                if (typeof e.deltaY === 'undefined') {
-                    delta.y = -e.wheelDelta;
-                    delta.x = 0;
-                }
-                else {
-                    delta.y = e.deltaY;
-                    delta.x = e.deltaX;
-                }
-            }
-            var _j = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
-                scrollWidth: scrollContentWidth,
-                scrollHeight: scrollContentHeight,
-                clientWidth: scrollContentContainerWidth,
-                clientHeight: scrollContentContainerHeight,
-            }), _k = _j.scrollLeft, currScrollLeft = _k === void 0 ? 0 : _k, _l = _j.scrollTop, currScrollTop = _l === void 0 ? 0 : _l, endOfScrollTop = _j.endOfScrollTop;
-            setStoreState({
-                scrollLeft: currScrollLeft,
-                scrollTop: currScrollTop,
-            });
-            if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
-                e.preventDefault();
-                // e.stopPropagation();
-            }
-            return true;
-        };
         _this.onKeyUp = function (e) {
             var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.focusedRow, focusedRow = _c === void 0 ? 0 : _c, _d = _a.focusedCol, focusedCol = _d === void 0 ? 0 : _d, setStoreState = _a.setStoreState;
             switch (e.which) {
@@ -422,46 +389,42 @@ var DataGridEvents = /** @class */ (function (_super) {
                         }
                         _c = e.type;
                         switch (_c) {
-                            case _enums_1.DataGridEnums.EventNames.WHEEL: return [3 /*break*/, 1];
-                            case _enums_1.DataGridEnums.EventNames.KEYDOWN: return [3 /*break*/, 2];
-                            case _enums_1.DataGridEnums.EventNames.KEYUP: return [3 /*break*/, 7];
-                            case _enums_1.DataGridEnums.EventNames.CONTEXTMENU: return [3 /*break*/, 8];
+                            case _enums_1.DataGridEnums.EventNames.KEYDOWN: return [3 /*break*/, 1];
+                            case _enums_1.DataGridEnums.EventNames.KEYUP: return [3 /*break*/, 6];
+                            case _enums_1.DataGridEnums.EventNames.CONTEXTMENU: return [3 /*break*/, 7];
                         }
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 8];
                     case 1:
-                        this.onWheel(e);
-                        return [3 /*break*/, 10];
-                    case 2:
                         this.busy = true;
-                        _d.label = 3;
-                    case 3:
-                        _d.trys.push([3, 5, , 6]);
+                        _d.label = 2;
+                    case 2:
+                        _d.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, this.onKeyDown(e)];
-                    case 4:
+                    case 3:
                         _d.sent();
-                        return [3 /*break*/, 6];
-                    case 5:
+                        return [3 /*break*/, 5];
+                    case 4:
                         err_1 = _d.sent();
                         console.log(err_1);
-                        return [3 /*break*/, 6];
-                    case 6:
+                        return [3 /*break*/, 5];
+                    case 5:
                         this.busy = false;
-                        return [3 /*break*/, 10];
-                    case 7:
+                        return [3 /*break*/, 9];
+                    case 6:
                         this.onKeyUp(e);
-                        return [3 /*break*/, 10];
-                    case 8:
+                        return [3 /*break*/, 9];
+                    case 7:
                         this.onContextmenu(e);
-                        return [3 /*break*/, 10];
-                    case 9: return [3 /*break*/, 10];
-                    case 10: return [2 /*return*/];
+                        return [3 /*break*/, 9];
+                    case 8: return [3 /*break*/, 9];
+                    case 9: return [2 /*return*/];
                 }
             });
         }); };
         return _this;
     }
     DataGridEvents.prototype.render = function () {
-        return React.createElement("div", { onWheel: this.onFireEvent }, this.props.children);
+        return React.createElement("div", null, this.props.children);
     };
     DataGridEvents.prototype.componentDidMount = function () {
         var rootNode = this.props.rootNode;

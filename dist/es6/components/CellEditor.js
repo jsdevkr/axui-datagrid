@@ -2,26 +2,46 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const _enums_1 = require("../common/@enums");
-class CellEditor extends React.Component {
+class CellEditor extends React.PureComponent {
     constructor(props) {
         super(props);
         this.activeComposition = false;
         this.onEventInput = (eventName, e) => {
-            const { setStoreState, dispatch, inlineEditingCell = {} } = this.props;
+            const { setStoreState, dispatch, inlineEditingCell = {}, col, li, } = this.props;
             switch (eventName) {
                 case _enums_1.DataGridEnums.EventNames.BLUR:
+                    // console.log('eventInput blur : setStoreState');
                     setStoreState({
                         isInlineEditing: false,
                         inlineEditingCell: {},
                     });
-                    dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+                    if (!this.activeComposition) {
+                        if (this.state.lastEventName === 'update') {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+                                row: li,
+                                colIndex: col.colIndex,
+                                value: e.currentTarget.value,
+                                eventWhichKey: e.which,
+                            });
+                        }
+                        else {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+                        }
+                        this.setState({
+                            lastEventName: 'blur',
+                        });
+                    }
                     break;
                 case _enums_1.DataGridEnums.EventNames.KEYUP:
                     switch (e.which) {
                         case _enums_1.DataGridEnums.KeyCodes.ESC:
+                            // console.log('eventInput esc : setStoreState');
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
+                            });
+                            this.setState({
+                                lastEventName: 'esc',
                             });
                             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
                             break;
@@ -29,11 +49,15 @@ class CellEditor extends React.Component {
                         case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
                         case _enums_1.DataGridEnums.KeyCodes.ENTER:
                             if (!this.activeComposition) {
+                                // console.log('eventInput enter : setStoreState');
                                 dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
                                     eventWhichKey: e.which,
+                                });
+                                this.setState({
+                                    lastEventName: 'update',
                                 });
                             }
                             break;
@@ -45,8 +69,10 @@ class CellEditor extends React.Component {
                     break;
             }
         };
-        this.handleUpdateValue = (value, keepEditing) => {
+        this.handleUpdateValue = (value, options) => {
             const { dispatch, li, col } = this.props;
+            const { keepEditing = false } = options || {};
+            // console.log('handleUpdateValue UPDATE : dispatch');
             dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                 row: li,
                 colIndex: col.colIndex,
@@ -57,6 +83,7 @@ class CellEditor extends React.Component {
         };
         this.handleCancelEdit = () => {
             const { setStoreState, dispatch } = this.props;
+            // console.log('handleCancelEdit : setStoreState');
             setStoreState({
                 isInlineEditing: false,
                 inlineEditingCell: {},
@@ -65,6 +92,7 @@ class CellEditor extends React.Component {
         };
         this.handleCustomEditorFocus = () => {
             const { setStoreState, li, col } = this.props;
+            // console.log('handleCustomEditorFocus : setStoreState');
             setStoreState({
                 isInlineEditing: true,
                 inlineEditingCell: {
@@ -89,9 +117,9 @@ class CellEditor extends React.Component {
                     setTimeout(() => {
                         this.activeComposition = false;
                     });
-                }, onBlur: (e) => {
+                }, onFocus: e => { }, onBlur: e => {
                     this.onEventInput(_enums_1.DataGridEnums.EventNames.BLUR, e);
-                }, onKeyUp: (e) => {
+                }, onKeyUp: e => {
                     this.onEventInput(_enums_1.DataGridEnums.EventNames.KEYUP, e);
                 }, "data-inline-edit": true, defaultValue: value }));
         };
@@ -132,54 +160,43 @@ class CellEditor extends React.Component {
                         lineHeight: lineHeight + 'px',
                     } }, label)));
         };
+        this.handleInputTextSelect = (inputCurrent) => {
+            const { col: { editor: colEditor }, } = this.props;
+            const editor = colEditor === 'text'
+                ? { type: 'text' }
+                : colEditor;
+            if (editor.activeType !== 'always') {
+                inputCurrent.select();
+            }
+        };
+        this.state = {
+            lastEventName: '',
+        };
         this.inputTextRef = React.createRef();
-        this.editorTargetRef = React.createRef();
     }
-    shouldComponentUpdate(nextProps) {
-        const { li, col: { colIndex }, } = nextProps;
-        if (this.props.focusedRow === nextProps.focusedRow &&
-            nextProps.focusedRow === li &&
-            this.props.focusedCol === nextProps.focusedCol &&
-            nextProps.focusedCol === colIndex) {
-            return true;
-        }
-        return this.props.value !== nextProps.value;
-    }
+    // shouldComponentUpdate(nextProps: IProps) {
+    //   const {
+    //     li,
+    //     col: { colIndex },
+    //   } = nextProps;
+    //   if (
+    //     this.props.focusedRow === nextProps.focusedRow &&
+    //     nextProps.focusedRow === li &&
+    //     this.props.focusedCol === nextProps.focusedCol &&
+    //     nextProps.focusedCol === colIndex
+    //   ) {
+    //     return true;
+    //   }
+    //   return this.props.value !== nextProps.value;
+    // }
     componentDidMount() {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
-            this.inputTextRef.current.select();
-        }
-        // if (this.editorTargetRef.current) {
-        //   const { data = [], col, li } = this.props;
-        //   const value = data[li] && data[li][col.key || ''];
-        //   const editor: IDataGrid.IColEditor =
-        //     col.editor === 'text'
-        //       ? { type: 'text' }
-        //       : (col.editor as IDataGrid.IColEditor);
-        //   if (editor && editor.render) {
-        //     const element = editor.render({
-        //       col: col,
-        //       rowIndex: li,
-        //       colIndex: col.colIndex || 0,
-        //       value,
-        //       update: this.handleUpdateValue,
-        //       cancel: this.handleCancelEdit,
-        //       focus: this.handleCustomEditorFocus,
-        //       blur: this.handleCustomEditorBlur,
-        //     });
-        //     ReactDOM.render(element as any, this.editorTargetRef.current);
-        //   }
-        // }
-    }
-    componentDidUpdate() {
-        if (this.inputTextRef.current) {
-            this.activeComposition = false;
-            this.inputTextRef.current.select();
+            this.inputTextRef.current.focus();
         }
     }
     render() {
-        const { value, col, li } = this.props;
+        const { item, value, col, li } = this.props;
         const editor = col.editor === 'text'
             ? { type: 'text' }
             : col.editor;
@@ -192,11 +209,11 @@ class CellEditor extends React.Component {
                 if (!editor.render) {
                     return this.inputTextRender(value);
                 }
-                // return <div ref={this.editorTargetRef} />;
                 return editor.render({
                     col: col,
                     rowIndex: li,
                     colIndex: col.colIndex || 0,
+                    item,
                     value,
                     update: this.handleUpdateValue,
                     cancel: this.handleCancelEdit,

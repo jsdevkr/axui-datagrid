@@ -8,8 +8,8 @@ class CellLabel extends React.PureComponent {
             case '_row_selector_':
                 if (optionsHeader.selector) {
                     return (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
-                            maxHeight: lineHeight + 'px',
-                            minHeight: lineHeight + 'px',
+                            width: lineHeight + 'px',
+                            height: lineHeight + 'px',
                         } }));
                 }
                 else {
@@ -28,13 +28,13 @@ class CellSorter extends React.PureComponent {
 }
 class DatagridHeaderCell extends React.PureComponent {
     render() {
-        const { listSelectedAll = false, options, options: { header: { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = 'left', } = {}, } = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, col: { align: colAlign = '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, } = {}, onClick, } = this.props;
+        const { listSelectedAll = false, options, options: { header: { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = 'left', } = {}, } = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, col: { align: colAlign = '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, columnAttr = '', } = {}, onClick, } = this.props;
         const optionsHeader = options.header || {};
         const lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
             optionsHeaderColumnBorderWidth;
         const classNames = ['axui-datagrid-header-column'];
-        if (col.columnAttr === 'lineNumber') {
+        if (columnAttr === 'lineNumber') {
             classNames.push('axui-datagrid-header-corner');
         }
         if (focusedCol > -1 &&
@@ -54,7 +54,7 @@ class DatagridHeaderCell extends React.PureComponent {
             }, onClick: (e) => {
                 onClick(e, col);
             } },
-            React.createElement("span", { "data-span": true, "data-align": colAlign || headerAlign, style: {
+            React.createElement("span", { "data-span": columnAttr, "data-align": colAlign || headerAlign, style: {
                     height: optionsHeaderColumnHeight - optionsHeaderColumnBorderWidth + 'px',
                     lineHeight: lineHeight + 'px',
                 } },

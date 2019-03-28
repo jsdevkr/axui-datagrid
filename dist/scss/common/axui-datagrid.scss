@@ -155,7 +155,7 @@
     [data-span] {
       cursor: se-resize;
       &:before {
-        $triangle-border-width: $axui-datagrid-font-size/3;
+        $triangle-border-width: $axui-datagrid-font-size/4;
         position: absolute;
         right: $triangle-border-width;
         bottom: $triangle-border-width;
@@ -295,13 +295,27 @@
       }
     }
   }
+  [data-span='rowSelector'] {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    cursor: pointer;
+  }
 
+  // todo : $axui-datagrid-cell-editInput-border 변수 정리
   [data-inline-edit] {
+    background-color: transparent;
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    border: $axui-datagrid-cell-editInput-border;
+    // border: $axui-datagrid-cell-editInput-border;
+    border: 0 none;
     display: block;
+    outline: 0;
+    padding: $axui-datagrid-cell-padding;
   }
 
   [data-span='checkbox-editor'] {

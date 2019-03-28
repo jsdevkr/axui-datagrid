@@ -17,7 +17,7 @@ declare class DataGridBodyCell extends React.Component<{
     inlineEditingCell: IDataGrid.IEditingCell;
     predefinedFormatter?: IDataGrid.IFormatter;
 }> {
-    onDoubleClickCell: (e: React.KeyboardEvent<HTMLInputElement>, col: IDataGrid.IColumn, li: number) => void;
+    handleActiveInlineEdit: (e: React.MouseEvent<HTMLTableDataCellElement>, col: IDataGrid.IColumn, li: number) => void;
     render(): JSX.Element;
 }
 export default DataGridBodyCell;

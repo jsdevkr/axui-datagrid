@@ -25,8 +25,8 @@ var CellLabel = /** @class */ (function (_super) {
             case '_row_selector_':
                 if (optionsHeader.selector) {
                     return (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
-                            maxHeight: lineHeight + 'px',
-                            minHeight: lineHeight + 'px',
+                            width: lineHeight + 'px',
+                            height: lineHeight + 'px',
                         } }));
                 }
                 else {
@@ -55,13 +55,13 @@ var DatagridHeaderCell = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DatagridHeaderCell.prototype.render = function () {
-        var _a = this.props, _b = _a.listSelectedAll, listSelectedAll = _b === void 0 ? false : _b, options = _a.options, _c = _a.options, _d = (_c === void 0 ? {} : _c).header, _e = _d === void 0 ? {} : _d, _f = _e.columnHeight, optionsHeaderColumnHeight = _f === void 0 ? 0 : _f, _g = _e.columnPadding, optionsHeaderColumnPadding = _g === void 0 ? 0 : _g, _h = _e.columnBorderWidth, optionsHeaderColumnBorderWidth = _h === void 0 ? 0 : _h, _j = _e.align, headerAlign = _j === void 0 ? 'left' : _j, _k = _a.focusedCol, focusedCol = _k === void 0 ? -1 : _k, selectionCols = _a.selectionCols, _l = _a.sortInfo, sortInfo = _l === void 0 ? {} : _l, bodyRow = _a.bodyRow, ri = _a.ri, col = _a.col, _m = _a.col, _o = _m === void 0 ? {} : _m, _p = _o.align, colAlign = _p === void 0 ? '' : _p, _q = _o.colIndex, colIndex = _q === void 0 ? 0 : _q, _r = _o.key, colKey = _r === void 0 ? '' : _r, _s = _o.rowSpan, colRowSpan = _s === void 0 ? 1 : _s, _t = _o.colSpan, colCowSpan = _t === void 0 ? 1 : _t, onClick = _a.onClick;
+        var _a = this.props, _b = _a.listSelectedAll, listSelectedAll = _b === void 0 ? false : _b, options = _a.options, _c = _a.options, _d = (_c === void 0 ? {} : _c).header, _e = _d === void 0 ? {} : _d, _f = _e.columnHeight, optionsHeaderColumnHeight = _f === void 0 ? 0 : _f, _g = _e.columnPadding, optionsHeaderColumnPadding = _g === void 0 ? 0 : _g, _h = _e.columnBorderWidth, optionsHeaderColumnBorderWidth = _h === void 0 ? 0 : _h, _j = _e.align, headerAlign = _j === void 0 ? 'left' : _j, _k = _a.focusedCol, focusedCol = _k === void 0 ? -1 : _k, selectionCols = _a.selectionCols, _l = _a.sortInfo, sortInfo = _l === void 0 ? {} : _l, bodyRow = _a.bodyRow, ri = _a.ri, col = _a.col, _m = _a.col, _o = _m === void 0 ? {} : _m, _p = _o.align, colAlign = _p === void 0 ? '' : _p, _q = _o.colIndex, colIndex = _q === void 0 ? 0 : _q, _r = _o.key, colKey = _r === void 0 ? '' : _r, _s = _o.rowSpan, colRowSpan = _s === void 0 ? 1 : _s, _t = _o.colSpan, colCowSpan = _t === void 0 ? 1 : _t, _u = _o.columnAttr, columnAttr = _u === void 0 ? '' : _u, onClick = _a.onClick;
         var optionsHeader = options.header || {};
         var lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
             optionsHeaderColumnBorderWidth;
         var classNames = ['axui-datagrid-header-column'];
-        if (col.columnAttr === 'lineNumber') {
+        if (columnAttr === 'lineNumber') {
             classNames.push('axui-datagrid-header-corner');
         }
         if (focusedCol > -1 &&
@@ -81,7 +81,7 @@ var DatagridHeaderCell = /** @class */ (function (_super) {
             }, onClick: function (e) {
                 onClick(e, col);
             } },
-            React.createElement("span", { "data-span": true, "data-align": colAlign || headerAlign, style: {
+            React.createElement("span", { "data-span": columnAttr, "data-align": colAlign || headerAlign, style: {
                     height: optionsHeaderColumnHeight - optionsHeaderColumnBorderWidth + 'px',
                     lineHeight: lineHeight + 'px',
                 } },

@@ -17,39 +17,6 @@ class DataGridEvents extends React.Component {
         super(...arguments);
         this.busy = false;
         this.state = {};
-        this.onWheel = (e) => {
-            const { scrollLeft = 0, scrollTop = 0, styles = {}, setStoreState, } = this.props;
-            const { scrollContentWidth = 0, scrollContentContainerWidth = 0, scrollContentHeight = 0, scrollContentContainerHeight = 0, } = styles;
-            let delta = { x: 0, y: 0 };
-            if (e.detail) {
-                delta.y = e.detail * 10;
-            }
-            else {
-                if (typeof e.deltaY === 'undefined') {
-                    delta.y = -e.wheelDelta;
-                    delta.x = 0;
-                }
-                else {
-                    delta.y = e.deltaY;
-                    delta.x = e.deltaX;
-                }
-            }
-            let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, endOfScrollTop, } = utils_1.getScrollPosition(scrollLeft - delta.x, scrollTop - delta.y, {
-                scrollWidth: scrollContentWidth,
-                scrollHeight: scrollContentHeight,
-                clientWidth: scrollContentContainerWidth,
-                clientHeight: scrollContentContainerHeight,
-            });
-            setStoreState({
-                scrollLeft: currScrollLeft,
-                scrollTop: currScrollTop,
-            });
-            if (scrollContentContainerHeight < scrollContentHeight && !endOfScrollTop) {
-                e.preventDefault();
-                // e.stopPropagation();
-            }
-            return true;
-        };
         this.onKeyUp = (e) => {
             const { colGroup = [], focusedRow = 0, focusedCol = 0, setStoreState, } = this.props;
             switch (e.which) {
@@ -375,9 +342,6 @@ class DataGridEvents extends React.Component {
                 this.props.onBeforeEvent({ e, eventName: e.type });
             }
             switch (e.type) {
-                case _enums_1.DataGridEnums.EventNames.WHEEL:
-                    this.onWheel(e);
-                    break;
                 case _enums_1.DataGridEnums.EventNames.KEYDOWN:
                     this.busy = true;
                     try {
@@ -400,7 +364,7 @@ class DataGridEvents extends React.Component {
         });
     }
     render() {
-        return React.createElement("div", { onWheel: this.onFireEvent }, this.props.children);
+        return React.createElement("div", null, this.props.children);
     }
     componentDidMount() {
         const { rootNode } = this.props;

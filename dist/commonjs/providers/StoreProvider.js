@@ -641,10 +641,11 @@ var StoreProvider = /** @class */ (function (_super) {
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
                     clientHeight: scrollContentContainerHeight,
-                }), _o = _m.scrollTop, currScrollTop = _o === void 0 ? 0 : _o, _p = _m.scrollLeft, currScrollLeft = _p === void 0 ? 0 : _p;
-                _scrollTop = currScrollTop;
-                _scrollLeft = currScrollLeft;
+                }), _o = _m.scrollTop, currScrollTop_1 = _o === void 0 ? 0 : _o, _p = _m.scrollLeft, currScrollLeft_1 = _p === void 0 ? 0 : _p;
+                _scrollTop = currScrollTop_1;
+                _scrollLeft = currScrollLeft_1;
             }
+            var currScrollLeft = void 0, currScrollTop = void 0;
             if (nProps.scrollTop !== nState.pScrollTop ||
                 nProps.scrollLeft !== nState.pScrollLeft) {
                 var _q = _styles || {}, _r = _q.scrollContentWidth, scrollContentWidth = _r === void 0 ? 0 : _r, _s = _q.scrollContentHeight, scrollContentHeight = _s === void 0 ? 0 : _s, _t = _q.scrollContentContainerWidth, scrollContentContainerWidth = _t === void 0 ? 0 : _t, _u = _q.scrollContentContainerHeight, scrollContentContainerHeight = _u === void 0 ? 0 : _u;
@@ -653,9 +654,17 @@ var StoreProvider = /** @class */ (function (_super) {
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
                     clientHeight: scrollContentContainerHeight,
-                }), _w = _v.scrollLeft, currScrollLeft = _w === void 0 ? 0 : _w, _x = _v.scrollTop, currScrollTop = _x === void 0 ? 0 : _x;
-                _scrollLeft = currScrollLeft;
+                }), _w = _v.scrollLeft, _currScrollLeft = _w === void 0 ? 0 : _w, _x = _v.scrollTop, _currScrollTop = _x === void 0 ? 0 : _x;
+                currScrollLeft = _currScrollLeft;
+                currScrollTop = _currScrollTop;
+            }
+            if (typeof currScrollTop !== 'undefined' &&
+                nProps.scrollTop !== nState.pScrollTop) {
                 _scrollTop = currScrollTop;
+            }
+            if (typeof currScrollLeft !== 'undefined' &&
+                nProps.scrollLeft !== nState.pScrollLeft) {
+                _scrollLeft = currScrollLeft;
             }
             if (nProps.selection !== nState.selection) {
                 storeState_1.selection = nProps.selection;

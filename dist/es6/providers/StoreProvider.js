@@ -598,17 +598,26 @@ class StoreProvider extends React.Component {
                 _scrollTop = currScrollTop;
                 _scrollLeft = currScrollLeft;
             }
+            let currScrollLeft, currScrollTop;
             if (nProps.scrollTop !== nState.pScrollTop ||
                 nProps.scrollLeft !== nState.pScrollLeft) {
                 const { scrollContentWidth = 0, scrollContentHeight = 0, scrollContentContainerWidth = 0, scrollContentContainerHeight = 0, } = _styles || {};
-                let { scrollLeft: currScrollLeft = 0, scrollTop: currScrollTop = 0, } = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+                let { scrollLeft: _currScrollLeft = 0, scrollTop: _currScrollTop = 0, } = utils_1.getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
                     scrollWidth: scrollContentWidth,
                     scrollHeight: scrollContentHeight,
                     clientWidth: scrollContentContainerWidth,
                     clientHeight: scrollContentContainerHeight,
                 });
-                _scrollLeft = currScrollLeft;
+                currScrollLeft = _currScrollLeft;
+                currScrollTop = _currScrollTop;
+            }
+            if (typeof currScrollTop !== 'undefined' &&
+                nProps.scrollTop !== nState.pScrollTop) {
                 _scrollTop = currScrollTop;
+            }
+            if (typeof currScrollLeft !== 'undefined' &&
+                nProps.scrollLeft !== nState.pScrollLeft) {
+                _scrollLeft = currScrollLeft;
             }
             if (nProps.selection !== nState.selection) {
                 storeState.selection = nProps.selection;
