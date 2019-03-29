@@ -16,12 +16,10 @@ interface IProps {
     focusedRow: number;
     focusedCol: number;
 }
-interface IState {
-    lastEventName: string;
-}
-declare class CellEditor extends React.PureComponent<IProps, IState> {
+declare class CellEditor extends React.PureComponent<IProps> {
     inputTextRef: React.RefObject<HTMLInputElement>;
     activeComposition: boolean;
+    lastEventName: string;
     constructor(props: IProps);
     onEventInput: (eventName: DataGridEnums.EventNames, e: React.KeyboardEvent<HTMLInputElement>) => void;
     handleUpdateValue: IDataGrid.CellEditorDataUpdate;

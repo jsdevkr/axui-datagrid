@@ -17,20 +17,15 @@ interface IProps {
   focusedRow: number;
   focusedCol: number;
 }
-interface IState {
-  lastEventName: string;
-}
 
-class CellEditor extends React.PureComponent<IProps, IState> {
+class CellEditor extends React.PureComponent<IProps> {
   inputTextRef: React.RefObject<HTMLInputElement>;
   activeComposition: boolean = false;
+  lastEventName: string = '';
 
   constructor(props: IProps) {
     super(props);
 
-    this.state = {
-      lastEventName: '',
-    };
     this.inputTextRef = React.createRef();
   }
 
@@ -55,33 +50,28 @@ class CellEditor extends React.PureComponent<IProps, IState> {
         });
 
         if (!this.activeComposition) {
-          if (this.state.lastEventName === 'update') {
+          if (this.lastEventName === 'update') {
+            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+          } else {
             dispatch(DataGridEnums.DispatchTypes.UPDATE, {
               row: li,
               colIndex: col.colIndex,
               value: e.currentTarget.value,
               eventWhichKey: e.which,
             });
-          } else {
-            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
           }
-          this.setState({
-            lastEventName: 'blur',
-          });
         }
 
         break;
       case DataGridEnums.EventNames.KEYUP:
         switch (e.which) {
           case DataGridEnums.KeyCodes.ESC:
-            // console.log('eventInput esc : setStoreState');
             setStoreState({
               isInlineEditing: false,
               inlineEditingCell: {},
             });
-            this.setState({
-              lastEventName: 'esc',
-            });
+
+            this.lastEventName = 'esc';
 
             dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
             break;
@@ -90,14 +80,13 @@ class CellEditor extends React.PureComponent<IProps, IState> {
           case DataGridEnums.KeyCodes.ENTER:
             if (!this.activeComposition) {
               // console.log('eventInput enter : setStoreState');
+              this.lastEventName = 'update';
+
               dispatch(DataGridEnums.DispatchTypes.UPDATE, {
                 row: inlineEditingCell.rowIndex,
                 colIndex: inlineEditingCell.colIndex,
                 value: e.currentTarget.value,
                 eventWhichKey: e.which,
-              });
-              this.setState({
-                lastEventName: 'update',
               });
             }
             break;

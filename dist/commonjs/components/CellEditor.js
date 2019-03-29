@@ -20,6 +20,7 @@ var CellEditor = /** @class */ (function (_super) {
     function CellEditor(props) {
         var _this = _super.call(this, props) || this;
         _this.activeComposition = false;
+        _this.lastEventName = '';
         _this.onEventInput = function (eventName, e) {
             var _a = _this.props, setStoreState = _a.setStoreState, dispatch = _a.dispatch, _b = _a.inlineEditingCell, inlineEditingCell = _b === void 0 ? {} : _b, col = _a.col, li = _a.li;
             switch (eventName) {
@@ -30,7 +31,10 @@ var CellEditor = /** @class */ (function (_super) {
                         inlineEditingCell: {},
                     });
                     if (!_this.activeComposition) {
-                        if (_this.state.lastEventName === 'update') {
+                        if (_this.lastEventName === 'update') {
+                            dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+                        }
+                        else {
                             dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                 row: li,
                                 colIndex: col.colIndex,
@@ -38,25 +42,16 @@ var CellEditor = /** @class */ (function (_super) {
                                 eventWhichKey: e.which,
                             });
                         }
-                        else {
-                            dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
-                        }
-                        _this.setState({
-                            lastEventName: 'blur',
-                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.EventNames.KEYUP:
                     switch (e.which) {
                         case _enums_1.DataGridEnums.KeyCodes.ESC:
-                            // console.log('eventInput esc : setStoreState');
                             setStoreState({
                                 isInlineEditing: false,
                                 inlineEditingCell: {},
                             });
-                            _this.setState({
-                                lastEventName: 'esc',
-                            });
+                            _this.lastEventName = 'esc';
                             dispatch(_enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
                             break;
                         case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
@@ -64,14 +59,12 @@ var CellEditor = /** @class */ (function (_super) {
                         case _enums_1.DataGridEnums.KeyCodes.ENTER:
                             if (!_this.activeComposition) {
                                 // console.log('eventInput enter : setStoreState');
+                                _this.lastEventName = 'update';
                                 dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                                     row: inlineEditingCell.rowIndex,
                                     colIndex: inlineEditingCell.colIndex,
                                     value: e.currentTarget.value,
                                     eventWhichKey: e.which,
-                                });
-                                _this.setState({
-                                    lastEventName: 'update',
                                 });
                             }
                             break;
@@ -189,9 +182,6 @@ var CellEditor = /** @class */ (function (_super) {
             if (editor.activeType !== 'always') {
                 inputCurrent.select();
             }
-        };
-        _this.state = {
-            lastEventName: '',
         };
         _this.inputTextRef = React.createRef();
         return _this;
