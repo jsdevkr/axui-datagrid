@@ -472,310 +472,304 @@ class StoreProvider extends React.Component<
       selectionECol,
       onChangeSelected,
     } = this.state;
+    const {
+      rowIndex,
+      colIndex,
+      checked,
+      row,
+      value,
+      eventWhichKey,
+      keepEditing = false,
+    } = param;
+
+    let selectedAll: boolean = listSelectedAll;
 
     switch (dispatchType) {
       case DataGridEnums.DispatchTypes.FILTER:
-        {
-          // const { colIndex, filterInfo } = param;
-          // const checkAll =
-          //   filterInfo[colIndex] === false
-          //     ? true
-          //     : filterInfo[colIndex]._check_all_;
-          // if (checkAll) {
-          //   filteredList =
-          //     data &&
-          //     data.filter((n: any) => {
-          //       return (
-          //         typeof n === 'undefined' ||
-          //         !n[optionColumnKeys.deleted || '_deleted_']
-          //       );
-          //     });
-          // } else {
-          //   filteredList = data.filter((n: any) => {
-          //     if (n) {
-          //       const value = n && n[colGroup[colIndex].key || ''];
-          //       if (
-          //         typeof n === 'undefined' ||
-          //         n[optionColumnKeys.deleted || '_deleted_']
-          //       ) {
-          //         return false;
-          //       }
-          //       if (typeof value === 'undefined') {
-          //         if (!filterInfo[colIndex]._UNDEFINED_) {
-          //           return false;
-          //         }
-          //       } else {
-          //         if (!filterInfo[colIndex][value]) {
-          //           return false;
-          //         }
-          //       }
-          //       return true;
-          //     }
-          //     return false;
-          //   });
-          // }
-          // this.setStoreState({
-          //   filteredList,
-          //   filterInfo,
-          //   scrollTop: 0,
-          // });
-          // if (onChangeSelected) {
-          //   onChangeSelected({
-          //     filteredList,
-          //   });
-          // }
-        }
+        // const { colIndex, filterInfo } = param;
+        // const checkAll =
+        //   filterInfo[colIndex] === false
+        //     ? true
+        //     : filterInfo[colIndex]._check_all_;
+        // if (checkAll) {
+        //   filteredList =
+        //     data &&
+        //     data.filter((n: any) => {
+        //       return (
+        //         typeof n === 'undefined' ||
+        //         !n[optionColumnKeys.deleted || '_deleted_']
+        //       );
+        //     });
+        // } else {
+        //   filteredList = data.filter((n: any) => {
+        //     if (n) {
+        //       const value = n && n[colGroup[colIndex].key || ''];
+        //       if (
+        //         typeof n === 'undefined' ||
+        //         n[optionColumnKeys.deleted || '_deleted_']
+        //       ) {
+        //         return false;
+        //       }
+        //       if (typeof value === 'undefined') {
+        //         if (!filterInfo[colIndex]._UNDEFINED_) {
+        //           return false;
+        //         }
+        //       } else {
+        //         if (!filterInfo[colIndex][value]) {
+        //           return false;
+        //         }
+        //       }
+        //       return true;
+        //     }
+        //     return false;
+        //   });
+        // }
+        // this.setStoreState({
+        //   filteredList,
+        //   filterInfo,
+        //   scrollTop: 0,
+        // });
+        // if (onChangeSelected) {
+        //   onChangeSelected({
+        //     filteredList,
+        //   });
+        // }
+
         break;
 
       case DataGridEnums.DispatchTypes.SORT:
-        {
-          const { colIndex } = param;
-          if (typeof colIndex === 'undefined') {
-            return;
+        if (typeof colIndex === 'undefined') {
+          return;
+        }
+        const { key: colKey = '' } = colGroup[colIndex];
+
+        let currentSortInfo: { [key: string]: any } = {};
+        let seq: number = 0;
+        let sortInfoArray: any[] = [];
+
+        const getValueByKey = function(_item: any, _key: string) {
+          return _item[_key] || '';
+        };
+
+        for (let k in sortInfo) {
+          if (sortInfo[k]) {
+            currentSortInfo[k] = sortInfo[k];
+            seq++;
           }
-          const { key: colKey = '' } = colGroup[colIndex];
+        }
 
-          let currentSortInfo: { [key: string]: any } = {};
-          let seq: number = 0;
-          let sortInfoArray: any[] = [];
-
-          const getValueByKey = function(_item: any, _key: string) {
-            return _item[_key] || '';
+        if (currentSortInfo[colKey]) {
+          if (currentSortInfo[colKey].orderBy === 'desc') {
+            currentSortInfo[colKey].orderBy = 'asc';
+          } else if (currentSortInfo[colKey].orderBy === 'asc') {
+            delete currentSortInfo[colKey];
+          }
+        } else {
+          currentSortInfo[colKey] = {
+            seq: seq++,
+            orderBy: 'desc',
           };
+        }
 
-          for (let k in sortInfo) {
-            if (sortInfo[k]) {
-              currentSortInfo[k] = sortInfo[k];
-              seq++;
-            }
-          }
-
-          if (currentSortInfo[colKey]) {
-            if (currentSortInfo[colKey].orderBy === 'desc') {
-              currentSortInfo[colKey].orderBy = 'asc';
-            } else if (currentSortInfo[colKey].orderBy === 'asc') {
-              delete currentSortInfo[colKey];
-            }
-          } else {
-            currentSortInfo[colKey] = {
-              seq: seq++,
-              orderBy: 'desc',
+        for (let k in currentSortInfo) {
+          if (currentSortInfo[k]) {
+            sortInfoArray[currentSortInfo[k].seq] = {
+              key: k,
+              order: currentSortInfo[k].orderBy,
             };
           }
-
-          for (let k in currentSortInfo) {
-            if (currentSortInfo[k]) {
-              sortInfoArray[currentSortInfo[k].seq] = {
-                key: k,
-                order: currentSortInfo[k].orderBy,
-              };
-            }
-          }
-          sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
-
-          let i = 0,
-            l = sortInfoArray.length,
-            aValue: any,
-            bValue: any;
-
-          const sortedList = data.sort(
-            (a: any, b: any): any => {
-              for (i = 0; i < l; i++) {
-                aValue = getValueByKey(a, sortInfoArray[i].key);
-                bValue = getValueByKey(b, sortInfoArray[i].key);
-
-                if (typeof aValue !== typeof bValue) {
-                  aValue = '' + aValue;
-                  bValue = '' + bValue;
-                }
-                if (aValue < bValue) {
-                  return sortInfoArray[i].order === 'asc' ? -1 : 1;
-                } else if (aValue > bValue) {
-                  return sortInfoArray[i].order === 'asc' ? 1 : -1;
-                }
-              }
-            },
-          );
-
-          this.setStoreState({
-            sortInfo: { ...currentSortInfo },
-            data: sortedList,
-            isInlineEditing: false,
-            inlineEditingCell: {},
-          });
         }
+        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+
+        let i = 0,
+          l = sortInfoArray.length,
+          aValue: any,
+          bValue: any;
+
+        const sortedList = data.sort(
+          (a: any, b: any): any => {
+            for (i = 0; i < l; i++) {
+              aValue = getValueByKey(a, sortInfoArray[i].key);
+              bValue = getValueByKey(b, sortInfoArray[i].key);
+
+              if (typeof aValue !== typeof bValue) {
+                aValue = '' + aValue;
+                bValue = '' + bValue;
+              }
+              if (aValue < bValue) {
+                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+              } else if (aValue > bValue) {
+                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+              }
+            }
+          },
+        );
+
+        this.setStoreState({
+          sortInfo: { ...currentSortInfo },
+          data: sortedList,
+          isInlineEditing: false,
+          inlineEditingCell: {},
+        });
+
         break;
 
       case DataGridEnums.DispatchTypes.UPDATE:
-        {
-          const {
-            row,
-            colIndex,
-            value,
-            eventWhichKey,
-            keepEditing = false,
-          } = param;
-          const key = colGroup[colIndex].key;
+      case DataGridEnums.DispatchTypes.UPDATE_ITEM:
+        let focusRow: number = focusedRow;
 
-          let focusRow: number = focusedRow;
-
-          if (key) {
-            data[row][key] = value;
+        if (dispatchType === DataGridEnums.DispatchTypes.UPDATE) {
+          const updateKey = colGroup[colIndex].key;
+          if (updateKey) {
+            data[row][updateKey] = value;
             // update filteredList
           }
+        } else if (dispatchType === DataGridEnums.DispatchTypes.UPDATE_ITEM) {
+          data[row] = { ...data[row], ...value };
+        }
 
-          if (eventWhichKey) {
-            switch (eventWhichKey) {
-              case DataGridEnums.KeyCodes.UP_ARROW:
-                focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-                break;
-              case DataGridEnums.KeyCodes.DOWN_ARROW:
-                focusRow =
-                  focusedRow + 1 >= data.length
-                    ? data.length - 1
-                    : focusedRow + 1;
-                break;
-              default:
-                break;
-            }
-          }
-
-          if (!keepEditing) {
-            this.setStoreState({
-              data: [...data],
-              isInlineEditing: false,
-              inlineEditingCell: {},
-              selectionRows: {
-                [focusRow]: true,
-              },
-              focusedRow: focusRow,
-            });
-
-            if (rootNode && rootNode.current) {
-              rootNode.current.focus();
-            }
-          } else {
-            this.setStoreState({
-              data: [...data],
-            });
+        if (eventWhichKey) {
+          switch (eventWhichKey) {
+            case DataGridEnums.KeyCodes.UP_ARROW:
+              focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+              break;
+            case DataGridEnums.KeyCodes.DOWN_ARROW:
+              focusRow =
+                focusedRow + 1 >= data.length
+                  ? data.length - 1
+                  : focusedRow + 1;
+              break;
+            default:
+              break;
           }
         }
+
+        if (!keepEditing) {
+          this.setStoreState({
+            data: [...data],
+            isInlineEditing: false,
+            inlineEditingCell: {},
+            selectionRows: {
+              [focusRow]: true,
+            },
+            focusedRow: focusRow,
+          });
+
+          if (rootNode && rootNode.current) {
+            rootNode.current.focus();
+          }
+        } else {
+          this.setStoreState({
+            data: [...data],
+          });
+        }
+
         break;
 
       case DataGridEnums.DispatchTypes.RESIZE_COL:
-        {
-          const { col, newWidth } = param;
-          let _colGroup = [...(this.state.colGroup || [])];
-          _colGroup[col.colIndex]._width = _colGroup[
-            col.colIndex
-          ].width = newWidth;
+        const { col, newWidth } = param;
+        let _colGroup = [...(this.state.colGroup || [])];
+        _colGroup[col.colIndex]._width = _colGroup[
+          col.colIndex
+        ].width = newWidth;
 
-          this.setStoreState({
-            colGroup: _colGroup,
-            columnResizing: false,
-          });
-        }
+        this.setStoreState({
+          colGroup: _colGroup,
+          columnResizing: false,
+        });
+
         break;
 
       case DataGridEnums.DispatchTypes.SELECT:
-        {
-          const { rowIndex, checked } = param;
+        let rowSelected: boolean = false;
 
-          let rowSelected: boolean = false;
-          let selectedAll: boolean = listSelectedAll;
+        if (checked === true) {
+          rowSelected = true;
+        } else if (checked === false) {
+          rowSelected = false;
+        } else {
+          rowSelected = !data[rowIndex]._selected_;
+        }
 
-          if (checked === true) {
-            rowSelected = true;
-          } else if (checked === false) {
-            rowSelected = false;
-          } else {
-            rowSelected = !data[rowIndex]._selected_;
-          }
+        if (!rowSelected) {
+          selectedAll = false;
+        }
+        data[rowIndex]._selected_ = rowSelected;
 
-          if (!rowSelected) {
-            selectedAll = false;
-          }
-          data[rowIndex]._selected_ = rowSelected;
+        this.setStoreState({
+          listSelectedAll: selectedAll,
+          data: [...data],
+        });
 
-          this.setStoreState({
-            listSelectedAll: selectedAll,
-            data: [...data],
+        if (onChangeSelected) {
+          const selectedIndexes: number[] = [];
+          const selectedList = data.filter((n, i) => {
+            if (n._selected_) {
+              selectedIndexes.push(i);
+            }
+            return n._selected_;
           });
 
-          if (onChangeSelected) {
-            const selectedIndexes: number[] = [];
-            const selectedList = data.filter((n, i) => {
-              if (n._selected_) {
-                selectedIndexes.push(i);
-              }
-              return n._selected_;
-            });
-
-            onChangeSelected({
-              selectedList,
-              selectedIndexes,
-            });
-          }
+          onChangeSelected({
+            selectedList,
+            selectedIndexes,
+          });
         }
+
         break;
 
       case DataGridEnums.DispatchTypes.SELECT_ALL:
-        {
-          const { checked } = param;
-          let selectedAll: boolean = listSelectedAll;
-          if (checked === true) {
-            selectedAll = true;
-          } else if (checked === false) {
-            selectedAll = false;
-          } else {
-            selectedAll = !selectedAll;
-          }
+        if (checked === true) {
+          selectedAll = true;
+        } else if (checked === false) {
+          selectedAll = false;
+        } else {
+          selectedAll = !selectedAll;
+        }
 
-          for (let i = 0, l = data.length; i < l; i++) {
-            data[i]._selected_ = selectedAll;
-          }
+        for (let i = 0, l = data.length; i < l; i++) {
+          data[i]._selected_ = selectedAll;
+        }
 
-          this.setStoreState({
-            listSelectedAll: selectedAll,
-            data: [...data],
+        this.setStoreState({
+          listSelectedAll: selectedAll,
+          data: [...data],
+        });
+
+        if (onChangeSelected) {
+          const selectedIndexes: number[] = [];
+          const selectedList = data.filter((n, i) => {
+            if (n._selected_) {
+              selectedIndexes.push(i);
+            }
+            return n._selected_;
           });
 
-          if (onChangeSelected) {
-            const selectedIndexes: number[] = [];
-            const selectedList = data.filter((n, i) => {
-              if (n._selected_) {
-                selectedIndexes.push(i);
-              }
-              return n._selected_;
-            });
-
-            onChangeSelected({
-              selectedList,
-              selectedIndexes,
-            });
-          }
+          onChangeSelected({
+            selectedList,
+            selectedIndexes,
+          });
         }
+
         break;
 
       case DataGridEnums.DispatchTypes.CHANGE_SELECTION:
-        {
-          const { sRow, sCol, eRow, eCol } = param;
+        const { sRow, sCol, eRow, eCol } = param;
 
-          if (
-            selectionSRow !== sRow ||
-            selectionSCol !== sCol ||
-            selectionERow !== eRow ||
-            selectionECol !== eCol
-          ) {
-            // console.log(sRow, sCol, eRow, eCol);
-            this.setStoreState({
-              selectionSRow: sRow,
-              selectionSCol: sCol,
-              selectionERow: eRow,
-              selectionECol: eCol,
-            });
-          }
+        if (
+          selectionSRow !== sRow ||
+          selectionSCol !== sCol ||
+          selectionERow !== eRow ||
+          selectionECol !== eCol
+        ) {
+          this.setStoreState({
+            selectionSRow: sRow,
+            selectionSCol: sCol,
+            selectionERow: eRow,
+            selectionECol: eCol,
+          });
         }
+
         break;
 
       case DataGridEnums.DispatchTypes.FOCUS_ROOT:

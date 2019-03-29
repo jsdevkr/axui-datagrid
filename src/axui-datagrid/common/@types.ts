@@ -94,7 +94,7 @@ export namespace IDataGrid {
 
   export type CellEditorDataUpdate = (
     value: any,
-    options?: { keepEditing?: boolean },
+    options?: { keepEditing?: boolean; updateItem?: boolean },
   ) => void;
 
   export interface ICellEditorData {

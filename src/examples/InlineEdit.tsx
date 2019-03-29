@@ -107,6 +107,7 @@ const subTypes = [
 
 const selectEditorA: IDataGrid.cellEditorFunction = ({
   value,
+  item,
   update,
   cancel,
   focus,
@@ -116,7 +117,11 @@ const selectEditorA: IDataGrid.cellEditorFunction = ({
     <Select
       style={{ width: '100%' }}
       onChange={val => {
-        update(val);
+        if ((item.subType + '').substring(0, 1) === val) {
+          update(val);
+        } else {
+          update({ type: val, subType: '' }, { updateItem: true });
+        }
       }}
       value={value}
       onDropdownVisibleChange={open => {

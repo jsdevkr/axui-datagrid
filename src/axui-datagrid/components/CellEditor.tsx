@@ -113,16 +113,21 @@ class CellEditor extends React.PureComponent<IProps, IState> {
 
   handleUpdateValue: IDataGrid.CellEditorDataUpdate = (value: any, options) => {
     const { dispatch, li, col } = this.props;
-    const { keepEditing = false } = options || {};
+    const { keepEditing = false, updateItem = false } = options || {};
 
     // console.log('handleUpdateValue UPDATE : dispatch');
-    dispatch(DataGridEnums.DispatchTypes.UPDATE, {
-      row: li,
-      colIndex: col.colIndex,
-      value: value,
-      eventWhichKey: 'custom-editor-action',
-      keepEditing,
-    });
+    dispatch(
+      updateItem
+        ? DataGridEnums.DispatchTypes.UPDATE_ITEM
+        : DataGridEnums.DispatchTypes.UPDATE,
+      {
+        row: li,
+        colIndex: col.colIndex,
+        value,
+        eventWhichKey: 'custom-editor-action',
+        keepEditing,
+      },
+    );
   };
 
   handleCancelEdit = () => {

@@ -48,10 +48,10 @@ export namespace DataGridEnums {
   }
 
   export enum DispatchTypes {
-    SET_DATA,
     SORT,
     FILTER,
     UPDATE,
+    UPDATE_ITEM,
     RESIZE_COL,
     SELECT,
     SELECT_ALL,
