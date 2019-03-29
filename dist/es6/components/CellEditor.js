@@ -71,12 +71,14 @@ class CellEditor extends React.PureComponent {
         };
         this.handleUpdateValue = (value, options) => {
             const { dispatch, li, col } = this.props;
-            const { keepEditing = false } = options || {};
+            const { keepEditing = false, updateItem = false } = options || {};
             // console.log('handleUpdateValue UPDATE : dispatch');
-            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+            dispatch(updateItem
+                ? _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM
+                : _enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                 row: li,
                 colIndex: col.colIndex,
-                value: value,
+                value,
                 eventWhichKey: 'custom-editor-action',
                 keepEditing,
             });

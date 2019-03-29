@@ -71,6 +71,7 @@ export declare namespace IDataGrid {
     type dispatch = (dispatchType: DataGridEnums.DispatchTypes, param: IDataGrid.DispatchParam) => void;
     type CellEditorDataUpdate = (value: any, options?: {
         keepEditing?: boolean;
+        updateItem?: boolean;
     }) => void;
     interface ICellEditorData {
         col: ICol;

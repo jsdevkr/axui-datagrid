@@ -44,10 +44,10 @@ export declare namespace DataGridEnums {
         DOWN = 3
     }
     enum DispatchTypes {
-        SET_DATA = 0,
-        SORT = 1,
-        FILTER = 2,
-        UPDATE = 3,
+        SORT = 0,
+        FILTER = 1,
+        UPDATE = 2,
+        UPDATE_ITEM = 3,
         RESIZE_COL = 4,
         SELECT = 5,
         SELECT_ALL = 6,

@@ -120,269 +120,256 @@ class StoreProvider extends React.Component {
         };
         this.dispatch = (dispatchType, param) => {
             const { data = [], listSelectedAll = false, colGroup = [], rootNode, focusedRow = -1, sortInfo = {}, selectionSRow, selectionSCol, selectionERow, selectionECol, onChangeSelected, } = this.state;
+            const { rowIndex, colIndex, checked, row, value, eventWhichKey, keepEditing = false, } = param;
+            let selectedAll = listSelectedAll;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
-                    {
-                        // const { colIndex, filterInfo } = param;
-                        // const checkAll =
-                        //   filterInfo[colIndex] === false
-                        //     ? true
-                        //     : filterInfo[colIndex]._check_all_;
-                        // if (checkAll) {
-                        //   filteredList =
-                        //     data &&
-                        //     data.filter((n: any) => {
-                        //       return (
-                        //         typeof n === 'undefined' ||
-                        //         !n[optionColumnKeys.deleted || '_deleted_']
-                        //       );
-                        //     });
-                        // } else {
-                        //   filteredList = data.filter((n: any) => {
-                        //     if (n) {
-                        //       const value = n && n[colGroup[colIndex].key || ''];
-                        //       if (
-                        //         typeof n === 'undefined' ||
-                        //         n[optionColumnKeys.deleted || '_deleted_']
-                        //       ) {
-                        //         return false;
-                        //       }
-                        //       if (typeof value === 'undefined') {
-                        //         if (!filterInfo[colIndex]._UNDEFINED_) {
-                        //           return false;
-                        //         }
-                        //       } else {
-                        //         if (!filterInfo[colIndex][value]) {
-                        //           return false;
-                        //         }
-                        //       }
-                        //       return true;
-                        //     }
-                        //     return false;
-                        //   });
-                        // }
-                        // this.setStoreState({
-                        //   filteredList,
-                        //   filterInfo,
-                        //   scrollTop: 0,
-                        // });
-                        // if (onChangeSelected) {
-                        //   onChangeSelected({
-                        //     filteredList,
-                        //   });
-                        // }
-                    }
+                    // const { colIndex, filterInfo } = param;
+                    // const checkAll =
+                    //   filterInfo[colIndex] === false
+                    //     ? true
+                    //     : filterInfo[colIndex]._check_all_;
+                    // if (checkAll) {
+                    //   filteredList =
+                    //     data &&
+                    //     data.filter((n: any) => {
+                    //       return (
+                    //         typeof n === 'undefined' ||
+                    //         !n[optionColumnKeys.deleted || '_deleted_']
+                    //       );
+                    //     });
+                    // } else {
+                    //   filteredList = data.filter((n: any) => {
+                    //     if (n) {
+                    //       const value = n && n[colGroup[colIndex].key || ''];
+                    //       if (
+                    //         typeof n === 'undefined' ||
+                    //         n[optionColumnKeys.deleted || '_deleted_']
+                    //       ) {
+                    //         return false;
+                    //       }
+                    //       if (typeof value === 'undefined') {
+                    //         if (!filterInfo[colIndex]._UNDEFINED_) {
+                    //           return false;
+                    //         }
+                    //       } else {
+                    //         if (!filterInfo[colIndex][value]) {
+                    //           return false;
+                    //         }
+                    //       }
+                    //       return true;
+                    //     }
+                    //     return false;
+                    //   });
+                    // }
+                    // this.setStoreState({
+                    //   filteredList,
+                    //   filterInfo,
+                    //   scrollTop: 0,
+                    // });
+                    // if (onChangeSelected) {
+                    //   onChangeSelected({
+                    //     filteredList,
+                    //   });
+                    // }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SORT:
-                    {
-                        const { colIndex } = param;
-                        if (typeof colIndex === 'undefined') {
-                            return;
+                    if (typeof colIndex === 'undefined') {
+                        return;
+                    }
+                    const { key: colKey = '' } = colGroup[colIndex];
+                    let currentSortInfo = {};
+                    let seq = 0;
+                    let sortInfoArray = [];
+                    const getValueByKey = function (_item, _key) {
+                        return _item[_key] || '';
+                    };
+                    for (let k in sortInfo) {
+                        if (sortInfo[k]) {
+                            currentSortInfo[k] = sortInfo[k];
+                            seq++;
                         }
-                        const { key: colKey = '' } = colGroup[colIndex];
-                        let currentSortInfo = {};
-                        let seq = 0;
-                        let sortInfoArray = [];
-                        const getValueByKey = function (_item, _key) {
-                            return _item[_key] || '';
+                    }
+                    if (currentSortInfo[colKey]) {
+                        if (currentSortInfo[colKey].orderBy === 'desc') {
+                            currentSortInfo[colKey].orderBy = 'asc';
+                        }
+                        else if (currentSortInfo[colKey].orderBy === 'asc') {
+                            delete currentSortInfo[colKey];
+                        }
+                    }
+                    else {
+                        currentSortInfo[colKey] = {
+                            seq: seq++,
+                            orderBy: 'desc',
                         };
-                        for (let k in sortInfo) {
-                            if (sortInfo[k]) {
-                                currentSortInfo[k] = sortInfo[k];
-                                seq++;
-                            }
-                        }
-                        if (currentSortInfo[colKey]) {
-                            if (currentSortInfo[colKey].orderBy === 'desc') {
-                                currentSortInfo[colKey].orderBy = 'asc';
-                            }
-                            else if (currentSortInfo[colKey].orderBy === 'asc') {
-                                delete currentSortInfo[colKey];
-                            }
-                        }
-                        else {
-                            currentSortInfo[colKey] = {
-                                seq: seq++,
-                                orderBy: 'desc',
+                    }
+                    for (let k in currentSortInfo) {
+                        if (currentSortInfo[k]) {
+                            sortInfoArray[currentSortInfo[k].seq] = {
+                                key: k,
+                                order: currentSortInfo[k].orderBy,
                             };
                         }
-                        for (let k in currentSortInfo) {
-                            if (currentSortInfo[k]) {
-                                sortInfoArray[currentSortInfo[k].seq] = {
-                                    key: k,
-                                    order: currentSortInfo[k].orderBy,
-                                };
+                    }
+                    sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+                    let i = 0, l = sortInfoArray.length, aValue, bValue;
+                    const sortedList = data.sort((a, b) => {
+                        for (i = 0; i < l; i++) {
+                            aValue = getValueByKey(a, sortInfoArray[i].key);
+                            bValue = getValueByKey(b, sortInfoArray[i].key);
+                            if (typeof aValue !== typeof bValue) {
+                                aValue = '' + aValue;
+                                bValue = '' + bValue;
+                            }
+                            if (aValue < bValue) {
+                                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                            }
+                            else if (aValue > bValue) {
+                                return sortInfoArray[i].order === 'asc' ? 1 : -1;
                             }
                         }
-                        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
-                        let i = 0, l = sortInfoArray.length, aValue, bValue;
-                        const sortedList = data.sort((a, b) => {
-                            for (i = 0; i < l; i++) {
-                                aValue = getValueByKey(a, sortInfoArray[i].key);
-                                bValue = getValueByKey(b, sortInfoArray[i].key);
-                                if (typeof aValue !== typeof bValue) {
-                                    aValue = '' + aValue;
-                                    bValue = '' + bValue;
-                                }
-                                if (aValue < bValue) {
-                                    return sortInfoArray[i].order === 'asc' ? -1 : 1;
-                                }
-                                else if (aValue > bValue) {
-                                    return sortInfoArray[i].order === 'asc' ? 1 : -1;
-                                }
-                            }
-                        });
-                        this.setStoreState({
-                            sortInfo: Object.assign({}, currentSortInfo),
-                            data: sortedList,
-                            isInlineEditing: false,
-                            inlineEditingCell: {},
-                        });
-                    }
+                    });
+                    this.setStoreState({
+                        sortInfo: Object.assign({}, currentSortInfo),
+                        data: sortedList,
+                        isInlineEditing: false,
+                        inlineEditingCell: {},
+                    });
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
-                    {
-                        const { row, colIndex, value, eventWhichKey, keepEditing = false, } = param;
-                        const key = colGroup[colIndex].key;
-                        let focusRow = focusedRow;
-                        if (key) {
-                            data[row][key] = value;
+                case _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM:
+                    let focusRow = focusedRow;
+                    if (dispatchType === _enums_1.DataGridEnums.DispatchTypes.UPDATE) {
+                        const updateKey = colGroup[colIndex].key;
+                        if (updateKey) {
+                            data[row][updateKey] = value;
                             // update filteredList
                         }
-                        if (eventWhichKey) {
-                            switch (eventWhichKey) {
-                                case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
-                                    focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-                                    break;
-                                case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
-                                    focusRow =
-                                        focusedRow + 1 >= data.length
-                                            ? data.length - 1
-                                            : focusedRow + 1;
-                                    break;
-                                default:
-                                    break;
-                            }
+                    }
+                    else if (dispatchType === _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM) {
+                        data[row] = Object.assign({}, data[row], value);
+                    }
+                    if (eventWhichKey) {
+                        switch (eventWhichKey) {
+                            case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                                focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+                                break;
+                            case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                                focusRow =
+                                    focusedRow + 1 >= data.length
+                                        ? data.length - 1
+                                        : focusedRow + 1;
+                                break;
+                            default:
+                                break;
                         }
-                        if (!keepEditing) {
-                            this.setStoreState({
-                                data: [...data],
-                                isInlineEditing: false,
-                                inlineEditingCell: {},
-                                selectionRows: {
-                                    [focusRow]: true,
-                                },
-                                focusedRow: focusRow,
-                            });
-                            if (rootNode && rootNode.current) {
-                                rootNode.current.focus();
-                            }
+                    }
+                    if (!keepEditing) {
+                        this.setStoreState({
+                            data: [...data],
+                            isInlineEditing: false,
+                            inlineEditingCell: {},
+                            selectionRows: {
+                                [focusRow]: true,
+                            },
+                            focusedRow: focusRow,
+                        });
+                        if (rootNode && rootNode.current) {
+                            rootNode.current.focus();
                         }
-                        else {
-                            this.setStoreState({
-                                data: [...data],
-                            });
-                        }
+                    }
+                    else {
+                        this.setStoreState({
+                            data: [...data],
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
-                    {
-                        const { col, newWidth } = param;
-                        let _colGroup = [...(this.state.colGroup || [])];
-                        _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
-                        this.setStoreState({
-                            colGroup: _colGroup,
-                            columnResizing: false,
-                        });
-                    }
+                    const { col, newWidth } = param;
+                    let _colGroup = [...(this.state.colGroup || [])];
+                    _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
+                    this.setStoreState({
+                        colGroup: _colGroup,
+                        columnResizing: false,
+                    });
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SELECT:
-                    {
-                        const { rowIndex, checked } = param;
-                        let rowSelected = false;
-                        let selectedAll = listSelectedAll;
-                        if (checked === true) {
-                            rowSelected = true;
-                        }
-                        else if (checked === false) {
-                            rowSelected = false;
-                        }
-                        else {
-                            rowSelected = !data[rowIndex]._selected_;
-                        }
-                        if (!rowSelected) {
-                            selectedAll = false;
-                        }
-                        data[rowIndex]._selected_ = rowSelected;
-                        this.setStoreState({
-                            listSelectedAll: selectedAll,
-                            data: [...data],
+                    let rowSelected = false;
+                    if (checked === true) {
+                        rowSelected = true;
+                    }
+                    else if (checked === false) {
+                        rowSelected = false;
+                    }
+                    else {
+                        rowSelected = !data[rowIndex]._selected_;
+                    }
+                    if (!rowSelected) {
+                        selectedAll = false;
+                    }
+                    data[rowIndex]._selected_ = rowSelected;
+                    this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        data: [...data],
+                    });
+                    if (onChangeSelected) {
+                        const selectedIndexes = [];
+                        const selectedList = data.filter((n, i) => {
+                            if (n._selected_) {
+                                selectedIndexes.push(i);
+                            }
+                            return n._selected_;
                         });
-                        if (onChangeSelected) {
-                            const selectedIndexes = [];
-                            const selectedList = data.filter((n, i) => {
-                                if (n._selected_) {
-                                    selectedIndexes.push(i);
-                                }
-                                return n._selected_;
-                            });
-                            onChangeSelected({
-                                selectedList,
-                                selectedIndexes,
-                            });
-                        }
+                        onChangeSelected({
+                            selectedList,
+                            selectedIndexes,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SELECT_ALL:
-                    {
-                        const { checked } = param;
-                        let selectedAll = listSelectedAll;
-                        if (checked === true) {
-                            selectedAll = true;
-                        }
-                        else if (checked === false) {
-                            selectedAll = false;
-                        }
-                        else {
-                            selectedAll = !selectedAll;
-                        }
-                        for (let i = 0, l = data.length; i < l; i++) {
-                            data[i]._selected_ = selectedAll;
-                        }
-                        this.setStoreState({
-                            listSelectedAll: selectedAll,
-                            data: [...data],
+                    if (checked === true) {
+                        selectedAll = true;
+                    }
+                    else if (checked === false) {
+                        selectedAll = false;
+                    }
+                    else {
+                        selectedAll = !selectedAll;
+                    }
+                    for (let i = 0, l = data.length; i < l; i++) {
+                        data[i]._selected_ = selectedAll;
+                    }
+                    this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        data: [...data],
+                    });
+                    if (onChangeSelected) {
+                        const selectedIndexes = [];
+                        const selectedList = data.filter((n, i) => {
+                            if (n._selected_) {
+                                selectedIndexes.push(i);
+                            }
+                            return n._selected_;
                         });
-                        if (onChangeSelected) {
-                            const selectedIndexes = [];
-                            const selectedList = data.filter((n, i) => {
-                                if (n._selected_) {
-                                    selectedIndexes.push(i);
-                                }
-                                return n._selected_;
-                            });
-                            onChangeSelected({
-                                selectedList,
-                                selectedIndexes,
-                            });
-                        }
+                        onChangeSelected({
+                            selectedList,
+                            selectedIndexes,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION:
-                    {
-                        const { sRow, sCol, eRow, eCol } = param;
-                        if (selectionSRow !== sRow ||
-                            selectionSCol !== sCol ||
-                            selectionERow !== eRow ||
-                            selectionECol !== eCol) {
-                            // console.log(sRow, sCol, eRow, eCol);
-                            this.setStoreState({
-                                selectionSRow: sRow,
-                                selectionSCol: sCol,
-                                selectionERow: eRow,
-                                selectionECol: eCol,
-                            });
-                        }
+                    const { sRow, sCol, eRow, eCol } = param;
+                    if (selectionSRow !== sRow ||
+                        selectionSCol !== sCol ||
+                        selectionERow !== eRow ||
+                        selectionECol !== eCol) {
+                        this.setStoreState({
+                            selectionSRow: sRow,
+                            selectionSCol: sCol,
+                            selectionERow: eRow,
+                            selectionECol: eCol,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT:

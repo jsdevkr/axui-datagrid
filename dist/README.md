@@ -266,3 +266,4 @@ export default Formatter;
 - v0.13.1 - Modified the style of inline editing text.
 - v0.13.2 - minor fix.
 - v0.13.3 - Modify Inline editor
+- v0.13.4 - update row by inlineEditor

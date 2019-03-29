@@ -166,269 +166,256 @@ var StoreProvider = /** @class */ (function (_super) {
         _this.dispatch = function (dispatchType, param) {
             var _a;
             var _b = _this.state, _c = _b.data, data = _c === void 0 ? [] : _c, _d = _b.listSelectedAll, listSelectedAll = _d === void 0 ? false : _d, _e = _b.colGroup, colGroup = _e === void 0 ? [] : _e, rootNode = _b.rootNode, _f = _b.focusedRow, focusedRow = _f === void 0 ? -1 : _f, _g = _b.sortInfo, sortInfo = _g === void 0 ? {} : _g, selectionSRow = _b.selectionSRow, selectionSCol = _b.selectionSCol, selectionERow = _b.selectionERow, selectionECol = _b.selectionECol, onChangeSelected = _b.onChangeSelected;
+            var rowIndex = param.rowIndex, colIndex = param.colIndex, checked = param.checked, row = param.row, value = param.value, eventWhichKey = param.eventWhichKey, _h = param.keepEditing, keepEditing = _h === void 0 ? false : _h;
+            var selectedAll = listSelectedAll;
             switch (dispatchType) {
                 case _enums_1.DataGridEnums.DispatchTypes.FILTER:
-                    {
-                        // const { colIndex, filterInfo } = param;
-                        // const checkAll =
-                        //   filterInfo[colIndex] === false
-                        //     ? true
-                        //     : filterInfo[colIndex]._check_all_;
-                        // if (checkAll) {
-                        //   filteredList =
-                        //     data &&
-                        //     data.filter((n: any) => {
-                        //       return (
-                        //         typeof n === 'undefined' ||
-                        //         !n[optionColumnKeys.deleted || '_deleted_']
-                        //       );
-                        //     });
-                        // } else {
-                        //   filteredList = data.filter((n: any) => {
-                        //     if (n) {
-                        //       const value = n && n[colGroup[colIndex].key || ''];
-                        //       if (
-                        //         typeof n === 'undefined' ||
-                        //         n[optionColumnKeys.deleted || '_deleted_']
-                        //       ) {
-                        //         return false;
-                        //       }
-                        //       if (typeof value === 'undefined') {
-                        //         if (!filterInfo[colIndex]._UNDEFINED_) {
-                        //           return false;
-                        //         }
-                        //       } else {
-                        //         if (!filterInfo[colIndex][value]) {
-                        //           return false;
-                        //         }
-                        //       }
-                        //       return true;
-                        //     }
-                        //     return false;
-                        //   });
-                        // }
-                        // this.setStoreState({
-                        //   filteredList,
-                        //   filterInfo,
-                        //   scrollTop: 0,
-                        // });
-                        // if (onChangeSelected) {
-                        //   onChangeSelected({
-                        //     filteredList,
-                        //   });
-                        // }
-                    }
+                    // const { colIndex, filterInfo } = param;
+                    // const checkAll =
+                    //   filterInfo[colIndex] === false
+                    //     ? true
+                    //     : filterInfo[colIndex]._check_all_;
+                    // if (checkAll) {
+                    //   filteredList =
+                    //     data &&
+                    //     data.filter((n: any) => {
+                    //       return (
+                    //         typeof n === 'undefined' ||
+                    //         !n[optionColumnKeys.deleted || '_deleted_']
+                    //       );
+                    //     });
+                    // } else {
+                    //   filteredList = data.filter((n: any) => {
+                    //     if (n) {
+                    //       const value = n && n[colGroup[colIndex].key || ''];
+                    //       if (
+                    //         typeof n === 'undefined' ||
+                    //         n[optionColumnKeys.deleted || '_deleted_']
+                    //       ) {
+                    //         return false;
+                    //       }
+                    //       if (typeof value === 'undefined') {
+                    //         if (!filterInfo[colIndex]._UNDEFINED_) {
+                    //           return false;
+                    //         }
+                    //       } else {
+                    //         if (!filterInfo[colIndex][value]) {
+                    //           return false;
+                    //         }
+                    //       }
+                    //       return true;
+                    //     }
+                    //     return false;
+                    //   });
+                    // }
+                    // this.setStoreState({
+                    //   filteredList,
+                    //   filterInfo,
+                    //   scrollTop: 0,
+                    // });
+                    // if (onChangeSelected) {
+                    //   onChangeSelected({
+                    //     filteredList,
+                    //   });
+                    // }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SORT:
-                    {
-                        var colIndex = param.colIndex;
-                        if (typeof colIndex === 'undefined') {
-                            return;
+                    if (typeof colIndex === 'undefined') {
+                        return;
+                    }
+                    var _j = colGroup[colIndex].key, colKey = _j === void 0 ? '' : _j;
+                    var currentSortInfo = {};
+                    var seq = 0;
+                    var sortInfoArray_1 = [];
+                    var getValueByKey_1 = function (_item, _key) {
+                        return _item[_key] || '';
+                    };
+                    for (var k in sortInfo) {
+                        if (sortInfo[k]) {
+                            currentSortInfo[k] = sortInfo[k];
+                            seq++;
                         }
-                        var _h = colGroup[colIndex].key, colKey = _h === void 0 ? '' : _h;
-                        var currentSortInfo = {};
-                        var seq = 0;
-                        var sortInfoArray_1 = [];
-                        var getValueByKey_1 = function (_item, _key) {
-                            return _item[_key] || '';
+                    }
+                    if (currentSortInfo[colKey]) {
+                        if (currentSortInfo[colKey].orderBy === 'desc') {
+                            currentSortInfo[colKey].orderBy = 'asc';
+                        }
+                        else if (currentSortInfo[colKey].orderBy === 'asc') {
+                            delete currentSortInfo[colKey];
+                        }
+                    }
+                    else {
+                        currentSortInfo[colKey] = {
+                            seq: seq++,
+                            orderBy: 'desc',
                         };
-                        for (var k in sortInfo) {
-                            if (sortInfo[k]) {
-                                currentSortInfo[k] = sortInfo[k];
-                                seq++;
-                            }
-                        }
-                        if (currentSortInfo[colKey]) {
-                            if (currentSortInfo[colKey].orderBy === 'desc') {
-                                currentSortInfo[colKey].orderBy = 'asc';
-                            }
-                            else if (currentSortInfo[colKey].orderBy === 'asc') {
-                                delete currentSortInfo[colKey];
-                            }
-                        }
-                        else {
-                            currentSortInfo[colKey] = {
-                                seq: seq++,
-                                orderBy: 'desc',
+                    }
+                    for (var k in currentSortInfo) {
+                        if (currentSortInfo[k]) {
+                            sortInfoArray_1[currentSortInfo[k].seq] = {
+                                key: k,
+                                order: currentSortInfo[k].orderBy,
                             };
                         }
-                        for (var k in currentSortInfo) {
-                            if (currentSortInfo[k]) {
-                                sortInfoArray_1[currentSortInfo[k].seq] = {
-                                    key: k,
-                                    order: currentSortInfo[k].orderBy,
-                                };
+                    }
+                    sortInfoArray_1 = sortInfoArray_1.filter(function (o) { return typeof o !== 'undefined'; });
+                    var i_1 = 0, l_1 = sortInfoArray_1.length, aValue_1, bValue_1;
+                    var sortedList = data.sort(function (a, b) {
+                        for (i_1 = 0; i_1 < l_1; i_1++) {
+                            aValue_1 = getValueByKey_1(a, sortInfoArray_1[i_1].key);
+                            bValue_1 = getValueByKey_1(b, sortInfoArray_1[i_1].key);
+                            if (typeof aValue_1 !== typeof bValue_1) {
+                                aValue_1 = '' + aValue_1;
+                                bValue_1 = '' + bValue_1;
+                            }
+                            if (aValue_1 < bValue_1) {
+                                return sortInfoArray_1[i_1].order === 'asc' ? -1 : 1;
+                            }
+                            else if (aValue_1 > bValue_1) {
+                                return sortInfoArray_1[i_1].order === 'asc' ? 1 : -1;
                             }
                         }
-                        sortInfoArray_1 = sortInfoArray_1.filter(function (o) { return typeof o !== 'undefined'; });
-                        var i_1 = 0, l_1 = sortInfoArray_1.length, aValue_1, bValue_1;
-                        var sortedList = data.sort(function (a, b) {
-                            for (i_1 = 0; i_1 < l_1; i_1++) {
-                                aValue_1 = getValueByKey_1(a, sortInfoArray_1[i_1].key);
-                                bValue_1 = getValueByKey_1(b, sortInfoArray_1[i_1].key);
-                                if (typeof aValue_1 !== typeof bValue_1) {
-                                    aValue_1 = '' + aValue_1;
-                                    bValue_1 = '' + bValue_1;
-                                }
-                                if (aValue_1 < bValue_1) {
-                                    return sortInfoArray_1[i_1].order === 'asc' ? -1 : 1;
-                                }
-                                else if (aValue_1 > bValue_1) {
-                                    return sortInfoArray_1[i_1].order === 'asc' ? 1 : -1;
-                                }
-                            }
-                        });
-                        _this.setStoreState({
-                            sortInfo: __assign({}, currentSortInfo),
-                            data: sortedList,
-                            isInlineEditing: false,
-                            inlineEditingCell: {},
-                        });
-                    }
+                    });
+                    _this.setStoreState({
+                        sortInfo: __assign({}, currentSortInfo),
+                        data: sortedList,
+                        isInlineEditing: false,
+                        inlineEditingCell: {},
+                    });
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.UPDATE:
-                    {
-                        var row = param.row, colIndex = param.colIndex, value = param.value, eventWhichKey = param.eventWhichKey, _j = param.keepEditing, keepEditing = _j === void 0 ? false : _j;
-                        var key = colGroup[colIndex].key;
-                        var focusRow = focusedRow;
-                        if (key) {
-                            data[row][key] = value;
+                case _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM:
+                    var focusRow = focusedRow;
+                    if (dispatchType === _enums_1.DataGridEnums.DispatchTypes.UPDATE) {
+                        var updateKey = colGroup[colIndex].key;
+                        if (updateKey) {
+                            data[row][updateKey] = value;
                             // update filteredList
                         }
-                        if (eventWhichKey) {
-                            switch (eventWhichKey) {
-                                case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
-                                    focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
-                                    break;
-                                case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
-                                    focusRow =
-                                        focusedRow + 1 >= data.length
-                                            ? data.length - 1
-                                            : focusedRow + 1;
-                                    break;
-                                default:
-                                    break;
-                            }
+                    }
+                    else if (dispatchType === _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM) {
+                        data[row] = __assign({}, data[row], value);
+                    }
+                    if (eventWhichKey) {
+                        switch (eventWhichKey) {
+                            case _enums_1.DataGridEnums.KeyCodes.UP_ARROW:
+                                focusRow = focusedRow < 1 ? 0 : focusedRow - 1;
+                                break;
+                            case _enums_1.DataGridEnums.KeyCodes.DOWN_ARROW:
+                                focusRow =
+                                    focusedRow + 1 >= data.length
+                                        ? data.length - 1
+                                        : focusedRow + 1;
+                                break;
+                            default:
+                                break;
                         }
-                        if (!keepEditing) {
-                            _this.setStoreState({
-                                data: __spread(data),
-                                isInlineEditing: false,
-                                inlineEditingCell: {},
-                                selectionRows: (_a = {},
-                                    _a[focusRow] = true,
-                                    _a),
-                                focusedRow: focusRow,
-                            });
-                            if (rootNode && rootNode.current) {
-                                rootNode.current.focus();
-                            }
+                    }
+                    if (!keepEditing) {
+                        _this.setStoreState({
+                            data: __spread(data),
+                            isInlineEditing: false,
+                            inlineEditingCell: {},
+                            selectionRows: (_a = {},
+                                _a[focusRow] = true,
+                                _a),
+                            focusedRow: focusRow,
+                        });
+                        if (rootNode && rootNode.current) {
+                            rootNode.current.focus();
                         }
-                        else {
-                            _this.setStoreState({
-                                data: __spread(data),
-                            });
-                        }
+                    }
+                    else {
+                        _this.setStoreState({
+                            data: __spread(data),
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.RESIZE_COL:
-                    {
-                        var col = param.col, newWidth = param.newWidth;
-                        var _colGroup = __spread((_this.state.colGroup || []));
-                        _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
-                        _this.setStoreState({
-                            colGroup: _colGroup,
-                            columnResizing: false,
-                        });
-                    }
+                    var col = param.col, newWidth = param.newWidth;
+                    var _colGroup = __spread((_this.state.colGroup || []));
+                    _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width = newWidth;
+                    _this.setStoreState({
+                        colGroup: _colGroup,
+                        columnResizing: false,
+                    });
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SELECT:
-                    {
-                        var rowIndex = param.rowIndex, checked = param.checked;
-                        var rowSelected = false;
-                        var selectedAll = listSelectedAll;
-                        if (checked === true) {
-                            rowSelected = true;
-                        }
-                        else if (checked === false) {
-                            rowSelected = false;
-                        }
-                        else {
-                            rowSelected = !data[rowIndex]._selected_;
-                        }
-                        if (!rowSelected) {
-                            selectedAll = false;
-                        }
-                        data[rowIndex]._selected_ = rowSelected;
-                        _this.setStoreState({
-                            listSelectedAll: selectedAll,
-                            data: __spread(data),
+                    var rowSelected = false;
+                    if (checked === true) {
+                        rowSelected = true;
+                    }
+                    else if (checked === false) {
+                        rowSelected = false;
+                    }
+                    else {
+                        rowSelected = !data[rowIndex]._selected_;
+                    }
+                    if (!rowSelected) {
+                        selectedAll = false;
+                    }
+                    data[rowIndex]._selected_ = rowSelected;
+                    _this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        data: __spread(data),
+                    });
+                    if (onChangeSelected) {
+                        var selectedIndexes_1 = [];
+                        var selectedList = data.filter(function (n, i) {
+                            if (n._selected_) {
+                                selectedIndexes_1.push(i);
+                            }
+                            return n._selected_;
                         });
-                        if (onChangeSelected) {
-                            var selectedIndexes_1 = [];
-                            var selectedList = data.filter(function (n, i) {
-                                if (n._selected_) {
-                                    selectedIndexes_1.push(i);
-                                }
-                                return n._selected_;
-                            });
-                            onChangeSelected({
-                                selectedList: selectedList,
-                                selectedIndexes: selectedIndexes_1,
-                            });
-                        }
+                        onChangeSelected({
+                            selectedList: selectedList,
+                            selectedIndexes: selectedIndexes_1,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.SELECT_ALL:
-                    {
-                        var checked = param.checked;
-                        var selectedAll = listSelectedAll;
-                        if (checked === true) {
-                            selectedAll = true;
-                        }
-                        else if (checked === false) {
-                            selectedAll = false;
-                        }
-                        else {
-                            selectedAll = !selectedAll;
-                        }
-                        for (var i = 0, l = data.length; i < l; i++) {
-                            data[i]._selected_ = selectedAll;
-                        }
-                        _this.setStoreState({
-                            listSelectedAll: selectedAll,
-                            data: __spread(data),
+                    if (checked === true) {
+                        selectedAll = true;
+                    }
+                    else if (checked === false) {
+                        selectedAll = false;
+                    }
+                    else {
+                        selectedAll = !selectedAll;
+                    }
+                    for (var i_2 = 0, l_2 = data.length; i_2 < l_2; i_2++) {
+                        data[i_2]._selected_ = selectedAll;
+                    }
+                    _this.setStoreState({
+                        listSelectedAll: selectedAll,
+                        data: __spread(data),
+                    });
+                    if (onChangeSelected) {
+                        var selectedIndexes_2 = [];
+                        var selectedList = data.filter(function (n, i) {
+                            if (n._selected_) {
+                                selectedIndexes_2.push(i);
+                            }
+                            return n._selected_;
                         });
-                        if (onChangeSelected) {
-                            var selectedIndexes_2 = [];
-                            var selectedList = data.filter(function (n, i) {
-                                if (n._selected_) {
-                                    selectedIndexes_2.push(i);
-                                }
-                                return n._selected_;
-                            });
-                            onChangeSelected({
-                                selectedList: selectedList,
-                                selectedIndexes: selectedIndexes_2,
-                            });
-                        }
+                        onChangeSelected({
+                            selectedList: selectedList,
+                            selectedIndexes: selectedIndexes_2,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.CHANGE_SELECTION:
-                    {
-                        var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
-                        if (selectionSRow !== sRow ||
-                            selectionSCol !== sCol ||
-                            selectionERow !== eRow ||
-                            selectionECol !== eCol) {
-                            // console.log(sRow, sCol, eRow, eCol);
-                            _this.setStoreState({
-                                selectionSRow: sRow,
-                                selectionSCol: sCol,
-                                selectionERow: eRow,
-                                selectionECol: eCol,
-                            });
-                        }
+                    var sRow = param.sRow, sCol = param.sCol, eRow = param.eRow, eCol = param.eCol;
+                    if (selectionSRow !== sRow ||
+                        selectionSCol !== sCol ||
+                        selectionERow !== eRow ||
+                        selectionECol !== eCol) {
+                        _this.setStoreState({
+                            selectionSRow: sRow,
+                            selectionSCol: sCol,
+                            selectionERow: eRow,
+                            selectionECol: eCol,
+                        });
                     }
                     break;
                 case _enums_1.DataGridEnums.DispatchTypes.FOCUS_ROOT:

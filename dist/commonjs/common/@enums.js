@@ -53,10 +53,10 @@ var DataGridEnums;
     })(DirectionTypes = DataGridEnums.DirectionTypes || (DataGridEnums.DirectionTypes = {}));
     var DispatchTypes;
     (function (DispatchTypes) {
-        DispatchTypes[DispatchTypes["SET_DATA"] = 0] = "SET_DATA";
-        DispatchTypes[DispatchTypes["SORT"] = 1] = "SORT";
-        DispatchTypes[DispatchTypes["FILTER"] = 2] = "FILTER";
-        DispatchTypes[DispatchTypes["UPDATE"] = 3] = "UPDATE";
+        DispatchTypes[DispatchTypes["SORT"] = 0] = "SORT";
+        DispatchTypes[DispatchTypes["FILTER"] = 1] = "FILTER";
+        DispatchTypes[DispatchTypes["UPDATE"] = 2] = "UPDATE";
+        DispatchTypes[DispatchTypes["UPDATE_ITEM"] = 3] = "UPDATE_ITEM";
         DispatchTypes[DispatchTypes["RESIZE_COL"] = 4] = "RESIZE_COL";
         DispatchTypes[DispatchTypes["SELECT"] = 5] = "SELECT";
         DispatchTypes[DispatchTypes["SELECT_ALL"] = 6] = "SELECT_ALL";

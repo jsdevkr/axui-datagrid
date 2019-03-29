@@ -85,9 +85,11 @@ var CellEditor = /** @class */ (function (_super) {
         };
         _this.handleUpdateValue = function (value, options) {
             var _a = _this.props, dispatch = _a.dispatch, li = _a.li, col = _a.col;
-            var _b = (options || {}).keepEditing, keepEditing = _b === void 0 ? false : _b;
+            var _b = options || {}, _c = _b.keepEditing, keepEditing = _c === void 0 ? false : _c, _d = _b.updateItem, updateItem = _d === void 0 ? false : _d;
             // console.log('handleUpdateValue UPDATE : dispatch');
-            dispatch(_enums_1.DataGridEnums.DispatchTypes.UPDATE, {
+            dispatch(updateItem
+                ? _enums_1.DataGridEnums.DispatchTypes.UPDATE_ITEM
+                : _enums_1.DataGridEnums.DispatchTypes.UPDATE, {
                 row: li,
                 colIndex: col.colIndex,
                 value: value,
