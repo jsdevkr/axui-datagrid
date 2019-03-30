@@ -3,6 +3,7 @@ import { IDataGrid } from '../common/@types';
 
 class CellLabel extends React.PureComponent<{
   lineHeight: number;
+  rowSelectorSize: number;
   col: IDataGrid.ICol;
   optionsHeader: IDataGrid.IOptionHeader;
   listSelectedAll: boolean;
@@ -10,7 +11,7 @@ class CellLabel extends React.PureComponent<{
   render() {
     const {
       col: { key = '', label = '' },
-      lineHeight,
+      rowSelectorSize,
       optionsHeader,
       listSelectedAll,
     } = this.props;
@@ -22,8 +23,8 @@ class CellLabel extends React.PureComponent<{
               className="axui-datagrid-check-box"
               data-checked={listSelectedAll}
               style={{
-                width: lineHeight + 'px',
-                height: lineHeight + 'px',
+                width: rowSelectorSize + 'px',
+                height: rowSelectorSize + 'px',
               }}
             />
           );
@@ -74,6 +75,7 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
       listSelectedAll = false,
       options,
       options: {
+        rowSelectorSize = 0,
         header: {
           columnHeight: optionsHeaderColumnHeight = 0,
           columnPadding: optionsHeaderColumnPadding = 0,
@@ -155,6 +157,7 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
           <CellLabel
             col={col}
             lineHeight={lineHeight}
+            rowSelectorSize={rowSelectorSize}
             optionsHeader={optionsHeader}
             listSelectedAll={listSelectedAll}
           />

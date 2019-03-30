@@ -52,6 +52,7 @@ class DataGridBodyCell extends React.Component<{
       selectionRows = [],
       selectionCols = [],
       options: {
+        rowSelectorSize = 0,
         body: {
           columnHeight = 0,
           columnPadding = 0,
@@ -170,6 +171,7 @@ class DataGridBodyCell extends React.Component<{
             columnHeight={columnHeight}
             lineHeight={lineHeight}
             columnBorderWidth={columnBorderWidth}
+            rowSelectorSize={rowSelectorSize}
             colAlign={colAlign}
             selected={selected}
             predefinedFormatter={predefinedFormatter}

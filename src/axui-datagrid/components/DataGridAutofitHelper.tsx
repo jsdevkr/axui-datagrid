@@ -63,6 +63,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
                             columnHeight={12}
                             lineHeight={12}
                             columnBorderWidth={0}
+                            rowSelectorSize={17}
                             colAlign={'left'}
                             col={col}
                             li={li}

@@ -66,6 +66,7 @@ class LoadingState extends React.Component<any, any> {
               data={data}
               options={{
                 showRowSelector: true,
+                rowSelectorSize: 16,
               }}
               selectedRowKeys={[]}
               onChangeSelected={param => {

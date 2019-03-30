@@ -6,6 +6,7 @@ class CellLabel extends React.PureComponent<{
   columnHeight: number;
   lineHeight: number;
   columnBorderWidth: number;
+  rowSelectorSize: number;
   colAlign: string;
   col: IDataGrid.ICol;
   li: number;
@@ -18,6 +19,7 @@ class CellLabel extends React.PureComponent<{
       columnHeight,
       lineHeight,
       columnBorderWidth,
+      rowSelectorSize,
       colAlign,
       col,
       col: { key = '', columnAttr = '', formatter },
@@ -47,8 +49,8 @@ class CellLabel extends React.PureComponent<{
             className="axui-datagrid-check-box"
             data-checked={selected}
             style={{
-              width: lineHeight + 'px',
-              height: lineHeight + 'px',
+              width: rowSelectorSize + 'px',
+              height: rowSelectorSize + 'px',
             }}
           />
         );

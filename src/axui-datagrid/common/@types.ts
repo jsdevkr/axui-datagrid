@@ -274,6 +274,7 @@ export namespace IDataGrid {
     columnMinWidth?: number;
     lineNumberColumnWidth?: number;
     rowSelectorColumnWidth?: number;
+    rowSelectorSize?: number;
     remoteSort?: boolean;
     footSum?: boolean;
     bodyLoaderHeight?: number;
