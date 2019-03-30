@@ -21,7 +21,7 @@ var CellLabel = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     CellLabel.prototype.render = function () {
-        var _a = this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, colAlign = _a.colAlign, col = _a.col, _b = _a.col, _c = _b.key, key = _c === void 0 ? '' : _c, _d = _b.columnAttr, columnAttr = _d === void 0 ? '' : _d, formatter = _b.formatter, li = _a.li, item = _a.item, _e = _a.selected, selected = _e === void 0 ? false : _e, predefinedFormatter = _a.predefinedFormatter;
+        var _a = this.props, columnHeight = _a.columnHeight, lineHeight = _a.lineHeight, columnBorderWidth = _a.columnBorderWidth, rowSelectorSize = _a.rowSelectorSize, colAlign = _a.colAlign, col = _a.col, _b = _a.col, _c = _b.key, key = _c === void 0 ? '' : _c, _d = _b.columnAttr, columnAttr = _d === void 0 ? '' : _d, formatter = _b.formatter, li = _a.li, item = _a.item, _e = _a.selected, selected = _e === void 0 ? false : _e, predefinedFormatter = _a.predefinedFormatter;
         var formatterData = {
             item: item,
             index: li,
@@ -35,8 +35,8 @@ var CellLabel = /** @class */ (function (_super) {
                 break;
             case '_row_selector_':
                 labelValue = (React.createElement("div", { "data-span": columnAttr, className: "axui-datagrid-check-box", "data-checked": selected, style: {
-                        width: lineHeight + 'px',
-                        height: lineHeight + 'px',
+                        width: rowSelectorSize + 'px',
+                        height: rowSelectorSize + 'px',
                     } }));
                 break;
             default:

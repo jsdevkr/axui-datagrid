@@ -4,6 +4,7 @@ declare class CellLabel extends React.PureComponent<{
     columnHeight: number;
     lineHeight: number;
     columnBorderWidth: number;
+    rowSelectorSize: number;
     colAlign: string;
     col: IDataGrid.ICol;
     li: number;

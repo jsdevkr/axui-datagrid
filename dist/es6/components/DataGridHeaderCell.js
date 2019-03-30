@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class CellLabel extends React.PureComponent {
     render() {
-        const { col: { key = '', label = '' }, lineHeight, optionsHeader, listSelectedAll, } = this.props;
+        const { col: { key = '', label = '' }, rowSelectorSize, optionsHeader, listSelectedAll, } = this.props;
         switch (key) {
             case '_row_selector_':
                 if (optionsHeader.selector) {
                     return (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
-                            width: lineHeight + 'px',
-                            height: lineHeight + 'px',
+                            width: rowSelectorSize + 'px',
+                            height: rowSelectorSize + 'px',
                         } }));
                 }
                 else {
@@ -28,7 +28,7 @@ class CellSorter extends React.PureComponent {
 }
 class DatagridHeaderCell extends React.PureComponent {
     render() {
-        const { listSelectedAll = false, options, options: { header: { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = 'left', } = {}, } = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, col: { align: colAlign = '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, columnAttr = '', } = {}, onClick, } = this.props;
+        const { listSelectedAll = false, options, options: { rowSelectorSize = 0, header: { columnHeight: optionsHeaderColumnHeight = 0, columnPadding: optionsHeaderColumnPadding = 0, columnBorderWidth: optionsHeaderColumnBorderWidth = 0, align: headerAlign = 'left', } = {}, } = {}, focusedCol = -1, selectionCols, sortInfo = {}, bodyRow, ri, col, col: { align: colAlign = '', colIndex = 0, key: colKey = '', rowSpan: colRowSpan = 1, colSpan: colCowSpan = 1, columnAttr = '', } = {}, onClick, } = this.props;
         const optionsHeader = options.header || {};
         const lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
@@ -59,7 +59,7 @@ class DatagridHeaderCell extends React.PureComponent {
                     lineHeight: lineHeight + 'px',
                 } },
                 React.createElement(CellSorter, { show: colKey && sortInfo[colKey], colIndex: colIndex, orderBy: sortInfo[colKey] ? sortInfo[colKey].orderBy : '' }),
-                React.createElement(CellLabel, { col: col, lineHeight: lineHeight, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll }))));
+                React.createElement(CellLabel, { col: col, lineHeight: lineHeight, rowSelectorSize: rowSelectorSize, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll }))));
     }
 }
 exports.default = DatagridHeaderCell;

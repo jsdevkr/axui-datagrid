@@ -75,7 +75,7 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
                             var inlineEditingActiveAlways = colEditor && colEditor.activeType === 'always';
                             return inlineEditingActiveAlways && colEditor.width ? (React.createElement("td", { key: ci },
                                 React.createElement("div", { style: { width: colEditor.width } }))) : (React.createElement("td", { key: ci },
-                                React.createElement(CellLabel_1.default, { columnHeight: 12, lineHeight: 12, columnBorderWidth: 0, colAlign: 'left', col: col, li: li, item: data[li], predefinedFormatter: predefinedFormatter })));
+                                React.createElement(CellLabel_1.default, { columnHeight: 12, lineHeight: 12, columnBorderWidth: 0, rowSelectorSize: 17, colAlign: 'left', col: col, li: li, item: data[li], predefinedFormatter: predefinedFormatter })));
                         })));
                 })))));
     };

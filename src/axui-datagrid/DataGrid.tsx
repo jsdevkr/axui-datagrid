@@ -71,6 +71,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
     lineNumberColumnWidth: 60,
     rowSelectorColumnWidth: 28,
+    rowSelectorSize: 16,
     remoteSort: false,
     header: DataGrid.defaultHeader,
     body: DataGrid.defaultBody,

@@ -4,7 +4,7 @@ const React = require("react");
 const utils_1 = require("../utils");
 class CellLabel extends React.PureComponent {
     render() {
-        const { columnHeight, lineHeight, columnBorderWidth, colAlign, col, col: { key = '', columnAttr = '', formatter }, li, item, selected = false, predefinedFormatter, } = this.props;
+        const { columnHeight, lineHeight, columnBorderWidth, rowSelectorSize, colAlign, col, col: { key = '', columnAttr = '', formatter }, li, item, selected = false, predefinedFormatter, } = this.props;
         const formatterData = {
             item,
             index: li,
@@ -18,8 +18,8 @@ class CellLabel extends React.PureComponent {
                 break;
             case '_row_selector_':
                 labelValue = (React.createElement("div", { "data-span": columnAttr, className: "axui-datagrid-check-box", "data-checked": selected, style: {
-                        width: lineHeight + 'px',
-                        height: lineHeight + 'px',
+                        width: rowSelectorSize + 'px',
+                        height: rowSelectorSize + 'px',
                     } }));
                 break;
             default:

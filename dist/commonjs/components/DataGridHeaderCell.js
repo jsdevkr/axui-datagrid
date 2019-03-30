@@ -20,13 +20,13 @@ var CellLabel = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     CellLabel.prototype.render = function () {
-        var _a = this.props, _b = _a.col, _c = _b.key, key = _c === void 0 ? '' : _c, _d = _b.label, label = _d === void 0 ? '' : _d, lineHeight = _a.lineHeight, optionsHeader = _a.optionsHeader, listSelectedAll = _a.listSelectedAll;
+        var _a = this.props, _b = _a.col, _c = _b.key, key = _c === void 0 ? '' : _c, _d = _b.label, label = _d === void 0 ? '' : _d, rowSelectorSize = _a.rowSelectorSize, optionsHeader = _a.optionsHeader, listSelectedAll = _a.listSelectedAll;
         switch (key) {
             case '_row_selector_':
                 if (optionsHeader.selector) {
                     return (React.createElement("div", { className: "axui-datagrid-check-box", "data-checked": listSelectedAll, style: {
-                            width: lineHeight + 'px',
-                            height: lineHeight + 'px',
+                            width: rowSelectorSize + 'px',
+                            height: rowSelectorSize + 'px',
                         } }));
                 }
                 else {
@@ -55,7 +55,7 @@ var DatagridHeaderCell = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DatagridHeaderCell.prototype.render = function () {
-        var _a = this.props, _b = _a.listSelectedAll, listSelectedAll = _b === void 0 ? false : _b, options = _a.options, _c = _a.options, _d = (_c === void 0 ? {} : _c).header, _e = _d === void 0 ? {} : _d, _f = _e.columnHeight, optionsHeaderColumnHeight = _f === void 0 ? 0 : _f, _g = _e.columnPadding, optionsHeaderColumnPadding = _g === void 0 ? 0 : _g, _h = _e.columnBorderWidth, optionsHeaderColumnBorderWidth = _h === void 0 ? 0 : _h, _j = _e.align, headerAlign = _j === void 0 ? 'left' : _j, _k = _a.focusedCol, focusedCol = _k === void 0 ? -1 : _k, selectionCols = _a.selectionCols, _l = _a.sortInfo, sortInfo = _l === void 0 ? {} : _l, bodyRow = _a.bodyRow, ri = _a.ri, col = _a.col, _m = _a.col, _o = _m === void 0 ? {} : _m, _p = _o.align, colAlign = _p === void 0 ? '' : _p, _q = _o.colIndex, colIndex = _q === void 0 ? 0 : _q, _r = _o.key, colKey = _r === void 0 ? '' : _r, _s = _o.rowSpan, colRowSpan = _s === void 0 ? 1 : _s, _t = _o.colSpan, colCowSpan = _t === void 0 ? 1 : _t, _u = _o.columnAttr, columnAttr = _u === void 0 ? '' : _u, onClick = _a.onClick;
+        var _a = this.props, _b = _a.listSelectedAll, listSelectedAll = _b === void 0 ? false : _b, options = _a.options, _c = _a.options, _d = _c === void 0 ? {} : _c, _e = _d.rowSelectorSize, rowSelectorSize = _e === void 0 ? 0 : _e, _f = _d.header, _g = _f === void 0 ? {} : _f, _h = _g.columnHeight, optionsHeaderColumnHeight = _h === void 0 ? 0 : _h, _j = _g.columnPadding, optionsHeaderColumnPadding = _j === void 0 ? 0 : _j, _k = _g.columnBorderWidth, optionsHeaderColumnBorderWidth = _k === void 0 ? 0 : _k, _l = _g.align, headerAlign = _l === void 0 ? 'left' : _l, _m = _a.focusedCol, focusedCol = _m === void 0 ? -1 : _m, selectionCols = _a.selectionCols, _o = _a.sortInfo, sortInfo = _o === void 0 ? {} : _o, bodyRow = _a.bodyRow, ri = _a.ri, col = _a.col, _p = _a.col, _q = _p === void 0 ? {} : _p, _r = _q.align, colAlign = _r === void 0 ? '' : _r, _s = _q.colIndex, colIndex = _s === void 0 ? 0 : _s, _t = _q.key, colKey = _t === void 0 ? '' : _t, _u = _q.rowSpan, colRowSpan = _u === void 0 ? 1 : _u, _v = _q.colSpan, colCowSpan = _v === void 0 ? 1 : _v, _w = _q.columnAttr, columnAttr = _w === void 0 ? '' : _w, onClick = _a.onClick;
         var optionsHeader = options.header || {};
         var lineHeight = optionsHeaderColumnHeight -
             optionsHeaderColumnPadding * 2 -
@@ -86,7 +86,7 @@ var DatagridHeaderCell = /** @class */ (function (_super) {
                     lineHeight: lineHeight + 'px',
                 } },
                 React.createElement(CellSorter, { show: colKey && sortInfo[colKey], colIndex: colIndex, orderBy: sortInfo[colKey] ? sortInfo[colKey].orderBy : '' }),
-                React.createElement(CellLabel, { col: col, lineHeight: lineHeight, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll }))));
+                React.createElement(CellLabel, { col: col, lineHeight: lineHeight, rowSelectorSize: rowSelectorSize, optionsHeader: optionsHeader, listSelectedAll: listSelectedAll }))));
     };
     return DatagridHeaderCell;
 }(React.PureComponent));
