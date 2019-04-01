@@ -204,7 +204,13 @@ var CellEditor = /** @class */ (function (_super) {
     CellEditor.prototype.componentDidMount = function () {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
-            this.inputTextRef.current.focus();
+            var colEditor = this.props.col.editor;
+            var editor = colEditor === 'text'
+                ? { type: 'text' }
+                : colEditor;
+            if (editor.activeType !== 'always') {
+                this.inputTextRef.current.focus();
+            }
         }
     };
     CellEditor.prototype.render = function () {

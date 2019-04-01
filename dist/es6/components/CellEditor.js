@@ -186,7 +186,13 @@ class CellEditor extends React.PureComponent {
     componentDidMount() {
         if (this.inputTextRef.current) {
             this.activeComposition = false;
-            this.inputTextRef.current.focus();
+            const { col: { editor: colEditor }, } = this.props;
+            const editor = colEditor === 'text'
+                ? { type: 'text' }
+                : colEditor;
+            if (editor.activeType !== 'always') {
+                this.inputTextRef.current.focus();
+            }
         }
     }
     render() {
