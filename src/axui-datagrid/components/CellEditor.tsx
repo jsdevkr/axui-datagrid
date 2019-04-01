@@ -272,7 +272,17 @@ class CellEditor extends React.PureComponent<IProps> {
   componentDidMount() {
     if (this.inputTextRef.current) {
       this.activeComposition = false;
-      this.inputTextRef.current.focus();
+
+      const {
+        col: { editor: colEditor },
+      } = this.props;
+      const editor: IDataGrid.IColEditor =
+        colEditor === 'text'
+          ? { type: 'text' }
+          : (colEditor as IDataGrid.IColEditor);
+      if (editor.activeType !== 'always') {
+        this.inputTextRef.current.focus();
+      }
     }
   }
 

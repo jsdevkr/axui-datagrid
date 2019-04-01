@@ -311,10 +311,9 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    // border: $axui-datagrid-cell-editInput-border;
-    border: 0 none;
+    border: $axui-datagrid-cell-editInput-border;
     display: block;
-    outline: 0;
+    outline: none;
     padding: $axui-datagrid-cell-padding;
   }
 
