@@ -168,21 +168,6 @@ class CellEditor extends React.PureComponent {
         };
         this.inputTextRef = React.createRef();
     }
-    // shouldComponentUpdate(nextProps: IProps) {
-    //   const {
-    //     li,
-    //     col: { colIndex },
-    //   } = nextProps;
-    //   if (
-    //     this.props.focusedRow === nextProps.focusedRow &&
-    //     nextProps.focusedRow === li &&
-    //     this.props.focusedCol === nextProps.focusedCol &&
-    //     nextProps.focusedCol === colIndex
-    //   ) {
-    //     return true;
-    //   }
-    //   return this.props.value !== nextProps.value;
-    // }
     componentDidMount() {
         if (this.inputTextRef.current) {
             this.activeComposition = false;

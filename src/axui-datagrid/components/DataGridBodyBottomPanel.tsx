@@ -24,7 +24,7 @@ class TableBody extends React.PureComponent<{
       <tbody>
         {this.props.bodyRow.rows.map((row, ri) => {
           return (
-            <tr key={ri} className={''}>
+            <tr key={ri}>
               {row.cols.map((col, ci) => {
                 return (
                   <DataGridBodyBottomCell

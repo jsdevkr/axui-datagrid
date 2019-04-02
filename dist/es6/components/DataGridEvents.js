@@ -378,7 +378,7 @@ class DataGridEvents extends React.Component {
         const { rootNode } = this.props;
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
-            // rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.removeEventListener('keyup', this.onFireEvent);
             rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
         }
     }

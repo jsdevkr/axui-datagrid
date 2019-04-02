@@ -186,21 +186,6 @@ var CellEditor = /** @class */ (function (_super) {
         _this.inputTextRef = React.createRef();
         return _this;
     }
-    // shouldComponentUpdate(nextProps: IProps) {
-    //   const {
-    //     li,
-    //     col: { colIndex },
-    //   } = nextProps;
-    //   if (
-    //     this.props.focusedRow === nextProps.focusedRow &&
-    //     nextProps.focusedRow === li &&
-    //     this.props.focusedCol === nextProps.focusedCol &&
-    //     nextProps.focusedCol === colIndex
-    //   ) {
-    //     return true;
-    //   }
-    //   return this.props.value !== nextProps.value;
-    // }
     CellEditor.prototype.componentDidMount = function () {
         if (this.inputTextRef.current) {
             this.activeComposition = false;

@@ -54,6 +54,12 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
         _this.tableRef = React.createRef();
         return _this;
     }
+    DataGridAutofitHelper.prototype.componentDidMount = function () {
+        var _this = this;
+        setTimeout(function () {
+            _this.getColumnsWidth();
+        });
+    };
     DataGridAutofitHelper.prototype.render = function () {
         var _a = this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.data, data = _c === void 0 ? [] : _c, _d = _a.predefinedFormatter, predefinedFormatter = _d === void 0 ? {} : _d, _e = _a.styles, styles = _e === void 0 ? {} : _e;
         var _f = styles.bodyHeight, bodyHeight = _f === void 0 ? 0 : _f, _g = styles.bodyTrHeight, bodyTrHeight = _g === void 0 ? 1 : _g;
@@ -78,12 +84,6 @@ var DataGridAutofitHelper = /** @class */ (function (_super) {
                                 React.createElement(CellLabel_1.default, { columnHeight: 12, lineHeight: 12, columnBorderWidth: 0, rowSelectorSize: 17, colAlign: 'left', col: col, li: li, item: data[li], predefinedFormatter: predefinedFormatter })));
                         })));
                 })))));
-    };
-    DataGridAutofitHelper.prototype.componentDidMount = function () {
-        var _this = this;
-        setTimeout(function () {
-            _this.getColumnsWidth();
-        });
     };
     return DataGridAutofitHelper;
 }(React.Component));

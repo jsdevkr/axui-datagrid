@@ -3,7 +3,7 @@ import { IDataGrid } from '../common/@types';
 import CellLabel from './CellLabel';
 import CellEditor from './CellEditor';
 
-class DataGridBodyCell extends React.Component<{
+class DataGridBodyCell extends React.PureComponent<{
   li: number;
   ci: number;
   col?: IDataGrid.ICol;

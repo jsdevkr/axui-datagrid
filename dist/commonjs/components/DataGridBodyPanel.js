@@ -16,9 +16,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
+var _enums_1 = require("../common/@enums");
 var DataGridBodyCell_1 = require("./DataGridBodyCell");
 var DataGridTableColGroup_1 = require("./DataGridTableColGroup");
-var _enums_1 = require("../common/@enums");
 var TableBody = /** @class */ (function (_super) {
     __extends(TableBody, _super);
     function TableBody() {
@@ -28,7 +28,7 @@ var TableBody = /** @class */ (function (_super) {
         var _a = this.props, sRowIndex = _a.sRowIndex, eRowIndex = _a.eRowIndex, data = _a.data, bodyRow = _a.bodyRow, setStoreState = _a.setStoreState, dispatch = _a.dispatch, focusedRow = _a.focusedRow, focusedCol = _a.focusedCol, selectionRows = _a.selectionRows, selectionCols = _a.selectionCols, options = _a.options, isInlineEditing = _a.isInlineEditing, inlineEditingCell = _a.inlineEditingCell, predefinedFormatter = _a.predefinedFormatter;
         return (React.createElement("tbody", null, utils_1.arrayFromRange(sRowIndex, eRowIndex).map(function (li) {
             if (data[li]) {
-                return bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri, className: "" + (li % 2 !== 0 && 'odded-line') },
+                return bodyRow.rows.map(function (row, ri) { return (React.createElement("tr", { key: ri, className: "" + (li % 2 !== 0 ? 'odded-line' : '') },
                     row.cols.map(function (col, ci) { return (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, data: data, selected: data[li]._selected_, setStoreState: setStoreState, dispatch: dispatch, focusedRow: focusedRow, focusedCol: focusedCol, selectionRows: selectionRows, selectionCols: selectionCols, options: options, isInlineEditing: isInlineEditing, inlineEditingCell: inlineEditingCell, predefinedFormatter: predefinedFormatter })); }),
                     React.createElement("td", null))); });
             }

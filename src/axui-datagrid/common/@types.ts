@@ -250,8 +250,6 @@ export namespace IDataGrid {
   }
 
   export interface IOptionPage {
-    // buttons?: IOptionPageButton[];
-    // buttonHeight?: number;
     height?: number;
   }
 

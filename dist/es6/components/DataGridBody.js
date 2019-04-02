@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const _enums_1 = require("../common/@enums");
 const DataGridBodyPanel_1 = require("./DataGridBodyPanel");
 const DataGridBodyBottomPanel_1 = require("./DataGridBodyBottomPanel");
 const DataGridBodyLoader_1 = require("./DataGridBodyLoader");
-const _enums_1 = require("../common/@enums");
 class DataGridBody extends React.Component {
     constructor(props) {
         super(props);

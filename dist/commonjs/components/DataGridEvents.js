@@ -438,7 +438,7 @@ var DataGridEvents = /** @class */ (function (_super) {
         var rootNode = this.props.rootNode;
         if (rootNode && rootNode.current) {
             rootNode.current.removeEventListener('keydown', this.onFireEvent);
-            // rootNode.current.removeEventListener('keyup', this.onFireEvent);
+            rootNode.current.removeEventListener('keyup', this.onFireEvent);
             rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
         }
     };

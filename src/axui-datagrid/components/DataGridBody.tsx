@@ -7,11 +7,11 @@ import {
   arrayFromRange,
   throttle,
 } from '../utils';
+import { IDataGrid } from '../common/@types';
+import { DataGridEnums } from '../common/@enums';
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
-import { IDataGrid } from '../common/@types';
-import { DataGridEnums } from '../common/@enums';
 
 interface IProps extends IDataGridStore {}
 

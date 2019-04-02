@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const hoc_1 = require("../hoc");
 const utils_1 = require("../utils");
+const _enums_1 = require("../common/@enums");
 const DataGridBodyCell_1 = require("./DataGridBodyCell");
 const DataGridTableColGroup_1 = require("./DataGridTableColGroup");
-const _enums_1 = require("../common/@enums");
 class TableBody extends React.PureComponent {
     render() {
         const { sRowIndex, eRowIndex, data, bodyRow, setStoreState, dispatch, focusedRow, focusedCol, selectionRows, selectionCols, options, isInlineEditing, inlineEditingCell, predefinedFormatter, } = this.props;
         return (React.createElement("tbody", null, utils_1.arrayFromRange(sRowIndex, eRowIndex).map(li => {
             if (data[li]) {
-                return bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri, className: `${li % 2 !== 0 && 'odded-line'}` },
+                return bodyRow.rows.map((row, ri) => (React.createElement("tr", { key: ri, className: `${li % 2 !== 0 ? 'odded-line' : ''}` },
                     row.cols.map((col, ci) => (React.createElement(DataGridBodyCell_1.default, { key: ci, li: li, ci: ci, col: col, data: data, selected: data[li]._selected_, setStoreState: setStoreState, dispatch: dispatch, focusedRow: focusedRow, focusedCol: focusedCol, selectionRows: selectionRows, selectionCols: selectionCols, options: options, isInlineEditing: isInlineEditing, inlineEditingCell: inlineEditingCell, predefinedFormatter: predefinedFormatter }))),
                     React.createElement("td", null))));
             }

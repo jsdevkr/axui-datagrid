@@ -111,5 +111,5 @@ var DataGridBodyCell = /** @class */ (function (_super) {
             } }, displayLabel ? (React.createElement(CellLabel_1.default, { col: col, li: li, item: data[li], columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, rowSelectorSize: rowSelectorSize, colAlign: colAlign, selected: selected, predefinedFormatter: predefinedFormatter })) : (React.createElement(CellEditor_1.default, { col: col, li: li, item: data[li], value: value, columnHeight: columnHeight, lineHeight: lineHeight, columnBorderWidth: columnBorderWidth, colAlign: colAlign, inlineEditingCell: inlineEditingCell, focusedRow: focusedRow, focusedCol: focusedCol, dispatch: dispatch, setStoreState: setStoreState }))));
     };
     return DataGridBodyCell;
-}(React.Component));
+}(React.PureComponent));
 exports.default = DataGridBodyCell;

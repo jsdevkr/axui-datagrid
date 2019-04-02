@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
-declare class DataGridBodyCell extends React.Component<{
+declare class DataGridBodyCell extends React.PureComponent<{
     li: number;
     ci: number;
     col?: IDataGrid.ICol;

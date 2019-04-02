@@ -2,10 +2,10 @@ import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { arrayFromRange } from '../utils';
-import DataGridBodyCell from './DataGridBodyCell';
-import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
+import DataGridBodyCell from './DataGridBodyCell';
+import DataGridTableColGroup from './DataGridTableColGroup';
 
 class TableBody extends React.PureComponent<{
   sRowIndex: number;
@@ -46,7 +46,7 @@ class TableBody extends React.PureComponent<{
         {arrayFromRange(sRowIndex, eRowIndex).map(li => {
           if (data[li]) {
             return bodyRow.rows.map((row, ri) => (
-              <tr key={ri} className={`${li % 2 !== 0 && 'odded-line'}`}>
+              <tr key={ri} className={`${li % 2 !== 0 ? 'odded-line' : ''}`}>
                 {row.cols.map((col, ci) => (
                   <DataGridBodyCell
                     key={ci}

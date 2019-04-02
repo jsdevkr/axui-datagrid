@@ -16,10 +16,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var hoc_1 = require("../hoc");
 var utils_1 = require("../utils");
+var _enums_1 = require("../common/@enums");
 var DataGridBodyPanel_1 = require("./DataGridBodyPanel");
 var DataGridBodyBottomPanel_1 = require("./DataGridBodyBottomPanel");
 var DataGridBodyLoader_1 = require("./DataGridBodyLoader");
-var _enums_1 = require("../common/@enums");
 var DataGridBody = /** @class */ (function (_super) {
     __extends(DataGridBody, _super);
     function DataGridBody(props) {

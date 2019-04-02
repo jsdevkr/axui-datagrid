@@ -26,7 +26,7 @@ var TableBody = /** @class */ (function (_super) {
     TableBody.prototype.render = function () {
         var _a = this.props, data = _a.data, options = _a.options, predefinedFormatter = _a.predefinedFormatter, predefinedCollector = _a.predefinedCollector;
         return (React.createElement("tbody", null, this.props.bodyRow.rows.map(function (row, ri) {
-            return (React.createElement("tr", { key: ri, className: '' },
+            return (React.createElement("tr", { key: ri },
                 row.cols.map(function (col, ci) {
                     return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, data: data, options: options, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }));
                 }),

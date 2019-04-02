@@ -39,6 +39,11 @@ class DataGridAutofitHelper extends React.Component {
         };
         this.tableRef = React.createRef();
     }
+    componentDidMount() {
+        setTimeout(() => {
+            this.getColumnsWidth();
+        });
+    }
     render() {
         const { colGroup = [], data = [], predefinedFormatter = {}, styles = {}, } = this.props;
         const { bodyHeight = 0, bodyTrHeight = 1 } = styles;
@@ -63,11 +68,6 @@ class DataGridAutofitHelper extends React.Component {
                                 React.createElement(CellLabel_1.default, { columnHeight: 12, lineHeight: 12, columnBorderWidth: 0, rowSelectorSize: 17, colAlign: 'left', col: col, li: li, item: data[li], predefinedFormatter: predefinedFormatter })));
                         })));
                 })))));
-    }
-    componentDidMount() {
-        setTimeout(() => {
-            this.getColumnsWidth();
-        });
     }
 }
 exports.default = hoc_1.connectStore(DataGridAutofitHelper);

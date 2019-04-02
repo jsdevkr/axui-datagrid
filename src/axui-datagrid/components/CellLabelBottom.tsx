@@ -80,7 +80,6 @@ class CellLabelBottom extends React.PureComponent<{
     return (
       <span
         data-span={columnAttr}
-        // data-pos={colColIndex}
         style={{
           height: columnHeight - columnBorderWidth + 'px',
           lineHeight: lineHeight + 'px',

@@ -9,7 +9,7 @@ class TableBody extends React.PureComponent {
     render() {
         const { data, options, predefinedFormatter, predefinedCollector, } = this.props;
         return (React.createElement("tbody", null, this.props.bodyRow.rows.map((row, ri) => {
-            return (React.createElement("tr", { key: ri, className: '' },
+            return (React.createElement("tr", { key: ri },
                 row.cols.map((col, ci) => {
                     return (React.createElement(DataGridBodyBottomCell_1.default, { key: ci, ci: ci, col: col, data: data, options: options, predefinedFormatter: predefinedFormatter, predefinedCollector: predefinedCollector }));
                 }),

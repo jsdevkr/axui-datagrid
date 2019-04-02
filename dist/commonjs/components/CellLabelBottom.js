@@ -60,9 +60,7 @@ var CellLabelBottom = /** @class */ (function (_super) {
                     labelValue = col.formatter(formatterData);
                 }
         }
-        return (React.createElement("span", { "data-span": columnAttr, 
-            // data-pos={colColIndex}
-            style: {
+        return (React.createElement("span", { "data-span": columnAttr, style: {
                 height: columnHeight - columnBorderWidth + 'px',
                 lineHeight: lineHeight + 'px',
                 textAlign: colAlign,

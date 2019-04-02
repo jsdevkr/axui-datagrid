@@ -17,6 +17,48 @@ class DataGridAutofitHelper extends React.Component<IProps> {
     this.tableRef = React.createRef();
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.getColumnsWidth();
+    });
+  }
+
+  getColumnsWidth = () => {
+    const { options = {} } = this.props;
+    const { autofitColumnWidthMin = 0, autofitColumnWidthMax = 0 } = options;
+
+    if (this.tableRef.current) {
+      const colGroup: IDataGrid.IAutofitCol[] = [];
+      const tds = this.tableRef.current.querySelectorAll(
+        '[data-autofit-table-head-row] > td',
+      );
+      if (tds && tds.length) {
+        for (let i = 0, l = tds.length; i < l; i++) {
+          const tdWidth = tds[i].getBoundingClientRect().width + 10;
+          let colWidth = tdWidth;
+
+          if (autofitColumnWidthMin > colWidth) {
+            colWidth = autofitColumnWidthMin;
+          } else if (autofitColumnWidthMax < colWidth) {
+            colWidth = autofitColumnWidthMax;
+          }
+
+          colGroup[i] = {
+            colIndex: i,
+            width: i === 0 ? tdWidth + 10 : colWidth,
+            tdWidth: Math.min(tdWidth + 10, autofitColumnWidthMax + 100),
+          };
+        }
+      }
+      if (colGroup.length) {
+        this.props.applyAutofit({
+          asideWidth: colGroup[0].width,
+          colGroup: colGroup.slice(1),
+        });
+      }
+    }
+  };
+
   render() {
     const {
       colGroup = [],
@@ -81,48 +123,6 @@ class DataGridAutofitHelper extends React.Component<IProps> {
       </div>
     );
   }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.getColumnsWidth();
-    });
-  }
-
-  getColumnsWidth = () => {
-    const { options = {} } = this.props;
-    const { autofitColumnWidthMin = 0, autofitColumnWidthMax = 0 } = options;
-
-    if (this.tableRef.current) {
-      const colGroup: IDataGrid.IAutofitCol[] = [];
-      const tds = this.tableRef.current.querySelectorAll(
-        '[data-autofit-table-head-row] > td',
-      );
-      if (tds && tds.length) {
-        for (let i = 0, l = tds.length; i < l; i++) {
-          const tdWidth = tds[i].getBoundingClientRect().width + 10;
-          let colWidth = tdWidth;
-
-          if (autofitColumnWidthMin > colWidth) {
-            colWidth = autofitColumnWidthMin;
-          } else if (autofitColumnWidthMax < colWidth) {
-            colWidth = autofitColumnWidthMax;
-          }
-
-          colGroup[i] = {
-            colIndex: i,
-            width: i === 0 ? tdWidth + 10 : colWidth,
-            tdWidth: Math.min(tdWidth + 10, autofitColumnWidthMax + 100),
-          };
-        }
-      }
-      if (colGroup.length) {
-        this.props.applyAutofit({
-          asideWidth: colGroup[0].width,
-          colGroup: colGroup.slice(1),
-        });
-      }
-    }
-  };
 }
 
 export default connectStore(DataGridAutofitHelper);

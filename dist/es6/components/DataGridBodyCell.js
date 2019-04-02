@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const CellLabel_1 = require("./CellLabel");
 const CellEditor_1 = require("./CellEditor");
-class DataGridBodyCell extends React.Component {
+class DataGridBodyCell extends React.PureComponent {
     constructor() {
         super(...arguments);
         this.handleActiveInlineEdit = (e, col, li) => {
