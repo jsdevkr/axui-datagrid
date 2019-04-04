@@ -25,6 +25,72 @@ var DataGridBody = /** @class */ (function (_super) {
     function DataGridBody(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {};
+        _this.handleSetSelected = function (rowIndex) {
+            var _a = _this.props, dispatch = _a.dispatch, _b = _a.data, data = _b === void 0 ? [] : _b;
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
+                rowIndex: rowIndex,
+            });
+        };
+        _this.handleClickLineNumber = function (e, rowIndex) {
+            var _a;
+            var _b = _this.props, _c = _b.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _b.focusedRow, focusedRow = _d === void 0 ? 0 : _d, _e = _b.data, data = _e === void 0 ? [] : _e, setStoreState = _b.setStoreState;
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            var state = {
+                dragging: false,
+                selectionRows: {},
+                selectionCols: (function () {
+                    var cols = {};
+                    colGroup.forEach(function (col) {
+                        cols[col.colIndex || 0] = true;
+                    });
+                    return cols;
+                })(),
+                focusedRow: focusedRow,
+                focusedCol: 0,
+            };
+            if (e.shiftKey) {
+                state.selectionRows = (function () {
+                    var rows = {};
+                    utils_1.arrayFromRange(Math.min(focusedRow, rowIndex), Math.max(focusedRow, rowIndex) + 1).forEach(function (i) {
+                        rows[i] = true;
+                    });
+                    return rows;
+                })();
+            }
+            else {
+                state.selectionRows = (_a = {},
+                    _a[rowIndex] = true,
+                    _a);
+                state.focusedRow = rowIndex;
+            }
+            setStoreState(state);
+        };
+        _this.handleClickBody = function (e, rowIndex, colIndex) {
+            var _a, _b;
+            var _c = _this.props, _d = _c.colGroup, colGroup = _d === void 0 ? [] : _d, _e = _c.data, data = _e === void 0 ? [] : _e, setStoreState = _c.setStoreState;
+            if (colIndex < 0 ||
+                colIndex > colGroup.length - 1 ||
+                rowIndex < 0 ||
+                rowIndex > data.length - 1) {
+                return;
+            }
+            // 셀렉션 저장정보 초기화
+            setStoreState({
+                selectionStartOffset: undefined,
+                selectionEndOffset: undefined,
+                selectionMinOffset: undefined,
+                selectionMaxOffset: undefined,
+                selectionRows: (_a = {}, _a[rowIndex] = true, _a),
+                selectionCols: (_b = {}, _b[colIndex] = true, _b),
+                focusedRow: rowIndex,
+                focusedCol: colIndex,
+            });
+        };
         _this.onMouseDownBody = function (e) {
             var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _a.scrollTop, scrollTop = _f === void 0 ? 0 : _f, _g = _a.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _a.focusedCol, focusedCol = _h === void 0 ? 0 : _h, isInlineEditing = _a.isInlineEditing, _j = _a.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _a.styles, styles = _k === void 0 ? {} : _k, setStoreState = _a.setStoreState, dispatch = _a.dispatch, rootNode = _a.rootNode, _l = _a.rootObject, rootObject = _l === void 0 ? {} : _l, loading = _a.loading, loadingData = _a.loadingData;
             if (loading || loadingData) {
@@ -46,7 +112,7 @@ var DataGridBody = /** @class */ (function (_super) {
                     headerHeight -
                     (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
                     bodyTrHeight);
-                return i >= data.length ? -1 : i;
+                return i >= data.length || i < 0 ? -1 : i;
             };
             var getColIndex = function (x, _scrollLeft) {
                 var p = x -
@@ -285,60 +351,6 @@ var DataGridBody = /** @class */ (function (_super) {
                     document.addEventListener('mouseleave', offEvent);
                 }
             };
-            var procClickLineNumber = function () {
-                var _a;
-                var state = {
-                    dragging: false,
-                    selectionRows: {},
-                    selectionCols: (function () {
-                        var cols = {};
-                        colGroup.forEach(function (col) {
-                            cols[col.colIndex || 0] = true;
-                        });
-                        return cols;
-                    })(),
-                    focusedRow: focusedRow,
-                    focusedCol: 0,
-                };
-                if (e.shiftKey) {
-                    state.selectionRows = (function () {
-                        var rows = {};
-                        utils_1.arrayFromRange(Math.min(focusedRow, selectStartedRow), Math.max(focusedRow, selectStartedRow) + 1).forEach(function (i) {
-                            rows[i] = true;
-                        });
-                        return rows;
-                    })();
-                }
-                else {
-                    state.selectionRows = (_a = {},
-                        _a[selectStartedRow] = true,
-                        _a);
-                    state.focusedRow = selectStartedRow;
-                }
-                setStoreState(state);
-            };
-            var procClickRowSelector = function () {
-                dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
-                    rowIndex: selectStartedRow,
-                });
-            };
-            var procBodyClick = function () {
-                var _a, _b;
-                if (selectStartedCol < 0) {
-                    return;
-                }
-                // 셀렉션 저장정보 초기화
-                setStoreState({
-                    selectionStartOffset: undefined,
-                    selectionEndOffset: undefined,
-                    selectionMinOffset: undefined,
-                    selectionMaxOffset: undefined,
-                    selectionRows: (_a = {}, _a[selectStartedRow] = true, _a),
-                    selectionCols: (_b = {}, _b[selectStartedCol] = true, _b),
-                    focusedRow: selectStartedRow,
-                    focusedCol: selectStartedCol,
-                });
-            };
             // 선택이 시작된 row / col
             var selectStartedRow = getRowIndex(startY, startScrollTop);
             // row값이 없다면 선택 안되야 함.
@@ -353,10 +365,10 @@ var DataGridBody = /** @class */ (function (_super) {
             if (e.button === 0) {
                 switch (spanType) {
                     case 'lineNumber':
-                        procClickLineNumber();
+                        _this.handleClickLineNumber(e, selectStartedRow);
                         break;
                     case 'rowSelector':
-                        procClickRowSelector();
+                        _this.handleSetSelected(selectStartedRow);
                         break;
                     default:
                         procBodySelect();
@@ -364,7 +376,7 @@ var DataGridBody = /** @class */ (function (_super) {
                 }
             }
             else {
-                procBodyClick();
+                _this.handleClickBody(e, selectStartedRow, selectStartedCol);
             }
             return true;
         };
@@ -520,7 +532,7 @@ var DataGridBody = /** @class */ (function (_super) {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDownCapture: this.onMouseDownBody },
             asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL, containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL, containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL, containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft })),

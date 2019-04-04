@@ -688,7 +688,7 @@ class StoreProvider extends React.Component<
         } else if (checked === false) {
           rowSelected = false;
         } else {
-          rowSelected = !data[rowIndex]._selected_;
+          rowSelected = !(data[rowIndex] && data[rowIndex]._selected_);
         }
 
         if (!rowSelected) {

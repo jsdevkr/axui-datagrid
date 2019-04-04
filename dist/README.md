@@ -270,3 +270,4 @@ export default Formatter;
 - v0.13.5 - add option.rowSelectorSize
 - v0.13.6 - Handle focus exception when text type editor is activeType 'always'.
 - v0.13.7 - minor fix.
+- v0.13.8 - rowSelect bug fix.

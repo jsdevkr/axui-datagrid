@@ -11,6 +11,70 @@ class DataGridBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.handleSetSelected = (rowIndex) => {
+            const { dispatch, data = [] } = this.props;
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
+                rowIndex,
+            });
+        };
+        this.handleClickLineNumber = (e, rowIndex) => {
+            const { colGroup = [], focusedRow = 0, data = [], setStoreState, } = this.props;
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            let state = {
+                dragging: false,
+                selectionRows: {},
+                selectionCols: (() => {
+                    let cols = {};
+                    colGroup.forEach((col) => {
+                        cols[col.colIndex || 0] = true;
+                    });
+                    return cols;
+                })(),
+                focusedRow: focusedRow,
+                focusedCol: 0,
+            };
+            if (e.shiftKey) {
+                state.selectionRows = (() => {
+                    let rows = {};
+                    utils_1.arrayFromRange(Math.min(focusedRow, rowIndex), Math.max(focusedRow, rowIndex) + 1).forEach(i => {
+                        rows[i] = true;
+                    });
+                    return rows;
+                })();
+            }
+            else {
+                state.selectionRows = {
+                    [rowIndex]: true,
+                };
+                state.focusedRow = rowIndex;
+            }
+            setStoreState(state);
+        };
+        this.handleClickBody = (e, rowIndex, colIndex) => {
+            const { colGroup = [], data = [], setStoreState } = this.props;
+            if (colIndex < 0 ||
+                colIndex > colGroup.length - 1 ||
+                rowIndex < 0 ||
+                rowIndex > data.length - 1) {
+                return;
+            }
+            // 셀렉션 저장정보 초기화
+            setStoreState({
+                selectionStartOffset: undefined,
+                selectionEndOffset: undefined,
+                selectionMinOffset: undefined,
+                selectionMaxOffset: undefined,
+                selectionRows: { [rowIndex]: true },
+                selectionCols: { [colIndex]: true },
+                focusedRow: rowIndex,
+                focusedCol: colIndex,
+            });
+        };
         this.onMouseDownBody = (e) => {
             const { data = [], colGroup = [], headerColGroup = [], scrollLeft = 0, scrollTop = 0, focusedRow = 0, focusedCol = 0, isInlineEditing, inlineEditingCell = {}, styles = {}, setStoreState, dispatch, rootNode, rootObject = {}, loading, loadingData, } = this.props;
             if (loading || loadingData) {
@@ -32,7 +96,7 @@ class DataGridBody extends React.Component {
                     headerHeight -
                     (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
                     bodyTrHeight);
-                return i >= data.length ? -1 : i;
+                return i >= data.length || i < 0 ? -1 : i;
             };
             const getColIndex = (x, _scrollLeft) => {
                 const p = x -
@@ -270,58 +334,6 @@ class DataGridBody extends React.Component {
                     document.addEventListener('mouseleave', offEvent);
                 }
             };
-            const procClickLineNumber = () => {
-                let state = {
-                    dragging: false,
-                    selectionRows: {},
-                    selectionCols: (() => {
-                        let cols = {};
-                        colGroup.forEach((col) => {
-                            cols[col.colIndex || 0] = true;
-                        });
-                        return cols;
-                    })(),
-                    focusedRow: focusedRow,
-                    focusedCol: 0,
-                };
-                if (e.shiftKey) {
-                    state.selectionRows = (() => {
-                        let rows = {};
-                        utils_1.arrayFromRange(Math.min(focusedRow, selectStartedRow), Math.max(focusedRow, selectStartedRow) + 1).forEach(i => {
-                            rows[i] = true;
-                        });
-                        return rows;
-                    })();
-                }
-                else {
-                    state.selectionRows = {
-                        [selectStartedRow]: true,
-                    };
-                    state.focusedRow = selectStartedRow;
-                }
-                setStoreState(state);
-            };
-            const procClickRowSelector = () => {
-                dispatch(_enums_1.DataGridEnums.DispatchTypes.SELECT, {
-                    rowIndex: selectStartedRow,
-                });
-            };
-            const procBodyClick = () => {
-                if (selectStartedCol < 0) {
-                    return;
-                }
-                // 셀렉션 저장정보 초기화
-                setStoreState({
-                    selectionStartOffset: undefined,
-                    selectionEndOffset: undefined,
-                    selectionMinOffset: undefined,
-                    selectionMaxOffset: undefined,
-                    selectionRows: { [selectStartedRow]: true },
-                    selectionCols: { [selectStartedCol]: true },
-                    focusedRow: selectStartedRow,
-                    focusedCol: selectStartedCol,
-                });
-            };
             // 선택이 시작된 row / col
             let selectStartedRow = getRowIndex(startY, startScrollTop);
             // row값이 없다면 선택 안되야 함.
@@ -336,10 +348,10 @@ class DataGridBody extends React.Component {
             if (e.button === 0) {
                 switch (spanType) {
                     case 'lineNumber':
-                        procClickLineNumber();
+                        this.handleClickLineNumber(e, selectStartedRow);
                         break;
                     case 'rowSelector':
-                        procClickRowSelector();
+                        this.handleSetSelected(selectStartedRow);
                         break;
                     default:
                         procBodySelect();
@@ -347,7 +359,7 @@ class DataGridBody extends React.Component {
                 }
             }
             else {
-                procBodyClick();
+                this.handleClickBody(e, selectStartedRow, selectStartedCol);
             }
             return true;
         };
@@ -502,7 +514,7 @@ class DataGridBody extends React.Component {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDown: this.onMouseDownBody },
+        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDownCapture: this.onMouseDownBody },
             asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL, containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL, containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL, containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft })),

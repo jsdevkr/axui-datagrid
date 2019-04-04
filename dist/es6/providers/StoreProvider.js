@@ -303,7 +303,7 @@ class StoreProvider extends React.Component {
                         rowSelected = false;
                     }
                     else {
-                        rowSelected = !data[rowIndex]._selected_;
+                        rowSelected = !(data[rowIndex] && data[rowIndex]._selected_);
                     }
                     if (!rowSelected) {
                         selectedAll = false;
