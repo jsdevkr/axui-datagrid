@@ -205,7 +205,7 @@ class CellEditor extends React.PureComponent {
                 }
                 return editor.render({
                     col: col,
-                    rowIndex: li,
+                    li,
                     colIndex: col.colIndex || 0,
                     item,
                     value,

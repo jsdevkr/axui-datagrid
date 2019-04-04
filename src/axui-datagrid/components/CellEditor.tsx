@@ -311,7 +311,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
         return editor.render({
           col: col,
-          rowIndex: li,
+          li,
           colIndex: col.colIndex || 0,
           item,
           value,

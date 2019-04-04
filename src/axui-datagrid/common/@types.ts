@@ -99,7 +99,7 @@ export namespace IDataGrid {
 
   export interface ICellEditorData {
     col: ICol;
-    rowIndex: number;
+    li: number;
     colIndex: number;
     item: any;
     value: any;

@@ -223,7 +223,7 @@ var CellEditor = /** @class */ (function (_super) {
                 }
                 return editor.render({
                     col: col,
-                    rowIndex: li,
+                    li: li,
                     colIndex: col.colIndex || 0,
                     item: item,
                     value: value,

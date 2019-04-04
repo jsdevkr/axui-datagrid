@@ -75,7 +75,7 @@ export declare namespace IDataGrid {
     }) => void;
     interface ICellEditorData {
         col: ICol;
-        rowIndex: number;
+        li: number;
         colIndex: number;
         item: any;
         value: any;
