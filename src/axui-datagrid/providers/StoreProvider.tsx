@@ -127,7 +127,8 @@ class StoreProvider extends React.Component<
       nProps.onChangeScrollSize === nState.onChangeScrollSize &&
       nProps.onChangeSelection === nState.onChangeSelection &&
       nProps.onChangeSelected === nState.onChangeSelected &&
-      nProps.onRightClick === nState.onRightClick
+      nProps.onRightClick === nState.onRightClick &&
+      nProps.onClick === nState.onClick
     ) {
       return null;
     } else {
@@ -160,6 +161,7 @@ class StoreProvider extends React.Component<
       storeState.onChangeSelection = nProps.onChangeSelection;
       storeState.onChangeSelected = nProps.onChangeSelected;
       storeState.onRightClick = nProps.onRightClick;
+      storeState.onClick = nProps.onClick;
       ///
       storeState.headerTable = nProps.headerTable;
       storeState.bodyRowTable = nProps.bodyRowTable;

@@ -91,44 +91,46 @@ var DataGridBody = /** @class */ (function (_super) {
                 focusedCol: colIndex,
             });
         };
+        _this.getRowIndex = function (y, _scrollTop) {
+            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.styles, _d = _c === void 0 ? {} : _c, _e = _d.frozenPanelHeight, frozenPanelHeight = _e === void 0 ? 0 : _e, _f = _d.headerHeight, headerHeight = _f === void 0 ? 0 : _f, _g = _d.bodyTrHeight, bodyTrHeight = _g === void 0 ? 0 : _g;
+            var i = Math.floor((y -
+                headerHeight -
+                (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
+                bodyTrHeight);
+            return i >= data.length || i < 0 ? -1 : i;
+        };
+        _this.getColIndex = function (x, _scrollLeft) {
+            var _a = _this.props, _b = _a.colGroup, colGroup = _b === void 0 ? [] : _b, _c = _a.styles, _d = _c === void 0 ? {} : _c, _e = _d.asidePanelWidth, asidePanelWidth = _e === void 0 ? 0 : _e, _f = _d.frozenPanelWidth, frozenPanelWidth = _f === void 0 ? 0 : _f;
+            var p = x -
+                asidePanelWidth -
+                (x - asidePanelWidth < frozenPanelWidth ? 0 : _scrollLeft);
+            var cl = colGroup.length;
+            var i = -1;
+            while (cl--) {
+                var col = colGroup[cl];
+                if (col && (col._sx || 0) <= p && (col._ex || 0) >= p) {
+                    i = col.colIndex;
+                    break;
+                }
+            }
+            return i;
+        };
         _this.onMouseDownBody = function (e) {
-            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, _d = _a.headerColGroup, headerColGroup = _d === void 0 ? [] : _d, _e = _a.scrollLeft, scrollLeft = _e === void 0 ? 0 : _e, _f = _a.scrollTop, scrollTop = _f === void 0 ? 0 : _f, _g = _a.focusedRow, focusedRow = _g === void 0 ? 0 : _g, _h = _a.focusedCol, focusedCol = _h === void 0 ? 0 : _h, isInlineEditing = _a.isInlineEditing, _j = _a.inlineEditingCell, inlineEditingCell = _j === void 0 ? {} : _j, _k = _a.styles, styles = _k === void 0 ? {} : _k, setStoreState = _a.setStoreState, dispatch = _a.dispatch, rootNode = _a.rootNode, _l = _a.rootObject, rootObject = _l === void 0 ? {} : _l, loading = _a.loading, loadingData = _a.loadingData;
+            var _a = _this.props, _b = _a.headerColGroup, headerColGroup = _b === void 0 ? [] : _b, _c = _a.scrollLeft, scrollLeft = _c === void 0 ? 0 : _c, _d = _a.scrollTop, scrollTop = _d === void 0 ? 0 : _d, _e = _a.focusedRow, focusedRow = _e === void 0 ? 0 : _e, _f = _a.focusedCol, focusedCol = _f === void 0 ? 0 : _f, isInlineEditing = _a.isInlineEditing, _g = _a.inlineEditingCell, inlineEditingCell = _g === void 0 ? {} : _g, _h = _a.styles, styles = _h === void 0 ? {} : _h, setStoreState = _a.setStoreState, dispatch = _a.dispatch, rootNode = _a.rootNode, _j = _a.rootObject, rootObject = _j === void 0 ? {} : _j, loading = _a.loading, loadingData = _a.loadingData;
             if (loading || loadingData) {
                 return false;
             }
-            var _m = styles.frozenPanelWidth, frozenPanelWidth = _m === void 0 ? 0 : _m, _o = styles.frozenPanelHeight, frozenPanelHeight = _o === void 0 ? 0 : _o, _p = styles.headerHeight, headerHeight = _p === void 0 ? 0 : _p, _q = styles.bodyHeight, bodyHeight = _q === void 0 ? 0 : _q, _r = styles.elWidth, elWidth = _r === void 0 ? 0 : _r, _s = styles.bodyTrHeight, bodyTrHeight = _s === void 0 ? 0 : _s, _t = styles.asidePanelWidth, asidePanelWidth = _t === void 0 ? 0 : _t, _u = styles.scrollContentWidth, scrollContentWidth = _u === void 0 ? 0 : _u, _v = styles.scrollContentHeight, scrollContentHeight = _v === void 0 ? 0 : _v, _w = styles.scrollContentContainerWidth, scrollContentContainerWidth = _w === void 0 ? 0 : _w, _x = styles.scrollContentContainerHeight, scrollContentContainerHeight = _x === void 0 ? 0 : _x;
+            var _k = styles.headerHeight, headerHeight = _k === void 0 ? 0 : _k, _l = styles.bodyHeight, bodyHeight = _l === void 0 ? 0 : _l, _m = styles.elWidth, elWidth = _m === void 0 ? 0 : _m, _o = styles.bodyTrHeight, bodyTrHeight = _o === void 0 ? 0 : _o, _p = styles.asidePanelWidth, asidePanelWidth = _p === void 0 ? 0 : _p, _q = styles.scrollContentWidth, scrollContentWidth = _q === void 0 ? 0 : _q, _r = styles.scrollContentHeight, scrollContentHeight = _r === void 0 ? 0 : _r, _s = styles.scrollContentContainerWidth, scrollContentContainerWidth = _s === void 0 ? 0 : _s, _t = styles.scrollContentContainerHeight, scrollContentContainerHeight = _t === void 0 ? 0 : _t;
             var scrollPanelRightMargin = 0; // 필요하면 verticalScrollerWidth 대입
             var startMousePosition = utils_1.getMousePosition(e);
             var spanType = e.target.getAttribute('data-span');
-            var _y = rootNode &&
+            var _u = rootNode &&
                 rootNode.current &&
-                rootNode.current.getBoundingClientRect(), _z = _y.x, leftPadding = _z === void 0 ? 0 : _z, _0 = _y.y, topPadding = _0 === void 0 ? 0 : _0;
+                rootNode.current.getBoundingClientRect(), _v = _u.x, leftPadding = _v === void 0 ? 0 : _v, _w = _u.y, topPadding = _w === void 0 ? 0 : _w;
             var startScrollLeft = scrollLeft;
             var startScrollTop = scrollTop;
             var startX = startMousePosition.x - leftPadding;
             var startY = startMousePosition.y - topPadding;
-            var getRowIndex = function (y, _scrollTop) {
-                var i = Math.floor((y -
-                    headerHeight -
-                    (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
-                    bodyTrHeight);
-                return i >= data.length || i < 0 ? -1 : i;
-            };
-            var getColIndex = function (x, _scrollLeft) {
-                var p = x -
-                    asidePanelWidth -
-                    (x - asidePanelWidth < frozenPanelWidth ? 0 : _scrollLeft);
-                var cl = colGroup.length;
-                var i = -1;
-                while (cl--) {
-                    var col = colGroup[cl];
-                    if (col && (col._sx || 0) <= p && (col._ex || 0) >= p) {
-                        i = col.colIndex;
-                        break;
-                    }
-                }
-                return i;
-            };
             var procBodySelect = function () {
                 var _a, _b;
                 if (selectStartedCol < 0) {
@@ -140,8 +142,8 @@ var DataGridBody = /** @class */ (function (_super) {
                     var setStateCall = function (currState, _moving) {
                         var _a = currState.selectionEndOffset, currSelectionEndOffset = _a === void 0 ? {} : _a, _b = currState.scrollLeft, currScrollLeft = _b === void 0 ? 0 : _b, _c = currState.scrollTop, currScrollTop = _c === void 0 ? 0 : _c;
                         var _d = currSelectionEndOffset.x, selectionEndOffsetX = _d === void 0 ? 0 : _d, _e = currSelectionEndOffset.y, selectionEndOffsetY = _e === void 0 ? 0 : _e;
-                        var selectEndedRow = getRowIndex(selectionEndOffsetY, currScrollTop);
-                        var selectEndedCol = getColIndex(selectionEndOffsetX, currScrollLeft);
+                        var selectEndedRow = _this.getRowIndex(selectionEndOffsetY, currScrollTop);
+                        var selectEndedCol = _this.getColIndex(selectionEndOffsetX, currScrollLeft);
                         // 컬럼인덱스를 찾지 못했다면
                         if (selectEndedCol === -1) {
                             var p = selectionEndOffsetX - asidePanelWidth - scrollLeft;
@@ -352,9 +354,9 @@ var DataGridBody = /** @class */ (function (_super) {
                 }
             };
             // 선택이 시작된 row / col
-            var selectStartedRow = getRowIndex(startY, startScrollTop);
+            var selectStartedRow = _this.getRowIndex(startY, startScrollTop);
             // row값이 없다면 선택 안되야 함.
-            var selectStartedCol = selectStartedRow === -1 ? -1 : getColIndex(startX, startScrollLeft);
+            var selectStartedCol = selectStartedRow === -1 ? -1 : _this.getColIndex(startX, startScrollLeft);
             if (isInlineEditing &&
                 inlineEditingCell.rowIndex === selectStartedRow &&
                 inlineEditingCell.colIndex === selectStartedCol) {
@@ -411,6 +413,21 @@ var DataGridBody = /** @class */ (function (_super) {
                 scrollTop: currScrollTop,
             });
             return;
+        };
+        _this.onClick = function (e) {
+            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, onClick = _a.onClick, focusedCol = _a.focusedCol, focusedRow = _a.focusedRow;
+            if (onClick &&
+                typeof focusedRow !== 'undefined' &&
+                typeof focusedCol !== 'undefined') {
+                var _d = colGroup[focusedCol].key, itemKey = _d === void 0 ? '' : _d;
+                onClick({
+                    e: e,
+                    item: data[focusedRow],
+                    value: data[focusedRow][itemKey],
+                    focusedRow: focusedRow,
+                    focusedCol: focusedCol,
+                });
+            }
         };
         _this.bodyRef = React.createRef();
         return _this;
@@ -532,7 +549,7 @@ var DataGridBody = /** @class */ (function (_super) {
             top: bodyHeight - footSumHeight - 1,
             height: footSumHeight,
         };
-        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDownCapture: this.onMouseDownBody },
+        return (React.createElement("div", { ref: this.bodyRef, className: 'axui-datagrid-body', style: { height: bodyHeight, touchAction: 'none' }, onMouseDownCapture: this.onMouseDownBody, onClick: this.onClick },
             asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_ASIDE_BODY_SCROLL, containerStyle: topAsideBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelWidth !== 0 && frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_LEFT_BODY_SCROLL, containerStyle: topLeftBodyPanelStyle, panelScrollConfig: topBodyScrollConfig })),
             frozenPanelHeight !== 0 && (React.createElement(DataGridBodyPanel_1.default, { panelName: _enums_1.DataGridEnums.PanelNames.TOP_BODY_SCROLL, containerStyle: topBodyPanelStyle, panelScrollConfig: topBodyScrollConfig, panelLeft: scrollLeft })),

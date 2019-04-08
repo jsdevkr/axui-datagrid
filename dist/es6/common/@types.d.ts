@@ -33,6 +33,13 @@ export declare namespace IDataGrid {
         focusedRow?: number;
         focusedCol?: number;
     }
+    interface IonClickParam {
+        e: React.MouseEvent<any>;
+        item: any;
+        value: any;
+        focusedRow?: number;
+        focusedCol?: number;
+    }
     interface IonScrollEndFunctionParam {
         endOfScrollTop?: boolean;
         endOfScrollLeft?: boolean;
@@ -303,6 +310,7 @@ export declare namespace IDataGrid {
         onChangeSelection?: (param: ISelection) => void;
         onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
+        onClick?: (param: IonClickParam) => void;
     }
     interface IStoreState {
         loading?: boolean;
@@ -385,6 +393,7 @@ export declare namespace IDataGrid {
         onChangeSelection?: (param: ISelection) => void;
         onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
+        onClick?: (param: IonClickParam) => void;
     }
     interface ISelection {
         rows?: number[];
@@ -414,6 +423,7 @@ export declare namespace IDataGrid {
         onChangeSelection?: (param: ISelection) => void;
         onChangeSelected?: (param: IonChangeSelectedParam) => void;
         onRightClick?: (param: IonRightClickParam) => void;
+        onClick?: (param: IonClickParam) => void;
     }
     interface IRootState {
         mounted?: boolean;

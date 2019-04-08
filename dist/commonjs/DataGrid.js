@@ -210,7 +210,7 @@ var DataGrid = /** @class */ (function (_super) {
     // }
     DataGrid.prototype.render = function () {
         var _a = this.state, mounted = _a.mounted, doneAutofit = _a.doneAutofit, autofitColGroup = _a.autofitColGroup, headerTable = _a.headerTable, bodyRowTable = _a.bodyRowTable, bodyRowMap = _a.bodyRowMap, asideHeaderData = _a.asideHeaderData, leftHeaderData = _a.leftHeaderData, headerData = _a.headerData, asideBodyRowData = _a.asideBodyRowData, leftBodyRowData = _a.leftBodyRowData, bodyRowData = _a.bodyRowData, colGroupMap = _a.colGroupMap, asideColGroup = _a.asideColGroup, colGroup = _a.colGroup, footSumColumns = _a.footSumColumns, footSumTable = _a.footSumTable, leftFootSumData = _a.leftFootSumData, footSumData = _a.footSumData, options = _a.options;
-        var _b = this.props, _c = _b.loading, loading = _c === void 0 ? false : _c, _d = _b.loadingData, loadingData = _d === void 0 ? false : _d, _e = _b.data, data = _e === void 0 ? [] : _e, width = _b.width, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, selectedRowKeys = _b.selectedRowKeys, selection = _b.selection, status = _b.status, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelected = _b.onChangeSelected, onRightClick = _b.onRightClick, _g = _b.style, style = _g === void 0 ? {} : _g;
+        var _b = this.props, _c = _b.loading, loading = _c === void 0 ? false : _c, _d = _b.loadingData, loadingData = _d === void 0 ? false : _d, _e = _b.data, data = _e === void 0 ? [] : _e, width = _b.width, _f = _b.height, height = _f === void 0 ? DataGrid.defaultHeight : _f, selectedRowKeys = _b.selectedRowKeys, selection = _b.selection, status = _b.status, scrollLeft = _b.scrollLeft, scrollTop = _b.scrollTop, onBeforeEvent = _b.onBeforeEvent, onScroll = _b.onScroll, onScrollEnd = _b.onScrollEnd, onChangeScrollSize = _b.onChangeScrollSize, onChangeSelection = _b.onChangeSelection, onChangeSelected = _b.onChangeSelected, onRightClick = _b.onRightClick, onClick = _b.onClick, _g = _b.style, style = _g === void 0 ? {} : _g;
         var gridRootStyle = __assign({
             height: height,
             width: width,
@@ -253,6 +253,7 @@ var DataGrid = /** @class */ (function (_super) {
             onChangeSelection: onChangeSelection,
             onChangeSelected: onChangeSelected,
             onRightClick: onRightClick,
+            onClick: onClick,
             options: options,
         };
         // console.log('datagrid render');

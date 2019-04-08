@@ -271,3 +271,4 @@ export default Formatter;
 - v0.13.6 - Handle focus exception when text type editor is activeType 'always'.
 - v0.13.7 - minor fix.
 - v0.13.8 - rowSelect bug fix.
+- v0.13.9 - add a new prop onClick

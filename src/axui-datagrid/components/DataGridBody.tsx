@@ -113,10 +113,50 @@ class DataGridBody extends React.Component<IProps> {
     });
   };
 
-  onMouseDownBody = (e: React.MouseEvent<Element>) => {
+  getRowIndex = (y: number, _scrollTop: number): number => {
     const {
       data = [],
+      styles: {
+        frozenPanelHeight = 0,
+        headerHeight = 0,
+        bodyTrHeight = 0,
+      } = {},
+    } = this.props;
+
+    const i = Math.floor(
+      (y -
+        headerHeight -
+        (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
+        bodyTrHeight,
+    );
+    return i >= data.length || i < 0 ? -1 : i;
+  };
+
+  getColIndex = (x: number, _scrollLeft: number): number => {
+    const {
       colGroup = [],
+      styles: { asidePanelWidth = 0, frozenPanelWidth = 0 } = {},
+    } = this.props;
+
+    const p: number =
+      x -
+      asidePanelWidth -
+      (x - asidePanelWidth < frozenPanelWidth ? 0 : _scrollLeft);
+
+    let cl: number = colGroup.length;
+    let i: number = -1;
+    while (cl--) {
+      const col = colGroup[cl] as any;
+      if (col && (col._sx || 0) <= p && (col._ex || 0) >= p) {
+        i = col.colIndex as number;
+        break;
+      }
+    }
+    return i;
+  };
+
+  onMouseDownBody = (e: React.MouseEvent<Element>) => {
+    const {
       headerColGroup = [],
       scrollLeft = 0,
       scrollTop = 0,
@@ -138,8 +178,6 @@ class DataGridBody extends React.Component<IProps> {
     }
 
     const {
-      frozenPanelWidth = 0,
-      frozenPanelHeight = 0,
       headerHeight = 0,
       bodyHeight = 0,
       elWidth = 0,
@@ -163,32 +201,7 @@ class DataGridBody extends React.Component<IProps> {
     const startScrollTop = scrollTop;
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
-    const getRowIndex: Function = (y: number, _scrollTop: number): number => {
-      const i = Math.floor(
-        (y -
-          headerHeight -
-          (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
-          bodyTrHeight,
-      );
-      return i >= data.length || i < 0 ? -1 : i;
-    };
-    const getColIndex: Function = (x: number, _scrollLeft: number): number => {
-      const p: number =
-        x -
-        asidePanelWidth -
-        (x - asidePanelWidth < frozenPanelWidth ? 0 : _scrollLeft);
 
-      let cl: number = colGroup.length;
-      let i: number = -1;
-      while (cl--) {
-        const col = colGroup[cl] as any;
-        if (col && (col._sx || 0) <= p && (col._ex || 0) >= p) {
-          i = col.colIndex as number;
-          break;
-        }
-      }
-      return i;
-    };
     const procBodySelect = () => {
       if (selectStartedCol < 0) {
         return;
@@ -212,11 +225,11 @@ class DataGridBody extends React.Component<IProps> {
             y: selectionEndOffsetY = 0,
           } = currSelectionEndOffset;
 
-          const selectEndedRow: number = getRowIndex(
+          const selectEndedRow: number = this.getRowIndex(
             selectionEndOffsetY,
             currScrollTop,
           );
-          let selectEndedCol: number = getColIndex(
+          let selectEndedCol: number = this.getColIndex(
             selectionEndOffsetX,
             currScrollLeft,
           );
@@ -466,10 +479,10 @@ class DataGridBody extends React.Component<IProps> {
     };
 
     // 선택이 시작된 row / col
-    let selectStartedRow: number = getRowIndex(startY, startScrollTop);
+    let selectStartedRow: number = this.getRowIndex(startY, startScrollTop);
     // row값이 없다면 선택 안되야 함.
     let selectStartedCol: number =
-      selectStartedRow === -1 ? -1 : getColIndex(startX, startScrollLeft);
+      selectStartedRow === -1 ? -1 : this.getColIndex(startX, startScrollLeft);
 
     if (
       isInlineEditing &&
@@ -550,6 +563,31 @@ class DataGridBody extends React.Component<IProps> {
     });
 
     return;
+  };
+
+  onClick = (e: React.MouseEvent) => {
+    const {
+      data = [],
+      colGroup = [],
+      onClick,
+      focusedCol,
+      focusedRow,
+    } = this.props;
+
+    if (
+      onClick &&
+      typeof focusedRow !== 'undefined' &&
+      typeof focusedCol !== 'undefined'
+    ) {
+      const { key: itemKey = '' } = colGroup[focusedCol];
+      onClick({
+        e,
+        item: data[focusedRow],
+        value: data[focusedRow][itemKey],
+        focusedRow,
+        focusedCol,
+      });
+    }
   };
 
   shouldComponentUpdate(pProps: IProps) {
@@ -745,6 +783,7 @@ class DataGridBody extends React.Component<IProps> {
         className={'axui-datagrid-body'}
         style={{ height: bodyHeight, touchAction: 'none' }}
         onMouseDownCapture={this.onMouseDownBody}
+        onClick={this.onClick}
       >
         {asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (
           <DataGridBodyPanel

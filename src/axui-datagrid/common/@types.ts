@@ -39,6 +39,14 @@ export namespace IDataGrid {
     focusedCol?: number;
   }
 
+  export interface IonClickParam {
+    e: React.MouseEvent<any>;
+    item: any;
+    value: any;
+    focusedRow?: number;
+    focusedCol?: number;
+  }
+
   export interface IonScrollEndFunctionParam {
     endOfScrollTop?: boolean;
     endOfScrollLeft?: boolean;
@@ -363,6 +371,7 @@ export namespace IDataGrid {
     onChangeSelection?: (param: ISelection) => void;
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
+    onClick?: (param: IonClickParam) => void;
   }
 
   export interface IStoreState {
@@ -461,6 +470,7 @@ export namespace IDataGrid {
     onChangeSelection?: (param: ISelection) => void;
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
+    onClick?: (param: IonClickParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface ISelection {
@@ -492,6 +502,7 @@ export namespace IDataGrid {
     onChangeSelection?: (param: ISelection) => void;
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
+    onClick?: (param: IonClickParam) => void;
   }
 
   export interface IRootState {

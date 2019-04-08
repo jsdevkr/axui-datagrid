@@ -522,7 +522,8 @@ var StoreProvider = /** @class */ (function (_super) {
             nProps.onChangeScrollSize === nState.onChangeScrollSize &&
             nProps.onChangeSelection === nState.onChangeSelection &&
             nProps.onChangeSelected === nState.onChangeSelected &&
-            nProps.onRightClick === nState.onRightClick) {
+            nProps.onRightClick === nState.onRightClick &&
+            nProps.onClick === nState.onClick) {
             return null;
         }
         else {
@@ -551,6 +552,7 @@ var StoreProvider = /** @class */ (function (_super) {
             storeState_1.onChangeSelection = nProps.onChangeSelection;
             storeState_1.onChangeSelected = nProps.onChangeSelected;
             storeState_1.onRightClick = nProps.onRightClick;
+            storeState_1.onClick = nProps.onClick;
             ///
             storeState_1.headerTable = nProps.headerTable;
             storeState_1.bodyRowTable = nProps.bodyRowTable;
