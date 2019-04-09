@@ -97,10 +97,10 @@ class EventReceive extends React.Component<any, any> {
               onChangeSelection={selection => {
                 console.log(selection);
               }}
-              onClick={({ e, item, value, focusedRow, focusedCol }) => {
+              onClick={({ e, item, value, rowIndex, colIndex }) => {
                 console.log(item, value);
                 this.receiveEvent(
-                  `onClick value: ${value}, ri : ${focusedRow}, ci : ${focusedCol}`,
+                  `onClick value: ${value}, ri : ${rowIndex}, ci : ${colIndex}`,
                 );
               }}
             />

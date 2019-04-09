@@ -415,17 +415,30 @@ var DataGridBody = /** @class */ (function (_super) {
             return;
         };
         _this.onClick = function (e) {
-            var _a = _this.props, _b = _a.data, data = _b === void 0 ? [] : _b, _c = _a.colGroup, colGroup = _c === void 0 ? [] : _c, onClick = _a.onClick, focusedCol = _a.focusedCol, focusedRow = _a.focusedRow;
-            if (onClick &&
-                typeof focusedRow !== 'undefined' &&
-                typeof focusedCol !== 'undefined') {
-                var _d = colGroup[focusedCol].key, itemKey = _d === void 0 ? '' : _d;
+            var _a = _this.props, rootNode = _a.rootNode, _b = _a.scrollLeft, scrollLeft = _b === void 0 ? 0 : _b, _c = _a.scrollTop, scrollTop = _c === void 0 ? 0 : _c, _d = _a.data, data = _d === void 0 ? [] : _d, _e = _a.colGroup, colGroup = _e === void 0 ? [] : _e, onClick = _a.onClick;
+            var startMousePosition = utils_1.getMousePosition(e);
+            var _f = rootNode &&
+                rootNode.current &&
+                rootNode.current.getBoundingClientRect(), _g = _f.x, leftPadding = _g === void 0 ? 0 : _g, _h = _f.y, topPadding = _h === void 0 ? 0 : _h;
+            var startX = startMousePosition.x - leftPadding;
+            var startY = startMousePosition.y - topPadding;
+            var rowIndex = _this.getRowIndex(startY, scrollTop);
+            // row값이 없다면 선택 안되야 함.
+            var colIndex = rowIndex === -1 ? -1 : _this.getColIndex(startX, scrollLeft);
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            if (colIndex < 0 || colIndex > colGroup.length - 1) {
+                return;
+            }
+            if (onClick) {
+                var _j = colGroup[colIndex].key, itemKey = _j === void 0 ? '' : _j;
                 onClick({
                     e: e,
-                    item: data[focusedRow],
-                    value: data[focusedRow][itemKey],
-                    focusedRow: focusedRow,
-                    focusedCol: focusedCol,
+                    item: data[rowIndex],
+                    value: data[rowIndex][itemKey],
+                    rowIndex: rowIndex,
+                    colIndex: colIndex,
                 });
             }
         };

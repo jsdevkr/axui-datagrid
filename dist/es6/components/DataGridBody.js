@@ -398,17 +398,30 @@ class DataGridBody extends React.Component {
             return;
         };
         this.onClick = (e) => {
-            const { data = [], colGroup = [], onClick, focusedCol, focusedRow, } = this.props;
-            if (onClick &&
-                typeof focusedRow !== 'undefined' &&
-                typeof focusedCol !== 'undefined') {
-                const { key: itemKey = '' } = colGroup[focusedCol];
+            const { rootNode, scrollLeft = 0, scrollTop = 0, data = [], colGroup = [], onClick, } = this.props;
+            const startMousePosition = utils_1.getMousePosition(e);
+            const { x: leftPadding = 0, y: topPadding = 0 } = rootNode &&
+                rootNode.current &&
+                rootNode.current.getBoundingClientRect();
+            const startX = startMousePosition.x - leftPadding;
+            const startY = startMousePosition.y - topPadding;
+            let rowIndex = this.getRowIndex(startY, scrollTop);
+            // row값이 없다면 선택 안되야 함.
+            let colIndex = rowIndex === -1 ? -1 : this.getColIndex(startX, scrollLeft);
+            if (rowIndex < 0 || rowIndex > data.length - 1) {
+                return;
+            }
+            if (colIndex < 0 || colIndex > colGroup.length - 1) {
+                return;
+            }
+            if (onClick) {
+                const { key: itemKey = '' } = colGroup[colIndex];
                 onClick({
                     e,
-                    item: data[focusedRow],
-                    value: data[focusedRow][itemKey],
-                    focusedRow,
-                    focusedCol,
+                    item: data[rowIndex],
+                    value: data[rowIndex][itemKey],
+                    rowIndex,
+                    colIndex,
                 });
             }
         };

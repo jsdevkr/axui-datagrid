@@ -43,8 +43,8 @@ export namespace IDataGrid {
     e: React.MouseEvent<any>;
     item: any;
     value: any;
-    focusedRow?: number;
-    focusedCol?: number;
+    rowIndex?: number;
+    colIndex?: number;
   }
 
   export interface IonScrollEndFunctionParam {
