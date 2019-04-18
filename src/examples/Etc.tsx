@@ -82,12 +82,16 @@ class Etc extends React.Component<any, any> {
         <Segment padded>
           <h1>Etc</h1>
           <MyBox
-            style={{ width: boxWidth, height: boxHeight }}
+            style={{
+              width: boxWidth,
+              height: boxHeight,
+              border: '1px solid #ccc',
+            }}
             ref={this.containerRef}
           >
             <DataGrid
-              width={this.state.boxWidth}
-              height={this.state.boxHeight}
+              width={this.state.boxWidth - 2}
+              height={this.state.boxHeight - 2}
               style={{ fontSize: '12px' }}
               columns={grid.columns}
               data={grid.data}
@@ -97,7 +101,7 @@ class Etc extends React.Component<any, any> {
                   theme: 'solid',
                   horizontalScrollerWidth: 50,
                   padding: 0,
-                  width: 3,
+                  width: 5,
                   height: 5,
                 },
               }}

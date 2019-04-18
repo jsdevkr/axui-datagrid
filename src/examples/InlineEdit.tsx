@@ -10,6 +10,7 @@ import moment = require('moment');
 import { debounce } from 'axui-datagrid/utils';
 
 const DatagridContainer = styled.div`
+  border: 1px solid #ccc;
   .ant-input {
     height: 23px;
     padding: 2px 5px;
@@ -437,8 +438,8 @@ class InlineEdit extends React.Component<any, any> {
             <DatagridContainer>
               <DataGrid
                 style={{ fontSize: '12px' }}
-                width={width}
-                height={height}
+                width={width - 2}
+                height={height - 2}
                 columns={columns}
                 data={data}
                 options={{

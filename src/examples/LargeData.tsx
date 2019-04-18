@@ -185,10 +185,13 @@ class LargeData extends React.Component<any, any> {
             large amounts of data quickly with ease.
           </p>
 
-          <div ref={this.dataGridContainerRef}>
+          <div
+            ref={this.dataGridContainerRef}
+            style={{ border: '1px solid #ccc' }}
+          >
             <DataGrid
-              width={width}
-              height={height}
+              width={width - 2}
+              height={height - 2}
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}

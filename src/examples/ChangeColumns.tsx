@@ -83,10 +83,13 @@ class FrozenColumnRow extends React.Component<any, any> {
             users can set the column type accordingly.
           </p>
 
-          <div ref={this.dataGridContainerRef}>
+          <div
+            ref={this.dataGridContainerRef}
+            style={{ border: '1px solid #ccc' }}
+          >
             <DataGrid
-              width={width}
-              height={height}
+              width={width - 2}
+              height={height - 2}
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}

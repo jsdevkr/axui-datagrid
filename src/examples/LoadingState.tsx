@@ -81,10 +81,13 @@ class LoadingState extends React.Component<any, any> {
           <h1>Loading</h1>
           <p>You can express the loading status with loading props</p>
 
-          <div ref={this.dataGridContainerRef}>
+          <div
+            ref={this.dataGridContainerRef}
+            style={{ border: '1px solid #ccc' }}
+          >
             <DataGrid
-              width={width}
-              height={height}
+              width={width - 2}
+              height={height - 2}
               loading={loading}
               loadingData={loadingData}
               style={{ fontSize: '12px' }}

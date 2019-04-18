@@ -70,10 +70,13 @@ class Formatter extends React.Component<any, any> {
             the money columns update doubled.
           </p>
 
-          <div ref={this.dataGridContainerRef}>
+          <div
+            ref={this.dataGridContainerRef}
+            style={{ border: '1px solid #ccc' }}
+          >
             <DataGrid
-              width={width}
-              height={height}
+              width={width - 2}
+              height={height - 2}
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}

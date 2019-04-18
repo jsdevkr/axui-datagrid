@@ -269,12 +269,16 @@ class Resizing extends React.Component<any, any> {
             located below the right side of the data grid.
           </p>
           <MyBox
-            style={{ width: boxWidth, height: boxHeight }}
+            style={{
+              width: boxWidth,
+              height: boxHeight,
+              border: '1px solid #ccc',
+            }}
             ref={this.containerRef}
           >
             <DataGrid
-              width={this.state.boxWidth}
-              height={this.state.boxHeight}
+              width={this.state.boxWidth - 2}
+              height={this.state.boxHeight - 2}
               style={{ fontSize: '12px' }}
               columns={grid.columns}
               data={grid.data}
