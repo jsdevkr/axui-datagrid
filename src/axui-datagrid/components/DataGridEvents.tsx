@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition } from '../utils';
+import { getScrollPosition, isFunction } from '../utils';
 import { DataGridEnums } from '../common/@enums';
+import { IDataGrid } from '../common/@types';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -56,6 +57,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
         focusedRow = 0,
         options = {},
         styles = {},
+        predefinedFormatter = {},
       } = this.props;
       const {
         printStartColIndex = 0,
@@ -155,7 +157,29 @@ class DataGridEvents extends React.Component<IProps, IState> {
                 const item = data[rk];
                 for (let ck in selectionCols) {
                   if (selectionCols[ck]) {
-                    copiedString += (item[headerColGroup[ck].key] || '') + '\t';
+                    let val = '';
+                    const { formatter, key: colKey = '' } = headerColGroup[ck];
+                    const formatterData = {
+                      item,
+                      index: Number(rk),
+                      key: colKey,
+                      value: item[colKey],
+                    };
+
+                    if (
+                      typeof formatter === 'string' &&
+                      formatter in predefinedFormatter
+                    ) {
+                      val = predefinedFormatter[formatter](formatterData);
+                    } else if (isFunction(formatter)) {
+                      val = (formatter as IDataGrid.formatterFunction)(
+                        formatterData,
+                      );
+                    } else {
+                      val = item[headerColGroup[ck].key];
+                    }
+
+                    copiedString += (val || '') + '\t';
                   }
                 }
                 copiedString += '\n';

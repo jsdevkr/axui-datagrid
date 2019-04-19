@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
 const MyBox = styled.div`
   position: relative;
@@ -60,10 +61,17 @@ class Etc extends React.Component<any, any> {
           nullable: false,
           type: 'VARCHAR',
           width: 120,
+          formatter: (param: IDataGrid.IFormatterData) => {
+            if (typeof param.value === 'string') {
+              return param.value;
+            } else {
+              return param.value.v;
+            }
+          },
         },
       ],
       data: [
-        ['A', 'B', 'C<b>a</b>'],
+        ['A', { v: 'TEST' }],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],

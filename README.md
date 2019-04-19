@@ -273,4 +273,5 @@ export default Formatter;
 - v0.13.8 - rowSelect bug fix.
 - v0.13.9 - add a new prop onClick
 - v0.13.10 - Fixed bug onClick
-- v0.13.10 - update default CSS & update example
+- v0.13.11 - update default CSS & update example
+- v0.13.12 - Fixed the copying of objects to clipboard copy data.
