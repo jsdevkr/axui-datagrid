@@ -118,7 +118,9 @@ export default function calculateDimensions(
       let bodyWidth =
         currentStyles.elWidth -
         currentStyles.asidePanelWidth -
-        currentStyles.verticalScrollerWidth;
+        (optionsScrollerTheme === 'default'
+          ? currentStyles.verticalScrollerWidth
+          : 0);
       return totalColGroupWidth > bodyWidth ? optionsScrollerHeight : 0;
     } else {
       return 0;

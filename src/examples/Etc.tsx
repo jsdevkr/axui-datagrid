@@ -108,9 +108,9 @@ class Etc extends React.Component<any, any> {
                 scroller: {
                   theme: 'solid',
                   horizontalScrollerWidth: 50,
-                  padding: 0,
-                  width: 5,
-                  height: 5,
+                  padding: 2,
+                  width: 9,
+                  height: 9,
                 },
               }}
               status={<div>{`Total Record ${grid.data.length}`}</div>}
