@@ -70,6 +70,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnMinWidth: 100,
 
     lineNumberColumnWidth: 60,
+    lineNumberStartAt: 1,
     rowSelectorColumnWidth: 28,
     rowSelectorSize: 16,
     remoteSort: false,

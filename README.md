@@ -276,3 +276,4 @@ export default Formatter;
 - v0.13.11 - update default CSS & update example
 - v0.13.12 - Fixed the copying of objects to clipboard copy data.
 - v0.13.13 - Fixed scrollBar & scrollPosition.
+- v0.14.0 - add option.lineNumberStartAt

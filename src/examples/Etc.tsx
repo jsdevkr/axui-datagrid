@@ -104,7 +104,9 @@ class Etc extends React.Component<any, any> {
               columns={grid.columns}
               data={grid.data}
               options={{
+                autofitColumns: true,
                 lineNumberColumnWidth: 50,
+                lineNumberStartAt: 10000,
                 scroller: {
                   theme: 'solid',
                   horizontalScrollerWidth: 50,

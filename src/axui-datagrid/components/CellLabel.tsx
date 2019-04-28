@@ -10,6 +10,7 @@ class CellLabel extends React.PureComponent<{
   colAlign: string;
   col: IDataGrid.ICol;
   li: number;
+  lineNumberStartAt: number;
   item: any;
   selected?: boolean;
   predefinedFormatter: IDataGrid.IFormatter;
@@ -24,6 +25,7 @@ class CellLabel extends React.PureComponent<{
       col,
       col: { key = '', columnAttr = '', formatter },
       li,
+      lineNumberStartAt,
       item,
       selected = false,
       predefinedFormatter,
@@ -39,7 +41,7 @@ class CellLabel extends React.PureComponent<{
     let labelValue: string | React.ReactNode = '';
     switch (key) {
       case '_line_number_':
-        labelValue = li + 1 + '';
+        labelValue = li + lineNumberStartAt + '';
         break;
 
       case '_row_selector_':

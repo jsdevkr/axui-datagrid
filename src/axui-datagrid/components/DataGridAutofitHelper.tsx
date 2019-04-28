@@ -65,6 +65,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
       data = [],
       predefinedFormatter = {},
       styles = {},
+      options: { lineNumberStartAt = 1 } = {},
     } = this.props;
 
     const { bodyHeight = 0, bodyTrHeight = 1 } = styles;
@@ -86,7 +87,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
               .map((row, li) => {
                 return (
                   <tr key={li}>
-                    <td>{li}</td>
+                    <td>{li + lineNumberStartAt + ''}</td>
                     {colGroup.map((col, ci) => {
                       const colEditor: IDataGrid.IColEditor =
                         col.editor === 'string'
@@ -109,6 +110,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
                             colAlign={'left'}
                             col={col}
                             li={li}
+                            lineNumberStartAt={lineNumberStartAt}
                             item={data[li]}
                             predefinedFormatter={predefinedFormatter}
                           />

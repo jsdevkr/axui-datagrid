@@ -279,6 +279,7 @@ export namespace IDataGrid {
     multipleSelect?: boolean;
     columnMinWidth?: number;
     lineNumberColumnWidth?: number;
+    lineNumberStartAt?: number;
     rowSelectorColumnWidth?: number;
     rowSelectorSize?: number;
     remoteSort?: boolean;

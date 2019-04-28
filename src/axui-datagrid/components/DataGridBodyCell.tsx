@@ -52,6 +52,7 @@ class DataGridBodyCell extends React.PureComponent<{
       selectionRows = [],
       selectionCols = [],
       options: {
+        lineNumberStartAt = 1,
         rowSelectorSize = 0,
         body: {
           columnHeight = 0,
@@ -167,6 +168,7 @@ class DataGridBodyCell extends React.PureComponent<{
           <CellLabel
             col={col}
             li={li}
+            lineNumberStartAt={lineNumberStartAt}
             item={data[li]}
             columnHeight={columnHeight}
             lineHeight={lineHeight}
