@@ -325,7 +325,7 @@ export namespace IDataGrid {
     loading?: boolean;
     loadingData?: boolean;
     data?: any[];
-    selectedIndexes?: string[];
+    selectedIndexes?: number[];
     selection?: ISelection;
     width?: number;
     height?: number;
@@ -386,7 +386,7 @@ export namespace IDataGrid {
     height?: number;
     columnHeight?: number;
 
-    selectedIndexes?: string[];
+    selectedIndexes?: number[];
     selection?: ISelection;
 
     isInlineEditing?: boolean;
@@ -492,7 +492,7 @@ export namespace IDataGrid {
     status?: React.ReactNode;
     loading?: boolean;
     loadingData?: boolean;
-    selectedIndexes?: string[];
+    selectedIndexes?: number[];
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
