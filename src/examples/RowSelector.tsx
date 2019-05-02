@@ -46,7 +46,7 @@ class LoadingState extends React.Component<any, any> {
   };
 
   render() {
-    const { width, height, columns, data } = this.state;
+    const { width, height, columns, data, selectedIndexes } = this.state;
 
     return (
       <Wrapper>
@@ -71,7 +71,7 @@ class LoadingState extends React.Component<any, any> {
                 showRowSelector: true,
                 rowSelectorSize: 16,
               }}
-              selectedRowKeys={[]}
+              selectedIndexes={selectedIndexes}
               onChangeSelected={param => {
                 this.setState({
                   selectedList: param.selectedList,
@@ -94,21 +94,23 @@ class LoadingState extends React.Component<any, any> {
 
           <Button
             type="primary"
-            onClick={() => this.changeConfig('setHeight', 300)}
+            onClick={() =>
+              this.setState({
+                selectedIndexes: [0],
+              })
+            }
           >
-            height : 300
+            selectedIndexes : [0]
           </Button>
           <Button
             type="primary"
-            onClick={() => this.changeConfig('setHeight', 400)}
+            onClick={() =>
+              this.setState({
+                selectedIndexes: [1, 2],
+              })
+            }
           >
-            height : 400
-          </Button>
-          <Button
-            type="primary"
-            onClick={() => this.changeConfig('setHeight', 500)}
-          >
-            height : 500
+            selectedIndexes : [1,2]
           </Button>
         </Segment>
       </Wrapper>

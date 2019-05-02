@@ -277,3 +277,5 @@ export default Formatter;
 - v0.13.12 - Fixed the copying of objects to clipboard copy data.
 - v0.13.13 - Fixed scrollBar & scrollPosition.
 - v0.14.0 - add option.lineNumberStartAt
+- v0.14.1 - add selectedIndexes prop
+- v0.14.2 - Fixed selectedIndexes prop

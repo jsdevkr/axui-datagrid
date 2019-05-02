@@ -90,7 +90,7 @@ class StoreProvider extends React.Component<
       nProps.loadingData === nState.loadingData &&
       nProps.data === nState.data &&
       nProps.selection === nState.selection &&
-      nProps.selectedRowKeys === nState.selectedRowKeys &&
+      nProps.selectedIndexes === nState.selectedIndexes &&
       nProps.width === nState.width &&
       nProps.height === nState.height &&
       nProps.scrollLeft === nState.scrollLeft &&
@@ -148,7 +148,7 @@ class StoreProvider extends React.Component<
       storeState.width = nProps.width;
       storeState.height = nProps.height;
       storeState.selection = nProps.selection;
-      storeState.selectedRowKeys = nProps.selectedRowKeys;
+      storeState.selectedIndexes = nProps.selectedIndexes;
       storeState.options = nProps.options;
       storeState.status = nProps.status;
       storeState.rootNode = nProps.rootNode;
@@ -332,6 +332,19 @@ class StoreProvider extends React.Component<
 
         storeState.focusedRow = focusedRow;
         storeState.focusedCol = focusedCol;
+      }
+
+      if (
+        storeState.data &&
+        nProps.selectedIndexes !== nState.selectedIndexes
+      ) {
+        storeState.data.forEach(item => (item._selected_ = false));
+
+        if (nProps.selectedIndexes) {
+          nProps.selectedIndexes.forEach(
+            idx => (storeState.data![idx]._selected_ = true),
+          );
+        }
       }
 
       // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.

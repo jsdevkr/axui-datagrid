@@ -324,7 +324,7 @@ class DataGrid extends React.Component<IProps, IState> {
   //     prevProps.status === this.props.status &&
   //     prevProps.loading === this.props.loading &&
   //     prevProps.loadingData === this.props.loadingData &&
-  //     prevProps.selectedRowKeys === this.props.selectedRowKeys &&
+  //     prevProps.selectedIndexes === this.props.selectedIndexes &&
   //     prevProps.selection === this.props.selection &&
   //     prevProps.scrollLeft === this.props.scrollLeft &&
   //     prevProps.scrollTop === this.props.scrollTop &&
@@ -372,7 +372,7 @@ class DataGrid extends React.Component<IProps, IState> {
       data = [],
       width,
       height = DataGrid.defaultHeight,
-      selectedRowKeys,
+      selectedIndexes,
       selection,
       status,
       scrollLeft,
@@ -404,7 +404,7 @@ class DataGrid extends React.Component<IProps, IState> {
       data,
       width,
       height,
-      selectedRowKeys,
+      selectedIndexes,
       selection,
       status,
       scrollLeft,
