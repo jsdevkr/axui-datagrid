@@ -293,6 +293,7 @@ export namespace IDataGrid {
     page?: IOptionPage;
     scroller?: IOptionScroller;
     columnKeys?: IColumnKeys;
+    disableClipboard?: boolean;
   }
 
   export interface IStyles {

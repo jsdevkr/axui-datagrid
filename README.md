@@ -280,3 +280,4 @@ export default Formatter;
 - v0.14.1 - add selectedIndexes prop
 - v0.14.2 - Fixed selectedIndexes prop
 - v0.14.3 - Fixed, Problems not copied to the clipboard at Windows
+- v0.14.4 - add option.disableClipboard

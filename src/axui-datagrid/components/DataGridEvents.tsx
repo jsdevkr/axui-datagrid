@@ -63,7 +63,11 @@ class DataGridEvents extends React.Component<IProps, IState> {
         printStartColIndex = 0,
         printEndColIndex = colGroup.length - 1,
       } = this.props;
-      const { frozenRowIndex = 0, frozenColumnIndex = 0 } = options;
+      const {
+        frozenRowIndex = 0,
+        frozenColumnIndex = 0,
+        disableClipboard = false,
+      } = options;
       const {
         bodyTrHeight = 0,
         scrollContentWidth = 0,
@@ -147,60 +151,66 @@ class DataGridEvents extends React.Component<IProps, IState> {
       if (e.metaKey || e.ctrlKey) {
         switch (e.which) {
           case DataGridEnums.MetaKeycodes.C:
-            e.preventDefault();
+            if (!disableClipboard) {
+              e.preventDefault();
 
-            let copySuccess: boolean = false;
-            let copiedString: string = '';
+              let copySuccess: boolean = false;
+              let copiedString: string = '';
 
-            for (let rk in selectionRows) {
-              if (selectionRows[rk]) {
-                const item = data[rk];
-                for (let ck in selectionCols) {
-                  if (selectionCols[ck]) {
-                    let val = '';
-                    const { formatter, key: colKey = '' } = headerColGroup[ck];
-                    const formatterData = {
-                      item,
-                      index: Number(rk),
-                      key: colKey,
-                      value: item[colKey],
-                    };
+              for (let rk in selectionRows) {
+                if (selectionRows[rk]) {
+                  const item = data[rk];
+                  for (let ck in selectionCols) {
+                    if (selectionCols[ck]) {
+                      let val = '';
+                      const { formatter, key: colKey = '' } = headerColGroup[
+                        ck
+                      ];
+                      const formatterData = {
+                        item,
+                        index: Number(rk),
+                        key: colKey,
+                        value: item[colKey],
+                      };
 
-                    if (
-                      typeof formatter === 'string' &&
-                      formatter in predefinedFormatter
-                    ) {
-                      val = predefinedFormatter[formatter](formatterData);
-                    } else if (isFunction(formatter)) {
-                      val = (formatter as IDataGrid.formatterFunction)(
-                        formatterData,
-                      );
-                    } else {
-                      val = item[headerColGroup[ck].key];
+                      if (
+                        typeof formatter === 'string' &&
+                        formatter in predefinedFormatter
+                      ) {
+                        val = predefinedFormatter[formatter](formatterData);
+                      } else if (isFunction(formatter)) {
+                        val = (formatter as IDataGrid.formatterFunction)(
+                          formatterData,
+                        );
+                      } else {
+                        val = item[headerColGroup[ck].key];
+                      }
+
+                      copiedString += (val || '') + '\t';
                     }
-
-                    copiedString += (val || '') + '\t';
                   }
+                  copiedString += '\n';
                 }
-                copiedString += '\n';
               }
-            }
 
-            if (clipBoardNode && clipBoardNode.current) {
-              clipBoardNode.current.value = copiedString;
-              clipBoardNode.current.select();
-            }
+              if (clipBoardNode && clipBoardNode.current) {
+                clipBoardNode.current.value = copiedString;
+                clipBoardNode.current.select();
+              }
 
-            try {
-              copySuccess = document.execCommand('copy');
-            } catch (e) {}
+              try {
+                copySuccess = document.execCommand('copy');
+              } catch (e) {}
 
-            rootNode && rootNode.current && rootNode.current.focus();
+              rootNode && rootNode.current && rootNode.current.focus();
 
-            if (copySuccess) {
-              resolve();
+              if (copySuccess) {
+                resolve();
+              } else {
+                reject();
+              }
             } else {
-              reject();
+              resolve();
             }
 
             break;

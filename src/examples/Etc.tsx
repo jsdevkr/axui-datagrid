@@ -114,6 +114,7 @@ class Etc extends React.Component<any, any> {
                   width: 9,
                   height: 9,
                 },
+                disableClipboard: false,
               }}
               status={<div>{`Total Record ${grid.data.length}`}</div>}
             />

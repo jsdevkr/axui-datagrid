@@ -83,6 +83,7 @@ class DataGrid extends React.Component<IProps, IState> {
     autofitColumns: false,
     autofitColumnWidthMin: 50,
     autofitColumnWidthMax: 300,
+    disableClipboard: false,
   };
   static defaultStyles: IDataGrid.IStyles = {
     asidePanelWidth: 0,
