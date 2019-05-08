@@ -279,3 +279,4 @@ export default Formatter;
 - v0.14.0 - add option.lineNumberStartAt
 - v0.14.1 - add selectedIndexes prop
 - v0.14.2 - Fixed selectedIndexes prop
+- v0.14.3 - Fixed, Problems not copied to the clipboard at Windows

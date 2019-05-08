@@ -144,7 +144,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
         return _scrollLeft;
       };
 
-      if (e.metaKey) {
+      if (e.metaKey || e.ctrlKey) {
         switch (e.which) {
           case DataGridEnums.MetaKeycodes.C:
             e.preventDefault();
