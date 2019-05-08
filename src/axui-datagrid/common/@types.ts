@@ -79,6 +79,11 @@ export namespace IDataGrid {
     cols?: number[];
   }
 
+  export interface IonError {
+    code?: number;
+    message?: string;
+  }
+
   export interface IapplyAutofitParam {
     asideWidth: number;
     colGroup: IAutofitCol[];
@@ -374,6 +379,7 @@ export namespace IDataGrid {
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onError?: (err: IonError, event: Event) => void;
   }
 
   export interface IStoreState {
@@ -473,6 +479,7 @@ export namespace IDataGrid {
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onError?: (err: IonError, event: Event) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface ISelection {
@@ -505,6 +512,7 @@ export namespace IDataGrid {
     onChangeSelected?: (param: IonChangeSelectedParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onError?: (err: IonError, event: Event) => void;
   }
 
   export interface IRootState {

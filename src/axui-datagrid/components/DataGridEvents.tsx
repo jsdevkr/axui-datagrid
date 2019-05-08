@@ -207,10 +207,10 @@ class DataGridEvents extends React.Component<IProps, IState> {
               if (copySuccess) {
                 resolve();
               } else {
-                reject();
+                reject('not working execCommand');
               }
             } else {
-              resolve();
+              reject('disableClipboard');
             }
 
             break;
@@ -486,7 +486,11 @@ class DataGridEvents extends React.Component<IProps, IState> {
         try {
           await this.onKeyDown(e);
         } catch (err) {
-          console.log(err);
+          if (this.props.onError) {
+            this.props.onError(err, e);
+          } else {
+            // console.log(err);
+          }
         }
         this.busy = false;
         break;

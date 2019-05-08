@@ -387,7 +387,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onChangeSelected,
       onRightClick,
       onClick,
-
+      onError,
       style = {},
     } = this.props;
 
@@ -440,6 +440,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onChangeSelected,
       onRightClick,
       onClick,
+      onError,
 
       options,
     };
