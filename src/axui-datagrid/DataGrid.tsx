@@ -119,7 +119,7 @@ class DataGrid extends React.Component<IProps, IState> {
   state: IState = {
     mounted: false,
     autofiting: false,
-    autofitAsideWidth: DataGrid.defaultOptions.lineNumberColumnWidth,
+    autofitAsideWidth: undefined,
     autofitColGroup: [],
     headerTable: { rows: [] },
     bodyRowTable: { rows: [] },
@@ -152,7 +152,7 @@ class DataGrid extends React.Component<IProps, IState> {
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
-    return {
+    const _options = {
       ...DataGrid.defaultOptions,
       ...options,
       header: { ...DataGrid.defaultOptions.header, ...options.header },
@@ -164,6 +164,10 @@ class DataGrid extends React.Component<IProps, IState> {
         ...options.columnKeys,
       },
     };
+    if (this.state.autofitAsideWidth !== undefined) {
+      _options.lineNumberColumnWidth = this.state.autofitAsideWidth;
+    }
+    return _options;
   };
 
   applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
@@ -312,7 +316,7 @@ class DataGrid extends React.Component<IProps, IState> {
     let changeState = false;
 
     if (_autofitColumns !== autofitColumns || _columns !== columns) {
-      // newState.autofiting = true;
+      newState.autofiting = true;
     }
     if (_columns !== columns || _footSum !== footSum || _options !== options) {
       newState.newOptions = this.getOptions(options || {});
