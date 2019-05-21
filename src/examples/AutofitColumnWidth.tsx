@@ -26,9 +26,6 @@ class AutofitColumnWidth extends React.Component<any, any> {
         { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
       ],
       data: gridData,
-      options: {
-        autofitColumns: true,
-      },
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -54,6 +51,7 @@ class AutofitColumnWidth extends React.Component<any, any> {
               columns={columns}
               data={data}
               options={options}
+              autofitColumns={true}
             />
           </div>
         </Segment>

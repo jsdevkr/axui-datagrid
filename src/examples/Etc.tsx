@@ -120,6 +120,7 @@ class Etc extends React.Component<any, any> {
               onError={(err, evt) => {
                 console.log(err);
               }}
+              autofitColumns={true}
             />
           </MyBox>
         </Segment>

@@ -50,6 +50,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
           };
         }
       }
+
       if (colGroup.length) {
         this.props.applyAutofit({
           asideWidth: colGroup[0].width,

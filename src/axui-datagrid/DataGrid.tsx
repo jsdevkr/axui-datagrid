@@ -118,8 +118,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
   state: IState = {
     mounted: false,
-    autofit: false,
-    doneAutofit: false,
+    autofiting: false,
     autofitAsideWidth: DataGrid.defaultOptions.lineNumberColumnWidth,
     autofitColGroup: [],
     headerTable: { rows: [] },
@@ -168,13 +167,28 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
-    const autofit = !!(this.props.options && this.props.options.autofitColumns);
+    const newState: IState = {};
+    const { columns, footSum } = this.props;
+    const { options } = this.state;
+
+    // console.log('applyAutofit');
+
+    newState.options = this.getOptions(options || {});
+    newState.options.lineNumberColumnWidth = params.asideWidth;
+
+    const columnData = this.getColumnData(
+      columns,
+      footSum || [],
+      newState.options,
+      params.colGroup,
+    );
 
     this.setState({
-      autofit,
-      doneAutofit: true,
+      autofiting: false,
       autofitAsideWidth: params.asideWidth,
       autofitColGroup: params.colGroup,
+      options: newState.options,
+      ...columnData,
     });
     // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
   };
@@ -183,9 +197,9 @@ class DataGrid extends React.Component<IProps, IState> {
     columns: IDataGrid.IColumn[],
     footSum: IDataGrid.IColumn[][],
     options: IDataGrid.IOptions,
+    autofitColGroup?: IDataGrid.IColumn[],
   ): IState => {
     const { frozenColumnIndex = 0 } = options;
-    const { autofit, doneAutofit, autofitColGroup } = this.state;
 
     const data: IState = {};
     data.headerTable = makeHeaderTable(columns, options);
@@ -226,7 +240,7 @@ class DataGrid extends React.Component<IProps, IState> {
           if (data.colGroupMap) {
             let colWidth = col.width; // columns로부터 전달받은 너비값.
 
-            if (autofit && doneAutofit && autofitColGroup) {
+            if (autofitColGroup) {
               if (
                 isNumber(col.colIndex) &&
                 autofitColGroup[Number(col.colIndex)]
@@ -271,12 +285,14 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   componentDidMount() {
-    const { columns, footSum = [], options = {} } = this.props;
+    const { columns, footSum = [], options = {}, autofitColumns } = this.props;
     const newOptions = this.getOptions(options);
     const columnData = this.getColumnData(columns, footSum, newOptions);
 
+    console.log('componentDidMount, autofitColumns:', !!autofitColumns);
     this.setState({
       mounted: true,
+      autofiting: !!autofitColumns,
       ...columnData,
       options: newOptions,
     });
@@ -287,67 +303,41 @@ class DataGrid extends React.Component<IProps, IState> {
       columns: _columns,
       footSum: _footSum,
       options: _options,
+      autofitColumns: _autofitColumns,
     } = prevProps;
-    const { columns, footSum, options } = this.props;
+    const { columns, footSum, options, autofitColumns } = this.props;
+    const newState: any = {
+      autofiting: this.state.autofiting,
+    };
+    let changeState = false;
 
-    const { autofitAsideWidth: _autofitAsideWidth } = prevState;
-    const { autofit, autofitAsideWidth } = this.state;
-
+    if (_autofitColumns !== autofitColumns || _columns !== columns) {
+      // newState.autofiting = true;
+    }
     if (_columns !== columns || _footSum !== footSum || _options !== options) {
-      const newOptions = this.getOptions(options || {});
-      const columnData = this.getColumnData(columns, footSum || [], newOptions);
+      newState.newOptions = this.getOptions(options || {});
+      newState.columnData = this.getColumnData(
+        columns,
+        footSum || [],
+        newState.newOptions,
+        this.state.autofitColGroup,
+      );
+      changeState = true;
+    }
+
+    if (changeState) {
       this.setState({
-        ...columnData,
-        options: newOptions,
-        doneAutofit: false,
-      });
-    } else if (autofit && _autofitAsideWidth !== autofitAsideWidth) {
-      const newOptions = this.getOptions(options || {});
-      newOptions.lineNumberColumnWidth = autofitAsideWidth;
-      const columnData = this.getColumnData(columns, footSum || [], newOptions);
-      this.setState({
-        ...columnData,
-        options: newOptions,
+        ...newState.columnData,
+        options: newState.newOptions,
+        autofiting: newState.autofiting,
       });
     }
   }
 
-  // todo : history change 변경에 대응 안됨.
-  // shouldComponentUpdate(prevProps: IProps) {
-  //   if (
-  //     prevProps.data === this.props.data &&
-  //     prevProps.columns === this.props.columns &&
-  //     prevProps.footSum === this.props.footSum &&
-  //     prevProps.width === this.props.width &&
-  //     prevProps.height === this.props.height &&
-  //     prevProps.style === this.props.style &&
-  //     prevProps.options === this.props.options &&
-  //     prevProps.status === this.props.status &&
-  //     prevProps.loading === this.props.loading &&
-  //     prevProps.loadingData === this.props.loadingData &&
-  //     prevProps.selectedIndexes === this.props.selectedIndexes &&
-  //     prevProps.selection === this.props.selection &&
-  //     prevProps.scrollLeft === this.props.scrollLeft &&
-  //     prevProps.scrollTop === this.props.scrollTop &&
-  //     prevProps.onBeforeEvent === this.props.onBeforeEvent &&
-  //     prevProps.onScroll === this.props.onScroll &&
-  //     prevProps.onScrollEnd === this.props.onScrollEnd &&
-  //     prevProps.onChangeScrollSize === this.props.onChangeScrollSize &&
-  //     prevProps.onChangeSelection === this.props.onChangeSelection &&
-  //     prevProps.onRightClick === this.props.onRightClick
-  //   ) {
-  //     debugger;
-  //     console.log('here');
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-
   public render() {
     const {
       mounted,
-      doneAutofit,
+      autofiting,
       autofitColGroup,
       headerTable,
       bodyRowTable,
@@ -367,6 +357,7 @@ class DataGrid extends React.Component<IProps, IState> {
       footSumData,
       options,
     } = this.state;
+
     const {
       loading = false,
       loadingData = false,
@@ -446,7 +437,7 @@ class DataGrid extends React.Component<IProps, IState> {
     };
 
     // console.log('datagrid render');
-    // console.log(`doneAutofit ${doneAutofit}`);
+    // console.log(`autofiting ${autofiting}`);
     // debugger;
 
     return (
@@ -469,7 +460,7 @@ class DataGrid extends React.Component<IProps, IState> {
               <DataGridLoader loading={loading} />
             </DataGridEvents>
           )}
-          {!doneAutofit && (
+          {autofiting && (
             <DataGridAutofitHelper applyAutofit={this.applyAutofit} />
           )}
         </div>

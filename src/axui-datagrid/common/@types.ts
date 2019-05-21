@@ -504,6 +504,8 @@ export namespace IDataGrid {
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
+    autofitColumns?: boolean;
+    applyAutofit?: (autofiting: boolean) => void;
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
@@ -517,8 +519,7 @@ export namespace IDataGrid {
 
   export interface IRootState {
     mounted?: boolean;
-    autofit?: boolean;
-    doneAutofit?: boolean;
+    autofiting?: boolean;
     autofitAsideWidth?: number;
     autofitColGroup?: IAutofitCol[];
 

@@ -49,7 +49,6 @@ class LargeData extends React.Component<any, any> {
       ],
       data: [],
       options: {
-        autofitColumns: true,
         header: {
           align: 'center',
         },
@@ -197,6 +196,7 @@ class LargeData extends React.Component<any, any> {
               data={data}
               options={{ ...options, updateAt: new Date() }}
               loading={loading}
+              autofitColumns={true}
             />
           </div>
 
