@@ -80,7 +80,6 @@ class DataGrid extends React.Component<IProps, IState> {
     scroller: DataGrid.defaultScroller,
     columnKeys: DataGrid.defaultColumnKeys,
     bodyLoaderHeight: 100,
-    autofitColumns: false,
     autofitColumnWidthMin: 50,
     autofitColumnWidthMax: 300,
     disableClipboard: false,

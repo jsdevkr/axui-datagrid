@@ -290,7 +290,6 @@ export namespace IDataGrid {
     remoteSort?: boolean;
     footSum?: boolean;
     bodyLoaderHeight?: number;
-    autofitColumns?: boolean;
     autofitColumnWidthMax?: number;
     autofitColumnWidthMin?: number;
     header?: IOptionHeader;
