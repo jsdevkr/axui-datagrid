@@ -720,7 +720,7 @@ class DataGridBody extends React.Component<IProps> {
     const bodyScrollConfig: IDataGrid.IScrollConfig = {
       frozenRowIndex: frozenRowIndex,
       sRowIndex: sRowIndex,
-      eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1,
+      eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)),
     };
 
     const topAsideBodyPanelStyle = {

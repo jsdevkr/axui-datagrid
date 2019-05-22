@@ -147,11 +147,10 @@ class DataGridBodyPanel extends React.Component<IProps> {
           : 0;
     }
 
+    const paddingTop = (sRowIndex - frozenRowIndex) * bodyTrHeight;
     const panelStyle = {
-      left: panelLeft,
-      top: panelTop,
-      paddingTop: (sRowIndex - frozenRowIndex) * bodyTrHeight,
-      paddingLeft: panelPaddingLeft,
+      left: panelLeft + panelPaddingLeft,
+      top: panelTop + paddingTop,
     };
 
     return (

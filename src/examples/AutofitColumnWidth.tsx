@@ -38,7 +38,6 @@ class AutofitColumnWidth extends React.Component<any, any> {
       <Wrapper>
         <Segment padded>
           <h1>Autofit Column Width</h1>
-          <p>autofit</p>
 
           <div
             ref={this.dataGridContainerRef}

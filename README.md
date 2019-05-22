@@ -282,3 +282,4 @@ export default Formatter;
 - v0.14.3 - Fixed, Problems not copied to the clipboard at Windows
 - v0.14.4 - add option.disableClipboard
 - v0.14.6 - remove option.autofitColumns, add props autofitColumns
+- v0.14.7 - Scrolling error fix when the number of data exceeds 1.5 million.

@@ -143,8 +143,8 @@ class DataGridBodyCell extends React.PureComponent<{
         key={ci}
         colSpan={colSpan}
         rowSpan={rowSpan}
-        className={tdClassNames.join(' ')}
-        style={{ height: cellHeight, minHeight: '1px' }}
+        className={tdClassNames.join(' ').trim()}
+        style={{ height: cellHeight }}
         onDoubleClick={e => {
           if (
             !editorDisabled &&

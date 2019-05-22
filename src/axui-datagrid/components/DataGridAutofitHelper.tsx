@@ -34,7 +34,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
       );
       if (tds && tds.length) {
         for (let i = 0, l = tds.length; i < l; i++) {
-          const tdWidth = tds[i].getBoundingClientRect().width + 10;
+          const tdWidth = tds[i].getBoundingClientRect().width + 5;
           let colWidth = tdWidth;
 
           if (autofitColumnWidthMin > colWidth) {
@@ -45,8 +45,8 @@ class DataGridAutofitHelper extends React.Component<IProps> {
 
           colGroup[i] = {
             colIndex: i,
-            width: i === 0 ? tdWidth + 10 : colWidth,
-            tdWidth: Math.min(tdWidth + 10, autofitColumnWidthMax + 100),
+            width: i === 0 ? tdWidth + 5 : colWidth,
+            tdWidth: Math.min(tdWidth + 5, autofitColumnWidthMax + 100),
           };
         }
       }
