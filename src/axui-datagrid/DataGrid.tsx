@@ -292,7 +292,7 @@ class DataGrid extends React.Component<IProps, IState> {
     const newOptions = this.getOptions(options);
     const columnData = this.getColumnData(columns, footSum, newOptions);
 
-    console.log('componentDidMount, autofitColumns:', !!autofitColumns);
+    // console.log('componentDidMount, autofitColumns:', !!autofitColumns);
     this.setState({
       mounted: true,
       autofiting: !!autofitColumns,
@@ -314,7 +314,10 @@ class DataGrid extends React.Component<IProps, IState> {
     };
     let changeState = false;
 
-    if (_autofitColumns !== autofitColumns || _columns !== columns) {
+    if (
+      autofitColumns &&
+      (_autofitColumns !== autofitColumns || _columns !== columns)
+    ) {
       newState.autofiting = true;
     }
     if (_columns !== columns || _footSum !== footSum || _options !== options) {
@@ -439,9 +442,7 @@ class DataGrid extends React.Component<IProps, IState> {
       options,
     };
 
-    // console.log('datagrid render');
-    // console.log(`autofiting ${autofiting}`);
-    // debugger;
+    // console.log(`autofitColumns : autofiting ${autofiting}`);
 
     return (
       <DataGridStore.Provider {...providerProps}>
