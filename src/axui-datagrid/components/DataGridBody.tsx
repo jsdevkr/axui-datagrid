@@ -719,9 +719,9 @@ class DataGridBody extends React.Component<IProps> {
       eRowIndex: frozenRowIndex - 1,
     };
 
-    // if (topBodyScrollConfig.eRowIndex || 0 >= data.length) {
-    //   topBodyScrollConfig.eRowIndex = data.length - 1;
-    // }
+    if ((topBodyScrollConfig.eRowIndex || 0) >= data.length) {
+      topBodyScrollConfig.eRowIndex = data.length - 1;
+    }
 
     const bodyScrollConfig: IDataGrid.IScrollConfig = {
       frozenRowIndex: frozenRowIndex,
@@ -729,9 +729,9 @@ class DataGridBody extends React.Component<IProps> {
       eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)),
     };
 
-    // if (bodyScrollConfig.eRowIndex || 0 >= data.length) {
-    //   bodyScrollConfig.eRowIndex = data.length - 1;
-    // }
+    if ((bodyScrollConfig.eRowIndex || 0) >= data.length) {
+      bodyScrollConfig.eRowIndex = data.length - 1;
+    }
 
     const topAsideBodyPanelStyle = {
       left: 0,
