@@ -44,7 +44,7 @@ class TableBody extends React.PureComponent<{
     return (
       <tbody>
         {arrayFromRange(sRowIndex, eRowIndex).map(li => {
-          if (data[li]) {
+          if (data.length > li && data[li]) {
             return bodyRow.rows.map((row, ri) => (
               <tr key={ri} className={`${li % 2 !== 0 ? 'odded-line' : ''}`}>
                 {row.cols.map((col, ci) => (
