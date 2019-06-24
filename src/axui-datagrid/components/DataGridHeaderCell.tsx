@@ -40,12 +40,15 @@ class CellLabel extends React.PureComponent<{
 class CellSorter extends React.PureComponent<{
   show: boolean;
   colIndex: number;
+  seq: number;
   orderBy: string;
 }> {
   render() {
-    const { show, colIndex, orderBy } = this.props;
+    const { show, colIndex, seq, orderBy } = this.props;
     return show ? (
-      <span data-sorter={colIndex} data-sorter-order={orderBy} />
+      <span data-sorter={colIndex} data-sorter-order={orderBy}>
+        {seq}
+      </span>
     ) : null;
   }
 }
@@ -62,7 +65,9 @@ interface IProps {
   options: IDataGrid.IOptions;
   focusedCol: number;
   selectionCols: {};
-  sortInfo: {};
+  sortInfo: {
+    [key: string]: IDataGrid.ISortInfo;
+  };
   bodyRow: IDataGrid.IColumnTableMap;
   ri: number;
   col: IDataGrid.ICol;
@@ -125,6 +130,8 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
       classNames.push('selected');
     }
 
+    // console.log('sortInfo', sortInfo);
+
     return (
       <td
         colSpan={colCowSpan}
@@ -149,11 +156,14 @@ class DatagridHeaderCell extends React.PureComponent<IProps> {
             lineHeight: lineHeight + 'px',
           }}
         >
-          <CellSorter
-            show={colKey && sortInfo[colKey]}
-            colIndex={colIndex}
-            orderBy={sortInfo[colKey] ? sortInfo[colKey].orderBy : ''}
-          />
+          {sortInfo[colKey] && (
+            <CellSorter
+              show={!!(colKey && sortInfo[colKey])}
+              colIndex={colIndex}
+              seq={sortInfo[colKey].seq || 0}
+              orderBy={sortInfo[colKey] ? sortInfo[colKey].orderBy : ''}
+            />
+          )}
           <CellLabel
             col={col}
             lineHeight={lineHeight}

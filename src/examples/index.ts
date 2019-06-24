@@ -10,5 +10,6 @@ export { default as RowSelector } from './RowSelector';
 export { default as ChangeColumns } from './ChangeColumns';
 export { default as FootSum } from './FootSum';
 export { default as Resizing } from './Resizing';
+export { default as RemoteSort } from './RemoteSort';
 export { default as Etc } from './Etc';
 export { default as AutofitColumnWidth } from './AutofitColumnWidth';

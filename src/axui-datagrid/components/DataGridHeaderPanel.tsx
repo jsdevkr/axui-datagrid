@@ -198,6 +198,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     } else {
     }
   };
+
   onMouseDownColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
@@ -253,6 +254,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     document.addEventListener('mouseup', offEvent);
     document.addEventListener('mouseleave', offEvent);
   };
+
   onDoubleClickColumnResizer = (e: any, col: IDataGrid.ICol) => {
     e.preventDefault();
 
@@ -266,6 +268,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       });
     }
   };
+
   render() {
     const {
       panelName,

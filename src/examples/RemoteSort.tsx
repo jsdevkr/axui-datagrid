@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
+import { Divider, Button, Alert } from 'antd';
 
 const MyBox = styled.div`
   position: relative;
@@ -22,10 +23,11 @@ const MyBox = styled.div`
   }
 `;
 
-class Etc extends React.Component<any, any> {
+class RemoteSort extends React.Component<any, any> {
   state = {
     boxWidth: 600,
     boxHeight: 300,
+    sortInfos: [],
   };
 
   containerRef: React.RefObject<any>;
@@ -36,7 +38,7 @@ class Etc extends React.Component<any, any> {
   }
 
   render() {
-    const { boxWidth, boxHeight } = this.state;
+    const { boxWidth, boxHeight, sortInfos } = this.state;
 
     const grid = {
       columns: [
@@ -52,10 +54,20 @@ class Etc extends React.Component<any, any> {
           width: 120,
         },
         {
-          autoIncrement: false,
-          displaySize: 50,
+          displaySize: 5,
           index: 1,
           key: '1',
+          label: 'city_name',
+          name: 'city_name',
+          nullable: false,
+          type: 'SMALLINT UNSIGNED',
+          width: 120,
+        },
+        {
+          autoIncrement: false,
+          displaySize: 50,
+          index: 2,
+          key: '2',
           label: 'city',
           name: 'city',
           nullable: false,
@@ -71,7 +83,7 @@ class Etc extends React.Component<any, any> {
         },
       ],
       data: [
-        ['A', { v: 'TEST' }],
+        ['A', 'C', { v: 'TEST' }],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
         ['A', 'B', 'C<b>a</b>'],
@@ -104,8 +116,10 @@ class Etc extends React.Component<any, any> {
               columns={grid.columns}
               data={grid.data}
               options={{
-                lineNumberColumnWidth: 50,
-                lineNumberStartAt: 1000,
+                header: {
+                  remoteSort: true,
+                },
+                lineNumberStartAt: 100,
                 scroller: {
                   theme: 'solid',
                   horizontalScrollerWidth: 50,
@@ -119,13 +133,63 @@ class Etc extends React.Component<any, any> {
               onError={(err, evt) => {
                 console.log(err);
               }}
-              autofitColumns={true}
+              autofitColumns={false}
+              onSort={param => {
+                this.setState({
+                  sortInfos: param.sortInfos,
+                });
+              }}
+              sortInfos={sortInfos}
             />
           </MyBox>
+
+          <Divider />
+
+          <Alert
+            type="warning"
+            message={'sortInfos'}
+            description={JSON.stringify(sortInfos)}
+          />
+
+          <Divider />
+
+          <Button
+            onClick={() => {
+              this.setState({ sortInfos: [{ key: '0', orderBy: 'asc' }] });
+            }}
+          >
+            sort 0, asc
+          </Button>
+          <Button
+            onClick={() => {
+              this.setState({ sortInfos: [{ key: '0', orderBy: 'desc' }] });
+            }}
+          >
+            sort 0, desc
+          </Button>
+          <Button
+            onClick={() => {
+              this.setState({ sortInfos: [{ key: '1', orderBy: 'desc' }] });
+            }}
+          >
+            sort 1, desc
+          </Button>
+          <Button
+            onClick={() => {
+              this.setState({
+                sortInfos: [
+                  { key: '0', orderBy: 'desc' },
+                  { key: '2', orderBy: 'desc' },
+                ],
+              });
+            }}
+          >
+            sort 0, 2, desc
+          </Button>
         </Segment>
       </Wrapper>
     );
   }
 }
 
-export default Etc;
+export default RemoteSort;

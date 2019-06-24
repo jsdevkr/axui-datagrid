@@ -84,6 +84,10 @@ export namespace IDataGrid {
     message?: string;
   }
 
+  export interface IonSortParam {
+    sortInfos: ISortInfo[];
+  }
+
   export interface IapplyAutofitParam {
     asideWidth: number;
     colGroup: IAutofitCol[];
@@ -244,6 +248,7 @@ export namespace IDataGrid {
     columnBorderWidth?: number;
     selector?: boolean;
     sortable?: boolean;
+    remoteSort?: boolean;
     clickAction?: 'select' | 'sort' | undefined;
   }
 
@@ -287,7 +292,7 @@ export namespace IDataGrid {
     lineNumberStartAt?: number;
     rowSelectorColumnWidth?: number;
     rowSelectorSize?: number;
-    remoteSort?: boolean;
+
     footSum?: boolean;
     bodyLoaderHeight?: number;
     autofitColumnWidthMax?: number;
@@ -330,8 +335,10 @@ export namespace IDataGrid {
     loading?: boolean;
     loadingData?: boolean;
     data?: any[];
+
     selectedIndexes?: number[];
     selection?: ISelection;
+    sortInfo?: {};
     width?: number;
     height?: number;
     scrollLeft?: number;
@@ -379,6 +386,7 @@ export namespace IDataGrid {
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
+    onSort?: (param: IonSortParam) => void;
   }
 
   export interface IStoreState {
@@ -387,7 +395,12 @@ export namespace IDataGrid {
 
     data?: any[];
     listSelectedAll?: boolean;
-    sortInfo?: {};
+    sortInfo?: {
+      [key: string]: ISortInfo;
+    };
+    pSortInfo?: {
+      [key: string]: ISortInfo;
+    };
     width?: number;
     height?: number;
     columnHeight?: number;
@@ -479,6 +492,7 @@ export namespace IDataGrid {
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
+    onSort?: (param: IonSortParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface ISelection {
@@ -488,13 +502,19 @@ export namespace IDataGrid {
     focusedCol?: number;
   }
 
+  export interface ISortInfo {
+    key?: string;
+    seq?: number;
+    orderBy: 'asc' | 'desc';
+  }
+
   export interface IRootProps {
     data?: any[];
     columns: IColumn[];
     footSum?: IColumn[][];
     width: number;
     height: number;
-    style?: any;
+    style?: React.CSSProperties;
     options?: IOptions;
     status?: React.ReactNode;
     loading?: boolean;
@@ -504,6 +524,7 @@ export namespace IDataGrid {
     scrollLeft?: number;
     scrollTop?: number;
     autofitColumns?: boolean;
+    sortInfos?: ISortInfo[];
     applyAutofit?: (autofiting: boolean) => void;
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
@@ -514,6 +535,7 @@ export namespace IDataGrid {
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
+    onSort?: (param: IonSortParam) => void;
   }
 
   export interface IRootState {
@@ -540,6 +562,9 @@ export namespace IDataGrid {
     footSumData?: IColumnTableMap;
 
     options?: IOptions;
+    sortInfo?: {
+      [key: string]: ISortInfo;
+    };
   }
 
   export type DispatchParam = { [key: string]: any };

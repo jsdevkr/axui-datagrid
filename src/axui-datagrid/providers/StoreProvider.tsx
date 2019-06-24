@@ -82,15 +82,18 @@ class StoreProvider extends React.Component<
     nProps: IDataGrid.IStoreProps,
     nState: IDataGrid.IStoreState,
   ) {
-    // console.log('getDerivedStateFromProps ~~');
+    // console.log(
+    //   'getDerivedStateFromProps ~~',
+    //   nProps.sortInfo !== nState.sortInfo,
+    // );
 
-    // console.log('nProps.colGroup === nState.colGroup', nState.colGroup);
     if (
       nProps.loading === nState.loading &&
       nProps.loadingData === nState.loadingData &&
       nProps.data === nState.data &&
       nProps.selection === nState.selection &&
       nProps.selectedIndexes === nState.selectedIndexes &&
+      nProps.sortInfo === nState.sortInfo &&
       nProps.width === nState.width &&
       nProps.height === nState.height &&
       nProps.scrollLeft === nState.scrollLeft &&
@@ -129,7 +132,8 @@ class StoreProvider extends React.Component<
       nProps.onChangeSelected === nState.onChangeSelected &&
       nProps.onRightClick === nState.onRightClick &&
       nProps.onClick === nState.onClick &&
-      nProps.onError === nState.onError
+      nProps.onError === nState.onError &&
+      nProps.onSort === nState.onSort
     ) {
       return null;
     } else {
@@ -150,6 +154,8 @@ class StoreProvider extends React.Component<
       storeState.height = nProps.height;
       storeState.selection = nProps.selection;
       storeState.selectedIndexes = nProps.selectedIndexes;
+      storeState.pSortInfo = nProps.sortInfo;
+
       storeState.options = nProps.options;
       storeState.status = nProps.status;
       storeState.rootNode = nProps.rootNode;
@@ -164,6 +170,7 @@ class StoreProvider extends React.Component<
       storeState.onRightClick = nProps.onRightClick;
       storeState.onClick = nProps.onClick;
       storeState.onError = nProps.onError;
+      storeState.onSort = nProps.onSort;
       ///
       storeState.headerTable = nProps.headerTable;
       storeState.bodyRowTable = nProps.bodyRowTable;
@@ -349,6 +356,11 @@ class StoreProvider extends React.Component<
         }
       }
 
+      if (nProps.sortInfo !== nState.pSortInfo) {
+        // changed sortInfo
+        storeState.sortInfo = nProps.sortInfo;
+      }
+
       // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
       if (
         changed.colGroup ||
@@ -488,6 +500,8 @@ class StoreProvider extends React.Component<
       selectionERow,
       selectionECol,
       onChangeSelected,
+      options: { header: { remoteSort = false } = {} } = {},
+      onSort,
     } = this.state;
     const {
       rowIndex,
@@ -560,9 +574,11 @@ class StoreProvider extends React.Component<
         }
         const { key: colKey = '' } = colGroup[colIndex];
 
-        let currentSortInfo: { [key: string]: any } = {};
+        let currentSortInfo: {
+          [key: string]: IDataGrid.ISortInfo;
+        } = {};
         let seq: number = 0;
-        let sortInfoArray: any[] = [];
+        let sortInfos: IDataGrid.ISortInfo[] = [];
 
         const getValueByKey = function(_item: any, _key: string) {
           return _item[_key] || '';
@@ -590,37 +606,50 @@ class StoreProvider extends React.Component<
 
         for (let k in currentSortInfo) {
           if (currentSortInfo[k]) {
-            sortInfoArray[currentSortInfo[k].seq] = {
+            sortInfos[currentSortInfo[k].seq!] = {
               key: k,
-              order: currentSortInfo[k].orderBy,
+              orderBy: currentSortInfo[k].orderBy,
             };
           }
         }
-        sortInfoArray = sortInfoArray.filter(o => typeof o !== 'undefined');
+        sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
 
         let i = 0,
-          l = sortInfoArray.length,
+          l = sortInfos.length,
           aValue: any,
-          bValue: any;
+          bValue: any,
+          sortedList = data;
 
-        const sortedList = data.sort(
-          (a: any, b: any): any => {
+        if (remoteSort) {
+          // is remote
+          if (onSort) {
+            onSort({ sortInfos });
+          }
+        } else {
+          sortedList = data.sort((a: any, b: any): any => {
             for (i = 0; i < l; i++) {
-              aValue = getValueByKey(a, sortInfoArray[i].key);
-              bValue = getValueByKey(b, sortInfoArray[i].key);
+              aValue = getValueByKey(a, sortInfos[i].key!);
+              bValue = getValueByKey(b, sortInfos[i].key!);
 
               if (typeof aValue !== typeof bValue) {
                 aValue = '' + aValue;
                 bValue = '' + bValue;
               }
               if (aValue < bValue) {
-                return sortInfoArray[i].order === 'asc' ? -1 : 1;
+                return sortInfos[i].orderBy === 'asc' ? -1 : 1;
               } else if (aValue > bValue) {
-                return sortInfoArray[i].order === 'asc' ? 1 : -1;
+                return sortInfos[i].orderBy === 'asc' ? 1 : -1;
               }
             }
-          },
-        );
+          });
+        }
+
+        // sortInfo 정리
+        sortInfos.forEach((si, idx) => {
+          if (si.key) {
+            currentSortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
+          }
+        });
 
         this.setStoreState({
           sortInfo: { ...currentSortInfo },
@@ -800,24 +829,6 @@ class StoreProvider extends React.Component<
     }
   };
 
-  render() {
-    return (
-      <Provider
-        value={{
-          ...this.state,
-          ...{
-            predefinedFormatter: { ...dataGridFormatter },
-            predefinedCollector: { ...dataGridCollector },
-            setStoreState: this.setStoreState,
-            dispatch: this.dispatch,
-          },
-        }}
-      >
-        {this.props.children}
-      </Provider>
-    );
-  }
-
   componentDidMount() {
     // console.log('store did mount');
   }
@@ -921,6 +932,24 @@ class StoreProvider extends React.Component<
 
   componentWillUnmount() {
     // console.log('store unMount');
+  }
+
+  render() {
+    return (
+      <Provider
+        value={{
+          ...this.state,
+          ...{
+            predefinedFormatter: { ...dataGridFormatter },
+            predefinedCollector: { ...dataGridCollector },
+            setStoreState: this.setStoreState,
+            dispatch: this.dispatch,
+          },
+        }}
+      >
+        {this.props.children}
+      </Provider>
+    );
   }
 }
 

@@ -41,6 +41,7 @@ class DataGrid extends React.Component<IProps, IState> {
     selector: true,
     sortable: true,
     clickAction: 'sort',
+    remoteSort: false,
   };
   static defaultBody: IDataGrid.IOptionBody = {
     align: 'left',
@@ -73,7 +74,6 @@ class DataGrid extends React.Component<IProps, IState> {
     lineNumberStartAt: 1,
     rowSelectorColumnWidth: 28,
     rowSelectorSize: 16,
-    remoteSort: false,
     header: DataGrid.defaultHeader,
     body: DataGrid.defaultBody,
     page: DataGrid.defaultPage,
@@ -143,11 +143,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
     this.rootNode = React.createRef();
     this.clipBoardNode = React.createRef();
-
-    // console.log(
-    //   `${new Date().toLocaleTimeString()}:${new Date().getMilliseconds()}`,
-    //   'datagrid constructor',
-    // );
   }
 
   getOptions = (options: IDataGrid.IOptions): IDataGrid.IOptions => {
@@ -288,7 +283,23 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   componentDidMount() {
-    const { columns, footSum = [], options = {}, autofitColumns } = this.props;
+    const {
+      columns,
+      footSum = [],
+      options = {},
+      autofitColumns,
+      sortInfos,
+    } = this.props;
+
+    const sortInfo = {};
+
+    sortInfos &&
+      sortInfos.forEach((si, idx) => {
+        if (si.key) {
+          sortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
+        }
+      });
+
     const newOptions = this.getOptions(options);
     const columnData = this.getColumnData(columns, footSum, newOptions);
 
@@ -298,6 +309,7 @@ class DataGrid extends React.Component<IProps, IState> {
       autofiting: !!autofitColumns,
       ...columnData,
       options: newOptions,
+      sortInfo,
     });
   }
 
@@ -307,12 +319,24 @@ class DataGrid extends React.Component<IProps, IState> {
       footSum: _footSum,
       options: _options,
       autofitColumns: _autofitColumns,
+      sortInfos: _sortInfos,
     } = prevProps;
-    const { columns, footSum, options, autofitColumns } = this.props;
+    const { columns, footSum, options, autofitColumns, sortInfos } = this.props;
     const newState: any = {
       autofiting: this.state.autofiting,
     };
     let changeState = false;
+
+    const sortInfo = {};
+    if (_sortInfos !== sortInfos) {
+      sortInfos &&
+        sortInfos.forEach((si, idx) => {
+          if (si.key) {
+            sortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
+          }
+        });
+      changeState = true;
+    }
 
     if (
       autofitColumns &&
@@ -336,6 +360,7 @@ class DataGrid extends React.Component<IProps, IState> {
         ...newState.columnData,
         options: newState.newOptions,
         autofiting: newState.autofiting,
+        sortInfo,
       });
     }
   }
@@ -362,6 +387,7 @@ class DataGrid extends React.Component<IProps, IState> {
       leftFootSumData,
       footSumData,
       options,
+      sortInfo,
     } = this.state;
 
     const {
@@ -385,6 +411,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onRightClick,
       onClick,
       onError,
+      onSort,
       style = {},
     } = this.props;
 
@@ -438,11 +465,11 @@ class DataGrid extends React.Component<IProps, IState> {
       onRightClick,
       onClick,
       onError,
+      onSort,
 
       options,
+      sortInfo,
     };
-
-    // console.log(`autofitColumns : autofiting ${autofiting}`);
 
     return (
       <DataGridStore.Provider {...providerProps}>

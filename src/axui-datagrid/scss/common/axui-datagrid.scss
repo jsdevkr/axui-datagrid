@@ -253,16 +253,18 @@
     }
     [data-sorter] {
       position: relative;
-      //right: 0;
-      //top: 2px;
-      width: 10px;
-      height: 10px;
+      font-size: 10px;
+      margin-right: 14px;
       display: inline-block;
+      background: $axui-datagrid-header-column-sorter-bg-color;
+      border-radius: 2px;
+      line-height: 10px;
+      padding: 2px 2px;
 
       &[data-sorter-order='asc'] {
         &:before {
           top: 2px;
-          left: 0;
+          right: -9px;
           @include axui-datagrid-sort-arrow(
             $axui-datagrid-header-sorter-size,
             2.5,
@@ -282,7 +284,7 @@
         }
         &:after {
           bottom: 2px;
-          left: 0;
+          right: -9px;
           @include axui-datagrid-sort-arrow(
             $axui-datagrid-header-sorter-size,
             2.5,
