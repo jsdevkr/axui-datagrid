@@ -114,7 +114,7 @@ class RemoteSort extends React.Component<any, any> {
               height={this.state.boxHeight - 2}
               style={{ fontSize: '12px' }}
               columns={grid.columns}
-              data={grid.data}
+              data={[...grid.data]}
               options={{
                 header: {
                   remoteSort: true,
@@ -133,7 +133,7 @@ class RemoteSort extends React.Component<any, any> {
               onError={(err, evt) => {
                 console.log(err);
               }}
-              autofitColumns={false}
+              autofitColumns={true}
               onSort={param => {
                 this.setState({
                   sortInfos: param.sortInfos,

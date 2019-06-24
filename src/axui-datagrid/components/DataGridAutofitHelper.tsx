@@ -78,7 +78,9 @@ class DataGridAutofitHelper extends React.Component<IProps> {
             <tr data-autofit-table-head-row>
               <td>{data.length + ''}</td>
               {colGroup.map((col, ci) => (
-                <td key={ci}>{col.label}</td>
+                <td key={ci} style={{ paddingLeft: 30 }}>
+                  {col.label}
+                </td>
               ))}
             </tr>
           </thead>
