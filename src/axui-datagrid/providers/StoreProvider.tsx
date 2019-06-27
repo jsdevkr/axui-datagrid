@@ -235,7 +235,10 @@ class StoreProvider extends React.Component<
       }
 
       // case of change datalength
-      if (nProps.data !== nState.data) {
+      if (
+        nProps.data !== nState.data ||
+        nProps.dataLength !== nState.dataLength
+      ) {
         changed.data = true;
         storeState.data = nProps.data;
         storeState.dataLength = storeState.dataLength = nProps.dataLength;
