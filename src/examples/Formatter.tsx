@@ -11,7 +11,6 @@ class Formatter extends React.Component<any, any> {
     super(props);
 
     const gridData = require('examples/data/data-basic.json');
-    '';
 
     this.state = {
       width: 400,

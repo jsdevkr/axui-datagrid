@@ -36,6 +36,7 @@ export const Menus = {
       { to: '/examples/Resizing', label: 'Resizing' },
       { to: '/examples/AutofitColumnWidth', label: 'Autofit Column Width' },
       { to: '/examples/RemoteSort', label: 'Remote Sort' },
+      { to: '/examples/MultiEdit', label: 'MultiEdit' },
       { to: '/examples/Etc', label: 'etc.' },
 
       // { to: '/examples/BodyGrouping', label: 'Body grouping' },

@@ -331,10 +331,41 @@ export namespace IDataGrid {
     scrollerArrowSize?: number;
   }
 
+  export interface ISelection {
+    rows?: number[];
+    cols?: number[];
+    focusedRow?: number;
+    focusedCol?: number;
+  }
+
+  export interface ISortInfo {
+    key?: string;
+    seq?: number;
+    orderBy: 'asc' | 'desc';
+  }
+
+  export interface IEditingData {
+    [key: string]: {
+      editType: string;
+      values: {
+        [key: string]: {};
+      };
+    };
+  }
+
+  export interface IData {
+    [key: number]: {
+      type?: 'C' | 'U' | 'D';
+      value: [] | { [key: string]: any };
+      changed?: [] | { [key: string]: any };
+    };
+  }
+
   export interface IStoreProps {
     loading?: boolean;
     loadingData?: boolean;
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
 
     selectedIndexes?: number[];
     selection?: ISelection;
@@ -393,7 +424,9 @@ export namespace IDataGrid {
     loading?: boolean;
     loadingData?: boolean;
 
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
+
     listSelectedAll?: boolean;
     sortInfo?: {
       [key: string]: ISortInfo;
@@ -495,21 +528,9 @@ export namespace IDataGrid {
     onSort?: (param: IonSortParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
-  export interface ISelection {
-    rows?: number[];
-    cols?: number[];
-    focusedRow?: number;
-    focusedCol?: number;
-  }
-
-  export interface ISortInfo {
-    key?: string;
-    seq?: number;
-    orderBy: 'asc' | 'desc';
-  }
-
   export interface IRootProps {
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
     columns: IColumn[];
     footSum?: IColumn[][];
     width: number;
@@ -525,6 +546,7 @@ export namespace IDataGrid {
     scrollTop?: number;
     autofitColumns?: boolean;
     sortInfos?: ISortInfo[];
+
     applyAutofit?: (autofiting: boolean) => void;
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
