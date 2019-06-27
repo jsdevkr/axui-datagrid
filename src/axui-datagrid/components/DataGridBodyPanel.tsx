@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { arrayFromRange } from '../utils';
+import { arrayFromRange, getDataItem } from '../utils';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 import DataGridBodyCell from './DataGridBodyCell';
@@ -10,7 +10,8 @@ import DataGridTableColGroup from './DataGridTableColGroup';
 class TableBody extends React.PureComponent<{
   sRowIndex: number;
   eRowIndex: number;
-  data: any[];
+  data: IDataGrid.IData;
+  dataLength: number;
   bodyRow: IDataGrid.IColumnTableMap;
   setStoreState: IDataGrid.setStoreState;
   dispatch: IDataGrid.dispatch;
@@ -28,6 +29,7 @@ class TableBody extends React.PureComponent<{
       sRowIndex,
       eRowIndex,
       data,
+      dataLength,
       bodyRow,
       setStoreState,
       dispatch,
@@ -41,12 +43,27 @@ class TableBody extends React.PureComponent<{
       predefinedFormatter,
     } = this.props;
 
+    const changedTrClassName = {
+      C: 'added-line',
+      U: 'updated-line',
+      D: 'deleted-line',
+      E: 'error-line',
+    };
+
     return (
       <tbody>
         {arrayFromRange(sRowIndex, eRowIndex).map(li => {
-          if (data.length > li && data[li]) {
+          const item = getDataItem(data, li);
+          if (dataLength > li && item) {
             return bodyRow.rows.map((row, ri) => (
-              <tr key={ri} className={`${li % 2 !== 0 ? 'odded-line' : ''}`}>
+              <tr
+                key={ri}
+                className={`${li % 2 !== 0 ? 'odded-line' : ''} ${
+                  changedTrClassName[item.type || '']
+                    ? changedTrClassName[item.type || '']
+                    : ''
+                }`}
+              >
                 {row.cols.map((col, ci) => (
                   <DataGridBodyCell
                     key={ci}
@@ -54,7 +71,7 @@ class TableBody extends React.PureComponent<{
                     ci={ci}
                     col={col}
                     data={data}
-                    selected={data[li]._selected_}
+                    selected={item.selected}
                     setStoreState={setStoreState}
                     dispatch={dispatch}
                     focusedRow={focusedRow}
@@ -90,7 +107,8 @@ interface IProps extends IDataGridStore {
 class DataGridBodyPanel extends React.Component<IProps> {
   render() {
     const {
-      data = [],
+      data = {},
+      dataLength = 0,
       asideColGroup = [],
       leftHeaderColGroup = [],
       visibleHeaderColGroup = [],
@@ -165,6 +183,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
               sRowIndex={sRowIndex}
               eRowIndex={eRowIndex}
               data={data}
+              dataLength={dataLength}
               bodyRow={panelBodyRow}
               setStoreState={setStoreState}
               dispatch={dispatch}

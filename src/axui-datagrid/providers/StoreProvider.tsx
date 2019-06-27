@@ -42,7 +42,8 @@ const store: IDataGridStore = {
 
   width: 0,
   height: 0,
-  data: [],
+  data: {},
+  dataLength: 0,
   listSelectedAll: false,
   colGroup: [],
   asideColGroup: [],
@@ -91,6 +92,7 @@ class StoreProvider extends React.Component<
       nProps.loading === nState.loading &&
       nProps.loadingData === nState.loadingData &&
       nProps.data === nState.data &&
+      nProps.dataLength === nState.dataLength &&
       nProps.selection === nState.selection &&
       nProps.selectedIndexes === nState.selectedIndexes &&
       nProps.sortInfo === nState.sortInfo &&
@@ -133,7 +135,8 @@ class StoreProvider extends React.Component<
       nProps.onRightClick === nState.onRightClick &&
       nProps.onClick === nState.onClick &&
       nProps.onError === nState.onError &&
-      nProps.onSort === nState.onSort
+      nProps.onSort === nState.onSort &&
+      nProps.onEdit === nState.onEdit
     ) {
       return null;
     } else {
@@ -171,6 +174,7 @@ class StoreProvider extends React.Component<
       storeState.onClick = nProps.onClick;
       storeState.onError = nProps.onError;
       storeState.onSort = nProps.onSort;
+      storeState.onEdit = nProps.onEdit;
       ///
       storeState.headerTable = nProps.headerTable;
       storeState.bodyRowTable = nProps.bodyRowTable;
@@ -234,8 +238,10 @@ class StoreProvider extends React.Component<
       if (nProps.data !== nState.data) {
         changed.data = true;
         storeState.data = nProps.data;
+        storeState.dataLength = storeState.dataLength = nProps.dataLength;
+
         // listSelectedAll is false when data empty
-        if (storeState.data && storeState.data.length === 0) {
+        if (storeState.data && storeState.dataLength === 0) {
           storeState.listSelectedAll = false;
         }
       }
@@ -255,7 +261,7 @@ class StoreProvider extends React.Component<
           headerColGroup: _headerColGroup,
           bodyRowTable: nProps.bodyRowTable,
           footSumColumns: nProps.footSumColumns,
-          data: nProps.data,
+          dataLength: nProps.dataLength,
           options: nProps.options,
         });
         _styles = dimensions.styles;
@@ -343,18 +349,22 @@ class StoreProvider extends React.Component<
         storeState.focusedCol = focusedCol;
       }
 
-      if (
-        storeState.data &&
-        nProps.selectedIndexes !== nState.selectedIndexes
-      ) {
-        storeState.data.forEach(item => (item._selected_ = false));
+      // if (
+      //   storeState.data &&
+      //   nProps.selectedIndexes !== nState.selectedIndexes
+      // ) {
+      //   Object.keys(storeState.data).forEach(k => {
+      //     if (storeState.data) {
+      //       storeState.data[k].selected = false;
+      //     }
+      //   });
 
-        if (nProps.selectedIndexes) {
-          nProps.selectedIndexes.forEach(
-            idx => (storeState.data![idx]._selected_ = true),
-          );
-        }
-      }
+      //   if (nProps.selectedIndexes) {
+      //     nProps.selectedIndexes.forEach(
+      //       idx => (storeState.data![idx].selected = true),
+      //     );
+      //   }
+      // }
 
       if (nProps.sortInfo !== nState.pSortInfo) {
         // changed sortInfo
@@ -489,8 +499,9 @@ class StoreProvider extends React.Component<
     param: IDataGrid.DispatchParam,
   ) => {
     const {
-      data = [],
-      listSelectedAll = false,
+      // data = {},
+      dataLength = 0,
+      // listSelectedAll = false,
       colGroup = [],
       rootNode,
       focusedRow = -1,
@@ -499,21 +510,24 @@ class StoreProvider extends React.Component<
       selectionSCol,
       selectionERow,
       selectionECol,
-      onChangeSelected,
-      options: { header: { remoteSort = false } = {} } = {},
+      // onChangeSelected,
       onSort,
+      onEdit,
     } = this.state;
+
     const {
-      rowIndex,
+      // rowIndex,
+      col,
       colIndex,
       checked,
       row,
       value,
       eventWhichKey,
       keepEditing = false,
+      newWidth,
     } = param;
 
-    let selectedAll: boolean = listSelectedAll;
+    // let selectedAll: boolean = listSelectedAll;
 
     switch (dispatchType) {
       case DataGridEnums.DispatchTypes.FILTER:
@@ -580,10 +594,6 @@ class StoreProvider extends React.Component<
         let seq: number = 0;
         let sortInfos: IDataGrid.ISortInfo[] = [];
 
-        const getValueByKey = function(_item: any, _key: string) {
-          return _item[_key] || '';
-        };
-
         for (let k in sortInfo) {
           if (sortInfo[k]) {
             currentSortInfo[k] = sortInfo[k];
@@ -614,49 +624,24 @@ class StoreProvider extends React.Component<
         }
         sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
 
-        let i = 0,
-          l = sortInfos.length,
-          aValue: any,
-          bValue: any,
-          sortedList = data;
-
-        if (remoteSort) {
-          // is remote
-          if (onSort) {
-            onSort({ sortInfos });
-          }
-        } else {
-          sortedList = data.sort((a: any, b: any): any => {
-            for (i = 0; i < l; i++) {
-              aValue = getValueByKey(a, sortInfos[i].key!);
-              bValue = getValueByKey(b, sortInfos[i].key!);
-
-              if (typeof aValue !== typeof bValue) {
-                aValue = '' + aValue;
-                bValue = '' + bValue;
-              }
-              if (aValue < bValue) {
-                return sortInfos[i].orderBy === 'asc' ? -1 : 1;
-              } else if (aValue > bValue) {
-                return sortInfos[i].orderBy === 'asc' ? 1 : -1;
-              }
-            }
+        if (onSort) {
+          onSort({
+            sortInfos,
           });
         }
 
-        // sortInfo 정리
-        sortInfos.forEach((si, idx) => {
-          if (si.key) {
-            currentSortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
-          }
-        });
+        // // sortInfo 정리
+        // sortInfos.forEach((si, idx) => {
+        //   if (si.key) {
+        //     currentSortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
+        //   }
+        // });
 
-        this.setStoreState({
-          sortInfo: { ...currentSortInfo },
-          data: sortedList,
-          isInlineEditing: false,
-          inlineEditingCell: {},
-        });
+        // this.setStoreState({
+        //   sortInfo: { ...currentSortInfo },
+        //   isInlineEditing: false,
+        //   inlineEditingCell: {},
+        // });
 
         break;
 
@@ -664,15 +649,15 @@ class StoreProvider extends React.Component<
       case DataGridEnums.DispatchTypes.UPDATE_ITEM:
         let focusRow: number = focusedRow;
 
-        if (dispatchType === DataGridEnums.DispatchTypes.UPDATE) {
-          const updateKey = colGroup[colIndex].key;
-          if (updateKey) {
-            data[row][updateKey] = value;
-            // update filteredList
-          }
-        } else if (dispatchType === DataGridEnums.DispatchTypes.UPDATE_ITEM) {
-          data[row] = { ...data[row], ...value };
-        }
+        // if (dispatchType === DataGridEnums.DispatchTypes.UPDATE) {
+        //   const updateKey = colGroup[colIndex].key;
+        //   if (updateKey) {
+        //     data[row][updateKey] = value;
+        //     // update filteredList
+        //   }
+        // } else if (dispatchType === DataGridEnums.DispatchTypes.UPDATE_ITEM) {
+        //   data[row] = { ...data[row], ...value };
+        // }
 
         if (eventWhichKey) {
           switch (eventWhichKey) {
@@ -681,9 +666,7 @@ class StoreProvider extends React.Component<
               break;
             case DataGridEnums.KeyCodes.DOWN_ARROW:
               focusRow =
-                focusedRow + 1 >= data.length
-                  ? data.length - 1
-                  : focusedRow + 1;
+                focusedRow + 1 >= dataLength ? dataLength - 1 : focusedRow + 1;
               break;
             default:
               break;
@@ -692,7 +675,7 @@ class StoreProvider extends React.Component<
 
         if (!keepEditing) {
           this.setStoreState({
-            data: [...data],
+            // data: { ...data },
             isInlineEditing: false,
             inlineEditingCell: {},
             selectionRows: {
@@ -705,15 +688,26 @@ class StoreProvider extends React.Component<
             rootNode.current.focus();
           }
         } else {
-          this.setStoreState({
-            data: [...data],
+          // this.setStoreState({
+          //   data: { ...data },
+          // });
+        }
+
+        if (onEdit) {
+          onEdit({
+            li: row,
+            col,
+            colIndex,
+            value,
+            checked,
+            eventWhichKey,
+            keepEditing,
           });
         }
 
         break;
 
       case DataGridEnums.DispatchTypes.RESIZE_COL:
-        const { col, newWidth } = param;
         let _colGroup = [...(this.state.colGroup || [])];
         _colGroup[col.colIndex]._width = _colGroup[
           col.colIndex
@@ -727,75 +721,79 @@ class StoreProvider extends React.Component<
         break;
 
       case DataGridEnums.DispatchTypes.SELECT:
-        let rowSelected: boolean = false;
+        // TODO: selected 처리 방식 변경
 
-        if (checked === true) {
-          rowSelected = true;
-        } else if (checked === false) {
-          rowSelected = false;
-        } else {
-          rowSelected = !(data[rowIndex] && data[rowIndex]._selected_);
-        }
+        // let rowSelected: boolean = false;
 
-        if (!rowSelected) {
-          selectedAll = false;
-        }
-        data[rowIndex]._selected_ = rowSelected;
+        // if (checked === true) {
+        //   rowSelected = true;
+        // } else if (checked === false) {
+        //   rowSelected = false;
+        // } else {
+        //   rowSelected = !(data[rowIndex] && data[rowIndex].selected);
+        // }
 
-        this.setStoreState({
-          listSelectedAll: selectedAll,
-          data: [...data],
-        });
+        // if (!rowSelected) {
+        //   selectedAll = false;
+        // }
+        // data[rowIndex].selected = rowSelected;
 
-        if (onChangeSelected) {
-          const selectedIndexes: number[] = [];
-          const selectedList = data.filter((n, i) => {
-            if (n._selected_) {
-              selectedIndexes.push(i);
-            }
-            return n._selected_;
-          });
+        // this.setStoreState({
+        //   listSelectedAll: selectedAll,
+        //   data: { ...data },
+        // });
 
-          onChangeSelected({
-            selectedList,
-            selectedIndexes,
-          });
-        }
+        // if (onChangeSelected) {
+        //   const selectedIndexes: number[] = [];
+
+        //   const selectedList = Object.entries(data).filter(([, n], i) => {
+        //     if (n.selected) {
+        //       selectedIndexes.push(i);
+        //     }
+        //     return n.selected;
+        //   });
+
+        //   onChangeSelected({
+        //     selectedList,
+        //     selectedIndexes,
+        //   });
+        // }
 
         break;
 
       case DataGridEnums.DispatchTypes.SELECT_ALL:
-        if (checked === true) {
-          selectedAll = true;
-        } else if (checked === false) {
-          selectedAll = false;
-        } else {
-          selectedAll = !selectedAll;
-        }
+        // TODO: selected 처리 방식 변경
+        // if (checked === true) {
+        //   selectedAll = true;
+        // } else if (checked === false) {
+        //   selectedAll = false;
+        // } else {
+        //   selectedAll = !selectedAll;
+        // }
 
-        for (let i = 0, l = data.length; i < l; i++) {
-          data[i]._selected_ = selectedAll;
-        }
+        // for (let i = 0, l = dataLength; i < l; i++) {
+        //   data[i].selected = selectedAll;
+        // }
 
-        this.setStoreState({
-          listSelectedAll: selectedAll,
-          data: [...data],
-        });
+        // this.setStoreState({
+        //   listSelectedAll: selectedAll,
+        //   data: { ...data },
+        // });
 
-        if (onChangeSelected) {
-          const selectedIndexes: number[] = [];
-          const selectedList = data.filter((n, i) => {
-            if (n._selected_) {
-              selectedIndexes.push(i);
-            }
-            return n._selected_;
-          });
+        // if (onChangeSelected) {
+        //   const selectedIndexes: number[] = [];
+        //   const selectedList = Object.entries(data).filter(([, n], i) => {
+        //     if (n.selected) {
+        //       selectedIndexes.push(i);
+        //     }
+        //     return n.selected;
+        //   });
 
-          onChangeSelected({
-            selectedList,
-            selectedIndexes,
-          });
-        }
+        //   onChangeSelected({
+        //     selectedList,
+        //     selectedIndexes,
+        //   });
+        // }
 
         break;
 

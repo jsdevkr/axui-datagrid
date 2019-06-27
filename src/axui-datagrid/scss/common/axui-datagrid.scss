@@ -215,6 +215,9 @@
     box-shadow: $axui-datagrid-cell-focused-box-shadow;
     background: $axui-datagrid-cell-focused-bg;
   }
+  &.updated {
+    background: $axui-datagrid-cell-updated-bg;
+  }
 
   [data-span] {
     user-select: none;

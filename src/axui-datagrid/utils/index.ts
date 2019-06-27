@@ -33,3 +33,4 @@ export {
   isFunction,
   isNumber,
 } from './common';
+export { default as getDataItem } from './getDataItem';

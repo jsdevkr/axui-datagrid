@@ -3,14 +3,13 @@ import * as React from 'react';
 import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { basicData } from './data/basicData';
 
 class AlignHeader extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: any) {
     super(props);
-
-    const gridData = require('examples/data/data-basic.json');
 
     this.state = {
       width: 300,
@@ -22,7 +21,7 @@ class AlignHeader extends React.Component<any, any> {
         { key: 'date', label: 'Date', formatter: 'date' },
         { key: 'money', label: 'Money', formatter: 'money' },
       ],
-      data: gridData,
+      data: basicData,
       options: {},
     };
 
@@ -102,6 +101,7 @@ class AlignHeader extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
+              dataLength={Object.keys(data).length}
               options={options}
             />
           </div>

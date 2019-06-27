@@ -33,7 +33,7 @@ export namespace IDataGrid {
 
   export interface IonRightClickParam {
     e: React.MouseEvent<any>;
-    item: any;
+    item: IDataItem;
     value: any;
     focusedRow?: number;
     focusedCol?: number;
@@ -41,7 +41,7 @@ export namespace IDataGrid {
 
   export interface IonClickParam {
     e: React.MouseEvent<any>;
-    item: any;
+    item: IDataItem;
     value: any;
     rowIndex?: number;
     colIndex?: number;
@@ -93,6 +93,16 @@ export namespace IDataGrid {
     colGroup: IAutofitCol[];
   }
 
+  export interface IonEditParam {
+    li: number;
+    col?: ICol;
+    colIndex: number;
+    value: any;
+    checked?: boolean;
+    eventWhichKey?: string;
+    keepEditing?: boolean;
+  }
+
   export type formatterFunction = (formatterData: IFormatterData) => any;
 
   export type collectorFunction = (formatterData: ICollectorData) => any;
@@ -111,14 +121,18 @@ export namespace IDataGrid {
 
   export type CellEditorDataUpdate = (
     value: any,
-    options?: { keepEditing?: boolean; updateItem?: boolean },
+    options?: {
+      keepEditing?: boolean;
+      updateItem?: boolean;
+      eventWhichKey?: string;
+    },
   ) => void;
 
   export interface ICellEditorData {
     col: ICol;
     li: number;
     colIndex: number;
-    item: any;
+    item: IDataItem;
     value: any;
     update: CellEditorDataUpdate;
     cancel: () => void;
@@ -130,7 +144,7 @@ export namespace IDataGrid {
     col: ICol;
     rowIndex: number;
     colIndex: number;
-    item: any;
+    item: IDataItem;
     value: any;
   }
 
@@ -158,7 +172,7 @@ export namespace IDataGrid {
   }
 
   export interface IFormatterData {
-    item?: any;
+    item?: IDataItem;
     index?: number;
     key?: string;
     value?: any;
@@ -166,7 +180,8 @@ export namespace IDataGrid {
   }
 
   export interface ICollectorData {
-    data?: any;
+    data?: IData;
+    dataLength?: number;
     key?: string;
     value?: any;
     options?: any;
@@ -247,8 +262,6 @@ export namespace IDataGrid {
     columnPadding?: number;
     columnBorderWidth?: number;
     selector?: boolean;
-    sortable?: boolean;
-    remoteSort?: boolean;
     clickAction?: 'select' | 'sort' | undefined;
   }
 
@@ -344,22 +357,17 @@ export namespace IDataGrid {
     orderBy: 'asc' | 'desc';
   }
 
-  export interface IEditingData {
-    [key: string]: {
-      editType: string;
-      values: {
-        [key: string]: {};
+  export interface IDataItem {
+    type?: 'C' | 'U' | 'D';
+    value: [] | { [key: string]: any };
+    changed?: { [key: string]: any };
+    selected?: boolean;
+  }
+  export type IData =
+    | Map<number, IDataItem>
+    | {
+        [key: number]: IDataItem;
       };
-    };
-  }
-
-  export interface IData {
-    [key: number]: {
-      type?: 'C' | 'U' | 'D';
-      value: [] | { [key: string]: any };
-      changed?: [] | { [key: string]: any };
-    };
-  }
 
   export interface IStoreProps {
     loading?: boolean;
@@ -418,6 +426,7 @@ export namespace IDataGrid {
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   }
 
   export interface IStoreState {
@@ -526,6 +535,7 @@ export namespace IDataGrid {
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface IRootProps {
@@ -558,6 +568,7 @@ export namespace IDataGrid {
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   }
 
   export interface IRootState {

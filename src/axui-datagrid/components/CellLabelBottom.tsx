@@ -26,7 +26,7 @@ class CellLabelBottom extends React.PureComponent<{
     } = this.props;
 
     let collectorData: IDataGrid.ICollectorData = {
-      data,
+      data: data,
       key,
     };
     let formatterData: IDataGrid.IFormatterData = {

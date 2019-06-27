@@ -39,9 +39,7 @@ class DataGrid extends React.Component<IProps, IState> {
     columnPadding: 3,
     columnBorderWidth: 1,
     selector: true,
-    sortable: true,
     clickAction: 'sort',
-    remoteSort: false,
   };
   static defaultBody: IDataGrid.IOptionBody = {
     align: 'left',
@@ -393,7 +391,8 @@ class DataGrid extends React.Component<IProps, IState> {
     const {
       loading = false,
       loadingData = false,
-      data = [],
+      data = {},
+      dataLength = 0,
       width,
       height = DataGrid.defaultHeight,
       selectedIndexes,
@@ -412,6 +411,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onClick,
       onError,
       onSort,
+      onEdit,
       style = {},
     } = this.props;
 
@@ -427,6 +427,7 @@ class DataGrid extends React.Component<IProps, IState> {
       loading,
       loadingData,
       data,
+      dataLength,
       width,
       height,
       selectedIndexes,
@@ -466,6 +467,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onClick,
       onError,
       onSort,
+      onEdit,
 
       options,
       sortInfo,

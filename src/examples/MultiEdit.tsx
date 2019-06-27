@@ -7,6 +7,7 @@ import { IDataGrid } from 'axui-datagrid/common/@types';
 
 import styled from 'styled-components';
 // import { debounce } from 'axui-datagrid/utils';
+import { arrayTypedData } from './data/arrayTypedData';
 
 const DatagridContainer = styled.div`
   border: 1px solid #ccc;
@@ -37,10 +38,9 @@ interface IState {
   height: number;
   scrollTop: number;
   columns: IDataGrid.IColumn[];
-  data: any[];
-  editingData: IDataGrid.IEditingData;
-  addingData: any[];
+  data: IDataGrid.IData;
   selection: IDataGrid.ISelection;
+  sortInfos: IDataGrid.ISortInfo[];
 }
 
 class MultiEdit extends React.Component<IProps, IState> {
@@ -56,7 +56,6 @@ class MultiEdit extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
 
-    const gridData = require('examples/data/data-array.json');
     const editor: IDataGrid.cellEditorFunction = ({
       value,
       li,
@@ -72,21 +71,23 @@ class MultiEdit extends React.Component<IProps, IState> {
           autoFocus
           defaultValue={value.v}
           onBlur={e => {
-            // value.editValue = e.currentTarget.value;
-            update(value);
+            update({ ...value, changed: e.currentTarget.value });
           }}
           onKeyUp={e => {
+            e.preventDefault();
             if (e.which === 27) {
               cancel();
               return;
             }
             if (e.which === 13) {
-              // value.editValue = e.currentTarget.value;
-              update(value);
+              update({ ...value, changed: e.currentTarget.value });
             }
           }}
         />
       );
+    };
+    const formatter: IDataGrid.formatterFunction = ({ value, item }) => {
+      return value ? value.v : '';
     };
 
     const columns: IDataGrid.ICol[] = [
@@ -106,49 +107,49 @@ class MultiEdit extends React.Component<IProps, IState> {
         key: '2',
         label: 'column 2',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '3',
         label: 'column 3',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '4',
         label: 'column 4',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '5',
         label: 'column 5',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '6',
         label: 'column 6',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '7',
         label: 'column 7',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '8',
         label: 'column 8',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
       {
         key: '9',
         label: 'column 9',
         editor: { activeType: 'dblclick', render: editor },
-        formatter: ({ value }) => value.v,
+        formatter,
       },
     ];
 
@@ -164,58 +165,107 @@ class MultiEdit extends React.Component<IProps, IState> {
       height: 300,
       scrollTop: 0,
       columns,
-      data: gridData,
+      data: arrayTypedData,
       selection,
-      editingData: {
-        '0': { editType: 'U', values: { '0': 'editValue' } },
-        '1': { editType: 'U', values: { '0': 'editValue' } },
-      },
-      addingData: [],
+      sortInfos: [],
     };
 
     this.dataGridContainerRef = React.createRef();
   }
 
   addItem = () => {
-    const newItem = [
-      { v: 'J' },
-      { v: 'A' },
-      { v: 'N' },
-      { v: 'G' },
-      { v: 'S' },
-      { v: 'E' },
-      { v: 'O' },
-      { v: 'W' },
-      { v: 'O' },
-      { v: 'O' },
-    ];
+    const { data } = this.state;
+    const dataLength = Object.keys(data).length;
+    const newItem: IDataGrid.IData = {
+      [dataLength]: {
+        type: 'C',
+        value: [
+          { v: 'J' },
+          { v: 'A' },
+          { v: 'N' },
+          { v: 'G' },
+          { v: 'S' },
+          { v: 'E' },
+          { v: 'O' },
+          { v: 'W' },
+          { v: 'O' },
+          { v: 'O' },
+        ],
+      },
+    };
 
     // 그리드의 스크롤을 변경하기 위한 스크롤 포지션 구하기
-    // const scrollTop =
-    //   this.scrollContentContainerHeight < this.scrollContentHeight
-    //     ? -this.scrollContentHeight
-    //     : 0;
+    const scrollTop =
+      this.scrollContentContainerHeight < this.scrollContentHeight
+        ? -this.scrollContentHeight
+        : 0;
 
-    // this.setState({
-    //   addingData: [...this.state.addingData, ...[newItem]],
-    //   scrollTop,
-    //   selection: {
-    //     rows: [this.state.data.length],
-    //     cols: [1],
-    //     focusedRow: this.state.data.length,
-    //     focusedCol: 1,
-    //   },
-    // });
+    this.setState({
+      data: { ...data, ...newItem },
+      scrollTop,
+      selection: {
+        rows: [dataLength],
+        cols: [0],
+        focusedRow: dataLength,
+        focusedCol: 0,
+      },
+    });
   };
 
   removeItem = () => {
-    // console.log(this.selectedIndexes);
-    if (this.selectedIndexes.length) {
-      //   const data: any[] = this.state.data;
-      //   const _data = data.filter((n, i) => {
-      //     return !this.selectedIndexes.includes(i);
-      //   });
-      //   this.setState({ data: _data });
+    const { selection, data } = this.state;
+    if (selection.rows && selection.rows.length) {
+      selection.rows.forEach(li => {
+        if (data instanceof Map) {
+          const item = data.get(li);
+          if (item) {
+            if (item.type === 'C') {
+              data.delete(li);
+            } else {
+              item.type = 'D';
+            }
+          }
+        } else {
+          const item = data[li];
+          if (item) {
+            if (item.type === 'C') {
+              delete data[li];
+            } else {
+              item.type = 'D';
+            }
+          }
+        }
+      });
+
+      this.setState({ data: { ...data } });
+    }
+  };
+
+  onEditItem = (param: IDataGrid.IonEditParam) => {
+    try {
+      const { li, col: { key: colKey = '' } = {}, value } = param;
+      const { data } = this.state;
+
+      const originalItemType = data[li].type;
+      if (originalItemType === 'C') {
+        const editDataItem: IDataGrid.IDataItem = { ...data[li] };
+        editDataItem.value[colKey] = { v: value.changed };
+
+        this.setState({
+          data: { ...data, [li]: editDataItem },
+        });
+      } else {
+        const editDataItem: IDataGrid.IDataItem = {
+          type: 'U',
+          value: data[li].value,
+          changed: { ...data[li].changed, [colKey]: { v: value.changed } },
+        };
+        this.setState({
+          data: { ...data, [li]: editDataItem },
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -249,6 +299,43 @@ class MultiEdit extends React.Component<IProps, IState> {
     }
   };
 
+  onSort = (param: IDataGrid.IonSortParam) => {
+    const { data } = this.state;
+    const { sortInfos } = param;
+
+    const getValueByKey = function(_item: any, _key: string) {
+      return _item.value[_key].v || '';
+    };
+
+    const newData = Object.values(data)
+      .sort((a, b) => {
+        for (let i = 0; i < sortInfos.length; i++) {
+          let aValue = getValueByKey(a, sortInfos[i].key!);
+          let bValue = getValueByKey(b, sortInfos[i].key!);
+
+          if (typeof aValue !== typeof bValue) {
+            aValue = '' + aValue;
+            bValue = '' + bValue;
+          }
+          if (aValue < bValue) {
+            return sortInfos[i].orderBy === 'asc' ? -1 : 1;
+          } else if (aValue > bValue) {
+            return sortInfos[i].orderBy === 'asc' ? 1 : -1;
+          }
+        }
+        return 0;
+      })
+      .reduce((obj, item, idx) => {
+        // convert array to object
+        obj[idx] = item;
+        return obj;
+      }, {});
+
+    // console.log(newData);
+
+    this.setState({ sortInfos, data: newData });
+  };
+
   componentDidMount() {
     this.getDataGridContainerRect();
     window.addEventListener('resize', this.getDataGridContainerRect, false);
@@ -259,7 +346,15 @@ class MultiEdit extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { width, height, columns, data, scrollTop, selection } = this.state;
+    const {
+      width,
+      height,
+      columns,
+      data,
+      scrollTop,
+      selection,
+      sortInfos,
+    } = this.state;
 
     return (
       <Wrapper>
@@ -274,6 +369,7 @@ class MultiEdit extends React.Component<IProps, IState> {
                 height={height - 2}
                 columns={columns}
                 data={data}
+                dataLength={Object.keys(data).length}
                 options={{}}
                 autofitColumns={true}
                 onScroll={this.onScroll}
@@ -281,6 +377,9 @@ class MultiEdit extends React.Component<IProps, IState> {
                 onChangeScrollSize={this.onChangeScrollSize}
                 selection={selection}
                 onChangeSelection={this.onChangeSelection}
+                sortInfos={sortInfos}
+                onSort={this.onSort}
+                onEdit={this.onEditItem}
               />
             </DatagridContainer>
           </div>
@@ -318,6 +417,15 @@ class MultiEdit extends React.Component<IProps, IState> {
             <textarea
               style={{ width: '100%', height: 100 }}
               value={JSON.stringify(selection)}
+              readOnly
+            />
+          </div>
+
+          <div>
+            <h4>data</h4>
+            <textarea
+              style={{ width: '100%', height: 200 }}
+              value={JSON.stringify(data).replace(/},"/g, '},\n"')}
               readOnly
             />
           </div>

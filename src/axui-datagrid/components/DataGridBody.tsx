@@ -6,6 +6,7 @@ import {
   getScrollPosition,
   arrayFromRange,
   throttle,
+  getDataItem,
 } from '../utils';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
@@ -26,9 +27,9 @@ class DataGridBody extends React.Component<IProps> {
   }
 
   handleSetSelected = (rowIndex: number) => {
-    const { dispatch, data = [] } = this.props;
+    const { dispatch, dataLength = 0 } = this.props;
 
-    if (rowIndex < 0 || rowIndex > data.length - 1) {
+    if (rowIndex < 0 || rowIndex > dataLength - 1) {
       return;
     }
 
@@ -41,11 +42,11 @@ class DataGridBody extends React.Component<IProps> {
     const {
       colGroup = [],
       focusedRow = 0,
-      data = [],
+      dataLength = 0,
       setStoreState,
     } = this.props;
 
-    if (rowIndex < 0 || rowIndex > data.length - 1) {
+    if (rowIndex < 0 || rowIndex > dataLength - 1) {
       return;
     }
 
@@ -89,13 +90,13 @@ class DataGridBody extends React.Component<IProps> {
     rowIndex: number,
     colIndex: number,
   ) => {
-    const { colGroup = [], data = [], setStoreState } = this.props;
+    const { colGroup = [], dataLength = 0, setStoreState } = this.props;
 
     if (
       colIndex < 0 ||
       colIndex > colGroup.length - 1 ||
       rowIndex < 0 ||
-      rowIndex > data.length - 1
+      rowIndex > dataLength - 1
     ) {
       return;
     }
@@ -115,7 +116,7 @@ class DataGridBody extends React.Component<IProps> {
 
   getRowIndex = (y: number, _scrollTop: number): number => {
     const {
-      data = [],
+      dataLength = 0,
       styles: {
         frozenPanelHeight = 0,
         headerHeight = 0,
@@ -129,7 +130,7 @@ class DataGridBody extends React.Component<IProps> {
         (y - headerHeight < frozenPanelHeight ? 0 : _scrollTop)) /
         bodyTrHeight,
     );
-    return i >= data.length || i < 0 ? -1 : i;
+    return i >= dataLength || i < 0 ? -1 : i;
   };
 
   getColIndex = (x: number, _scrollLeft: number): number => {
@@ -570,7 +571,8 @@ class DataGridBody extends React.Component<IProps> {
       rootNode,
       scrollLeft = 0,
       scrollTop = 0,
-      data = [],
+      data = {},
+      dataLength = 0,
       colGroup = [],
       onClick,
     } = this.props;
@@ -588,7 +590,7 @@ class DataGridBody extends React.Component<IProps> {
     let colIndex: number =
       rowIndex === -1 ? -1 : this.getColIndex(startX, scrollLeft);
 
-    if (rowIndex < 0 || rowIndex > data.length - 1) {
+    if (rowIndex < 0 || rowIndex > dataLength - 1) {
       return;
     }
     if (colIndex < 0 || colIndex > colGroup.length - 1) {
@@ -597,10 +599,14 @@ class DataGridBody extends React.Component<IProps> {
 
     if (onClick) {
       const { key: itemKey = '' } = colGroup[colIndex];
+      const item = getDataItem(data, rowIndex);
+      if (!item) {
+        return;
+      }
       onClick({
         e,
-        item: data[rowIndex],
-        value: data[rowIndex][itemKey],
+        item,
+        value: item[itemKey],
         rowIndex,
         colIndex,
       });
@@ -705,7 +711,7 @@ class DataGridBody extends React.Component<IProps> {
         footSumHeight = 0,
       } = {},
       loadingData = false,
-      data = [],
+      dataLength = 0,
     } = this.props;
 
     const sRowIndex =
@@ -719,8 +725,8 @@ class DataGridBody extends React.Component<IProps> {
       eRowIndex: frozenRowIndex - 1,
     };
 
-    if ((topBodyScrollConfig.eRowIndex || 0) >= data.length) {
-      topBodyScrollConfig.eRowIndex = data.length - 1;
+    if ((topBodyScrollConfig.eRowIndex || 0) >= dataLength) {
+      topBodyScrollConfig.eRowIndex = dataLength - 1;
     }
 
     const bodyScrollConfig: IDataGrid.IScrollConfig = {
@@ -729,8 +735,8 @@ class DataGridBody extends React.Component<IProps> {
       eRowIndex: sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)),
     };
 
-    if ((bodyScrollConfig.eRowIndex || 0) >= data.length) {
-      bodyScrollConfig.eRowIndex = data.length - 1;
+    if ((bodyScrollConfig.eRowIndex || 0) >= dataLength) {
+      bodyScrollConfig.eRowIndex = dataLength - 1;
     }
 
     const topAsideBodyPanelStyle = {

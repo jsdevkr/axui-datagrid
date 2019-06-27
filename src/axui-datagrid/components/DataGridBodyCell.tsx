@@ -2,12 +2,13 @@ import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import CellLabel from './CellLabel';
 import CellEditor from './CellEditor';
+import { getDataItem } from '../utils';
 
 class DataGridBodyCell extends React.PureComponent<{
   li: number;
   ci: number;
   col?: IDataGrid.ICol;
-  data?: any[];
+  data?: IDataGrid.IData;
   selected?: boolean;
   setStoreState: IDataGrid.setStoreState;
   dispatch: IDataGrid.dispatch;
@@ -45,7 +46,7 @@ class DataGridBodyCell extends React.PureComponent<{
       col = {},
       col: { rowSpan = 0, colSpan = 0, colIndex = 0, columnAttr = '' } = {},
       ci,
-      data = [],
+      data = {},
       selected,
       focusedRow,
       focusedCol,
@@ -70,7 +71,11 @@ class DataGridBodyCell extends React.PureComponent<{
 
     const editor = col.editor;
     const colAlign = col.align || bodyAlign;
-    const value = data[li] && data[li][col.key || ''];
+    const item = getDataItem(data, li);
+    if (!item) {
+      return null;
+    }
+    const value = item.value[col.key || ''] || '';
     const cellHeight = columnHeight * rowSpan;
     const lineHeight = columnHeight - columnPadding * 2 - columnBorderWidth;
     const tdClassNames: string[] = [
@@ -97,6 +102,10 @@ class DataGridBodyCell extends React.PureComponent<{
         }
     }
 
+    if (item.changed && item.changed[col.key || ''] && item.type === 'U') {
+      tdClassNames.push('updated');
+    }
+
     const colEditor: IDataGrid.IColEditor =
       editor === 'string'
         ? { type: '' + editor }
@@ -118,7 +127,7 @@ class DataGridBodyCell extends React.PureComponent<{
             col: col,
             rowIndex: li,
             colIndex: col.colIndex || 0,
-            item: data[li],
+            item,
             value,
           })
         : false;
@@ -169,7 +178,7 @@ class DataGridBodyCell extends React.PureComponent<{
             col={col}
             li={li}
             lineNumberStartAt={lineNumberStartAt}
-            item={data[li]}
+            item={item}
             columnHeight={columnHeight}
             lineHeight={lineHeight}
             columnBorderWidth={columnBorderWidth}
@@ -182,8 +191,7 @@ class DataGridBodyCell extends React.PureComponent<{
           <CellEditor
             col={col}
             li={li}
-            item={data[li]}
-            value={value}
+            item={item}
             columnHeight={columnHeight}
             lineHeight={lineHeight}
             columnBorderWidth={columnBorderWidth}

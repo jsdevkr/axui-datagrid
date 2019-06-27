@@ -133,21 +133,16 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     switch (key) {
       case '_line_number_':
         {
-          state.selectionRows = (() => {
-            let rows = {};
-            data.forEach((item, i) => {
-              rows[i] = true;
-            });
-            return rows;
-          })();
+          state.selectionRows = Object.keys(data).reduce((obj, key) => {
+            obj[key] = true;
+            return obj;
+          }, {});
 
-          state.selectionCols = (() => {
-            let cols = {};
-            colGroup.forEach(_col => {
-              cols[_col.colIndex || 0] = true;
-            });
-            return cols;
-          })();
+          state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
+            obj[col.colIndex || 0] = true;
+            return obj;
+          }, {});
+
           state.focusedCol = 0;
           setStoreState(state);
         }
@@ -158,13 +153,10 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       default:
         {
           if (optionsHeader.clickAction === 'select') {
-            state.selectionRows = (() => {
-              let rows = {};
-              data.forEach((item, i) => {
-                rows[i] = true;
-              });
-              return rows;
-            })();
+            state.selectionRows = Object.keys(data).reduce((obj, key) => {
+              obj[key] = true;
+              return obj;
+            }, {});
 
             if (e.shiftKey) {
               state.selectionCols = (() => {
@@ -184,10 +176,7 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
               state.focusedCol = colIndex;
             }
             setStoreState(state);
-          } else if (
-            optionsHeader.clickAction === 'sort' &&
-            optionsHeader.sortable
-          ) {
+          } else if (optionsHeader.clickAction === 'sort') {
             dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
           }
         }

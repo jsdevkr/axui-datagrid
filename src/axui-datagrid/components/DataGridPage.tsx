@@ -34,13 +34,13 @@ class DataGridPage extends React.Component<IProps> {
     const {
       styles: { pageHeight = 0, horizontalScrollerWidth = 0 } = {},
       status,
-      data = [],
+      dataLength = 0,
     } = this.props;
 
     return (
       <div className="axui-datagrid-page" style={{ height: pageHeight }}>
         <div className="axui-datagrid-page-status">
-          {status ? status : `Total ${formatCurrency(data.length)} Items`}
+          {status ? status : `Total ${formatCurrency(dataLength)} Items`}
         </div>
         <div style={{ width: horizontalScrollerWidth }} />
       </div>
