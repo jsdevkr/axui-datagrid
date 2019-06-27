@@ -20,6 +20,7 @@ class DataGridPage extends React.Component<IProps> {
 
     if (
       this.props.data !== prevProps.data ||
+      this.props.dataLength !== prevProps.dataLength ||
       this.props.status !== prevProps.status ||
       pageHeight !== _pageHeight ||
       horizontalScrollerWidth !== _horizontalScrollerWidth

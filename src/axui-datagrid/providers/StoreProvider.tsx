@@ -235,6 +235,7 @@ class StoreProvider extends React.Component<
       }
 
       // case of change datalength
+
       if (
         nProps.data !== nState.data ||
         nProps.dataLength !== nState.dataLength
