@@ -17,11 +17,11 @@
   tr.added-line {
     background-color: $axui-datagrid-row-added-bg;
   }
-  tr.updated-line {
-    // background-color: $axui-datagrid-row-updated-bg;
-    td {
-    }
-  }
+  // tr.updated-line {
+  //   background-color: $axui-datagrid-row-updated-bg;
+  //   td {
+  //   }
+  // }
   tr.deleted-line {
     background-color: $axui-datagrid-row-deleted-bg;
   }
