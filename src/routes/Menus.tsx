@@ -27,7 +27,7 @@ export const Menus = {
       // { to: '/examples/ChangeColumns', label: 'Change Columns' },
       // { to: '/examples/FrozenColumnRow', label: 'Frozen column and row' },
       // { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
-      // { to: '/examples/InlineEdit', label: 'Inline edit' },
+      { to: '/examples/InlineEdit', label: 'Inline edit' },
       // { to: '/examples/EventReceive', label: 'Event' },
       // { to: '/examples/LoadingState', label: 'Loading' },
       { to: '/examples/RowSelector', label: 'RowSelector' },

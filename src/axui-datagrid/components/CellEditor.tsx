@@ -194,6 +194,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
     dispatch(DataGridEnums.DispatchTypes.UPDATE, {
       row: li,
+      col,
       colIndex: col.colIndex,
       value: value,
       eventWhichKey: 'click-checkbox',
@@ -273,6 +274,10 @@ class CellEditor extends React.PureComponent<IProps> {
         this.inputTextRef.current.focus();
       }
     }
+  }
+
+  componentDidUpdate() {
+    this.lastEventName = '';
   }
 
   handleInputTextSelect = (inputCurrent: any) => {

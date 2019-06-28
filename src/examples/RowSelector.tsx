@@ -137,7 +137,7 @@ class LoadingState extends React.Component<any, IState> {
               this.onSelect({ li: 0, selected: true });
             }}
           >
-            selectedIndexes : [0]
+            select : [0]
           </Button>
           <Button
             type="primary"
@@ -147,7 +147,7 @@ class LoadingState extends React.Component<any, IState> {
               this.onSelect({ li: 2, selected: true });
             }}
           >
-            selectedIndexes : [1,2]
+            select : [1,2]
           </Button>
         </Segment>
       </Wrapper>

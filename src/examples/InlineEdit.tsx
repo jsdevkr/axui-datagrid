@@ -7,7 +7,7 @@ import { IDataGrid } from 'axui-datagrid/common/@types';
 
 import styled from 'styled-components';
 import moment = require('moment');
-import { debounce } from 'axui-datagrid/utils';
+import { debounce, isObject } from 'axui-datagrid/utils';
 
 const DatagridContainer = styled.div`
   border: 1px solid #ccc;
@@ -118,7 +118,7 @@ const selectEditorA: IDataGrid.cellEditorFunction = ({
     <Select
       style={{ width: '100%' }}
       onChange={val => {
-        if ((item.subType + '').substring(0, 1) === val) {
+        if ((val.subType + '').substring(0, 1) === val) {
           update(val);
         } else {
           update({ type: val, subType: '' }, { updateItem: true });
@@ -151,7 +151,7 @@ const selectEditorB: IDataGrid.cellEditorFunction = ({
   focus,
   blur,
 }) => {
-  const _subTypes = subTypes.filter(t => t.type === item.type);
+  const _subTypes = subTypes.filter(t => t.type === item.value['type']);
   if (!_subTypes.find(t => t.subType === value)) {
     value = '';
   }
@@ -192,7 +192,16 @@ const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
   );
 };
 
-class InlineEdit extends React.Component<any, any> {
+interface IState {
+  width: number;
+  height: number;
+  scrollTop: number;
+  columns: IDataGrid.IColumn[];
+  data: IDataGrid.IData;
+  selection: IDataGrid.ISelection;
+}
+
+class InlineEdit extends React.Component<any, IState> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   scrollTop: number = 0;
@@ -204,7 +213,7 @@ class InlineEdit extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
-    const columns: IDataGrid.ICol[] = [
+    const columns: IDataGrid.IColumn[] = [
       { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
       {
         key: 'title',
@@ -239,7 +248,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           activeType: 'always',
           render: searchSelectEditor,
-          disable: ({ item }) => item.type === 'A',
+          disable: ({ item }) => item.value['type'] === 'A',
         },
       },
       {
@@ -250,7 +259,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           activeType: 'click',
           render: inputNumberEditor,
-          disable: ({ item }) => item.type === 'A',
+          disable: ({ item }) => item.value['type'] === 'A',
         },
       },
       {
@@ -260,7 +269,7 @@ class InlineEdit extends React.Component<any, any> {
         editor: {
           type: 'checkbox',
           label: 'useYn',
-          disable: ({ item }) => item.type === 'A',
+          disable: ({ item }) => item.value['type'] === 'A',
         },
       },
       {
@@ -290,66 +299,78 @@ class InlineEdit extends React.Component<any, any> {
       columns,
       data: [
         {
-          id: 1,
-          title: 'Think like a man of action and act like man of thought.',
-          writer: 'Thomas',
-          date: '2017/12/05',
-          money: 120000,
-          type: 'A',
-          subType: 'A-1',
-          check: true,
+          value: {
+            id: 1,
+            title: 'Think like a man of action and act like man of thought.',
+            writer: 'Thomas',
+            date: '2017/12/05',
+            money: 120000,
+            type: 'A',
+            subType: 'A-1',
+            check: true,
+          },
         },
         {
-          id: 2,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: new Date(),
-          money: 18000,
-          type: 'B',
-          subType: 'B-1',
-          check: false,
+          value: {
+            id: 2,
+            title:
+              'Courage is very important. Like a muscle, it is strengthened by use.',
+            writer: 'Sofia',
+            date: new Date(),
+            money: 18000,
+            type: 'B',
+            subType: 'B-1',
+            check: false,
+          },
         },
         {
-          id: 3,
-          title: 'TEST',
-          writer: 'Jack',
-          date: '2018/01/01',
-          money: 9000,
-          type: 'C',
-          subType: 'C-1',
-          check: false,
+          value: {
+            id: 3,
+            title: 'TEST',
+            writer: 'Jack',
+            date: '2018/01/01',
+            money: 9000,
+            type: 'C',
+            subType: 'C-1',
+            check: false,
+          },
         },
         {
-          id: 4,
-          title: 'Think like a man of action and act like man of thought.',
-          writer: 'Thomas',
-          date: '2017/12/05',
-          money: 120000,
-          type: 'A',
-          subType: 'A-2',
-          check: true,
+          value: {
+            id: 4,
+            title: 'Think like a man of action and act like man of thought.',
+            writer: 'Thomas',
+            date: '2017/12/05',
+            money: 120000,
+            type: 'A',
+            subType: 'A-2',
+            check: true,
+          },
         },
         {
-          id: 5,
-          title:
-            'Courage is very important. Like a muscle, it is strengthened by use.',
-          writer: 'Sofia',
-          date: new Date(),
-          money: 18000,
-          type: 'B',
-          subType: 'B-2',
-          check: false,
+          value: {
+            id: 5,
+            title:
+              'Courage is very important. Like a muscle, it is strengthened by use.',
+            writer: 'Sofia',
+            date: new Date(),
+            money: 18000,
+            type: 'B',
+            subType: 'B-2',
+            check: false,
+          },
         },
         {
-          id: 6,
-          title: 'TEST',
-          writer: 'Jack',
-          date: '2018/01/01',
-          money: 9000,
-          type: 'C',
-          subType: 'C-2',
-          check: false,
+          value: {
+            id: 6,
+            title: 'TEST',
+            writer: 'Jack',
+            date: '2018/01/01',
+            money: 9000,
+            type: 'C',
+            subType: 'C-2',
+            check: false,
+          },
         },
       ],
       selection,
@@ -364,38 +385,36 @@ class InlineEdit extends React.Component<any, any> {
   }
 
   addItem = () => {
-    const newItem = {
-      id: 999,
-      title: '',
-      writer: '',
-      date: '',
-      money: 0,
-      type: 'B',
-      check: true,
-    };
-
+    // const newItem = {
+    //   id: 999,
+    //   title: '',
+    //   writer: '',
+    //   date: '',
+    //   money: 0,
+    //   type: 'B',
+    //   check: true,
+    // };
     // console.log(this.scrollContentHeight);
-
-    this.setState({
-      data: [...this.state.data, ...[newItem]],
-      scrollTop: -this.scrollContentHeight,
-      selection: {
-        rows: [this.state.data.length],
-        cols: [1],
-        focusedRow: this.state.data.length,
-        focusedCol: 1,
-      },
-    });
+    // this.setState({
+    //   data: [...this.state.data, ...[newItem]],
+    //   scrollTop: -this.scrollContentHeight,
+    //   selection: {
+    //     rows: [this.state.data.length],
+    //     cols: [1],
+    //     focusedRow: this.state.data.length,
+    //     focusedCol: 1,
+    //   },
+    // });
   };
 
   removeItem = () => {
     // console.log(this.selectedIndexes);
     if (this.selectedIndexes.length) {
-      const data: any[] = this.state.data;
-      const _data = data.filter((n, i) => {
-        return !this.selectedIndexes.includes(i);
-      });
-      this.setState({ data: _data });
+      // const data: any[] = this.state.data;
+      // const _data = data.filter((n, i) => {
+      //   return !this.selectedIndexes.includes(i);
+      // });
+      // this.setState({ data: _data });
     }
   };
 
@@ -415,8 +434,29 @@ class InlineEdit extends React.Component<any, any> {
     this.setState({ selection: param });
   };
 
+  onEditItem = (param: IDataGrid.IonEditParam) => {
+    console.log(param);
+    const { li, col: { key: colKey = '' } = {}, value } = param;
+    const { data } = this.state;
+    const editDataItem: IDataGrid.IDataItem = { ...data[li] };
+
+    if (isObject(value)) {
+      editDataItem.value = { ...editDataItem.value, ...value };
+    } else {
+      editDataItem.value[colKey] = value;
+    }
+
+    // console.log('newData', { ...data, [li]: editDataItem });
+
+    this.setState({
+      data: { ...data, [li]: editDataItem },
+    });
+  };
+
   public render() {
     const { width, height, columns, data, scrollTop } = this.state;
+
+    console.log('render', data);
 
     return (
       <Wrapper>
@@ -442,6 +482,7 @@ class InlineEdit extends React.Component<any, any> {
                 height={height - 2}
                 columns={columns}
                 data={data}
+                dataLength={Object.keys(data).length}
                 options={{
                   rowSelectorColumnWidth: 26,
                   showRowSelector: true,
@@ -452,12 +493,13 @@ class InlineEdit extends React.Component<any, any> {
                 // selection={selection}
                 // onChangeSelection={this.onChangeSelection}
                 // selectedRowKeys={this.selectedRowKeys}
-                onChangeSelected={param => {
-                  this.selectedIndexes = param.selectedIndexes || [];
-                }}
+                // onChangeSelected={param => {
+                //   this.selectedIndexes = param.selectedIndexes || [];
+                // }}
                 // onScroll={this.onScroll}
                 scrollTop={scrollTop}
                 onChangeScrollSize={this.onChangeScrollSize}
+                onEdit={this.onEditItem}
               />
             </DatagridContainer>
           </div>
