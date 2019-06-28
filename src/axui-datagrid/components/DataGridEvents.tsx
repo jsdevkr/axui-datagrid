@@ -172,7 +172,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
                           item,
                           index: Number(rk),
                           key: colKey,
-                          value: item[colKey],
+                          value: item.value[colKey],
                         };
 
                         if (
@@ -185,7 +185,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
                             formatterData,
                           );
                         } else {
-                          val = item[headerColGroup[ck].key];
+                          val = item.value[headerColGroup[ck].key];
                         }
 
                         copiedString += (val || '') + '\t';
@@ -458,7 +458,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       onRightClick({
         e,
         item,
-        value: item[itemKey],
+        value: item.value[itemKey],
         focusedRow,
         focusedCol,
       });

@@ -606,7 +606,7 @@ class DataGridBody extends React.Component<IProps> {
       onClick({
         e,
         item,
-        value: item[itemKey],
+        value: item.value[itemKey],
         rowIndex,
         colIndex,
       });
