@@ -11,7 +11,7 @@ class CellLabel extends React.PureComponent<{
   col: IDataGrid.ICol;
   li: number;
   lineNumberStartAt: number;
-  item: any;
+  item?: IDataGrid.IDataItem;
   selected?: boolean;
   predefinedFormatter: IDataGrid.IFormatter;
 }> {
@@ -31,17 +31,26 @@ class CellLabel extends React.PureComponent<{
       predefinedFormatter,
     } = this.props;
 
-    const formatterData = {
+    if (!item) {
+      return null;
+    }
+
+    const value =
+      item && item.changed && item.changed![col.key || '']
+        ? item.changed![col.key || '']
+        : item.value[col.key || ''];
+
+    const formatterData: IDataGrid.IFormatterData = {
       item,
       index: li,
       key: col.key,
-      value: item[col.key || ''],
+      value,
     };
 
     let labelValue: string | React.ReactNode = '';
     switch (key) {
       case '_line_number_':
-        labelValue = li + lineNumberStartAt + '';
+        labelValue = item.type ? item.type : li + lineNumberStartAt + '';
         break;
 
       case '_row_selector_':
@@ -66,7 +75,7 @@ class CellLabel extends React.PureComponent<{
             formatterData,
           );
         } else {
-          labelValue = item[key];
+          labelValue = formatterData.value;
         }
     }
 

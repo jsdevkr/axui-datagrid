@@ -72,6 +72,11 @@ $axui-datagrid-row-hover-bg: lighten(#cce2f3, 5%) !default;
 $axui-datagrid-row-grouping-bg: #ffffe7 !default;
 $axui-datagrid-row-selected: lighten(#b1d7fe, 10%) !default;
 
+$axui-datagrid-row-added-bg: #d8eee4 !default;
+$axui-datagrid-row-updated-bg: #dff0ff !default;
+$axui-datagrid-row-deleted-bg: #e6e6e6 !default;
+$axui-datagrid-row-error-bg: #d8b6b6 !default;
+
 //== body.cell
 $axui-datagrid-cell-padding-row-selector: 5px !default;
 $axui-datagrid-cell-padding: 3px 5px !default;
@@ -94,6 +99,7 @@ $axui-datagrid-cell-selected-bg: lighten(#b1d7fe, 10%) !default;
 $axui-datagrid-cell-selected-color: #000 !default;
 
 $axui-datagrid-cell-editInput-border: 1px solid #0581f2 !default;
+$axui-datagrid-cell-updated-bg: #dff0ff !default;
 
 //== resizer
 $axui-datagrid-resizer-color: #ff3300 !default;

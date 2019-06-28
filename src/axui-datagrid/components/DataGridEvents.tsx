@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition, isFunction } from '../utils';
+import { getScrollPosition, isFunction, getDataItem } from '../utils';
 import { DataGridEnums } from '../common/@enums';
 import { IDataGrid } from '../common/@types';
 
@@ -43,7 +43,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
   onKeyDown = (e: React.KeyboardEvent<any>) => {
     return new Promise((resolve, reject) => {
       const {
-        data = [],
+        data = {},
+        dataLength = 0,
         rootNode,
         clipBoardNode,
         colGroup = [],
@@ -159,34 +160,36 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
               for (let rk in selectionRows) {
                 if (selectionRows[rk]) {
-                  const item = data[rk];
-                  for (let ck in selectionCols) {
-                    if (selectionCols[ck]) {
-                      let val = '';
-                      const { formatter, key: colKey = '' } = headerColGroup[
-                        ck
-                      ];
-                      const formatterData = {
-                        item,
-                        index: Number(rk),
-                        key: colKey,
-                        value: item[colKey],
-                      };
+                  const item = getDataItem(data, Number(rk));
+                  if (item) {
+                    for (let ck in selectionCols) {
+                      if (selectionCols[ck]) {
+                        let val = '';
+                        const { formatter, key: colKey = '' } = headerColGroup[
+                          ck
+                        ];
+                        const formatterData = {
+                          item,
+                          index: Number(rk),
+                          key: colKey,
+                          value: item.value[colKey],
+                        };
 
-                      if (
-                        typeof formatter === 'string' &&
-                        formatter in predefinedFormatter
-                      ) {
-                        val = predefinedFormatter[formatter](formatterData);
-                      } else if (isFunction(formatter)) {
-                        val = (formatter as IDataGrid.formatterFunction)(
-                          formatterData,
-                        );
-                      } else {
-                        val = item[headerColGroup[ck].key];
+                        if (
+                          typeof formatter === 'string' &&
+                          formatter in predefinedFormatter
+                        ) {
+                          val = predefinedFormatter[formatter](formatterData);
+                        } else if (isFunction(formatter)) {
+                          val = (formatter as IDataGrid.formatterFunction)(
+                            formatterData,
+                          );
+                        } else {
+                          val = item.value[headerColGroup[ck].key];
+                        }
+
+                        copiedString += (val || '') + '\t';
                       }
-
-                      copiedString += (val || '') + '\t';
                     }
                   }
                   copiedString += '\n';
@@ -220,26 +223,20 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             let state = {
               dragging: false,
-
               selectionRows: {},
               selectionCols: {},
               focusedRow: 0,
               focusedCol: focusedCol,
             };
-            state.selectionRows = (() => {
-              let rows = {};
-              data.forEach((item, i) => {
-                rows[i] = true;
-              });
-              return rows;
-            })();
-            state.selectionCols = (() => {
-              let cols = {};
-              colGroup.forEach(col => {
-                cols[col.colIndex || 0] = true;
-              });
-              return cols;
-            })();
+            state.selectionRows = Object.keys(data).reduce((obj, key) => {
+              obj[key] = true;
+              return obj;
+            }, {});
+            state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
+              obj[col.colIndex || 0] = true;
+              return obj;
+            }, {});
+
             state.focusedCol = 0;
             setStoreState(state, () => {
               resolve();
@@ -288,7 +285,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             break;
           case DataGridEnums.KeyCodes.END:
-            focusRow = data.length - 1;
+            focusRow = dataLength - 1;
 
             setStoreState(
               {
@@ -328,8 +325,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
             e.preventDefault();
 
             focusRow =
-              focusedRow + pRowSize >= data.length
-                ? data.length - 1
+              focusedRow + pRowSize >= dataLength
+                ? dataLength - 1
                 : focusedRow + pRowSize;
 
             setStoreState(
@@ -371,7 +368,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
             e.preventDefault();
 
             focusRow =
-              focusedRow + 1 >= data.length ? data.length - 1 : focusedRow + 1;
+              focusedRow + 1 >= dataLength ? dataLength - 1 : focusedRow + 1;
 
             setStoreState(
               {
@@ -453,11 +450,15 @@ class DataGridEvents extends React.Component<IProps, IState> {
       colGroup
     ) {
       const { key: itemKey = '' } = colGroup[focusedCol];
+      const item = getDataItem(data, focusedRow);
+      if (!item) {
+        return;
+      }
 
       onRightClick({
         e,
-        item: data[focusedRow],
-        value: data[focusedRow][itemKey],
+        item,
+        value: item.value[itemKey],
         focusedRow,
         focusedCol,
       });

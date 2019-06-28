@@ -5,8 +5,7 @@ import { DataGridEnums } from '../common/@enums';
 interface IProps {
   col: IDataGrid.ICol;
   li: number;
-  item: any;
-  value: any;
+  item?: IDataGrid.IDataItem;
   columnHeight: number;
   lineHeight: number;
   columnBorderWidth: number;
@@ -84,6 +83,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
               dispatch(DataGridEnums.DispatchTypes.UPDATE, {
                 row: inlineEditingCell.rowIndex,
+                col,
                 colIndex: inlineEditingCell.colIndex,
                 value: e.currentTarget.value,
                 eventWhichKey: e.which,
@@ -104,13 +104,19 @@ class CellEditor extends React.PureComponent<IProps> {
     const { dispatch, li, col } = this.props;
     const { keepEditing = false, updateItem = false } = options || {};
 
-    // console.log('handleUpdateValue UPDATE : dispatch');
+    if (this.lastEventName === 'update' || this.lastEventName === 'cancel') {
+      return;
+    }
+
+    this.lastEventName = 'update';
+
     dispatch(
       updateItem
         ? DataGridEnums.DispatchTypes.UPDATE_ITEM
         : DataGridEnums.DispatchTypes.UPDATE,
       {
         row: li,
+        col,
         colIndex: col.colIndex,
         value,
         eventWhichKey: 'custom-editor-action',
@@ -122,7 +128,8 @@ class CellEditor extends React.PureComponent<IProps> {
   handleCancelEdit = () => {
     const { setStoreState, dispatch } = this.props;
 
-    // console.log('handleCancelEdit : setStoreState');
+    this.lastEventName = 'cancel';
+
     setStoreState({
       isInlineEditing: false,
       inlineEditingCell: {},
@@ -187,6 +194,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
     dispatch(DataGridEnums.DispatchTypes.UPDATE, {
       row: li,
+      col,
       colIndex: col.colIndex,
       value: value,
       eventWhichKey: 'click-checkbox',
@@ -268,6 +276,10 @@ class CellEditor extends React.PureComponent<IProps> {
     }
   }
 
+  componentDidUpdate() {
+    this.lastEventName = '';
+  }
+
   handleInputTextSelect = (inputCurrent: any) => {
     const {
       col: { editor: colEditor },
@@ -282,7 +294,15 @@ class CellEditor extends React.PureComponent<IProps> {
   };
 
   render() {
-    const { item, value, col, li } = this.props;
+    const { item, col, li } = this.props;
+    if (!item) {
+      return null;
+    }
+
+    const value =
+      item && item.changed && item.changed![col.key || '']
+        ? item.changed![col.key || '']
+        : item.value[col.key || ''];
 
     const editor: IDataGrid.IColEditor =
       col.editor === 'text'

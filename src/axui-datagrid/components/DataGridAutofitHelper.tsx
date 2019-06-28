@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
 import { IDataGrid } from '../common/@types';
+import { arrayFromRange, getDataItem } from '../utils';
 import CellLabel from './CellLabel';
 
 interface IProps extends IDataGridStore {
@@ -63,7 +64,8 @@ class DataGridAutofitHelper extends React.Component<IProps> {
   render() {
     const {
       colGroup = [],
-      data = [],
+      data = {},
+      dataLength = 0,
       predefinedFormatter = {},
       styles = {},
       options: { lineNumberStartAt = 1 } = {},
@@ -76,7 +78,7 @@ class DataGridAutofitHelper extends React.Component<IProps> {
         <table ref={this.tableRef}>
           <thead>
             <tr data-autofit-table-head-row>
-              <td>{data.length + ''}</td>
+              <td>{dataLength + ''}</td>
               {colGroup.map((col, ci) => (
                 <td key={ci} style={{ paddingLeft: 30 }}>
                   {col.label}
@@ -85,44 +87,48 @@ class DataGridAutofitHelper extends React.Component<IProps> {
             </tr>
           </thead>
           <tbody>
-            {data
-              .slice(0, Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1)
-              .map((row, li) => {
-                return (
-                  <tr key={li}>
-                    <td>{li + lineNumberStartAt + ''}</td>
-                    {colGroup.map((col, ci) => {
-                      const colEditor: IDataGrid.IColEditor =
-                        col.editor === 'string'
-                          ? { type: '' + col.editor }
-                          : (col.editor as IDataGrid.IColEditor);
-                      const inlineEditingActiveAlways =
-                        colEditor && colEditor.activeType === 'always';
+            {arrayFromRange(
+              0,
+              Math.min(
+                Math.ceil(bodyHeight / (bodyTrHeight || 1)),
+                dataLength - 1,
+              ),
+            ).map(li => {
+              return (
+                <tr key={li}>
+                  <td>{li + lineNumberStartAt + ''}</td>
+                  {colGroup.map((col, ci) => {
+                    const colEditor: IDataGrid.IColEditor =
+                      col.editor === 'string'
+                        ? { type: '' + col.editor }
+                        : (col.editor as IDataGrid.IColEditor);
+                    const inlineEditingActiveAlways =
+                      colEditor && colEditor.activeType === 'always';
 
-                      return inlineEditingActiveAlways && colEditor.width ? (
-                        <td key={ci}>
-                          <div style={{ width: colEditor.width }} />
-                        </td>
-                      ) : (
-                        <td key={ci}>
-                          <CellLabel
-                            columnHeight={12}
-                            lineHeight={12}
-                            columnBorderWidth={0}
-                            rowSelectorSize={17}
-                            colAlign={'left'}
-                            col={col}
-                            li={li}
-                            lineNumberStartAt={lineNumberStartAt}
-                            item={data[li]}
-                            predefinedFormatter={predefinedFormatter}
-                          />
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                    return inlineEditingActiveAlways && colEditor.width ? (
+                      <td key={ci}>
+                        <div style={{ width: colEditor.width }} />
+                      </td>
+                    ) : (
+                      <td key={ci}>
+                        <CellLabel
+                          columnHeight={12}
+                          lineHeight={12}
+                          columnBorderWidth={0}
+                          rowSelectorSize={17}
+                          colAlign={'left'}
+                          col={col}
+                          li={li}
+                          lineNumberStartAt={lineNumberStartAt}
+                          item={getDataItem(data, li)}
+                          predefinedFormatter={predefinedFormatter}
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

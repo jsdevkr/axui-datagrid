@@ -2,14 +2,21 @@ import * as React from 'react';
 import { Divider, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { basicData } from './data/basicData';
+import { IDataGrid } from 'axui-datagrid/common/@types';
 
-class LoadingState extends React.Component<any, any> {
+interface IState {
+  width: number;
+  height: number;
+  columns: IDataGrid.IColumn[];
+  data: IDataGrid.IData;
+}
+
+class LoadingState extends React.Component<any, IState> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: any) {
     super(props);
-
-    let gridData = require('examples/data/data-basic.json');
 
     this.state = {
       width: 300,
@@ -21,12 +28,28 @@ class LoadingState extends React.Component<any, any> {
         { key: 'date', label: 'Date', formatter: 'date' },
         { key: 'money', label: 'Money', formatter: 'money', align: 'right' },
       ],
-      data: [...gridData],
-      selectedList: [],
-      selectedIndexes: [],
+      data: basicData,
     };
 
     this.dataGridContainerRef = React.createRef();
+  }
+
+  getDataGridContainerRect = (e?: Event) => {
+    if (this.dataGridContainerRef.current) {
+      const {
+        width,
+      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      this.setState({ width });
+    }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 
   changeConfig = (props: any, value: any) => {
@@ -45,8 +68,30 @@ class LoadingState extends React.Component<any, any> {
     }
   };
 
+  onSelect = (param: IDataGrid.IonSelectParam) => {
+    console.log(param);
+
+    const { li, selected, selectedAll } = param;
+    const { data } = this.state;
+    if (li !== undefined) {
+      const item: IDataGrid.IDataItem = data[li];
+      item.selected = selected;
+
+      this.setState({
+        data: { ...data, [li]: item },
+      });
+    } else {
+      Object.values(data).forEach(item => {
+        item.selected = selectedAll;
+      });
+      this.setState({
+        data: { ...data },
+      });
+    }
+  };
+
   render() {
-    const { width, height, columns, data, selectedIndexes } = this.state;
+    const { width, height, columns, data } = this.state;
 
     return (
       <Wrapper>
@@ -67,17 +112,12 @@ class LoadingState extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
+              dataLength={Object.keys(data).length}
               options={{
                 showRowSelector: true,
                 rowSelectorSize: 16,
               }}
-              selectedIndexes={selectedIndexes}
-              onChangeSelected={param => {
-                this.setState({
-                  selectedList: param.selectedList,
-                  selectedIndexes: param.selectedIndexes,
-                });
-              }}
+              onSelect={this.onSelect}
             />
           </div>
           <Divider />
@@ -85,54 +125,33 @@ class LoadingState extends React.Component<any, any> {
           <h2>Data</h2>
           <textarea
             style={{ width: '100%', height: '400px', padding: '10px' }}
-            value={`selectedList : ${JSON.stringify(
-              this.state.selectedList,
-            )}\nselectedIndexes: ${this.state.selectedIndexes}`}
+            value={`${JSON.stringify(data)}`}
             readOnly
           />
           <Divider />
 
           <Button
             type="primary"
-            onClick={() =>
-              this.setState({
-                selectedIndexes: [0],
-              })
-            }
+            onClick={() => {
+              this.onSelect({ selectedAll: false });
+              this.onSelect({ li: 0, selected: true });
+            }}
           >
-            selectedIndexes : [0]
+            select : [0]
           </Button>
           <Button
             type="primary"
-            onClick={() =>
-              this.setState({
-                selectedIndexes: [1, 2],
-              })
-            }
+            onClick={() => {
+              this.onSelect({ selectedAll: false });
+              this.onSelect({ li: 1, selected: true });
+              this.onSelect({ li: 2, selected: true });
+            }}
           >
-            selectedIndexes : [1,2]
+            select : [1,2]
           </Button>
         </Segment>
       </Wrapper>
     );
-  }
-
-  getDataGridContainerRect = (e?: Event) => {
-    if (this.dataGridContainerRef.current) {
-      const {
-        width,
-      } = this.dataGridContainerRef.current.getBoundingClientRect();
-      this.setState({ width });
-    }
-  };
-
-  componentDidMount() {
-    this.getDataGridContainerRect();
-    window.addEventListener('resize', this.getDataGridContainerRect, false);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.getDataGridContainerRect);
   }
 }
 

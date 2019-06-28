@@ -215,6 +215,9 @@
     box-shadow: $axui-datagrid-cell-focused-box-shadow;
     background: $axui-datagrid-cell-focused-bg;
   }
+  &.updated {
+    background: $axui-datagrid-cell-updated-bg;
+  }
 
   [data-span] {
     user-select: none;
@@ -317,6 +320,7 @@
     display: block;
     outline: none;
     padding: $axui-datagrid-cell-padding;
+    font-size: inherit;
   }
 
   [data-span='checkbox-editor'] {

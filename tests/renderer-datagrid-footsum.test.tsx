@@ -234,8 +234,8 @@ it('renders DataGrid has data', () => {
         {
           key: 'sum',
           collector: function(collectorData: IDataGrid.ICollectorData) {
-            const { data } = collectorData;
-            return data.reduce(
+            const { data = {} } = collectorData;
+            return Object.values(data).reduce(
               (accumulator: number, currentValue: any) =>
                 accumulator + currentValue.price * currentValue.qty,
               0,

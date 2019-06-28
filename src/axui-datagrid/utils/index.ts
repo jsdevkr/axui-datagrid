@@ -32,4 +32,6 @@ export {
   isDate,
   isFunction,
   isNumber,
+  isObject,
 } from './common';
+export { default as getDataItem } from './getDataItem';

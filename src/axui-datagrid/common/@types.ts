@@ -33,7 +33,7 @@ export namespace IDataGrid {
 
   export interface IonRightClickParam {
     e: React.MouseEvent<any>;
-    item: any;
+    item: IDataItem;
     value: any;
     focusedRow?: number;
     focusedCol?: number;
@@ -41,7 +41,7 @@ export namespace IDataGrid {
 
   export interface IonClickParam {
     e: React.MouseEvent<any>;
-    item: any;
+    item: IDataItem;
     value: any;
     rowIndex?: number;
     colIndex?: number;
@@ -69,9 +69,11 @@ export namespace IDataGrid {
     bodyTrHeight?: number;
   }
 
-  export interface IonChangeSelectedParam {
-    selectedList?: any[];
+  export interface IonSelectParam {
+    li?: number;
     selectedIndexes?: number[];
+    selected?: boolean;
+    selectedAll?: boolean;
   }
 
   export interface IonChangeSelectionParam {
@@ -93,6 +95,16 @@ export namespace IDataGrid {
     colGroup: IAutofitCol[];
   }
 
+  export interface IonEditParam {
+    li: number;
+    col?: ICol;
+    colIndex: number;
+    value: any;
+    checked?: boolean;
+    eventWhichKey?: string;
+    keepEditing?: boolean;
+  }
+
   export type formatterFunction = (formatterData: IFormatterData) => any;
 
   export type collectorFunction = (formatterData: ICollectorData) => any;
@@ -111,14 +123,18 @@ export namespace IDataGrid {
 
   export type CellEditorDataUpdate = (
     value: any,
-    options?: { keepEditing?: boolean; updateItem?: boolean },
+    options?: {
+      keepEditing?: boolean;
+      updateItem?: boolean;
+      eventWhichKey?: string;
+    },
   ) => void;
 
   export interface ICellEditorData {
     col: ICol;
     li: number;
     colIndex: number;
-    item: any;
+    item: IDataItem;
     value: any;
     update: CellEditorDataUpdate;
     cancel: () => void;
@@ -130,7 +146,7 @@ export namespace IDataGrid {
     col: ICol;
     rowIndex: number;
     colIndex: number;
-    item: any;
+    item: IDataItem;
     value: any;
   }
 
@@ -158,7 +174,7 @@ export namespace IDataGrid {
   }
 
   export interface IFormatterData {
-    item?: any;
+    item?: IDataItem;
     index?: number;
     key?: string;
     value?: any;
@@ -166,7 +182,8 @@ export namespace IDataGrid {
   }
 
   export interface ICollectorData {
-    data?: any;
+    data?: IData;
+    dataLength?: number;
     key?: string;
     value?: any;
     options?: any;
@@ -247,8 +264,6 @@ export namespace IDataGrid {
     columnPadding?: number;
     columnBorderWidth?: number;
     selector?: boolean;
-    sortable?: boolean;
-    remoteSort?: boolean;
     clickAction?: 'select' | 'sort' | undefined;
   }
 
@@ -331,12 +346,37 @@ export namespace IDataGrid {
     scrollerArrowSize?: number;
   }
 
+  export interface ISelection {
+    rows?: number[];
+    cols?: number[];
+    focusedRow?: number;
+    focusedCol?: number;
+  }
+
+  export interface ISortInfo {
+    key?: string;
+    seq?: number;
+    orderBy: 'asc' | 'desc';
+  }
+
+  export interface IDataItem {
+    type?: 'C' | 'U' | 'D';
+    value: [] | { [key: string]: any };
+    changed?: { [key: string]: any };
+    selected?: boolean;
+  }
+  export type IData =
+    | Map<number, IDataItem>
+    | {
+        [key: number]: IDataItem;
+      };
+
   export interface IStoreProps {
     loading?: boolean;
     loadingData?: boolean;
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
 
-    selectedIndexes?: number[];
     selection?: ISelection;
     sortInfo?: {};
     width?: number;
@@ -382,18 +422,21 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   }
 
   export interface IStoreState {
     loading?: boolean;
     loadingData?: boolean;
 
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
+
     listSelectedAll?: boolean;
     sortInfo?: {
       [key: string]: ISortInfo;
@@ -405,7 +448,6 @@ export namespace IDataGrid {
     height?: number;
     columnHeight?: number;
 
-    selectedIndexes?: number[];
     selection?: ISelection;
 
     isInlineEditing?: boolean;
@@ -488,28 +530,17 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
-  export interface ISelection {
-    rows?: number[];
-    cols?: number[];
-    focusedRow?: number;
-    focusedCol?: number;
-  }
-
-  export interface ISortInfo {
-    key?: string;
-    seq?: number;
-    orderBy: 'asc' | 'desc';
-  }
-
   export interface IRootProps {
-    data?: any[];
+    data?: IData;
+    dataLength?: number;
     columns: IColumn[];
     footSum?: IColumn[][];
     width: number;
@@ -519,23 +550,24 @@ export namespace IDataGrid {
     status?: React.ReactNode;
     loading?: boolean;
     loadingData?: boolean;
-    selectedIndexes?: number[];
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
     autofitColumns?: boolean;
     sortInfos?: ISortInfo[];
+
     applyAutofit?: (autofiting: boolean) => void;
     onBeforeEvent?: (param: IonEventParam) => void;
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
+    onEdit?: (param: IonEditParam) => void;
   }
 
   export interface IRootState {

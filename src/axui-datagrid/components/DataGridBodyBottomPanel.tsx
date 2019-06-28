@@ -8,7 +8,7 @@ import { DataGridEnums } from '../common/@enums';
 
 class TableBody extends React.PureComponent<{
   bodyRow: IDataGrid.IColumnTableMap;
-  data: any[];
+  data: IDataGrid.IData;
   options: IDataGrid.IOptions;
   predefinedFormatter?: {};
   predefinedCollector?: {};
