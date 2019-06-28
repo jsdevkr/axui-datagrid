@@ -112,7 +112,7 @@ interface IDataGridHeaderPanel extends IDataGridStore {
 class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
   onHandleClick = (e: any, col: IDataGrid.ICol) => {
     const {
-      data = [],
+      dataLength = 0,
       colGroup = [],
       focusedCol = 0,
       options = {},
@@ -133,15 +133,17 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
     switch (key) {
       case '_line_number_':
         {
-          state.selectionRows = Object.keys(data).reduce((obj, key) => {
-            obj[key] = true;
-            return obj;
-          }, {});
+          // select all
+          for (let i = 0; i < dataLength; i++) {
+            state.selectionRows[i] = true;
+          }
 
           state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
             obj[col.colIndex || 0] = true;
             return obj;
           }, {});
+
+          console.log(state.selectionRows);
 
           state.focusedCol = 0;
           setStoreState(state);
@@ -153,10 +155,9 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       default:
         {
           if (optionsHeader.clickAction === 'select') {
-            state.selectionRows = Object.keys(data).reduce((obj, key) => {
-              obj[key] = true;
-              return obj;
-            }, {});
+            for (let i = 0; i < dataLength; i++) {
+              state.selectionRows[i] = true;
+            }
 
             if (e.shiftKey) {
               state.selectionCols = (() => {
