@@ -30,7 +30,7 @@ export const Menus = {
       // { to: '/examples/InlineEdit', label: 'Inline edit' },
       // { to: '/examples/EventReceive', label: 'Event' },
       // { to: '/examples/LoadingState', label: 'Loading' },
-      // { to: '/examples/RowSelector', label: 'RowSelector' },
+      { to: '/examples/RowSelector', label: 'RowSelector' },
       // { to: '/examples/FootSum', label: 'Foot summary' },
       { to: '/examples/AlignHeader', label: 'Align Header' },
       // { to: '/examples/Resizing', label: 'Resizing' },

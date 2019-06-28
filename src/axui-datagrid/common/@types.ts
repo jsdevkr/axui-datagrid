@@ -69,9 +69,11 @@ export namespace IDataGrid {
     bodyTrHeight?: number;
   }
 
-  export interface IonChangeSelectedParam {
-    selectedList?: any[];
+  export interface IonSelectParam {
+    li?: number;
     selectedIndexes?: number[];
+    selected?: boolean;
+    selectedAll?: boolean;
   }
 
   export interface IonChangeSelectionParam {
@@ -375,7 +377,6 @@ export namespace IDataGrid {
     data?: IData;
     dataLength?: number;
 
-    selectedIndexes?: number[];
     selection?: ISelection;
     sortInfo?: {};
     width?: number;
@@ -421,7 +422,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
@@ -447,7 +448,6 @@ export namespace IDataGrid {
     height?: number;
     columnHeight?: number;
 
-    selectedIndexes?: number[];
     selection?: ISelection;
 
     isInlineEditing?: boolean;
@@ -530,7 +530,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
@@ -550,7 +550,6 @@ export namespace IDataGrid {
     status?: React.ReactNode;
     loading?: boolean;
     loadingData?: boolean;
-    selectedIndexes?: number[];
     selection?: ISelection;
     scrollLeft?: number;
     scrollTop?: number;
@@ -563,7 +562,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
-    onChangeSelected?: (param: IonChangeSelectedParam) => void;
+    onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
