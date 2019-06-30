@@ -228,14 +228,13 @@ class DataGridEvents extends React.Component<IProps, IState> {
               focusedRow: 0,
               focusedCol: focusedCol,
             };
-            state.selectionRows = Object.keys(data).reduce((obj, key) => {
-              obj[key] = true;
-              return obj;
-            }, {});
-            state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
-              obj[col.colIndex || 0] = true;
-              return obj;
-            }, {});
+            Array.from(new Array(dataLength), (x, i) => {
+              state.selectionRows[i] = true;
+            });
+
+            Object.values(colGroup).forEach(col => {
+              state.selectionCols[col.colIndex || 0] = true;
+            });
 
             state.focusedCol = 0;
             setStoreState(state, () => {

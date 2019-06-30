@@ -90,7 +90,15 @@ class DataGridBody extends React.Component<IProps> {
     rowIndex: number,
     colIndex: number,
   ) => {
-    const { colGroup = [], dataLength = 0, setStoreState } = this.props;
+    const {
+      colGroup = [],
+      dataLength = 0,
+      setStoreState,
+      selectionSCol = 0,
+      selectionECol = 0,
+      selectionSRow = 0,
+      selectionERow = 0,
+    } = this.props;
 
     if (
       colIndex < 0 ||
@@ -98,6 +106,19 @@ class DataGridBody extends React.Component<IProps> {
       rowIndex < 0 ||
       rowIndex > dataLength - 1
     ) {
+      return;
+    }
+
+    if (
+      colIndex >= selectionSCol &&
+      colIndex <= selectionECol &&
+      rowIndex >= selectionSRow &&
+      colIndex <= selectionERow
+    ) {
+      setStoreState({
+        focusedRow: rowIndex,
+        focusedCol: colIndex,
+      });
       return;
     }
 
@@ -495,6 +516,7 @@ class DataGridBody extends React.Component<IProps> {
     }
 
     // only first mouse button
+    console.log(e.button);
     if (e.button === 0) {
       switch (spanType) {
         case 'lineNumber':
