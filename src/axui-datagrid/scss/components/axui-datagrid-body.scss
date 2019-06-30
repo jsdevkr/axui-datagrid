@@ -16,6 +16,10 @@
   }
   tr.added-line {
     background-color: $axui-datagrid-row-added-bg;
+    color: $axui-datagrid-row-added-color;
+    td.focused {
+      color: $axui-datagrid-row-added-color;
+    }
   }
   // tr.updated-line {
   //   background-color: $axui-datagrid-row-updated-bg;
@@ -24,9 +28,19 @@
   // }
   tr.deleted-line {
     background-color: $axui-datagrid-row-deleted-bg;
+    color: $axui-datagrid-row-deleted-color;
+    td.focused {
+      background-color: $axui-datagrid-row-deleted-bg;
+      color: $axui-datagrid-row-deleted-color;
+    }
   }
   tr.error-line {
     background-color: $axui-datagrid-row-error-bg;
+    color: $axui-datagrid-row-error-color;
+    td.focused {
+      background-color: $axui-datagrid-row-deleted-bg;
+      color: $axui-datagrid-row-error-color;
+    }
   }
 }
 [data-panel='top-aside-body-scroll'],
