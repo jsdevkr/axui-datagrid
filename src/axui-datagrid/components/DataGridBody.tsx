@@ -109,6 +109,19 @@ class DataGridBody extends React.Component<IProps> {
       return;
     }
 
+    // console.log(
+    //   'selection check',
+    //   `
+    // colIndex: ${colIndex},
+    // rowIndex: ${rowIndex},
+    // ~~~~~~~~~~~~~~~~
+    // selectionSCol: ${selectionSCol},
+    // selectionECol: ${selectionECol},
+    // selectionSRow: ${selectionSRow},
+    // selectionERow: ${selectionERow},
+    // `,
+    // );
+
     if (
       colIndex >= selectionSCol &&
       colIndex <= selectionECol &&

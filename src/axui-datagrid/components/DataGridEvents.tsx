@@ -225,8 +225,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
               dragging: false,
               selectionRows: {},
               selectionCols: {},
-              focusedRow: 0,
-              focusedCol: focusedCol,
+              selectionSCol: 0,
+              selectionECol: 0,
+              selectionSRow: 0,
+              selectionERow: dataLength,
+              // focusedRow: 0,
+              // focusedCol: 0,
             };
             Array.from(new Array(dataLength), (x, i) => {
               state.selectionRows[i] = true;
@@ -234,9 +238,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             Object.values(colGroup).forEach(col => {
               state.selectionCols[col.colIndex || 0] = true;
+              state.selectionECol = col.colIndex || 0;
             });
 
-            state.focusedCol = 0;
             setStoreState(state, () => {
               resolve();
             });

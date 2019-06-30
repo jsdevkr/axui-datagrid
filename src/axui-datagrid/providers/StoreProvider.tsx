@@ -341,6 +341,12 @@ class StoreProvider extends React.Component<
 
         storeState.selectionRows = {};
         storeState.selectionCols = {};
+
+        storeState.selectionSCol = cols[0];
+        storeState.selectionECol = cols[cols.length - 1];
+        storeState.selectionSRow = rows[0];
+        storeState.selectionERow = rows[rows.length - 1];
+
         rows.forEach(n => {
           storeState.selectionRows![n] = true;
         });
