@@ -100,6 +100,38 @@ class DataGridBody extends React.Component<IProps> {
       selectionERow = 0,
     } = this.props;
 
+    if (colIndex === -1 && (rowIndex > -1 || rowIndex < dataLength)) {
+      //lineNumber를 클릭한경우
+      colIndex = 0;
+
+      // console.log(
+      //   'selection check',
+      //   `
+      // colIndex: ${colIndex},
+      // rowIndex: ${rowIndex},
+      // ~~~~~~~~~~~~~~~~
+      // selectionSCol: ${selectionSCol},
+      // selectionECol: ${selectionECol},
+      // selectionSRow: ${selectionSRow},
+      // selectionERow: ${selectionERow},
+      // `,
+      // );
+
+      const selectionRows = { [rowIndex]: true };
+      const selectionCols = {};
+      colGroup.forEach(col => {
+        selectionCols[col.colIndex || ''] = true;
+      });
+
+      setStoreState({
+        focusedRow: rowIndex,
+        focusedCol: colIndex,
+        selectionRows,
+        selectionCols,
+      });
+      return;
+    }
+
     if (
       colIndex < 0 ||
       colIndex > colGroup.length - 1 ||
@@ -108,19 +140,6 @@ class DataGridBody extends React.Component<IProps> {
     ) {
       return;
     }
-
-    // console.log(
-    //   'selection check',
-    //   `
-    // colIndex: ${colIndex},
-    // rowIndex: ${rowIndex},
-    // ~~~~~~~~~~~~~~~~
-    // selectionSCol: ${selectionSCol},
-    // selectionECol: ${selectionECol},
-    // selectionSRow: ${selectionSRow},
-    // selectionERow: ${selectionERow},
-    // `,
-    // );
 
     if (
       colIndex >= selectionSCol &&
