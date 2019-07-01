@@ -71,7 +71,11 @@ class MultiEdit extends React.Component<IProps, IState> {
           autoFocus
           defaultValue={value.v}
           onBlur={e => {
-            update({ ...value, changed: e.currentTarget.value });
+            if (value.v !== e.currentTarget.value) {
+              update({ ...value, changed: e.currentTarget.value });
+            } else {
+              cancel();
+            }
           }}
           onKeyUp={e => {
             e.preventDefault();

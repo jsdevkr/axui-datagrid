@@ -78,7 +78,6 @@ class CellEditor extends React.PureComponent<IProps> {
           case DataGridEnums.KeyCodes.DOWN_ARROW:
           case DataGridEnums.KeyCodes.ENTER:
             if (!this.activeComposition) {
-              // console.log('eventInput enter : setStoreState');
               this.lastEventName = 'update';
 
               dispatch(DataGridEnums.DispatchTypes.UPDATE, {
