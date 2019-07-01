@@ -361,7 +361,7 @@ class DataGrid extends React.Component<IProps, IState> {
       (autofitColumns && _autofitColumns !== autofitColumns) ||
       _columns !== columns
     ) {
-      newState.autofiting = true;
+      newState.autofiting = autofitColumns;
     }
 
     if (_columns !== columns || _footSum !== footSum || _options !== options) {
