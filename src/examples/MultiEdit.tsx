@@ -215,14 +215,25 @@ class MultiEdit extends React.Component<IProps, IState> {
   removeItem = () => {
     const { selection, data } = this.state;
     if (selection.rows && selection.rows.length) {
+      const dataLength = Object.keys(data).length;
+
       selection.rows.forEach(li => {
         if (data instanceof Map) {
           const item = data.get(li);
+
           if (item) {
             if (item.type === 'C') {
               data.delete(li);
             } else {
               item.type = 'D';
+            }
+
+            for (let i = li; i < dataLength - 1; i++) {
+              const nextItem = data.get(i + 1);
+              if (nextItem) {
+                data.set(i, nextItem);
+                data.delete(i + 1);
+              }
             }
           }
         } else {
@@ -232,6 +243,11 @@ class MultiEdit extends React.Component<IProps, IState> {
               delete data[li];
             } else {
               item.type = 'D';
+            }
+
+            for (let i = li; i < dataLength - 1; i++) {
+              data[i] = data[i + 1];
+              delete data[i + 1];
             }
           }
         }
