@@ -167,8 +167,6 @@ class DataGrid extends React.Component<IProps, IState> {
     const { columns, footSum, onChangeColumns } = this.props;
     const { options } = this.state;
 
-    // console.log('applyAutofit');
-
     newState.options = this.getOptions(options || {});
     newState.options.lineNumberColumnWidth = params.asideWidth;
 
@@ -188,6 +186,7 @@ class DataGrid extends React.Component<IProps, IState> {
     });
 
     if (onChangeColumns) {
+      console.log('Run DataGrid :: applyAutofit');
       onChangeColumns({
         colGroup: columnData.colGroup,
       });
@@ -339,6 +338,14 @@ class DataGrid extends React.Component<IProps, IState> {
     };
     let changeState = false;
 
+    //console.log(`
+    // _sortInfos !== sortInfos : ${_sortInfos !== sortInfos},
+    // _autofitColumns !== autofitColumns : ${_autofitColumns !== autofitColumns},
+    // _columns !== columns : ${_columns !== columns},
+    // _footSum !== footSum : ${_footSum !== footSum},
+    // _options !== options : ${_options !== options},
+    //`);
+
     const sortInfo = {};
     if (_sortInfos !== sortInfos) {
       sortInfos &&
@@ -351,8 +358,8 @@ class DataGrid extends React.Component<IProps, IState> {
     }
 
     if (
-      autofitColumns &&
-      (_autofitColumns !== autofitColumns || _columns !== columns)
+      (autofitColumns && _autofitColumns !== autofitColumns) ||
+      _columns !== columns
     ) {
       newState.autofiting = true;
     }
