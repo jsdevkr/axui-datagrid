@@ -81,6 +81,10 @@ export namespace IDataGrid {
     cols?: number[];
   }
 
+  export interface IonChangeColumnParam {
+    colGroup?: ICol[];
+  }
+
   export interface IonError {
     code?: number;
     message?: string;
@@ -422,6 +426,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
+    onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
@@ -530,6 +535,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
+    onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
@@ -562,6 +568,7 @@ export namespace IDataGrid {
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
     onChangeSelection?: (param: ISelection) => void;
+    onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;

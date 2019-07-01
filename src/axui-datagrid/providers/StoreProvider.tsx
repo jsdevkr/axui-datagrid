@@ -131,6 +131,7 @@ class StoreProvider extends React.Component<
       nProps.onScrollEnd === nState.onScrollEnd &&
       nProps.onChangeScrollSize === nState.onChangeScrollSize &&
       nProps.onChangeSelection === nState.onChangeSelection &&
+      nProps.onChangeColumns === nState.onChangeColumns &&
       nProps.onSelect === nState.onSelect &&
       nProps.onRightClick === nState.onRightClick &&
       nProps.onClick === nState.onClick &&
@@ -168,6 +169,7 @@ class StoreProvider extends React.Component<
       storeState.onScrollEnd = nProps.onScrollEnd;
       storeState.onChangeScrollSize = nProps.onChangeScrollSize;
       storeState.onChangeSelection = nProps.onChangeSelection;
+      storeState.onChangeColumns = nProps.onChangeColumns;
       storeState.onSelect = nProps.onSelect;
       storeState.onRightClick = nProps.onRightClick;
       storeState.onClick = nProps.onClick;
@@ -522,6 +524,7 @@ class StoreProvider extends React.Component<
       onSelect,
       onSort,
       onEdit,
+      onChangeColumns,
     } = this.state;
 
     const {
@@ -712,6 +715,12 @@ class StoreProvider extends React.Component<
           colGroup: _colGroup,
           columnResizing: false,
         });
+
+        if (onChangeColumns) {
+          onChangeColumns({
+            colGroup: _colGroup,
+          });
+        }
 
         break;
 

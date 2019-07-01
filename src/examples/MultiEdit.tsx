@@ -306,6 +306,16 @@ class MultiEdit extends React.Component<IProps, IState> {
     this.setState({ selection: param });
   };
 
+  onChangeColumns = (param: IDataGrid.IonChangeColumnParam) => {
+    console.log(param);
+    const { columns } = this.state;
+    const { colGroup = [] } = param;
+    colGroup.forEach(col => {
+      columns[col.colIndex || 0].width = col.width;
+    });
+    this.setState({ columns });
+  };
+
   getDataGridContainerRect = (e?: Event) => {
     if (this.dataGridContainerRef.current) {
       const {
@@ -393,6 +403,7 @@ class MultiEdit extends React.Component<IProps, IState> {
                 onChangeScrollSize={this.onChangeScrollSize}
                 selection={selection}
                 onChangeSelection={this.onChangeSelection}
+                onChangeColumns={this.onChangeColumns}
                 sortInfos={sortInfos}
                 onSort={this.onSort}
                 onEdit={this.onEditItem}
@@ -433,6 +444,15 @@ class MultiEdit extends React.Component<IProps, IState> {
             <textarea
               style={{ width: '100%', height: 100 }}
               value={JSON.stringify(selection)}
+              readOnly
+            />
+          </div>
+
+          <div>
+            <h4>columns</h4>
+            <textarea
+              style={{ width: '100%', height: 100 }}
+              value={JSON.stringify(columns)}
               readOnly
             />
           </div>

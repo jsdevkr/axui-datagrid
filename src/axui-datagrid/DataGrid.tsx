@@ -164,7 +164,7 @@ class DataGrid extends React.Component<IProps, IState> {
 
   applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
     const newState: IState = {};
-    const { columns, footSum } = this.props;
+    const { columns, footSum, onChangeColumns } = this.props;
     const { options } = this.state;
 
     // console.log('applyAutofit');
@@ -186,6 +186,12 @@ class DataGrid extends React.Component<IProps, IState> {
       options: newState.options,
       ...columnData,
     });
+
+    if (onChangeColumns) {
+      onChangeColumns({
+        colGroup: columnData.colGroup,
+      });
+    }
     // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
   };
 
@@ -318,8 +324,16 @@ class DataGrid extends React.Component<IProps, IState> {
       options: _options,
       autofitColumns: _autofitColumns,
       sortInfos: _sortInfos,
+      // data: _data,
     } = prevProps;
-    const { columns, footSum, options, autofitColumns, sortInfos } = this.props;
+    const {
+      columns,
+      footSum,
+      options,
+      autofitColumns,
+      sortInfos,
+      // data,
+    } = this.props;
     const newState: any = {
       autofiting: this.state.autofiting,
     };
@@ -342,13 +356,14 @@ class DataGrid extends React.Component<IProps, IState> {
     ) {
       newState.autofiting = true;
     }
+
     if (_columns !== columns || _footSum !== footSum || _options !== options) {
       newState.newOptions = this.getOptions(options || {});
       newState.columnData = this.getColumnData(
         columns,
         footSum || [],
         newState.newOptions,
-        this.state.autofitColGroup,
+        // this.state.autofitColGroup,
       );
       changeState = true;
     }
@@ -405,6 +420,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onScrollEnd,
       onChangeScrollSize,
       onChangeSelection,
+      onChangeColumns,
       onSelect,
       onRightClick,
       onClick,
@@ -460,6 +476,7 @@ class DataGrid extends React.Component<IProps, IState> {
       onScrollEnd,
       onChangeScrollSize,
       onChangeSelection,
+      onChangeColumns,
       onSelect,
       onRightClick,
       onClick,
