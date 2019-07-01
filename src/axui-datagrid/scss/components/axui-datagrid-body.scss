@@ -54,39 +54,42 @@
     tr.added-line {
       td,
       td.axui-datagrid-line-number.selected {
-        @include axui-background(
-          to right,
-          (
-            $axui-datagrid-row-added-bg,
-            darken($axui-datagrid-row-added-bg, 10%)
-          )
-        );
+        background-color: $axui-datagrid-row-added-bg;
+        // @include axui-background(
+        //   to right,
+        //   (
+        //     $axui-datagrid-row-added-bg,
+        //     darken($axui-datagrid-row-added-bg, 10%)
+        //   )
+        // );
         box-shadow: none;
       }
     }
     tr.updated-line {
       td,
       td.axui-datagrid-line-number.selected {
-        @include axui-background(
-          to right,
-          (
-            $axui-datagrid-row-updated-bg,
-            darken($axui-datagrid-row-updated-bg, 10%)
-          )
-        );
+        background-color: $axui-datagrid-row-updated-bg;
+        // @include axui-background(
+        //   to right,
+        //   (
+        //     $axui-datagrid-row-updated-bg,
+        //     darken($axui-datagrid-row-updated-bg, 10%)
+        //   )
+        // );
         box-shadow: none;
       }
     }
     tr.deleted-line {
       td,
       td.axui-datagrid-line-number.selected {
-        @include axui-background(
-          to right,
-          (
-            $axui-datagrid-row-deleted-bg,
-            darken($axui-datagrid-row-deleted-bg, 10%)
-          )
-        );
+        background-color: $axui-datagrid-row-deleted-bg;
+        // @include axui-background(
+        //   to right,
+        //   (
+        //     $axui-datagrid-row-deleted-bg,
+        //     darken($axui-datagrid-row-deleted-bg, 10%)
+        //   )
+        // );
         box-shadow: none;
       }
     }
