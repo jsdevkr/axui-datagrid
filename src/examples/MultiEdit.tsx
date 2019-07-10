@@ -162,6 +162,7 @@ class MultiEdit extends React.Component<IProps, IState> {
       cols: [],
       focusedRow: -1,
       focusedCol: -1,
+      isEditing: false,
     };
 
     this.state = {

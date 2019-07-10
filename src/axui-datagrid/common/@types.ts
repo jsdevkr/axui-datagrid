@@ -76,10 +76,7 @@ export namespace IDataGrid {
     selectedAll?: boolean;
   }
 
-  export interface IonChangeSelectionParam {
-    rows?: number[];
-    cols?: number[];
-  }
+  export interface IonChangeSelectionParam extends ISelection {}
 
   export interface IonChangeColumnParam {
     colGroup?: ICol[];
@@ -355,6 +352,7 @@ export namespace IDataGrid {
     cols?: number[];
     focusedRow?: number;
     focusedCol?: number;
+    isEditing?: boolean;
   }
 
   export interface ISortInfo {
@@ -425,7 +423,7 @@ export namespace IDataGrid {
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
-    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelection?: (param: IonChangeSelectionParam) => void;
     onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
@@ -534,7 +532,7 @@ export namespace IDataGrid {
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
-    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelection?: (param: IonChangeSelectionParam) => void;
     onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
@@ -567,7 +565,7 @@ export namespace IDataGrid {
     onScroll?: (param: IonScrollFunctionParam) => void;
     onScrollEnd?: (param: IonScrollEndFunctionParam) => void;
     onChangeScrollSize?: (param: IonChangeScrollSizeFunctionParam) => void;
-    onChangeSelection?: (param: ISelection) => void;
+    onChangeSelection?: (param: IonChangeSelectionParam) => void;
     onChangeColumns?: (param: IonChangeColumnParam) => void;
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
