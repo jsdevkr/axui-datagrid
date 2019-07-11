@@ -551,6 +551,10 @@ class StoreProvider extends React.Component<
       eventWhichKey,
       keepEditing = false,
       newWidth,
+      isInlineEditing,
+      inlineEditingCell,
+      newFocusedRow,
+      newFocusedCol,
     } = param;
 
     let selectedAll: boolean = listSelectedAll;
@@ -657,19 +661,6 @@ class StoreProvider extends React.Component<
               sortInfos,
             });
           }
-
-          // // sortInfo 정리
-          // sortInfos.forEach((si, idx) => {
-          //   if (si.key) {
-          //     currentSortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
-          //   }
-          // });
-
-          // this.setStoreState({
-          //   sortInfo: { ...currentSortInfo },
-          //   isInlineEditing: false,
-          //   inlineEditingCell: {},
-          // });
         }
         break;
 
@@ -703,6 +694,13 @@ class StoreProvider extends React.Component<
           if (rootNode && rootNode.current) {
             rootNode.current.focus();
           }
+        } else if (isInlineEditing) {
+          this.setStoreState({
+            isInlineEditing: true,
+            inlineEditingCell,
+            focusedRow: newFocusedRow,
+            focusedCol: newFocusedCol,
+          });
         }
 
         if (onEdit) {

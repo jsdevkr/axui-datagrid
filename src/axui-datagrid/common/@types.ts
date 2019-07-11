@@ -131,6 +131,12 @@ export namespace IDataGrid {
     },
   ) => void;
 
+  export type CellEditorKeyAction = (
+    e: React.KeyboardEvent,
+    value: any,
+    options?: { updateItem?: boolean },
+  ) => void;
+
   export interface ICellEditorData {
     col: ICol;
     li: number;
@@ -141,6 +147,7 @@ export namespace IDataGrid {
     cancel: () => void;
     focus: () => void;
     blur: () => void;
+    keyAction: CellEditorKeyAction;
   }
 
   export interface ICellEditorDisableData {

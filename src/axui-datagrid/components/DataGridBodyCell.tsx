@@ -7,6 +7,7 @@ import { getDataItem } from '../utils';
 class DataGridBodyCell extends React.PureComponent<{
   li: number;
   ci: number;
+  colGroup: IDataGrid.ICol[];
   col?: IDataGrid.ICol;
   data?: IDataGrid.IData;
   selected?: boolean;
@@ -43,6 +44,7 @@ class DataGridBodyCell extends React.PureComponent<{
   render() {
     const {
       li,
+      colGroup = [],
       col = {},
       col: { rowSpan = 0, colSpan = 0, colIndex = 0, columnAttr = '' } = {},
       ci,
@@ -189,6 +191,7 @@ class DataGridBodyCell extends React.PureComponent<{
           />
         ) : (
           <CellEditor
+            colGroup={colGroup}
             col={col}
             li={li}
             item={item}

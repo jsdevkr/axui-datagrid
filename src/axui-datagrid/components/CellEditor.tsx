@@ -3,6 +3,7 @@ import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 
 interface IProps {
+  colGroup: IDataGrid.ICol[];
   col: IDataGrid.ICol;
   li: number;
   item?: IDataGrid.IDataItem;
@@ -135,6 +136,55 @@ class CellEditor extends React.PureComponent<IProps> {
     });
 
     dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+  };
+
+  handelKeyAction: IDataGrid.CellEditorKeyAction = (e, value, options) => {
+    const { dispatch, li, colGroup, col } = this.props;
+    const { updateItem = false } = options || {};
+
+    switch (e.which) {
+      case DataGridEnums.KeyCodes.TAB:
+        const { colIndex = 0 } = col;
+
+        this.lastEventName = 'update';
+
+        const nextCol =
+          colGroup[
+            e.shiftKey
+              ? colIndex - 1 > -1
+                ? colIndex - 1
+                : colGroup.length - 1
+              : colIndex + 1 < colGroup.length
+              ? colIndex + 1
+              : 0
+          ];
+
+        dispatch(
+          updateItem
+            ? DataGridEnums.DispatchTypes.UPDATE_ITEM
+            : DataGridEnums.DispatchTypes.UPDATE,
+          {
+            row: li,
+            col,
+            colIndex,
+            value,
+            eventWhichKey: 'custom-editor-action',
+
+            keepEditing: true,
+            isInlineEditing: true,
+            inlineEditingCell: {
+              rowIndex: li,
+              colIndex: nextCol.colIndex,
+              editor: nextCol.editor,
+            },
+            newFocusedRow: li,
+            newFocusedCol: nextCol.colIndex,
+          },
+        );
+
+        break;
+      default:
+    }
   };
 
   handleCustomEditorFocus = () => {
@@ -338,6 +388,7 @@ class CellEditor extends React.PureComponent<IProps> {
           cancel: this.handleCancelEdit,
           focus: this.handleCustomEditorFocus,
           blur: this.handleCustomEditorBlur,
+          keyAction: this.handelKeyAction,
         });
     }
   }

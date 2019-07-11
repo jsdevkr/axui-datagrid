@@ -8,6 +8,7 @@ import DataGridBodyCell from './DataGridBodyCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 
 class TableBody extends React.PureComponent<{
+  colGroup: IDataGrid.ICol[];
   sRowIndex: number;
   eRowIndex: number;
   data: IDataGrid.IData;
@@ -26,6 +27,7 @@ class TableBody extends React.PureComponent<{
 }> {
   render() {
     const {
+      colGroup,
       sRowIndex,
       eRowIndex,
       data,
@@ -66,6 +68,7 @@ class TableBody extends React.PureComponent<{
               >
                 {row.cols.map((col, ci) => (
                   <DataGridBodyCell
+                    colGroup={colGroup}
                     key={ci}
                     li={li}
                     ci={ci}
@@ -112,7 +115,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
       asideColGroup = [],
       leftHeaderColGroup = [],
       visibleHeaderColGroup = [],
-
+      colGroup = [],
       asideBodyRowData = { rows: [{ cols: [] }] },
       leftBodyRowData = { rows: [{ cols: [] }] },
       visibleBodyRowData = { rows: [{ cols: [] }] },
@@ -180,6 +183,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
           <table style={{ height: '100%' }}>
             <DataGridTableColGroup panelColGroup={panelColGroup} />
             <TableBody
+              colGroup={colGroup}
               sRowIndex={sRowIndex}
               eRowIndex={eRowIndex}
               data={data}
