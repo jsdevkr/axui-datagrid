@@ -694,16 +694,21 @@ class StoreProvider extends React.Component<
           if (rootNode && rootNode.current) {
             rootNode.current.focus();
           }
-        } else if (isInlineEditing) {
-          this.setStoreState({
-            isInlineEditing: true,
+        } else if (inlineEditingCell) {
+          const newState: IDataGrid.IStoreState = {
+            isInlineEditing,
             inlineEditingCell,
-            focusedRow: newFocusedRow,
-            focusedCol: newFocusedCol,
-          });
+          };
+
+          if (newFocusedRow !== undefined) {
+            newState.focusedRow = newFocusedRow;
+            newState.focusedCol = newFocusedCol;
+          }
+
+          this.setStoreState(newState);
         }
 
-        if (onEdit) {
+        if (onEdit && value !== undefined) {
           onEdit({
             li: row,
             col,
@@ -810,6 +815,13 @@ class StoreProvider extends React.Component<
       case DataGridEnums.DispatchTypes.FOCUS_ROOT:
         if (rootNode && rootNode.current) {
           rootNode.current.focus();
+        }
+
+        if (inlineEditingCell) {
+          this.setStoreState({
+            isInlineEditing,
+            inlineEditingCell,
+          });
         }
         break;
 

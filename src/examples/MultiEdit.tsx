@@ -85,13 +85,23 @@ class MultiEdit extends React.Component<IProps, IState> {
               return;
             }
             if (e.which === 13) {
-              update({ ...value, changed: e.currentTarget.value });
+              if (value.v !== e.currentTarget.value) {
+                update({ ...value, changed: e.currentTarget.value });
+              } else {
+                blur();
+              }
             }
           }}
           onKeyDown={e => {
             if (e.which === 9) {
               e.preventDefault();
-              keyAction(e, { ...value, changed: e.currentTarget.value });
+              keyAction(
+                'EDIT_NEXT',
+                value.v !== e.currentTarget.value
+                  ? { ...value, changed: e.currentTarget.value }
+                  : undefined,
+                { e },
+              );
             }
           }}
         />

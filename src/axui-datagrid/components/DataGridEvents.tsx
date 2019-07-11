@@ -410,6 +410,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
             );
 
             break;
+
           case DataGridEnums.KeyCodes.RIGHT_ARROW:
             e.preventDefault();
 
@@ -486,6 +487,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
     switch (e.type) {
       case DataGridEnums.EventNames.KEYDOWN:
+        if (e.which === DataGridEnums.KeyCodes.TAB) {
+          e.preventDefault();
+        }
         this.busy = true;
         try {
           await this.onKeyDown(e);

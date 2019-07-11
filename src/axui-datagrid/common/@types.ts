@@ -132,9 +132,9 @@ export namespace IDataGrid {
   ) => void;
 
   export type CellEditorKeyAction = (
-    e: React.KeyboardEvent,
+    action: 'EDIT_NEXT' | 'EDIT_PREV',
     value: any,
-    options?: { updateItem?: boolean },
+    options?: { e: React.KeyboardEvent; updateItem?: boolean },
   ) => void;
 
   export interface ICellEditorData {
