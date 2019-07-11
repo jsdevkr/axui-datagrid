@@ -500,22 +500,6 @@ class StoreProvider extends React.Component<
       }
     }
 
-    // if (_filteredList && filteredList.length !== _filteredList.length) {
-    //   const dimensions = calculateDimensions(newState, {
-    //     headerTable: newState.headerTable || this.state.headerTable,
-    //     colGroup: newState.colGroup || this.state.colGroup,
-    //     headerColGroup: newState.headerColGroup || this.state.headerColGroup,
-    //     bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
-    //     footSumColumns: newState.footSumColumns || this.state.footSumColumns,
-    //     filteredList: _filteredList,
-    //     options: newState.options || this.state.options,
-    //   });
-
-    //   newState.styles = dimensions.styles;
-    //   newState.scrollLeft = dimensions.scrollLeft;
-    //   newState.scrollTop = dimensions.scrollTop;
-    // }
-
     this.setState(newState, callback);
   };
 
@@ -703,6 +687,8 @@ class StoreProvider extends React.Component<
           if (newFocusedRow !== undefined) {
             newState.focusedRow = newFocusedRow;
             newState.focusedCol = newFocusedCol;
+            newState.selectionRows = { [newFocusedRow]: true };
+            newState.selectionCols = { [newFocusedCol]: true };
           }
 
           this.setStoreState(newState);
@@ -900,19 +886,22 @@ class StoreProvider extends React.Component<
           pState.selectionSRow !== this.state.selectionSRow ||
           pState.selectionERow !== this.state.selectionERow ||
           pState.selectionSCol !== this.state.selectionSCol ||
-          pState.selectionECol !== this.state.selectionECol)
+          pState.selectionECol !== this.state.selectionECol ||
+          pState.isInlineEditing !== this.state.isInlineEditing)
       ) {
         const {
           selectionRows = [],
           selectionCols = [],
           focusedRow = -1,
           focusedCol = -1,
+          isInlineEditing,
         } = this.state;
         onChangeSelection({
           rows: Object.keys(selectionRows).map(n => Number(n)),
           cols: Object.keys(selectionCols).map(n => Number(n)),
           focusedRow,
           focusedCol,
+          isEditing: isInlineEditing,
         });
       }
     },

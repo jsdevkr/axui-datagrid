@@ -91,9 +91,6 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
           e.preventDefault();
           keyAction('EDIT_NEXT', value, { e });
         }
-        // if (e.which === 13) {
-        //   e.preventDefault();
-        // }
       }}
       defaultOpen={true}
       autoFocus={true}
