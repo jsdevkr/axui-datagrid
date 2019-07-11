@@ -213,6 +213,7 @@ class MultiEdit extends React.Component<IProps, IState> {
         cols: [0],
         focusedRow: dataLength,
         focusedCol: 0,
+        isEditing: true
       },
     });
   };

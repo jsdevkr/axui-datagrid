@@ -156,7 +156,7 @@ class StoreProvider extends React.Component<
 
       storeState.width = nProps.width;
       storeState.height = nProps.height;
-      storeState.selection = nProps.selection;
+      // storeState.selection = nProps.selection;
       storeState.pSortInfo = nProps.sortInfo;
 
       storeState.options = nProps.options;
@@ -338,8 +338,13 @@ class StoreProvider extends React.Component<
       if (nProps.selection !== nState.selection) {
         storeState.selection = nProps.selection;
 
-        const { rows = [], cols = [], focusedRow = -1, focusedCol = -1 } =
-          nProps.selection || {};
+        const {
+          rows = [],
+          cols = [],
+          focusedRow = -1,
+          focusedCol = -1,
+          isEditing = false,
+        } = nProps.selection || {};
 
         storeState.selectionRows = {};
         storeState.selectionCols = {};
@@ -358,6 +363,15 @@ class StoreProvider extends React.Component<
 
         storeState.focusedRow = focusedRow;
         storeState.focusedCol = focusedCol;
+
+        // 에디팅이면 인라인 에디팅 상태추가.
+        if (isEditing) {
+          storeState.isInlineEditing = true;
+          storeState.inlineEditingCell = {
+            rowIndex: focusedRow,
+            colIndex: focusedCol,
+          };
+        }
       }
 
       // if (
