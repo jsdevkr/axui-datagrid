@@ -95,7 +95,9 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
       defaultOpen={true}
       autoFocus={true}
       onDropdownVisibleChange={open => {
-        if (!open) {
+        if (open) {
+          focus();
+        } else {
           blur();
         }
       }}

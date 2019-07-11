@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
+import getAvailScrollLeft from '../utils/getAvailScrollLeft';
 
 interface IProps {
   colGroup: IDataGrid.ICol[];
@@ -16,6 +17,12 @@ interface IProps {
   inlineEditingCell: IDataGrid.IEditingCell;
   focusedRow: number;
   focusedCol: number;
+  printStartColIndex?: number;
+  printEndColIndex?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  options?: IDataGrid.IOptions;
+  styles?: IDataGrid.IStyles;
 }
 
 class CellEditor extends React.PureComponent<IProps> {
@@ -179,7 +186,26 @@ class CellEditor extends React.PureComponent<IProps> {
   };
 
   handelKeyAction: IDataGrid.CellEditorKeyAction = (action, value, options) => {
-    const { dispatch, li, colGroup, col } = this.props;
+    const {
+      dispatch,
+      li,
+      colGroup,
+      col,
+      printStartColIndex = 0,
+      printEndColIndex = 0,
+      scrollLeft = 0,
+      scrollTop = 0,
+      options: { frozenColumnIndex = 0 } = {},
+      styles: {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+        frozenPanelWidth = 0,
+        rightPanelWidth = 0,
+        verticalScrollerWidth = 0,
+      } = {},
+    } = this.props;
     const { updateItem = false, e } = options || { e: null };
 
     switch (action) {
@@ -199,28 +225,47 @@ class CellEditor extends React.PureComponent<IProps> {
               : 0
           ];
 
-        dispatch(
-          updateItem
-            ? DataGridEnums.DispatchTypes.UPDATE_ITEM
-            : DataGridEnums.DispatchTypes.UPDATE,
-          {
-            row: li,
-            col,
-            colIndex,
-            value,
-            eventWhichKey: 'custom-editor-action',
-
-            keepEditing: true,
-            isInlineEditing: true,
-            inlineEditingCell: {
-              rowIndex: li,
-              colIndex: nextCol.colIndex,
-              editor: nextCol.editor,
+        if (nextCol.colIndex !== undefined) {
+          dispatch(
+            updateItem
+              ? DataGridEnums.DispatchTypes.UPDATE_ITEM
+              : DataGridEnums.DispatchTypes.UPDATE,
+            {
+              row: li,
+              col,
+              colIndex,
+              value,
+              eventWhichKey: 'custom-editor-action',
+              scrollLeft: getAvailScrollLeft(nextCol.colIndex, {
+                colGroup,
+                sColIndex: printStartColIndex,
+                eColIndex:
+                  printEndColIndex === 0
+                    ? colGroup.length - 1
+                    : printEndColIndex,
+                frozenColumnIndex,
+                frozenPanelWidth,
+                verticalScrollerWidth,
+                rightPanelWidth,
+                scrollContentWidth,
+                scrollContentHeight,
+                scrollContentContainerWidth,
+                scrollContentContainerHeight,
+                scrollTop,
+                scrollLeft,
+              }),
+              keepEditing: true,
+              isInlineEditing: true,
+              inlineEditingCell: {
+                rowIndex: li,
+                colIndex: nextCol.colIndex,
+                editor: nextCol.editor,
+              },
+              newFocusedRow: li,
+              newFocusedCol: nextCol.colIndex,
             },
-            newFocusedRow: li,
-            newFocusedCol: nextCol.colIndex,
-          },
-        );
+          );
+        }
 
         break;
       default:

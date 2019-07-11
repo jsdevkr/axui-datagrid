@@ -24,6 +24,11 @@ class TableBody extends React.PureComponent<{
   isInlineEditing: boolean;
   inlineEditingCell: IDataGrid.IEditingCell;
   predefinedFormatter?: IDataGrid.IFormatter;
+  printStartColIndex?: number;
+  printEndColIndex?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  styles?: IDataGrid.IStyles;
 }> {
   render() {
     const {
@@ -43,6 +48,11 @@ class TableBody extends React.PureComponent<{
       isInlineEditing,
       inlineEditingCell,
       predefinedFormatter,
+      printStartColIndex,
+      printEndColIndex,
+      scrollLeft,
+      scrollTop,
+      styles,
     } = this.props;
 
     const changedTrClassName = {
@@ -85,6 +95,11 @@ class TableBody extends React.PureComponent<{
                     isInlineEditing={isInlineEditing}
                     inlineEditingCell={inlineEditingCell}
                     predefinedFormatter={predefinedFormatter}
+                    printStartColIndex={printStartColIndex}
+                    printEndColIndex={printEndColIndex}
+                    scrollLeft={scrollLeft}
+                    scrollTop={scrollTop}
+                    styles={styles}
                   />
                 ))}
                 <td />
@@ -140,6 +155,12 @@ class DataGridBodyPanel extends React.Component<IProps> {
       predefinedFormatter,
       setStoreState,
       dispatch,
+
+      printStartColIndex,
+      printEndColIndex,
+      scrollLeft,
+      scrollTop,
+      styles,
     } = this.props;
 
     let panelColGroup: IDataGrid.ICol[];
@@ -199,6 +220,11 @@ class DataGridBodyPanel extends React.Component<IProps> {
               isInlineEditing={!!isInlineEditing}
               inlineEditingCell={inlineEditingCell || {}}
               predefinedFormatter={predefinedFormatter}
+              printStartColIndex={printStartColIndex}
+              printEndColIndex={printEndColIndex}
+              scrollLeft={scrollLeft}
+              scrollTop={scrollTop}
+              styles={styles}
             />
           </table>
         </div>

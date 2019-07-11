@@ -539,6 +539,7 @@ class StoreProvider extends React.Component<
       inlineEditingCell,
       newFocusedRow,
       newFocusedCol,
+      scrollLeft,
     } = param;
 
     let selectedAll: boolean = listSelectedAll;
@@ -666,14 +667,16 @@ class StoreProvider extends React.Component<
         }
 
         if (!keepEditing) {
-          this.setStoreState({
+          const newState: IDataGrid.IStoreState = {
             isInlineEditing: false,
             inlineEditingCell: {},
             selectionRows: {
               [focusRow]: true,
             },
             focusedRow: focusRow,
-          });
+          };
+
+          this.setStoreState(newState);
 
           if (rootNode && rootNode.current) {
             rootNode.current.focus();
@@ -691,7 +694,17 @@ class StoreProvider extends React.Component<
             newState.selectionCols = { [newFocusedCol]: true };
           }
 
+          if (scrollLeft !== undefined) {
+            newState.scrollLeft = scrollLeft;
+          }
+
           this.setStoreState(newState);
+        }
+
+        if (!isInlineEditing) {
+          if (rootNode && rootNode.current) {
+            rootNode.current.focus();
+          }
         }
 
         if (onEdit && value !== undefined) {
@@ -886,22 +899,19 @@ class StoreProvider extends React.Component<
           pState.selectionSRow !== this.state.selectionSRow ||
           pState.selectionERow !== this.state.selectionERow ||
           pState.selectionSCol !== this.state.selectionSCol ||
-          pState.selectionECol !== this.state.selectionECol ||
-          pState.isInlineEditing !== this.state.isInlineEditing)
+          pState.selectionECol !== this.state.selectionECol)
       ) {
         const {
           selectionRows = [],
           selectionCols = [],
           focusedRow = -1,
           focusedCol = -1,
-          isInlineEditing,
         } = this.state;
         onChangeSelection({
           rows: Object.keys(selectionRows).map(n => Number(n)),
           cols: Object.keys(selectionCols).map(n => Number(n)),
           focusedRow,
           focusedCol,
-          isEditing: isInlineEditing,
         });
       }
     },
