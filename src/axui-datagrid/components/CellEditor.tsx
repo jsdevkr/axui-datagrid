@@ -226,6 +226,18 @@ class CellEditor extends React.PureComponent<IProps> {
           ];
 
         if (nextCol.colIndex !== undefined) {
+          // const nextColEditor = nextCol.editor;
+          // const nextEditor: IDataGrid.IColEditor =
+          //   nextColEditor === 'text'
+          //     ? { type: 'text' }
+          //     : (nextColEditor as IDataGrid.IColEditor);
+          // const hasNextColEditor =
+          //   nextEditor &&
+          //   (nextEditor.activeType === 'click' ||
+          //     nextEditor.activeType === 'dblclick');
+
+          // console.log('hasNextColEditor', hasNextColEditor, nextEditor);
+
           dispatch(
             updateItem
               ? DataGridEnums.DispatchTypes.UPDATE_ITEM
@@ -332,6 +344,7 @@ class CellEditor extends React.PureComponent<IProps> {
       colIndex: col.colIndex,
       value: value,
       eventWhichKey: 'click-checkbox',
+      keepEditing: false,
     });
   };
 
@@ -371,7 +384,6 @@ class CellEditor extends React.PureComponent<IProps> {
 
     return (
       <span
-        tabIndex={-1}
         data-span={'checkbox-editor'}
         className={`${disabled ? 'disabled' : ''}`}
         style={{
@@ -415,6 +427,8 @@ class CellEditor extends React.PureComponent<IProps> {
     // }
 
     const {
+      setStoreState,
+      dispatch,
       col: { editor: colEditor },
     } = this.props;
     const editor: IDataGrid.IColEditor =
@@ -426,11 +440,14 @@ class CellEditor extends React.PureComponent<IProps> {
       const inputEl = this.customEditorRef.current.querySelector('input');
       if (editor.activeType !== 'always' && inputEl) {
         inputEl.focus();
+        return;
       }
     }
+
+    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IProps) {
     this.lastEventName = '';
   }
 

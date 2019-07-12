@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Select, Icon, DatePicker, InputNumber, Checkbox } from 'antd';
+import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
@@ -29,6 +29,12 @@ const DatagridContainer = styled.div`
   }
   .ant-input-number-input {
     height: 23px;
+  }
+
+  .axui-datagrid {
+    &:focus {
+      outline: #ff3300 solid 1px !important;
+    }
   }
 `;
 
@@ -111,30 +117,6 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
   );
 };
 
-const inputCheckboxEditor: IDataGrid.cellEditorFunction = ({
-  value,
-  update,
-  keyAction,
-}) => {
-  return (
-    <div
-      onKeyDown={e => {
-        if (e.which === 9) {
-          e.preventDefault();
-          keyAction('EDIT_NEXT', undefined, { e });
-        }
-      }}
-    >
-      <Checkbox
-        defaultChecked={!!value}
-        onChange={e => {
-          update(e.target.checked, { keepEditing: true });
-        }}
-      />
-    </div>
-  );
-};
-
 const inputDateEditor: IDataGrid.cellEditorFunction = ({
   value,
   update,
@@ -198,8 +180,7 @@ class InlineEdit extends React.Component<any, IState> {
         align: 'center',
         formatter: ({ value }) => value + '',
         editor: {
-          activeType: 'click',
-          render: inputCheckboxEditor,
+          type: 'checkbox',
           disable: ({ item }) => item.value['type'] === 'A',
         },
       },
@@ -400,7 +381,7 @@ class InlineEdit extends React.Component<any, IState> {
   };
 
   onEditItem = (param: IDataGrid.IonEditParam) => {
-    console.log(param);
+    console.log(`onEditItem`, param);
     const { li, col: { key: colKey = '' } = {}, value } = param;
     const { data } = this.state;
     const editDataItem: IDataGrid.IDataItem = { ...data[li] };
