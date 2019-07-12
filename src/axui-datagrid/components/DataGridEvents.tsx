@@ -408,15 +408,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
             );
 
             break;
-          case DataGridEnums.KeyCodes.TAB:
-            e.preventDefault();
-
-            // console.log(`focusCol`, colGroup[focusedCol].editor);
-            resolve();
-            break;
-          case DataGridEnums.KeyCodes.SPACE:
-            resolve();
-            break;
           default:
             resolve();
             break;
@@ -535,13 +526,13 @@ class DataGridEvents extends React.Component<IProps, IState> {
           }
 
           break;
-        case DataGridEnums.KeyCodes.SPACE:
+        // case DataGridEnums.KeyCodes.SPACE:
         case DataGridEnums.KeyCodes.ENTER:
           e.preventDefault();
 
           const item: IDataGrid.IDataItem = data[rowIndex];
           const value = item.value[colGroup[colIndex].key!];
-          // console.log(data[rowIndex].value[colGroup[colIndex].key]);
+          // console.log('checkbox event fire SPACE, ENTER', e.which);
 
           const disabled = editor.disable
             ? editor.disable({
@@ -561,8 +552,8 @@ class DataGridEvents extends React.Component<IProps, IState> {
             col: colGroup[colIndex],
             colIndex,
             value: !value,
-            eventWhichKey: 'custom-editor-action',
-            keepEditing: true,
+            eventWhichKey: 'click-checkbox',
+            keepEditing: false,
           });
 
           break;
@@ -580,6 +571,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       colGroup = [],
       focusedRow = -1,
       focusedCol = -1,
+      data = {},
     } = this.props;
 
     let stopEvent =
@@ -600,9 +592,29 @@ class DataGridEvents extends React.Component<IProps, IState> {
           ? { type: 'text' }
           : (colEditor as IDataGrid.IColEditor);
 
-      if (editor.type === 'checkbox') {
-        this.onKeyDownInlineEditor(e);
-        stopEvent = false;
+      if (editor) {
+        if (editor.type === 'checkbox') {
+          this.onKeyDownInlineEditor(e);
+          stopEvent = false;
+        } else {
+          const item: IDataGrid.IDataItem = data[focusedRow];
+          if (item) {
+            const value = item.value[colGroup[focusedCol].key!];
+            const disabled = editor.disable
+              ? editor.disable({
+                  col: colGroup[focusedCol],
+                  rowIndex: focusedRow,
+                  colIndex: focusedCol,
+                  item,
+                  value,
+                })
+              : false;
+
+            if (disabled) {
+              stopEvent = false;
+            }
+          }
+        }
       }
     }
 

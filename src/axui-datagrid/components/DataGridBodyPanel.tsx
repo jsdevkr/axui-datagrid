@@ -83,6 +83,7 @@ class TableBody extends React.PureComponent<{
                     li={li}
                     ci={ci}
                     col={col}
+                    value={item.value[col.key || ''] || ''}
                     data={data}
                     selected={item.selected}
                     setStoreState={setStoreState}
