@@ -53,14 +53,16 @@ class DataGridEvents extends React.Component<IProps, IState> {
         headerColGroup = [],
         selectionRows = {},
         selectionCols = {},
-        focusedCol = 0,
         setStoreState,
-        scrollLeft = 0,
         scrollTop = 0,
+        scrollLeft = 0,
         focusedRow = 0,
+        focusedCol = 0,
         options = {},
         styles = {},
         predefinedFormatter = {},
+        isInlineEditing,
+        inlineEditingCell,
       } = this.props;
       const {
         printStartColIndex = 0,
@@ -406,6 +408,15 @@ class DataGridEvents extends React.Component<IProps, IState> {
             );
 
             break;
+          case DataGridEnums.KeyCodes.TAB:
+            e.preventDefault();
+
+            // console.log(`focusCol`, colGroup[focusedCol].editor);
+            resolve();
+            break;
+          case DataGridEnums.KeyCodes.SPACE:
+            resolve();
+            break;
           default:
             resolve();
             break;
@@ -440,15 +451,162 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
+  onKeyDownInlineEditor = (e: React.KeyboardEvent) => {
+    const {
+      data = {},
+      inlineEditingCell,
+      colGroup = [],
+      printStartColIndex: sColIndex = 0,
+      printEndColIndex: eColIndex = 0,
+      scrollTop = 0,
+      scrollLeft = 0,
+      focusedCol = -1,
+      focusedRow: rowIndex = 0,
+      options: { frozenColumnIndex = 0 } = {},
+      styles: {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+        frozenPanelWidth = 0,
+        rightPanelWidth = 0,
+        verticalScrollerWidth = 0,
+      } = {},
+      dispatch,
+      setStoreState,
+    } = this.props;
+
+    const { colIndex = 0, editor: colEditor } = colGroup[focusedCol];
+    const editor: IDataGrid.IColEditor =
+      colEditor === 'text'
+        ? { type: 'text' }
+        : (colEditor as IDataGrid.IColEditor);
+
+    if (editor.type === 'checkbox') {
+      // console.log('catch in onKeyDownInlineEditor', inlineEditingCell);
+
+      switch (e.which) {
+        case DataGridEnums.KeyCodes.TAB:
+          e.preventDefault();
+
+          const getScrollLeftOptions = {
+            colGroup,
+            sColIndex,
+            eColIndex,
+            frozenColumnIndex,
+            frozenPanelWidth,
+            verticalScrollerWidth,
+            rightPanelWidth,
+            scrollContentWidth,
+            scrollContentHeight,
+            scrollContentContainerWidth,
+            scrollContentContainerHeight,
+            scrollTop,
+            scrollLeft,
+          };
+
+          const nextCol =
+            colGroup[
+              e && e.shiftKey
+                ? colIndex - 1 > -1
+                  ? colIndex - 1
+                  : colGroup.length - 1
+                : colIndex + 1 < colGroup.length
+                ? colIndex + 1
+                : 0
+            ];
+          if (nextCol.colIndex !== undefined) {
+            setStoreState({
+              scrollLeft: getAvailScrollLeft(
+                nextCol.colIndex,
+                getScrollLeftOptions,
+              ),
+              selectionCols: {
+                [nextCol.colIndex]: true,
+              },
+              focusedCol: nextCol.colIndex,
+              isInlineEditing: true,
+              inlineEditingCell: {
+                rowIndex: rowIndex,
+                colIndex: nextCol.colIndex,
+                editor: nextCol.editor,
+              },
+            });
+          }
+
+          break;
+        case DataGridEnums.KeyCodes.SPACE:
+        case DataGridEnums.KeyCodes.ENTER:
+          e.preventDefault();
+
+          const item: IDataGrid.IDataItem = data[rowIndex];
+          const value = item.value[colGroup[colIndex].key!];
+          // console.log(data[rowIndex].value[colGroup[colIndex].key]);
+
+          const disabled = editor.disable
+            ? editor.disable({
+                col: colGroup[colIndex],
+                rowIndex,
+                colIndex,
+                item,
+                value,
+              })
+            : false;
+
+          if (disabled) {
+            return;
+          }
+          dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+            row: rowIndex,
+            col: colGroup[colIndex],
+            colIndex,
+            value: !value,
+            eventWhichKey: 'custom-editor-action',
+            keepEditing: true,
+          });
+
+          break;
+        default:
+      }
+    }
+  };
+
   onFireEvent = async (e: any) => {
-    const { loading, loadingData, isInlineEditing = false } = this.props;
+    const {
+      loading,
+      loadingData,
+      isInlineEditing = false,
+      inlineEditingCell,
+      colGroup = [],
+      focusedRow = -1,
+      focusedCol = -1,
+    } = this.props;
+
+    let stopEvent =
+      isInlineEditing &&
+      inlineEditingCell &&
+      inlineEditingCell.colIndex === focusedCol &&
+      inlineEditingCell.rowIndex === focusedRow;
 
     if (this.busy || loadingData || loading) {
       e.preventDefault();
       return;
     }
 
-    if (isInlineEditing) {
+    if (e.type === DataGridEnums.EventNames.KEYDOWN && colGroup[focusedCol]) {
+      const colEditor = colGroup[focusedCol].editor;
+      const editor: IDataGrid.IColEditor =
+        colEditor === 'text'
+          ? { type: 'text' }
+          : (colEditor as IDataGrid.IColEditor);
+
+      if (editor.type === 'checkbox') {
+        this.onKeyDownInlineEditor(e);
+        stopEvent = false;
+      }
+    }
+
+    if (stopEvent) {
       return;
     }
 
@@ -458,9 +616,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
     switch (e.type) {
       case DataGridEnums.EventNames.KEYDOWN:
-        if (e.which === DataGridEnums.KeyCodes.TAB) {
-          e.preventDefault();
-        }
         this.busy = true;
         try {
           await this.onKeyDown(e);

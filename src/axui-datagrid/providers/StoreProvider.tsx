@@ -666,6 +666,10 @@ class StoreProvider extends React.Component<
           }
         }
 
+        if (rootNode && rootNode.current) {
+          rootNode.current.focus();
+        }
+
         if (!keepEditing) {
           const newState: IDataGrid.IStoreState = {
             isInlineEditing: false,
@@ -677,10 +681,6 @@ class StoreProvider extends React.Component<
           };
 
           this.setStoreState(newState);
-
-          if (rootNode && rootNode.current) {
-            rootNode.current.focus();
-          }
         } else if (inlineEditingCell) {
           const newState: IDataGrid.IStoreState = {
             isInlineEditing,
@@ -699,12 +699,6 @@ class StoreProvider extends React.Component<
           }
 
           this.setStoreState(newState);
-        }
-
-        if (!isInlineEditing) {
-          if (rootNode && rootNode.current) {
-            rootNode.current.focus();
-          }
         }
 
         if (onEdit && value !== undefined) {
