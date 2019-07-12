@@ -143,8 +143,6 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
             return obj;
           }, {});
 
-          console.log(state.selectionRows);
-
           state.focusedCol = 0;
           setStoreState(state);
         }

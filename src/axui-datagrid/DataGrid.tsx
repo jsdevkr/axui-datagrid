@@ -186,7 +186,7 @@ class DataGrid extends React.Component<IProps, IState> {
     });
 
     if (onChangeColumns) {
-      console.log('Run DataGrid :: applyAutofit');
+      // console.log('Run DataGrid :: applyAutofit');
       onChangeColumns({
         colGroup: columnData.colGroup,
       });

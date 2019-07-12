@@ -8,6 +8,7 @@ import DataGridBodyCell from './DataGridBodyCell';
 import DataGridTableColGroup from './DataGridTableColGroup';
 
 class TableBody extends React.PureComponent<{
+  colGroup: IDataGrid.ICol[];
   sRowIndex: number;
   eRowIndex: number;
   data: IDataGrid.IData;
@@ -23,9 +24,15 @@ class TableBody extends React.PureComponent<{
   isInlineEditing: boolean;
   inlineEditingCell: IDataGrid.IEditingCell;
   predefinedFormatter?: IDataGrid.IFormatter;
+  printStartColIndex?: number;
+  printEndColIndex?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  styles?: IDataGrid.IStyles;
 }> {
   render() {
     const {
+      colGroup,
       sRowIndex,
       eRowIndex,
       data,
@@ -41,6 +48,11 @@ class TableBody extends React.PureComponent<{
       isInlineEditing,
       inlineEditingCell,
       predefinedFormatter,
+      printStartColIndex,
+      printEndColIndex,
+      scrollLeft,
+      scrollTop,
+      styles,
     } = this.props;
 
     const changedTrClassName = {
@@ -66,6 +78,7 @@ class TableBody extends React.PureComponent<{
               >
                 {row.cols.map((col, ci) => (
                   <DataGridBodyCell
+                    colGroup={colGroup}
                     key={ci}
                     li={li}
                     ci={ci}
@@ -82,6 +95,11 @@ class TableBody extends React.PureComponent<{
                     isInlineEditing={isInlineEditing}
                     inlineEditingCell={inlineEditingCell}
                     predefinedFormatter={predefinedFormatter}
+                    printStartColIndex={printStartColIndex}
+                    printEndColIndex={printEndColIndex}
+                    scrollLeft={scrollLeft}
+                    scrollTop={scrollTop}
+                    styles={styles}
                   />
                 ))}
                 <td />
@@ -112,7 +130,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
       asideColGroup = [],
       leftHeaderColGroup = [],
       visibleHeaderColGroup = [],
-
+      colGroup = [],
       asideBodyRowData = { rows: [{ cols: [] }] },
       leftBodyRowData = { rows: [{ cols: [] }] },
       visibleBodyRowData = { rows: [{ cols: [] }] },
@@ -137,6 +155,12 @@ class DataGridBodyPanel extends React.Component<IProps> {
       predefinedFormatter,
       setStoreState,
       dispatch,
+
+      printStartColIndex,
+      printEndColIndex,
+      scrollLeft,
+      scrollTop,
+      styles,
     } = this.props;
 
     let panelColGroup: IDataGrid.ICol[];
@@ -180,6 +204,7 @@ class DataGridBodyPanel extends React.Component<IProps> {
           <table style={{ height: '100%' }}>
             <DataGridTableColGroup panelColGroup={panelColGroup} />
             <TableBody
+              colGroup={colGroup}
               sRowIndex={sRowIndex}
               eRowIndex={eRowIndex}
               data={data}
@@ -195,6 +220,11 @@ class DataGridBodyPanel extends React.Component<IProps> {
               isInlineEditing={!!isInlineEditing}
               inlineEditingCell={inlineEditingCell || {}}
               predefinedFormatter={predefinedFormatter}
+              printStartColIndex={printStartColIndex}
+              printEndColIndex={printEndColIndex}
+              scrollLeft={scrollLeft}
+              scrollTop={scrollTop}
+              styles={styles}
             />
           </table>
         </div>

@@ -7,6 +7,7 @@ import { getDataItem } from '../utils';
 class DataGridBodyCell extends React.PureComponent<{
   li: number;
   ci: number;
+  colGroup: IDataGrid.ICol[];
   col?: IDataGrid.ICol;
   data?: IDataGrid.IData;
   selected?: boolean;
@@ -20,6 +21,11 @@ class DataGridBodyCell extends React.PureComponent<{
   isInlineEditing: boolean;
   inlineEditingCell: IDataGrid.IEditingCell;
   predefinedFormatter?: IDataGrid.IFormatter;
+  printStartColIndex?: number;
+  printEndColIndex?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  styles?: IDataGrid.IStyles;
 }> {
   handleActiveInlineEdit = (
     e: React.MouseEvent<HTMLTableDataCellElement>,
@@ -43,6 +49,7 @@ class DataGridBodyCell extends React.PureComponent<{
   render() {
     const {
       li,
+      colGroup = [],
       col = {},
       col: { rowSpan = 0, colSpan = 0, colIndex = 0, columnAttr = '' } = {},
       ci,
@@ -52,6 +59,7 @@ class DataGridBodyCell extends React.PureComponent<{
       focusedCol,
       selectionRows = [],
       selectionCols = [],
+      options,
       options: {
         lineNumberStartAt = 1,
         rowSelectorSize = 0,
@@ -67,6 +75,11 @@ class DataGridBodyCell extends React.PureComponent<{
       predefinedFormatter = {},
       setStoreState,
       dispatch,
+      printStartColIndex,
+      printEndColIndex,
+      scrollLeft,
+      scrollTop,
+      styles,
     } = this.props;
 
     const editor = col.editor;
@@ -189,6 +202,7 @@ class DataGridBodyCell extends React.PureComponent<{
           />
         ) : (
           <CellEditor
+            colGroup={colGroup}
             col={col}
             li={li}
             item={item}
@@ -201,6 +215,12 @@ class DataGridBodyCell extends React.PureComponent<{
             focusedCol={focusedCol}
             dispatch={dispatch}
             setStoreState={setStoreState}
+            printStartColIndex={printStartColIndex}
+            printEndColIndex={printEndColIndex}
+            scrollLeft={scrollLeft}
+            scrollTop={scrollTop}
+            options={options}
+            styles={styles}
           />
         )}
       </td>

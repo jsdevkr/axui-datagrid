@@ -64,6 +64,7 @@ class MultiEdit extends React.Component<IProps, IState> {
       cancel,
       blur,
       focus,
+      keyAction,
     }) => {
       return (
         <Input
@@ -84,7 +85,23 @@ class MultiEdit extends React.Component<IProps, IState> {
               return;
             }
             if (e.which === 13) {
-              update({ ...value, changed: e.currentTarget.value });
+              if (value.v !== e.currentTarget.value) {
+                update({ ...value, changed: e.currentTarget.value });
+              } else {
+                blur();
+              }
+            }
+          }}
+          onKeyDown={e => {
+            if (e.which === 9) {
+              e.preventDefault();
+              keyAction(
+                'EDIT_NEXT',
+                value.v !== e.currentTarget.value
+                  ? { ...value, changed: e.currentTarget.value }
+                  : undefined,
+                { e },
+              );
             }
           }}
         />
@@ -162,6 +179,7 @@ class MultiEdit extends React.Component<IProps, IState> {
       cols: [],
       focusedRow: -1,
       focusedCol: -1,
+      isEditing: false,
     };
 
     this.state = {
@@ -212,6 +230,7 @@ class MultiEdit extends React.Component<IProps, IState> {
         cols: [0],
         focusedRow: dataLength,
         focusedCol: 0,
+        isEditing: true,
       },
     });
   };

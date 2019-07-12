@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { IDataGridStore } from '../providers';
 import { connectStore } from '../hoc';
-import { getScrollPosition, isFunction, getDataItem } from '../utils';
+import { isFunction, getDataItem } from '../utils';
 import { DataGridEnums } from '../common/@enums';
 import { IDataGrid } from '../common/@types';
+import getAvailScrollTop from '../utils/getAvailScrollTop';
+import getAvailScrollLeft from '../utils/getAvailScrollLeft';
 
 interface IProps extends IDataGridStore {}
 interface IState {}
@@ -89,64 +91,33 @@ class DataGridEvents extends React.Component<IProps, IState> {
       const eColIndex = printEndColIndex;
       const pRowSize = Math.floor(scrollContentContainerHeight / bodyTrHeight);
 
-      const getAvailScrollTop = (rowIndex: number): number | undefined => {
-        let _scrollTop: number | undefined = undefined;
-
-        if (frozenRowIndex >= rowIndex) {
-          return;
-        }
-
-        if (sRowIndex >= rowIndex) {
-          _scrollTop = -(rowIndex - frozenRowIndex) * bodyTrHeight;
-        } else if (eRowIndex <= rowIndex) {
-          _scrollTop =
-            -rowIndex * bodyTrHeight + (pRowSize * bodyTrHeight - bodyTrHeight);
-        }
-
-        if (typeof _scrollTop !== 'undefined') {
-          _scrollTop = getScrollPosition(scrollLeft, _scrollTop, {
-            scrollWidth: scrollContentWidth,
-            scrollHeight: scrollContentHeight,
-            clientWidth: scrollContentContainerWidth,
-            clientHeight: scrollContentContainerHeight,
-          }).scrollTop;
-        } else {
-          _scrollTop = scrollTop;
-        }
-
-        return _scrollTop;
+      const getScrollLeftOptions = {
+        colGroup,
+        sColIndex,
+        eColIndex,
+        frozenColumnIndex,
+        frozenPanelWidth,
+        verticalScrollerWidth,
+        rightPanelWidth,
+        scrollContentWidth,
+        scrollContentHeight,
+        scrollContentContainerWidth,
+        scrollContentContainerHeight,
+        scrollTop,
+        scrollLeft,
       };
-      const getAvailScrollLeft = (colIndex: number): number | undefined => {
-        let _scrollLeft: number | undefined = undefined;
-
-        if (frozenColumnIndex > colIndex) {
-          return;
-        }
-
-        if (sColIndex >= colIndex - frozenColumnIndex) {
-          _scrollLeft = -(colGroup[colIndex]._sx as number) + frozenPanelWidth;
-        } else if (eColIndex <= colIndex - frozenColumnIndex) {
-          // 끝점 계산
-          _scrollLeft =
-            scrollContentContainerWidth -
-            (colGroup[colIndex]._ex as number) +
-            frozenPanelWidth -
-            verticalScrollerWidth -
-            rightPanelWidth;
-        }
-
-        if (typeof _scrollLeft !== 'undefined') {
-          _scrollLeft = getScrollPosition(_scrollLeft as number, scrollTop, {
-            scrollWidth: scrollContentWidth,
-            scrollHeight: scrollContentHeight,
-            clientWidth: scrollContentContainerWidth,
-            clientHeight: scrollContentContainerHeight,
-          }).scrollLeft;
-        } else {
-          _scrollLeft = scrollLeft;
-        }
-
-        return _scrollLeft;
+      const getScrollTopOptions = {
+        frozenRowIndex,
+        sRowIndex,
+        eRowIndex,
+        scrollTop,
+        scrollLeft,
+        scrollContentWidth,
+        scrollContentHeight,
+        scrollContentContainerWidth,
+        scrollContentContainerHeight,
+        bodyTrHeight,
+        pRowSize,
       };
 
       if (e.metaKey || e.ctrlKey) {
@@ -275,7 +246,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -292,7 +263,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -312,7 +283,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -334,7 +305,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -353,7 +324,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -375,7 +346,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollTop: getAvailScrollTop(focusRow),
+                scrollTop: getAvailScrollTop(focusRow, getScrollTopOptions),
                 selectionRows: {
                   [focusRow]: true,
                 },
@@ -396,7 +367,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollLeft: getAvailScrollLeft(focusCol),
+                scrollLeft: getAvailScrollLeft(focusCol, getScrollLeftOptions),
                 selectionCols: {
                   [focusCol]: true,
                 },
@@ -410,6 +381,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
             );
 
             break;
+
           case DataGridEnums.KeyCodes.RIGHT_ARROW:
             e.preventDefault();
 
@@ -420,7 +392,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
             setStoreState(
               {
-                scrollLeft: getAvailScrollLeft(focusCol),
+                scrollLeft: getAvailScrollLeft(focusCol, getScrollLeftOptions),
                 selectionCols: {
                   [focusCol]: true,
                 },
@@ -486,6 +458,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
 
     switch (e.type) {
       case DataGridEnums.EventNames.KEYDOWN:
+        if (e.which === DataGridEnums.KeyCodes.TAB) {
+          e.preventDefault();
+        }
         this.busy = true;
         try {
           await this.onKeyDown(e);

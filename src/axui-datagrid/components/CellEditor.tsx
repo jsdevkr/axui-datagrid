@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
+import getAvailScrollLeft from '../utils/getAvailScrollLeft';
 
 interface IProps {
+  colGroup: IDataGrid.ICol[];
   col: IDataGrid.ICol;
   li: number;
   item?: IDataGrid.IDataItem;
@@ -15,17 +17,23 @@ interface IProps {
   inlineEditingCell: IDataGrid.IEditingCell;
   focusedRow: number;
   focusedCol: number;
+  printStartColIndex?: number;
+  printEndColIndex?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  options?: IDataGrid.IOptions;
+  styles?: IDataGrid.IStyles;
 }
 
 class CellEditor extends React.PureComponent<IProps> {
-  inputTextRef: React.RefObject<HTMLInputElement>;
+  customEditorRef: React.RefObject<HTMLDivElement>;
   activeComposition: boolean = false;
   lastEventName: string = '';
 
   constructor(props: IProps) {
     super(props);
 
-    this.inputTextRef = React.createRef();
+    this.customEditorRef = React.createRef();
   }
 
   onEventInput = (
@@ -33,51 +41,47 @@ class CellEditor extends React.PureComponent<IProps> {
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     const {
-      setStoreState,
       dispatch,
       inlineEditingCell = {},
+      colGroup = [],
       col,
       li,
     } = this.props;
 
     switch (eventName) {
       case DataGridEnums.EventNames.BLUR:
-        // console.log('eventInput blur : setStoreState');
-        setStoreState({
-          isInlineEditing: false,
-          inlineEditingCell: {},
-        });
-
-        if (!this.activeComposition) {
+        {
           if (this.lastEventName === 'update') {
-            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
+              isInlineEditing: false,
+              inlineEditingCell: {},
+            });
           } else {
             dispatch(DataGridEnums.DispatchTypes.UPDATE, {
               row: li,
               colIndex: col.colIndex,
               value: e.currentTarget.value,
               eventWhichKey: e.which,
-            });
-          }
-        }
-
-        break;
-      case DataGridEnums.EventNames.KEYUP:
-        switch (e.which) {
-          case DataGridEnums.KeyCodes.ESC:
-            setStoreState({
               isInlineEditing: false,
               inlineEditingCell: {},
             });
+          }
+        }
+        break;
+      case DataGridEnums.EventNames.KEYUP:
+        {
+          switch (e.which) {
+            case DataGridEnums.KeyCodes.ESC:
+              this.lastEventName = 'esc';
 
-            this.lastEventName = 'esc';
-
-            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
-            break;
-          case DataGridEnums.KeyCodes.UP_ARROW:
-          case DataGridEnums.KeyCodes.DOWN_ARROW:
-          case DataGridEnums.KeyCodes.ENTER:
-            if (!this.activeComposition) {
+              dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
+                isInlineEditing: false,
+                inlineEditingCell: {},
+              });
+              break;
+            case DataGridEnums.KeyCodes.UP_ARROW:
+            case DataGridEnums.KeyCodes.DOWN_ARROW:
+            case DataGridEnums.KeyCodes.ENTER:
               this.lastEventName = 'update';
 
               dispatch(DataGridEnums.DispatchTypes.UPDATE, {
@@ -87,12 +91,56 @@ class CellEditor extends React.PureComponent<IProps> {
                 value: e.currentTarget.value,
                 eventWhichKey: e.which,
               });
-            }
-            break;
-          default:
-            break;
+              break;
+            default:
+              break;
+          }
         }
+        break;
 
+      case DataGridEnums.EventNames.KEYDOWN:
+        {
+          switch (e.which) {
+            case DataGridEnums.KeyCodes.TAB:
+              e.preventDefault();
+
+              this.lastEventName = 'update';
+
+              const { colIndex = 0 } = col;
+              const nextCol =
+                colGroup[
+                  e.shiftKey
+                    ? colIndex - 1 > -1
+                      ? colIndex - 1
+                      : colGroup.length - 1
+                    : colIndex + 1 < colGroup.length
+                    ? colIndex + 1
+                    : 0
+                ];
+
+              dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+                row: inlineEditingCell.rowIndex,
+                col,
+                colIndex: inlineEditingCell.colIndex,
+                value: e.currentTarget.value,
+                eventWhichKey: e.which,
+
+                keepEditing: true,
+                isInlineEditing: true,
+                inlineEditingCell: {
+                  rowIndex: li,
+                  colIndex: nextCol.colIndex,
+                  editor: nextCol.editor,
+                },
+                newFocusedRow: li,
+                newFocusedCol: nextCol.colIndex,
+              });
+
+              break;
+            default:
+              break;
+          }
+        }
         break;
       default:
         break;
@@ -137,6 +185,93 @@ class CellEditor extends React.PureComponent<IProps> {
     dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   };
 
+  handelKeyAction: IDataGrid.CellEditorKeyAction = (action, value, options) => {
+    const {
+      dispatch,
+      li,
+      colGroup,
+      col,
+      printStartColIndex = 0,
+      printEndColIndex = 0,
+      scrollLeft = 0,
+      scrollTop = 0,
+      options: { frozenColumnIndex = 0 } = {},
+      styles: {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+        frozenPanelWidth = 0,
+        rightPanelWidth = 0,
+        verticalScrollerWidth = 0,
+      } = {},
+    } = this.props;
+    const { updateItem = false, e } = options || { e: null };
+
+    switch (action) {
+      case 'EDIT_NEXT':
+        const { colIndex = 0 } = col;
+
+        this.lastEventName = 'update';
+
+        const nextCol =
+          colGroup[
+            e && e.shiftKey
+              ? colIndex - 1 > -1
+                ? colIndex - 1
+                : colGroup.length - 1
+              : colIndex + 1 < colGroup.length
+              ? colIndex + 1
+              : 0
+          ];
+
+        if (nextCol.colIndex !== undefined) {
+          dispatch(
+            updateItem
+              ? DataGridEnums.DispatchTypes.UPDATE_ITEM
+              : DataGridEnums.DispatchTypes.UPDATE,
+            {
+              row: li,
+              col,
+              colIndex,
+              value,
+              eventWhichKey: 'custom-editor-action',
+              scrollLeft: getAvailScrollLeft(nextCol.colIndex, {
+                colGroup,
+                sColIndex: printStartColIndex,
+                eColIndex:
+                  printEndColIndex === 0
+                    ? colGroup.length - 1
+                    : printEndColIndex,
+                frozenColumnIndex,
+                frozenPanelWidth,
+                verticalScrollerWidth,
+                rightPanelWidth,
+                scrollContentWidth,
+                scrollContentHeight,
+                scrollContentContainerWidth,
+                scrollContentContainerHeight,
+                scrollTop,
+                scrollLeft,
+              }),
+              keepEditing: true,
+              isInlineEditing: true,
+              inlineEditingCell: {
+                rowIndex: li,
+                colIndex: nextCol.colIndex,
+                editor: nextCol.editor,
+              },
+              newFocusedRow: li,
+              newFocusedCol: nextCol.colIndex,
+            },
+          );
+        }
+
+        break;
+      default:
+    }
+  };
+
   handleCustomEditorFocus = () => {
     const { setStoreState, li, col } = this.props;
 
@@ -152,21 +287,18 @@ class CellEditor extends React.PureComponent<IProps> {
   };
 
   handleCustomEditorBlur = () => {
-    const { setStoreState, dispatch } = this.props;
+    const { dispatch } = this.props;
 
-    setStoreState({
+    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
       isInlineEditing: false,
       inlineEditingCell: {},
     });
-
-    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   };
 
   inputTextRender = (value: any, disable: boolean = false) => {
     return (
       <input
         type="text"
-        ref={this.inputTextRef}
         onCompositionUpdate={() => {
           this.activeComposition = true;
         }}
@@ -181,6 +313,9 @@ class CellEditor extends React.PureComponent<IProps> {
         }}
         onKeyUp={e => {
           this.onEventInput(DataGridEnums.EventNames.KEYUP, e as any);
+        }}
+        onKeyDown={e => {
+          this.onEventInput(DataGridEnums.EventNames.KEYDOWN, e as any);
         }}
         data-inline-edit
         defaultValue={value}
@@ -198,6 +333,17 @@ class CellEditor extends React.PureComponent<IProps> {
       value: value,
       eventWhichKey: 'click-checkbox',
     });
+  };
+
+  handleCheckboxKeyUp = (e: React.KeyboardEvent, currentValue: any) => {
+    switch (e.which) {
+      case DataGridEnums.KeyCodes.SPACE:
+      case DataGridEnums.KeyCodes.ENTER:
+        this.handleCheckboxValue(!currentValue);
+        break;
+      default:
+        break;
+    }
   };
 
   checkboxRender = (
@@ -225,6 +371,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
     return (
       <span
+        tabIndex={-1}
         data-span={'checkbox-editor'}
         className={`${disabled ? 'disabled' : ''}`}
         style={{
@@ -259,18 +406,26 @@ class CellEditor extends React.PureComponent<IProps> {
   };
 
   componentDidMount() {
-    if (this.inputTextRef.current) {
-      this.activeComposition = false;
+    // if (this.inputTextRef.current) {
+    //   this.activeComposition = false;
 
-      const {
-        col: { editor: colEditor },
-      } = this.props;
-      const editor: IDataGrid.IColEditor =
-        colEditor === 'text'
-          ? { type: 'text' }
-          : (colEditor as IDataGrid.IColEditor);
-      if (editor.activeType !== 'always') {
-        this.inputTextRef.current.focus();
+    //   if (editor.activeType !== 'always') {
+    //     this.inputTextRef.current.focus();
+    //   }
+    // }
+
+    const {
+      col: { editor: colEditor },
+    } = this.props;
+    const editor: IDataGrid.IColEditor =
+      colEditor === 'text'
+        ? { type: 'text' }
+        : (colEditor as IDataGrid.IColEditor);
+
+    if (this.customEditorRef.current) {
+      const inputEl = this.customEditorRef.current.querySelector('input');
+      if (editor.activeType !== 'always' && inputEl) {
+        inputEl.focus();
       }
     }
   }
@@ -320,25 +475,34 @@ class CellEditor extends React.PureComponent<IProps> {
 
     switch (editor.type) {
       case 'text':
-        return this.inputTextRender(value);
+        return (
+          <div ref={this.customEditorRef}>{this.inputTextRender(value)}</div>
+        );
       case 'checkbox':
         return this.checkboxRender(value, editor.label, disabled);
       default:
         if (!editor.render) {
-          return this.inputTextRender(value);
+          return (
+            <div ref={this.customEditorRef}>{this.inputTextRender(value)}</div>
+          );
         }
 
-        return editor.render({
-          col: col,
-          li,
-          colIndex: col.colIndex || 0,
-          item,
-          value,
-          update: this.handleUpdateValue,
-          cancel: this.handleCancelEdit,
-          focus: this.handleCustomEditorFocus,
-          blur: this.handleCustomEditorBlur,
-        });
+        return (
+          <div ref={this.customEditorRef}>
+            {editor.render({
+              col: col,
+              li,
+              colIndex: col.colIndex || 0,
+              item,
+              value,
+              update: this.handleUpdateValue,
+              cancel: this.handleCancelEdit,
+              focus: this.handleCustomEditorFocus,
+              blur: this.handleCustomEditorBlur,
+              keyAction: this.handelKeyAction,
+            })}
+          </div>
+        );
     }
   }
 }

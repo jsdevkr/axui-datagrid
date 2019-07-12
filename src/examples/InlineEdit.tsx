@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
+import { Button, Select, Icon, DatePicker, InputNumber, Checkbox } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
@@ -36,19 +36,34 @@ const inputNumberEditor: IDataGrid.cellEditorFunction = ({
   value,
   update,
   cancel,
+  keyAction,
 }) => {
   return (
     <InputNumber
       style={{ width: '100%' }}
       autoFocus
       defaultValue={value}
-      onChange={val => {
-        update(val, { keepEditing: true });
+      onBlur={e => {
+        if (value !== e.target.value) {
+          update(e.target.value);
+        } else {
+          cancel();
+        }
       }}
-      onBlur={cancel}
       onKeyUp={e => {
+        e.preventDefault();
+        if (e.which === 27) {
+          cancel();
+          return;
+        }
         if (e.which === 13) {
           update(e.currentTarget.value);
+        }
+      }}
+      onKeyDown={e => {
+        if (e.which === 9) {
+          e.preventDefault();
+          keyAction('EDIT_NEXT', e.currentTarget.value, { e });
         }
       }}
     />
@@ -60,22 +75,25 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
   update,
   focus,
   blur,
+  keyAction,
 }) => {
   return (
     <Select
       style={{ width: '100%' }}
       showSearch
       optionFilterProp="children"
-      onFocus={() => focus()}
-      onBlur={() => blur()}
+      onSelect={val => {
+        console.log('onSelect', val);
+        setTimeout(() => keyAction('EDIT_NEXT', val), 100);
+      }}
       onInputKeyDown={e => {
-        if (e.which !== 13 && e.which !== 27) {
-          update(e.currentTarget.value, { keepEditing: true });
+        if (e.which === 9) {
+          e.preventDefault();
+          keyAction('EDIT_NEXT', value, { e });
         }
       }}
-      onChange={val => {
-        update(val);
-      }}
+      defaultOpen={true}
+      autoFocus={true}
       onDropdownVisibleChange={open => {
         if (open) {
           focus();
@@ -93,101 +111,44 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
   );
 };
 
-const types = ['A', 'B', 'C'];
-const subTypes = [
-  { type: 'A', subType: 'A-1' },
-  { type: 'A', subType: 'A-2' },
-  { type: 'A', subType: 'A-3' },
-  { type: 'B', subType: 'B-1' },
-  { type: 'B', subType: 'B-2' },
-  { type: 'B', subType: 'B-3' },
-  { type: 'C', subType: 'C-1' },
-  { type: 'C', subType: 'C-2' },
-  { type: 'C', subType: 'C-3' },
-];
-
-const selectEditorA: IDataGrid.cellEditorFunction = ({
+const inputCheckboxEditor: IDataGrid.cellEditorFunction = ({
   value,
-  item,
   update,
-  cancel,
-  focus,
-  blur,
+  keyAction,
 }) => {
   return (
-    <Select
-      style={{ width: '100%' }}
-      onChange={val => {
-        if ((val.subType + '').substring(0, 1) === val) {
-          update(val);
-        } else {
-          update({ type: val, subType: '' }, { updateItem: true });
+    <div
+      onKeyDown={e => {
+        if (e.which === 9) {
+          e.preventDefault();
+          keyAction('EDIT_NEXT', undefined, { e });
         }
       }}
-      value={value}
-      onDropdownVisibleChange={open => {
-        if (open) {
-          focus();
-        } else {
-          blur();
-        }
-      }}
-      dropdownClassName="axui-datagrid-select-dropdown"
     >
-      {types.map(t => (
-        <Select.Option key={t} value={t}>
-          {t}
-        </Select.Option>
-      ))}
-    </Select>
+      <Checkbox
+        defaultChecked={!!value}
+        onChange={e => {
+          update(e.target.checked, { keepEditing: true });
+        }}
+      />
+    </div>
   );
 };
 
-const selectEditorB: IDataGrid.cellEditorFunction = ({
-  item,
+const inputDateEditor: IDataGrid.cellEditorFunction = ({
   value,
   update,
-  cancel,
   focus,
-  blur,
+  keyAction,
 }) => {
-  const _subTypes = subTypes.filter(t => t.type === item.value['type']);
-  if (!_subTypes.find(t => t.subType === value)) {
-    value = '';
-  }
-
-  return (
-    <Select
-      style={{ width: '100%' }}
-      onChange={val => {
-        update(val);
-      }}
-      value={value}
-      onDropdownVisibleChange={open => {
-        if (open) {
-          focus();
-        } else {
-          blur();
-        }
-      }}
-      dropdownClassName="axui-datagrid-select-dropdown"
-    >
-      {_subTypes.map(t => (
-        <Select.Option key={t.subType} value={t.subType}>
-          {t.subType}
-        </Select.Option>
-      ))}
-    </Select>
-  );
-};
-
-const inputDateEditor: IDataGrid.cellEditorFunction = ({ value, update }) => {
   return (
     <DatePicker
       value={value ? moment(value, 'YYYY/MM/DD') : moment()}
       onChange={(date, dateString) => {
         update(dateString);
+        // keyAction('EDIT_NEXT', dateString);
       }}
+      open={true}
     />
   );
 };
@@ -205,6 +166,7 @@ class InlineEdit extends React.Component<any, IState> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   scrollTop: number = 0;
+  scrollContentContainerHeight: number = 0;
   scrollContentHeight: number = 0;
   bodyTrHeight: number = 24;
   selectedIndexes: number[] = [];
@@ -214,7 +176,33 @@ class InlineEdit extends React.Component<any, IState> {
     super(props);
 
     const columns: IDataGrid.IColumn[] = [
-      { key: 'id', width: 60, label: 'ID', editor: { type: 'text' } },
+      {
+        key: 'id',
+        width: 60,
+        label: 'ID',
+        editor: { activeType: 'click', type: 'text' },
+      },
+      {
+        key: 'writer',
+        label: 'Writer',
+        width: 120,
+        editor: {
+          activeType: 'click',
+          render: searchSelectEditor,
+          disable: ({ item }) => item.value['type'] === 'A',
+        },
+      },
+      {
+        key: 'check',
+        label: 'checkbox',
+        align: 'center',
+        formatter: ({ value }) => value + '',
+        editor: {
+          activeType: 'click',
+          render: inputCheckboxEditor,
+          disable: ({ item }) => item.value['type'] === 'A',
+        },
+      },
       {
         key: 'title',
         width: 200,
@@ -222,33 +210,6 @@ class InlineEdit extends React.Component<any, IState> {
         editor: {
           activeType: 'click',
           type: 'text',
-        },
-      },
-      {
-        key: 'type',
-        label: 'select A',
-        editor: {
-          activeType: 'always',
-          render: selectEditorA,
-        },
-      },
-      {
-        key: 'subType',
-        label: 'select B',
-        width: 120,
-        editor: {
-          activeType: 'always',
-          render: selectEditorB,
-        },
-      },
-      {
-        key: 'writer',
-        label: 'Writer',
-        width: 120,
-        editor: {
-          activeType: 'always',
-          render: searchSelectEditor,
-          disable: ({ item }) => item.value['type'] === 'A',
         },
       },
       {
@@ -263,22 +224,12 @@ class InlineEdit extends React.Component<any, IState> {
         },
       },
       {
-        key: 'check',
-        label: 'checkbox',
-        align: 'center',
-        editor: {
-          type: 'checkbox',
-          label: 'useYn',
-          disable: ({ item }) => item.value['type'] === 'A',
-        },
-      },
-      {
         key: 'date',
         label: 'Date',
         formatter: 'date',
         width: 105,
         editor: {
-          activeType: 'always',
+          activeType: 'click',
           width: 105, // need when autofitColumns
           render: inputDateEditor,
         },
@@ -290,6 +241,7 @@ class InlineEdit extends React.Component<any, IState> {
       cols: [],
       focusedRow: -1,
       focusedCol: -1,
+      isEditing: false,
     };
 
     this.state = {
@@ -385,26 +337,40 @@ class InlineEdit extends React.Component<any, IState> {
   }
 
   addItem = () => {
-    // const newItem = {
-    //   id: 999,
-    //   title: '',
-    //   writer: '',
-    //   date: '',
-    //   money: 0,
-    //   type: 'B',
-    //   check: true,
-    // };
-    // console.log(this.scrollContentHeight);
-    // this.setState({
-    //   data: [...this.state.data, ...[newItem]],
-    //   scrollTop: -this.scrollContentHeight,
-    //   selection: {
-    //     rows: [this.state.data.length],
-    //     cols: [1],
-    //     focusedRow: this.state.data.length,
-    //     focusedCol: 1,
-    //   },
-    // });
+    const { data } = this.state;
+    const dataLength = Object.keys(data).length;
+    const newItem: IDataGrid.IData = {
+      [dataLength]: {
+        type: 'C',
+        value: {
+          id: 999,
+          title: '',
+          writer: '',
+          date: '',
+          money: 0,
+          type: 'B',
+          check: true,
+        },
+      },
+    };
+
+    // 그리드의 스크롤을 변경하기 위한 스크롤 포지션 구하기
+    const scrollTop =
+      this.scrollContentContainerHeight < this.scrollContentHeight
+        ? -this.scrollContentHeight
+        : 0;
+
+    this.setState({
+      data: { ...data, ...newItem },
+      scrollTop,
+      selection: {
+        rows: [dataLength],
+        cols: [0],
+        focusedRow: dataLength,
+        focusedCol: 0,
+        isEditing: true,
+      },
+    });
   };
 
   removeItem = () => {
@@ -430,7 +396,6 @@ class InlineEdit extends React.Component<any, IState> {
   };
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
-    // console.log(param);
     this.setState({ selection: param });
   };
 
@@ -446,17 +411,13 @@ class InlineEdit extends React.Component<any, IState> {
       editDataItem.value[colKey] = value;
     }
 
-    // console.log('newData', { ...data, [li]: editDataItem });
-
     this.setState({
       data: { ...data, [li]: editDataItem },
     });
   };
 
   public render() {
-    const { width, height, columns, data, scrollTop } = this.state;
-
-    console.log('render', data);
+    const { width, height, columns, data, scrollTop, selection } = this.state;
 
     return (
       <Wrapper>
@@ -490,13 +451,8 @@ class InlineEdit extends React.Component<any, IState> {
                     align: 'center',
                   },
                 }}
-                // selection={selection}
-                // onChangeSelection={this.onChangeSelection}
-                // selectedRowKeys={this.selectedRowKeys}
-                // onChangeSelected={param => {
-                //   this.selectedIndexes = param.selectedIndexes || [];
-                // }}
-                // onScroll={this.onScroll}
+                selection={selection}
+                onChangeSelection={this.onChangeSelection}
                 scrollTop={scrollTop}
                 onChangeScrollSize={this.onChangeScrollSize}
                 onEdit={this.onEditItem}

@@ -156,7 +156,7 @@ class StoreProvider extends React.Component<
 
       storeState.width = nProps.width;
       storeState.height = nProps.height;
-      storeState.selection = nProps.selection;
+      // storeState.selection = nProps.selection;
       storeState.pSortInfo = nProps.sortInfo;
 
       storeState.options = nProps.options;
@@ -338,8 +338,13 @@ class StoreProvider extends React.Component<
       if (nProps.selection !== nState.selection) {
         storeState.selection = nProps.selection;
 
-        const { rows = [], cols = [], focusedRow = -1, focusedCol = -1 } =
-          nProps.selection || {};
+        const {
+          rows = [],
+          cols = [],
+          focusedRow = -1,
+          focusedCol = -1,
+          isEditing = false,
+        } = nProps.selection || {};
 
         storeState.selectionRows = {};
         storeState.selectionCols = {};
@@ -358,6 +363,15 @@ class StoreProvider extends React.Component<
 
         storeState.focusedRow = focusedRow;
         storeState.focusedCol = focusedCol;
+
+        // 에디팅이면 인라인 에디팅 상태추가.
+        if (isEditing) {
+          storeState.isInlineEditing = true;
+          storeState.inlineEditingCell = {
+            rowIndex: focusedRow,
+            colIndex: focusedCol,
+          };
+        }
       }
 
       // if (
@@ -486,22 +500,6 @@ class StoreProvider extends React.Component<
       }
     }
 
-    // if (_filteredList && filteredList.length !== _filteredList.length) {
-    //   const dimensions = calculateDimensions(newState, {
-    //     headerTable: newState.headerTable || this.state.headerTable,
-    //     colGroup: newState.colGroup || this.state.colGroup,
-    //     headerColGroup: newState.headerColGroup || this.state.headerColGroup,
-    //     bodyRowTable: newState.bodyRowTable || this.state.bodyRowTable,
-    //     footSumColumns: newState.footSumColumns || this.state.footSumColumns,
-    //     filteredList: _filteredList,
-    //     options: newState.options || this.state.options,
-    //   });
-
-    //   newState.styles = dimensions.styles;
-    //   newState.scrollLeft = dimensions.scrollLeft;
-    //   newState.scrollTop = dimensions.scrollTop;
-    // }
-
     this.setState(newState, callback);
   };
 
@@ -537,6 +535,11 @@ class StoreProvider extends React.Component<
       eventWhichKey,
       keepEditing = false,
       newWidth,
+      isInlineEditing,
+      inlineEditingCell,
+      newFocusedRow,
+      newFocusedCol,
+      scrollLeft,
     } = param;
 
     let selectedAll: boolean = listSelectedAll;
@@ -643,19 +646,6 @@ class StoreProvider extends React.Component<
               sortInfos,
             });
           }
-
-          // // sortInfo 정리
-          // sortInfos.forEach((si, idx) => {
-          //   if (si.key) {
-          //     currentSortInfo[si.key] = { seq: idx, orderBy: si.orderBy };
-          //   }
-          // });
-
-          // this.setStoreState({
-          //   sortInfo: { ...currentSortInfo },
-          //   isInlineEditing: false,
-          //   inlineEditingCell: {},
-          // });
         }
         break;
 
@@ -677,21 +667,47 @@ class StoreProvider extends React.Component<
         }
 
         if (!keepEditing) {
-          this.setStoreState({
+          const newState: IDataGrid.IStoreState = {
             isInlineEditing: false,
             inlineEditingCell: {},
             selectionRows: {
               [focusRow]: true,
             },
             focusedRow: focusRow,
-          });
+          };
 
+          this.setStoreState(newState);
+
+          if (rootNode && rootNode.current) {
+            rootNode.current.focus();
+          }
+        } else if (inlineEditingCell) {
+          const newState: IDataGrid.IStoreState = {
+            isInlineEditing,
+            inlineEditingCell,
+          };
+
+          if (newFocusedRow !== undefined) {
+            newState.focusedRow = newFocusedRow;
+            newState.focusedCol = newFocusedCol;
+            newState.selectionRows = { [newFocusedRow]: true };
+            newState.selectionCols = { [newFocusedCol]: true };
+          }
+
+          if (scrollLeft !== undefined) {
+            newState.scrollLeft = scrollLeft;
+          }
+
+          this.setStoreState(newState);
+        }
+
+        if (!isInlineEditing) {
           if (rootNode && rootNode.current) {
             rootNode.current.focus();
           }
         }
 
-        if (onEdit) {
+        if (onEdit && value !== undefined) {
           onEdit({
             li: row,
             col,
@@ -798,6 +814,13 @@ class StoreProvider extends React.Component<
       case DataGridEnums.DispatchTypes.FOCUS_ROOT:
         if (rootNode && rootNode.current) {
           rootNode.current.focus();
+        }
+
+        if (inlineEditingCell) {
+          this.setStoreState({
+            isInlineEditing,
+            inlineEditingCell,
+          });
         }
         break;
 
