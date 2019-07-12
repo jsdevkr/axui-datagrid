@@ -418,17 +418,7 @@ class CellEditor extends React.PureComponent<IProps> {
   };
 
   componentDidMount() {
-    // if (this.inputTextRef.current) {
-    //   this.activeComposition = false;
-
-    //   if (editor.activeType !== 'always') {
-    //     this.inputTextRef.current.focus();
-    //   }
-    // }
-
     const {
-      setStoreState,
-      dispatch,
       col: { editor: colEditor },
     } = this.props;
     const editor: IDataGrid.IColEditor =
@@ -444,7 +434,7 @@ class CellEditor extends React.PureComponent<IProps> {
       }
     }
 
-    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    // dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   }
 
   componentDidUpdate(prevProps: IProps) {

@@ -9,6 +9,7 @@ class DataGridBodyCell extends React.PureComponent<{
   ci: number;
   colGroup: IDataGrid.ICol[];
   col?: IDataGrid.ICol;
+  value?: any;
   data?: IDataGrid.IData;
   selected?: boolean;
   setStoreState: IDataGrid.setStoreState;
