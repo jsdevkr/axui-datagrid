@@ -21,7 +21,6 @@
     "noUnusedParameters": false,
     "experimentalDecorators": true,
     "downlevelIteration": true,
-    "skipLibCheck": true,
     "plugins": [{ "name": "typescript-styled-plugin" }]
   },
   "exclude": [
