@@ -260,6 +260,9 @@ class StoreProvider extends React.Component<
         nProps.height !== nState.height
       ) {
         // 스타일 초기화 안되어 있거나 크기를 다시 결정해야 하는 경우.
+        storeState.scrollTop = nProps.scrollTop;
+        storeState.scrollLeft = nProps.scrollLeft;
+
         const dimensions = calculateDimensions(storeState, {
           headerTable: nProps.headerTable,
           colGroup: _colGroup,
@@ -269,6 +272,7 @@ class StoreProvider extends React.Component<
           dataLength: nProps.dataLength,
           options: nProps.options,
         });
+
         _styles = dimensions.styles;
         _scrollTop = dimensions.scrollTop;
         _scrollLeft = dimensions.scrollLeft;
@@ -309,6 +313,7 @@ class StoreProvider extends React.Component<
           scrollContentContainerWidth = 0,
           scrollContentContainerHeight = 0,
         } = _styles || {};
+
         let {
           scrollLeft: _currScrollLeft = 0,
           scrollTop: _currScrollTop = 0,

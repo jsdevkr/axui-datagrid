@@ -54,7 +54,7 @@
     "sass-loader": "^7.0.1",
     "styled-components": "^4.1.2",
     "tslint-config-prettier": "^1.15.0",
-    "typescript": "^3.5.3",
+    "typescript": "^3.4.5",
     "typescript-styled-plugin": "^0.13.0"
   },
   "scripts": {
@@ -63,7 +63,6 @@
     "docs": "react-app-rewired build --scripts-version react-scripts-ts && rimraf ./docs && mv build ./docs && ncp ./src/CNAME ./docs/CNAME && ncp ./src/404.html ./docs/404.html  && git add -A",
     "test": "NODE_ENV=test jest",
     "test-watch": "NODE_ENV=test jest --watch",
-    "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "prepublish": "npm run build",
     "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
     "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"

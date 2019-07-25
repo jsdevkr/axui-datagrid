@@ -117,6 +117,7 @@ class LoadingState extends React.Component<any, IState> {
                 showRowSelector: true,
                 rowSelectorSize: 16,
               }}
+              scrollTop={-100}
               onSelect={this.onSelect}
             />
           </div>
