@@ -225,15 +225,11 @@ class DataGridBody extends React.Component<IProps> {
       rootObject = {},
       loading,
       loadingData,
-
-      // selectionSCol = 0,
-      // selectionECol = 0,
-      // selectionSRow = 0,
-      // selectionERow = 0,
     } = this.props;
 
-    if (loading || loadingData) {
-      return false;
+    if (isInlineEditing || loadingData || loading) {
+      e.preventDefault();
+      return;
     }
 
     const {
@@ -643,7 +639,16 @@ class DataGridBody extends React.Component<IProps> {
       dataLength = 0,
       colGroup = [],
       onClick,
+      loading,
+      loadingData,
+      isInlineEditing = false,
+      inlineEditingCell,
     } = this.props;
+
+    if (isInlineEditing || loadingData || loading) {
+      e.preventDefault();
+      return;
+    }
 
     const startMousePosition = getMousePosition(e);
     const { x: leftPadding = 0, y: topPadding = 0 } =
