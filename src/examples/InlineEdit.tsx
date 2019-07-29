@@ -84,13 +84,14 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
   keyAction,
 }) => {
   return (
-    <Select
+    <Select<string>
       style={{ width: '100%' }}
       showSearch
       optionFilterProp="children"
       onSelect={val => {
-        console.log('onSelect', val);
-        setTimeout(() => keyAction('EDIT_NEXT', val), 100);
+        update(val);
+        // console.log('onSelect', val);
+        // setTimeout(() => keyAction('EDIT_NEXT', val), 100);
       }}
       onInputKeyDown={e => {
         if (e.which === 9) {

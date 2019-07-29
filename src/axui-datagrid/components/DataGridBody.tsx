@@ -13,6 +13,7 @@ import { DataGridEnums } from '../common/@enums';
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
+import { log } from 'util';
 
 interface IProps extends IDataGridStore {}
 
@@ -227,10 +228,19 @@ class DataGridBody extends React.Component<IProps> {
       loadingData,
     } = this.props;
 
-    if (isInlineEditing || loadingData || loading) {
+    if (loadingData || loading) {
       e.preventDefault();
       return;
     }
+
+    if (e.target instanceof Node) {
+      if (!e.currentTarget.contains(e.target)) {
+        e.preventDefault();
+        return;
+      }
+    }
+
+    // e.target.
 
     const {
       headerHeight = 0,
@@ -643,12 +653,28 @@ class DataGridBody extends React.Component<IProps> {
       loadingData,
       isInlineEditing = false,
       inlineEditingCell,
+      focusedCol = -1,
     } = this.props;
 
-    if (isInlineEditing || loadingData || loading) {
+    if (loadingData || loading) {
       e.preventDefault();
       return;
     }
+
+    // console.log(e.currentTarget);
+
+    // if (isInlineEditing) {
+    //   const colEditor = colGroup[focusedCol].editor;
+    //   const editor: IDataGrid.IColEditor =
+    //     colEditor === 'text'
+    //       ? { type: 'text' }
+    //       : (colEditor as IDataGrid.IColEditor);
+
+    //   if (editor.activeType === 'click') {
+    //     e.preventDefault();
+    //     return;
+    //   }
+    // }
 
     const startMousePosition = getMousePosition(e);
     const { x: leftPadding = 0, y: topPadding = 0 } =
@@ -888,7 +914,7 @@ class DataGridBody extends React.Component<IProps> {
         ref={this.bodyRef}
         className={'axui-datagrid-body'}
         style={{ height: bodyHeight, touchAction: 'none' }}
-        onMouseDownCapture={this.onMouseDownBody}
+        onMouseDown={this.onMouseDownBody}
         onClick={this.onClick}
       >
         {asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (
