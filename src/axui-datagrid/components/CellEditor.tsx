@@ -182,7 +182,8 @@ class CellEditor extends React.PureComponent<IProps> {
       inlineEditingCell: {},
     });
 
-    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    // remove refocus when cancle
+    // dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   };
 
   handelKeyAction: IDataGrid.CellEditorKeyAction = (action, value, options) => {

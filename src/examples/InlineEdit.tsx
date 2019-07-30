@@ -89,7 +89,7 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
       showSearch
       optionFilterProp="children"
       onSelect={val => {
-        update(val);
+        update(val, { keepEditing: true });
         // console.log('onSelect', val);
         // setTimeout(() => keyAction('EDIT_NEXT', val), 100);
       }}

@@ -670,10 +670,7 @@ class StoreProvider extends React.Component<
               break;
           }
         }
-
-        if (rootNode && rootNode.current) {
-          rootNode.current.focus();
-        }
+        // console.log('update datagrid', keepEditing);
 
         if (!keepEditing) {
           const newState: IDataGrid.IStoreState = {
@@ -716,6 +713,10 @@ class StoreProvider extends React.Component<
             eventWhichKey,
             keepEditing,
           });
+        }
+
+        if (keepEditing) {
+          this.dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
         }
 
         break;
@@ -821,6 +822,13 @@ class StoreProvider extends React.Component<
             inlineEditingCell,
           });
         }
+        break;
+
+      case DataGridEnums.DispatchTypes.BLUR:
+        this.setStoreState({
+          isInlineEditing: false,
+          inlineEditingCell: undefined,
+        });
         break;
 
       default:

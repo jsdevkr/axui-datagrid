@@ -240,8 +240,6 @@ class DataGridBody extends React.Component<IProps> {
       }
     }
 
-    // e.target.
-
     const {
       headerHeight = 0,
       bodyHeight = 0,
@@ -660,21 +658,6 @@ class DataGridBody extends React.Component<IProps> {
       e.preventDefault();
       return;
     }
-
-    // console.log(e.currentTarget);
-
-    // if (isInlineEditing) {
-    //   const colEditor = colGroup[focusedCol].editor;
-    //   const editor: IDataGrid.IColEditor =
-    //     colEditor === 'text'
-    //       ? { type: 'text' }
-    //       : (colEditor as IDataGrid.IColEditor);
-
-    //   if (editor.activeType === 'click') {
-    //     e.preventDefault();
-    //     return;
-    //   }
-    // }
 
     const startMousePosition = getMousePosition(e);
     const { x: leftPadding = 0, y: topPadding = 0 } =
