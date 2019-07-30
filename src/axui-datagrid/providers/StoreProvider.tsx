@@ -824,13 +824,6 @@ class StoreProvider extends React.Component<
         }
         break;
 
-      case DataGridEnums.DispatchTypes.BLUR:
-        this.setStoreState({
-          isInlineEditing: false,
-          inlineEditingCell: undefined,
-        });
-        break;
-
       default:
         break;
     }
