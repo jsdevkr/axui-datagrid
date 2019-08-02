@@ -45,7 +45,7 @@ class CellEditor extends React.PureComponent<IProps> {
       li,
     } = this.props;
 
-    console.log('fire onInputTextBlur', this.lastEventName);
+    // console.log('fire onInputTextBlur', this.lastEventName);
     if (this.lastEventName === 'update') {
       dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
         isInlineEditing: false,
@@ -84,7 +84,7 @@ class CellEditor extends React.PureComponent<IProps> {
       case DataGridEnums.KeyCodes.UP_ARROW:
       case DataGridEnums.KeyCodes.DOWN_ARROW:
       case DataGridEnums.KeyCodes.ENTER:
-        console.log('fire onInputTextKeyDown ENTER');
+        // console.log('fire onInputTextKeyDown ENTER');
         this.lastEventName = 'update';
         e.preventDefault();
         dispatch(DataGridEnums.DispatchTypes.UPDATE, {
