@@ -14,35 +14,35 @@ class DataGridEvents extends React.Component<IProps, IState> {
   busy: boolean = false;
   state = {};
 
-  onKeyUp = (e: React.KeyboardEvent<any>) => {
-    const {
-      colGroup = [],
-      focusedRow = 0,
-      focusedCol = 0,
-      setStoreState,
-    } = this.props;
+  // onKeyUp = (e: React.KeyboardEvent<any>) => {
+  //   const {
+  //     colGroup = [],
+  //     focusedRow = 0,
+  //     focusedCol = 0,
+  //     setStoreState,
+  //   } = this.props;
 
-    switch (e.which) {
-      case DataGridEnums.KeyCodes.ENTER:
-        const col = colGroup[focusedCol];
-        if (!col.editor) {
-          return;
-        }
-        setStoreState({
-          isInlineEditing: true,
-          inlineEditingCell: {
-            rowIndex: focusedRow,
-            colIndex: col.colIndex,
-            editor: col.editor,
-          },
-        });
-        return;
-      default:
-        return;
-    }
-  };
+  //   switch (e.which) {
+  //     case DataGridEnums.KeyCodes.ENTER:
+  //       const col = colGroup[focusedCol];
+  //       if (!col.editor) {
+  //         return;
+  //       }
+  //       setStoreState({
+  //         isInlineEditing: true,
+  //         inlineEditingCell: {
+  //           rowIndex: focusedRow,
+  //           colIndex: col.colIndex,
+  //           editor: col.editor,
+  //         },
+  //       });
+  //       return;
+  //     default:
+  //       return;
+  //   }
+  // };
 
-  onKeyDown = (e: React.KeyboardEvent<any>) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     return new Promise((resolve, reject) => {
       const {
         data = {},
@@ -408,6 +408,31 @@ class DataGridEvents extends React.Component<IProps, IState> {
             );
 
             break;
+
+          case DataGridEnums.KeyCodes.ENTER:
+            const col = colGroup[focusedCol];
+            if (!col.editor) {
+              resolve();
+              break;
+            }
+            setStoreState(
+              {
+                isInlineEditing: true,
+                inlineEditingCell: {
+                  rowIndex: focusedRow,
+                  colIndex: col.colIndex,
+                  editor: col.editor,
+                },
+              },
+              () => {
+                setTimeout(() => {
+                  resolve();
+                });
+              },
+            );
+
+            break;
+
           default:
             resolve();
             break;
@@ -416,8 +441,21 @@ class DataGridEvents extends React.Component<IProps, IState> {
     });
   };
 
-  onContextmenu = (e: React.MouseEvent<any>) => {
-    const { onRightClick, focusedRow, focusedCol, data, colGroup } = this.props;
+  onContextmenu = (e: MouseEvent) => {
+    const {
+      onRightClick,
+      focusedRow,
+      focusedCol,
+      data,
+      colGroup,
+      loading,
+      loadingData,
+    } = this.props;
+
+    if (this.busy || loadingData || loading) {
+      e.preventDefault();
+      return;
+    }
 
     if (
       onRightClick &&
@@ -442,7 +480,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onKeyDownInlineEditor = (e: React.KeyboardEvent) => {
+  onKeyDownInlineEditor = (e: KeyboardEvent) => {
     const {
       data = {},
       inlineEditingCell,
@@ -562,7 +600,96 @@ class DataGridEvents extends React.Component<IProps, IState> {
     }
   };
 
-  onFireEvent = async (e: any) => {
+  // onFireEvent = async (e: any) => {
+  //   const {
+  //     loading,
+  //     loadingData,
+  //     isInlineEditing = false,
+  //     inlineEditingCell,
+  //     colGroup = [],
+  //     focusedRow = -1,
+  //     focusedCol = -1,
+  //     data = {},
+  //   } = this.props;
+
+  //   let stopEvent =
+  //     isInlineEditing &&
+  //     inlineEditingCell &&
+  //     inlineEditingCell.colIndex === focusedCol &&
+  //     inlineEditingCell.rowIndex === focusedRow;
+
+  //   if (this.busy || loadingData || loading) {
+  //     e.preventDefault();
+  //     return;
+  //   }
+
+  //   if (e.type === DataGridEnums.EventNames.KEYDOWN && colGroup[focusedCol]) {
+  //     const colEditor = colGroup[focusedCol].editor;
+  //     const editor: IDataGrid.IColEditor =
+  //       colEditor === 'text'
+  //         ? { type: 'text' }
+  //         : (colEditor as IDataGrid.IColEditor);
+
+  //     if (editor) {
+  //       if (editor.type === 'checkbox') {
+  //         this.onKeyDownInlineEditor(e);
+  //         stopEvent = false;
+  //       } else {
+  //         const item: IDataGrid.IDataItem = data[focusedRow];
+  //         if (item) {
+  //           const value = item.value[colGroup[focusedCol].key!];
+  //           const disabled = editor.disable
+  //             ? editor.disable({
+  //                 col: colGroup[focusedCol],
+  //                 rowIndex: focusedRow,
+  //                 colIndex: focusedCol,
+  //                 item,
+  //                 value,
+  //               })
+  //             : false;
+
+  //           if (disabled) {
+  //             stopEvent = false;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   if (stopEvent) {
+  //     return;
+  //   }
+
+  //   if (this.props.onBeforeEvent) {
+  //     this.props.onBeforeEvent({ e, eventName: e.type });
+  //   }
+
+  //   switch (e.type) {
+  //     case DataGridEnums.EventNames.KEYDOWN:
+  //       this.busy = true;
+  //       try {
+  //         await this.onKeyDown(e);
+  //       } catch (err) {
+  //         if (this.props.onError) {
+  //           this.props.onError(err, e);
+  //         } else {
+  //           // console.log(err);
+  //         }
+  //       }
+  //       this.busy = false;
+  //       break;
+  //     case DataGridEnums.EventNames.KEYUP:
+  //       this.onKeyUp(e);
+  //       break;
+  //     case DataGridEnums.EventNames.CONTEXTMENU:
+  //       this.onContextmenu(e);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  onKeyDown = async (e: KeyboardEvent) => {
     const {
       loading,
       loadingData,
@@ -585,7 +712,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
       return;
     }
 
-    if (e.type === DataGridEnums.EventNames.KEYDOWN && colGroup[focusedCol]) {
+    if (colGroup[focusedCol]) {
       const colEditor = colGroup[focusedCol].editor;
       const editor: IDataGrid.IColEditor =
         colEditor === 'text'
@@ -622,55 +749,45 @@ class DataGridEvents extends React.Component<IProps, IState> {
       return;
     }
 
-    if (this.props.onBeforeEvent) {
-      this.props.onBeforeEvent({ e, eventName: e.type });
-    }
+    e.preventDefault();
 
-    switch (e.type) {
-      case DataGridEnums.EventNames.KEYDOWN:
-        this.busy = true;
-        try {
-          await this.onKeyDown(e);
-        } catch (err) {
-          if (this.props.onError) {
-            this.props.onError(err, e);
-          } else {
-            // console.log(err);
-          }
-        }
-        this.busy = false;
-        break;
-      case DataGridEnums.EventNames.KEYUP:
-        this.onKeyUp(e);
-        break;
-      case DataGridEnums.EventNames.CONTEXTMENU:
-        this.onContextmenu(e);
-        break;
-      default:
-        break;
+    this.busy = true;
+    try {
+      await this.handleKeyDown(e);
+    } catch (err) {
+      if (this.props.onError) {
+        this.props.onError(err, e);
+      } else {
+        // console.log(err);
+      }
     }
+    this.busy = false;
   };
-
-  render() {
-    return <div>{this.props.children}</div>;
-  }
 
   componentDidMount() {
     const { rootNode } = this.props;
     if (rootNode && rootNode.current) {
-      rootNode.current.addEventListener('keydown', this.onFireEvent, false);
-      rootNode.current.addEventListener('keyup', this.onFireEvent, false);
-      rootNode.current.addEventListener('contextmenu', this.onFireEvent, false);
+      rootNode.current.addEventListener('keydown', this.onKeyDown, false);
+      // rootNode.current.addEventListener('keyup', this.onFireEvent, false);
+      rootNode.current.addEventListener(
+        'contextmenu',
+        this.onContextmenu,
+        false,
+      );
     }
   }
 
   componentWillUnmount() {
     const { rootNode } = this.props;
     if (rootNode && rootNode.current) {
-      rootNode.current.removeEventListener('keydown', this.onFireEvent);
-      rootNode.current.removeEventListener('keyup', this.onFireEvent);
-      rootNode.current.removeEventListener('contextmenu', this.onFireEvent);
+      rootNode.current.removeEventListener('keydown', this.onKeyDown);
+      // rootNode.current.removeEventListener('keyup', this.onFireEvent);
+      rootNode.current.removeEventListener('contextmenu', this.onContextmenu);
     }
+  }
+
+  render() {
+    return <div>{this.props.children}</div>;
   }
 }
 
