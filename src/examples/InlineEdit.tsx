@@ -50,26 +50,19 @@ const inputNumberEditor: IDataGrid.cellEditorFunction = ({
       autoFocus
       defaultValue={value}
       onBlur={e => {
-        if (value !== e.target.value) {
-          update(e.target.value);
-        } else {
-          cancel();
-        }
-      }}
-      onKeyUp={e => {
-        e.preventDefault();
-        if (e.which === 27) {
-          cancel();
-          return;
-        }
-        if (e.which === 13) {
-          update(e.currentTarget.value);
-        }
+        console.log('onBlur');
+        cancel();
       }}
       onKeyDown={e => {
         if (e.which === 9) {
           e.preventDefault();
           keyAction('EDIT_NEXT', e.currentTarget.value, { e });
+        } else if (e.which === 27) {
+          e.preventDefault();
+          cancel();
+        } else if (e.which === 13) {
+          e.preventDefault();
+          update(e.currentTarget.value);
         }
       }}
     />
@@ -81,6 +74,7 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
   update,
   focus,
   blur,
+  cancel,
   keyAction,
 }) => {
   return (
@@ -88,28 +82,37 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
       style={{ width: '100%' }}
       showSearch
       optionFilterProp="children"
+      defaultOpen={true}
+      autoFocus={true}
+      defaultValue={value}
+      dropdownClassName="axui-datagrid-select-dropdown"
       onSelect={val => {
-        update(val, { keepEditing: true });
-        // console.log('onSelect', val);
-        // setTimeout(() => keyAction('EDIT_NEXT', val), 100);
+        console.log('onSelect', val);
+        if (value !== val) {
+          update(val);
+        } else {
+          cancel({ keepEditing: true });
+        }
       }}
       onInputKeyDown={e => {
+        console.log('onInputKeyDown', e.currentTarget.value);
         if (e.which === 9) {
           e.preventDefault();
           keyAction('EDIT_NEXT', value, { e });
+        } else if (e.which === 27 || e.which === 13) {
+          e.preventDefault();
+          cancel({ keepEditing: true });
         }
       }}
-      defaultOpen={true}
-      autoFocus={true}
+      onBlur={() => {
+        console.log('onBlur');
+        cancel();
+      }}
       onDropdownVisibleChange={open => {
         if (open) {
           focus();
-        } else {
-          blur();
         }
       }}
-      value={value}
-      dropdownClassName="axui-datagrid-select-dropdown"
     >
       <Select.Option value="Jack">Jack</Select.Option>
       <Select.Option value="Sofia">Sofia</Select.Option>
@@ -172,7 +175,7 @@ class InlineEdit extends React.Component<any, IState> {
         editor: {
           activeType: 'click',
           render: searchSelectEditor,
-          disable: ({ item }) => item.value['type'] === 'A',
+          // disable: ({ item }) => item.value['type'] === 'A',
         },
       },
       {
@@ -398,7 +401,34 @@ class InlineEdit extends React.Component<any, IState> {
     });
   };
 
-  public render() {
+  onKeyDown = (e: KeyboardEvent) => {
+    // if (
+    //   this.dataGridContainerRef.current &&
+    //   e.target &&
+    //   e.target instanceof Node
+    // ) {
+    //   console.log(
+    //     this.dataGridContainerRef.current.contains(e.target),
+    //     this.dataGridContainerRef.current,
+    //     e.target,
+    //     e.currentTarget,
+    //   );
+    //   // console.log(e.target, e.currentTarget);
+    // }
+  };
+
+  componentDidMount() {
+    this.getDataGridContainerRect();
+    window.addEventListener('resize', this.getDataGridContainerRect, false);
+    window.addEventListener('keydown', this.onKeyDown, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.getDataGridContainerRect);
+    window.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  render() {
     const { width, height, columns, data, scrollTop, selection } = this.state;
 
     return (
@@ -469,15 +499,6 @@ class InlineEdit extends React.Component<any, IState> {
       this.setState({ width });
     }
   };
-
-  componentDidMount() {
-    this.getDataGridContainerRect();
-    window.addEventListener('resize', this.getDataGridContainerRect, false);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.getDataGridContainerRect);
-  }
 }
 
 export default InlineEdit;

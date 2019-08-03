@@ -72,25 +72,7 @@ class MultiEdit extends React.Component<IProps, IState> {
           autoFocus
           defaultValue={value.v}
           onBlur={e => {
-            if (value.v !== e.currentTarget.value) {
-              update({ ...value, changed: e.currentTarget.value });
-            } else {
-              cancel();
-            }
-          }}
-          onKeyUp={e => {
-            e.preventDefault();
-            if (e.which === 27) {
-              cancel();
-              return;
-            }
-            if (e.which === 13) {
-              if (value.v !== e.currentTarget.value) {
-                update({ ...value, changed: e.currentTarget.value });
-              } else {
-                blur();
-              }
-            }
+            cancel();
           }}
           onKeyDown={e => {
             if (e.which === 9) {
@@ -102,6 +84,16 @@ class MultiEdit extends React.Component<IProps, IState> {
                   : undefined,
                 { e },
               );
+            } else if (e.which === 27) {
+              e.preventDefault();
+              cancel();
+            } else if (e.which === 13) {
+              e.preventDefault();
+              if (value.v !== e.currentTarget.value) {
+                update({ ...value, changed: e.currentTarget.value });
+              } else {
+                blur();
+              }
             }
           }}
         />

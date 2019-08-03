@@ -32,7 +32,7 @@ export namespace IDataGrid {
   }
 
   export interface IonRightClickParam {
-    e: React.MouseEvent<any>;
+    e: MouseEvent;
     item: IDataItem;
     value: any;
     focusedRow?: number;
@@ -131,6 +131,12 @@ export namespace IDataGrid {
     },
   ) => void;
 
+  export type CellEditorDataCancel = (options?: {
+    keepEditing?: boolean;
+    updateItem?: boolean;
+    eventWhichKey?: string;
+  }) => void;
+
   export type CellEditorKeyAction = (
     action: 'EDIT_NEXT' | 'EDIT_PREV',
     value: any,
@@ -144,7 +150,7 @@ export namespace IDataGrid {
     item: IDataItem;
     value: any;
     update: CellEditorDataUpdate;
-    cancel: () => void;
+    cancel: CellEditorDataCancel;
     focus: () => void;
     blur: () => void;
     keyAction: CellEditorKeyAction;

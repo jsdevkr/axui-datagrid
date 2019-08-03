@@ -36,10 +36,7 @@ class CellEditor extends React.PureComponent<IProps> {
     this.customEditorRef = React.createRef();
   }
 
-  onEventInput = (
-    eventName: DataGridEnums.EventNames,
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
+  onInputTextBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const {
       dispatch,
       inlineEditingCell = {},
@@ -48,99 +45,91 @@ class CellEditor extends React.PureComponent<IProps> {
       li,
     } = this.props;
 
-    switch (eventName) {
-      case DataGridEnums.EventNames.BLUR:
-        {
-          if (this.lastEventName === 'update') {
-            dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
-              isInlineEditing: false,
-              inlineEditingCell: {},
-            });
-          } else {
-            dispatch(DataGridEnums.DispatchTypes.UPDATE, {
-              row: li,
-              colIndex: col.colIndex,
-              value: e.currentTarget.value,
-              eventWhichKey: e.which,
-              isInlineEditing: false,
-              inlineEditingCell: {},
-            });
-          }
-        }
+    // console.log('fire onInputTextBlur', this.lastEventName);
+    if (this.lastEventName === 'update') {
+      dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
+        isInlineEditing: false,
+        inlineEditingCell: {},
+      });
+    } else {
+      dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+        row: li,
+        colIndex: col.colIndex,
+        value: e.currentTarget.value,
+        // eventWhichKey: e.which,
+        isInlineEditing: false,
+        inlineEditingCell: {},
+      });
+    }
+  };
+
+  onInputTextKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const {
+      dispatch,
+      inlineEditingCell = {},
+      colGroup = [],
+      col,
+      li,
+    } = this.props;
+
+    switch (e.which) {
+      case DataGridEnums.KeyCodes.ESC:
+        this.lastEventName = 'esc';
+        e.preventDefault();
+        dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
+          isInlineEditing: false,
+          inlineEditingCell: {},
+        });
         break;
-      case DataGridEnums.EventNames.KEYUP:
-        {
-          switch (e.which) {
-            case DataGridEnums.KeyCodes.ESC:
-              this.lastEventName = 'esc';
-
-              dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
-                isInlineEditing: false,
-                inlineEditingCell: {},
-              });
-              break;
-            case DataGridEnums.KeyCodes.UP_ARROW:
-            case DataGridEnums.KeyCodes.DOWN_ARROW:
-            case DataGridEnums.KeyCodes.ENTER:
-              this.lastEventName = 'update';
-
-              dispatch(DataGridEnums.DispatchTypes.UPDATE, {
-                row: inlineEditingCell.rowIndex,
-                col,
-                colIndex: inlineEditingCell.colIndex,
-                value: e.currentTarget.value,
-                eventWhichKey: e.which,
-              });
-              break;
-            default:
-              break;
-          }
-        }
+      case DataGridEnums.KeyCodes.UP_ARROW:
+      case DataGridEnums.KeyCodes.DOWN_ARROW:
+      case DataGridEnums.KeyCodes.ENTER:
+        // console.log('fire onInputTextKeyDown ENTER');
+        this.lastEventName = 'update';
+        e.preventDefault();
+        dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+          row: inlineEditingCell.rowIndex,
+          col,
+          colIndex: inlineEditingCell.colIndex,
+          value: e.currentTarget.value,
+          eventWhichKey: e.which,
+          keepEditing: true,
+        });
         break;
+      case DataGridEnums.KeyCodes.TAB:
+        e.preventDefault();
 
-      case DataGridEnums.EventNames.KEYDOWN:
-        {
-          switch (e.which) {
-            case DataGridEnums.KeyCodes.TAB:
-              e.preventDefault();
+        this.lastEventName = 'update';
+        const { colIndex = 0 } = col;
+        const nextCol =
+          colGroup[
+            e.shiftKey
+              ? colIndex - 1 > -1
+                ? colIndex - 1
+                : colGroup.length - 1
+              : colIndex + 1 < colGroup.length
+              ? colIndex + 1
+              : 0
+          ];
 
-              this.lastEventName = 'update';
+        dispatch(DataGridEnums.DispatchTypes.UPDATE, {
+          row: inlineEditingCell.rowIndex,
+          col,
+          colIndex: inlineEditingCell.colIndex,
+          value: e.currentTarget.value,
+          eventWhichKey: e.which,
 
-              const { colIndex = 0 } = col;
-              const nextCol =
-                colGroup[
-                  e.shiftKey
-                    ? colIndex - 1 > -1
-                      ? colIndex - 1
-                      : colGroup.length - 1
-                    : colIndex + 1 < colGroup.length
-                    ? colIndex + 1
-                    : 0
-                ];
+          keepEditing: true,
+          isInlineEditing: true,
+          inlineEditingCell: {
+            rowIndex: li,
+            colIndex: nextCol.colIndex,
+            editor: nextCol.editor,
+          },
+          newFocusedRow: li,
+          newFocusedCol: nextCol.colIndex,
+        });
 
-              dispatch(DataGridEnums.DispatchTypes.UPDATE, {
-                row: inlineEditingCell.rowIndex,
-                col,
-                colIndex: inlineEditingCell.colIndex,
-                value: e.currentTarget.value,
-                eventWhichKey: e.which,
-
-                keepEditing: true,
-                isInlineEditing: true,
-                inlineEditingCell: {
-                  rowIndex: li,
-                  colIndex: nextCol.colIndex,
-                  editor: nextCol.editor,
-                },
-                newFocusedRow: li,
-                newFocusedCol: nextCol.colIndex,
-              });
-
-              break;
-            default:
-              break;
-          }
-        }
         break;
       default:
         break;
@@ -170,10 +159,13 @@ class CellEditor extends React.PureComponent<IProps> {
         keepEditing,
       },
     );
+
+    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
   };
 
-  handleCancelEdit = () => {
+  handleCancelEdit: IDataGrid.CellEditorDataCancel = options => {
     const { setStoreState, dispatch } = this.props;
+    const { keepEditing = false } = options || {};
 
     this.lastEventName = 'cancel';
 
@@ -182,8 +174,9 @@ class CellEditor extends React.PureComponent<IProps> {
       inlineEditingCell: {},
     });
 
-    // remove refocus when cancle
-    // dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    if (keepEditing) {
+      dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    }
   };
 
   handelKeyAction: IDataGrid.CellEditorKeyAction = (action, value, options) => {
@@ -321,15 +314,8 @@ class CellEditor extends React.PureComponent<IProps> {
           });
         }}
         onFocus={e => {}}
-        onBlur={e => {
-          this.onEventInput(DataGridEnums.EventNames.BLUR, e as any);
-        }}
-        onKeyUp={e => {
-          this.onEventInput(DataGridEnums.EventNames.KEYUP, e as any);
-        }}
-        onKeyDown={e => {
-          this.onEventInput(DataGridEnums.EventNames.KEYDOWN, e as any);
-        }}
+        onBlur={this.onInputTextBlur}
+        onKeyDown={this.onInputTextKeyDown}
         data-inline-edit
         defaultValue={value}
       />
