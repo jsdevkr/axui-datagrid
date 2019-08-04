@@ -366,6 +366,10 @@ export namespace IDataGrid {
     focusedRow?: number;
     focusedCol?: number;
     isEditing?: boolean;
+    scrollLeft?: number;
+    scrollTop?: number;
+    sRowIndex?: number;
+    eRowIndex?: number;
   }
 
   export interface ISortInfo {

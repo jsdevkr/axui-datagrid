@@ -834,96 +834,105 @@ class StoreProvider extends React.Component<
   }
 
   // tslint:disable-next-line: member-ordering
-  lazyComponentDidUpdate = throttle(
-    (pState: IDataGrid.IStoreState) => {
-      const { onScroll } = this.props;
-      const {
-        scrollLeft = 0,
-        scrollTop = 0,
-        options: { frozenRowIndex = 0 } = {},
-        styles: {
-          scrollContentContainerHeight = 0,
-          scrollContentHeight = 0,
-          scrollContentContainerWidth = 0,
-          scrollContentWidth = 0,
-          bodyTrHeight = 0,
-          bodyHeight = 0,
-        } = {},
-        onChangeSelection,
-      } = this.state;
-
-      // detect change scrollContent
-      if (pState.styles) {
-        const {
-          scrollContentHeight: _scrollContentHeight,
-          scrollContentWidth: _scrollContentWidth,
-        } = pState.styles;
-
-        if (
-          scrollContentHeight !== _scrollContentHeight ||
-          scrollContentWidth !== _scrollContentWidth
-        ) {
-          this.props.onChangeScrollSize &&
-            this.props.onChangeScrollSize({
-              scrollContentContainerHeight,
-              scrollContentHeight,
-              scrollContentContainerWidth,
-              scrollContentWidth,
-              bodyTrHeight,
-            });
-        }
-      }
-
-      // detect change scrollTop
-      if (pState.scrollTop !== this.state.scrollTop) {
-        if (onScroll) {
-          const sRowIndex =
-            Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
-          const eRowIndex =
-            sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
-
-          onScroll({
-            scrollLeft: Number(scrollLeft),
-            scrollTop: Number(scrollTop),
-            sRowIndex,
-            eRowIndex,
-          });
-        }
-      }
-
-      // detect change selection
-      if (
-        onChangeSelection &&
-        (pState.focusedRow !== this.state.focusedRow ||
-          pState.focusedCol !== this.state.focusedCol ||
-          pState.selectionSRow !== this.state.selectionSRow ||
-          pState.selectionERow !== this.state.selectionERow ||
-          pState.selectionSCol !== this.state.selectionSCol ||
-          pState.selectionECol !== this.state.selectionECol)
-      ) {
-        const {
-          selectionRows = [],
-          selectionCols = [],
-          focusedRow = -1,
-          focusedCol = -1,
-        } = this.state;
-        onChangeSelection({
-          rows: Object.keys(selectionRows).map(n => Number(n)),
-          cols: Object.keys(selectionCols).map(n => Number(n)),
-          focusedRow,
-          focusedCol,
-        });
-      }
-    },
-    0,
-    { trailing: true },
-  );
+  lazyComponentDidUpdate = throttle((pState: IDataGrid.IStoreState) => {}, 0, {
+    trailing: true,
+  });
 
   componentDidUpdate(
     pProps: IDataGrid.IStoreProps,
     pState: IDataGrid.IStoreState,
   ) {
-    this.lazyComponentDidUpdate(pState);
+    // this.lazyComponentDidUpdate(pState);
+
+    const { onScroll } = this.props;
+    const {
+      scrollLeft = 0,
+      scrollTop = 0,
+      options: { frozenRowIndex = 0 } = {},
+      styles: {
+        scrollContentContainerHeight = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentWidth = 0,
+        bodyTrHeight = 0,
+        bodyHeight = 0,
+      } = {},
+      onChangeSelection,
+    } = this.state;
+
+    // detect change scrollContent
+    if (pState.styles) {
+      const {
+        scrollContentHeight: _scrollContentHeight,
+        scrollContentWidth: _scrollContentWidth,
+      } = pState.styles;
+
+      if (
+        scrollContentHeight !== _scrollContentHeight ||
+        scrollContentWidth !== _scrollContentWidth
+      ) {
+        this.props.onChangeScrollSize &&
+          this.props.onChangeScrollSize({
+            scrollContentContainerHeight,
+            scrollContentHeight,
+            scrollContentContainerWidth,
+            scrollContentWidth,
+            bodyTrHeight,
+          });
+      }
+    }
+
+    // detect change scrollTop
+    if (
+      onScroll &&
+      (pState.scrollTop !== this.state.scrollTop ||
+        pState.scrollLeft !== this.state.scrollLeft)
+    ) {
+      const sRowIndex =
+        Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+      const eRowIndex =
+        sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+
+      onScroll({
+        scrollLeft: Number(scrollLeft),
+        scrollTop: Number(scrollTop),
+        sRowIndex,
+        eRowIndex,
+      });
+    }
+
+    // detect change selection
+    if (
+      onChangeSelection &&
+      (pState.focusedRow !== this.state.focusedRow ||
+        pState.focusedCol !== this.state.focusedCol ||
+        pState.selectionSRow !== this.state.selectionSRow ||
+        pState.selectionERow !== this.state.selectionERow ||
+        pState.selectionSCol !== this.state.selectionSCol ||
+        pState.selectionECol !== this.state.selectionECol)
+    ) {
+      const {
+        selectionRows = [],
+        selectionCols = [],
+        focusedRow = -1,
+        focusedCol = -1,
+      } = this.state;
+      const sRowIndex =
+        Math.floor(-scrollTop / (bodyTrHeight || 1)) + frozenRowIndex;
+      const eRowIndex =
+        sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
+
+      onChangeSelection({
+        rows: Object.keys(selectionRows).map(n => Number(n)),
+        cols: Object.keys(selectionCols).map(n => Number(n)),
+        focusedRow,
+        focusedCol,
+        scrollLeft: Number(scrollLeft),
+        scrollTop: Number(scrollTop),
+        sRowIndex,
+        eRowIndex,
+      });
+    }
   }
 
   componentWillUnmount() {

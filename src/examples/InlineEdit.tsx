@@ -143,6 +143,7 @@ interface IState {
   width: number;
   height: number;
   scrollTop: number;
+  scrollLeft: number;
   columns: IDataGrid.IColumn[];
   data: IDataGrid.IData;
   selection: IDataGrid.ISelection;
@@ -233,6 +234,7 @@ class InlineEdit extends React.Component<any, IState> {
       width: 300,
       height: 300,
       scrollTop: 0,
+      scrollLeft: 0,
       columns,
       data: [
         {
@@ -314,11 +316,6 @@ class InlineEdit extends React.Component<any, IState> {
     };
 
     this.dataGridContainerRef = React.createRef();
-    this.debouncedOnScroll = debounce((scrollTop: number) => {
-      this.setState({
-        scrollTop: scrollTop,
-      });
-    }, 1000);
   }
 
   addItem = () => {
@@ -369,10 +366,18 @@ class InlineEdit extends React.Component<any, IState> {
     }
   };
 
-  onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
-    // console.log(param);
-    this.debouncedOnScroll(param.scrollTop);
-  };
+  // onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
+  //   // console.log(param);
+  //   this.debouncedOnScroll(param.scrollTop);
+  // };
+
+  onScroll = debounce((param: IDataGrid.IonScrollFunctionParam) => {
+    console.log('debounce');
+    this.setState({
+      scrollTop: param.scrollTop,
+      scrollLeft: param.scrollLeft,
+    });
+  }, 300);
 
   onChangeScrollSize = (param: IDataGrid.IonChangeScrollSizeFunctionParam) => {
     // console.log(param);
@@ -381,7 +386,7 @@ class InlineEdit extends React.Component<any, IState> {
   };
 
   onChangeSelection = (param: IDataGrid.IonChangeSelectionParam) => {
-    this.setState({ selection: param });
+    // this.setState({ selection: param });
   };
 
   onEditItem = (param: IDataGrid.IonEditParam) => {
@@ -429,7 +434,15 @@ class InlineEdit extends React.Component<any, IState> {
   }
 
   render() {
-    const { width, height, columns, data, scrollTop, selection } = this.state;
+    const {
+      width,
+      height,
+      columns,
+      data,
+      scrollTop,
+      scrollLeft,
+      selection,
+    } = this.state;
 
     return (
       <Wrapper>
@@ -465,7 +478,9 @@ class InlineEdit extends React.Component<any, IState> {
                 }}
                 selection={selection}
                 onChangeSelection={this.onChangeSelection}
+                onScroll={this.onScroll}
                 scrollTop={scrollTop}
+                scrollLeft={scrollLeft}
                 onChangeScrollSize={this.onChangeScrollSize}
                 onEdit={this.onEditItem}
               />

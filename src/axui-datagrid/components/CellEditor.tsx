@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 import getAvailScrollLeft from '../utils/getAvailScrollLeft';
+import { delay } from '../utils/delay';
 
 interface IProps {
   colGroup: IDataGrid.ICol[];
@@ -29,6 +30,7 @@ class CellEditor extends React.PureComponent<IProps> {
   customEditorRef: React.RefObject<HTMLDivElement>;
   activeComposition: boolean = false;
   lastEventName: string = '';
+  busy = false;
 
   constructor(props: IProps) {
     super(props);
@@ -167,15 +169,16 @@ class CellEditor extends React.PureComponent<IProps> {
     const { setStoreState, dispatch } = this.props;
     const { keepEditing = false } = options || {};
 
-    this.lastEventName = 'cancel';
+    if (!this.busy) {
+      this.lastEventName = 'cancel';
+      setStoreState({
+        isInlineEditing: false,
+        inlineEditingCell: {},
+      });
 
-    setStoreState({
-      isInlineEditing: false,
-      inlineEditingCell: {},
-    });
-
-    if (keepEditing) {
-      dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+      if (keepEditing) {
+        dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+      }
     }
   };
 
@@ -201,6 +204,8 @@ class CellEditor extends React.PureComponent<IProps> {
       } = {},
     } = this.props;
     const { updateItem = false, e } = options || { e: null };
+
+    this.busy = true;
 
     switch (action) {
       case 'EDIT_NEXT':
@@ -276,6 +281,8 @@ class CellEditor extends React.PureComponent<IProps> {
         break;
       default:
     }
+
+    this.busy = false;
   };
 
   handleCustomEditorFocus = () => {
