@@ -10,6 +10,23 @@
   },
   "author": "tom@axisj.com",
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --parser flow --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "prettier --parser typescript --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "next": "^9.0.3",
     "react": "^16.8.6",
@@ -24,6 +41,20 @@
     "@zeit/next-sass": "^1.0.1",
     "next-compose-plugins": "^2.2.0",
     "next-images": "^1.1.2",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "7.14.2",
+    "husky": "^3.0.1",
+    "lerna": "^3.16.1",
+    "lint-staged": "^9.2.0",
+    "ncp": "^2.0.0",
+    "npm": "^6.10.1",
+    "prettier": "^1.18.2",
+    "rimraf": "^2.6.3"
   }
 }
