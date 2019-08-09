@@ -1,0 +1,115 @@
+.rewm-contextmenu {
+  position: absolute;
+  box-sizing: border-box;
+
+  background: $rewm-contextmenu-bg-color;
+  border: $rewm-contextmenu-border-width $rewm-contextmenu-border-style
+    $rewm-contextmenu-border-color;
+  box-shadow: $rewm-contextmenu-box-shadow;
+  border-radius: $rewm-contextmenu-border-radius;
+  padding: $rewm-contextmenu-padding-size 0;
+  margin-top: -$rewm-contextmenu-padding-size - $rewm-contextmenu-border-width;
+
+  user-select: none;
+  cursor: default;
+  min-width: $rewm-contextmenu-min-width;
+
+  font-size: $rewm-contextmenu-item-font-size;
+  color: $rewm-contextmenu-item-font-color;
+  font-weight: $rewm-contextmenu-item-font-weight;
+
+  [data-ctx-item] {
+    position: relative;
+    padding: $rewm-contextmenu-item-padding;
+    line-height: $rewm-contextmenu-item-line-height;
+    white-space: nowrap;
+    font-size: inherit;
+    color: inherit;
+    font-weight: inherit;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: center;
+
+    [data-label] {
+      flex: 1;
+      margin-right: $rewm-contextmenu-padding-size;
+    }
+
+    [data-label-icon] {
+      margin-right: $rewm-contextmenu-padding-size;
+    }
+
+    [data-checkbox] {
+      width: $rewm-contextmenu-item-checkbox-width;
+    }
+
+    [data-accelerator] {
+      font-size: 0.8em;
+      margin-left: $rewm-contextmenu-padding-size;
+      margin-right: $rewm-contextmenu-padding-size;
+    }
+
+    &:hover {
+      background-color: $rewm-menu-item-hover-bg-color;
+      color: $rewm-menu-item-hover-font-color;
+    }
+
+    &[data-opened] {
+      background-color: $rewm-menu-item-hover-bg-color;
+      color: $rewm-menu-item-hover-font-color;
+    }
+
+    &[data-enabled='false'] {
+      opacity: 0.2;
+
+      &:hover {
+        background-color: $rewm-contextmenu-bg-color;
+        color: $rewm-contextmenu-item-font-color;
+      }
+    }
+  }
+
+  [data-ctx-separator] {
+    height: $rewm-menu-separator-height;
+    background-color: $rewm-menu-separator-color;
+    padding: 0;
+    margin: $rewm-menu-separator-margin;
+  }
+}
+
+.rewm-menubar {
+  cursor: default;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  user-select: none;
+
+  [data-menubar-item] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: $rewm-menubar-item-padding;
+    color: $rewm-menubar-item-font-color;
+    font-weight: $rewm-menubar-item-font-weight;
+
+    &:hover {
+      background-color: $rewm-menu-item-hover-bg-color;
+      color: $rewm-menu-item-hover-font-color;
+    }
+  }
+}
+
+.rewm-menubar-active {
+  [data-menubar-item] {
+    &:hover,
+    &.active {
+      background-color: $rewm-menu-item-hover-bg-color;
+      color: $rewm-menu-item-hover-font-color;
+    }
+  }
+}

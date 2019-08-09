@@ -1,0 +1,7 @@
+build/
+lib/
+dist/
+node_modules/
+.next/
+.idea/
+.vs/
