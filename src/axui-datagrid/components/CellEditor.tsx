@@ -140,7 +140,8 @@ class CellEditor extends React.PureComponent<IProps> {
 
   handleUpdateValue: IDataGrid.CellEditorDataUpdate = (value: any, options) => {
     const { dispatch, li, col } = this.props;
-    const { keepEditing = false, updateItem = false } = options || {};
+    const { keepEditing = false, updateItem = false, focus = false } =
+      options || {};
 
     if (this.lastEventName === 'update' || this.lastEventName === 'cancel') {
       return;
@@ -162,7 +163,9 @@ class CellEditor extends React.PureComponent<IProps> {
       },
     );
 
-    dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    if (focus) {
+      dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {});
+    }
   };
 
   handleCancelEdit: IDataGrid.CellEditorDataCancel = options => {

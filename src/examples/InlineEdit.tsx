@@ -59,10 +59,10 @@ const inputNumberEditor: IDataGrid.cellEditorFunction = ({
           keyAction('EDIT_NEXT', e.currentTarget.value, { e });
         } else if (e.which === 27) {
           e.preventDefault();
-          cancel();
+          cancel({ keepEditing: true });
         } else if (e.which === 13) {
           e.preventDefault();
-          update(e.currentTarget.value);
+          update(e.currentTarget.value, { focus: true });
         }
       }}
     />
@@ -89,7 +89,7 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
       onSelect={val => {
         console.log('onSelect', val);
         if (value !== val) {
-          update(val);
+          update(val, { focus: true });
         } else {
           cancel({ keepEditing: true });
         }
@@ -131,7 +131,7 @@ const inputDateEditor: IDataGrid.cellEditorFunction = ({
     <DatePicker
       value={value ? moment(value, 'YYYY/MM/DD') : moment()}
       onChange={(date, dateString) => {
-        update(dateString);
+        update(dateString, { focus: true });
         // keyAction('EDIT_NEXT', dateString);
       }}
       open={true}

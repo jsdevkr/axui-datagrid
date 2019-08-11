@@ -128,6 +128,7 @@ export namespace IDataGrid {
       keepEditing?: boolean;
       updateItem?: boolean;
       eventWhichKey?: string;
+      focus?: boolean;
     },
   ) => void;
 
