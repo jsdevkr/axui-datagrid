@@ -15,3 +15,27 @@
     background: $axui-datagrid-scroll-bar-hover-bg !important;
   }
 }
+
+[data-scroll-track='horizontal'] {
+  .axui-datagrid-scroll-bar {
+    &:before {
+      content: '';
+      display: block;
+      height: 200%;
+      width: 100%;
+      transform: translateY(-25%);
+    }
+  }
+}
+
+[data-scroll-track='vertical'] {
+  .axui-datagrid-scroll-bar {
+    &:before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 200%;
+      transform: translateX(-25%);
+    }
+  }
+}

@@ -37,6 +37,7 @@ interface IState {
   width: number;
   height: number;
   scrollTop: number;
+  scrollLeft: number;
   columns: IDataGrid.IColumn[];
   data: IDataGrid.IData;
   selection: IDataGrid.ISelection;
@@ -178,6 +179,7 @@ class MultiEdit extends React.Component<IProps, IState> {
       width: 300,
       height: 300,
       scrollTop: 0,
+      scrollLeft: 0,
       columns,
       data: arrayTypedData,
       selection,
@@ -302,10 +304,11 @@ class MultiEdit extends React.Component<IProps, IState> {
 
   onScroll = (param: IDataGrid.IonScrollFunctionParam) => {
     // console.log('onScroll', param);
-    const { scrollTop } = param;
+    const { scrollTop, scrollLeft } = param;
 
     this.setState({
       scrollTop,
+      scrollLeft,
     });
   };
 
@@ -393,6 +396,7 @@ class MultiEdit extends React.Component<IProps, IState> {
       columns,
       data,
       scrollTop,
+      scrollLeft,
       selection,
       sortInfos,
     } = this.state;
@@ -415,6 +419,7 @@ class MultiEdit extends React.Component<IProps, IState> {
                 autofitColumns={true}
                 onScroll={this.onScroll}
                 scrollTop={scrollTop}
+                scrollLeft={scrollLeft}
                 onChangeScrollSize={this.onChangeScrollSize}
                 selection={selection}
                 onChangeSelection={this.onChangeSelection}
