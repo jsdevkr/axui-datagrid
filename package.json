@@ -1,0 +1,65 @@
+{
+  "name": "axui-datagrid",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@craco/craco": "^5.4.0",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.3",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.9.0",
+    "@types/react-router": "^5.0.3",
+    "@types/react-router-dom": "^4.3.5",
+    "@types/react-syntax-highlighter": "^10.2.1",
+    "@types/styled-components": "^4.1.18",
+    "antd": "^3.9.0",
+    "better-npm-run": "^0.1.0",
+    "craco-less": "^1.12.0",
+    "craco-raw-loader": "^1.0.1",
+    "less": "^3.5.3",
+    "less-loader": "^4.1.0",
+    "ncp": "^2.0.0",
+    "node-sass": "^4.8.3",
+    "raw-loader": "^1.0.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-github-button": "^0.1.11",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "react-syntax-highlighter": "^11.0.2",
+    "rimraf": "^2.6.3",
+    "sass-loader": "^7.0.1",
+    "styled-components": "^4.1.2",
+    "typescript": "3.6.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
+    "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
+  },
+  "betterScripts": {
+    "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css --output-style compressed && rimraf ./dist/scss && ncp ./src/axui-datagrid/style.scss ./dist/style.scss && ncp ./src/axui-datagrid/scss ./dist/scss && ncp ./README.md ./dist/README.md",
+    "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfig.es5.json",
+    "build:es6": "rimraf ./dist/es6 && tsc --p tsconfig.es6.json"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {}
+}

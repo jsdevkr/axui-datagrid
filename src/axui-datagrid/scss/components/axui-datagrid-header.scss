@@ -1,0 +1,55 @@
+.axui-datagrid-header {
+  user-select: none;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  @include axui-background(to bottom, $axui-datagrid-header-column-bg-colors);
+  border: 0 none;
+  border-bottom: $axui-datagrid-header-column-border;
+  color: $axui-datagrid-header-column-color;
+  z-index: 10;
+
+  table tr td {
+    box-shadow: $axui-datagrid-header-column-box-shadow;
+  }
+  [data-panel] {
+    &[data-panel='aside-header'] {
+      overflow: hidden;
+      border-right: $axui-datagrid-aside-border;
+      td {
+        text-align: center;
+      }
+    }
+    &[data-panel='left-header'] {
+      @include axui-datagrid-frozen-border('vertical');
+    }
+    &[data-panel='header-scroll'] {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+  [data-column-resizer] {
+    position: absolute;
+    top: 0;
+    cursor: ew-resize;
+  }
+
+  [data-column-resizer-track] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  [data-column-resizing] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    cursor: default;
+    background: rgba(255, 0, 0, 0.3);
+    z-index: 9;
+  }
+}
