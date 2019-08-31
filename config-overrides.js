@@ -22,6 +22,7 @@ module.exports = function override(config, env) {
           ...plugin.options,
           workers: ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
           memoryLimit: 2048,
+          tslint: false,
         });
       }
     } catch (error) {}
