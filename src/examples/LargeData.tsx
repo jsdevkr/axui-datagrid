@@ -120,15 +120,17 @@ class LargeData extends React.Component<any, any> {
         const amount = getTypes('amountTypes');
 
         gridData.push({
-          a: getTypes('aTypes'),
-          b: getTypes('bTypes'),
-          c: getTypes('cTypes'),
-          saleDt: getTypes('saleDtTypes'),
-          customer: getTypes('customerTypes'),
-          saleType: getTypes('saleTypes'),
-          price: price,
-          amount: amount,
-          cost: price * amount,
+          value: {
+            a: getTypes('aTypes'),
+            b: getTypes('bTypes'),
+            c: getTypes('cTypes'),
+            saleDt: getTypes('saleDtTypes'),
+            customer: getTypes('customerTypes'),
+            saleType: getTypes('saleTypes'),
+            price: price,
+            amount: amount,
+            cost: price * amount,
+          },
         });
       }
 
@@ -194,6 +196,7 @@ class LargeData extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
+              dataLength={data.length}
               options={{ ...options, updateAt: new Date() }}
               loading={loading}
               autofitColumns={true}

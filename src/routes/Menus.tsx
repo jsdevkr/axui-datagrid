@@ -22,7 +22,7 @@ export const Menus = {
       </>
     ),
     menus: [
-      // { to: '/examples/LargeData', label: 'LargeData' },
+      { to: '/examples/LargeData', label: 'LargeData' },
       // { to: '/examples/Formatter', label: 'Formatting of data' },
       // { to: '/examples/ChangeColumns', label: 'Change Columns' },
       // { to: '/examples/FrozenColumnRow', label: 'Frozen column and row' },
