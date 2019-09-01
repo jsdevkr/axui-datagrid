@@ -2,14 +2,13 @@ import * as React from 'react';
 
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { basicData } from './data/basicData';
 
 class AutofitColumnWidth extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: any) {
     super(props);
-
-    const gridData = require('examples/data/data-basic.json');
 
     this.state = {
       width: 300,
@@ -25,7 +24,7 @@ class AutofitColumnWidth extends React.Component<any, any> {
         { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
         { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
       ],
-      data: gridData,
+      data: basicData,
     };
 
     this.dataGridContainerRef = React.createRef();
@@ -49,6 +48,7 @@ class AutofitColumnWidth extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
+              dataLength={data.length}
               options={options}
               autofitColumns={true}
             />

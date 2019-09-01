@@ -34,7 +34,7 @@ export const Menus = {
       // { to: '/examples/FootSum', label: 'Foot summary' },
       { to: '/examples/AlignHeader', label: 'Align Header' },
       // { to: '/examples/Resizing', label: 'Resizing' },
-      // { to: '/examples/AutofitColumnWidth', label: 'Autofit Column Width' },
+      { to: '/examples/AutofitColumnWidth', label: 'Autofit Column Width' },
       // { to: '/examples/RemoteSort', label: 'Remote Sort' },
       { to: '/examples/MultiEdit', label: 'MultiEdit' },
       // { to: '/examples/Etc', label: 'etc.' },
