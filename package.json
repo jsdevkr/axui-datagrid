@@ -28,33 +28,34 @@
     ]
   },
   "dependencies": {
-    "next": "^9.0.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "next": "^9.0.3"
   },
   "devDependencies": {
     "@types/node": "^12.6.9",
-    "@types/react": "^16.8.24",
-    "@types/react-dom": "^16.8.5",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
-    "next-compose-plugins": "^2.2.0",
-    "next-images": "^1.1.2",
-    "typescript": "^3.5.3",
-    "@typescript-eslint/eslint-plugin": "^1.12.0",
-    "@typescript-eslint/parser": "^1.12.0",
     "cross-env": "^5.2.0",
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "7.14.2",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "husky": "^3.0.1",
-    "lerna": "^3.16.1",
+    "lerna": "^3.8.0",
     "lint-staged": "^9.2.0",
     "ncp": "^2.0.0",
+    "next-compose-plugins": "^2.2.0",
+    "next-images": "^1.1.2",
     "npm": "^6.10.1",
     "prettier": "^1.18.2",
-    "rimraf": "^2.6.3"
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.5.3"
   }
 }

@@ -1,26 +1,26 @@
-const withPlugins = require("next-compose-plugins");
-const withCSS = require("@zeit/next-css");
-const withLess = require("@zeit/next-less");
-const withSass = require("@zeit/next-sass");
-const withImages = require("next-images");
-const path = require("path");
-const fs = require("fs");
+const withPlugins = require('next-compose-plugins');
+const withCSS = require('@zeit/next-css');
+const withLess = require('@zeit/next-less');
+const withSass = require('@zeit/next-sass');
+const withImages = require('next-images');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = withPlugins(
   [
     [
       withImages,
       {
-        inlineImageLimit: 1024
-      }
+        inlineImageLimit: 1024,
+      },
     ],
     [
       withLess,
       {
         lessLoaderOptions: {
-          javascriptEnabled: true
-        }
-      }
+          javascriptEnabled: true,
+        },
+      },
     ],
     [withSass],
     [
@@ -29,13 +29,13 @@ module.exports = withPlugins(
         cssModules: true,
         cssLoaderOptions: {
           importLoaders: 1,
-          localIdentName: "[local]___[hash:base64:5]"
-        }
-      }
-    ]
+          localIdentName: '[local]___[hash:base64:5]',
+        },
+      },
+    ],
   ],
   {
-    target: "serverless",
+    target: 'serverless',
     webpack(config, options) {
       // get directories in the project
       const dirs = fs.readdirSync(process.cwd(), { withFileTypes: true });
@@ -44,14 +44,17 @@ module.exports = withPlugins(
         .filter(
           dir =>
             dir.isDirectory() &&
-            !dir.name.startsWith(".") &&
-            !["pages", "node_modules"].includes(dir.name)
+            !dir.name.startsWith('.') &&
+            !['pages', 'node_modules', 'packages'].includes(dir.name),
         )
         .forEach(dir => {
           config.resolve.alias[dir.name] = path.join(process.cwd(), dir.name);
         });
+
+      config.resolve.alias['@axui'] = path.join(process.cwd(), '/packages');
+
       // console.log(config.resolve.alias);
       return config;
-    }
-  }
+    },
+  },
 );
