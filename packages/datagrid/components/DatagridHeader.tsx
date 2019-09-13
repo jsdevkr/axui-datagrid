@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import DatagridContext from '../context/DatagridContext';
+import { IDatagridHeader } from '../common/Types';
 
-const DatagridHeader: React.FC = props => {
+const DatagridHeader: React.FC<IDatagridHeader> = props => {
   const [context, setContext] = useContext(DatagridContext);
-  const { columns = [] } = context;
+  const { columns = [], headerHeight = 30 } = context;
+  const styles = { ...props.style, height: headerHeight };
   return (
-    <div>
+    <div style={styles}>
       {columns.map((column, key) => {
         return (
           <div key={key}>

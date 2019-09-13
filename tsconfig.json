@@ -19,6 +19,7 @@
     "jsx": "preserve",
     "isolatedModules": true,
     "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "@types"],
     "paths": {
       "@axui/*": ["packages/*"]
     }

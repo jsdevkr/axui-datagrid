@@ -6,6 +6,11 @@ const withImages = require('next-images');
 const path = require('path');
 const fs = require('fs');
 
+const whyjs = 'is 2space';
+function a() {
+  let c = '';
+}
+
 module.exports = withPlugins(
   [
     [

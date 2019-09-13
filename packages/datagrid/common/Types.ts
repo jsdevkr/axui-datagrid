@@ -7,8 +7,8 @@ export interface IDataItem {
 export type IData =
   | Map<number, IDataItem>
   | {
-      [key: number]: IDataItem;
-    };
+    [key: number]: IDataItem;
+  };
 
 export interface IColumn {
   key?: string;
@@ -29,13 +29,17 @@ export interface IColumn {
   depth?: number;
 }
 
-export interface IDatagridProps {
+export interface IDatagridCommonProps {
+  style?: React.CSSProperties;
+}
+
+export interface IDatagridProps extends IDatagridCommonProps {
   width?: number;
   height?: number;
+  headerHeight?: number;
   columns?: IColumn[];
   data?: IData;
   dataLength?: number;
-  style?: React.CSSProperties;
   loading?: boolean;
   loadingData?: boolean;
   selection?: any;
@@ -46,5 +50,8 @@ export interface IDatagridProps {
   onScroll?: () => void;
   onClick?: () => void;
 }
+
+export interface IDatagridHeader extends IDatagridCommonProps {}
+export interface IDatagridBody extends IDatagridCommonProps {}
 
 export interface IDatagridContext extends IDatagridProps {}
