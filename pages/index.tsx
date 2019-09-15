@@ -1,31 +1,60 @@
 import React, { useContext, useState } from 'react';
 import { Datagrid, DatagridHeader, DatagridBody } from '@axui/datagrid';
-import { IData } from '@axui/datagrid/common/Types';
+import { IData, IColumn } from '@axui/datagrid/common/Types';
 import 'styles/global';
 import '@axui/datagrid/scss/style.scss';
 import { LayoutRoot, Nav, ControlBox, Viewer } from 'layouts';
+import { default as DefaultOptions } from 'components/DefaultOptions';
 
-const columns = [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }];
-const data: IData = [
-  { value: { id: '1', name: 'tom' } },
-  { value: { id: '2', name: 'seowoo' } },
-];
+export interface IDefaultOptions {
+  width?: number;
+  height?: number;
+  scrollLeft?: number;
+  scrollTop?: number;
+  frozenColumnIndex?: number;
+  frozenRowIndex?: number;
+  columns?: IColumn[];
+  data?: IData;
+}
 
 const Home: React.FC = props => {
+  const [options, setOptions] = useState<IDefaultOptions>({
+    columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
+    data: [
+      { value: { id: '1', name: 'tom' } },
+      { value: { id: '2', name: 'seowoo' } },
+    ],
+  });
+  const {
+    width = 400,
+    height = 300,
+    scrollLeft = 0,
+    scrollTop = 0,
+    frozenColumnIndex = 0,
+    frozenRowIndex = 0,
+    columns,
+    data,
+  } = options;
+  const onChangeOptions = (newOptions: IDefaultOptions) => {
+    setOptions({ ...options, ...newOptions });
+  };
+
   return (
     <LayoutRoot>
       <Nav />
-      <ControlBox></ControlBox>
+      <ControlBox>
+        <DefaultOptions {...options} onChangeOptions={onChangeOptions} />
+      </ControlBox>
       <Viewer>
         <Datagrid
-          width={400}
-          height={300}
+          width={width}
+          height={height}
           columns={columns}
           data={data}
-          scrollLeft={0}
-          scrollTop={0}
-          frozenColumnIndex={0}
-          frozenRowIndex={0}
+          scrollLeft={scrollLeft}
+          scrollTop={scrollTop}
+          frozenColumnIndex={frozenColumnIndex}
+          frozenRowIndex={frozenRowIndex}
         >
           <DatagridHeader />
           <DatagridBody />
