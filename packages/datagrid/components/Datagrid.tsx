@@ -42,6 +42,7 @@ const Datagrid: React.FC<IDatagridProps> = props => {
 
   const styles: React.CSSProperties = { ...props.style, width, height };
 
+  console.log('Datagrid render', context, props);
   return (
     <DataContext.Provider value={[context, setContext]}>
       <div data-datagrid-container style={styles}>

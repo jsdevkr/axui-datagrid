@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Datagrid, DatagridHeader, DatagridBody } from '@axui/datagrid';
 import { IData, IColumn } from '@axui/datagrid/common/Types';
 import 'styles/global';
@@ -18,13 +18,24 @@ export interface IDefaultOptions {
 }
 
 const Home: React.FC = props => {
-  const [options, setOptions] = useState<IDefaultOptions>({
-    columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
-    data: [
-      { value: { id: '1', name: 'tom' } },
-      { value: { id: '2', name: 'seowoo' } },
-    ],
-  });
+  const [options, setOptions] = useState<IDefaultOptions>({});
+
+  useEffect(() => {
+    if (!columns || !data) {
+      setOptions({
+        columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
+        data: [
+          { value: { id: '1', name: 'tom' } },
+          { value: { id: '2', name: 'seowoo' } },
+        ],
+      });
+    }
+  }, [columns, data]);
+
+  const onChangeOptions = (newOptions: IDefaultOptions) => {
+    setOptions({ ...options, ...newOptions });
+  };
+
   const {
     width = 400,
     height = 300,
@@ -35,10 +46,6 @@ const Home: React.FC = props => {
     columns,
     data,
   } = options;
-  const onChangeOptions = (newOptions: IDefaultOptions) => {
-    console.log('newOptions', newOptions);
-    setOptions({ ...options, ...newOptions });
-  };
 
   return (
     <LayoutRoot>
