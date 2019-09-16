@@ -20,6 +20,17 @@ export interface IDefaultOptions {
 const Home: React.FC = props => {
   const [options, setOptions] = useState<IDefaultOptions>({});
 
+  const {
+    width = 400,
+    height = 300,
+    scrollLeft = 0,
+    scrollTop = 0,
+    frozenColumnIndex = 0,
+    frozenRowIndex = 0,
+    columns,
+    data,
+  } = options;
+
   useEffect(() => {
     if (!columns || !data) {
       setOptions({
@@ -35,17 +46,6 @@ const Home: React.FC = props => {
   const onChangeOptions = (newOptions: IDefaultOptions) => {
     setOptions({ ...options, ...newOptions });
   };
-
-  const {
-    width = 400,
-    height = 300,
-    scrollLeft = 0,
-    scrollTop = 0,
-    frozenColumnIndex = 0,
-    frozenRowIndex = 0,
-    columns,
-    data,
-  } = options;
 
   return (
     <LayoutRoot>
