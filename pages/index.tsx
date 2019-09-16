@@ -36,6 +36,7 @@ const Home: React.FC = props => {
     data,
   } = options;
   const onChangeOptions = (newOptions: IDefaultOptions) => {
+    console.log('newOptions', newOptions);
     setOptions({ ...options, ...newOptions });
   };
 

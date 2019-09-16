@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, InputNumber } from 'antd';
+import { Form, Input, InputNumber, Button } from 'antd';
 import { FormComponentProps, FormProps, ValidateCallback } from 'antd/lib/form';
 import { IDefaultOptions } from 'pages';
 
@@ -9,6 +9,15 @@ export interface DefaultOptionsProps
   IDefaultOptions {
   onChangeOptions?: (options: IDefaultOptions) => void;
 }
+
+const JSONValidator = (rule: any, value: any, callback: any) => {
+  try {
+    JSON.parse(value);
+    callback();
+  } catch (err) {
+    callback('It is not JSON format');
+  }
+};
 
 const Style = styled.div`
   .ant-form-item {
@@ -122,8 +131,26 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
         >
           {getFieldDecorator('columns', {
             initialValue: JSON.stringify(columns),
+            rules: [
+              {
+                validator: JSONValidator,
+              },
+            ],
           })(<Input.TextArea rows={6} />)}
         </Form.Item>
+        <div style={{ textAlign: 'right' }}>
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => {
+              props.form.validateFields(['columns'], (errors, values) => {
+                handleChangeOption('columns', JSON.parse(values.columns));
+              });
+            }}
+          >
+            Apply
+          </Button>
+        </div>
         <Form.Item
           labelCol={{ xs: 24, sm: 24 }}
           wrapperCol={{ xs: 24, sm: 24 }}
@@ -132,8 +159,26 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
         >
           {getFieldDecorator('data', {
             initialValue: JSON.stringify(data),
+            rules: [
+              {
+                validator: JSONValidator,
+              },
+            ],
           })(<Input.TextArea rows={12} />)}
         </Form.Item>
+        <div style={{ textAlign: 'right' }}>
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => {
+              props.form.validateFields(['data'], (errors, values) => {
+                handleChangeOption('data', JSON.parse(values.data));
+              });
+            }}
+          >
+            Apply
+          </Button>
+        </div>
       </Form>
     </Style>
   );

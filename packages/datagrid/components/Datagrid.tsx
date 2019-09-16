@@ -37,6 +37,7 @@ const Datagrid: React.FC<IDatagridProps> = props => {
     onScroll,
     onClick,
   };
+
   const [context, setContext] = useState(initialContext);
 
   const styles: React.CSSProperties = { ...props.style, width, height };
