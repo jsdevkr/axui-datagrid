@@ -33,6 +33,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
+    "@types/lodash": "^4.14.141",
     "@types/node": "^12.6.9",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
@@ -56,6 +57,7 @@
     "lerna": "^3.8.0",
     "less": "^3.10.3",
     "lint-staged": "^9.2.0",
+    "lodash": "^4.17.15",
     "ncp": "^2.0.0",
     "next-compose-plugins": "^2.2.0",
     "next-images": "^1.1.2",

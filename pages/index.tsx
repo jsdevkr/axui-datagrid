@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import debounce from 'lodash/debounce';
 import { Datagrid, DatagridHeader, DatagridBody } from '@axui/datagrid';
 import { IData, IColumn } from '@axui/datagrid/common/Types';
 import 'styles/global';
@@ -43,9 +44,9 @@ const Home: React.FC = props => {
     }
   }, [columns, data]);
 
-  const onChangeOptions = (newOptions: IDefaultOptions) => {
+  const onChangeOptions = debounce((newOptions: IDefaultOptions) => {
     setOptions({ ...options, ...newOptions });
-  };
+  }, 300);
 
   return (
     <LayoutRoot>
