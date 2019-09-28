@@ -33,16 +33,15 @@ const Home: React.FC = props => {
   } = options;
 
   useEffect(() => {
-    if (!columns || !data) {
-      setOptions({
-        columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
-        data: [
-          { value: { id: '1', name: 'tom' } },
-          { value: { id: '2', name: 'seowoo' } },
-        ],
-      });
-    }
-  }, [columns, data]);
+    console.log('domponent didMount');
+    setOptions({
+      columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
+      data: [
+        { value: { id: '1', name: 'tom' } },
+        { value: { id: '2', name: 'seowoo' } },
+      ],
+    });
+  }, []);
 
   const onChangeOptions = debounce((newOptions: IDefaultOptions) => {
     setOptions({ ...options, ...newOptions });
