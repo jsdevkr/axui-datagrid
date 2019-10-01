@@ -37,6 +37,7 @@ export interface IDatagridProps extends IDatagridCommonProps {
   width?: number;
   height?: number;
   headerHeight?: number;
+  headerAlign?: 'left' | 'center' | 'right';
   columns?: IColumn[];
   data?: IData;
   dataLength?: number;
@@ -47,6 +48,8 @@ export interface IDatagridProps extends IDatagridCommonProps {
   scrollTop?: number;
   frozenColumnIndex?: number;
   frozenRowIndex?: number;
+  bodyRowHeight?: number;
+  bodyAlign?: 'left' | 'center' | 'right';
   onScroll?: () => void;
   onClick?: () => void;
 }
@@ -54,4 +57,8 @@ export interface IDatagridProps extends IDatagridCommonProps {
 export interface IDatagridHeader extends IDatagridCommonProps {}
 export interface IDatagridBody extends IDatagridCommonProps {}
 
-export interface IDatagridContext extends IDatagridProps {}
+export interface IDatagridContext extends IDatagridProps {
+  _columns?: IColumn[];
+  _scrollLeft: number;
+  _scrollTop: number;
+}

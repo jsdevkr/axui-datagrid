@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IDatagridProps, IDatagridContext } from '../common/Types';
 import DataContext from '../context/DatagridContext';
 
@@ -31,7 +31,9 @@ const Datagrid: React.FC<IDatagridProps> = props => {
     loadingData,
     selection,
     scrollLeft,
+    _scrollLeft: 0,
     scrollTop,
+    _scrollTop: 0,
     frozenColumnIndex,
     frozenRowIndex,
     onScroll,
@@ -42,7 +44,20 @@ const Datagrid: React.FC<IDatagridProps> = props => {
 
   const styles: React.CSSProperties = { ...props.style, width, height };
 
-  console.log('Datagrid render', context, props);
+  // remake _columns and related scrollWidth
+  useEffect(() => {
+    console.log('changed columns or width');
+  }, [columns, width, frozenColumnIndex]);
+
+  // remake related scrollHeight
+  useEffect(() => {}, [data, height]);
+
+  // related scrollLeft
+  useEffect(() => {}, [scrollLeft]);
+
+  // related scrollTop
+  useEffect(() => {}, [scrollTop]);
+
   return (
     <DataContext.Provider value={[context, setContext]}>
       <div data-datagrid-container style={styles}>

@@ -33,7 +33,6 @@ const Home: React.FC = props => {
   } = options;
 
   useEffect(() => {
-    console.log('domponent didMount');
     setOptions({
       columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
       data: [
@@ -45,7 +44,7 @@ const Home: React.FC = props => {
 
   const onChangeOptions = debounce((newOptions: IDefaultOptions) => {
     setOptions({ ...options, ...newOptions });
-  }, 300);
+  }, 500);
 
   return (
     <LayoutRoot>
