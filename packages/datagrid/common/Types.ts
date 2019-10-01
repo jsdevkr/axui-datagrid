@@ -59,6 +59,6 @@ export interface IDatagridBody extends IDatagridCommonProps {}
 
 export interface IDatagridContext extends IDatagridProps {
   _columns?: IColumn[];
-  _scrollLeft: number;
-  _scrollTop: number;
+  _scrollLeft?: number;
+  _scrollTop?: number;
 }

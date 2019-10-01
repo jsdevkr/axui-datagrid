@@ -3,60 +3,25 @@ import { IDatagridProps, IDatagridContext } from '../common/Types';
 import DataContext from '../context/DatagridContext';
 
 const Datagrid: React.FC<IDatagridProps> = props => {
-  const {
-    width,
-    height,
-    headerHeight,
-    columns,
-    data,
-    dataLength,
-    loading,
-    loadingData,
-    selection,
-    scrollLeft,
-    scrollTop,
-    frozenColumnIndex,
-    frozenRowIndex,
-    onScroll,
-    onClick,
-  } = props;
-  const initialContext: IDatagridContext = {
-    width,
-    height,
-    headerHeight,
-    columns,
-    data,
-    dataLength,
-    loading,
-    loadingData,
-    selection,
-    scrollLeft,
-    _scrollLeft: 0,
-    scrollTop,
-    _scrollTop: 0,
-    frozenColumnIndex,
-    frozenRowIndex,
-    onScroll,
-    onClick,
+  const [context, setContext] = useState<IDatagridContext>({});
+  const styles: React.CSSProperties = {
+    ...props.style,
+    width: props.width,
+    height: props.height,
   };
 
-  const [context, setContext] = useState(initialContext);
-
-  const styles: React.CSSProperties = { ...props.style, width, height };
-
-  // remake _columns and related scrollWidth
   useEffect(() => {
-    console.log('changed columns or width');
-  }, [columns, width, frozenColumnIndex]);
+    // make new context
+    const nextContext: IDatagridContext = {
+      ...props,
+      _scrollLeft: 0,
+      _scrollTop: 0,
+    };
 
-  // remake related scrollHeight
-  useEffect(() => {}, [data, height]);
+    console.log('isColumns changed', context.columns !== nextContext.columns);
 
-  // related scrollLeft
-  useEffect(() => {}, [scrollLeft]);
-
-  // related scrollTop
-  useEffect(() => {}, [scrollTop]);
+    setContext(nextContext);
+  }, [context.columns, props]);
 
   return (
     <DataContext.Provider value={[context, setContext]}>

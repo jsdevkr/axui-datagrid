@@ -4,10 +4,21 @@ import { Form, Input, InputNumber, Button } from 'antd';
 import { FormComponentProps, FormProps, ValidateCallback } from 'antd/lib/form';
 import { IDefaultOptions } from 'pages';
 
+export enum OptionKeys {
+  WIDTH = 'width',
+  HEIGHT = 'height',
+  SCROLL_LEFT = 'scrollLeft',
+  SCROLL_TOP = 'scrollTop',
+  FROZEN_COLUMN_INDEX = 'frozenColumnIndex',
+  FROZEN_ROW_INDEX = 'frozenRowIndex',
+  COLUMNS = 'columns',
+  DATA = 'data',
+}
+
 export interface DefaultOptionsProps
   extends FormComponentProps,
   IDefaultOptions {
-  onChangeOptions?: (options: IDefaultOptions) => void;
+  onChangeOption?: (key: OptionKeys, value: any) => void;
 }
 
 const JSONValidator = (rule: any, value: any, callback: any) => {
@@ -30,10 +41,8 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
     e.preventDefault();
     validateFields((err, values: IDefaultOptions) => {});
   };
-  const handleChangeOption = (key: string, value: any) => {
-    if (props.onChangeOptions) {
-      props.onChangeOptions({ [key]: value });
-    }
+  const handleChangeOption = (key: OptionKeys, value: any) => {
+    props.onChangeOption && props.onChangeOption(key, value);
   };
   const {
     width = 400,
@@ -57,71 +66,56 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
         }}
         colon={false}
       >
-        <Form.Item label="width">
-          {getFieldDecorator('width', { initialValue: width })(
-            <InputNumber
-              size="small"
-              min={100}
-              onChange={value => {
-                handleChangeOption('width', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.WIDTH + ''}>
+          <InputNumber
+            size="small"
+            min={100}
+            defaultValue={width}
+            onChange={value => {
+              handleChangeOption(OptionKeys.WIDTH, value);
+            }}
+          />
         </Form.Item>
-        <Form.Item label="height">
-          {getFieldDecorator('height', { initialValue: height })(
-            <InputNumber
-              size="small"
-              min={100}
-              onChange={value => {
-                handleChangeOption('height', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.HEIGHT}>
+          <InputNumber
+            size="small"
+            min={100}
+            onChange={value => {
+              handleChangeOption(OptionKeys.HEIGHT, value);
+            }}
+          />
         </Form.Item>
-        <Form.Item label="scrollLeft">
-          {getFieldDecorator('scrollLeft', { initialValue: scrollLeft })(
-            <InputNumber
-              size="small"
-              onChange={value => {
-                handleChangeOption('scrollLeft', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.SCROLL_LEFT}>
+          <InputNumber
+            size="small"
+            onChange={value => {
+              handleChangeOption(OptionKeys.SCROLL_LEFT, value);
+            }}
+          />
         </Form.Item>
-        <Form.Item label="scrollTop">
-          {getFieldDecorator('scrollTop', { initialValue: scrollTop })(
-            <InputNumber
-              size="small"
-              onChange={value => {
-                handleChangeOption('scrollTop', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.SCROLL_TOP}>
+          <InputNumber
+            size="small"
+            onChange={value => {
+              handleChangeOption(OptionKeys.SCROLL_TOP, value);
+            }}
+          />
         </Form.Item>
-        <Form.Item label="frozenColumnIndex">
-          {getFieldDecorator('frozenColumnIndex', {
-            initialValue: frozenColumnIndex,
-          })(
-            <InputNumber
-              size="small"
-              onChange={value => {
-                handleChangeOption('frozenColumnIndex', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.FROZEN_COLUMN_INDEX}>
+          <InputNumber
+            size="small"
+            onChange={value => {
+              handleChangeOption(OptionKeys.FROZEN_COLUMN_INDEX, value);
+            }}
+          />
         </Form.Item>
-        <Form.Item label="frozenRowIndex">
-          {getFieldDecorator('frozenRowIndex', {
-            initialValue: frozenRowIndex,
-          })(
-            <InputNumber
-              size="small"
-              onChange={value => {
-                handleChangeOption('frozenRowIndex', value);
-              }}
-            />,
-          )}
+        <Form.Item label={OptionKeys.FROZEN_ROW_INDEX}>
+          <InputNumber
+            size="small"
+            onChange={value => {
+              handleChangeOption(OptionKeys.FROZEN_ROW_INDEX, value);
+            }}
+          />
         </Form.Item>
         <Form.Item
           labelCol={{ xs: 24, sm: 24 }}
@@ -129,7 +123,7 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
           label="columns"
           labelAlign="left"
         >
-          {getFieldDecorator('columns', {
+          {getFieldDecorator(OptionKeys.COLUMNS + '', {
             initialValue: JSON.stringify(columns),
             rules: [
               {
@@ -143,9 +137,15 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
             type="primary"
             size="small"
             onClick={() => {
-              props.form.validateFields(['columns'], (errors, values) => {
-                handleChangeOption('columns', JSON.parse(values.columns));
-              });
+              props.form.validateFields(
+                [OptionKeys.COLUMNS + ''],
+                (errors, values) => {
+                  handleChangeOption(
+                    OptionKeys.COLUMNS,
+                    JSON.parse(values.columns),
+                  );
+                },
+              );
             }}
           >
             Apply
@@ -157,7 +157,7 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
           label="data"
           labelAlign="left"
         >
-          {getFieldDecorator('data', {
+          {getFieldDecorator(OptionKeys.DATA + '', {
             initialValue: JSON.stringify(data),
             rules: [
               {
@@ -171,8 +171,8 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
             type="primary"
             size="small"
             onClick={() => {
-              props.form.validateFields(['data'], (errors, values) => {
-                handleChangeOption('data', JSON.parse(values.data));
+              props.form.validateFields([OptionKeys.DATA], (errors, values) => {
+                handleChangeOption(OptionKeys.DATA, JSON.parse(values.data));
               });
             }}
           >

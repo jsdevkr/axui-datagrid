@@ -1,11 +1,20 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+  Reducer,
+} from 'react';
 import debounce from 'lodash/debounce';
 import { Datagrid, DatagridHeader, DatagridBody } from '@axui/datagrid';
 import { IData, IColumn } from '@axui/datagrid/common/Types';
 import 'styles/global';
 import '@axui/datagrid/scss/style.scss';
 import { LayoutRoot, Nav, ControlBox, Viewer } from 'layouts';
-import { default as DefaultOptions } from 'components/DefaultOptions';
+import {
+  default as DefaultOptions,
+  OptionKeys,
+} from 'components/DefaultOptions';
 
 export interface IDefaultOptions {
   width?: number;
@@ -17,10 +26,36 @@ export interface IDefaultOptions {
   columns?: IColumn[];
   data?: IData;
 }
+export interface IOptionReducerAction {
+  type: string;
+  value?: any;
+}
 
+const reducer = (
+  state: IDefaultOptions,
+  action: IOptionReducerAction,
+): IDefaultOptions => {
+  const { type, value } = action;
+  switch (type) {
+    case 'columns':
+      return { ...state, columns: value };
+    case 'width':
+      return { ...state, width: value };
+    default:
+      throw new Error();
+  }
+};
+const defaultOption: IDefaultOptions = {
+  columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
+  data: [
+    { value: { id: '1', name: 'tom' } },
+    { value: { id: '2', name: 'seowoo' } },
+  ],
+};
 const Home: React.FC = props => {
-  const [options, setOptions] = useState<IDefaultOptions>({});
+  const [options, dispatchOptions] = useReducer(reducer, defaultOption);
 
+  console.log('options value is ', options);
   const {
     width = 400,
     height = 300,
@@ -33,24 +68,26 @@ const Home: React.FC = props => {
   } = options;
 
   useEffect(() => {
-    setOptions({
-      columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
-      data: [
-        { value: { id: '1', name: 'tom' } },
-        { value: { id: '2', name: 'seowoo' } },
-      ],
-    });
+    //
   }, []);
 
-  const onChangeOptions = debounce((newOptions: IDefaultOptions) => {
-    setOptions({ ...options, ...newOptions });
+  const onChangeOption = debounce((key: OptionKeys, value: any) => {
+    switch (key) {
+      case OptionKeys.COLUMNS:
+        dispatchOptions({ type: 'columns', value });
+        break;
+      case OptionKeys.WIDTH:
+        dispatchOptions({ type: 'width', value });
+      default:
+        break;
+    }
   }, 500);
 
   return (
     <LayoutRoot>
       <Nav />
       <ControlBox>
-        <DefaultOptions {...options} onChangeOptions={onChangeOptions} />
+        <DefaultOptions {...options} onChangeOption={onChangeOption} />
       </ControlBox>
       <Viewer>
         <Datagrid
