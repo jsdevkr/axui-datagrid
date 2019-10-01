@@ -15,7 +15,7 @@ import { ISettings, SettingsActionType } from 'common/settings';
 import settingsReducer from 'reducer/settingsReducer';
 import Settings from 'components/Settings';
 
-const defaultSettings: ISettings = {
+const initialSettings: ISettings = {
   columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
   data: [
     { value: { id: '1', name: 'tom' } },
@@ -25,7 +25,7 @@ const defaultSettings: ISettings = {
 const Home: React.FC = props => {
   const [settings, dispatchSettings] = useReducer(
     settingsReducer,
-    defaultSettings,
+    initialSettings,
   );
 
   console.log('settings value is ', settings);
