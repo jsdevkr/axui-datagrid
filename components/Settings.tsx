@@ -2,23 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Form, Input, InputNumber, Button } from 'antd';
 import { FormComponentProps, FormProps, ValidateCallback } from 'antd/lib/form';
-import { IDefaultOptions } from 'pages';
+import { ISettings } from 'common/settings';
 
-export enum OptionKeys {
-  WIDTH = 'width',
-  HEIGHT = 'height',
-  SCROLL_LEFT = 'scrollLeft',
-  SCROLL_TOP = 'scrollTop',
-  FROZEN_COLUMN_INDEX = 'frozenColumnIndex',
-  FROZEN_ROW_INDEX = 'frozenRowIndex',
-  COLUMNS = 'columns',
-  DATA = 'data',
-}
-
-export interface DefaultOptionsProps
-  extends FormComponentProps,
-  IDefaultOptions {
-  onChangeOption?: (key: OptionKeys, value: any) => void;
+export interface SettingsProps extends FormComponentProps, ISettings {
+  onChangeSettings?: (key: keyof ISettings, value: any) => void;
 }
 
 const JSONValidator = (rule: any, value: any, callback: any) => {
@@ -35,14 +22,14 @@ const Style = styled.div`
     margin-bottom: 12px;
   }
 `;
-const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
+const SettingsForm: React.FC<SettingsProps> = props => {
   const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
   const handleSubmit: FormProps['onSubmit'] = e => {
     e.preventDefault();
-    validateFields((err, values: IDefaultOptions) => {});
+    validateFields((err, values: ISettings) => {});
   };
-  const handleChangeOption = (key: OptionKeys, value: any) => {
-    props.onChangeOption && props.onChangeOption(key, value);
+  const handleChangeOption = (key: keyof ISettings, value: any) => {
+    props.onChangeSettings && props.onChangeSettings(key, value);
   };
   const {
     width = 400,
@@ -66,54 +53,54 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
         }}
         colon={false}
       >
-        <Form.Item label={OptionKeys.WIDTH + ''}>
+        <Form.Item label={'width'}>
           <InputNumber
             size="small"
             min={100}
             defaultValue={width}
             onChange={value => {
-              handleChangeOption(OptionKeys.WIDTH, value);
+              handleChangeOption('width', value);
             }}
           />
         </Form.Item>
-        <Form.Item label={OptionKeys.HEIGHT}>
+        <Form.Item label={'height'}>
           <InputNumber
             size="small"
             min={100}
             onChange={value => {
-              handleChangeOption(OptionKeys.HEIGHT, value);
+              handleChangeOption('height', value);
             }}
           />
         </Form.Item>
-        <Form.Item label={OptionKeys.SCROLL_LEFT}>
+        <Form.Item label={'scrollLeft'}>
           <InputNumber
             size="small"
             onChange={value => {
-              handleChangeOption(OptionKeys.SCROLL_LEFT, value);
+              handleChangeOption('scrollLeft', value);
             }}
           />
         </Form.Item>
-        <Form.Item label={OptionKeys.SCROLL_TOP}>
+        <Form.Item label={'scrollTop'}>
           <InputNumber
             size="small"
             onChange={value => {
-              handleChangeOption(OptionKeys.SCROLL_TOP, value);
+              handleChangeOption('scrollTop', value);
             }}
           />
         </Form.Item>
-        <Form.Item label={OptionKeys.FROZEN_COLUMN_INDEX}>
+        <Form.Item label={'frozenColumnIndex'}>
           <InputNumber
             size="small"
             onChange={value => {
-              handleChangeOption(OptionKeys.FROZEN_COLUMN_INDEX, value);
+              handleChangeOption('frozenColumnIndex', value);
             }}
           />
         </Form.Item>
-        <Form.Item label={OptionKeys.FROZEN_ROW_INDEX}>
+        <Form.Item label={'frozenRowIndex'}>
           <InputNumber
             size="small"
             onChange={value => {
-              handleChangeOption(OptionKeys.FROZEN_ROW_INDEX, value);
+              handleChangeOption('frozenRowIndex', value);
             }}
           />
         </Form.Item>
@@ -123,7 +110,7 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
           label="columns"
           labelAlign="left"
         >
-          {getFieldDecorator(OptionKeys.COLUMNS + '', {
+          {getFieldDecorator('columns', {
             initialValue: JSON.stringify(columns),
             rules: [
               {
@@ -137,15 +124,9 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
             type="primary"
             size="small"
             onClick={() => {
-              props.form.validateFields(
-                [OptionKeys.COLUMNS + ''],
-                (errors, values) => {
-                  handleChangeOption(
-                    OptionKeys.COLUMNS,
-                    JSON.parse(values.columns),
-                  );
-                },
-              );
+              props.form.validateFields(['columns'], (errors, values) => {
+                handleChangeOption('columns', JSON.parse(values.columns));
+              });
             }}
           >
             Apply
@@ -157,7 +138,7 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
           label="data"
           labelAlign="left"
         >
-          {getFieldDecorator(OptionKeys.DATA + '', {
+          {getFieldDecorator('data', {
             initialValue: JSON.stringify(data),
             rules: [
               {
@@ -171,8 +152,8 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
             type="primary"
             size="small"
             onClick={() => {
-              props.form.validateFields([OptionKeys.DATA], (errors, values) => {
-                handleChangeOption(OptionKeys.DATA, JSON.parse(values.data));
+              props.form.validateFields(['data'], (errors, values) => {
+                handleChangeOption('data', JSON.parse(values.data));
               });
             }}
           >
@@ -183,5 +164,5 @@ const DefaultOptionsForm: React.FC<DefaultOptionsProps> = props => {
     </Style>
   );
 };
-const DefaultOptions = Form.create<DefaultOptionsProps>({})(DefaultOptionsForm);
-export default DefaultOptions;
+const Settings = Form.create<SettingsProps>({})(SettingsForm);
+export default Settings;

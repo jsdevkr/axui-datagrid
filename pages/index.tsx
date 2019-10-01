@@ -11,41 +11,11 @@ import { IData, IColumn } from '@axui/datagrid/common/Types';
 import 'styles/global';
 import '@axui/datagrid/scss/style.scss';
 import { LayoutRoot, Nav, ControlBox, Viewer } from 'layouts';
-import {
-  default as DefaultOptions,
-  OptionKeys,
-} from 'components/DefaultOptions';
+import { ISettings, SettingsActionType } from 'common/settings';
+import settingsReducer from 'reducer/settingsReducer';
+import Settings from 'components/Settings';
 
-export interface IDefaultOptions {
-  width?: number;
-  height?: number;
-  scrollLeft?: number;
-  scrollTop?: number;
-  frozenColumnIndex?: number;
-  frozenRowIndex?: number;
-  columns?: IColumn[];
-  data?: IData;
-}
-export interface IOptionReducerAction {
-  type: string;
-  value?: any;
-}
-
-const reducer = (
-  state: IDefaultOptions,
-  action: IOptionReducerAction,
-): IDefaultOptions => {
-  const { type, value } = action;
-  switch (type) {
-    case 'columns':
-      return { ...state, columns: value };
-    case 'width':
-      return { ...state, width: value };
-    default:
-      throw new Error();
-  }
-};
-const defaultOption: IDefaultOptions = {
+const defaultSettings: ISettings = {
   columns: [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }],
   data: [
     { value: { id: '1', name: 'tom' } },
@@ -53,9 +23,12 @@ const defaultOption: IDefaultOptions = {
   ],
 };
 const Home: React.FC = props => {
-  const [options, dispatchOptions] = useReducer(reducer, defaultOption);
+  const [settings, dispatchSettings] = useReducer(
+    settingsReducer,
+    defaultSettings,
+  );
 
-  console.log('options value is ', options);
+  console.log('settings value is ', settings);
   const {
     width = 400,
     height = 300,
@@ -65,19 +38,20 @@ const Home: React.FC = props => {
     frozenRowIndex = 0,
     columns,
     data,
-  } = options;
+  } = settings;
 
   useEffect(() => {
     //
   }, []);
 
-  const onChangeOption = debounce((key: OptionKeys, value: any) => {
+  // TODO: useMemo
+  const onChangeSettings = debounce((key: keyof ISettings, value: any) => {
     switch (key) {
-      case OptionKeys.COLUMNS:
-        dispatchOptions({ type: 'columns', value });
+      case 'columns':
+        dispatchSettings({ type: SettingsActionType.SET_COLUMNS, value });
         break;
-      case OptionKeys.WIDTH:
-        dispatchOptions({ type: 'width', value });
+      case 'width':
+        dispatchSettings({ type: SettingsActionType.SET_WIDTH, value });
       default:
         break;
     }
@@ -87,7 +61,7 @@ const Home: React.FC = props => {
     <LayoutRoot>
       <Nav />
       <ControlBox>
-        <DefaultOptions {...options} onChangeOption={onChangeOption} />
+        <Settings {...settings} onChangeSettings={onChangeSettings} />
       </ControlBox>
       <Viewer>
         <Datagrid
