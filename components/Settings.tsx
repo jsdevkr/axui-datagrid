@@ -67,6 +67,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
           <InputNumber
             size="small"
             min={100}
+            defaultValue={height}
             onChange={value => {
               handleChangeOption('height', value);
             }}
@@ -75,6 +76,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
         <Form.Item label={'scrollLeft'}>
           <InputNumber
             size="small"
+            defaultValue={scrollLeft}
             onChange={value => {
               handleChangeOption('scrollLeft', value);
             }}
@@ -83,6 +85,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
         <Form.Item label={'scrollTop'}>
           <InputNumber
             size="small"
+            defaultValue={scrollTop}
             onChange={value => {
               handleChangeOption('scrollTop', value);
             }}
@@ -91,6 +94,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
         <Form.Item label={'frozenColumnIndex'}>
           <InputNumber
             size="small"
+            defaultValue={frozenColumnIndex}
             onChange={value => {
               handleChangeOption('frozenColumnIndex', value);
             }}
@@ -99,6 +103,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
         <Form.Item label={'frozenRowIndex'}>
           <InputNumber
             size="small"
+            defaultValue={frozenRowIndex}
             onChange={value => {
               handleChangeOption('frozenRowIndex', value);
             }}

@@ -48,11 +48,16 @@ const Home: React.FC = props => {
   const onChangeSettings = debounce((key: keyof ISettings, value: any) => {
     switch (key) {
       case 'columns':
-        dispatchSettings({ type: SettingsActionType.SET_COLUMNS, value });
-        break;
       case 'width':
-        dispatchSettings({ type: SettingsActionType.SET_WIDTH, value });
+      case 'height':
+      case 'scrollLeft':
+      case 'scrollTop':
+      case 'frozenColumnIndex':
+      case 'frozenRowIndex':
+      case 'columns':
+      case 'data':
       default:
+        dispatchSettings({ type: key as SettingsActionType, value });
         break;
     }
   }, 500);
