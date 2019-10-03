@@ -2,10 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Form, Input, InputNumber, Button } from 'antd';
 import { FormComponentProps, FormProps, ValidateCallback } from 'antd/lib/form';
-import { ISettings } from 'common/settings';
+import {
+  ISettings,
+  ISettingsAction,
+  SettingsActionType,
+} from 'common/settings';
+import debounce from 'lodash/debounce';
 
 export interface SettingsProps extends FormComponentProps, ISettings {
-  onChangeSettings?: (key: keyof ISettings, value: any) => void;
+  dispatchSettings: (action: ISettingsAction) => void;
 }
 
 const JSONValidator = (rule: any, value: any, callback: any) => {
@@ -28,9 +33,11 @@ const SettingsForm: React.FC<SettingsProps> = props => {
     e.preventDefault();
     validateFields((err, values: ISettings) => {});
   };
-  const handleChangeOption = (key: keyof ISettings, value: any) => {
-    props.onChangeSettings && props.onChangeSettings(key, value);
-  };
+
+  const handleChangeOption = debounce((action: ISettingsAction) => {
+    props.dispatchSettings && props.dispatchSettings(action);
+  }, 300);
+
   const {
     width = 400,
     height = 300,
@@ -59,7 +66,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             min={100}
             defaultValue={width}
             onChange={value => {
-              handleChangeOption('width', value);
+              handleChangeOption({ type: SettingsActionType.SET_WIDTH, value });
             }}
           />
         </Form.Item>
@@ -69,7 +76,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             min={100}
             defaultValue={height}
             onChange={value => {
-              handleChangeOption('height', value);
+              handleChangeOption({
+                type: SettingsActionType.SET_HEIGHT,
+                value,
+              });
             }}
           />
         </Form.Item>
@@ -78,7 +88,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             defaultValue={scrollLeft}
             onChange={value => {
-              handleChangeOption('scrollLeft', value);
+              handleChangeOption({
+                type: SettingsActionType.SET_SCROLL_LEFT,
+                value,
+              });
             }}
           />
         </Form.Item>
@@ -87,7 +100,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             defaultValue={scrollTop}
             onChange={value => {
-              handleChangeOption('scrollTop', value);
+              handleChangeOption({
+                type: SettingsActionType.SET_SCROLL_TOP,
+                value,
+              });
             }}
           />
         </Form.Item>
@@ -96,7 +112,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             defaultValue={frozenColumnIndex}
             onChange={value => {
-              handleChangeOption('frozenColumnIndex', value);
+              handleChangeOption({
+                type: SettingsActionType.SET_FROZEN_COLUMN_INDEX,
+                value,
+              });
             }}
           />
         </Form.Item>
@@ -105,7 +124,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             defaultValue={frozenRowIndex}
             onChange={value => {
-              handleChangeOption('frozenRowIndex', value);
+              handleChangeOption({
+                type: SettingsActionType.SET_FROZEN_ROW_INDEX,
+                value,
+              });
             }}
           />
         </Form.Item>
@@ -130,7 +152,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             onClick={() => {
               props.form.validateFields(['columns'], (errors, values) => {
-                handleChangeOption('columns', JSON.parse(values.columns));
+                handleChangeOption({
+                  type: SettingsActionType.SET_COLUMNS,
+                  value: JSON.parse(values.columns),
+                });
               });
             }}
           >
@@ -158,7 +183,10 @@ const SettingsForm: React.FC<SettingsProps> = props => {
             size="small"
             onClick={() => {
               props.form.validateFields(['data'], (errors, values) => {
-                handleChangeOption('data', JSON.parse(values.data));
+                handleChangeOption({
+                  type: SettingsActionType.SET_DATA,
+                  value: JSON.parse(values.data),
+                });
               });
             }}
           >

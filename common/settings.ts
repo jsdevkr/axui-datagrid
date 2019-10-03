@@ -22,10 +22,12 @@ export enum SettingsActionType {
   SET_DATA = 'data',
 }
 
+export interface ISettingsAction {
+  type: SettingsActionType;
+  value?: any;
+}
+
 export type SettingsReducer = (
   state: ISettings,
-  action: {
-    type: SettingsActionType;
-    value?: any;
-  },
+  action: ISettingsAction,
 ) => ISettings;

@@ -28,7 +28,6 @@ const Home: React.FC = props => {
     initialSettings,
   );
 
-  console.log('settings value is ', settings);
   const {
     width = 400,
     height = 300,
@@ -44,29 +43,11 @@ const Home: React.FC = props => {
     //
   }, []);
 
-  // TODO: useMemo
-  const onChangeSettings = debounce((key: keyof ISettings, value: any) => {
-    switch (key) {
-      case 'columns':
-      case 'width':
-      case 'height':
-      case 'scrollLeft':
-      case 'scrollTop':
-      case 'frozenColumnIndex':
-      case 'frozenRowIndex':
-      case 'columns':
-      case 'data':
-      default:
-        dispatchSettings({ type: key as SettingsActionType, value });
-        break;
-    }
-  }, 500);
-
   return (
     <LayoutRoot>
       <Nav />
       <ControlBox>
-        <Settings {...settings} onChangeSettings={onChangeSettings} />
+        <Settings {...settings} dispatchSettings={dispatchSettings} />
       </ControlBox>
       <Viewer>
         <Datagrid
