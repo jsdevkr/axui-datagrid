@@ -48,6 +48,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
     columns,
     data,
   } = props;
+
   return (
     <Style>
       <h3>Options</h3>
@@ -148,6 +149,7 @@ const SettingsForm: React.FC<SettingsProps> = props => {
         </Form.Item>
         <div style={{ textAlign: 'right' }}>
           <Button
+            htmlType="button"
             type="primary"
             size="small"
             onClick={() => {

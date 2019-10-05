@@ -10,6 +10,7 @@ const Datagrid: React.FC<IDatagridProps> = props => {
     height: props.height,
   };
 
+  // componnent didUpdate
   useEffect(() => {
     // make new context
     const nextContext: IDatagridContext = {
@@ -18,10 +19,15 @@ const Datagrid: React.FC<IDatagridProps> = props => {
       _scrollTop: 0,
     };
 
-    console.log('isColumns changed', context.columns !== nextContext.columns);
+    if (context.columns !== nextContext.columns) {
+      console.log('changed or init columns');
+    }
+    if (context.data !== nextContext.data) {
+      console.log('changed or init data');
+    }
 
     setContext(nextContext);
-  }, [context.columns, props]);
+  }, [context.columns, context.data, props]);
 
   return (
     <DataContext.Provider value={[context, setContext]}>
