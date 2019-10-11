@@ -7,8 +7,8 @@ export interface IDataItem {
 export type IData =
   | Map<number, IDataItem>
   | {
-    [key: number]: IDataItem;
-  };
+      [key: number]: IDataItem;
+    };
 
 export interface IColumn {
   key?: string;
@@ -36,8 +36,6 @@ export interface IDatagridCommonProps {
 export interface IDatagridProps extends IDatagridCommonProps {
   width?: number;
   height?: number;
-  headerHeight?: number;
-  headerAlign?: 'left' | 'center' | 'right';
   columns?: IColumn[];
   data?: IData;
   dataLength?: number;
@@ -46,10 +44,13 @@ export interface IDatagridProps extends IDatagridCommonProps {
   selection?: any;
   scrollLeft?: number;
   scrollTop?: number;
-  frozenColumnIndex?: number;
-  frozenRowIndex?: number;
+  headerHeight?: number;
+  headerAlign?: 'left' | 'center' | 'right';
   bodyRowHeight?: number;
   bodyAlign?: 'left' | 'center' | 'right';
+  showLineNumber?: boolean;
+  lineNumberColumnWidth?: number;
+  lineNumberStartAt?: number;
   onScroll?: () => void;
   onClick?: () => void;
 }

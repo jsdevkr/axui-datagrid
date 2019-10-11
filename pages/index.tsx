@@ -31,10 +31,15 @@ const Home: React.FC = props => {
   const {
     width = 400,
     height = 300,
+    headerHeight,
+    headerAlign,
+    bodyRowHeight,
+    bodyAlign,
+    showLineNumber,
+    lineNumberColumnWidth,
+    lineNumberStartAt,
     scrollLeft = 0,
     scrollTop = 0,
-    frozenColumnIndex = 0,
-    frozenRowIndex = 0,
     columns,
     data,
   } = settings;
@@ -53,12 +58,17 @@ const Home: React.FC = props => {
         <Datagrid
           width={width}
           height={height}
-          columns={columns}
-          data={data}
+          headerHeight={headerHeight}
+          headerAlign={headerAlign}
+          bodyRowHeight={bodyRowHeight}
+          bodyAlign={bodyAlign}
+          showLineNumber={showLineNumber}
+          lineNumberColumnWidth={lineNumberColumnWidth}
+          lineNumberStartAt={lineNumberStartAt}
           scrollLeft={scrollLeft}
           scrollTop={scrollTop}
-          frozenColumnIndex={frozenColumnIndex}
-          frozenRowIndex={frozenRowIndex}
+          columns={columns}
+          data={data}
         >
           <DatagridHeader />
           <DatagridBody />

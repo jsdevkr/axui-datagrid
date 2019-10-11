@@ -27,7 +27,7 @@ const Datagrid: React.FC<IDatagridProps> = props => {
     }
 
     setContext(nextContext);
-  }, [context.columns, context.data, props]);
+  }, Object.keys(props).map(k => props[k]));
 
   return (
     <DataContext.Provider value={[context, setContext]}>

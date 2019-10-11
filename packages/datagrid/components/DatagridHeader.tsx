@@ -7,7 +7,7 @@ const DatagridHeader: React.FC<IDatagridHeader> = props => {
   const { columns = [], headerHeight = 30 } = context;
   const styles = { ...props.style, height: headerHeight };
   return (
-    <div style={styles}>
+    <div style={styles} role="datagrid-header">
       {columns.map((column, key) => {
         return (
           <div key={key}>

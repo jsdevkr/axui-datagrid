@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Collapse } from 'antd';
 import { FormComponentProps, FormProps, ValidateCallback } from 'antd/lib/form';
 import {
   ISettings,
@@ -8,6 +8,9 @@ import {
   SettingsActionType,
 } from 'common/settings';
 import debounce from 'lodash/debounce';
+import BaseSettings from './BaseSettings';
+import ScrollSettings from './ScrollSettings';
+import LineNumberSettings from './LineNumberSettings';
 
 export interface SettingsProps extends FormComponentProps, ISettings {
   dispatchSettings: (action: ISettingsAction) => void;
@@ -24,16 +27,19 @@ const JSONValidator = (rule: any, value: any, callback: any) => {
 
 const Style = styled.div`
   .ant-form-item {
-    margin-bottom: 12px;
+    margin: 0;
+    padding: 8px 16px;
+    &:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+  }
+  .ant-collapse-content > .ant-collapse-content-box {
+    padding: 10px 0;
   }
 `;
 const SettingsForm: React.FC<SettingsProps> = props => {
+  const [activeKeys, setActiveKeys] = useState(['BASE']);
   const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
-  const handleSubmit: FormProps['onSubmit'] = e => {
-    e.preventDefault();
-    validateFields((err, values: ISettings) => {});
-  };
-
   const handleChangeOption = debounce((action: ISettingsAction) => {
     props.dispatchSettings && props.dispatchSettings(action);
   }, 300);
@@ -41,161 +47,130 @@ const SettingsForm: React.FC<SettingsProps> = props => {
   const {
     width = 400,
     height = 300,
+    headerHeight,
+    headerAlign,
+    bodyRowHeight,
+    bodyAlign,
     scrollLeft = 0,
     scrollTop = 0,
-    frozenColumnIndex = 0,
-    frozenRowIndex = 0,
+    showLineNumber = true,
+    lineNumberColumnWidth = 40,
+    lineNumberStartAt = 1,
     columns,
     data,
   } = props;
 
   return (
     <Style>
-      <h3>Options</h3>
-      <Form
-        onSubmit={handleSubmit}
-        labelCol={{ xs: { span: 24 }, sm: { span: 16 } }}
-        wrapperCol={{
-          xs: { span: 24 },
-          sm: { span: 8 },
-        }}
-        colon={false}
+      <Collapse
+        expandIconPosition="right"
+        activeKey={activeKeys}
+        onChange={activeKeys =>
+          setActiveKeys(
+            typeof activeKeys === 'string' ? [activeKeys] : activeKeys,
+          )
+        }
       >
-        <Form.Item label={'width'}>
-          <InputNumber
-            size="small"
-            min={100}
-            defaultValue={width}
-            onChange={value => {
-              handleChangeOption({ type: SettingsActionType.SET_WIDTH, value });
+        <Collapse.Panel header="BASE" key="BASE">
+          <BaseSettings
+            {...{
+              width,
+              height,
+              headerHeight,
+              headerAlign,
+              bodyRowHeight,
+              bodyAlign,
             }}
+            handleChangeOption={handleChangeOption}
           />
-        </Form.Item>
-        <Form.Item label={'height'}>
-          <InputNumber
-            size="small"
-            min={100}
-            defaultValue={height}
-            onChange={value => {
-              handleChangeOption({
-                type: SettingsActionType.SET_HEIGHT,
-                value,
-              });
+        </Collapse.Panel>
+        <Collapse.Panel header="SCROLL" key="SCROLL">
+          <ScrollSettings
+            {...{
+              scrollLeft,
+              scrollTop,
             }}
+            handleChangeOption={handleChangeOption}
           />
-        </Form.Item>
-        <Form.Item label={'scrollLeft'}>
-          <InputNumber
-            size="small"
-            defaultValue={scrollLeft}
-            onChange={value => {
-              handleChangeOption({
-                type: SettingsActionType.SET_SCROLL_LEFT,
-                value,
-              });
+        </Collapse.Panel>
+        <Collapse.Panel header="LINE NUMBER" key="LINE_NUMBER">
+          <LineNumberSettings
+            {...{
+              showLineNumber,
+              lineNumberColumnWidth,
+              lineNumberStartAt,
             }}
+            handleChangeOption={handleChangeOption}
           />
-        </Form.Item>
-        <Form.Item label={'scrollTop'}>
-          <InputNumber
-            size="small"
-            defaultValue={scrollTop}
-            onChange={value => {
-              handleChangeOption({
-                type: SettingsActionType.SET_SCROLL_TOP,
-                value,
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={'frozenColumnIndex'}>
-          <InputNumber
-            size="small"
-            defaultValue={frozenColumnIndex}
-            onChange={value => {
-              handleChangeOption({
-                type: SettingsActionType.SET_FROZEN_COLUMN_INDEX,
-                value,
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={'frozenRowIndex'}>
-          <InputNumber
-            size="small"
-            defaultValue={frozenRowIndex}
-            onChange={value => {
-              handleChangeOption({
-                type: SettingsActionType.SET_FROZEN_ROW_INDEX,
-                value,
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          labelCol={{ xs: 24, sm: 24 }}
-          wrapperCol={{ xs: 24, sm: 24 }}
-          label="columns"
-          labelAlign="left"
-        >
-          {getFieldDecorator('columns', {
-            initialValue: JSON.stringify(columns),
-            rules: [
-              {
-                validator: JSONValidator,
-              },
-            ],
-          })(<Input.TextArea rows={6} />)}
-        </Form.Item>
-        <div style={{ textAlign: 'right' }}>
-          <Button
-            htmlType="button"
-            type="primary"
-            size="small"
-            onClick={() => {
-              props.form.validateFields(['columns'], (errors, values) => {
-                handleChangeOption({
-                  type: SettingsActionType.SET_COLUMNS,
-                  value: JSON.parse(values.columns),
-                });
-              });
-            }}
+        </Collapse.Panel>
+        <Collapse.Panel header="COLUMNS" key="COLUMNS">
+          <Form.Item
+            labelCol={{ xs: 24, sm: 24 }}
+            wrapperCol={{ xs: 24, sm: 24 }}
+            label="columns"
+            labelAlign="left"
           >
-            Apply
-          </Button>
-        </div>
-        <Form.Item
-          labelCol={{ xs: 24, sm: 24 }}
-          wrapperCol={{ xs: 24, sm: 24 }}
-          label="data"
-          labelAlign="left"
-        >
-          {getFieldDecorator('data', {
-            initialValue: JSON.stringify(data),
-            rules: [
-              {
-                validator: JSONValidator,
-              },
-            ],
-          })(<Input.TextArea rows={12} />)}
-        </Form.Item>
-        <div style={{ textAlign: 'right' }}>
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => {
-              props.form.validateFields(['data'], (errors, values) => {
-                handleChangeOption({
-                  type: SettingsActionType.SET_DATA,
-                  value: JSON.parse(values.data),
+            {getFieldDecorator('columns', {
+              initialValue: JSON.stringify(columns),
+              rules: [
+                {
+                  validator: JSONValidator,
+                },
+              ],
+            })(<Input.TextArea rows={6} />)}
+          </Form.Item>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              htmlType="button"
+              type="primary"
+              size="small"
+              onClick={() => {
+                props.form.validateFields(['columns'], (errors, values) => {
+                  handleChangeOption({
+                    type: SettingsActionType.SET_COLUMNS,
+                    value: JSON.parse(values.columns),
+                  });
                 });
-              });
-            }}
+              }}
+            >
+              Apply
+            </Button>
+          </div>
+        </Collapse.Panel>
+        <Collapse.Panel header="DATA" key="DATA">
+          <Form.Item
+            labelCol={{ xs: 24, sm: 24 }}
+            wrapperCol={{ xs: 24, sm: 24 }}
+            label="data"
+            labelAlign="left"
           >
-            Apply
-          </Button>
-        </div>
-      </Form>
+            {getFieldDecorator('data', {
+              initialValue: JSON.stringify(data),
+              rules: [
+                {
+                  validator: JSONValidator,
+                },
+              ],
+            })(<Input.TextArea rows={12} />)}
+          </Form.Item>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => {
+                props.form.validateFields(['data'], (errors, values) => {
+                  handleChangeOption({
+                    type: SettingsActionType.SET_DATA,
+                    value: JSON.parse(values.data),
+                  });
+                });
+              }}
+            >
+              Apply
+            </Button>
+          </div>
+        </Collapse.Panel>
+      </Collapse>
     </Style>
   );
 };

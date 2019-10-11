@@ -11,10 +11,6 @@ const settingsReducer: SettingsReducer = (state, action) => {
       return { ...state, scrollLeft: value };
     case SettingsActionType.SET_SCROLL_TOP:
       return { ...state, scrollTop: value };
-    case SettingsActionType.SET_FROZEN_COLUMN_INDEX:
-      return { ...state, frozenColumnIndex: value };
-    case SettingsActionType.SET_FROZEN_ROW_INDEX:
-      return { ...state, frozenRowIndex: value };
     case SettingsActionType.SET_COLUMNS:
       return { ...state, columns: value };
     case SettingsActionType.SET_DATA:
