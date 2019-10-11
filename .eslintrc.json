@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "react", "prettier"],
+  "plugins": ["@typescript-eslint", "react", "prettier", "react-hooks"],
   "extends": [
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
@@ -31,8 +31,8 @@
     "@typescript-eslint/no-object-literal-type-assertion": "off",
     "@typescript-eslint/no-namespace": "off",
     "react/prop-types": "off",
-    // "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    // "react-hooks/exhaustive-deps": "off", // Checks effect dependencies
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "off", // Checks effect dependencies
     "indent": "off",
     "@typescript-eslint/indent": ["error", 2]
   },

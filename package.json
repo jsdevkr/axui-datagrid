@@ -11,6 +11,23 @@
   "author": "tom@axisj.com",
   "license": "MIT",
   "repository": "",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --parser flow --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "prettier --parser typescript --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "next": "^9.0.3"
   },
