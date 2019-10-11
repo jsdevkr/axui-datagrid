@@ -10,4 +10,9 @@ export const GlobalStyles = createGlobalStyle`
   .clearfix:after {
     clear: both;
   }
+
+  html, body{
+    height: 100%;
+    
+  }
 `;

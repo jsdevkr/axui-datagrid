@@ -15,8 +15,8 @@ export interface BaseSettingsProps extends FormComponentProps, ISettings {
 const BaseSettingsForm: React.FC<BaseSettingsProps> = props => {
   const { getFieldDecorator, validateFields, getFieldsValue } = props.form;
   const {
-    width = 400,
-    height = 300,
+    width,
+    height,
     headerHeight,
     headerAlign,
     bodyRowHeight,
