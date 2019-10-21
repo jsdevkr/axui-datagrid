@@ -129,11 +129,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
               e.preventDefault();
 
               let copySuccess: boolean = false;
-              let copiedString: string = '';
+              const copiedString: string[] = [];
 
               for (let rk in selectionRows) {
                 if (selectionRows[rk]) {
                   const item = getDataItem(data, Number(rk));
+                  const copiedRow: string[] = [];
                   if (item) {
                     for (let ck in selectionCols) {
                       if (selectionCols[ck]) {
@@ -161,16 +162,16 @@ class DataGridEvents extends React.Component<IProps, IState> {
                           val = item.value[headerColGroup[ck].key];
                         }
 
-                        copiedString += (val || '') + '\t';
+                        copiedRow.push(val || '');
                       }
                     }
                   }
-                  copiedString += '\n';
+                  copiedString.push(copiedRow.join('\t'));
                 }
               }
 
               if (clipBoardNode && clipBoardNode.current) {
-                clipBoardNode.current.value = copiedString;
+                clipBoardNode.current.value = copiedString.join('\n');
                 clipBoardNode.current.select();
               }
 
