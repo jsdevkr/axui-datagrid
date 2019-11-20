@@ -199,7 +199,6 @@ class LargeData extends React.Component<any, any> {
               dataLength={data.length}
               options={options}
               loading={loading}
-              autofitColumns={true}
             />
           </div>
 

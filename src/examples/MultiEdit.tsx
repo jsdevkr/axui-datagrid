@@ -416,7 +416,6 @@ class MultiEdit extends React.Component<IProps, IState> {
                 data={data}
                 dataLength={Object.keys(data).length}
                 options={{}}
-                autofitColumns={true}
                 onScroll={this.onScroll}
                 scrollTop={scrollTop}
                 scrollLeft={scrollLeft}
