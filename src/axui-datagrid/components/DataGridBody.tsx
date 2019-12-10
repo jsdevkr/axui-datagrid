@@ -70,7 +70,7 @@ class DataGridBody extends React.Component<IProps> {
         let rows = {};
         arrayFromRange(
           Math.min(focusedRow, rowIndex),
-          Math.max(focusedRow, rowIndex) + 1,
+          Math.max(focusedRow, rowIndex),
         ).forEach(i => {
           rows[i] = true;
         });
