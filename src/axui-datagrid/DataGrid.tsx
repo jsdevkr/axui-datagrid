@@ -19,7 +19,7 @@ import {
   isNumber,
 } from './utils';
 import { IDataGrid } from './common/@types';
-import DataGridAutofitHelper from './components/DataGridAutofitHelper';
+// import DataGridAutofitHelper from './components/DataGridAutofitHelper';
 
 interface IProps extends IDataGrid.IRootProps {}
 interface IState extends IDataGrid.IRootState {}

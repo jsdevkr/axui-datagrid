@@ -52,7 +52,9 @@ npm start
 
 # Props
 
-## data?: any[] = [];
+## data?: IData;
+
+## dataLength?: number;
 
 ## columns: DataGridColumn[];
 
@@ -165,69 +167,67 @@ _IDataGridRowSelector_
 
 # Sample
 
-[You can see source code here](https://github.com/axui/datagrid/tree/master/src/examples)
+[![Edit axui-datagrid-ex](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/affectionate-boyd-r3y7r?fontsize=14&hidenavigation=1&theme=dark)
+
+[You can see other source code here](https://github.com/axui/datagrid/tree/master/src/examples)
 
 Here is one example code for using a datagrid
 
 ```typescript jsx
-import * as React from 'react';
+import React, { FC, useState } from 'react';
+import { DataGrid, IDataGrid } from 'axui-datagrid';
 
-import { Wrapper, Segment } from 'components';
-import { DataGrid } from 'axui-datagrid';
+interface IProps {}
+const DatagridExample: FC<IProps> = () => {
+  const [width, setWidth] = useState(500);
+  const [height, setHeight] = useState(250);
 
-class Formatter extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
+  const columns: IDataGrid.IColumn[] = [
+    { key: '0', width: 60, label: 'ID', align: 'center' },
+    {
+      key: '1',
+      width: 200,
+      label: 'Title',
+      formatter: function(args: any) {
+        // console.log(args);
+        return ' * ' + args.value;
+      },
+    },
+    { key: '2', label: 'Writer', align: 'center', formatter: 'html' },
+    { key: '0', label: 'Date', align: 'center', formatter: 'date' },
+    { key: '1', label: 'Money', align: 'right', formatter: 'money' },
+  ];
 
-    const gridData = require('examples/basicData.json');
+  const data = [
+    { value: ['A01', 'B01', 'C'] },
+    { value: ['A02', 'B02', 'C<b>a</b>'] },
+    { value: ['A03', 'B03', 'C<b>a</b>'] },
+    { value: ['A04', 'B04', 'C<b>a</b>'] },
+    { value: ['A05', 'B05', 'C<b>a</b>'] },
+    { value: ['A06', 'B06', 'C<b>a</b>'] },
+    { value: ['A07', 'B07', 'C<b>a</b>'] },
+    { value: ['A08', 'B08', 'C<b>a</b>'] },
+    { value: ['A09', 'B09', 'C<b>a</b>'] },
+    { value: ['A10', 'B10', 'C<b>a</b>'] },
+    { value: ['A11', 'B11', 'C<b>a</b>'] },
+  ];
 
-    this.state = {
-      width: 400,
-      height: 400,
-      columns: [
-        { key: 'id', width: 60, label: 'ID', align: 'center' },
-        {
-          key: 'title',
-          width: 200,
-          label: 'Title',
-          formatter: function(args: any) {
-            // console.log(args);
-            return ' * ' + args.value;
-          },
-        },
-        { key: 'writer', label: 'Writer', align: 'center', formatter: 'html' },
-        { key: 'date', label: 'Date', align: 'center', formatter: 'date' },
-        { key: 'money', label: 'Money', align: 'right', formatter: 'money' },
-      ],
-      data: gridData,
-    };
-  }
+  return (
+    <div style={{ border: '1px solid #d9d9d9', width, height }}>
+      <DataGrid
+        width={width}
+        height={height}
+        style={{ fontSize: '12px' }}
+        columns={columns}
+        data={data}
+        dataLength={data.length}
+        options={{}}
+      />
+    </div>
+  );
+};
 
-  public render() {
-    return (
-      <Wrapper>
-        <Segment padded>
-          <h1>Formatter</h1>
-          <p>
-            You can use 'date', 'money' predefined in 'columns> col.formatter',
-            or you can change the values as desired using a user-defined
-            function.
-          </p>
-          <DataGrid
-            width={this.state.width}
-            height={this.state.height}
-            style={{ fontSize: '12px' }}
-            columns={this.state.columns}
-            data={this.state.data}
-            options={this.state.options}
-          />
-        </Segment>
-      </Wrapper>
-    );
-  }
-}
-
-export default Formatter;
+export default DatagridExample;
 ```
 
 # Version history
@@ -284,3 +284,6 @@ export default Formatter;
 - v0.14.6 - remove option.autofitColumns, add props autofitColumns
 - v0.14.7 - Scrolling error fix when the number of data exceeds 1.5 million.
 - v0.14.8 - Fix minor issue
+- v0.15.0 - Changed type of 'data' prop (IData) / Add 'dataLength' property / Option Properties Cleanup.
+- v0.15.1 - Export IDataGrid interface
+- v0.15.2 - Update readme

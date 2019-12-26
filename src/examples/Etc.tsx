@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Wrapper, Segment } from 'components';
-import { DataGrid } from 'axui-datagrid';
-import { IDataGrid } from 'axui-datagrid/common/@types';
+import { DataGrid, IDataGrid } from 'axui-datagrid';
 
 const MyBox = styled.div`
   position: relative;
