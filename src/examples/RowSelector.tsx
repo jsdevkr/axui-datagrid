@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Divider, Button } from 'antd';
 import { Wrapper, Segment } from 'components';
-import { DataGrid } from 'axui-datagrid';
+import { DataGrid, IDataGrid } from 'axui-datagrid';
 import { basicData } from './data/basicData';
-import { IDataGrid } from 'axui-datagrid/common/@types';
 
 interface IState {
   width: number;

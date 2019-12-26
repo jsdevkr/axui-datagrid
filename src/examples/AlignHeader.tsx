@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { Button, Divider } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
@@ -89,7 +88,7 @@ class AlignHeader extends React.Component<any, any> {
       <Wrapper>
         <Segment padded>
           <h1>Align Header</h1>
-          <p>This example changes the 'options.header.align' property.</p>
+          <p>This example changes the `options.header.align` property.</p>
 
           <div
             ref={this.dataGridContainerRef}

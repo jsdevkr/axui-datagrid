@@ -1,11 +1,9 @@
 import * as React from 'react';
-
 import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
+import { DataGrid, IDataGrid } from 'axui-datagrid';
 import { Wrapper, Segment } from 'components';
-import { DataGrid } from 'axui-datagrid';
-import { IDataGrid } from 'axui-datagrid/common/@types';
-
 import styled from 'styled-components';
+
 import moment = require('moment');
 import { debounce, isObject } from 'axui-datagrid/utils';
 
