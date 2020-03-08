@@ -551,107 +551,105 @@ class StoreProvider extends React.Component<
 
     switch (dispatchType) {
       case DataGridEnums.DispatchTypes.FILTER:
-        {
-          // const { colIndex, filterInfo } = param;
-          // const checkAll =
-          //   filterInfo[colIndex] === false
-          //     ? true
-          //     : filterInfo[colIndex]._check_all_;
-          // if (checkAll) {
-          //   filteredList =
-          //     data &&
-          //     data.filter((n: any) => {
-          //       return (
-          //         typeof n === 'undefined' ||
-          //         !n[optionColumnKeys.deleted || '_deleted_']
-          //       );
-          //     });
-          // } else {
-          //   filteredList = data.filter((n: any) => {
-          //     if (n) {
-          //       const value = n && n[colGroup[colIndex].key || ''];
-          //       if (
-          //         typeof n === 'undefined' ||
-          //         n[optionColumnKeys.deleted || '_deleted_']
-          //       ) {
-          //         return false;
-          //       }
-          //       if (typeof value === 'undefined') {
-          //         if (!filterInfo[colIndex]._UNDEFINED_) {
-          //           return false;
-          //         }
-          //       } else {
-          //         if (!filterInfo[colIndex][value]) {
-          //           return false;
-          //         }
-          //       }
-          //       return true;
-          //     }
-          //     return false;
-          //   });
-          // }
-          // this.setStoreState({
-          //   filteredList,
-          //   filterInfo,
-          //   scrollTop: 0,
-          // });
-          // if (onSelect) {
-          //   onSelect({
-          //     filteredList,
-          //   });
-          // }
-        }
+        // const { colIndex, filterInfo } = param;
+        // const checkAll =
+        //   filterInfo[colIndex] === false
+        //     ? true
+        //     : filterInfo[colIndex]._check_all_;
+        // if (checkAll) {
+        //   filteredList =
+        //     data &&
+        //     data.filter((n: any) => {
+        //       return (
+        //         typeof n === 'undefined' ||
+        //         !n[optionColumnKeys.deleted || '_deleted_']
+        //       );
+        //     });
+        // } else {
+        //   filteredList = data.filter((n: any) => {
+        //     if (n) {
+        //       const value = n && n[colGroup[colIndex].key || ''];
+        //       if (
+        //         typeof n === 'undefined' ||
+        //         n[optionColumnKeys.deleted || '_deleted_']
+        //       ) {
+        //         return false;
+        //       }
+        //       if (typeof value === 'undefined') {
+        //         if (!filterInfo[colIndex]._UNDEFINED_) {
+        //           return false;
+        //         }
+        //       } else {
+        //         if (!filterInfo[colIndex][value]) {
+        //           return false;
+        //         }
+        //       }
+        //       return true;
+        //     }
+        //     return false;
+        //   });
+        // }
+        // this.setStoreState({
+        //   filteredList,
+        //   filterInfo,
+        //   scrollTop: 0,
+        // });
+        // if (onSelect) {
+        //   onSelect({
+        //     filteredList,
+        //   });
+        // }
+
         break;
 
       case DataGridEnums.DispatchTypes.SORT:
-        {
-          if (typeof colIndex === 'undefined') {
-            return;
-          }
-          const { key: colKey = '' } = colGroup[colIndex];
+        if (typeof colIndex === 'undefined') {
+          return;
+        }
+        const { key: colKey = '' } = colGroup[colIndex];
 
-          let currentSortInfo: {
-            [key: string]: IDataGrid.ISortInfo;
-          } = {};
-          let seq: number = 0;
-          let sortInfos: IDataGrid.ISortInfo[] = [];
+        let currentSortInfo: {
+          [key: string]: IDataGrid.ISortInfo;
+        } = {};
+        let seq: number = 0;
+        let sortInfos: IDataGrid.ISortInfo[] = [];
 
-          for (let k in sortInfo) {
-            if (sortInfo[k]) {
-              currentSortInfo[k] = sortInfo[k];
-              seq++;
-            }
-          }
-
-          if (currentSortInfo[colKey]) {
-            if (currentSortInfo[colKey].orderBy === 'desc') {
-              currentSortInfo[colKey].orderBy = 'asc';
-            } else if (currentSortInfo[colKey].orderBy === 'asc') {
-              delete currentSortInfo[colKey];
-            }
-          } else {
-            currentSortInfo[colKey] = {
-              seq: seq++,
-              orderBy: 'desc',
-            };
-          }
-
-          for (let k in currentSortInfo) {
-            if (currentSortInfo[k]) {
-              sortInfos[currentSortInfo[k].seq!] = {
-                key: k,
-                orderBy: currentSortInfo[k].orderBy,
-              };
-            }
-          }
-          sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
-
-          if (onSort) {
-            onSort({
-              sortInfos,
-            });
+        for (let k in sortInfo) {
+          if (sortInfo[k]) {
+            currentSortInfo[k] = sortInfo[k];
+            seq++;
           }
         }
+
+        if (currentSortInfo[colKey]) {
+          if (currentSortInfo[colKey].orderBy === 'desc') {
+            currentSortInfo[colKey].orderBy = 'asc';
+          } else if (currentSortInfo[colKey].orderBy === 'asc') {
+            delete currentSortInfo[colKey];
+          }
+        } else {
+          currentSortInfo[colKey] = {
+            seq: seq++,
+            orderBy: 'desc',
+          };
+        }
+
+        for (let k in currentSortInfo) {
+          if (currentSortInfo[k]) {
+            sortInfos[currentSortInfo[k].seq!] = {
+              key: k,
+              orderBy: currentSortInfo[k].orderBy,
+            };
+          }
+        }
+        sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
+
+        if (onSort) {
+          onSort({
+            sortInfos,
+          });
+        }
+
         break;
 
       case DataGridEnums.DispatchTypes.UPDATE:

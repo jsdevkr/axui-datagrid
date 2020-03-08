@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DataGridStore } from './providers';
+import DataGridStore from './providers/StoreProvider';
 import {
   DataGridEvents,
   DataGridHeader,

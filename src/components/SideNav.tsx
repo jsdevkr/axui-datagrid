@@ -215,7 +215,11 @@ class SideNav extends React.Component<IProps, IState> {
                       {menu.to ? (
                         <NavLink to={menu.to}>{menu.label}</NavLink>
                       ) : (
-                        <a href={menu.href} target="_blank">
+                        <a
+                          href={menu.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {menu.label}
                         </a>
                       )}

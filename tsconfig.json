@@ -28,7 +28,6 @@
     ],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "allowNamespaces": true,
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,

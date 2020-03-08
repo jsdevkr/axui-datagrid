@@ -10,12 +10,12 @@ const ObjectFunctionString = fnToString.call(Object);
 const freeGlobal =
   typeof global === 'object' &&
   global !== null &&
-  (<any>global).Object === Object &&
+  (global as any).Object === Object &&
   global;
 const freeSelf =
   typeof self === 'object' &&
   self !== null &&
-  (<any>self).Object === Object &&
+  (self as any).Object === Object &&
   self;
 /** Used as a reference to the global object. */
 const root = freeGlobal || freeSelf || Function('return this')();

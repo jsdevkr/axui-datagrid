@@ -24,31 +24,31 @@ npm start
 
 ### Large Data
 
-![axui-datagrid example LargeData](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-01.jpg)
+![axui-datagrid example LargeData](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-01.jpg)
 
 ### Frozen row / col
 
-![axui-datagrid example Frozen row,col](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-02.jpg)
+![axui-datagrid example Frozen row,col](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-02.jpg)
 
 ### Multi header
 
-![axui-datagrid example Multi header](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-03.jpg)
+![axui-datagrid example Multi header](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-03.jpg)
 
 ### Loading
 
-![axui-datagrid example Loading](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-04.jpg)
+![axui-datagrid example Loading](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-04.jpg)
 
 ### Row selector
 
-![axui-datagrid example Row selector](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-05.jpg)
+![axui-datagrid example Row selector](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-05.jpg)
 
 ### Inline edit
 
-![axui-datagrid example Inline edit](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-06.jpg)
+![axui-datagrid example Inline edit](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-06.jpg)
 
 ### Foot Summary
 
-![axui-datagrid example Foot Summary](https://cdn.rawgit.com/jsdevkr/datagrid/0d332b6c/src/assets/datagrid-feature-07.jpg)
+![axui-datagrid example Foot Summary](https://cdn.jsdelivr.net/gh/jsdevkr/datagrid@0d332b6cc2795a0ac6152efc0dfec92edb344d0d/src/assets/datagrid-feature-07.jpg)
 
 # Props
 

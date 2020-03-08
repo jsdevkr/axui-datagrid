@@ -132,53 +132,51 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
 
     switch (key) {
       case '_line_number_':
-        {
-          // select all
-          for (let i = 0; i < dataLength; i++) {
-            state.selectionRows[i] = true;
-          }
-
-          state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
-            obj[col.colIndex || 0] = true;
-            return obj;
-          }, {});
-
-          state.focusedCol = 0;
-          setStoreState(state);
+        // select all
+        for (let i = 0; i < dataLength; i++) {
+          state.selectionRows[i] = true;
         }
+
+        state.selectionCols = Object.values(colGroup).reduce((obj, col) => {
+          obj[col.colIndex || 0] = true;
+          return obj;
+        }, {});
+
+        state.focusedCol = 0;
+        setStoreState(state);
+
         break;
       case '_row_selector_':
         dispatch(DataGridEnums.DispatchTypes.SELECT_ALL, {});
         break;
       default:
-        {
-          if (optionsHeader.clickAction === 'select') {
-            for (let i = 0; i < dataLength; i++) {
-              state.selectionRows[i] = true;
-            }
-
-            if (e.shiftKey) {
-              state.selectionCols = (() => {
-                let cols = {};
-                arrayFromRange(
-                  Math.min(focusedCol, colIndex),
-                  Math.max(focusedCol, colIndex) + 1,
-                ).forEach(i => {
-                  cols[i] = true;
-                });
-                return cols;
-              })();
-            } else {
-              state.selectionCols = {
-                [colIndex]: true,
-              };
-              state.focusedCol = colIndex;
-            }
-            setStoreState(state);
-          } else if (optionsHeader.clickAction === 'sort') {
-            dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
+        if (optionsHeader.clickAction === 'select') {
+          for (let i = 0; i < dataLength; i++) {
+            state.selectionRows[i] = true;
           }
+
+          if (e.shiftKey) {
+            state.selectionCols = (() => {
+              let cols = {};
+              arrayFromRange(
+                Math.min(focusedCol, colIndex),
+                Math.max(focusedCol, colIndex) + 1,
+              ).forEach(i => {
+                cols[i] = true;
+              });
+              return cols;
+            })();
+          } else {
+            state.selectionCols = {
+              [colIndex]: true,
+            };
+            state.focusedCol = colIndex;
+          }
+          setStoreState(state);
+        } else if (optionsHeader.clickAction === 'sort') {
+          dispatch(DataGridEnums.DispatchTypes.SORT, { colIndex });
         }
+
         break;
     }
 

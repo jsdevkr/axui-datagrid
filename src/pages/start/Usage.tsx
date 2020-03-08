@@ -30,8 +30,14 @@ $ npm start
       <h2>Example</h2>
 
       <p>
-        <a href="https://github.com/axui/datagrid/tree/master/src/examples" target="_blank">
-          You can see source code here.</a> and It is one example code for using a datagrid
+        <a
+          href="https://github.com/axui/datagrid/tree/master/src/examples"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          You can see source code here.
+        </a>{' '}
+        and It is one example code for using a datagrid
       </p>
       <CodeViewer>
         {`
