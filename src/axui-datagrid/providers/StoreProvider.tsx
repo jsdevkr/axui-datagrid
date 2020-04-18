@@ -135,6 +135,7 @@ class StoreProvider extends React.Component<
       nProps.onSelect === nState.onSelect &&
       nProps.onRightClick === nState.onRightClick &&
       nProps.onClick === nState.onClick &&
+      nProps.onDoubleClick === nState.onDoubleClick &&
       nProps.onError === nState.onError &&
       nProps.onSort === nState.onSort &&
       nProps.onEdit === nState.onEdit
@@ -173,6 +174,7 @@ class StoreProvider extends React.Component<
       storeState.onSelect = nProps.onSelect;
       storeState.onRightClick = nProps.onRightClick;
       storeState.onClick = nProps.onClick;
+      storeState.onDoubleClick = nProps.onDoubleClick;
       storeState.onError = nProps.onError;
       storeState.onSort = nProps.onSort;
       storeState.onEdit = nProps.onEdit;
@@ -314,7 +316,7 @@ class StoreProvider extends React.Component<
           scrollContentContainerHeight = 0,
         } = _styles || {};
 
-        let {
+        const {
           scrollLeft: _currScrollLeft = 0,
           scrollTop: _currScrollTop = 0,
         } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
@@ -359,10 +361,10 @@ class StoreProvider extends React.Component<
         storeState.selectionSRow = rows[0];
         storeState.selectionERow = rows[rows.length - 1];
 
-        rows.forEach(n => {
+        rows.forEach((n) => {
           storeState.selectionRows![n] = true;
         });
-        cols.forEach(n => {
+        cols.forEach((n) => {
           storeState.selectionCols![n] = true;
         });
 
@@ -608,13 +610,13 @@ class StoreProvider extends React.Component<
         }
         const { key: colKey = '' } = colGroup[colIndex];
 
-        let currentSortInfo: {
+        const currentSortInfo: {
           [key: string]: IDataGrid.ISortInfo;
         } = {};
         let seq: number = 0;
         let sortInfos: IDataGrid.ISortInfo[] = [];
 
-        for (let k in sortInfo) {
+        for (const k in sortInfo) {
           if (sortInfo[k]) {
             currentSortInfo[k] = sortInfo[k];
             seq++;
@@ -634,7 +636,7 @@ class StoreProvider extends React.Component<
           };
         }
 
-        for (let k in currentSortInfo) {
+        for (const k in currentSortInfo) {
           if (currentSortInfo[k]) {
             sortInfos[currentSortInfo[k].seq!] = {
               key: k,
@@ -642,7 +644,7 @@ class StoreProvider extends React.Component<
             };
           }
         }
-        sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
+        sortInfos = sortInfos.filter((o) => typeof o !== 'undefined');
 
         if (onSort) {
           onSort({
@@ -720,7 +722,7 @@ class StoreProvider extends React.Component<
         break;
 
       case DataGridEnums.DispatchTypes.RESIZE_COL:
-        let _colGroup = [...(this.state.colGroup || [])];
+        const _colGroup = [...(this.state.colGroup || [])];
         _colGroup[col.colIndex]._width = _colGroup[
           col.colIndex
         ].width = newWidth;
@@ -921,8 +923,8 @@ class StoreProvider extends React.Component<
         sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
 
       onChangeSelection({
-        rows: Object.keys(selectionRows).map(n => Number(n)),
-        cols: Object.keys(selectionCols).map(n => Number(n)),
+        rows: Object.keys(selectionRows).map((n) => Number(n)),
+        cols: Object.keys(selectionCols).map((n) => Number(n)),
         focusedRow,
         focusedCol,
         scrollLeft: Number(scrollLeft),

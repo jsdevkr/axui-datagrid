@@ -446,6 +446,7 @@ export namespace IDataGrid {
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onDoubleClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
@@ -555,6 +556,7 @@ export namespace IDataGrid {
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onDoubleClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
@@ -586,6 +588,7 @@ export namespace IDataGrid {
     onSelect?: (param: IonSelectParam) => void;
     onRightClick?: (param: IonRightClickParam) => void;
     onClick?: (param: IonClickParam) => void;
+    onDoubleClick?: (param: IonClickParam) => void;
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
