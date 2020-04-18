@@ -79,7 +79,7 @@ class LargeData extends React.Component<any, any> {
 
   makeData = (len: number) => {
     return new Promise((resolve, reject) => {
-      let gridData: any = [];
+      const gridData: any = [];
 
       const typeGroup = {
         aTypes: ['A', 'B', 'C', 'D'],
@@ -199,6 +199,9 @@ class LargeData extends React.Component<any, any> {
               dataLength={data.length}
               options={options}
               loading={loading}
+              onDoubleClick={d => {
+                console.log(d);
+              }}
             />
           </div>
 

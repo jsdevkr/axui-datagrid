@@ -13,7 +13,6 @@ import { DataGridEnums } from '../common/@enums';
 import DataGridBodyPanel from './DataGridBodyPanel';
 import DataGridBodyBottomPanel from './DataGridBodyBottomPanel';
 import DataGridBodyLoader from './DataGridBodyLoader';
-import { log } from 'util';
 
 interface IProps extends IDataGridStore {}
 
@@ -51,11 +50,11 @@ class DataGridBody extends React.Component<IProps> {
       return;
     }
 
-    let state = {
+    const state = {
       dragging: false,
       selectionRows: {},
       selectionCols: (() => {
-        let cols = {};
+        const cols = {};
         colGroup.forEach((col: any) => {
           cols[col.colIndex || 0] = true;
         });
@@ -67,11 +66,11 @@ class DataGridBody extends React.Component<IProps> {
 
     if (e.shiftKey) {
       state.selectionRows = (() => {
-        let rows = {};
+        const rows = {};
         arrayFromRange(
           Math.min(focusedRow, rowIndex),
           Math.max(focusedRow, rowIndex),
-        ).forEach(i => {
+        ).forEach((i) => {
           rows[i] = true;
         });
         return rows;
@@ -120,7 +119,7 @@ class DataGridBody extends React.Component<IProps> {
 
       const selectionRows = { [rowIndex]: true };
       const selectionCols = {};
-      colGroup.forEach(col => {
+      colGroup.forEach((col) => {
         selectionCols[col.colIndex || ''] = true;
       });
 
@@ -311,10 +310,10 @@ class DataGridBody extends React.Component<IProps> {
             }
           }
 
-          let sRow: number = Math.min(selectStartedRow, selectEndedRow);
-          let eRow: number = Math.max(selectStartedRow, selectEndedRow);
-          let sCol: number = Math.min(selectStartedCol, selectEndedCol);
-          let eCol: number = Math.max(selectStartedCol, selectEndedCol);
+          const sRow: number = Math.min(selectStartedRow, selectEndedRow);
+          const eRow: number = Math.max(selectStartedRow, selectEndedRow);
+          const sCol: number = Math.min(selectStartedCol, selectEndedCol);
+          const eCol: number = Math.max(selectStartedCol, selectEndedCol);
 
           if (sRow !== -1 && eRow !== -1 && sCol !== -1 && eCol !== -1) {
             currState.selectionRows = {};
@@ -386,17 +385,17 @@ class DataGridBody extends React.Component<IProps> {
           return !endOfScrollTop && !endOfScrollLeft;
         };
 
-        let x1: number = startMousePosition.x - leftPadding;
-        let y1: number = startMousePosition.y - topPadding;
-        let x2: number = currMousePosition.x - leftPadding;
-        let y2: number = currMousePosition.y - topPadding;
+        const x1: number = startMousePosition.x - leftPadding;
+        const y1: number = startMousePosition.y - topPadding;
+        const x2: number = currMousePosition.x - leftPadding;
+        const y2: number = currMousePosition.y - topPadding;
 
-        let p1X: number = Math.min(x1, x2);
-        let p2X: number = Math.max(x1, x2);
-        let p1Y: number = Math.min(y1, y2);
-        let p2Y: number = Math.max(y1, y2);
+        const p1X: number = Math.min(x1, x2);
+        const p2X: number = Math.max(x1, x2);
+        const p1Y: number = Math.min(y1, y2);
+        const p2Y: number = Math.max(y1, y2);
 
-        let moving: IDataGrid.IMoving = {
+        const moving: IDataGrid.IMoving = {
           active: false,
           top: false,
           left: false,
@@ -477,17 +476,17 @@ class DataGridBody extends React.Component<IProps> {
 
       if (e.metaKey || (e.shiftKey && focusedRow > -1 && focusedCol > -1)) {
         if (e.shiftKey) {
-          let state = {
+          const state = {
             dragging: false,
 
             selectionRows: {},
             selectionCols: {},
           };
 
-          let sRow: number = Math.min(focusedRow, selectStartedRow);
-          let sCol: number = Math.min(focusedCol, selectStartedCol);
-          let eRow: number = Math.max(focusedRow, selectStartedRow);
-          let eCol: number = Math.max(focusedCol, selectStartedCol);
+          const sRow: number = Math.min(focusedRow, selectStartedRow);
+          const sCol: number = Math.min(focusedCol, selectStartedCol);
+          const eRow: number = Math.max(focusedRow, selectStartedRow);
+          const eCol: number = Math.max(focusedCol, selectStartedCol);
           for (let i = sRow; i < eRow + 1; i++) {
             state.selectionRows[i] = true;
           }
@@ -615,7 +614,7 @@ class DataGridBody extends React.Component<IProps> {
       }
     }
 
-    let {
+    const {
       scrollLeft: currScrollLeft = 0,
       scrollTop: currScrollTop = 0,
       endOfScrollTop,
@@ -667,9 +666,9 @@ class DataGridBody extends React.Component<IProps> {
     const startX: number = startMousePosition.x - leftPadding;
     const startY: number = startMousePosition.y - topPadding;
 
-    let rowIndex: number = this.getRowIndex(startY, scrollTop);
+    const rowIndex: number = this.getRowIndex(startY, scrollTop);
     // row값이 없다면 선택 안되야 함.
-    let colIndex: number =
+    const colIndex: number =
       rowIndex === -1 ? -1 : this.getColIndex(startX, scrollLeft);
 
     if (rowIndex < 0 || rowIndex > dataLength - 1) {
@@ -686,6 +685,63 @@ class DataGridBody extends React.Component<IProps> {
         return;
       }
       onClick({
+        e,
+        item,
+        value: item.value[itemKey],
+        rowIndex,
+        colIndex,
+      });
+    }
+  };
+
+  onDoubleClick = (e: React.MouseEvent) => {
+    const {
+      rootNode,
+      scrollLeft = 0,
+      scrollTop = 0,
+      data = {},
+      dataLength = 0,
+      colGroup = [],
+      onDoubleClick,
+      loading,
+      loadingData,
+      isInlineEditing = false,
+      inlineEditingCell,
+      focusedCol = -1,
+    } = this.props;
+
+    if (loadingData || loading) {
+      e.preventDefault();
+      return;
+    }
+
+    const startMousePosition = getMousePosition(e);
+    const { x: leftPadding = 0, y: topPadding = 0 } =
+      rootNode &&
+      rootNode.current &&
+      (rootNode.current.getBoundingClientRect() as any);
+    const startX: number = startMousePosition.x - leftPadding;
+    const startY: number = startMousePosition.y - topPadding;
+
+    const rowIndex: number = this.getRowIndex(startY, scrollTop);
+    // row값이 없다면 선택 안되야 함.
+    const colIndex: number =
+      rowIndex === -1 ? -1 : this.getColIndex(startX, scrollLeft);
+
+    if (rowIndex < 0 || rowIndex > dataLength - 1) {
+      return;
+    }
+    if (colIndex < 0 || colIndex > colGroup.length - 1) {
+      return;
+    }
+
+    if (onDoubleClick) {
+      const { key: itemKey = '' } = colGroup[colIndex];
+      const item = getDataItem(data, rowIndex);
+      if (!item) {
+        return;
+      }
+      onDoubleClick({
         e,
         item,
         value: item.value[itemKey],
@@ -899,6 +955,7 @@ class DataGridBody extends React.Component<IProps> {
         style={{ height: bodyHeight, touchAction: 'none' }}
         onMouseDown={this.onMouseDownBody}
         onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
       >
         {asidePanelWidth !== 0 && frozenPanelHeight !== 0 && (
           <DataGridBodyPanel

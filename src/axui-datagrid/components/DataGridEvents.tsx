@@ -131,12 +131,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
               let copySuccess: boolean = false;
               const copiedString: string[] = [];
 
-              for (let rk in selectionRows) {
+              for (const rk in selectionRows) {
                 if (selectionRows[rk]) {
                   const item = getDataItem(data, Number(rk));
                   const copiedRow: string[] = [];
                   if (item) {
-                    for (let ck in selectionCols) {
+                    for (const ck in selectionCols) {
                       if (selectionCols[ck]) {
                         let val = '';
                         const { formatter, key: colKey = '' } = headerColGroup[
@@ -195,7 +195,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
           case DataGridEnums.MetaKeycodes.A:
             e.preventDefault();
 
-            let state = {
+            const state = {
               dragging: false,
               selectionRows: {},
               selectionCols: {},
@@ -210,7 +210,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
               state.selectionRows[i] = true;
             });
 
-            Object.values(colGroup).forEach(col => {
+            Object.values(colGroup).forEach((col) => {
               state.selectionCols[col.colIndex || 0] = true;
               state.selectionECol = col.colIndex || 0;
             });
