@@ -6,7 +6,8 @@
     "target": "es5",
     "allowJs": false,
     "declaration": true,
-    "sourceMap": false
+    "sourceMap": false,
+    "noEmit": false
   },
   "include": ["./src/axui-datagrid/**/*"]
 }
