@@ -56,6 +56,7 @@
   "scripts": {
     "start": "craco start",
     "build": "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
+    "prepublish": "npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
