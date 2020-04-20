@@ -27,7 +27,6 @@
     "axui-contextmenu": "^0.4.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "better-npm-run": "^0.1.1",
     "craco-less": "^1.16.0",
     "craco-raw-loader": "^1.0.1",
     "file-loader": "^5.1.0",
@@ -55,14 +54,12 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "better-npm-run build:common && better-npm-run build:es5 && better-npm-run build:es6",
+    "build": "npm run build:common && npm run build:es5 && npm run build:es6",
     "prepublish": "npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
-    "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs"
-  },
-  "betterScripts": {
+    "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs",
     "build:common": "node-sass ./src/axui-datagrid/style.scss dist/style.css --output-style compressed && rimraf ./dist/scss && ncp ./src/axui-datagrid/style.scss ./dist/style.scss && ncp ./src/axui-datagrid/scss ./dist/scss && ncp ./README.md ./dist/README.md",
     "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfig.es5.json",
     "build:es6": "rimraf ./dist/es6 && tsc --p tsconfig.es6.json"
