@@ -1,0 +1,77 @@
+.axui-datagrid-select-dropdown {
+  font-size: @axui-datagrid-font-size;
+}
+
+.axui-datagrid {
+  .focused {
+    .ant-input,
+    .ant-input-number {
+      box-shadow: inset 0px 0px 1px 1px @axui-datagrid-cell-focused-box-shadow;
+    }
+  }
+
+  .ant-input {
+    height: 23px;
+    border: 0 none;
+    border-radius: 0;
+    font-size: @axui-datagrid-font-size;
+    padding: 2px 5px;
+    background: transparent;
+  }
+  .ant-calendar-picker-clear,
+  .ant-calendar-picker-icon {
+    right: 5px;
+  }
+
+  .ant-select {
+    height: 23px;
+    font-size: @axui-datagrid-font-size;
+  }
+  .ant-select-selection {
+    background: transparent;
+    border: 0 none;
+    border-radius: 0;
+  }
+  .ant-select-selection--single {
+    height: 23px;
+  }
+  .ant-select-selection__rendered {
+    line-height: 23px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .ant-select-arrow {
+    right: 5px;
+  }
+
+  .ant-input-number {
+    height: 23px;
+    font-size: @axui-datagrid-font-size;
+    line-height: 1;
+    border: 0 none;
+    border-radius: 0;
+  }
+  .ant-input-number-input {
+    height: 23px;
+  }
+  .ant-input-number-handler-wrap {
+    opacity: 0.5;
+    border-radius: 0;
+  }
+  .ant-checkbox-wrapper {
+    padding: 1px 5px 0 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    line-height: 1;
+    font-size: @axui-datagrid-font-size;
+    .ant-checkbox {
+      top: auto;
+    }
+    .ant-checkbox + span {
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+  }
+}

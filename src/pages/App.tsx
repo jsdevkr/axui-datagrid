@@ -11,7 +11,7 @@ import { NoMatch, ErrorBoundary, SideNav } from 'components';
 import { Layout } from 'antd';
 
 import 'styles/globals';
-import 'axui-datagrid/style.scss'; // or style.css
+import 'axui-datagrid/style.less'; // or style.css
 
 import { Introduction, Usage } from 'pages/start';
 import { Examples } from 'pages/examples';
