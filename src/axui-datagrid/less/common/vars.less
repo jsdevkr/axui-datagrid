@@ -88,10 +88,11 @@
 @axui-datagrid-cell-checkbox-border: 1px solid #ccc;
 @axui-datagrid-cell-checkbox-border-radius: 3px;
 @axui-datagrid-cell-checkbox-bg-colors: #ffffff, #f0f0f0;
-@axui-datagrid-cell-disable-checkbox-bg-colors: (
-  darken(extract(@axui-datagrid-cell-checkbox-bg-colors, 2), 10%),
-  darken(extract(@axui-datagrid-cell-checkbox-bg-colors, 1), 10%)
-);
+@axui-datagrid-cell-disable-checkbox-bg-colors: darken(
+    extract(@axui-datagrid-cell-checkbox-bg-colors, 2),
+    10%
+  ),
+  darken(extract(@axui-datagrid-cell-checkbox-bg-colors, 1), 10%);
 @axui-datagrid-cell-checkbox-arrow-color: #3372ff;
 
 @axui-datagrid-cell-focused-box-shadow: inset 0px 0px 1px 1px #0581f2;
