@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Select, Icon, DatePicker, InputNumber } from 'antd';
+import { Button, Select, DatePicker, InputNumber } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
@@ -8,6 +8,7 @@ import { IDataGrid } from 'axui-datagrid/common/@types';
 import styled from 'styled-components';
 import moment from 'moment';
 import { debounce, isObject } from 'axui-datagrid/utils';
+import { PlusCircleFilled, MinusCircleFilled } from '@ant-design/icons';
 
 const DatagridContainer = styled.div`
   border: 1px solid #ccc;
@@ -449,7 +450,7 @@ class InlineEdit extends React.Component<any, IState> {
         <Segment padded>
           <h1>Inline Edit</h1>
           <p>
-            One column is consists of the attributes which are defined in
+            {`One column is consists of the attributes which are defined in
             '&#123; &#125;' context.
             <br />
             So if you want to edit contents of columns, you have to add the
@@ -457,7 +458,7 @@ class InlineEdit extends React.Component<any, IState> {
             '&#123; &#125;' what you want to add editor mode.
             <br />
             After this, you can activate editor mode using double-click or
-            return key.
+            return key.`}
           </p>
 
           <div ref={this.dataGridContainerRef}>
@@ -489,12 +490,12 @@ class InlineEdit extends React.Component<any, IState> {
 
           <div style={{ height: 10 }} />
           <Button size="small" onClick={() => this.addItem()}>
-            <Icon type="plus" />
+            <PlusCircleFilled />
             Add item
           </Button>
 
           <Button size="small" onClick={() => this.removeItem()}>
-            <Icon type="minus" />
+            <MinusCircleFilled />
             Remove item
           </Button>
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Icon } from 'antd';
+import { HomeFilled, SolutionOutlined } from '@ant-design/icons';
 
 export const Menus = {
   start: {
     label: (
       <>
-        <Icon type="home" />
+        <HomeFilled />
         Start
       </>
     ),
@@ -17,7 +17,7 @@ export const Menus = {
   examples: {
     label: (
       <>
-        <Icon type="solution" />
+        <SolutionOutlined />
         Examples
       </>
     ),

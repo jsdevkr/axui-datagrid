@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { Button, Icon, Input } from 'antd';
+import { Button, Input } from 'antd';
 import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
 import { IDataGrid } from 'axui-datagrid/common/@types';
 
 import styled from 'styled-components';
-// import { debounce } from 'axui-datagrid/utils';
+import { PlusCircleFilled, MinusCircleFilled } from '@ant-design/icons';
 import { arrayTypedData } from './data/arrayTypedData';
 
 const DatagridContainer = styled.div`
@@ -347,7 +347,7 @@ class MultiEdit extends React.Component<IProps, IState> {
     const { data } = this.state;
     const { sortInfos } = param;
 
-    const getValueByKey = function(_item: any, _key: string) {
+    const getValueByKey = function (_item: any, _key: string) {
       return _item.value[_key].v || '';
     };
 
@@ -432,12 +432,12 @@ class MultiEdit extends React.Component<IProps, IState> {
 
           <div style={{ height: 10 }} />
           <Button size="small" onClick={this.addItem}>
-            <Icon type="plus" />
+            <PlusCircleFilled />
             Add item
           </Button>
 
           <Button size="small" onClick={this.removeItem}>
-            <Icon type="minus" />
+            <MinusCircleFilled />
             Remove item
           </Button>
 

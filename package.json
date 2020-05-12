@@ -22,7 +22,7 @@
     "@types/react-router-dom": "^5.1.4",
     "@types/react-syntax-highlighter": "11.0.4",
     "@types/styled-components": "^4.4.3",
-    "antd": "^4.1.4",
+    "antd": "^4.2.2",
     "axios": "^0.19.2",
     "axui-contextmenu": "^0.4.0",
     "babel-polyfill": "^6.26.0",
@@ -74,5 +74,7 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "@ant-design/icons": "^4.1.0"
+  }
 }
