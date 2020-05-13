@@ -48,7 +48,6 @@ const inputNumberEditor: IDataGrid.cellEditorFunction = ({
   return (
     <InputNumber
       style={{ width: '100%' }}
-      autoFocus
       defaultValue={value}
       onBlur={e => {
         console.log('onBlur');
@@ -84,7 +83,6 @@ const searchSelectEditor: IDataGrid.cellEditorFunction = ({
       showSearch
       optionFilterProp="children"
       defaultOpen={true}
-      autoFocus={true}
       defaultValue={value}
       dropdownClassName="axui-datagrid-select-dropdown"
       onSelect={val => {
@@ -451,13 +449,13 @@ class InlineEdit extends React.Component<any, IState> {
           <h1>Inline Edit</h1>
           <p>
             {`One column is consists of the attributes which are defined in
-            '&#123; &#125;' context.
+            "{}" context.`}
             <br />
-            So if you want to edit contents of columns, you have to add the
-            editor attribute like 'editor: &#123;type: 'text' &#125;' within
-            '&#123; &#125;' what you want to add editor mode.
+            {`So if you want to edit contents of columns, you have to add the
+            editor attribute like "editor: {type: 'text'}" within
+            "{}" what you want to add editor mode.`}
             <br />
-            After this, you can activate editor mode using double-click or
+            {`After this, you can activate editor mode using double-click or
             return key.`}
           </p>
 

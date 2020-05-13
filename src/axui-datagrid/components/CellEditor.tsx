@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 import getAvailScrollLeft from '../utils/getAvailScrollLeft';
-import { delay } from '../utils/delay';
 
 interface IProps {
   colGroup: IDataGrid.ICol[];
@@ -426,7 +425,7 @@ class CellEditor extends React.PureComponent<IProps> {
     if (this.customEditorRef.current) {
       const inputEl = this.customEditorRef.current.querySelector('input');
       if (editor.activeType !== 'always' && inputEl) {
-        inputEl.focus();
+        inputEl.focus({ preventScroll: true });
         return;
       }
     }
