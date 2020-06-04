@@ -210,7 +210,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
               state.selectionRows[i] = true;
             });
 
-            Object.values(colGroup).forEach((col) => {
+            Object.values(colGroup).forEach(col => {
               state.selectionCols[col.colIndex || 0] = true;
               state.selectionECol = col.colIndex || 0;
             });
@@ -465,6 +465,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
       typeof focusedCol !== 'undefined' &&
       colGroup
     ) {
+      if (!colGroup[focusedCol]) {
+        return;
+      }
       const { key: itemKey = '' } = colGroup[focusedCol];
       const item = getDataItem(data, focusedRow);
       if (!item) {
