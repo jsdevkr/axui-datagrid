@@ -138,7 +138,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
                   if (item) {
                     for (const ck in selectionCols) {
                       if (selectionCols[ck]) {
-                        let val = '';
+                        let val: string | React.ReactNode = '';
                         const { formatter, key: colKey = '' } = headerColGroup[
                           ck
                         ];
@@ -162,7 +162,14 @@ class DataGridEvents extends React.Component<IProps, IState> {
                           val = item.value[headerColGroup[ck].key];
                         }
 
-                        copiedRow.push(val || '');
+                        if (
+                          typeof val === 'string' ||
+                          typeof val === 'number'
+                        ) {
+                          copiedRow.push(val.toString() || '');
+                        } else if (val && 'props' in (val as any)) {
+                          copiedRow.push((val as any).props.children || '');
+                        }
                       }
                     }
                   }

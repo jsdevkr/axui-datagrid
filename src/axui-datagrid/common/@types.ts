@@ -106,9 +106,13 @@ export namespace IDataGrid {
     keepEditing?: boolean;
   }
 
-  export type formatterFunction = (formatterData: IFormatterData) => any;
+  export type formatterFunction = (
+    formatterData: IFormatterData,
+  ) => string | React.ReactNode;
 
-  export type collectorFunction = (formatterData: ICollectorData) => any;
+  export type collectorFunction = (
+    formatterData: ICollectorData,
+  ) => string | React.ReactNode;
 
   export type userCallBackFunction = (param?: any) => void;
 
