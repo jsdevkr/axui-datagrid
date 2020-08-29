@@ -425,7 +425,7 @@ class DataGridBody extends React.Component<IProps> {
         if (moving.active) {
           rootObject.timer = setInterval(() => {
             if (!scrollMoving(moving)) {
-              // clearInterval(this.scrollMovingTimer);
+              clearInterval(rootObject.timer);
             }
           }, 60);
         } else {
@@ -469,7 +469,7 @@ class DataGridBody extends React.Component<IProps> {
         });
         document.removeEventListener('mousemove', throttledOnMouseMove);
         document.removeEventListener('mouseup', offEvent);
-        document.removeEventListener('mouseleave', offEvent);
+        // document.removeEventListener('mouseout', offEvent);
       };
 
       const throttledOnMouseMove = throttle(onMouseMove, 200);
@@ -543,7 +543,7 @@ class DataGridBody extends React.Component<IProps> {
 
       document.addEventListener('mousemove', throttledOnMouseMove);
       document.addEventListener('mouseup', offEvent);
-      document.addEventListener('mouseleave', offEvent);
+      // document.addEventListener('mouseout', offEvent);
     };
 
     // 선택이 시작된 row / col
