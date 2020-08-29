@@ -70,7 +70,7 @@ class DataGridBody extends React.Component<IProps> {
         arrayFromRange(
           Math.min(focusedRow, rowIndex),
           Math.max(focusedRow, rowIndex),
-        ).forEach((i) => {
+        ).forEach(i => {
           rows[i] = true;
         });
         return rows;
@@ -119,7 +119,7 @@ class DataGridBody extends React.Component<IProps> {
 
       const selectionRows = { [rowIndex]: true };
       const selectionCols = {};
-      colGroup.forEach((col) => {
+      colGroup.forEach(col => {
         selectionCols[col.colIndex || ''] = true;
       });
 
@@ -507,10 +507,6 @@ class DataGridBody extends React.Component<IProps> {
 
           selectStartedRow = focusedRow;
           selectStartedCol = focusedCol;
-
-          document.addEventListener('mousemove', throttledOnMouseMove);
-          document.addEventListener('mouseup', offEvent);
-          document.addEventListener('mouseleave', offEvent);
         }
       } else {
         // 셀렉션 저장정보 초기화
@@ -534,10 +530,6 @@ class DataGridBody extends React.Component<IProps> {
             focusedRow: selectStartedRow,
             focusedCol: selectStartedCol,
           });
-
-          document.addEventListener('mousemove', throttledOnMouseMove);
-          document.addEventListener('mouseup', offEvent);
-          document.addEventListener('mouseleave', offEvent);
         } else {
           // if (
           //   selectStartedCol >= selectionSCol &&
@@ -548,6 +540,10 @@ class DataGridBody extends React.Component<IProps> {
           // }
         }
       }
+
+      document.addEventListener('mousemove', throttledOnMouseMove);
+      document.addEventListener('mouseup', offEvent);
+      document.addEventListener('mouseleave', offEvent);
     };
 
     // 선택이 시작된 row / col

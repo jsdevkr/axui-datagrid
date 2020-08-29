@@ -68,7 +68,7 @@ class Introduction extends React.Component<IProps, IState> {
           <h3>Formatting of data</h3>
           <p>
             Users can change the values using 'date', 'money' predefined in
-            'columns>col.formatter', or the values as desired using a
+            'columns - col.formatter', or the values as desired using a
             user-defined function and apply the formula to the data in the
             column. The results are then displayed accoding to the function. For
             example, if you defined the formatter of the 'money' column as a
@@ -141,7 +141,7 @@ class Introduction extends React.Component<IProps, IState> {
           <Divider />
           <h3>Inline edit</h3>
           <p>
-            If you define the editor attribute in 'columns> col', you can use
+            If you define the editor attribute in 'columns - col', you can use
             the editor mode of that column. You can activate editor mode using
             double-click or return key.
           </p>
@@ -181,8 +181,8 @@ class Introduction extends React.Component<IProps, IState> {
 
           <h3>Row selector</h3>
           <p>
-            'options> showRowSelector' If you set the value to true, a check box
-            appears, allowing you to select each row of 'datagrid'.
+            'options - showRowSelector' If you set the value to true, a check
+            box appears, allowing you to select each row of 'datagrid'.
           </p>
           <NavLink to={'examples/RowSelector'}>
             <Button type={'primary'} size={'small'} ghost>

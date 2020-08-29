@@ -200,9 +200,9 @@ class SideNav extends React.Component<IProps, IState> {
           theme="dark"
           openKeys={openKeys}
           selectedKeys={selectedKeys}
-          onOpenChange={(nextOpenKeys: string[]) => {
+          onOpenChange={nextOpenKeys => {
             this.setState({
-              openKeys: nextOpenKeys,
+              openKeys: nextOpenKeys as string[],
             });
           }}
         >

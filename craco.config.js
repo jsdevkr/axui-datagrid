@@ -39,7 +39,9 @@ module.exports = {
       plugin: CracoLessPlugin,
       options: {
         lessLoaderOptions: {
-          javascriptEnabled: true,
+          lessOptions: {
+            javascriptEnabled: true,
+          },
         },
       },
     },

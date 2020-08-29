@@ -98,8 +98,8 @@ class LoadingState extends React.Component<any, IState> {
         <Segment padded>
           <h1>RowSelector</h1>
           <p>
-            'options> showRowSelector' If you set the value to true, a check box
-            appears, allowing you to select each row of 'datagrid'.
+            'options - showRowSelector' If you set the value to true, a check
+            box appears, allowing you to select each row of 'datagrid'.
           </p>
 
           <div
