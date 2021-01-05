@@ -23,7 +23,7 @@
     "@types/react-test-renderer": "^16.0.1",
     "@types/styled-components": "^4.1.0",
     "antd": "^3.9.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "axui-contextmenu": "^0.4.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
