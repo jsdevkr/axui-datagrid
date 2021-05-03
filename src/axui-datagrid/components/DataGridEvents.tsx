@@ -159,7 +159,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
                             formatterData,
                           );
                         } else {
-                          val = item.value[headerColGroup[ck].key];
+                          val = item.value[headerColGroup[ck].key!] ?? '';
                         }
 
                         if (

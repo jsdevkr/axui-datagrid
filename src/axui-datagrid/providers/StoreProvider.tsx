@@ -78,8 +78,10 @@ class StoreProvider extends React.Component<
   IDataGrid.IStoreProps,
   IDataGrid.IStoreState
 > {
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   state = store;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   static getDerivedStateFromProps(
     nProps: IDataGrid.IStoreProps,
     nState: IDataGrid.IStoreState,
@@ -141,305 +143,309 @@ class StoreProvider extends React.Component<
       nProps.onEdit === nState.onEdit
     ) {
       return null;
-    } else {
-      // store state | 현재 state복제
-      const { options = {} } = nProps;
-      const { frozenColumnIndex = 0 } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
-      const storeState: IDataGrid.IStoreState = {
-        ...nState,
-      };
-
-      // scrollTop prop 저장
-      storeState.pScrollTop = nProps.scrollTop;
-      storeState.pScrollLeft = nProps.scrollLeft;
-      storeState.loading = nProps.loading;
-      storeState.loadingData = nProps.loadingData;
-
-      storeState.width = nProps.width;
-      storeState.height = nProps.height;
-      // storeState.selection = nProps.selection;
-      storeState.pSortInfo = nProps.sortInfo;
-
-      storeState.options = nProps.options;
-      storeState.status = nProps.status;
-      storeState.rootNode = nProps.rootNode;
-      storeState.clipBoardNode = nProps.clipBoardNode;
-      storeState.rootObject = nProps.rootObject;
-      storeState.onBeforeEvent = nProps.onBeforeEvent;
-      storeState.onScroll = nProps.onScroll;
-      storeState.onScrollEnd = nProps.onScrollEnd;
-      storeState.onChangeScrollSize = nProps.onChangeScrollSize;
-      storeState.onChangeSelection = nProps.onChangeSelection;
-      storeState.onChangeColumns = nProps.onChangeColumns;
-      storeState.onSelect = nProps.onSelect;
-      storeState.onRightClick = nProps.onRightClick;
-      storeState.onClick = nProps.onClick;
-      storeState.onDoubleClick = nProps.onDoubleClick;
-      storeState.onError = nProps.onError;
-      storeState.onSort = nProps.onSort;
-      storeState.onEdit = nProps.onEdit;
-      ///
-      storeState.headerTable = nProps.headerTable;
-      storeState.bodyRowTable = nProps.bodyRowTable;
-      storeState.bodyRowMap = nProps.bodyRowMap;
-      storeState.asideHeaderData = nProps.asideHeaderData;
-      storeState.leftHeaderData = nProps.leftHeaderData;
-      storeState.headerData = nProps.headerData;
-      storeState.asideBodyRowData = nProps.asideBodyRowData;
-      storeState.leftBodyRowData = nProps.leftBodyRowData;
-      storeState.bodyRowData = nProps.bodyRowData;
-      storeState.colGroupMap = nProps.colGroupMap;
-      storeState.asideColGroup = nProps.asideColGroup;
-      storeState.autofitColGroup = nProps.autofitColGroup;
-      storeState.colGroup = nProps.colGroup;
-      storeState.footSumColumns = nProps.footSumColumns;
-      storeState.footSumTable = nProps.footSumTable;
-      storeState.leftFootSumData = nProps.leftFootSumData;
-      storeState.footSumData = nProps.footSumData;
-
-      const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
-        storeState.options || {};
-      const changed = {
-        colGroup: false,
-        frozenColumnIndex: false,
-        styles: false,
-        visibleColGroup: false,
-        data: false,
-      };
-
-      // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
-      let {
-        colGroup: _colGroup = [],
-        leftHeaderColGroup: _leftHeaderColGroup,
-        headerColGroup: _headerColGroup,
-        styles: _styles,
-        scrollLeft: _scrollLeft = 0,
-        scrollTop: _scrollTop = 0,
-      } = storeState;
-
-      // colGroup들의 너비합을 모르거나 변경된 경우.
-      // colGroup > width 연산
-      if (
-        nProps.colGroup !== nState.colGroup ||
-        nProps.options !== nState.options
-      ) {
-        _colGroup = setColGroupWidth(
-          nProps.colGroup || [],
-          { width: nProps.width || 0 },
-          nProps.options,
-        );
-        changed.colGroup = true;
-      }
-
-      if (changed.colGroup || frozenColumnIndex !== PfrozenColumnIndex) {
-        _leftHeaderColGroup = _colGroup.slice(0, frozenColumnIndex);
-        _headerColGroup = _colGroup.slice(frozenColumnIndex);
-        changed.frozenColumnIndex = true;
-      }
-
-      // case of change datalength
-
-      if (
-        nProps.data !== nState.data ||
-        nProps.dataLength !== nState.dataLength
-      ) {
-        changed.data = true;
-        storeState.data = nProps.data;
-        storeState.dataLength = storeState.dataLength = nProps.dataLength;
-
-        // listSelectedAll is false when data empty
-        if (storeState.data && storeState.dataLength === 0) {
-          storeState.listSelectedAll = false;
-        }
-      }
-
-      if (
-        changed.data ||
-        changed.colGroup ||
-        changed.frozenColumnIndex ||
-        !storeState.styles ||
-        nProps.width !== nState.width ||
-        nProps.height !== nState.height
-      ) {
-        // 스타일 초기화 안되어 있거나 크기를 다시 결정해야 하는 경우.
-        storeState.scrollTop = nProps.scrollTop;
-        storeState.scrollLeft = nProps.scrollLeft;
-
-        const dimensions = calculateDimensions(storeState, {
-          headerTable: nProps.headerTable,
-          colGroup: _colGroup,
-          headerColGroup: _headerColGroup,
-          bodyRowTable: nProps.bodyRowTable,
-          footSumColumns: nProps.footSumColumns,
-          dataLength: nProps.dataLength,
-          options: nProps.options,
-        });
-
-        _styles = dimensions.styles;
-        _scrollTop = dimensions.scrollTop;
-        _scrollLeft = dimensions.scrollLeft;
-
-        changed.styles = true;
-      }
-
-      if (changed.styles) {
-        const {
-          scrollContentWidth = 0,
-          scrollContentHeight = 0,
-          scrollContentContainerWidth = 0,
-          scrollContentContainerHeight = 0,
-        } = _styles || {};
-        const {
-          scrollTop: currScrollTop = 0,
-          scrollLeft: currScrollLeft = 0,
-        } = getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
-          scrollWidth: scrollContentWidth,
-          scrollHeight: scrollContentHeight,
-          clientWidth: scrollContentContainerWidth,
-          clientHeight: scrollContentContainerHeight,
-        });
-
-        _scrollTop = currScrollTop;
-        _scrollLeft = currScrollLeft;
-      }
-
-      let currScrollLeft, currScrollTop;
-
-      if (
-        nProps.scrollTop !== nState.pScrollTop ||
-        nProps.scrollLeft !== nState.pScrollLeft
-      ) {
-        const {
-          scrollContentWidth = 0,
-          scrollContentHeight = 0,
-          scrollContentContainerWidth = 0,
-          scrollContentContainerHeight = 0,
-        } = _styles || {};
-
-        const {
-          scrollLeft: _currScrollLeft = 0,
-          scrollTop: _currScrollTop = 0,
-        } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
-          scrollWidth: scrollContentWidth,
-          scrollHeight: scrollContentHeight,
-          clientWidth: scrollContentContainerWidth,
-          clientHeight: scrollContentContainerHeight,
-        });
-        currScrollLeft = _currScrollLeft;
-        currScrollTop = _currScrollTop;
-      }
-
-      if (
-        typeof currScrollTop !== 'undefined' &&
-        nProps.scrollTop !== nState.pScrollTop
-      ) {
-        _scrollTop = currScrollTop;
-      }
-      if (
-        typeof currScrollLeft !== 'undefined' &&
-        nProps.scrollLeft !== nState.pScrollLeft
-      ) {
-        _scrollLeft = currScrollLeft;
-      }
-
-      if (nProps.selection !== nState.selection) {
-        storeState.selection = nProps.selection;
-
-        const {
-          rows = [],
-          cols = [],
-          focusedRow = -1,
-          focusedCol = -1,
-          isEditing = false,
-        } = nProps.selection || {};
-
-        storeState.selectionRows = {};
-        storeState.selectionCols = {};
-
-        storeState.selectionSCol = cols[0];
-        storeState.selectionECol = cols[cols.length - 1];
-        storeState.selectionSRow = rows[0];
-        storeState.selectionERow = rows[rows.length - 1];
-
-        rows.forEach((n) => {
-          storeState.selectionRows![n] = true;
-        });
-        cols.forEach((n) => {
-          storeState.selectionCols![n] = true;
-        });
-
-        storeState.focusedRow = focusedRow;
-        storeState.focusedCol = focusedCol;
-
-        // 에디팅이면 인라인 에디팅 상태추가.
-        if (isEditing) {
-          storeState.isInlineEditing = true;
-          storeState.inlineEditingCell = {
-            rowIndex: focusedRow,
-            colIndex: focusedCol,
-          };
-        }
-      }
-
-      // if (
-      //   storeState.data &&
-      //   nProps.selectedIndexes !== nState.selectedIndexes
-      // ) {
-      //   Object.keys(storeState.data).forEach(k => {
-      //     if (storeState.data) {
-      //       storeState.data[k].selected = false;
-      //     }
-      //   });
-
-      //   if (nProps.selectedIndexes) {
-      //     nProps.selectedIndexes.forEach(
-      //       idx => (storeState.data![idx].selected = true),
-      //     );
-      //   }
-      // }
-
-      if (nProps.sortInfo !== nState.pSortInfo) {
-        // changed sortInfo
-        storeState.sortInfo = nProps.sortInfo;
-      }
-
-      // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
-      if (
-        changed.colGroup ||
-        changed.frozenColumnIndex ||
-        !storeState.styles ||
-        nProps.width !== nState.width
-      ) {
-        const visibleData = getVisibleColGroup(_headerColGroup, {
-          scrollLeft: _scrollLeft,
-          bodyRowData: storeState.bodyRowData,
-          footSumData: storeState.footSumData,
-          styles: _styles,
-          options: storeState.options,
-        });
-
-        storeState.visibleHeaderColGroup = visibleData.visibleHeaderColGroup;
-        storeState.visibleBodyRowData = visibleData.visibleBodyRowData;
-        storeState.visibleFootSumData = visibleData.visibleFootSumData;
-        storeState.printStartColIndex = visibleData.printStartColIndex;
-        storeState.printEndColIndex = visibleData.printEndColIndex;
-
-        changed.colGroup = true;
-      }
-
-      // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
-      storeState.colGroup = _colGroup;
-      storeState.leftHeaderColGroup = _leftHeaderColGroup;
-      storeState.headerColGroup = _headerColGroup;
-      storeState.styles = _styles;
-      storeState.scrollLeft = _scrollLeft;
-      storeState.scrollTop = _scrollTop;
-
-      return storeState;
     }
+    // store state | 현재 state복제
+    const { options = {} } = nProps;
+    const { frozenColumnIndex = 0 } = options; // 옵션은 외부에서 받은 값을 사용하고 state에서 값을 수정하면 안됨.
+    const storeState: IDataGrid.IStoreState = {
+      ...nState,
+    };
+
+    // scrollTop prop 저장
+    storeState.pScrollTop = nProps.scrollTop;
+    storeState.pScrollLeft = nProps.scrollLeft;
+    storeState.loading = nProps.loading;
+    storeState.loadingData = nProps.loadingData;
+
+    storeState.width = nProps.width;
+    storeState.height = nProps.height;
+    // storeState.selection = nProps.selection;
+    storeState.pSortInfo = nProps.sortInfo;
+
+    storeState.options = nProps.options;
+    storeState.status = nProps.status;
+    storeState.rootNode = nProps.rootNode;
+    storeState.clipBoardNode = nProps.clipBoardNode;
+    storeState.rootObject = nProps.rootObject;
+    storeState.onBeforeEvent = nProps.onBeforeEvent;
+    storeState.onScroll = nProps.onScroll;
+    storeState.onScrollEnd = nProps.onScrollEnd;
+    storeState.onChangeScrollSize = nProps.onChangeScrollSize;
+    storeState.onChangeSelection = nProps.onChangeSelection;
+    storeState.onChangeColumns = nProps.onChangeColumns;
+    storeState.onSelect = nProps.onSelect;
+    storeState.onRightClick = nProps.onRightClick;
+    storeState.onClick = nProps.onClick;
+    storeState.onDoubleClick = nProps.onDoubleClick;
+    storeState.onError = nProps.onError;
+    storeState.onSort = nProps.onSort;
+    storeState.onEdit = nProps.onEdit;
+    ///
+    storeState.headerTable = nProps.headerTable;
+    storeState.bodyRowTable = nProps.bodyRowTable;
+    storeState.bodyRowMap = nProps.bodyRowMap;
+    storeState.asideHeaderData = nProps.asideHeaderData;
+    storeState.leftHeaderData = nProps.leftHeaderData;
+    storeState.headerData = nProps.headerData;
+    storeState.asideBodyRowData = nProps.asideBodyRowData;
+    storeState.leftBodyRowData = nProps.leftBodyRowData;
+    storeState.bodyRowData = nProps.bodyRowData;
+    storeState.colGroupMap = nProps.colGroupMap;
+    storeState.asideColGroup = nProps.asideColGroup;
+    storeState.autofitColGroup = nProps.autofitColGroup;
+    storeState.colGroup = nProps.colGroup;
+    storeState.footSumColumns = nProps.footSumColumns;
+    storeState.footSumTable = nProps.footSumTable;
+    storeState.leftFootSumData = nProps.leftFootSumData;
+    storeState.footSumData = nProps.footSumData;
+
+    const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
+      storeState.options || {};
+    const changed = {
+      colGroup: false,
+      frozenColumnIndex: false,
+      styles: false,
+      visibleColGroup: false,
+      data: false,
+    };
+
+    // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
+    let {
+      colGroup: _colGroup = [],
+      leftHeaderColGroup: _leftHeaderColGroup,
+      headerColGroup: _headerColGroup,
+      styles: _styles,
+      scrollLeft: _scrollLeft = 0,
+      scrollTop: _scrollTop = 0,
+    } = storeState;
+
+    // colGroup들의 너비합을 모르거나 변경된 경우.
+    // colGroup > width 연산
+    if (
+      nProps.colGroup !== nState.colGroup ||
+      nProps.options !== nState.options
+    ) {
+      _colGroup = setColGroupWidth(
+        nProps.colGroup || [],
+        { width: nProps.width || 0 },
+        nProps.options,
+      );
+      changed.colGroup = true;
+    }
+
+    if (changed.colGroup || frozenColumnIndex !== PfrozenColumnIndex) {
+      _leftHeaderColGroup = _colGroup.slice(0, frozenColumnIndex);
+      _headerColGroup = _colGroup.slice(frozenColumnIndex);
+      changed.frozenColumnIndex = true;
+    }
+
+    // case of change datalength
+
+    if (
+      nProps.data !== nState.data ||
+      nProps.dataLength !== nState.dataLength
+    ) {
+      changed.data = true;
+      storeState.data = nProps.data;
+      storeState.dataLength = storeState.dataLength = nProps.dataLength;
+
+      // listSelectedAll is false when data empty
+      if (storeState.data && storeState.dataLength === 0) {
+        storeState.listSelectedAll = false;
+      }
+    }
+
+    if (
+      changed.data ||
+      changed.colGroup ||
+      changed.frozenColumnIndex ||
+      !storeState.styles ||
+      nProps.width !== nState.width ||
+      nProps.height !== nState.height
+    ) {
+      // 스타일 초기화 안되어 있거나 크기를 다시 결정해야 하는 경우.
+      storeState.scrollTop = nProps.scrollTop;
+      storeState.scrollLeft = nProps.scrollLeft;
+
+      const dimensions = calculateDimensions(storeState, {
+        headerTable: nProps.headerTable,
+        colGroup: _colGroup,
+        headerColGroup: _headerColGroup,
+        bodyRowTable: nProps.bodyRowTable,
+        footSumColumns: nProps.footSumColumns,
+        dataLength: nProps.dataLength,
+        options: nProps.options,
+      });
+
+      _styles = dimensions.styles;
+      _scrollTop = dimensions.scrollTop;
+      _scrollLeft = dimensions.scrollLeft;
+
+      changed.styles = true;
+    }
+
+    if (changed.styles) {
+      const {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+      } = _styles || {};
+      const {
+        scrollTop: currScrollTop = 0,
+        scrollLeft: currScrollLeft = 0,
+      } = getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
+        scrollWidth: scrollContentWidth,
+        scrollHeight: scrollContentHeight,
+        clientWidth: scrollContentContainerWidth,
+        clientHeight: scrollContentContainerHeight,
+      });
+
+      _scrollTop = currScrollTop;
+      _scrollLeft = currScrollLeft;
+    }
+
+    let currScrollLeft, currScrollTop;
+
+    if (
+      nProps.scrollTop !== nState.pScrollTop ||
+      nProps.scrollLeft !== nState.pScrollLeft
+    ) {
+      const {
+        scrollContentWidth = 0,
+        scrollContentHeight = 0,
+        scrollContentContainerWidth = 0,
+        scrollContentContainerHeight = 0,
+      } = _styles || {};
+
+      const {
+        scrollLeft: _currScrollLeft = 0,
+        scrollTop: _currScrollTop = 0,
+      } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+        scrollWidth: scrollContentWidth,
+        scrollHeight: scrollContentHeight,
+        clientWidth: scrollContentContainerWidth,
+        clientHeight: scrollContentContainerHeight,
+      });
+      currScrollLeft = _currScrollLeft;
+      currScrollTop = _currScrollTop;
+    }
+
+    if (
+      typeof currScrollTop !== 'undefined' &&
+      nProps.scrollTop !== nState.pScrollTop
+    ) {
+      _scrollTop = currScrollTop;
+    }
+    if (
+      typeof currScrollLeft !== 'undefined' &&
+      nProps.scrollLeft !== nState.pScrollLeft
+    ) {
+      _scrollLeft = currScrollLeft;
+    }
+
+    if (nProps.selection !== nState.selection) {
+      storeState.selection = nProps.selection;
+
+      const {
+        rows = [],
+        cols = [],
+        focusedRow = -1,
+        focusedCol = -1,
+        isEditing = false,
+      } = nProps.selection || {};
+
+      storeState.selectionRows = {};
+      storeState.selectionCols = {};
+
+      storeState.selectionSCol = cols.length ? cols[0] : undefined;
+      storeState.selectionECol = cols[cols.length - 1];
+      storeState.selectionSRow = rows.length ? rows[0] : undefined;
+      storeState.selectionERow = rows[rows.length - 1];
+
+      rows.forEach(n => {
+        if (storeState.selectionRows) {
+          storeState.selectionRows[n] = true;
+        }
+      });
+      cols.forEach(n => {
+        if (storeState.selectionCols) {
+          storeState.selectionCols[n] = true;
+        }
+      });
+
+      storeState.focusedRow = focusedRow;
+      storeState.focusedCol = focusedCol;
+
+      // 에디팅이면 인라인 에디팅 상태추가.
+      if (isEditing) {
+        storeState.isInlineEditing = true;
+        storeState.inlineEditingCell = {
+          rowIndex: focusedRow,
+          colIndex: focusedCol,
+        };
+      }
+    }
+
+    // if (
+    //   storeState.data &&
+    //   nProps.selectedIndexes !== nState.selectedIndexes
+    // ) {
+    //   Object.keys(storeState.data).forEach(k => {
+    //     if (storeState.data) {
+    //       storeState.data[k].selected = false;
+    //     }
+    //   });
+
+    //   if (nProps.selectedIndexes) {
+    //     nProps.selectedIndexes.forEach(
+    //       idx => (storeState.data![idx].selected = true),
+    //     );
+    //   }
+    // }
+
+    if (nProps.sortInfo !== nState.pSortInfo) {
+      // changed sortInfo
+      storeState.sortInfo = nProps.sortInfo;
+    }
+
+    // 스타일 정의가 되어 있지 않은 경우 : 그리드가 한번도 그려진 적이 없는 상태.
+    if (
+      changed.colGroup ||
+      changed.frozenColumnIndex ||
+      !storeState.styles ||
+      nProps.width !== nState.width
+    ) {
+      const visibleData = getVisibleColGroup(_headerColGroup, {
+        scrollLeft: _scrollLeft,
+        bodyRowData: storeState.bodyRowData,
+        footSumData: storeState.footSumData,
+        styles: _styles,
+        options: storeState.options,
+      });
+
+      storeState.visibleHeaderColGroup = visibleData.visibleHeaderColGroup;
+      storeState.visibleBodyRowData = visibleData.visibleBodyRowData;
+      storeState.visibleFootSumData = visibleData.visibleFootSumData;
+      storeState.printStartColIndex = visibleData.printStartColIndex;
+      storeState.printEndColIndex = visibleData.printEndColIndex;
+
+      changed.colGroup = true;
+    }
+
+    // 언더바로 시작하는 변수를 상태에 전달하기 위해 주입.
+    storeState.colGroup = _colGroup;
+    storeState.leftHeaderColGroup = _leftHeaderColGroup;
+    storeState.headerColGroup = _headerColGroup;
+    storeState.styles = _styles;
+    storeState.scrollLeft = _scrollLeft;
+    storeState.scrollTop = _scrollTop;
+
+    return storeState;
   }
 
   // state 가 업데이트 되기 전.
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   setStoreState = (newState: IDataGrid.IStoreState, callback?: () => void) => {
     const {
       scrollLeft = 0,
@@ -510,6 +516,7 @@ class StoreProvider extends React.Component<
     this.setState(newState, callback);
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   dispatch = (
     dispatchType: DataGridEnums.DispatchTypes,
     param: IDataGrid.DispatchParam,
@@ -638,13 +645,14 @@ class StoreProvider extends React.Component<
 
         for (const k in currentSortInfo) {
           if (currentSortInfo[k]) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             sortInfos[currentSortInfo[k].seq!] = {
               key: k,
               orderBy: currentSortInfo[k].orderBy,
             };
           }
         }
-        sortInfos = sortInfos.filter((o) => typeof o !== 'undefined');
+        sortInfos = sortInfos.filter(o => typeof o !== 'undefined');
 
         if (onSort) {
           onSort({
@@ -829,15 +837,18 @@ class StoreProvider extends React.Component<
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   componentDidMount() {
     // console.log('store did mount');
   }
 
   // tslint:disable-next-line: member-ordering
-  lazyComponentDidUpdate = throttle((pState: IDataGrid.IStoreState) => {}, 0, {
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+  lazyComponentDidUpdate = throttle((_pState: IDataGrid.IStoreState) => {}, 0, {
     trailing: true,
   });
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   componentDidUpdate(
     pProps: IDataGrid.IStoreProps,
     pState: IDataGrid.IStoreState,
@@ -923,8 +934,8 @@ class StoreProvider extends React.Component<
         sRowIndex + Math.ceil(bodyHeight / (bodyTrHeight || 1)) + 1;
 
       onChangeSelection({
-        rows: Object.keys(selectionRows).map((n) => Number(n)),
-        cols: Object.keys(selectionCols).map((n) => Number(n)),
+        rows: Object.keys(selectionRows).map(n => Number(n)),
+        cols: Object.keys(selectionCols).map(n => Number(n)),
         focusedRow,
         focusedCol,
         scrollLeft: Number(scrollLeft),
@@ -939,6 +950,7 @@ class StoreProvider extends React.Component<
     // console.log('store unMount');
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   render() {
     return (
       <Provider

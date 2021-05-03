@@ -489,8 +489,8 @@ export namespace IDataGrid {
 
     endOfScrollTop?: boolean;
     endOfScrollLeft?: boolean;
-    selectionRows?: {};
-    selectionCols?: {};
+    selectionRows?: Record<number, boolean>;
+    selectionCols?: Record<number, boolean>;
     focusedRow?: number;
     focusedCol?: number;
 
