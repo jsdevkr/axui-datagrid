@@ -79,6 +79,19 @@ class CellLabel extends React.PureComponent<{
         }
     }
 
+    if (typeof labelValue === 'string') {
+      return (
+        <span
+          data-span={columnAttr}
+          style={{
+            height: columnHeight - columnBorderWidth + 'px',
+            lineHeight: lineHeight + 'px',
+            textAlign: colAlign as any,
+          }}
+          dangerouslySetInnerHTML={{ __html: labelValue }}
+        />
+      );
+    }
     return (
       <span
         data-span={columnAttr}
