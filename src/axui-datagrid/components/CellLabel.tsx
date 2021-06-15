@@ -88,7 +88,9 @@ class CellLabel extends React.PureComponent<{
             lineHeight: lineHeight + 'px',
             textAlign: colAlign as any,
           }}
-          dangerouslySetInnerHTML={{ __html: labelValue }}
+          dangerouslySetInnerHTML={{
+            __html: labelValue.replace(/ /g, '&nbsp;'),
+          }}
         />
       );
     }
