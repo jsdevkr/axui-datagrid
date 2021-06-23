@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { isFunction } from '../utils';
+import { isFunction, escapeHTML } from '../utils';
 import { IDataGrid } from '../common/@types';
 
 class CellLabel extends React.PureComponent<{
@@ -89,7 +89,7 @@ class CellLabel extends React.PureComponent<{
             textAlign: colAlign as any,
           }}
           dangerouslySetInnerHTML={{
-            __html: labelValue.replace(/ /g, '&nbsp;'),
+            __html: escapeHTML(labelValue),
           }}
         />
       );

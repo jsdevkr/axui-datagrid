@@ -229,7 +229,7 @@ export function debounce(func: any, wait: any, options?: any) {
     return timerId !== undefined;
   }
 
-  let debounced: any = function(...args: any[]) {
+  const debounced: any = function (...args: any[]) {
     const time = Date.now();
     const isInvoking = shouldInvoke(time);
 
@@ -287,7 +287,7 @@ export const isDate = (value: any) =>
  * @return {{x: any; y: any}}
  */
 export function getMousePosition(e: any) {
-  let mouseObj =
+  const mouseObj =
     'changedTouches' in e && e.changedTouches ? e.changedTouches[0] : e;
   // clientX, Y 쓰면 스크롤에서 문제 발생
   return {
@@ -307,4 +307,23 @@ export function padLeft(s: any, l: number = 2, padder: string = '0'): string {
 
 export function padRight(s: any, l: number = 2, padder: string = '0'): string {
   return s.toString() + times(padder || '0', l - s.length);
+}
+
+// List of HTML entities for escaping.
+const htmlEscapes = {
+  ' ': '&nbsp;',
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#x27;',
+  '/': '&#x2F;',
+};
+// Regex containing the keys listed immediately above.
+const htmlEscaper = /[ &<>"'\/]/g;
+// Escape a string for HTML interpolation.
+export function escapeHTML(string: string) {
+  return ('' + string).replace(htmlEscaper, function (match) {
+    return htmlEscapes[match];
+  });
 }
