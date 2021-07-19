@@ -11,7 +11,7 @@ demo : http://axui-datagrid.jsdev.kr
 npm install axui-datagrid
 ```
 
-# Run
+# Run 2
 
 ```bash
 git clone https://github.com/jsdevkr/axui-datagrid.git
