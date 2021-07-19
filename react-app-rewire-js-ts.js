@@ -1,5 +1,7 @@
 //This is change to OSS experiment!
 //test1
+//test2
+//test3
 const path = require('path');
 
 const tsLoaderMatcher = function(rule) {
