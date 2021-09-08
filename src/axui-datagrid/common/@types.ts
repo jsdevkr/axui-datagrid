@@ -337,6 +337,7 @@ export namespace IDataGrid {
     scroller?: IOptionScroller;
     columnKeys?: IColumnKeys;
     disableClipboard?: boolean;
+    onCopyClipboard?: (copiedString: string) => void;
   }
 
   export interface IStyles {

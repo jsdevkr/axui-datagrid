@@ -61,8 +61,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
         options = {},
         styles = {},
         predefinedFormatter = {},
-        isInlineEditing,
-        inlineEditingCell,
       } = this.props;
       const {
         printStartColIndex = 0,
@@ -72,6 +70,7 @@ class DataGridEvents extends React.Component<IProps, IState> {
         frozenRowIndex = 0,
         frozenColumnIndex = 0,
         disableClipboard = false,
+        onCopyClipboard,
       } = options;
       const {
         bodyTrHeight = 0,
@@ -125,7 +124,9 @@ class DataGridEvents extends React.Component<IProps, IState> {
       if (e.metaKey || e.ctrlKey) {
         switch (e.which) {
           case DataGridEnums.MetaKeycodes.C:
-            if (!disableClipboard) {
+            if (disableClipboard) {
+              reject('disableClipboard');
+            } else {
               e.preventDefault();
 
               let copySuccess: boolean = false;
@@ -189,14 +190,12 @@ class DataGridEvents extends React.Component<IProps, IState> {
               rootNode && rootNode.current && rootNode.current.focus();
 
               if (copySuccess) {
+                onCopyClipboard?.(copiedString.join('\n'));
                 resolve();
               } else {
                 reject('not working execCommand');
               }
-            } else {
-              reject('disableClipboard');
             }
-
             break;
 
           case DataGridEnums.MetaKeycodes.A:
@@ -494,7 +493,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
   onKeyDownInlineEditor = (e: KeyboardEvent) => {
     const {
       data = {},
-      inlineEditingCell,
       colGroup = [],
       printStartColIndex: sColIndex = 0,
       printEndColIndex: eColIndex = 0,

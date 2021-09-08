@@ -128,10 +128,10 @@ export function debounce(func: any, wait: any, options?: any) {
   }
   wait = +wait || 0;
   if (isObject(options)) {
-    leading = !!options.leading;
+    leading = Boolean(options.leading);
     maxing = 'maxWait' in options;
     maxWait = maxing ? Math.max(+options.maxWait || 0, wait) : maxWait;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
+    trailing = 'trailing' in options ? Boolean(options.trailing) : trailing;
   }
 
   function invokeFunc(time: any) {
@@ -268,8 +268,8 @@ export function throttle(func: any, wait: any, options?: any) {
     throw new TypeError('Expected a function');
   }
   if (isObject(options)) {
-    leading = 'leading' in options ? !!options.leading : leading;
-    trailing = 'trailing' in options ? !!options.trailing : trailing;
+    leading = 'leading' in options ? Boolean(options.leading) : leading;
+    trailing = 'trailing' in options ? Boolean(options.trailing) : trailing;
   }
   return debounce(func, wait, {
     leading: leading,
@@ -281,11 +281,6 @@ export function throttle(func: any, wait: any, options?: any) {
 export const isDate = (value: any) =>
   isObjectLike(value) && baseGetTag(value) === '[object Date]';
 
-/**
- *
- * @param e
- * @return {{x: any; y: any}}
- */
 export function getMousePosition(e: any) {
   const mouseObj =
     'changedTouches' in e && e.changedTouches ? e.changedTouches[0] : e;
@@ -320,10 +315,10 @@ const htmlEscapes = {
   '/': '&#x2F;',
 };
 // Regex containing the keys listed immediately above.
-const htmlEscaper = /[ &<>"'\/]/g;
+const htmlEscape = /[ &<>"'/]/g;
 // Escape a string for HTML interpolation.
 export function escapeHTML(string: string) {
-  return ('' + string).replace(htmlEscaper, function (match) {
+  return ('' + string).replace(htmlEscape, function (match) {
     return htmlEscapes[match];
   });
 }
