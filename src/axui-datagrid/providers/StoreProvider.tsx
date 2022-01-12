@@ -230,7 +230,7 @@ class StoreProvider extends React.Component<
       scrollTop: _scrollTop = 0,
     } = storeState;
 
-    if(nProps.asideColGroup !== nState.asideColGroup) {
+    if (nProps.asideColGroup !== nState.asideColGroup) {
       changed.asideColGroup = true;
     }
     // colGroup들의 너비합을 모르거나 변경된 경우.
@@ -548,7 +548,8 @@ class StoreProvider extends React.Component<
       onSort,
       onEdit,
       onChangeColumns,
-      options = {},
+      onChangeLineNumberWidth,
+      onChangeRowSelectorWidth,
     } = this.state;
 
     const {
@@ -748,7 +749,7 @@ class StoreProvider extends React.Component<
             _col => _col.columnAttr === col.columnAttr,
           );
 
-          if(colIndex > -1) {
+          if (colIndex > -1) {
             _asideColGroup[colIndex]._width = _asideColGroup[colIndex].width =
               newWidth;
 
@@ -758,12 +759,14 @@ class StoreProvider extends React.Component<
                 columnResizing: false,
                 lineNumberWidth: newWidth,
               });
+              onChangeLineNumberWidth?.(newWidth);
             } else if (col.columnAttr === 'rowSelector') {
               this.setStoreState({
                 asideColGroup: [..._asideColGroup],
                 columnResizing: false,
                 rowSelectorWidth: newWidth,
               });
+              onChangeRowSelectorWidth?.(newWidth);
             }
           }
         } else {
@@ -776,11 +779,9 @@ class StoreProvider extends React.Component<
             columnResizing: false,
           });
 
-          if (onChangeColumns) {
-            onChangeColumns({
-              colGroup: _colGroup,
-            });
-          }
+          onChangeColumns?.({
+            colGroup: _colGroup,
+          });
         }
 
         break;

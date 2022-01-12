@@ -85,6 +85,9 @@ class ResizeColumn extends React.Component<any, IState> {
               }}
               scrollTop={-100}
               lineNumberWidth={lineNumberWidth}
+              onChangeLineNumberWidth={lineNumberWidth =>
+                this.setState({ lineNumberWidth })
+              }
               rowSelectorWidth={rowSelectorWidth}
             />
           </div>
@@ -100,18 +103,24 @@ class ResizeColumn extends React.Component<any, IState> {
           />
           <Divider />
 
-          <Button type="primary" onClick={() => {
-            this.setState({
-              lineNumberWidth: 100
-            })
-          }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              this.setState({
+                lineNumberWidth: 100,
+              });
+            }}
+          >
             setLineNumberWidth: 100
           </Button>
-          <Button type="primary" onClick={() => {
-            this.setState({
-              lineNumberWidth: 50
-            })
-          }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              this.setState({
+                lineNumberWidth: 50,
+              });
+            }}
+          >
             setLineNumberWidth: 50
           </Button>
         </Segment>
