@@ -64,6 +64,8 @@ class ColumnResizer extends React.Component<{
     e: React.SyntheticEvent<Element>,
     col: IDataGrid.ICol,
   ) => void;
+  enableLineNumberResizer: boolean;
+  enableRowSelectorResizer: boolean;
 }> {
   render() {
     const {
@@ -71,6 +73,8 @@ class ColumnResizer extends React.Component<{
       resizerHeight,
       onMouseDownColumnResizer,
       onDoubleClickColumnResizer,
+      enableLineNumberResizer,
+      enableRowSelectorResizer,
     } = this.props;
     let resizerLeft = 0;
     let resizerWidth = 4;
@@ -78,6 +82,12 @@ class ColumnResizer extends React.Component<{
     return (
       <>
         {colGroup.map((col, ci) => {
+          if (
+            (col.columnAttr === 'lineNumber' && !enableLineNumberResizer) ||
+            (col.columnAttr === 'rowSelector' && !enableRowSelectorResizer)
+          ) {
+            return null;
+          }
           if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
             let prevResizerLeft = resizerLeft;
             resizerLeft += col._width || 0;
@@ -90,7 +100,7 @@ class ColumnResizer extends React.Component<{
                 style={{
                   width: resizerWidth,
                   height: resizerHeight + 'px',
-                  left: resizerLeft - (resizerWidth) + 'px',
+                  left: resizerLeft - resizerWidth + 'px',
                 }}
                 onMouseDown={e => onMouseDownColumnResizer(e, col)}
                 onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
@@ -271,6 +281,8 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       focusedCol = -1,
       selectionCols = {},
       sortInfo = {},
+      onChangeLineNumberWidth,
+      onChangeRowSelectorWidth,
     } = this.props;
 
     const { header: optionsHeader = {} } = options;
@@ -323,6 +335,8 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           resizerHeight={resizerHeight}
           onMouseDownColumnResizer={this.onMouseDownColumnResizer}
           onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
+          enableLineNumberResizer={Boolean(onChangeLineNumberWidth)}
+          enableRowSelectorResizer={Boolean(onChangeRowSelectorWidth)}
         />
       </div>
     );

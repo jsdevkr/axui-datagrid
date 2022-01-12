@@ -62,10 +62,9 @@ class ResizeColumn extends React.Component<any, IState> {
     return (
       <Wrapper>
         <Segment padded>
-          <h1>RowSelector</h1>
+          <h1>ResizeColumn</h1>
           <p>
-            'options - showRowSelector' If you set the value to true, a check
-            box appears, allowing you to select each row of 'datagrid'.
+
           </p>
 
           <div
