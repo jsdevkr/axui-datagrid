@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDataGrid } from '../common/@types';
 
-class DataGridTableColGroup extends React.PureComponent<{
+class DataGridTableColGroup extends React.Component<{
   panelColGroup: IDataGrid.ICol[];
 }> {
   render() {

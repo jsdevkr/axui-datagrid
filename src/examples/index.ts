@@ -14,3 +14,4 @@ export { default as RowSelector } from './RowSelector';
 // export { default as Etc } from './Etc';
 export { default as AutofitColumnWidth } from './AutofitColumnWidth';
 export { default as MultiEdit } from './MultiEdit';
+export { default as ResizeColumn } from './ResizeColumn';

@@ -7,7 +7,7 @@ import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 
-class TableBody extends React.PureComponent<{
+class TableBody extends React.Component<{
   bodyRow: IDataGrid.IColumnTableMap;
   listSelectedAll: boolean;
   options: IDataGrid.IOptions;
@@ -53,7 +53,7 @@ class TableBody extends React.PureComponent<{
   }
 }
 
-class ColumnResizer extends React.PureComponent<{
+class ColumnResizer extends React.Component<{
   colGroup: IDataGrid.ICol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
@@ -90,7 +90,7 @@ class ColumnResizer extends React.PureComponent<{
                 style={{
                   width: resizerWidth,
                   height: resizerHeight + 'px',
-                  left: resizerLeft - resizerWidth / 2 + 'px',
+                  left: resizerLeft - (resizerWidth) + 'px',
                 }}
                 onMouseDown={e => onMouseDownColumnResizer(e, col)}
                 onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
@@ -318,14 +318,12 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           />
         </table>
 
-        {panelName !== DataGridEnums.PanelNames.ASIDE_HEADER && (
-          <ColumnResizer
-            colGroup={colGroup}
-            resizerHeight={resizerHeight}
-            onMouseDownColumnResizer={this.onMouseDownColumnResizer}
-            onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
-          />
-        )}
+        <ColumnResizer
+          colGroup={colGroup}
+          resizerHeight={resizerHeight}
+          onMouseDownColumnResizer={this.onMouseDownColumnResizer}
+          onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
+        />
       </div>
     );
   }

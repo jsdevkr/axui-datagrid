@@ -19,7 +19,6 @@ import {
   isNumber,
 } from './utils';
 import { IDataGrid } from './common/@types';
-import DataGridAutofitHelper from './components/DataGridAutofitHelper';
 
 interface IProps extends IDataGrid.IRootProps {}
 interface IState extends IDataGrid.IRootState {}
@@ -67,10 +66,7 @@ class DataGrid extends React.Component<IProps, IState> {
     showLineNumber: true,
     multipleSelect: true,
     columnMinWidth: 100,
-
-    lineNumberColumnWidth: 60,
     lineNumberStartAt: 1,
-    rowSelectorColumnWidth: 28,
     rowSelectorSize: 16,
     header: DataGrid.defaultHeader,
     body: DataGrid.defaultBody,
@@ -115,8 +111,6 @@ class DataGrid extends React.Component<IProps, IState> {
 
   state: IState = {
     mounted: false,
-    autofitAsideWidth: undefined,
-    autofitColGroup: [],
     headerTable: { rows: [] },
     bodyRowTable: { rows: [] },
     bodyRowMap: {},
@@ -133,6 +127,8 @@ class DataGrid extends React.Component<IProps, IState> {
     footSumTable: { rows: [] },
     leftFootSumData: { rows: [] },
     footSumData: { rows: [] },
+    lineNumberWidth: 60,
+    rowSelectorWidth: 28,
   };
 
   constructor(props: IProps) {
@@ -155,50 +151,20 @@ class DataGrid extends React.Component<IProps, IState> {
         ...options.columnKeys,
       },
     };
-    if (this.state.autofitAsideWidth !== undefined) {
-      _options.lineNumberColumnWidth = this.state.autofitAsideWidth;
-    }
     return _options;
-  };
-
-  applyAutofit = (params: IDataGrid.IapplyAutofitParam) => {
-    const newState: IState = {};
-    const { columns, footSum, onChangeColumns } = this.props;
-    const { options } = this.state;
-
-    newState.options = this.getOptions(options || {});
-    newState.options.lineNumberColumnWidth = params.asideWidth;
-
-    const columnData = this.getColumnData(
-      columns,
-      footSum || [],
-      newState.options,
-      params.colGroup,
-    );
-
-    this.setState({
-      autofitAsideWidth: params.asideWidth,
-      autofitColGroup: params.colGroup,
-      options: newState.options,
-      ...columnData,
-    });
-
-    if (onChangeColumns) {
-      // console.log('Run DataGrid :: applyAutofit');
-      onChangeColumns({
-        colGroup: columnData.colGroup,
-      });
-    }
-    // render가 다시되고 > getProviderProps이 다시 실행됨 (getProviderProps에서 doneAutofit인지 판단하여 autofitColGroup의 width값을 colGroup에 넣어주면 됨.)
   };
 
   getColumnData = (
     columns: IDataGrid.IColumn[],
     footSum: IDataGrid.IColumn[][],
     options: IDataGrid.IOptions,
-    autofitColGroup?: IDataGrid.IColumn[],
+    params: {
+      lineNumberWidth?: number;
+      rowSelectorWidth?: number;
+    },
   ): IState => {
     const { frozenColumnIndex = 0 } = options;
+    const { lineNumberWidth, rowSelectorWidth } = params;
 
     const data: IState = {};
     data.headerTable = makeHeaderTable(columns, options);
@@ -213,6 +179,7 @@ class DataGrid extends React.Component<IProps, IState> {
       data.headerTable || { rows: [] },
       frozenColumnIndex,
       options,
+      { lineNumberWidth, rowSelectorWidth },
     );
 
     // body를 위한 divide
@@ -220,6 +187,7 @@ class DataGrid extends React.Component<IProps, IState> {
       data.bodyRowTable || { rows: [] },
       frozenColumnIndex,
       options,
+      { lineNumberWidth, rowSelectorWidth },
     );
 
     data.asideHeaderData = headerDividedObj.asideData;
@@ -238,15 +206,6 @@ class DataGrid extends React.Component<IProps, IState> {
         row.cols.forEach((col, cidx) => {
           if (data.colGroupMap) {
             let colWidth = col.width; // columns로부터 전달받은 너비값.
-
-            if (autofitColGroup) {
-              if (
-                isNumber(col.colIndex) &&
-                autofitColGroup[Number(col.colIndex)]
-              ) {
-                colWidth = autofitColGroup[Number(col.colIndex)].width;
-              }
-            }
 
             const currentCol: IDataGrid.ICol = {
               key: col.key,
@@ -276,6 +235,7 @@ class DataGrid extends React.Component<IProps, IState> {
       data.footSumTable || { rows: [] },
       frozenColumnIndex,
       options,
+      { lineNumberWidth, rowSelectorWidth },
     );
     data.leftFootSumData = footSumDividedObj.leftData;
     data.footSumData = footSumDividedObj.rightData;
@@ -284,7 +244,14 @@ class DataGrid extends React.Component<IProps, IState> {
   };
 
   componentDidMount() {
-    const { columns, footSum = [], options = {}, sortInfos } = this.props;
+    const {
+      columns,
+      footSum = [],
+      options = {},
+      sortInfos,
+      lineNumberWidth = 60,
+      rowSelectorWidth = 28,
+    } = this.props;
 
     const sortInfo = {};
 
@@ -296,9 +263,12 @@ class DataGrid extends React.Component<IProps, IState> {
       });
 
     const newOptions = this.getOptions(options);
-    const columnData = this.getColumnData(columns, footSum, newOptions);
+    // console.log("componentDidMount call columnData");
+    const columnData = this.getColumnData(columns, footSum, newOptions, {
+      lineNumberWidth,
+      rowSelectorWidth,
+    });
 
-    // console.log('componentDidMount, autofitColumns:', !!autofitColumns);
     this.setState({
       mounted: true,
       ...columnData,
@@ -313,25 +283,19 @@ class DataGrid extends React.Component<IProps, IState> {
       footSum: _footSum,
       options: _options,
       sortInfos: _sortInfos,
-      // data: _data,
+      lineNumberWidth: _lineNumberWidth = 60,
+      rowSelectorWidth: _rowSelectorWidth = 28,
     } = prevProps;
     const {
       columns,
       footSum,
       options,
       sortInfos,
-      // data,
+      lineNumberWidth = 60,
+      rowSelectorWidth = 28,
     } = this.props;
     const newState: any = {};
     let changeState = false;
-
-    //console.log(`
-    // _sortInfos !== sortInfos : ${_sortInfos !== sortInfos},
-    // _autofitColumns !== autofitColumns : ${_autofitColumns !== autofitColumns},
-    // _columns !== columns : ${_columns !== columns},
-    // _footSum !== footSum : ${_footSum !== footSum},
-    // _options !== options : ${_options !== options},
-    //`);
 
     const sortInfo = {};
     if (_sortInfos !== sortInfos) {
@@ -344,13 +308,22 @@ class DataGrid extends React.Component<IProps, IState> {
       changeState = true;
     }
 
-    if (_columns !== columns || _footSum !== footSum || _options !== options) {
+    if (
+      _columns !== columns ||
+      _footSum !== footSum ||
+      _options !== options ||
+      _lineNumberWidth !== lineNumberWidth ||
+      _rowSelectorWidth !== rowSelectorWidth
+    ) {
       newState.newOptions = this.getOptions(options || {});
       newState.columnData = this.getColumnData(
         columns,
         footSum || [],
         newState.newOptions,
-        // this.state.autofitColGroup,
+        {
+          lineNumberWidth,
+          rowSelectorWidth,
+        },
       );
       changeState = true;
     }
@@ -367,7 +340,6 @@ class DataGrid extends React.Component<IProps, IState> {
   public render() {
     const {
       mounted,
-      autofitColGroup,
       headerTable,
       bodyRowTable,
       bodyRowMap,
@@ -414,6 +386,11 @@ class DataGrid extends React.Component<IProps, IState> {
       onSort,
       onEdit,
       style = {},
+
+      lineNumberWidth,
+      rowSelectorWidth,
+      onChangeLineNumberWidth,
+      onChangeRowSelectorWidth,
     } = this.props;
 
     const gridRootStyle = {
@@ -436,7 +413,6 @@ class DataGrid extends React.Component<IProps, IState> {
       scrollLeft,
       scrollTop,
 
-      autofitColGroup,
       headerTable,
       bodyRowTable,
       bodyRowMap,
@@ -473,6 +449,11 @@ class DataGrid extends React.Component<IProps, IState> {
 
       options,
       sortInfo,
+
+      lineNumberWidth,
+      rowSelectorWidth,
+      onChangeLineNumberWidth,
+      onChangeRowSelectorWidth,
     };
 
     return (

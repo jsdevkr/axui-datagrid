@@ -140,7 +140,11 @@ class StoreProvider extends React.Component<
       nProps.onDoubleClick === nState.onDoubleClick &&
       nProps.onError === nState.onError &&
       nProps.onSort === nState.onSort &&
-      nProps.onEdit === nState.onEdit
+      nProps.onEdit === nState.onEdit &&
+      nProps.lineNumberWidth === nState.lineNumberWidth &&
+      nProps.onChangeLineNumberWidth === nState.onChangeLineNumberWidth &&
+      nProps.rowSelectorWidth === nState.rowSelectorWidth &&
+      nProps.onChangeRowSelectorWidth === nState.onChangeRowSelectorWidth
     ) {
       return null;
     }
@@ -199,9 +203,15 @@ class StoreProvider extends React.Component<
     storeState.leftFootSumData = nProps.leftFootSumData;
     storeState.footSumData = nProps.footSumData;
 
+    storeState.lineNumberWidth = nProps.lineNumberWidth;
+    storeState.rowSelectorWidth = nProps.rowSelectorWidth;
+    storeState.onChangeLineNumberWidth = nProps.onChangeLineNumberWidth;
+    storeState.onChangeRowSelectorWidth = nProps.onChangeRowSelectorWidth;
+
     const { frozenColumnIndex: PfrozenColumnIndex = 0 } =
       storeState.options || {};
     const changed = {
+      asideColGroup: false,
       colGroup: false,
       frozenColumnIndex: false,
       styles: false,
@@ -211,6 +221,7 @@ class StoreProvider extends React.Component<
 
     // 다른 조건식 안에서 변경하여 처리할 수 있는 변수들 언더바(_)로 시작함.
     let {
+      asideColGroup: _asideColGroup = [],
       colGroup: _colGroup = [],
       leftHeaderColGroup: _leftHeaderColGroup,
       headerColGroup: _headerColGroup,
@@ -219,6 +230,9 @@ class StoreProvider extends React.Component<
       scrollTop: _scrollTop = 0,
     } = storeState;
 
+    if(nProps.asideColGroup !== nState.asideColGroup) {
+      changed.asideColGroup = true;
+    }
     // colGroup들의 너비합을 모르거나 변경된 경우.
     // colGroup > width 연산
     if (
@@ -257,6 +271,7 @@ class StoreProvider extends React.Component<
 
     if (
       changed.data ||
+      changed.asideColGroup ||
       changed.colGroup ||
       changed.frozenColumnIndex ||
       !storeState.styles ||
@@ -291,15 +306,13 @@ class StoreProvider extends React.Component<
         scrollContentContainerWidth = 0,
         scrollContentContainerHeight = 0,
       } = _styles || {};
-      const {
-        scrollTop: currScrollTop = 0,
-        scrollLeft: currScrollLeft = 0,
-      } = getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
-        scrollWidth: scrollContentWidth,
-        scrollHeight: scrollContentHeight,
-        clientWidth: scrollContentContainerWidth,
-        clientHeight: scrollContentContainerHeight,
-      });
+      const { scrollTop: currScrollTop = 0, scrollLeft: currScrollLeft = 0 } =
+        getScrollPosition(_scrollLeft || 0, _scrollTop || 0, {
+          scrollWidth: scrollContentWidth,
+          scrollHeight: scrollContentHeight,
+          clientWidth: scrollContentContainerWidth,
+          clientHeight: scrollContentContainerHeight,
+        });
 
       _scrollTop = currScrollTop;
       _scrollLeft = currScrollLeft;
@@ -318,15 +331,13 @@ class StoreProvider extends React.Component<
         scrollContentContainerHeight = 0,
       } = _styles || {};
 
-      const {
-        scrollLeft: _currScrollLeft = 0,
-        scrollTop: _currScrollTop = 0,
-      } = getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
-        scrollWidth: scrollContentWidth,
-        scrollHeight: scrollContentHeight,
-        clientWidth: scrollContentContainerWidth,
-        clientHeight: scrollContentContainerHeight,
-      });
+      const { scrollLeft: _currScrollLeft = 0, scrollTop: _currScrollTop = 0 } =
+        getScrollPosition(nProps.scrollLeft || 0, nProps.scrollTop || 0, {
+          scrollWidth: scrollContentWidth,
+          scrollHeight: scrollContentHeight,
+          clientWidth: scrollContentContainerWidth,
+          clientHeight: scrollContentContainerHeight,
+        });
       currScrollLeft = _currScrollLeft;
       currScrollTop = _currScrollTop;
     }
@@ -537,6 +548,7 @@ class StoreProvider extends React.Component<
       onSort,
       onEdit,
       onChangeColumns,
+      options = {},
     } = this.state;
 
     const {
@@ -730,20 +742,45 @@ class StoreProvider extends React.Component<
         break;
 
       case DataGridEnums.DispatchTypes.RESIZE_COL:
-        const _colGroup = [...(this.state.colGroup || [])];
-        _colGroup[col.colIndex]._width = _colGroup[
-          col.colIndex
-        ].width = newWidth;
+        if (col.columnAttr) {
+          const _asideColGroup = [...(this.state.asideColGroup || [])];
+          const colIndex = _asideColGroup.findIndex(
+            _col => _col.columnAttr === col.columnAttr,
+          );
 
-        this.setStoreState({
-          colGroup: _colGroup,
-          columnResizing: false,
-        });
+          if(colIndex > -1) {
+            _asideColGroup[colIndex]._width = _asideColGroup[colIndex].width =
+              newWidth;
 
-        if (onChangeColumns) {
-          onChangeColumns({
+            if (col.columnAttr === 'lineNumber') {
+              this.setStoreState({
+                asideColGroup: [..._asideColGroup],
+                columnResizing: false,
+                lineNumberWidth: newWidth,
+              });
+            } else if (col.columnAttr === 'rowSelector') {
+              this.setStoreState({
+                asideColGroup: [..._asideColGroup],
+                columnResizing: false,
+                rowSelectorWidth: newWidth,
+              });
+            }
+          }
+        } else {
+          const _colGroup = [...(this.state.colGroup || [])];
+          _colGroup[col.colIndex]._width = _colGroup[col.colIndex].width =
+            newWidth;
+
+          this.setStoreState({
             colGroup: _colGroup,
+            columnResizing: false,
           });
+
+          if (onChangeColumns) {
+            onChangeColumns({
+              colGroup: _colGroup,
+            });
+          }
         }
 
         break;

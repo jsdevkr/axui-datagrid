@@ -469,7 +469,6 @@ class InlineEdit extends React.Component<any, IState> {
                 data={data}
                 dataLength={Object.keys(data).length}
                 options={{
-                  rowSelectorColumnWidth: 26,
                   showRowSelector: true,
                   header: {
                     align: 'center',
