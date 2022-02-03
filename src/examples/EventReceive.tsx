@@ -1,16 +1,15 @@
-import * as React from 'react';
-
 import { Button, Divider } from 'antd';
-import { Wrapper, Segment } from 'components';
 import { DataGrid } from 'axui-datagrid';
+import { IDataGrid } from 'axui-datagrid/common/@types';
+import { Segment, Wrapper } from 'components';
+import * as React from 'react';
+import { basicData } from './data/basicData';
 
 class EventReceive extends React.Component<any, any> {
   dataGridContainerRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: any) {
     super(props);
-
-    const gridData = require('examples/data/data-basic.json');
 
     this.state = {
       width: 300,
@@ -19,10 +18,21 @@ class EventReceive extends React.Component<any, any> {
         { key: 'id', width: 60, label: 'ID' },
         { key: 'title', width: 200, label: 'Title' },
         { key: 'writer', label: 'Writer' },
-        { key: 'date', label: 'Date', formatter: 'date' },
-        { key: 'money', label: 'Money', formatter: 'money', align: 'right' },
+        { key: 'price', label: 'Price' },
+        { key: 'qty', label: 'Qty' },
+        {
+          key: 'money',
+          label: 'Sum',
+          formatter: function ({ item }: IDataGrid.IFormatterData) {
+            if (item) {
+              return item.value['price'] * item.value['qty'];
+            }
+            return '';
+          },
+          align: 'right',
+        },
       ],
-      data: gridData,
+      data: basicData,
       options: {
         header: {
           align: 'center',
@@ -80,6 +90,7 @@ class EventReceive extends React.Component<any, any> {
               style={{ fontSize: '12px' }}
               columns={columns}
               data={data}
+              dataLength={data.length}
               options={options}
               scrollTop={screenTop}
               onScroll={({ sRowIndex, eRowIndex, scrollTop }) => {
@@ -97,7 +108,7 @@ class EventReceive extends React.Component<any, any> {
                 // item : item of list, value: keyvalue of item
                 console.log(item, value, focusedRow, focusedCol);
               }}
-              onChangeSelection={(selection) => {
+              onChangeSelection={selection => {
                 console.log(selection);
               }}
               onClick={({ e, item, value, rowIndex, colIndex }) => {
@@ -148,9 +159,8 @@ class EventReceive extends React.Component<any, any> {
 
   getDataGridContainerRect = (e?: Event) => {
     if (this.dataGridContainerRef.current) {
-      const {
-        width,
-      } = this.dataGridContainerRef.current.getBoundingClientRect();
+      const { width } =
+        this.dataGridContainerRef.current.getBoundingClientRect();
       this.setState({ width });
     }
   };

@@ -101,21 +101,7 @@ class DataGridBody extends React.Component<IProps> {
     } = this.props;
 
     if (colIndex === -1 && (rowIndex > -1 || rowIndex < dataLength)) {
-      //lineNumber를 클릭한경우
       colIndex = 0;
-
-      // console.log(
-      //   'selection check',
-      //   `
-      // colIndex: ${colIndex},
-      // rowIndex: ${rowIndex},
-      // ~~~~~~~~~~~~~~~~
-      // selectionSCol: ${selectionSCol},
-      // selectionECol: ${selectionECol},
-      // selectionSRow: ${selectionSRow},
-      // selectionERow: ${selectionERow},
-      // `,
-      // );
 
       const selectionRows = { [rowIndex]: true };
       const selectionCols = {};
@@ -270,6 +256,7 @@ class DataGridBody extends React.Component<IProps> {
       }
 
       const onMouseMove = (ee: any): void => {
+        ee.preventDefault();
         const currMousePosition = getMousePosition(ee);
 
         // 인터벌 무빙 함수 아래 구문에서 연속 스크롤이 필요하면 사용
@@ -282,10 +269,8 @@ class DataGridBody extends React.Component<IProps> {
             scrollLeft: currScrollLeft = 0,
             scrollTop: currScrollTop = 0,
           } = currState;
-          const {
-            x: selectionEndOffsetX = 0,
-            y: selectionEndOffsetY = 0,
-          } = currSelectionEndOffset;
+          const { x: selectionEndOffsetX = 0, y: selectionEndOffsetY = 0 } =
+            currSelectionEndOffset;
 
           const selectEndedRow: number = this.getRowIndex(
             selectionEndOffsetY,
@@ -530,14 +515,6 @@ class DataGridBody extends React.Component<IProps> {
             focusedRow: selectStartedRow,
             focusedCol: selectStartedCol,
           });
-        } else {
-          // if (
-          //   selectStartedCol >= selectionSCol &&
-          //   selectStartedCol <= selectionECol &&
-          //   selectStartedRow >= selectionSRow &&
-          //   selectStartedRow <= selectionERow
-          // ) {
-          // }
         }
       }
 
@@ -647,8 +624,17 @@ class DataGridBody extends React.Component<IProps> {
       isInlineEditing = false,
       inlineEditingCell,
       focusedCol = -1,
+      selectionRows = {},
+      selectionCols = {},
     } = this.props;
 
+    if (
+      Object.keys(selectionRows).length > 1 ||
+      Object.keys(selectionCols).length > 1
+    ) {
+      e.preventDefault();
+      return;
+    }
     if (loadingData || loading) {
       e.preventDefault();
       return;
