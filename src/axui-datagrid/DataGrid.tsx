@@ -1,24 +1,21 @@
 import * as React from 'react';
-
-import DataGridStore from './providers/StoreProvider';
+import { IDataGrid } from './common/@types';
 import {
+  DataGridBody,
   DataGridEvents,
   DataGridHeader,
-  DataGridBody,
-  DataGridScroll,
-  DataGridPage,
   DataGridLoader,
+  DataGridPage,
+  DataGridScroll,
 } from './components';
-
+import DataGridStore from './providers/StoreProvider';
 import {
-  makeHeaderTable,
-  makeBodyRowTable,
-  makeBodyRowMap,
-  makeFootSumTable,
   divideTableByFrozenColumnIndex,
-  isNumber,
+  makeBodyRowMap,
+  makeBodyRowTable,
+  makeFootSumTable,
+  makeHeaderTable,
 } from './utils';
-import { IDataGrid } from './common/@types';
 
 interface IProps extends IDataGrid.IRootProps {}
 interface IState extends IDataGrid.IRootState {}
@@ -207,7 +204,7 @@ class DataGrid extends React.Component<IProps, IState> {
           if (data.colGroupMap) {
             let colWidth = col.width; // columns로부터 전달받은 너비값.
 
-            const currentCol: IDataGrid.ICol = {
+            data.colGroupMap[col.colIndex || 0] = {
               key: col.key,
               label: col.label,
               width: colWidth,
@@ -219,7 +216,6 @@ class DataGrid extends React.Component<IProps, IState> {
               formatter: col.formatter,
               editor: col.editor,
             };
-            data.colGroupMap[col.colIndex || 0] = currentCol;
           }
         });
       });
