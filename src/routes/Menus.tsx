@@ -28,7 +28,7 @@ export const Menus = {
       // { to: '/examples/FrozenColumnRow', label: 'Frozen column and row' },
       // { to: '/examples/MultiColumnHeader', label: 'Multi column header' },
       { to: '/examples/InlineEdit', label: 'Inline edit' },
-      // { to: '/examples/EventReceive', label: 'Event' },
+      { to: '/examples/EventReceive', label: 'Event' },
       // { to: '/examples/LoadingState', label: 'Loading' },
       { to: '/examples/RowSelector', label: 'RowSelector' },
       // { to: '/examples/FootSum', label: 'Foot summary' },
@@ -37,8 +37,8 @@ export const Menus = {
       { to: '/examples/AutofitColumnWidth', label: 'Autofit Column Width' },
       // { to: '/examples/RemoteSort', label: 'Remote Sort' },
       { to: '/examples/MultiEdit', label: 'MultiEdit' },
+      { to: '/examples/ResizeColumn', label: 'ResizeColumn' },
       // { to: '/examples/Etc', label: 'etc.' },
-
       // { to: '/examples/BodyGrouping', label: 'Body grouping' },
     ],
   },

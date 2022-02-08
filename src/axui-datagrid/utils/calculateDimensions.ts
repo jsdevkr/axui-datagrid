@@ -26,7 +26,12 @@ export default function calculateDimensions(
   scrollTop: number;
   styles: IDataGrid.IStyles;
 } {
-  const { width = 0, height = 0 } = storeState;
+  const {
+    width = 0,
+    height = 0,
+    lineNumberWidth = 60,
+    rowSelectorWidth = 28,
+  } = storeState;
   let { scrollLeft = 0, scrollTop = 0 } = storeState;
   const {
     header: optionsHeader = {},
@@ -35,8 +40,6 @@ export default function calculateDimensions(
     page: optionsPage = {},
     frozenColumnIndex = 0,
     frozenRowIndex = 0,
-    lineNumberColumnWidth = 0,
-    rowSelectorColumnWidth = 0,
     showLineNumber,
     showRowSelector,
   } = options;
@@ -47,7 +50,7 @@ export default function calculateDimensions(
   const { columnHeight: optionsBodyColumnHeight = 0 } = optionsBody;
   const { height: optionsPageHeight = 0 } = optionsPage;
   const headerTableRowsLength = headerTable.rows.length;
-  const bodyTablsRowsLength = bodyRowTable.rows.length;
+  const bodyTablesRowsLength = bodyRowTable.rows.length;
 
   let {
     theme: optionsScrollerTheme = 'default',
@@ -70,9 +73,9 @@ export default function calculateDimensions(
   currentStyles.rightPanelWidth = 0;
   currentStyles.pageHeight = 0;
   currentStyles.asidePanelWidth =
-    (showLineNumber ? lineNumberColumnWidth : 0) +
-    (showRowSelector ? rowSelectorColumnWidth : 0);
-  currentStyles.bodyTrHeight = bodyTablsRowsLength * optionsBodyColumnHeight;
+    (showLineNumber ? lineNumberWidth : 0) +
+    (showRowSelector ? rowSelectorWidth : 0);
+  currentStyles.bodyTrHeight = bodyTablesRowsLength * optionsBodyColumnHeight;
   currentStyles.horizontalScrollerHeight = 0;
 
   currentStyles.frozenPanelWidth = ((_colGroup, endIndex) => {

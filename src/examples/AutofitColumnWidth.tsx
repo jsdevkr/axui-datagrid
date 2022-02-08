@@ -5,7 +5,6 @@ import { DataGrid } from 'axui-datagrid';
 import { basicData } from './data/basicData';
 import { IDataGrid } from 'axui-datagrid/common/@types';
 import { formatCurrency, printDate } from 'axui-datagrid/utils';
-import { log } from 'util';
 
 function getFormatText(formatter: string, text: string) {
   switch (formatter) {

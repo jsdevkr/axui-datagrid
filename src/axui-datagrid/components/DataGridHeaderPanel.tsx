@@ -7,7 +7,7 @@ import DataGridTableColGroup from './DataGridTableColGroup';
 import { IDataGrid } from '../common/@types';
 import { DataGridEnums } from '../common/@enums';
 
-class TableBody extends React.PureComponent<{
+class TableBody extends React.Component<{
   bodyRow: IDataGrid.IColumnTableMap;
   listSelectedAll: boolean;
   options: IDataGrid.IOptions;
@@ -53,7 +53,7 @@ class TableBody extends React.PureComponent<{
   }
 }
 
-class ColumnResizer extends React.PureComponent<{
+class ColumnResizer extends React.Component<{
   colGroup: IDataGrid.ICol[];
   resizerHeight: number;
   onMouseDownColumnResizer: (
@@ -64,6 +64,8 @@ class ColumnResizer extends React.PureComponent<{
     e: React.SyntheticEvent<Element>,
     col: IDataGrid.ICol,
   ) => void;
+  enableLineNumberResizer: boolean;
+  enableRowSelectorResizer: boolean;
 }> {
   render() {
     const {
@@ -71,6 +73,8 @@ class ColumnResizer extends React.PureComponent<{
       resizerHeight,
       onMouseDownColumnResizer,
       onDoubleClickColumnResizer,
+      enableLineNumberResizer,
+      enableRowSelectorResizer,
     } = this.props;
     let resizerLeft = 0;
     let resizerWidth = 4;
@@ -78,6 +82,12 @@ class ColumnResizer extends React.PureComponent<{
     return (
       <>
         {colGroup.map((col, ci) => {
+          if (
+            (col.columnAttr === 'lineNumber' && !enableLineNumberResizer) ||
+            (col.columnAttr === 'rowSelector' && !enableRowSelectorResizer)
+          ) {
+            return null;
+          }
           if (col.colIndex !== null && typeof col.colIndex !== 'undefined') {
             let prevResizerLeft = resizerLeft;
             resizerLeft += col._width || 0;
@@ -90,7 +100,7 @@ class ColumnResizer extends React.PureComponent<{
                 style={{
                   width: resizerWidth,
                   height: resizerHeight + 'px',
-                  left: resizerLeft - resizerWidth / 2 + 'px',
+                  left: resizerLeft - resizerWidth + 'px',
                 }}
                 onMouseDown={e => onMouseDownColumnResizer(e, col)}
                 onDoubleClick={e => onDoubleClickColumnResizer(e, col)}
@@ -271,6 +281,8 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
       focusedCol = -1,
       selectionCols = {},
       sortInfo = {},
+      onChangeLineNumberWidth,
+      onChangeRowSelectorWidth,
     } = this.props;
 
     const { header: optionsHeader = {} } = options;
@@ -318,14 +330,14 @@ class DataGridHeaderPanel extends React.Component<IDataGridHeaderPanel> {
           />
         </table>
 
-        {panelName !== DataGridEnums.PanelNames.ASIDE_HEADER && (
-          <ColumnResizer
-            colGroup={colGroup}
-            resizerHeight={resizerHeight}
-            onMouseDownColumnResizer={this.onMouseDownColumnResizer}
-            onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
-          />
-        )}
+        <ColumnResizer
+          colGroup={colGroup}
+          resizerHeight={resizerHeight}
+          onMouseDownColumnResizer={this.onMouseDownColumnResizer}
+          onDoubleClickColumnResizer={this.onDoubleClickColumnResizer}
+          enableLineNumberResizer={Boolean(onChangeLineNumberWidth)}
+          enableRowSelectorResizer={Boolean(onChangeRowSelectorWidth)}
+        />
       </div>
     );
   }

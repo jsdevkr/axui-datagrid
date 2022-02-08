@@ -15,7 +15,7 @@
   "devDependencies": {
     "@ant-design/icons": "^4.1.0",
     "@babel/plugin-transform-typescript": "^7.8.7",
-    "@craco/craco": "^5.6.4",
+    "@craco/craco": "^5.9.0",
     "@types/node": "^13.9.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
@@ -24,11 +24,11 @@
     "@types/react-syntax-highlighter": "11.0.4",
     "@types/styled-components": "^4.4.3",
     "antd": "^4.2.2",
-    "axios": "^0.19.2",
+    "axios": "^0.25.0",
     "axui-contextmenu": "^0.4.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "craco-less": "^1.16.0",
+    "craco-less": "^1.9.0",
     "craco-raw-loader": "^1.0.1",
     "file-loader": "^5.1.0",
     "history": "^4.10.1",
@@ -36,6 +36,7 @@
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "ncp": "^2.0.0",
+    "prettier": "^2.5.1",
     "raw-loader": "^4.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -43,8 +44,8 @@
     "react-hot-loader": "^4.12.19",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.3",
-    "react-syntax-highlighter": "^12.2.1",
+    "react-scripts": "^5.0.0",
+    "react-syntax-highlighter": "^15.4.5",
     "rimraf": "^3.0.2",
     "styled-components": "^4.4.1",
     "tslint-config-prettier": "^1.18.0",
@@ -74,6 +75,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "dependencies": {}
+  }
 }

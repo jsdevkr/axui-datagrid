@@ -14,34 +14,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
   busy: boolean = false;
   state = {};
 
-  // onKeyUp = (e: React.KeyboardEvent<any>) => {
-  //   const {
-  //     colGroup = [],
-  //     focusedRow = 0,
-  //     focusedCol = 0,
-  //     setStoreState,
-  //   } = this.props;
-
-  //   switch (e.which) {
-  //     case DataGridEnums.KeyCodes.ENTER:
-  //       const col = colGroup[focusedCol];
-  //       if (!col.editor) {
-  //         return;
-  //       }
-  //       setStoreState({
-  //         isInlineEditing: true,
-  //         inlineEditingCell: {
-  //           rowIndex: focusedRow,
-  //           colIndex: col.colIndex,
-  //           editor: col.editor,
-  //         },
-  //       });
-  //       return;
-  //     default:
-  //       return;
-  //   }
-  // };
-
   handleKeyDown = (e: KeyboardEvent) => {
     return new Promise((resolve, reject) => {
       const {
@@ -608,95 +580,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
       }
     }
   };
-
-  // onFireEvent = async (e: any) => {
-  //   const {
-  //     loading,
-  //     loadingData,
-  //     isInlineEditing = false,
-  //     inlineEditingCell,
-  //     colGroup = [],
-  //     focusedRow = -1,
-  //     focusedCol = -1,
-  //     data = {},
-  //   } = this.props;
-
-  //   let stopEvent =
-  //     isInlineEditing &&
-  //     inlineEditingCell &&
-  //     inlineEditingCell.colIndex === focusedCol &&
-  //     inlineEditingCell.rowIndex === focusedRow;
-
-  //   if (this.busy || loadingData || loading) {
-  //     e.preventDefault();
-  //     return;
-  //   }
-
-  //   if (e.type === DataGridEnums.EventNames.KEYDOWN && colGroup[focusedCol]) {
-  //     const colEditor = colGroup[focusedCol].editor;
-  //     const editor: IDataGrid.IColEditor =
-  //       colEditor === 'text'
-  //         ? { type: 'text' }
-  //         : (colEditor as IDataGrid.IColEditor);
-
-  //     if (editor) {
-  //       if (editor.type === 'checkbox') {
-  //         this.onKeyDownInlineEditor(e);
-  //         stopEvent = false;
-  //       } else {
-  //         const item: IDataGrid.IDataItem = data[focusedRow];
-  //         if (item) {
-  //           const value = item.value[colGroup[focusedCol].key!];
-  //           const disabled = editor.disable
-  //             ? editor.disable({
-  //                 col: colGroup[focusedCol],
-  //                 rowIndex: focusedRow,
-  //                 colIndex: focusedCol,
-  //                 item,
-  //                 value,
-  //               })
-  //             : false;
-
-  //           if (disabled) {
-  //             stopEvent = false;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   if (stopEvent) {
-  //     return;
-  //   }
-
-  //   if (this.props.onBeforeEvent) {
-  //     this.props.onBeforeEvent({ e, eventName: e.type });
-  //   }
-
-  //   switch (e.type) {
-  //     case DataGridEnums.EventNames.KEYDOWN:
-  //       this.busy = true;
-  //       try {
-  //         await this.onKeyDown(e);
-  //       } catch (err) {
-  //         if (this.props.onError) {
-  //           this.props.onError(err, e);
-  //         } else {
-  //           // console.log(err);
-  //         }
-  //       }
-  //       this.busy = false;
-  //       break;
-  //     case DataGridEnums.EventNames.KEYUP:
-  //       this.onKeyUp(e);
-  //       break;
-  //     case DataGridEnums.EventNames.CONTEXTMENU:
-  //       this.onContextmenu(e);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
 
   onKeyDown = async (e: KeyboardEvent) => {
     const {

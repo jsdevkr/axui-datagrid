@@ -11,6 +11,10 @@ function divideTableByFrozenColumnIndex(
   rowTable: IDataGrid.IColumnTableMap,
   frozenColumnIndex: number,
   options: IDataGrid.IOptions,
+  params: {
+    lineNumberWidth?: number;
+    rowSelectorWidth?: number;
+  },
 ): IDataGrid.ColumnDivideTable {
   let asideTable: IDataGrid.IColumnTableMap = { rows: [] };
   let asideColGroup: any[] = [];
@@ -35,8 +39,8 @@ function divideTableByFrozenColumnIndex(
         _col = {
           ...col,
           ...{
-            width: options.lineNumberColumnWidth,
-            _width: options.lineNumberColumnWidth,
+            width: params.lineNumberWidth,
+            _width: params.lineNumberWidth,
             align: 'center',
             columnAttr: 'lineNumber',
             key: '_line_number_',
@@ -52,8 +56,8 @@ function divideTableByFrozenColumnIndex(
         _col = {
           ...col,
           ...{
-            width: options.rowSelectorColumnWidth,
-            _width: options.rowSelectorColumnWidth,
+            width: params.rowSelectorWidth,
+            _width: params.rowSelectorWidth,
             align: 'center',
             columnAttr: 'rowSelector',
             key: '_row_selector_',

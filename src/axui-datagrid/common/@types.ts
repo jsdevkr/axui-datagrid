@@ -322,9 +322,7 @@ export namespace IDataGrid {
     showRowSelector?: boolean;
     multipleSelect?: boolean;
     columnMinWidth?: number;
-    lineNumberColumnWidth?: number;
     lineNumberStartAt?: number;
-    rowSelectorColumnWidth?: number;
     rowSelectorSize?: number;
 
     footSum?: boolean;
@@ -455,6 +453,11 @@ export namespace IDataGrid {
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
+
+    lineNumberWidth?: number;
+    rowSelectorWidth?: number;
+    onChangeLineNumberWidth?: (lineNumberWidth: number) => void;
+    onChangeRowSelectorWidth?: (rowSelectorWidth: number) => void;
   }
 
   export interface IStoreState {
@@ -565,6 +568,11 @@ export namespace IDataGrid {
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
+
+    lineNumberWidth?: number;
+    rowSelectorWidth?: number;
+    onChangeLineNumberWidth?: (lineNumberWidth: number) => void;
+    onChangeRowSelectorWidth?: (rowSelectorWidth: number) => void;
   } // footSum의 출력레이아웃 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 왼쪽 // frozenColumnIndex 를 기준으로 나누어진 출력 레이아웃 오른쪽
 
   export interface IRootProps {
@@ -597,12 +605,15 @@ export namespace IDataGrid {
     onError?: (err: IonError, event: Event) => void;
     onSort?: (param: IonSortParam) => void;
     onEdit?: (param: IonEditParam) => void;
+
+    lineNumberWidth?: number;
+    rowSelectorWidth?: number;
+    onChangeLineNumberWidth?: (lineNumberWidth: number) => void;
+    onChangeRowSelectorWidth?: (rowSelectorWidth: number) => void;
   }
 
   export interface IRootState {
     mounted?: boolean;
-    autofitAsideWidth?: number;
-    autofitColGroup?: IAutofitCol[];
 
     headerTable?: IColumnTableMap;
     bodyRowTable?: IColumnTableMap;
@@ -625,6 +636,9 @@ export namespace IDataGrid {
     sortInfo?: {
       [key: string]: ISortInfo;
     };
+
+    lineNumberWidth?: number;
+    rowSelectorWidth?: number;
   }
 
   export type DispatchParam = { [key: string]: any };
