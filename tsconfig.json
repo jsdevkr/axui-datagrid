@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,12 +17,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
     "incremental": true,
     "plugins": [
       {
         "name": "typescript-styled-plugin"
       }
-    ],
+    ]
   },
   "exclude": [
     "node_modules",
@@ -29,5 +34,9 @@
     "jest",
     "dist"
   ],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
