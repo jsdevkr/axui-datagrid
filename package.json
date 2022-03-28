@@ -6,23 +6,32 @@
     "dev": "PORT=3377 next dev",
     "next-build": "next build",
     "next-start": "next start",
-    "next-lint": "next lint"
+    "next-lint": "next lint",
+    "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
+    "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs",
+    "build:common": "lessc ./axui-datagrid/style.less dist/style.css && rimraf ./dist/scss && ncp ./axui-datagrid/style.less ./dist/style.less && ncp ./axui-datagrid/less ./dist/less && ncp ./README.md ./dist/README.md",
+    "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfig.es5.json",
+    "build:es6": "rimraf ./dist/es6 && tsc --p tsconfig.es6.json",
+    "build": "npm run build:common && npm run build:es5 && npm run build:es6",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "next": "^12.0.7",
     "@types/node": "17.0.23",
     "@types/react": "17.0.43",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
+    "ncp": "^2.0.0",
+    "next": "^12.0.7",
     "next-with-less": "^2.0.5",
     "prettier": "^2.6.1",
     "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
     "typescript": "4.6.3",
     "webpack": "^5.70.0"
   }
