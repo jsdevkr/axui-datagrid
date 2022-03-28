@@ -1,50 +1,46 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { DataGrid } from '../axui-datagrid';
 import { IDataGrid } from '../axui-datagrid/common/@types';
-import { useWindowSize } from '../customEffect/useWindowSize';
 import { Container } from '../styles/Layouts';
+import { useDataGridSize } from '../customEffect/useDataGridSize';
+import { useData } from '../customEffect/useData';
 
 const Home: NextPage = () => {
-  const windowSize = useWindowSize();
-  const dataGridContainerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState<number>(600);
-  const [height, setHeight] = useState<number>(400);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [columns, setColumns] = useState<IDataGrid.IColumn[]>([
+  const { dataGridContainerRef, width, height } = useDataGridSize();
+  const { data, loading } = useData();
+  const [columns] = useState<IDataGrid.IColumn[]>([
     {
-      key: 'a',
+      key: 'id',
       label: 'Field A',
       width: 50,
       align: 'center',
     },
-    { key: 'b', label: 'Field B', align: 'center', width: 50 },
-    { key: 'c', label: 'Field C', align: 'center', width: 50 },
+    { key: 'title', label: 'Field B', width: 300 },
+    { key: 'writer', label: 'Field C', align: 'center', width: 100 },
     {
       key: 'price',
       label: 'Price',
       formatter: 'money',
       align: 'right',
-      width: 50,
+      width: 100,
     },
     {
-      key: 'amount',
+      key: 'qty',
       label: 'Qty',
       formatter: 'money',
       align: 'right',
       width: 50,
     },
     {
-      key: 'cost',
+      key: 'money',
       label: 'Sum',
       align: 'right',
       formatter: 'money',
-      width: 50,
+      width: 120,
     },
-    { key: 'saleDt', label: 'Sale Date', align: 'center', width: 50 },
-    { key: 'customer', label: 'Customer', align: 'center', width: 50 },
-    { key: 'saleType', label: 'Sale Type', align: 'center', width: 50 },
+    { key: 'date', label: 'Sale Date', align: 'center', width: 120 },
   ]);
   const [options, setOptions] = useState<IDataGrid.IOptions>({
     header: {
@@ -53,26 +49,6 @@ const Home: NextPage = () => {
     showLineNumber: true,
     showRowSelector: false,
   });
-  const [data, setData] = useState<any[]>([]);
-
-  const getData = useCallback(async () => {
-    const res = await fetch(`/api/getData`, { method: 'GET' });
-    const { list } = await res.json();
-    setData(list);
-  }, []);
-
-  useEffect(() => {
-    if (dataGridContainerRef.current) {
-      setWidth(dataGridContainerRef.current.clientWidth);
-      setHeight(dataGridContainerRef.current.clientHeight);
-    }
-  }, [windowSize.width, windowSize.height]);
-
-  useEffect(() => {
-    (async () => {
-      await getData();
-    })();
-  }, []);
 
   return (
     <div>
