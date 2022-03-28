@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { IDataGrid } from '../axui-datagrid/common/@types';
+import { IDataGrid } from '../datagrid/common/@types';
 
 export function useData(param: { url: string } = { url: '/api/getData' }) {
   const [data, setData] = useState<any[]>([]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { throttle } from '../axui-datagrid/utils';
+import { throttle } from '../datagrid/utils';
 
 interface IDataGridSize {
   width: number;

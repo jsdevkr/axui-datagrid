@@ -17,21 +17,19 @@
     "next-build": "next build",
     "next-start": "next start",
     "next-lint": "next lint",
-    "publish:patch": "cd src && npm version patch && cd .. && node ./scripts/syncVersion.js && npm run docs",
-    "publish:minor": "cd src && npm version minor && cd .. && node ./scripts/syncVersion.js && npm run docs",
-    "build:common": "lessc ./axui-datagrid/style.less dist/style.css && rimraf ./dist/scss && ncp ./axui-datagrid/style.less ./dist/style.less && ncp ./axui-datagrid/less ./dist/less && ncp ./README.md ./dist/README.md",
+    "build:common": "lessc datagrid/style.less dist/style.css && rimraf ./dist/scss && ncp datagrid/style.less ./dist/style.less && ncp datagrid/less ./dist/less && ncp ./README.md ./dist/README.md",
     "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfig.es5.json",
     "build:es6": "rimraf ./dist/es6 && tsc --p tsconfig.es6.json",
     "build": "npm run build:common && npm run build:es5 && npm run build:es6",
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@types/node": "17.0.23",
     "@types/react": "17.0.43",
     "eslint": "8.11.0",

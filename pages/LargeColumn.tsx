@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useCallback, useState } from 'react';
-import { DataGrid } from '../axui-datagrid';
-import { IDataGrid } from '../axui-datagrid/common/@types';
+import { DataGrid } from '../datagrid';
+import { IDataGrid } from '../datagrid/common/@types';
 import { Container } from '../styles/Layouts';
 import { useDataGridSize } from '../customEffect/useDataGridSize';
 import { useData } from '../customEffect/useData';
-import { isObject } from '../axui-datagrid/utils';
+import { isObject } from '../datagrid/utils';
 
 const LargeColumn: NextPage = () => {
   const { dataGridContainerRef, width, height } = useDataGridSize();
