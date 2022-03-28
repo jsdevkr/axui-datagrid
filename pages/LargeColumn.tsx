@@ -1,47 +1,37 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DataGrid } from '../axui-datagrid';
 import { IDataGrid } from '../axui-datagrid/common/@types';
 import { Container } from '../styles/Layouts';
 import { useDataGridSize } from '../customEffect/useDataGridSize';
 import { useData } from '../customEffect/useData';
+import { isObject } from '../axui-datagrid/utils';
 
-const Basic: NextPage = () => {
+const LargeColumn: NextPage = () => {
   const { dataGridContainerRef, width, height } = useDataGridSize();
-  const { data, loading } = useData();
+  const { data, loading, setDataItem } = useData({
+    url: '/api/getLargeColumnData',
+  });
   const [columns] = useState<IDataGrid.IColumn[]>([
     {
       key: 'id',
-      label: 'Field A',
-      width: 50,
-      align: 'center',
-    },
-    { key: 'title', label: 'Field B', width: 300 },
-    { key: 'writer', label: 'Field C', align: 'center', width: 100 },
-    {
-      key: 'price',
-      label: 'Price',
-      formatter: 'money',
-      align: 'right',
-      width: 100,
-    },
-    {
-      key: 'qty',
-      label: 'Qty',
-      formatter: 'money',
-      align: 'right',
+      label: 'Id',
       width: 50,
     },
+    { key: 'title', label: 'Title', width: 300 },
+    { key: 'writer', label: 'Write', align: 'center', width: 100 },
     {
-      key: 'money',
-      label: 'Sum',
-      align: 'right',
-      formatter: 'money',
-      width: 120,
+      key: 'rawContent',
+      label: 'Raw Date',
+      width: 200,
+      editor: {
+        activeType: 'click',
+        type: 'text',
+      },
     },
-    { key: 'date', label: 'Sale Date', align: 'center', width: 120 },
   ]);
+
   const [options, setOptions] = useState<IDataGrid.IOptions>({
     header: {
       align: 'center',
@@ -49,6 +39,25 @@ const Basic: NextPage = () => {
     showLineNumber: true,
     showRowSelector: false,
   });
+
+  const handleEditItem = useCallback(
+    (param: IDataGrid.IonEditParam) => {
+      const { li, col: { key: colKey = '' } = {}, value } = param;
+      const editDataItem: IDataGrid.IDataItem = { ...data[li] };
+      if (!colKey) {
+        return;
+      }
+
+      if (isObject(value)) {
+        editDataItem.value = { ...editDataItem.value, ...value };
+      } else {
+        (editDataItem.value as Record<string, any>)[colKey] = value;
+      }
+
+      setDataItem(li, editDataItem);
+    },
+    [data, setDataItem],
+  );
 
   return (
     <div>
@@ -59,7 +68,7 @@ const Basic: NextPage = () => {
       </Head>
 
       <Container>
-        <h1>Basic</h1>
+        <h1>Large Column</h1>
 
         <div ref={dataGridContainerRef} style={{ border: '1px solid #ccc' }}>
           <DataGrid
@@ -71,9 +80,7 @@ const Basic: NextPage = () => {
             dataLength={data.length}
             options={options}
             loading={loading}
-            onDoubleClick={d => {
-              console.log(d);
-            }}
+            onEdit={handleEditItem}
           />
         </div>
       </Container>
@@ -81,4 +88,4 @@ const Basic: NextPage = () => {
   );
 };
 
-export default Basic;
+export default LargeColumn;

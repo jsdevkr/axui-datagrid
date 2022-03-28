@@ -46,8 +46,8 @@ class CellEditor extends React.PureComponent<IProps> {
       li,
     } = this.props;
 
-    // console.log('fire onInputTextBlur', this.lastEventName);
-    if (this.lastEventName === 'update') {
+    console.log('fire onInputTextBlur', this.lastEventName);
+    if (this.lastEventName === 'update' || this.lastEventName === 'cancel') {
       dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
         isInlineEditing: false,
         inlineEditingCell: {},
@@ -55,6 +55,7 @@ class CellEditor extends React.PureComponent<IProps> {
     } else {
       dispatch(DataGridEnums.DispatchTypes.UPDATE, {
         row: li,
+        col,
         colIndex: col.colIndex,
         value: e.currentTarget.value,
         // eventWhichKey: e.which,
@@ -75,7 +76,7 @@ class CellEditor extends React.PureComponent<IProps> {
 
     switch (e.which) {
       case DataGridEnums.KeyCodes.ESC:
-        this.lastEventName = 'esc';
+        this.lastEventName = 'cancel';
         e.preventDefault();
         dispatch(DataGridEnums.DispatchTypes.FOCUS_ROOT, {
           isInlineEditing: false,
@@ -326,8 +327,8 @@ class CellEditor extends React.PureComponent<IProps> {
           });
         }}
         onFocus={e => {}}
-        onBlur={this.onInputTextBlur}
-        onKeyDown={this.onInputTextKeyDown}
+        onBlur={evt => this.onInputTextBlur(evt)}
+        onKeyDown={evt => this.onInputTextKeyDown(evt)}
         data-inline-edit
         defaultValue={value}
       />

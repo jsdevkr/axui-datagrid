@@ -7,7 +7,7 @@ const timezone =
 const timezoneClip = /[^-+\dA-Z]/g;
 
 function right(str: string, pos: number): string {
-  return str.substr(str.length - pos);
+  return str.slice(str.length - pos);
 }
 
 function localDate(
@@ -175,32 +175,32 @@ export class PrintDate {
       } else if (date.length === 14) {
         va = date.replace(/\D/g, '');
         currDate = localDate(
-          Number(va.substr(0, 4)),
-          Number(va.substr(4, 2)) - 1,
-          Number(va.substr(6, 2)),
-          Number(va.substr(8, 2)),
-          Number(va.substr(10, 2)),
-          Number(va.substr(12, 2)),
+          Number(va.slice(0, 4)),
+          Number(va.slice(4, 2)) - 1,
+          Number(va.slice(6, 2)),
+          Number(va.slice(8, 2)),
+          Number(va.slice(10, 2)),
+          Number(va.slice(12, 2)),
         );
       } else if (date.length > 7) {
         va = date.replace(/\D/g, '');
         currDate = localDate(
-          Number(va.substr(0, 4)),
-          Number(va.substr(4, 2)) - 1,
-          Number(va.substr(6, 2)),
+          Number(va.slice(0, 4)),
+          Number(va.slice(4, 2)) - 1,
+          Number(va.slice(6, 2)),
         );
       } else if (date.length > 4) {
         va = date.replace(/\D/g, '');
         currDate = localDate(
-          Number(va.substr(0, 4)),
-          Number(va.substr(4, 2)) - 1,
+          Number(va.slice(0, 4)),
+          Number(va.slice(4, 2)) - 1,
           1,
         );
       } else if (date.length > 2) {
         va = date.replace(/\D/g, '');
         currDate = localDate(
-          Number(va.substr(0, 4)),
-          Number(va.substr(4, 2)) - 1,
+          Number(va.slice(0, 4)),
+          Number(va.slice(4, 2)) - 1,
           1,
         );
       } else {
@@ -244,7 +244,7 @@ export class PrintDate {
     let flags = {
       d: d,
       dd: padLeft(d),
-      E: PrintDate.i18n.dayNames[D].substr(0, 1),
+      E: PrintDate.i18n.dayNames[D].slice(0, 1),
       EEE: PrintDate.i18n.dayNames[D],
       EEEE: PrintDate.i18n.dayNames[D + 7],
       M: M + 1,

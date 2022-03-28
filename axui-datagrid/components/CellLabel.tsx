@@ -81,6 +81,11 @@ class CellLabel extends React.PureComponent<{
     }
 
     if (typeof labelValue === 'string') {
+      const displayLabelValue =
+        labelValue.length > 1024
+          ? labelValue.substring(0, 1024) + '...'
+          : labelValue;
+
       return (
         <span
           data-span={columnAttr}
@@ -90,7 +95,7 @@ class CellLabel extends React.PureComponent<{
             textAlign: colAlign as any,
           }}
           dangerouslySetInnerHTML={{
-            __html: escapeHTML(labelValue),
+            __html: escapeHTML(displayLabelValue),
           }}
         />
       );

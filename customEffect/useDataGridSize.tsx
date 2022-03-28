@@ -7,7 +7,6 @@ interface IDataGridSize {
 }
 
 export function useDataGridSize() {
-  console.log('call useDataGridSize')
   const dataGridContainerRef = useRef<HTMLDivElement>(null);
   const [dataGridSize, setDataGridSize] = useState<IDataGridSize>({
     width: 600,

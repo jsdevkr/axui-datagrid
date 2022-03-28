@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { IDataGrid } from '../axui-datagrid/common/@types';
 
 export function useData(param: { url: string } = { url: '/api/getData' }) {
   const [data, setData] = useState<any[]>([]);
@@ -17,11 +18,19 @@ export function useData(param: { url: string } = { url: '/api/getData' }) {
     }
   }, []);
 
+  const setDataItem = useCallback(
+    (itemIndex: number, item: any) => {
+      data[itemIndex] = item;
+      setData([...data]);
+    },
+    [data],
+  );
+
   useEffect(() => {
     (async () => {
       await getData();
     })();
   }, []);
 
-  return { data, loading };
+  return { data, loading, setDataItem };
 }

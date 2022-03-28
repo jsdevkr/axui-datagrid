@@ -17,6 +17,9 @@ const Home: NextPage = () => {
           <li>
             <Link href={'/Basic'}>Basic</Link>
           </li>
+          <li>
+            <Link href={'/LargeColumn'}>LargeColumn</Link>
+          </li>
         </ul>
       </Container>
     </div>
