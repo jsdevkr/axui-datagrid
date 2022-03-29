@@ -20,6 +20,9 @@ const Home: NextPage = () => {
           <li>
             <Link href={'/LargeColumn'}>LargeColumn</Link>
           </li>
+            <li>
+            <Link href={'/CopyToClipboard'}>CopyToClipboard</Link>
+          </li>
         </ul>
       </Container>
     </div>

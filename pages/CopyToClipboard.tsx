@@ -48,6 +48,7 @@ const Basic: NextPage = () => {
     },
     showLineNumber: true,
     showRowSelector: false,
+    onCopyClipboard: copiedString => console.log(copiedString)
   });
 
   return (
@@ -59,7 +60,7 @@ const Basic: NextPage = () => {
       </Head>
 
       <Container>
-        <h1>Basic</h1>
+        <h1>CopyToClipboard</h1>
 
         <div ref={dataGridContainerRef} style={{ border: '1px solid #ccc' }}>
           <DataGrid

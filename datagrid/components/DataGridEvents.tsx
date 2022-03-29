@@ -92,6 +92,11 @@ class DataGridEvents extends React.Component<IProps, IState> {
       };
 
       if (e.metaKey || e.ctrlKey) {
+        if (e.repeat) {
+          resolve();
+          return;
+        }
+
         switch (e.which) {
           case DataGridEnums.MetaKeycodes.C:
             if (disableClipboard) {
@@ -629,7 +634,6 @@ class DataGridEvents extends React.Component<IProps, IState> {
           // @ts-ignore
           const item: IDataGrid.IDataItem = data[focusedRow];
           if (item) {
-
             // @ts-ignore
             const value = item.value[colGroup[focusedCol].key!];
             const disabled = editor.disable
