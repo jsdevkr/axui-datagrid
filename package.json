@@ -30,7 +30,7 @@
   "devDependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
-    "@types/node": "17.0.23",
+    "@types/node": "16.11.26",
     "@types/react": "17.0.43",
     "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
